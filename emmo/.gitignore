@@ -1,1 +1,5 @@
-catalog-v001.xml
+*.pyc
+__pycache__
+owl
+
+old
