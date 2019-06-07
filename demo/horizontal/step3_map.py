@@ -20,7 +20,7 @@ import dlite
 
 
 def map_app2common(inst, metacoll, out_id=None):
-    """Maps atom structure `atoms` from our application representation
+    """Maps atom structure `inst` from our application representation
     (based on a not explicitly stated ontology) to the common
     EMMO-based representation in `metacoll`.
 
@@ -74,10 +74,9 @@ def map_app2common(inst, metacoll, out_id=None):
 # Load metadata collection from step 1
 metacoll = dlite.Collection('json://case_metadata.json?mode=r#case_ontology', True)
 
-# Load dlite-representation of atoms structure from step 2
+# Load dlite-representation of atoms structure from step 3
 coll = dlite.Collection('json://case_data.json?mode=r#case_data', False)
 inst = coll.get('atoms')
-
 
 # Do the mapping
 new = map_app2common(inst, metacoll)
