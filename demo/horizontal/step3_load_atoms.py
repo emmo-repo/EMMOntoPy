@@ -13,7 +13,7 @@ from ase.spacegroup import Spacegroup
 
 import dlite
 
-from .step2_define_atoms import DLiteAtoms
+from step2_define_atoms import DLiteAtoms
 
 
 
