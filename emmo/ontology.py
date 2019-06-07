@@ -57,7 +57,7 @@ setattr(owlready2.ThingClass, 'get_parents', _get_parents)
 
 
 
-def get_ontology(base_iri='emmo-all-inferred.owl', verbose=False):
+def get_ontology(base_iri='emmo-inferred.owl', verbose=False):
     """Returns a new Ontology from `base_iri`.
 
     If `verbose` is true, a lot of dianostics is written.
@@ -69,27 +69,6 @@ def get_ontology(base_iri='emmo-all-inferred.owl', verbose=False):
     else:
         onto = Ontology(owlready2.default_world, base_iri)
     onto._verbose = verbose
-
-    # Add annotations used by EMMO
-    #with onto:
-    #    class definition(owlready2.comment):
-    #        pass
-    #
-    #    class axiom(owlready2.comment):
-    #        pass
-    #
-    #    class elucidation(owlready2.comment):
-    #        pass
-    #
-    #    #class domain(owlready2.AnnotationProperty):
-    #    #    pass
-    #    #
-    #    #class range(owlready2.AnnotationProperty):
-    #    #    pass
-    #
-    #    class example(owlready2.comment):
-    #        pass
-
     return onto
 
 

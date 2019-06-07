@@ -9,7 +9,7 @@ import owlready2
 
 
 thisdir = os.path.abspath(os.path.realpath((os.path.dirname(__file__))))
-owldir = os.path.abspath(os.path.join(thisdir, '..', '..', 'emmo','rdfxml'))
+owldir = os.path.abspath(os.path.join(thisdir, 'rdfxml'))
 
 if not os.path.exists(os.path.join(owldir, 'emmo.owl')):
     print('File does not exists: ', os.path.join(owldir, 'emmo.owl'))
