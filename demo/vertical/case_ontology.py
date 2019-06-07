@@ -52,11 +52,11 @@ with onto:
     #
     # Relations
     # =========
-    class has_unit(emmo.has_convention):
+    class has_unit(emmo.has_part):
         """Associates a unit to a property."""
         pass
 
-    class is_unit_for(emmo.is_convention_for):
+    class is_unit_for(emmo.is_part_of):
         """Associates a property to a unit."""
         inverse_property = has_unit
 
