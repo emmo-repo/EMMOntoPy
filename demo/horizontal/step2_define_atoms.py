@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Step 2 - load atom structure and represent it using our metadata framework
---------------------------------------------------------------------------
-In this step we uses the Atomistic Simulation Environment (ASE) to load
-a atomistic Al-Fe4Al13 interface structure from a cif file and
-represents it using the same metadata framework as used in step 1.
+Step 2 - define metadata for the ASE Atoms class
+------------------------------------------------
+In this step we define metadata for the Atoms class in the Atomistic
+Simulation Environment (ASE).  This metadata is defined in the file
+atoms.json.
+
+We use the dlite.classfactory() to create a subclass of ASE Atoms that
+also exposes the attributes as dlite properties. The subclass DLiteAtoms
+adds some methods for handling some special attributes.
 """
 import ase
 import ase.io
@@ -30,15 +34,3 @@ class DLiteAtoms(BaseAtoms):
 
     def _dlite_get_celldisp(self):
         return self.get_celldisp()[:, 0]
-
-
-# Load atom structure from cif file and convert it to a DLiteAtoms object
-at = ase.io.read('../vertical/Al-Fe4Al13.cif')
-atoms = dlite.objectfactory(at, cls=DLiteAtoms, instanceid='atoms_Al-Fe4Al13')
-
-
-# Create a new collection for data instances
-coll = dlite.Collection('case_data')
-coll.add('Atoms', atoms.dlite_meta)
-coll.add('atoms', atoms.dlite_inst)
-coll.save('json', 'case_data.json', 'mode=w')

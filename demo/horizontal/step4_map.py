@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Step 3 - map to common representation
+Step 4 - map to common representation
 -------------------------------------
 maps it to a collection of instances of the metadata generated from the
 ontology.
