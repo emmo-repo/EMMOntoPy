@@ -72,10 +72,12 @@ def map_app2common(inst, metacoll, out_id=None):
 
 
 # Load metadata collection from step 1
-metacoll = dlite.Collection('json://case_metadata.json?mode=r#case_ontology', True)
+metacoll = dlite.Collection(
+    'json://usercase_metadata.json?mode=r#usercase_ontology', True)
 
 # Load dlite-representation of atoms structure from step 3
-coll = dlite.Collection('json://case_data.json?mode=r#case_data', False)
+coll = dlite.Collection(
+    'json://usercase_appdata.json?mode=r#usercase_appdata', False)
 inst = coll.get('atoms')
 
 # Do the mapping
@@ -83,5 +85,4 @@ new = map_app2common(inst, metacoll)
 
 
 # Append the new atoms collection to the storage
-new.save('json://case_data.json?mode=append')
-new.save('json', 'case_data.json', 'mode=append')
+new.save('json://usercase_data.json?mode=w')

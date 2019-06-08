@@ -11,12 +11,13 @@ we here denote _component_, _microstructure_ and _atomistic_ scale.
 
 
 
-Creating an EMMO-based application ontology for the user case
--------------------------------------------------------------
-The script [case_ontology.py](case_ontology.py) uses the Python API
+Creating an EMMO-based user case ontology
+-----------------------------------------
+The script [define_ontology.py](define_ontology.py) uses the Python API
 for EMMO to generate an application ontology extending EMMO with
 additional concepts needed to describe the data that is exchanged
-between scales.
+between scales.  The user case ontology can then be visualised with the
+script [plot_ontology.py](plot_ontology.py).
 
 
 ### Defining the needed material entities
@@ -49,8 +50,8 @@ transferred between scales, we also need to define types.
 
 ### The new application-ontology
 
-![All classes in the user case ontology.](figs/case_ontology.svg)
+![All classes in the user case ontology.](figs/usercase_ontology.svg)
 
 The final plot shows the user case ontology in context of EMMO.
 
-![The user case ontology shown in context of EMMO.](figs/case_ontology-parents.svg)
+![The user case ontology shown in context of EMMO.](figs/usercase_ontology-parents.svg)

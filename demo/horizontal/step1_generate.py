@@ -25,7 +25,7 @@ from emmo2meta import EMMO2Meta
 
 # Load our ontology from the vertical case
 ontopath = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), '..', 'vertical', 'case_ontology.owl'))
+    os.path.dirname(__file__), '..', 'vertical', 'usercase_ontology.owl'))
 onto = get_ontology(ontopath)
 onto.load()
 
@@ -36,5 +36,5 @@ onto.base_iri = 'http://www.emmc.info/emmc-csa/demo#'
 
 # Generate metadata and store it in a JSON file
 items = list(onto.classes()) + [onto['e-bonded_atom']]
-e = EMMO2Meta(ontology=onto, classes=items, collid='case_ontology')
-e.save('json', 'case_metadata.json', 'mode=w')
+e = EMMO2Meta(ontology=onto, classes=items, collid='usercase_ontology')
+e.save('json', 'usercase_metadata.json', 'mode=w')
