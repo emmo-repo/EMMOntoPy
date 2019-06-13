@@ -12,7 +12,6 @@ also exposes the attributes as dlite properties. The subclass DLiteAtoms
 adds some methods for handling some special attributes.
 """
 import ase
-import ase.io
 from ase.spacegroup import Spacegroup
 
 import dlite

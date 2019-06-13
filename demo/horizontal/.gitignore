@@ -1,6 +1,7 @@
 __pycache__
 
-case_data.json
-case_metadata.json
+usercase_metadata.json
+usercase_appdata.json
+usercase_data.json
 
 old

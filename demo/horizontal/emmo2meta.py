@@ -141,8 +141,9 @@ class EMMO2Meta:
             self.labels.add(label)
             uri = self.get_uri(label)
             for r in cls.is_a:
-                if isinstance(r, owlready2.ThingClass):
-                    self.labels.add(label)
+                if r is owlready2.Thing:
+                    pass
+                elif isinstance(r, owlready2.ThingClass):
                     self.coll.add_relation(label, "is_a", r.label.first())
                     self.add_class(r)
                 elif isinstance(r, owlready2.Restriction):
@@ -237,12 +238,10 @@ class EMMO2Meta:
             inst.type = rtype
             inst.cardinality = cardinality
             vlabel = self.get_label(r.value)
-            if not vlabel in self.labels:
-                self.labels.add(vlabel)
-                self.add(r.value)
-            if not self.coll.has(label):
-                self.coll.add(label, inst)
+            self.coll.add(label, inst)
             self.coll.add_relation(label, r.property.label.first(), vlabel)
+            if not vlabel in self.labels:
+                self.add(r.value)
         return self.coll.get(label)
 
     def add_restriction_entity(self):

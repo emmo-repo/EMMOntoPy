@@ -77,7 +77,7 @@ with onto:
     class real(emmo.number):
         pass
 
-    class string(emmo.symbol):
+    class string(emmo['well-formed']):
         pass
 
     #
@@ -125,6 +125,7 @@ with onto:
                 has_type.exactly(1, real)]
 
     class mass(emmo.physical_quantity):
+        """Mass of a physical entity."""
         is_a = [has_unit.exactly(1, kilogram),
                 has_type.exactly(1, real)]
 
@@ -213,6 +214,10 @@ with onto:
     #
     # Subdimensional
     # ==============
+    class vertex(emmo.point):
+        """A vertex in a finite element unit cell."""
+        is_a = [emmo.has_property.exactly(1, position)]
+
     class interface(emmo.surface):
         """A 2D surface associated with a boundary.
 
@@ -225,7 +230,6 @@ with onto:
 
     # Aassign `measured_volume` as a property of `emmo.volume`
     emmo.volume.is_a.append(emmo.has_property.exactly(1, measured_volume))
-
 
 
     #
@@ -257,38 +261,20 @@ with onto:
         equivalient_to = [emmo.has_spatial_direct_part.exactly(2, emmo.state)]
         is_a = [emmo.has_space_slice.exactly(1, interface)]
 
+    # Continuum
+    # ---------
+    # FIXME
     class phase(emmo.continuum):
-        """A phase in a bulk material.
-
-        Other properties, like compositions etc. would normally be
-        assigned to a phase, are omitted here because they are not
-        essential for this case study."""
+        """A phase is a continuum in which properties are homogeneous and can
+        have different state of matter."""
         is_a = [emmo.has_property.exactly(1, stiffness_tensor),
                 emmo.has_property.exactly(1, density),
                 emmo.has_property.exactly(1, plasticity)]
 
-    class vertex(emmo.point):
-        """A vertex in a finite element unit cell."""
-        is_a = [emmo.has_property.exactly(1, position)]
-
-    class fem_unit_cell(emmo.model):
-        """A volume of a real world entity that is represented as a finite
-        element unit cell in FEM."""
-        is_a = [emmo.has_space_slice.exactly(1, emmo.volume)]
-
-    class cohesive_element(fem_unit_cell):
-        is_a = [emmo.has_spatial_direct_part.exactly(2, phase),
-                emmo.has_space_slice.min(6, vertex),
-                emmo.has_space_slice.exactly(1, interface)]
-
-    class bulk_element(fem_unit_cell):
-        is_a = [emmo.has_spatial_direct_part.exactly(1, phase),
-                emmo.has_space_slice.min(4, vertex)]
-
     class rve(emmo.continuum):
-        """The minimum volume that represents the system in question."""
-        is_a = [emmo.has_spatial_direct_part.only(fem_unit_cell),
-                emmo.has_property.exactly(1, stiffness_tensor),
+        """Representative volume element.  The minimum volume that is
+        representative for the system in question."""
+        is_a = [emmo.has_property.exactly(1, stiffness_tensor),
                 emmo.has_property.exactly(1, density),
                 emmo.has_property.exactly(1, plasticity)]
 
@@ -311,7 +297,7 @@ with onto:
     class cohesive_element(fem_unit_cell):
         is_a = [emmo.has_spatial_direct_part.exactly(2, phase),
                 emmo.has_space_slice.min(6, vertex),
-                #emmo.has_space_slice.exactly(1, interface),
+                emmo.has_space_slice.exactly(1, interface),
         ]
 
     # FIXME
@@ -336,68 +322,8 @@ onto.sync_attributes()
 # It seems that owlready2 by default is appending to the existing
 # ontology.  To get a clean version, we simply delete the owl file if
 # it already exists.
-owlfile = 'case_ontology.owl'
+owlfile = 'usercase_ontology.owl'
 import os
 if os.path.exists(owlfile):
     os.remove(owlfile)
 onto.save(owlfile)
-
-
-#
-# Visualise our new EMMO-based ontology
-# =====================================
-
-# Save graph with our new classes
-graph = onto.get_dot_graph(list(onto.classes()), relations=True,
-                           style='uml', constraint=None)
-graph.write_png('figs/case_ontology.png')
-
-
-# Categories of classes
-units = [c for c in onto.classes() if issubclass(c, onto.SI_unit)]
-properties = [c for c in onto.classes()
-              if issubclass(c, onto.property) and not c in units]
-leaf_prop = [c for c in properties if len(c.descendants()) == 1]
-materials = [c for c in onto.classes() if issubclass(c, (
-    emmo.subatomic, emmo.atomic, emmo.mesoscopic, emmo.continuum))]
-subdimensional = [c for c in onto.classes() if issubclass(c, (
-    emmo.point, emmo.line, emmo.surface, emmo.volume))]
-types = [c for c in onto.classes() if issubclass(c, (
-    emmo.number, emmo.symbol))]
-
-# Update the uml-stype to generate
-onto._uml_style['graph']['rankdir'] = 'BT'
-
-# Units and properties
-#graph = onto.get_dot_graph([onto.SI_unit] + leaf_prop, relations=True,
-graph = onto.get_dot_graph([onto.SI_unit] + properties, relations=True,
-                           style='uml', constraint=None)
-graph.write_png('figs/units+properties.png')
-
-# Types and properties
-graph = onto.get_dot_graph(types + leaf_prop, relations=True, style='uml',
-                           constraint=None)
-graph.write_png('figs/types+properties.png')
-
-# Properties and materials
-items = [
-    emmo.physical_quantity, emmo['e-bonded_atom']] + materials + subdimensional
-graph = onto.get_dot_graph(items, relations=True, style='uml', constraint=None)
-graph.write_png('figs/properties+materials.png')
-
-# Material
-#items = [emmo.atomic, emmo.continuum, onto.boundary]
-items = [emmo.state] + materials
-leafs = ['elementary', 'symbolic', 'subatomic', 'standalone_atom']
-graph = onto.get_dot_graph(items, leafs=leafs, relations=True,
-                           parents=False, style='uml')
-graph.write_png('figs/materials.png')
-
-# Also include the parents of our new classes (this graph becomes
-# rather large...)
-parents = {e.mro()[1] for e in onto.classes()}
-classes = list(parents.union(onto.classes())) + [emmo.space]
-onto._uml_style['graph']['rankdir'] = 'RL'
-graph = onto.get_dot_graph(classes, relations=True, style='uml',
-                            edgelabels=True)
-graph.write_png('figs/case_ontology-parents.png')

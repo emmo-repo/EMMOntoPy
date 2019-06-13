@@ -23,7 +23,7 @@ atoms = dlite.objectfactory(at, cls=DLiteAtoms, instanceid='atoms_Al-Fe4Al13')
 
 
 # Create a new collection for data instances
-coll = dlite.Collection('case_data')
+coll = dlite.Collection('usercase_appdata')
 coll.add('Atoms', atoms.dlite_meta)
 coll.add('atoms', atoms.dlite_inst)
-coll.save('json', 'case_data.json', 'mode=w')
+coll.save('json', 'usercase_appdata.json', 'mode=w')

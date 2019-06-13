@@ -1,6 +1,5 @@
 __pycache__
 old
 
-case_ontology.owl
-*.png
-*.pdf
+usercase_ontology.owl
+*.svg
