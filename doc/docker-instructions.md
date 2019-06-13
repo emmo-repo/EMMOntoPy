@@ -24,3 +24,6 @@ docker run -it emmo
 * Your Docker container may run out of memory while executing HermiT
   (``sync_reasoner``). Append ``--memory=2GB`` to ``docker run`` in
   order to align the memory limit with the Java runtime environment.
+
+* Uncomment the last line in Dockerfile if you wish to start directly
+  in python. 

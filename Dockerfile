@@ -10,4 +10,4 @@ RUN chown user:user -R /home/user/emmo/
 USER user
 WORKDIR /home/user/
 ENV PYTHONPATH "/home/user/emmo/:${PYTHONPATH}"
-ENTRYPOINT python
+#ENTRYPOINT python
