@@ -32,6 +32,9 @@ This is done in four steps:
   4. Map the atomistic interface structure from the application
      representation to the common EMMO-based representation.
 
+     Implemented in the script
+     [step4_map_instance.py](step4_map_instance.py).
+
 Essentially this demonstration shows how EMMO can be extended and how
 external data can be mapped into our extended ontology (serving as a
 common representational system).
