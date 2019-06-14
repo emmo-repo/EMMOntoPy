@@ -1,17 +1,13 @@
 from continuumio/miniconda3
-#from ubuntu:latest
 
-RUN apt update && apt install -y texlive-latex-extra pandoc gcc
+RUN apt update && apt install -y texlive-latex-extra pandoc gcc gcj-jre
 RUN conda install -c conda-forge graphviz
-RUN pip install Cython
-RUN pip install pydot 
-RUN pip install ase
-RUN pip install Owlready2==0.10
+RUN pip install Cython pydot ase Owlready2==0.10
 
-ENV PYTHONPATH "/emmo/python:${PYTHONPATH}"
-
-
-
-
-### docker run -it -v c:/:/emmo emmo
-
+RUN useradd -ms /bin/bash user
+COPY emmo /home/user/emmo/
+RUN chown user:user -R /home/user/emmo/
+USER user
+WORKDIR /home/user/
+ENV PYTHONPATH "/home/user/emmo/:${PYTHONPATH}"
+#ENTRYPOINT python

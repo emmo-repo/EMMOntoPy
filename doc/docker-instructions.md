@@ -1,19 +1,29 @@
-Creating a docker image
-=======================
+# EMMO-python Docker
 
-File->preferences->Render->Render by annotation property
+### Clone project
 
-# Instructions for Dockerenvironment, note that docker must be running
-# Instructions given for Powershell in Windows10
+```bash
+git clone git@github.com:emmo-repo/EMMO-python.git
+```
 
-Preparations in Windows10, Powershell
-run "Set-NetConnectionProfile -interfacealias "vEthernet (DockerNAT)" -NetworkCategory Private"
-Allow for external mounting of C:/ in Docker (as administrator)
-	Docker (rightclick in system tray)->Settings->Shared Drives->tick of C->Apply
+### Build Docker image
 
-To create image (Windows10 and Linux):
+```bash
+cd EMMO-python
 docker build -t emmo .
+```
 
-To run image:
-docker run --rm -it -v ${PWD}:/emmo emmo (Windows10, Powershell)
-docker run --rm -it -v $(pwd):/emmo emmo (linux)
+### Run Docker container
+
+```bash
+docker run -it emmo
+```
+
+### Notes
+
+* Your Docker container may run out of memory while executing HermiT
+  (``sync_reasoner``). Append ``--memory=2GB`` to ``docker run`` in
+  order to align the memory limit with the Java runtime environment.
+
+* Uncomment the last line in Dockerfile if you wish to start directly
+  in python. 
