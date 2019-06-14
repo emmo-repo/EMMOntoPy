@@ -45,10 +45,10 @@ Requirements for running the user case
 --------------------------------------
 In addition to emmo, this demo also requires:
   - [dlite][1], a C-implementation of [SOFT][2] used for handling metadata
-  - [ASE][2], for reading atom structure from cif and visualisation
+  - [ASE][3], for reading atom structure from cif and visualisation
 
 
 
-[1] https://stash.code.sintef.no/projects/SIDASE/repos/dlite/
-[2] https://github.com/NanoSim/SOFT5
-[3] https://wiki.fysik.dtu.dk/ase/
+[1]: https://stash.code.sintef.no/projects/SIDASE/repos/dlite/
+[2]: https://github.com/NanoSim/SOFT5
+[3]: https://wiki.fysik.dtu.dk/ase/
