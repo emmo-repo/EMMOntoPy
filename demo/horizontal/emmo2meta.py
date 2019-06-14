@@ -3,14 +3,16 @@
 DLite metadata entities.
 
 Entities in the ontology are mapped to DLite as follows:
-  - owl class -> metadata entity
-  - owl object property -> relation
-  - owl restriction -> entity + relation
+  - owl class (except EMMO property, see below) -> metadata entities
+  - owl `has_property` restrictions are interpreted. The "object"
+    entity of the relation is added as a SOFT property to the
+    "subject" entity.
+  - all other owl restriction -> entity + relation(s)
+  - owl object property -> relations
   - owl class construct -> entity + relation(s)
 
 TODO:
   - map restriction cardinality to collection diminsions
-
 """
 import sys
 import json
