@@ -27,3 +27,27 @@ docker run -it emmo
 
 * Uncomment the last line in Dockerfile if you wish to start directly
   in python. 
+
+
+### devel.Dockerfile for development purposes
+
+### Allow for mounting of C: in Windows10 (Powershell)
+in Docker (as administrator) Docker (rightclick in system tray)->Settings->Shared Drives->tick of C->Apply
+```Powershell
+Set-NetConnectionProfile -interfacealias "vEthernet (DockerNAT)" -NetworkCategory Private
+```
+
+### Creating a docker image
+
+```bash
+docker build -t emmo -f devel.Dockerfile .
+```
+
+### Run Docker container
+```bash
+docker run --rm -it -v $(pwd):/home/user/emmo emmo (linux)
+```
+
+```bash
+docker run --rm -it -v ${PWD}:/home/user/emmo emmo (windows10, Powershell)
+```
