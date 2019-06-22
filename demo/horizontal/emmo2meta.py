@@ -54,7 +54,7 @@ class EMMO2Meta:
     -----
     The collection UUID is accessable via the `coll.uuid` attribute.
     Use the `collid` argument to provide a human readable id to make
-    it easier to later to retrieve it from a storage (without having
+    it easier to later retrieve it from a storage (without having
     to remember its UUID).
     """
     def __init__(self, ontology=None, classes=None, version='0.1', collid=None):
@@ -70,10 +70,6 @@ class EMMO2Meta:
         self.iri = self.onto.base_iri
         self.namespace = self.onto.base_iri.rstrip('#')
         self.coll = dlite.Collection(collid)
-        # To avoid infinite recursion when adding cyclic dependent entities
-        # we keep track of all labels we add (or are going to add) to the
-        # collection
-        self.labels = set()
 
         if classes is None:
             classes = self.onto.classes()
@@ -138,10 +134,11 @@ class EMMO2Meta:
         if isinstance(cls, str):
             cls = self.onto[cls]
         label = cls.label.first()
-        if label not in self.labels:
-            assert not self.coll.has(label)
-            self.labels.add(label)
+        if not self.coll.has(label):
             uri = self.get_uri(label)
+            dims, props = self.get_properties(cls)
+            e = Instance(uri, dims, props, self.get_description(cls))
+            self.coll.add(label, e)
             for r in cls.is_a:
                 if r is owlready2.Thing:
                     pass
@@ -159,9 +156,6 @@ class EMMO2Meta:
                     self.add_class_construct(r)
                 else:
                     raise TypeError('Unexpected is_a member: %s' % type(r))
-            dims, props = self.get_properties(cls)
-            e = Instance(uri, dims, props, self.get_description(cls))
-            self.coll.add(label, e)
         return self.coll.get(label)
 
     def get_properties(self, cls):
@@ -231,20 +225,17 @@ class EMMO2Meta:
         to it."""
         rtype = owlready2.class_construct._restriction_type_2_label[r.type]
         cardinality = r.cardinality if r.cardinality else 0
-        label = 'restriction_%s_%d' % (rtype, cardinality)
-        if label not in self.labels:
-            assert not self.coll.has(label)
-            self.labels.add(label)
-            e = self.add_restriction_entity()
-            inst = e(id=label)
-            inst.type = rtype
-            inst.cardinality = cardinality
-            vlabel = self.get_label(r.value)
-            self.coll.add(label, inst)
-            self.coll.add_relation(label, r.property.label.first(), vlabel)
-            if not vlabel in self.labels:
-                self.add(r.value)
-        return self.coll.get(label)
+        e = self.add_restriction_entity()
+        inst = e()
+        inst.type = rtype
+        inst.cardinality = cardinality
+        label = inst.uuid
+        vlabel = self.get_label(r.value)
+        self.coll.add(label, inst)
+        self.coll.add_relation(label, r.property.label.first(), vlabel)
+        if not self.coll.has(vlabel):
+            self.add(r.value)
+        return inst
 
     def add_restriction_entity(self):
         """Adds restriction metadata to collection and returns a reference
@@ -270,7 +261,6 @@ class EMMO2Meta:
                          "restriction, `r.property` is a relation and "
                          "`r.value.label` is the label of the value of the "
                          "restriction.")
-            self.labels.add('Restriction')
             self.coll.add('Restriction', e)
         return self.coll.get('Restriction')
 
@@ -278,22 +268,18 @@ class EMMO2Meta:
         """Adds owl class construct `c` to collection and returns a reference
         to it."""
         ctype = c.__class__.__name__
-        label = 'class_construct_%s' % ctype
-        if not label in self.labels:
-            assert not self.coll.has(label)
-            e = self.add_class_construct_entity()
-            self.labels.add(label)
-            inst = e(id=label)
-            inst.type = ctype
-            if isinstance(c, owlready2.LogicalClassConstruct):
-                args = c.Classes
-            else:
-                args = [c.Class]
-            for arg in args:
-                self.coll.add_relation(label, 'has_argument',
-                                       self.get_label(arg))
-            self.coll.add(label, inst)
-        return self.coll.get(label)
+        e = self.add_class_construct_entity()
+        inst = e()
+        label = inst.uuid
+        inst.type = ctype
+        if isinstance(c, owlready2.LogicalClassConstruct):
+            args = c.Classes
+        else:
+            args = [c.Class]
+        for arg in args:
+            self.coll.add_relation(label, 'has_argument', self.get_label(arg))
+        self.coll.add(label, inst)
+        return inst
 
     def add_class_construct_entity(self):
         """Adds class construct metadata to collection and returns a reference
@@ -316,7 +302,6 @@ class EMMO2Meta:
                          "where `c.label` is the label associated with the "
                          "class construct, `c.value.label` is the label of "
                          "an argument.")
-            self.labels.add('ClassConstruct')
             self.coll.add('ClassConstruct', e)
         return self.coll.get('ClassConstruct')
 
