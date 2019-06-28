@@ -36,7 +36,6 @@ References
 from emmo import get_ontology
 from owlready2 import sync_reasoner_pellet
 
-
 # Load EMMO
 emmo = get_ontology()
 emmo.load()
@@ -243,7 +242,7 @@ with onto:
     class crystal_unit_cell(emmo.mesoscopic):
         """A volume defined by the 3 unit cell vectors.  It contains the atoms
         constituting the unit cell of a crystal."""
-        is_a = [emmo.has_spatial_direct_part.some(emmo['e_bonded_atom']),
+        is_a = [emmo.has_spatial_direct_part.some(emmo['e-bonded_atom']),
                 emmo.has_property.exactly(3, lattice_vector),
                 emmo.has_property.exactly(1, stiffness_tensor)]
 
@@ -253,9 +252,9 @@ with onto:
                 emmo.has_property.exactly(1, spacegroup)]
 
     # Add some properties to our atoms
-    emmo['e_bonded_atom'].is_a.append(emmo.has_property.exactly(1, atomic_number))
-    emmo['e_bonded_atom'].is_a.append(emmo.has_property.exactly(1, mass))
-    emmo['e_bonded_atom'].is_a.append(emmo.has_property.exactly(1, position))
+    emmo['e-bonded_atom'].is_a.append(emmo.has_property.exactly(1, atomic_number))
+    emmo['e-bonded_atom'].is_a.append(emmo.has_property.exactly(1, mass))
+    emmo['e-bonded_atom'].is_a.append(emmo.has_property.exactly(1, position))
 
     class boundary(emmo.state):
         """A boundary is a 4D region of spacetime shared by two material
