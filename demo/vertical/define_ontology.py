@@ -34,6 +34,7 @@ References
 
 """
 from emmo import get_ontology
+from owlready2 import sync_reasoner_pellet
 
 
 # Load EMMO
@@ -77,7 +78,7 @@ with onto:
     class real(emmo.number):
         pass
 
-    class string(emmo['well-formed']):
+    class string(emmo.number): #['well-formed']): #FIXME Ontology "emmo-all-inferred" has no such label: well-formed
         pass
 
     #
@@ -193,7 +194,8 @@ with onto:
         space group number (and setting) from the International tables of
         Crystallography.
         """
-        is_a = [has_type.exactly(1, string)]
+        is_a = [has_type.exactly(1, string)]  
+        pass
 
     class plasticity(emmo.physical_quantity):
         """Describes Yield stress and material hardening."""
@@ -241,7 +243,7 @@ with onto:
     class crystal_unit_cell(emmo.mesoscopic):
         """A volume defined by the 3 unit cell vectors.  It contains the atoms
         constituting the unit cell of a crystal."""
-        is_a = [emmo.has_spatial_direct_part.some(emmo['e-bonded_atom']),
+        is_a = [emmo.has_spatial_direct_part.some(emmo['e_bonded_atom']),
                 emmo.has_property.exactly(3, lattice_vector),
                 emmo.has_property.exactly(1, stiffness_tensor)]
 
@@ -251,9 +253,9 @@ with onto:
                 emmo.has_property.exactly(1, spacegroup)]
 
     # Add some properties to our atoms
-    emmo['e-bonded_atom'].is_a.append(emmo.has_property.exactly(1, atomic_number))
-    emmo['e-bonded_atom'].is_a.append(emmo.has_property.exactly(1, mass))
-    emmo['e-bonded_atom'].is_a.append(emmo.has_property.exactly(1, position))
+    emmo['e_bonded_atom'].is_a.append(emmo.has_property.exactly(1, atomic_number))
+    emmo['e_bonded_atom'].is_a.append(emmo.has_property.exactly(1, mass))
+    emmo['e_bonded_atom'].is_a.append(emmo.has_property.exactly(1, position))
 
     class boundary(emmo.state):
         """A boundary is a 4D region of spacetime shared by two material
@@ -310,11 +312,11 @@ with onto:
 
 # Sync attributes to make sure that all classes get a `label` and to
 # include the docstrings in the comments
-onto.sync_attributes()
+#onto.sync_attributes() FIXME: no sync_attribute
 
 
-# Sync the reasoner - FIXME: figure out how to use Pellet instead of HermiT
-#onto.sync_reasoner()
+# Sync the reasoner - FIXME: Using Pellet reasoner, not thoroughly tested
+sync_reasoner_pellet([onto])
 
 
 # Save our new EMMO-based ontology.
