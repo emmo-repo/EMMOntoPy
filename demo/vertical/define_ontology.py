@@ -311,7 +311,7 @@ with onto:
 
 # Sync attributes to make sure that all classes get a `label` and to
 # include the docstrings in the comments
-#onto.sync_attributes() FIXME: no sync_attribute
+onto.sync_attributes()
 
 
 # Sync the reasoner - FIXME: Using Pellet reasoner, not thoroughly tested
