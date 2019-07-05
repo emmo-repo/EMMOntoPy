@@ -193,7 +193,7 @@ with onto:
         space group number (and setting) from the International tables of
         Crystallography.
         """
-        is_a = [has_type.exactly(1, string)]  
+        is_a = [has_type.exactly(1, string)]
         pass
 
     class plasticity(emmo.physical_quantity):
@@ -314,7 +314,7 @@ with onto:
 onto.sync_attributes()
 
 
-# Sync the reasoner - FIXME: Using Pellet reasoner, not thoroughly tested
+# Sync the reasoner - we use Pellet here becuse HermiT is very slow
 sync_reasoner_pellet([onto])
 
 

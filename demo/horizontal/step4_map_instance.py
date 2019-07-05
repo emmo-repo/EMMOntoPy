@@ -63,7 +63,7 @@ def map_app2common(inst, metacoll, out_id=None):
         label = 'atom%d' % i
         a = EBondedAtom([3])
         a.atomic_number = inst.numbers[i]
-        a.atomic_mass = inst.masses[i]
+        a.mass = inst.masses[i]
         a.position = inst.positions[i]
         atcoll.add(label, a)
         atcoll.add_relation('unit_cell', 'has_spatial_direct_part', label)
