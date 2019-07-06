@@ -16,9 +16,17 @@ import dlite
 from step2_define_metadata import DLiteAtoms
 
 
+# Example for importing structure from the MaterialsProject
+# Not used in the current demo
+#from pymatgen.ext.matproj import MPRester
+#with MPRester('USER_API_KEY') as m:
+#    structure = m.get_structure_by_material_id('mp-2018')
 
-# Load atom structure from cif file and convert it to a DLiteAtoms object
+
+# Load atom structure from cif file 
 at = ase.io.read('../vertical/Al-Fe4Al13.cif')
+
+# convert atom structure to a DLiteAtoms object
 atoms = dlite.objectfactory(at, cls=DLiteAtoms, instanceid='atoms_Al-Fe4Al13')
 
 

@@ -34,7 +34,7 @@ References
 
 """
 from emmo import get_ontology
-
+from owlready2 import sync_reasoner_pellet
 
 # Load EMMO
 emmo = get_ontology()
@@ -77,7 +77,7 @@ with onto:
     class real(emmo.number):
         pass
 
-    class string(emmo['well-formed']):
+    class string(emmo.number): #['well-formed']): #FIXME Ontology "emmo-all-inferred" has no such label: well-formed
         pass
 
     #
@@ -193,7 +193,8 @@ with onto:
         space group number (and setting) from the International tables of
         Crystallography.
         """
-        is_a = [has_type.exactly(1, string)]
+        is_a = [has_type.exactly(1, string)]  
+        pass
 
     class plasticity(emmo.physical_quantity):
         """Describes Yield stress and material hardening."""
@@ -313,8 +314,8 @@ with onto:
 onto.sync_attributes()
 
 
-# Sync the reasoner - FIXME: figure out how to use Pellet instead of HermiT
-#onto.sync_reasoner()
+# Sync the reasoner - FIXME: Using Pellet reasoner, not thoroughly tested
+sync_reasoner_pellet([onto])
 
 
 # Save our new EMMO-based ontology.
