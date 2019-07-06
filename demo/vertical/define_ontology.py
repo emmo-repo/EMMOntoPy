@@ -193,7 +193,7 @@ with onto:
         space group number (and setting) from the International tables of
         Crystallography.
         """
-        is_a = [has_type.exactly(1, string)]  
+        is_a = [has_type.exactly(1, string)]
         pass
 
     class plasticity(emmo.physical_quantity):
@@ -202,14 +202,21 @@ with onto:
                 has_type.min(2, real)]
 
     class work_of_separation(energy_per_area):
-        """The work required to separate two materials per boundary area."""
+        """The work required to separate two materials per interface area."""
         is_a = [has_unit.exactly(1, joule_per_square_meter),
                 has_type.exactly(1, real)]
 
     class traction_separation(pressure):
-        """The work required to separate two materials per boundary area."""
+        """The force required to separate two materials a certain distance
+        per interface area.  Hence, traction_separation is a curve."""
         is_a = [has_unit.exactly(1, pascal),
-                has_type.exactly(1, real)]
+                has_type.min(4, real)]
+
+    class load_curve(pressure):
+        """A measure for the displacement of a materials as function of the
+        appliced force."""
+        is_a = [has_unit.exactly(1, pascal),
+                has_type.min(4, real)]
 
 
     #
@@ -264,7 +271,6 @@ with onto:
 
     # Continuum
     # ---------
-    # FIXME
     class phase(emmo.continuum):
         """A phase is a continuum in which properties are homogeneous and can
         have different state of matter."""
@@ -277,7 +283,8 @@ with onto:
         representative for the system in question."""
         is_a = [emmo.has_property.exactly(1, stiffness_tensor),
                 emmo.has_property.exactly(1, density),
-                emmo.has_property.exactly(1, plasticity)]
+                emmo.has_property.exactly(1, plasticity),
+                emmo.has_spatial_direct_part.only(phase | boundary)]
 
 
     #
@@ -288,21 +295,18 @@ with onto:
         in a continous elastic materials."""
         is_a = [emmo.has_part.some(stiffness_tensor)]
 
-    # FIXME
-    class fem_unit_cell(emmo.model):
+    class finite_element(emmo.model):
         """A volume of a real world entity that is represented as a finite
         element unit cell in FEM."""
         is_a = [emmo.has_space_slice.exactly(1, emmo.volume)]
 
-    # FIXME
-    class cohesive_element(fem_unit_cell):
+    class cohesive_element(finite_element):
         is_a = [emmo.has_spatial_direct_part.exactly(2, phase),
                 emmo.has_space_slice.min(6, vertex),
                 emmo.has_space_slice.exactly(1, interface),
         ]
 
-    # FIXME
-    class bulk_element(fem_unit_cell):
+    class bulk_element(finite_element):
         is_a = [emmo.has_spatial_direct_part.exactly(1, phase),
                 emmo.has_space_slice.min(4, vertex)]
 
@@ -314,7 +318,7 @@ with onto:
 onto.sync_attributes()
 
 
-# Sync the reasoner - FIXME: Using Pellet reasoner, not thoroughly tested
+# Sync the reasoner - we use Pellet here becuse HermiT is very slow
 sync_reasoner_pellet([onto])
 
 

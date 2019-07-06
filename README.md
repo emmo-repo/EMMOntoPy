@@ -41,7 +41,7 @@ emmo.matter
 Dependencies
 ------------
   * Python 3.5 or greater
-  * [Owlready2]:  Developed and tested for v0.10. Install it with
+  * [Owlready2]: Install it with
 
         pip3 install Owlready2
 
