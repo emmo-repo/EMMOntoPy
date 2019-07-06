@@ -49,6 +49,6 @@ In addition to emmo, this demo also requires:
 
 
 
-[1]: https://stash.code.sintef.no/projects/SIDASE/repos/dlite/
+[1]: https://github.com/jesper-friis/DLite
 [2]: https://github.com/NanoSim/SOFT5
 [3]: https://wiki.fysik.dtu.dk/ase/
