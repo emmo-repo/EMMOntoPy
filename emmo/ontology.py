@@ -13,7 +13,6 @@ If desirable some of this may be moved back into owlready2.
 # This module was written before I had a good understanding of DL.
 # Should be simplified and improved:
 #   - Replace the mixin classes with composition.
-#   - Update to work with latest version of Owlready2
 #   - Rename get_dot_graph to get_graph().
 #   - Deprecate methods that are not needed.
 import os
@@ -89,7 +88,8 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
         f = lambda s: s[s.rindex('.') + 1: ] if '.' in s else s
         s = set(object.__dir__(self))
         for onto in [get_ontology(uri) for uri in self._namespaces.keys()]:
-            s.update([f(repr(cls)) for cls in onto.classes()])
+            s.update([f(repr(cls)) for cls in itertools.chain.from_iterable(
+                (onto.classes(), onto.properties()))])
         return sorted(s)
 
     def __objclass__(self):
@@ -165,8 +165,9 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
             owlready2.sync_reasoner()
 
     def sync_attributes(self, sync_imported=False):
-        """Call method is intended to be called after you have added new
-        classes (typically via Python).
+        """This method is intended to be called after you have added new
+        classes (typically via Python) to make sure that attributes like
+        `label` and `comments` are defined.
 
         If a class, object property or individual in the current
         ontology has no label, the name of the corresponding Python class
@@ -212,15 +213,21 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
                 self.get_triples(entity.storid, a.storid, None)]
         return d
 
-    def get_branch(self, root, leafs=(), include_leafs=True):
+    def get_branch(self, root, leafs=(), include_leafs=True,
+                   include_ancestors=False):
         """Returns a list with all direct and indirect subclasses of `root`.
-        Any subclass found in the sequence `leafs` will be included in
-        the returned list, but its subclasses will not.
 
-        If `include_leafs` is true, the leafs are included in the returned
-        list, otherwise they are not.
+        Subclasses of any subclass found in the sequence `leafs` will
+        be excluded from the returned list, where the elements of `leafs`
+        may be ThingClass objects or labels.
 
-        The elements of `leafs` may be ThingClass objects or labels.
+        If `include_leafs` is true, the leafs classes are included in
+        the returned list, otherwise they are not.
+
+        If `include_ancestors` is true, the ancestors of `root` will
+        be included.  If `include_ancestors` is a class or class label,
+        only ancestors up to (and including) the given class will included
+        in the returned list.
         """
         def _branch(root, leafs):
             if root not in leafs:
@@ -231,12 +238,69 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
                 branch = [root] if include_leafs else []
             return branch
 
+        def _ancestors(root, ancestors=set()):
+            if not include_ancestors:
+                return []
+            for parent in [c for c in root.is_a
+                           if isinstance(c, owlready2.ThingClass)]:
+                ancestors.add(parent)
+                label = parent.label.first() if parent.label else str(parent)
+                if include_ancestors is True or (
+                        parent not in include_ancestors and
+                        label not in include_ancestors):
+                    _ancestors(parent, ancestors)
+            return ancestors
+
         if isinstance(root, str):
             root = self.get_by_label(root)
         leafs = set(self.get_by_label(leaf) if isinstance(leaf, str)
                     else leaf for leaf in leafs)
         leafs.discard(root)
-        return _branch(root, leafs)
+        return list(_ancestors(root)) + _branch(root, leafs)
+
+    def get_relations(self, classes, relations=('is_a', 'relation'),
+                      label=True):
+        """Returns selected relations between `classes` as a generator object
+        of (subject, predicate, object) tuples.
+
+        `relations` is a sequence of the following strings or objects:
+          - "is_a": include `is_a` relations
+          - "equivalent_to": include `equivalent_to` relations
+          - "disjoint": include `disjoint` relations
+          - "inverse": include `inverse` relations (only between
+            object properties)
+          - relation label (include the given relation and all subclasses
+            of it)
+          - relation object  (include the given relation and all subclasses
+            of it)
+          - "argument": class construct argument
+
+        If `label` is true, labels will be added.  `label` may also be a
+        callable, in which case it will be called with one argument (which
+        might be a Restriction, ObjectProperty or string ("is_a", "disjoint",
+        "inverse", "argument")). It should return a string.
+        """
+        classes = set(self[c] if isinstance(c, str) else c for c in classes)
+        #labels = set(c if isinstance(c, str) else c.label.first()
+        #             for c in classes)
+        for c in classes:
+            for s in c.is_a:
+                if issubclass(s, owlready.Thing) and s in classes:
+                    yield (c, 'is_a', s)
+                elif isinstance(s, owlready2.restriction):
+                    yield (c, s, s.value)
+                elif isinstance(s, owlready2.ClassConstruct):
+                    if hasattr(s, 'Classes'):
+                        for cls in s.Classes:
+                            yield (c, s, cls)
+                    elif hasattr(s, 'Class'):
+                        yield (c, s, s.Class)
+                    else:
+                        raise TypeError('unsupported class construct: %r', s)
+                #elif isinstance
+
+
+
 
     def is_individual(self, entity):
         """Returns true if entity is an individual."""
@@ -270,7 +334,7 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
                    if ancestor in parent.ancestors())
 
     def closest_common_ancestors(self, cls1, cls2):
-        """Returns a list  with closest_common_ancestor to cls1 and cls2"""
+        """Returns a list  with closest_common_ancestor to cls1 and cls2."""
         distances = {}
         for ancestor in self.common_ancestors(cls1, cls2):
             distances[ancestor] = self.number_of_generations(cls1, ancestor) + self.number_of_generations(cls2, ancestor)
