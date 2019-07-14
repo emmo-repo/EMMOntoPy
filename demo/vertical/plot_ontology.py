@@ -16,6 +16,11 @@ onto.load()
 # Visualise our new EMMO-based ontology
 # =====================================
 
+# Update the uml-stype to generate
+del onto._uml_style['class']['shape']
+del onto._uml_style['defined_class']['shape']
+
+
 # Save graph with our new classes
 graph = onto.get_dot_graph(list(onto.classes()), relations=True,
                            style='uml', constraint=None)
