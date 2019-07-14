@@ -384,13 +384,6 @@ constituting the unit cell of a crystal.</rdfs:comment>
       <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
     </owl:Restriction>
   </rdfs:subClassOf>
-  <rdfs:subClassOf>
-    <owl:Restriction>
-      <owl:onProperty rdf:resource="http://emmc.info/emmo-properties#EMMO_e1097637_70d2_4895_973f_2396f04fa204"/>
-      <owl:onClass rdf:resource="http://www.emmc.info/emmc-csa/demo#load_curve"/>
-      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-    </owl:Restriction>
-  </rdfs:subClassOf>
   <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A boundary is a 4D region of spacetime shared by two material
 entities.</rdfs:comment>
   <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">boundary</rdfs:label>

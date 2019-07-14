@@ -211,15 +211,14 @@ with onto:
     emmo['e-bonded_atom'].is_a.append(emmo.has_property.exactly(1, atomic_number))
     emmo['e-bonded_atom'].is_a.append(emmo.has_property.exactly(1, position))
 
+    # Continuum
+    # ---------
     class boundary(emmo.state):
         """A boundary is a 4D region of spacetime shared by two material
         entities."""
         equivalient_to = [emmo.has_spatial_direct_part.exactly(2, emmo.state)]
-        is_a = [emmo.has_space_slice.exactly(1, interface),
-                emmo.has_property.exactly(1, load_curve)]
+        is_a = [emmo.has_space_slice.exactly(1, interface)]
 
-    # Continuum
-    # ---------
     class phase(emmo.continuum):
         """A phase is a continuum in which properties are homogeneous and can
         have different state of matter."""
