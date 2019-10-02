@@ -159,10 +159,28 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
                     getattr(self, c)() for c in categories)
                 if hasattr(entity, 'label') and label in entity.label]
 
-    def sync_reasoner(self):
-        """Update current ontology by running the HermiT reasoner."""
-        with self:
-            owlready2.sync_reasoner()
+    def sync_reasoner(self, reasoner='HermiT', include_imported=False):
+        """Update current ontology by running the given reasoner.
+
+        Supported values for `reasoner` are 'Pellet' and 'HermiT'.
+
+        If `include_imported` is true, the reasoner will also reason
+        over imported ontologies.  Note that this may be **very** with
+        the current supported reasoners (FaCT++ seems must faster).
+        """
+        def run(*args):
+            if reasoner == 'Pellet':
+                owlready2.sync_reasoner_pellet(*args)
+            elif reasoner == 'HermiT':
+                owlready2.sync_reasoner(*args)
+            else:
+                raise ValueError('unknown reasoner %r.  Supported reasoners'
+                                     'are "Pellet" and "HermiT".', reasoner)
+        if include_imported:
+            with self:
+                run()
+        else:
+            run([self])
 
     def sync_attributes(self, sync_imported=False):
         """Call method is intended to be called after you have added new

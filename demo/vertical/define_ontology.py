@@ -245,15 +245,13 @@ with onto:
     # ======
 
 
-
-
 # Sync attributes to make sure that all classes get a `label` and to
 # include the docstrings in the comments
 onto.sync_attributes()
 
 
-# Sync the reasoner - we use Pellet here becuse HermiT is very slow
-sync_reasoner_pellet([onto])
+# Run the reasoner
+onto.sync_reasoner()
 
 
 # Save our new EMMO-based ontology.
