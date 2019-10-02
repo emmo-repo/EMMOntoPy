@@ -159,7 +159,7 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
                     getattr(self, c)() for c in categories)
                 if hasattr(entity, 'label') and label in entity.label]
 
-    def sync_reasoner(self, reasoner='Pellet', include_imported=False):
+    def sync_reasoner(self, reasoner='HermiT', include_imported=False):
         """Update current ontology by running the given reasoner.
 
         Supported values for `reasoner` are 'Pellet' and 'HermiT'.
