@@ -224,11 +224,15 @@ class OntoVocab:
                 # ...add disjoint_with relations
                 if hasattr(item, 'disjoints'):
                     for d in item.disjoints():
-                        for e in d.entities:
-                            if e is not item:
-                                points.append(point_template.format(
-                                    point='disjoint_with ' + asstring(e, link),
-                                    ontology=self))
+                        #for e in d.entities:
+                        #    if e is not item:
+                        #        points.append(point_template.format(
+                        #            point='disjoint_with ' + asstring(e, link),
+                        #            ontology=self))
+                        s = ', '.join([asstring(e, link) for e in d.entities
+                                       if e is not item])
+                        points.append(point_template.format(
+                            point='disjoint_with ' + s, ontology=self))
 
                 # ...add inverse_of relations
                 if hasattr(item, 'inverse_property') and item.inverse_property:

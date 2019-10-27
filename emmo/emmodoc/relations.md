@@ -71,20 +71,18 @@ the following *property axioms*:
 
 
 
-## relation
+## emmo_relation
 
-## encloses
+## mereotopological
+
+## semiotic
+
+## connected
 
 ## has_sign
 
-## has_member
+## has_part
 
-
-## is_enclosed_by
-
-## stands_for
-
-## is_member_of
 
 
 

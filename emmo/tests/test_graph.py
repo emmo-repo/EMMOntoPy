@@ -43,6 +43,6 @@ property_graph.write_svg('property_graph.svg')
 emmo._default_style['graph']['rankdir'] = 'BT'
 
 #relations_graph = emmo.get_dot_relations_graph()
-relations_graph = emmo.get_dot_graph('relation')
+relations_graph = emmo.get_dot_graph('emmo_relation')
 relations_graph.write_pdf('relation_graph.pdf')
 relations_graph.write_png('relation_graph.png')

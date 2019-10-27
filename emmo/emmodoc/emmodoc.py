@@ -66,7 +66,7 @@ max_width = 668  # max width of image in px
 
 
 def emmodoc(filename='emmodoc.html', format=None, figformat=None,
-            figstyle='uml', figscale=None, tmpdir=None):
+            figstyle=None, figscale=None, tmpdir=None):
     """Generates EMMO documentation using pandoc.
 
     Parameters
@@ -147,12 +147,20 @@ def emmodoc(filename='emmodoc.html', format=None, figformat=None,
     # Appendix - full taxonomy
     entity_graph = emmo.get_dot_graph('emmo', relations=True,
                                       edgelabels=abbreviations)
-    figname = os.path.join(htmldir, 'entity_graph.' + figformat)
+    taxonomy = os.path.join(htmldir, 'entity_graph.' + figformat)
     writer = getattr(entity_graph, 'write_' + figformat)
-    writer(figname)
+    writer(taxonomy)
+
+    relations_graph = emmo.get_dot_graph('emmo_relation')
+    emmo_relations = os.path.join(htmldir, 'relations_graph.' + figformat)
+    writer = getattr(relations_graph, 'write_' + figformat)
+    writer(emmo_relations)
+
     doc.append('\n\n# Appendix\n\n')
     doc.append(
-        '![The complete EMMO taxonomy.](%s)\n\n' % figname)
+        '![The complete EMMO taxonomy.](%s)\n\n' % taxonomy)
+    doc.append(
+        '![EMMO relations.](%s)\n\n' % emmo_relations)
 
     # Write markdown document
     with open(mdfile, 'w') as f:
@@ -202,6 +210,7 @@ def emmodoc(filename='emmodoc.html', format=None, figformat=None,
         args.append('--template=%s' %
                     os.path.join(thisdir, 'emmodoc-template.tex'))
         args.append('--variable=documentclass:report')
+        args.append('--pdf-engine=xelatex')
 
 
     # Run pandoc
@@ -220,7 +229,7 @@ def emmodoc(filename='emmodoc.html', format=None, figformat=None,
 
 
 def make_graphs(sections, outdir='.', format='svg', relations=True,
-                style='uml', href=''):
+                style=None, href=''):
     """Reads `sections` dict and generate graphs for each section.
 
     Parameters
@@ -251,6 +260,9 @@ def make_graphs(sections, outdir='.', format='svg', relations=True,
             node.set_URL("%s#%s" % (href, node.get_name().strip('"')))
             node.set_target("_top")
 
+        #print('*** name:', name)
+        #print('    leafs:', leafs)
+        #print()
         writer = getattr(graph, 'write_' + format)
         writer(os.path.join(outdir, name + '.' + format))
 

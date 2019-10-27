@@ -139,13 +139,13 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
                 pass
         # Fallback to check whether we have a class in the current or any
         # of the imported ontologies whos name matches `label`
-        #for onto in [self] + self.imported_ontologies:
-        #    l = [cls for cls in onto.classes() if cls.__name__ == label]
-        #    if len(l) == 1:
-        #        return l[0]
-        #    elif len(l) > 1:
-        #        raise NoSuchLabelError('There is more than one class with '
-        #                               'name %r' % label)
+        for onto in [self] + self.imported_ontologies:
+            l = [cls for cls in onto.classes() if cls.__name__ == label]
+            if len(l) == 1:
+                return l[0]
+            elif len(l) > 1:
+                raise NoSuchLabelError('There is more than one class with '
+                                       'name %r' % label)
         # Label cannot be found
         raise NoSuchLabelError('Ontology "%s" has no such label: %s' % (
             self.name, label))

@@ -26,6 +26,19 @@ from .utils import asstring
 import emmo
 
 
+def getlabel(e):
+    """Returns the label of entity `e`."""
+    if hasattr(e, 'label'):
+        return e.label.first()
+    elif hasattr(e, '__name__'):
+        return e.__name__
+    elif hasattr(e, 'name'):
+        return str(e.name)
+    else:
+        return repr(e)
+        #raise ValueError('Cannot infer a label for entity: %r' % (e, ))
+
+
 class OntoGraph:
     """A mixin class used by emmo.ontology.Ontology that adds
     functionality for generating graph representations of the ontology.
@@ -275,7 +288,8 @@ class OntoGraph:
                         edge.set_constraint(constraint)
                     graph.add_edge(edge)
             elif isinstance(e, owlready2.Restriction):
-                rname = e.property.label.first()
+                #rname = e.property.label.first()
+                rname = getlabel(e.property)
                 rtype = owlready2.class_construct._restriction_type_2_label[
                     e.type]
 
