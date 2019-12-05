@@ -341,7 +341,9 @@ class OntoGraph:
         import pydot
 
         if graph is None:
-            graph = pydot.Dot(**style.get('graph', {}))
+            kwargs = style.get('graph', {})
+            kwargs.setdefault('newrank', True)
+            graph = pydot.Dot(**kwargs)
 
         if relations is True:
             relations = ['is_a'] + list(self.get_relations())

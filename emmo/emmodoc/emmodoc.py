@@ -19,7 +19,7 @@ sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
 from emmo import get_ontology
 
 # Load emmo and sync the resoner
-emmo = get_ontology()
+emmo = get_ontology('emmo-all-inferred.owl')
 emmo.load()
 #emmo.sync_reasoner()
 
@@ -76,7 +76,7 @@ def emmodoc(filename='emmodoc.html', format=None, figformat=None,
     format : None | "html" | "pdf" | ...
         Format of generated document.  If None, the format is inferred
         from `filename`.
-    figformat : None | "svg" | "pdf" | ...
+    figformat : None | "svg" | "pdf" | "png" | ...
         Format of generated figures.  If None, the figure format is inferred
         from `format`.
     figstyle : dict | "uml"

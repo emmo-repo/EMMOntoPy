@@ -69,7 +69,7 @@ branch of parthood (mereotopology).
 
 ## mathematical
 
-## quantitative_property
+;## quantitative_property
 
 
 ;## model
