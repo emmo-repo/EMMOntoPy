@@ -16,6 +16,11 @@ onto.load()
 # Visualise our new EMMO-based ontology
 # =====================================
 
+# Update the uml-stype to generate
+del onto._uml_style['class']['shape']
+del onto._uml_style['defined_class']['shape']
+
+
 # Save graph with our new classes
 graph = onto.get_dot_graph(list(onto.classes()), relations=True,
                            style='uml', constraint=None)
@@ -28,7 +33,8 @@ properties = [c for c in onto.classes()
               if issubclass(c, onto.property) and not c in units]
 leaf_prop = [c for c in properties if len(c.descendants()) == 1]
 materials = [c for c in onto.classes() if issubclass(c, (
-    onto.subatomic, onto.atomic, onto.mesoscopic, onto.continuum))]
+    onto.subatomic, onto.atomic, onto.mesoscopic, onto.continuum,
+    onto.boundary, onto.engineered_entity))]
 subdimensional = [c for c in onto.classes() if issubclass(c, (
     onto.point, onto.line, onto.surface, onto.volume))]
 types = [onto.integer, onto.real, onto.string]
