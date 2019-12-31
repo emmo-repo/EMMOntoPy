@@ -69,4 +69,5 @@ def get_related(cls, relations='relation', fixed_relations=None,
     return matches
 
 
+
 setattr(ThingClass, 'get_related', get_related)

@@ -19,9 +19,12 @@ If desirable some of this may be moved back into owlready2.
 import os
 import itertools
 import inspect
+import warnings
 
 import owlready2
 
+from .utils import asstring
+from .entity import ThingClass
 from .relations import EntityClass, ThingClass, PropertyClass
 from .ontograph import OntoGraph
 from .ontovocab import OntoVocab
@@ -85,11 +88,16 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
         return attr
 
     def __dir__(self):
-        """Include classes in dir() listing."""
-        f = lambda s: s[s.rindex('.') + 1: ] if '.' in s else s
+        """Extend in dir() listing."""
+        #f = lambda s: s[s.rindex('.') + 1: ] if '.' in s else s
         s = set(object.__dir__(self))
         for onto in [get_ontology(uri) for uri in self._namespaces.keys()]:
-            s.update([f(repr(cls)) for cls in onto.classes()])
+            s.update([cls.label.first() for cls in onto.classes()])
+            s.update([cls.label.first() for cls in onto.individuals()])
+            s.update([cls.label.first() for cls in onto.properties()])
+            s.update([cls.name for cls in onto.classes()])
+            s.update([cls.name for cls in onto.individuals()])
+            s.update([cls.name for cls in onto.properties()])
         return sorted(s)
 
     def __objclass__(self):
@@ -100,6 +108,23 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
         """Returns a list or root classes."""
         return [cls for cls in self.classes()
                 if not cls.ancestors().difference(set([cls, owlready2.Thing]))]
+
+    def get_root_object_properties(self):
+        """Returns a list of root object properties."""
+        props = set(self.object_properties())
+        return [p for p in props if not props.intersection(p.is_a)]
+
+    def get_root_data_properties(self):
+        """Returns a list of root object properties."""
+        props = set(self.data_properties())
+        return [p for p in props if not props.intersection(p.is_a)]
+
+    def get_roots(self):
+        """Returns all class, object_property and data_property roots."""
+        roots = self.get_root_classes()
+        roots.extend(self.get_root_object_properties())
+        roots.extend(self.get_root_data_properties())
+        return roots
 
     def get_by_label(self, label):
         """Returns entity by label.
@@ -221,6 +246,9 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
     def get_annotations(self, entity):
         """Returns a dict with annotations for `entity`.  Entity may be given
         either as a ThingClass object or as a label."""
+        warnings.warn('Ontology.get_annotations(cls) is deprecated.  '
+                      'Use cls.get_annotations() instead.', DeprecationWarning)
+
         if isinstance(entity, str):
             entity = self.get_by_label(entity)
         d = {'comment': getattr(entity, 'comment', '')}
@@ -254,7 +282,10 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
         leafs = set(self.get_by_label(leaf) if isinstance(leaf, str)
                     else leaf for leaf in leafs)
         leafs.discard(root)
-        return _branch(root, leafs)
+        branch = _branch(root, leafs)
+        # Sort according to depth, then by label
+        return sorted(sorted(set(branch), key=lambda x: asstring(x)),
+                      key=lambda x: len(x.mro()))
 
     def is_individual(self, entity):
         """Returns true if entity is an individual."""

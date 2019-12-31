@@ -7,6 +7,8 @@ $endif$$if(dir)$$if(latex-dir-rtl)$
 \PassOptionsToPackage{RTLdocument}{bidi}
 $endif$$endif$%
 \documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$babel-lang$,$endif$$if(papersize)$$papersize$paper,$endif$$if(beamer)$ignorenonframetext,$if(handout)$handout,$endif$$if(aspectratio)$aspectratio=$aspectratio$,$endif$$endif$$for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
+\usepackage{graphicx}
+
 $if(beamer)$
 $if(background-image)$
 \usebackgroundtemplate{%
@@ -385,7 +387,7 @@ $else$
   {\large $date$\par}\vspace{2cm}
   $endif$
   $if(titlegraphic)$
-  \includegraphics{$titlegraphic$}\par\vspace{0.5cm}
+  \includegraphics[width=\linewidth]{$titlegraphic$}\par\vspace{0.5cm}
   $endif$
 \end{titlepage}
 \thispagestyle{empty}
@@ -399,6 +401,7 @@ $if(keywords)$
   {\bf Keywords:} $for(keywords)$$keywords$$sep$, $endfor$
 }
 $endif$
+
 $if(author)$
 {
   \par\vspace{4cm}

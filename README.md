@@ -51,10 +51,16 @@ Dependencies
 
   * [java]. Needed for reasoning.
 
-  * [pandoc]: Only used for converting generated controlled vocabulary
-    from markdown to nicely formatted html or pdf.
+  * [pandoc]: Only used for generated documentation from markdown to
+    nicely formatted html or pdf.
+
+  * [pdfLaTeX]/[XeLaTeX] and the upgreek latex package (included in
+    texlive-was on RetHat-based distributions) for generation of pdf
+    documentation.
 
 
 [Owlready2]: https://pypi.org/project/Owlready2/
 [pydot]: https://pypi.org/project/pydot/
 [pandoc]: http://pandoc.org
+[XeLaTeX]: https://www.overleaf.com/learn/latex/XeLaTeX
+[pdfLaTeX]: https://www.latex-project.org/

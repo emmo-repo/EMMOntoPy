@@ -61,8 +61,12 @@ h2 {
     border-bottom: 3px solid #0d6ea1;
 }
 h3 {
-    font-weight: normal;
+    font-weight: bold;
+    font-size: 14pt;
+/*
     font-style: italic;
+    color: #0d6ea1;
+*/
 }
 h4 {
     font-weight: bold;
@@ -214,7 +218,9 @@ dd {
     margin-bottom: 1em;
 }
 
-
+img {
+    padding-bottom: 30pt;
+}
 
 caption,col,colgroup,table,tbody,td,tfoot,th,thead,tr {
     border-spacing: 0;

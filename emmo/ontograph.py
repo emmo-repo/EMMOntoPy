@@ -17,8 +17,12 @@ A module adding graphing functionality to emmo.ontology
 #     very useful interface to Jupyter Notebook and Qt Console integration,
 #     see https://pypi.org/project/graphviz/.
 #
+import os
+import re
 import itertools
 import warnings
+import tempfile
+import xml.etree.ElementTree as ET
 
 import owlready2
 
@@ -161,6 +165,8 @@ class OntoGraph:
 
         Note: This method requires pydot.
         """
+        # FIXME - double inheritance leads to dublicated nodes. Make sure
+        #         to only add a node once!
         import pydot
         from .ontology import NoSuchLabelError
 
@@ -437,3 +443,19 @@ class OntoGraph:
                  if not any([r in rels for r in relation.is_a])]
         return self.get_dot_graph(root=roots, graph=graph, relations=relations,
                                   style=style)
+
+
+
+def get_figsize(graph):
+    """Returns figure size (width, height) in points of figures for the
+    current pydot graph object `graph`."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpfile = os.path.join(tmpdir, 'graph.svg')
+        graph.write_svg(tmpfile)
+        xml = ET.parse(tmpfile)
+        svg = xml.getroot()
+        asfloat = lambda s: float(re.match(r'^[\d.]+', s).group())
+        width = svg.attrib['width']
+        height = svg.attrib['height']
+        assert width.endswith('pt')  # ensure that units are in points
+    return asfloat(width), asfloat(height)
