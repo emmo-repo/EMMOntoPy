@@ -124,7 +124,7 @@ class OntoDoc:
         sep='<p>\n',
         figwidth='width="{width:.0f}"',
         figure='<img src="{path}" alt="{caption}"{figwidth}>',
-        header='  <dt><dfn id="{lowerlabel}">{label}</dfn>',
+        header='<h{level} id="{lowerlabel}">{label}</h{level}>',
         link='<a href="{lowerurl}">{name}</a>',
         point='      <li>{point}</li>\n',
         points='    <ul>\n      {points}\n    </ul>\n',
