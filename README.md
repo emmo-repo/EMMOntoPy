@@ -19,7 +19,7 @@ EMMO in Python.  On top of that EMMO-python provides:
     property names in EMMO are based on UUIDs).
   - Generation of graphs.
   - Generation of documentation.
-  - Pre-inferred [OWL file](owl/emmo-inferred.owl) of EMMO.
+  - Pre-inferred [OWL file](emmo/owl/emmo-inferred.owl) of EMMO.
   - ++
 
 Some examples of what you can do with EMMO-python includes:
@@ -77,7 +77,7 @@ In addition EMMO-python includes a few examples and demos:
 
 Dependencies
 ------------
-  * Python 3.5 or greater
+  * Python 3.6 or greater
   * [Owlready2][Owlready2]: Install it with:
 
         pip3 install Owlready2
@@ -91,9 +91,10 @@ Dependencies
   * [pandoc][pandoc]: Only used for generated documentation from markdown to
     nicely formatted html or pdf.
 
-  * [XeLaTeX][XeLaTeX]/[pdfLaTeX][pdfLaTeX] and the `upgreek` latex
+  * [XeLaTeX][XeLaTeX] or [pdfLaTeX][pdfLaTeX] and the `upgreek` latex
     package (included in texlive-was on RetHat-based distributions)
-    for generation of pdf documentation.
+    for generation of pdf documentation.  If your ontology contains unicode
+    characters, we recommend XeLaTeX.
 
 
 [Owlready2]: https://pypi.org/project/Owlready2/

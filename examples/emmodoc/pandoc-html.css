@@ -33,7 +33,10 @@ code {
     -webkit-border-radius: 5px;
     border: 1px solid #BCBEC0;
     padding: 2px;
+    font-size: 0.95em;
+    /*
     font: Monaco,Consolas,"Andale  Mono","DejaVu Sans Mono",monospace
+   */
     /*
     font-family: Monospace;
     display: inline-block;

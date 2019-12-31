@@ -14,8 +14,8 @@ class NADict:
 
     It is intended to be used with keys that are valid Python
     identifiers.  However, except for string keys containing a dot,
-    there are actually no hard limitations.  If an equals an existing
-    attribute name, attribute access if of cause not possible.
+    there are actually no hard limitations.  If a key equals an existing
+    attribute name, attribute access is of cause not possible.
 
     Nested items can be accessed via a dot notation, as shown in the
     example below.
@@ -39,12 +39,6 @@ class NADict:
     ----------
     _dict : dict
         Dictionary holding the actial items.
-    _attrWarn : bool
-        If true, a warning will be raised if a key matching an existing
-        attribute is added.
-    _errNew: bool
-        Raise an
-    _
     """
     def __init__(self, *args, **kw):
         object.__setattr__(self, '_dict', {})
