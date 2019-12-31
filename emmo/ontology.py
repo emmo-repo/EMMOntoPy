@@ -3,7 +3,6 @@
 includes:
   - Visualisation of taxonomy and ontology as graphs (using pydot, see
     ontograph.py).
-  - Generation of a controlled vocabulary from an ontology (see ontovocab.py).
 
 The class extension is defined within.
 
@@ -27,7 +26,6 @@ from .utils import asstring
 from .entity import ThingClass
 from .relations import EntityClass, ThingClass, PropertyClass
 from .ontograph import OntoGraph
-from .ontovocab import OntoVocab
 
 
 class NoSuchLabelError(LookupError):
@@ -35,14 +33,13 @@ class NoSuchLabelError(LookupError):
     pass
 
 
-# owl types
+# owl categories
 categories = (
     'annotation_properties',
     'data_properties',
     'object_properties',
     'classes',
     'individuals',
-    #'properties',
 )
 
 # Improve default rendering of entities
@@ -75,7 +72,7 @@ def get_ontology(base_iri='emmo-inferred.owl', verbose=False):
     return onto
 
 
-class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
+class Ontology(owlready2.Ontology, OntoGraph):
     """A generic class extending owlready2.Ontology.
     """
     def __getitem__(self, name):

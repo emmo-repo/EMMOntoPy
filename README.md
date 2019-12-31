@@ -1,4 +1,4 @@
-emmo-python - Python API for the Euroean Materials & Modelling Ontology (EMMO)
+EMMO-python - Python API for the Euroean Materials & Modelling Ontology (EMMO)
 ==============================================================================
 This package is based on [Owlready2] and provides an intuitive
 representation of EMMO in Python.
@@ -10,56 +10,96 @@ interoperability.  The aim of EMMO is to be generic and provide a
 common ground for describing materials, models and data that can be
 adapted by all domains.
 
-EMMO is formulated using OWL.  `emmo` makes it easier to use EMMO for
-solving real problems, by providing a natural representation of it in
-Python.  No knowledge of OWL is required to use `emmo`.  In `emmo`,
-entities in EMMO are represented as Python classes, while individuals
-are represented as instances of these. Relations are represented as
-class properties.
+EMMO is formulated using OWL.  EMMO-python is a Python API for using
+EMMO to solving real problems.  By using the excellent Python package
+[Owlready2], EMMO-python provides a natural representation of
+EMMO in Python.  On top of that EMMO-python provides:
 
-Below is a basic example showing how to access an entity using `emmo`:
+  - Access by label (as well as by names, important since class and
+    property names in EMMO are based on UUIDs).
+  - Generation of graphs.
+  - Generation of documentation.
+  - Pre-inferred [OWL file](owl/emmo-inferred.owl) of EMMO.
+  - ++
 
-```python
->>> from emmo import get_ontology
+Some examples of what you can do with EMMO-python includes:
 
->>> emmo = get_ontology()
->>> emmo.load()
->>> emmo.sync_reasoner()
+  - Access and query EMMO-based ontologies from your application.
+  - Extend EMMO with new domain or application ontologies.  This can
+    be done both statically with easy readable Python code or
+    dynamically within your application.
+  - Generate graphs and documentation of your ontologies.  EMMO-python
+    includes `ontodoc`, which is a dedicated command line tool for this.
+    You find it in the [tools/](tools) sub directory.
+  - Interactively explore an ontology in e.g. [IPython].  Tab completion
+    makes exploration easy and fast.  Below is an example of an IPython
+    session where we check the relations of `Matter`:
 
->>> emmo.matter
-emmo.matter
+    ```python
+    >>> from emmo import get_ontology
 
->>> emmo.matter.is_a
-[emmo-core.physical, emmo-core.is_part_of.only(emmo-material.matter)]
-```
+    >>> emmo = get_ontology()
+    >>> emmo.load()
+
+    >>> emmo.Matter
+    emmo-material.Matter
+
+    >>> emmo.Matter.is_a
+    [emmo-material.Type,
+     emmo-mereotopology.hasPart.some(emmo-material.Massive),
+     emmo-mereotopology.hasTemporalPart.only(emmo-material.Matter)]
+    ```
 
 
+Documentation and examples
+--------------------------
+The [Owlready2 documentation][Owlready2-doc] is a good starting point.
 
+In addition EMMO-python includes a few examples and demos:
+  - [demo/vertical](demo/vertical/README.md) shows an example of
+    how EMMO may be used to achieve vertical interoperability.
+    The file [define-ontology.py](demo/vertical/define-ontology.py)
+    provides a good example for how an EMMO-based application ontology
+    can be defined in Python.
+
+  - [demo/horizontal](demo/horizontal/README.md) shows an example of
+    shows an example of how EMMO may be used to achieve horizontal
+    interoperability.  This demo also shows how you can use
+    EMMO-python to represent your ontology with the low-level metadata
+    framework [DLite]. In addition to achieve interoperability, as
+    shown in the demo, DLite also allow you to automatically generate
+    C or Fortran code base on your ontology.
+
+  - [examples/emmodoc](examples/emmodoc/README.md) shows how the
+    documentation of EMMO is generated using the `ontodoc` tool.
 
 
 
 Dependencies
 ------------
   * Python 3.5 or greater
-  * [Owlready2]: Install it with
+  * [Owlready2][Owlready2]: Install it with:
 
         pip3 install Owlready2
 
-  * [pydot].  Required for generating graphs.  Install it with
+  * [pydot][pydot].  Required for generating graphs.  Install it with:
 
         pip3 install pydot
 
-  * [java]. Needed for reasoning.
+  * Java. Needed for reasoning.
 
-  * [pandoc]: Only used for generated documentation from markdown to
+  * [pandoc][pandoc]: Only used for generated documentation from markdown to
     nicely formatted html or pdf.
 
-  * [pdfLaTeX]/[XeLaTeX] and the upgreek latex package (included in
-    texlive-was on RetHat-based distributions) for generation of pdf
-    documentation.
+  * [XeLaTeX][XeLaTeX]/[pdfLaTeX][pdfLaTeX] and the `upgreek` latex
+    package (included in texlive-was on RetHat-based distributions)
+    for generation of pdf documentation.
 
 
 [Owlready2]: https://pypi.org/project/Owlready2/
+[Owlready2-doc]: https://pythonhosted.org/Owlready2/
+[IPython]: https://ipython.org/
+[DLite]: https://github.com/SINTEF/dlite/
 [pydot]: https://pypi.org/project/pydot/
 [pandoc]: http://pandoc.org
 [XeLaTeX]: https://www.overleaf.com/learn/latex/XeLaTeX

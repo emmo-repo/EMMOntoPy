@@ -27,6 +27,7 @@ for s in sorted(iris):
 inputdir = os.path.abspath(os.path.join(
     thisdir, '..', '..', 'examples', 'emmodoc'))
 inputfile = os.path.join(inputdir, 'doc.md')
+inputfile = 'doc.md'
 
 ontodoc = OntoDoc(emmo)
 
@@ -36,5 +37,3 @@ docpp = DocPP(template, ontodoc, os.path.dirname(inputfile))
 docpp.process()
 with open('doc-output.md', 'wt') as f:
     f.write(docpp.get_buffer())
-
-print(docpp)
