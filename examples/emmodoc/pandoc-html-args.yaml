@@ -2,5 +2,5 @@
 # Additional pandoc arguments for html output
 #
 to: html5
-css: emmodoc.css
-template: emmodoc-template.html
+css: pandoc-html.css
+template: pandoc-template.html

@@ -2,7 +2,7 @@
 # Additional pandoc arguments for latex and pdf output
 #
 from: markdown+auto_identifiers
-template: emmodoc-template.tex
+template: pandoc-template.tex
 pdf-engine: xelatex
 variables:
   urlcolor: blue

@@ -27,11 +27,20 @@ body, div, p {
     font-size: 12pt;
 }
 code {
+    background-color: #fbfbfb;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid #BCBEC0;
+    padding: 2px;
+    font: Monaco,Consolas,"Andale  Mono","DejaVu Sans Mono",monospace
+    /*
     font-family: Monospace;
-    /* display: inline-block; */
+    display: inline-block;
     background-color: #f4f4f4;
     border: 1px solid lightgray;
     border-radius: 3px;
+    */
 }
 /* Headers */
 h1, h2, h3, h4, h5, h6 {
