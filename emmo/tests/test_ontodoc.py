@@ -7,8 +7,6 @@ thisdir = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
 from emmo import get_ontology
 
-import owlready2
-
 from emmo.ontodoc import OntoDoc, DocPP
 
 
@@ -26,8 +24,7 @@ for s in sorted(iris):
 
 inputdir = os.path.abspath(os.path.join(
     thisdir, '..', '..', 'examples', 'emmodoc'))
-inputfile = os.path.join(inputdir, 'doc.md')
-inputfile = 'doc.md'
+inputfile = os.path.join(thisdir, 'doc.md')
 
 ontodoc = OntoDoc(emmo)
 

@@ -5,6 +5,7 @@ import argparse
 import subprocess
 
 
+# Support to run from uninstalled version by adding parent dir to sys path
 rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
     os.path.dirname(__file__)))))
 sys.path.insert(1, rootdir)
@@ -18,7 +19,7 @@ def main():
     parser = argparse.ArgumentParser(
         description='Tool for documenting ontologies.')
     parser.add_argument(
-        'iri', metavar='IRI', #default='emmo-inferred.owl', nargs='?',
+        'iri', metavar='IRI',  # default='emmo-inferred.owl', nargs='?',
         help='OWL file/source to document.')
     parser.add_argument(
         'outfile', metavar='OUTFILE',
@@ -37,7 +38,8 @@ def main():
         '--figdir', '-d', metavar='DIR', default='genfigs',
         help='Default directory to store generated figures.  If a relative '
         'path is given, it is relative to the template (see --template), or '
-        'the current directory, if --template is not given. Default: "genfigs"')
+        'the current directory, if --template is not given. Default: '
+        '"genfigs"')
     parser.add_argument(
         '--pandoc-args', '-p', metavar='FILE', nargs='*',
         help='YAML file with additional pandoc options.  Note, that default '

@@ -33,8 +33,10 @@ References
 [1] Khalid et al. Proc. Manufact. 15 (2018) 1407
 
 """
+import os
+
 from emmo import get_ontology
-from owlready2 import sync_reasoner_pellet
+
 
 # Load EMMO
 emmo = get_ontology()
@@ -77,7 +79,7 @@ with onto:
     class real(emmo.number):
         pass
 
-    class string(emmo.number): #['well-formed']): #FIXME Ontology "emmo-all-inferred" has no such label: well-formed
+    class string(emmo.number):  # ['well-formed']): #FIXME Ontology "emmo-all-inferred" has no such label: well-formed
         pass
 
     #
@@ -95,7 +97,6 @@ with onto:
 
     class pascal(SI_unit):
         label = ['Pa']
-
 
     #
     # Properties
@@ -186,8 +187,6 @@ with onto:
         is_a = [emmo.has_property.exactly(1, area),
                 emmo.has_property.exactly(1, traction_separation)]
 
-
-
     #
     # Material classes
     # ================
@@ -208,7 +207,8 @@ with onto:
                 emmo.has_property.exactly(1, spacegroup)]
 
     # Add some properties to our atoms
-    emmo['e-bonded_atom'].is_a.append(emmo.has_property.exactly(1, atomic_number))
+    emmo['e-bonded_atom'].is_a.append(
+        emmo.has_property.exactly(1, atomic_number))
     emmo['e-bonded_atom'].is_a.append(emmo.has_property.exactly(1, position))
 
     # Continuum
@@ -239,7 +239,6 @@ with onto:
             emmo.has_spatial_direct_part.exactly(2, boundary),
             emmo.has_property.exactly(1, load_curve)]
 
-
     #
     # Models
     # ======
@@ -260,7 +259,6 @@ onto.sync_reasoner()
 # ontology.  To get a clean version, we simply delete the owl file if
 # it already exists.
 owlfile = 'usercase_ontology.owl'
-import os
 if os.path.exists(owlfile):
     os.remove(owlfile)
 onto.save(owlfile)

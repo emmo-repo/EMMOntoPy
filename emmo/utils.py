@@ -27,11 +27,10 @@ def asstring(expr, link='{name}', n=0):
             return str(e).replace('owl.', 'owl:')
 
     if isinstance(expr, str):
-        #return link.format(name=expr)
+        # return link.format(name=expr)
         return fmt(expr)
     elif isinstance(expr, owlready2.Restriction):
         rlabel = owlready2.class_construct._restriction_type_2_label[expr.type]
-        #if n == 0:
         if not rlabel:
             s = '%s %s'
         elif expr.type in (owlready2.MIN, owlready2.MAX, owlready2.EXACTLY):
@@ -46,11 +45,11 @@ def asstring(expr, link='{name}', n=0):
     elif isinstance(expr, owlready2.Or):
         s = '%s' if n == 0 else '(%s)'
         return s % ' or '.join([asstring(c, link, n + 1)
-                                     for c in expr.Classes])
+                                for c in expr.Classes])
     elif isinstance(expr, owlready2.And):
         s = '%s' if n == 0 else '(%s)'
         return s % ' and '.join([asstring(c, link, n + 1)
-                                      for c in expr.Classes])
+                                 for c in expr.Classes])
     elif isinstance(expr, owlready2.Not):
         return 'not %s' % asstring(expr.Class, link, n + 1)
     elif isinstance(expr, owlready2.ThingClass):
@@ -61,11 +60,9 @@ def asstring(expr, link='{name}', n=0):
         return fmt(expr)
     elif isinstance(expr, bool):
         return repr(expr)
-    elif isinstance(expr, owlready2.class_construct.Inverse): #FLB
-        #print("Inverse in utils. TODO:", repr(expr))
+    elif isinstance(expr, owlready2.class_construct.Inverse):
         return fmt(expr)
-    elif isinstance(expr, owlready2.disjoint.AllDisjoint): #FLB
-        #print("owlready2.disjoint.AllDisjoints in utils. TODO:", repr(expr))
+    elif isinstance(expr, owlready2.disjoint.AllDisjoint):
         return fmt(expr)
     else:
         raise RuntimeError('Unknown expression: %r (type: %r)' % (
@@ -83,7 +80,7 @@ def camelsplit(s):
     c = s[0]
     for next in s[1:]:
         if ((not prev_isspace and c.isupper() and next.islower()) or
-            prev_lower and c.isupper()):
+                prev_lower and c.isupper()):
             result.append(' ')
         result.append(c)
         prev_lower = c.islower()

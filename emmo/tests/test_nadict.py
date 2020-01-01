@@ -8,5 +8,9 @@ sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
 from emmo.nadict import NADict
 
 
-#n = NADict()
 n = NADict(a=1, b=NADict(c=3, d=4))
+
+assert n.a == 1
+assert n.b.c == 3
+assert n.b.d == 4
+assert n['b.c'] == 3

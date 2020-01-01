@@ -78,7 +78,7 @@ class OntoDoc:
             ('\u039f', r'$\\Upomekron$'),
             ('\u03a0', r'$\\Uppi$'),
             ('\u03a1', r'$\\Uprho$'),
-            ('\u03a3', r'$\\Upsigma$'), # no \u0302
+            ('\u03a3', r'$\\Upsigma$'),  # no \u0302
             ('\u03a4', r'$\\Uptau$'),
             ('\u03a5', r'$\\Upupsilon$'),
             ('\u03a6', r'$\\Upvarphi$'),
@@ -129,18 +129,19 @@ class OntoDoc:
         point='      <li>{point}</li>\n',
         points='    <ul>\n      {points}\n    </ul>\n',
         annotation='  <dd><strong>{key}:</strong>\n{value}  </dd>\n',
-        substitutions=[(r'\n\n', r'<p>'),
-                       (r'\n', r'<br>\n'),
-                       (r'&', r"&#8210;"),
-                       (r'<p>', r'<p>\n\n'),
-                       (r'\u2018([^\u2019]*)\u2019', r'<q>\1</q>'),
-                       (r'\u2019', r"'"),
-                       (r'\u2260', r"&ne;"),
-                       (r'\u2264', r"&le;"),
-                       (r'\u2265', r"&ge;"),
-                       (r'\u226A', r"&x226A;"),
-                       (r'\u226B', r"&x226B;"),
-                       (r'"Y$', r""),  # strange noice added by owlready2
+        substitutions=[
+            (r'\n\n', r'<p>'),
+            (r'\n', r'<br>\n'),
+            (r'&', r"&#8210;"),
+            (r'<p>', r'<p>\n\n'),
+            (r'\u2018([^\u2019]*)\u2019', r'<q>\1</q>'),
+            (r'\u2019', r"'"),
+            (r'\u2260', r"&ne;"),
+            (r'\u2264', r"&le;"),
+            (r'\u2265', r"&ge;"),
+            (r'\u226A', r"&x226A;"),
+            (r'\u226B', r"&x226B;"),
+            (r'"Y$', r""),  # strange noice added by owlready2
         ],
     )
 
@@ -220,7 +221,6 @@ class OntoDoc:
         # Logical "sorting" of annotations
         order = dict(definition='00', axiom='01', theorem='02',
                      elucidation='03', domain='04', range='05', example='06')
-        sorter=lambda key: order.get(key, key)
 
         doc = []
 
@@ -238,7 +238,8 @@ class OntoDoc:
             annotations = item.get_individual_annotations()
         else:
             annotations = item.get_annotations()
-        for key in sorted(annotations.keys(), key=sorter):
+        for key in sorted(annotations.keys(),
+                          key=lambda key: order.get(key, key)):
             for value in annotations[key]:
                 for reg, sub in substitutions:
                     value = re.sub(reg, sub, value)
@@ -247,7 +248,7 @@ class OntoDoc:
 
         # ...add relations from is_a
         points = []
-        nonProp = (owlready2.ThingClass, #owlready2.Restriction,
+        nonProp = (owlready2.ThingClass,  # owlready2.Restriction,
                    owlready2.And, owlready2.Or, owlready2.Not)
         for p in item.is_a:
             if (isinstance(p, nonProp) or
@@ -333,8 +334,10 @@ class attrdict(dict):
         super(attrdict, self).__init__(*args, **kwargs)
         self.__dict__ = self
 
+
 class InvalidTemplateError(NameError):
     """Raised on errors in template files."""
+
 
 def get_options(opts, **kw):
     """Returns a dict with options from the sequence `opts` with
@@ -342,7 +345,7 @@ def get_options(opts, **kw):
     provided with the keyword arguments."""
     d = attrdict(kw)
     for opt in opts:
-        if not '=' in opt:
+        if '=' not in opt:
             raise InvalidTemplateError('Missing "=" in template option: %r' %
                                        opt)
         name, value = opt.split('=', 1)
@@ -398,18 +401,21 @@ class DocPP:
         correct format required by the backend). `leafs` may be a comma-
         separated list of leaf node names.
 
-            %BRANCHFIG name [path='' caption='' terminated=1 include_leafs=1 width=0px leafs='']
+            %BRANCHFIG name [path='' caption='' terminated=1 include_leafs=1
+                             width=0px leafs='']
 
       * This is a combination of the %HEADER and %BRANCHFIG directives.
 
-            %BRANCHHEAD name [level=2  path='' caption='' terminated=1 include_leafs=1 width=0px leafs='']
+            %BRANCHHEAD name [level=2  path='' caption='' terminated=1
+                              include_leafs=1 width=0px leafs='']
 
       * This is a combination of the %HEADER, %BRANCHFIG and %BRANCH
         directives. It inserts documentation of branch `name`, with a
         header followed by a figure and then documentation of each
         element.
 
-            %BRANCHDOC name [level=2  path='' caption='' terminated=1 include_leafs=1 width=0px leafs='']
+            %BRANCHDOC name [level=2  path='' caption='' terminated=1
+                             include_leafs=1 width=0px leafs='']
 
       * Insert generated documentation for all entities of the given type.
         Valid values of `type` are: "classes", "individuals",
@@ -630,7 +636,7 @@ class DocPP:
             figdir = self.figdir
             format = self.figformat
             term = 'T' if terminated else ''
-            path = os.path.join(self.figdir, name + term) + '.' + format
+            path = os.path.join(figdir, name + term) + '.' + format
 
         filepath = os.path.join(self.basedir, path)
         destdir = os.path.dirname(filepath)
@@ -642,8 +648,6 @@ class DocPP:
 
     def process_branchfigs(self):
         """Process all %BRANCHFIG directives."""
-        onto = self.ontodoc.onto
-        names = self.get_branches()
         for i, line in reversed(list(enumerate(self.lines))):
             if line.startswith('%BRANCHFIG '):
                 tokens = shlex.split(line)
@@ -662,10 +666,9 @@ class DocPP:
     def process_branchdocs(self):
         """Process all %BRANCHDOC and  %BRANCHEAD directives."""
         onto = self.ontodoc.onto
-        names = self.get_branches()
         for i, line in reversed(list(enumerate(self.lines))):
             if (line.startswith('%BRANCHDOC ') or
-                line.startswith('%BRANCHHEAD ')):
+                    line.startswith('%BRANCHHEAD ')):
                 with_branch = True if line.startswith('%BRANCHDOC ') else False
                 tokens = shlex.split(line)
                 name = tokens[1]
@@ -687,8 +690,7 @@ class DocPP:
                     self.ontodoc.get_figure(filepath, caption=opts.caption,
                                             width=width))
                 if with_branch:
-                    branch = self.ontodoc.onto.get_branch(
-                        name, leafs, opts.include_leafs)
+                    branch = onto.get_branch(name, leafs, opts.include_leafs)
                     sec.append(
                         self.ontodoc.itemsdoc(branch, int(opts.level + 1)))
 
@@ -724,7 +726,6 @@ class DocPP:
     def process_allfig(self):
         """Process all %ALLFIG directives."""
         onto = self.ontodoc.onto
-        names = self.get_branches()
         for i, line in reversed(list(enumerate(self.lines))):
             if line.startswith('%ALLFIG '):
                 tokens = shlex.split(line)

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""Tool for plotting selected parts of EMMO.
-"""
+"""Tool for plotting ontologies."""
 import sys
 import os
 import argparse
@@ -8,23 +7,27 @@ import argparse
 import pydot
 
 # Support to run from uninstalled version by adding parent dir to sys path
-thisdir = os.path.abspath(os.path.dirname(__file__))
-sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
+rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
+    os.path.dirname(__file__)))))
+sys.path.insert(1, rootdir)
 
-import emmo
+from emmo import get_ontology
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        'iri', metavar='IRI',  # default='emmo-inferred.owl', nargs='?',
+        help='OWL file/source to plot.')
     parser.add_argument(
         'output',
         help='name of output file.')
     parser.add_argument(
         '--root', '-r', default='entity',
         help='Name of root node.  Defaults to "entity".')
-    #parser.add_argument(
-    #    '--resoner', action='store_true', default=True,
-    #    help='Run the reasoner (the default)')
+    # parser.add_argument(
+    #     '--reasoner', action='store_true', default=True,
+    #     help='Run the reasoner (the default)')
     parser.add_argument(
         '--no-resoner', '-n', dest='reasoner', action='store_false',
         help='Do not run the reasoner.')
@@ -42,13 +45,13 @@ def main():
         help='Create a graph with only relations.')
     args = parser.parse_args()
 
-    onto = emmo.get_ontology('emmo.owl')
+    onto = get_ontology(args.iri)
     onto.load()
 
     if args.reasoner:
         onto.sync_reasoner()
 
-    #rankdir = 'RL' if args.horizontal else 'BT'
+    # rankdir = 'RL' if args.horizontal else 'BT'
     format = args.format if args.format else os.path.splitext(
         args.output)[1][1:]
 

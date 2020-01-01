@@ -8,8 +8,6 @@ thisdir = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
 from emmo import get_ontology
 
-import owlready2
-
 #emmo = get_ontology()
 #emmo.load()
 
@@ -50,8 +48,6 @@ else:
         modules = json.load(f)
 
 
-
-
 # Plot module dependencies
 from graphviz import Digraph
 
@@ -69,8 +65,7 @@ for i, cluster in enumerate(clusters):
     nodes = [k for k in modules if k.startswith(base + cluster)]
     with dot.subgraph(name='cluster%d' % i) as c:
         c.attr(label=cluster, labeljust='c', fontsize='20',
-               style='filled', fillcolor='lightgray',
-        )
+               style='filled', fillcolor='lightgray')
         print('cluster:', cluster)
         for node in nodes:
             print('  -', getname(node))

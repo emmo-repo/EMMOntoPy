@@ -15,9 +15,7 @@ TODO:
   - map restriction cardinality to collection diminsions
 """
 import sys
-import json
 import re
-from inspect import isclass
 
 import dlite
 from dlite import Instance, Dimension, Property
@@ -57,7 +55,8 @@ class EMMO2Meta:
     it easier to later retrieve it from a storage (without having
     to remember its UUID).
     """
-    def __init__(self, ontology=None, classes=None, version='0.1', collid=None):
+    def __init__(self, ontology=None, classes=None, version='0.1',
+                 collid=None):
         if ontology is None:
             self.onto = get_ontology()
             self.onto.load()
@@ -146,7 +145,7 @@ class EMMO2Meta:
                     self.coll.add_relation(label, "is_a", r.label.first())
                     self.add_class(r)
                 elif isinstance(r, owlready2.Restriction):
-                    if     (issubclass(r.property, self.onto.has_property) and
+                    if (issubclass(r.property, self.onto.has_property) and
                             isinstance(r.value, owlready2.ThingClass) and
                             isinstance(r.value, self.onto.property)):
                         self.add_class(r.value)
@@ -172,7 +171,7 @@ class EMMO2Meta:
             for property `r.value`."""
             t = owlready2.class_construct._restriction_type_2_label[r.type]
             if (t in ('some', 'only', 'min') or
-                (t in ('max', 'exactly') and r.cardinality > 1)):
+                    (t in ('max', 'exactly') and r.cardinality > 1)):
                 if name not in dimindices:
                     dimindices[name] = len(dims)
                     dims.append(Dimension(name, descr))
@@ -184,7 +183,7 @@ class EMMO2Meta:
             if not isinstance(c, owlready2.ThingClass):
                 continue
             for r in c.is_a:
-                if     (isinstance(r, owlready2.Restriction) and
+                if (isinstance(r, owlready2.Restriction) and
                         issubclass(r.property, self.onto.has_property) and
                         isinstance(r.value, owlready2.ThingClass) and
                         isinstance(r.value, self.onto.property)):
@@ -201,7 +200,8 @@ class EMMO2Meta:
                     else:
                         ptype = 'double'
                     d = []
-                    d.extend(get_dim(r, 'n_%ss' % name, 'Number of %s.' % name))
+                    d.extend(get_dim(r, 'n_%ss' % name, 'Number of %s.' %
+                                     name))
                     unit = None
 
                     # Update type, ndims and unit from relations
@@ -241,7 +241,6 @@ class EMMO2Meta:
         """Adds restriction metadata to collection and returns a reference
         to it."""
         uri = self.get_uri("Restriction")
-        uuid = self.get_uuid(uri)
         if not self.coll.has('Restriction'):
             props = [
                 Property('type', type='string', description='Type of '
@@ -285,7 +284,6 @@ class EMMO2Meta:
         """Adds class construct metadata to collection and returns a reference
         to it."""
         uri = self.get_uri("ClassConstruct")
-        uuid = self.get_uuid(uri)
         if not self.coll.has('ClassConstruct'):
             props = [
                 Property('type', type='string', description='Type of '

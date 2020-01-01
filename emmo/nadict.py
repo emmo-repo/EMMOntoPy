@@ -4,7 +4,6 @@ A nested dict with both attribute and item access.
 
 NA stands for Nested and Attribute.
 """
-import warnings
 import collections
 import copy
 

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Plots the user case ontology created with the script `define_ontology.py`."""
+"""Plots the user case ontology created with the script `define_ontology.py`.
+"""
 from emmo import get_ontology
 
 
-# Load EMMO
+# Load usercase ontology
 
 # Create a new ontology with out extensions that imports EMMO
 onto = get_ontology('usercase_ontology.owl')
@@ -30,7 +31,7 @@ graph.write_svg('usercase_ontology.svg')
 # Categories of classes
 units = [c for c in onto.classes() if issubclass(c, onto.SI_unit)]
 properties = [c for c in onto.classes()
-              if issubclass(c, onto.property) and not c in units]
+              if issubclass(c, onto.property) and c not in units]
 leaf_prop = [c for c in properties if len(c.descendants()) == 1]
 materials = [c for c in onto.classes() if issubclass(c, (
     onto.subatomic, onto.atomic, onto.mesoscopic, onto.continuum,
@@ -73,5 +74,5 @@ parents = {e.mro()[1] for e in onto.classes()}
 classes = list(parents.union(onto.classes())) + [onto.space]
 onto._uml_style['graph']['rankdir'] = 'RL'
 graph = onto.get_dot_graph(classes, relations=True, style='uml',
-                            edgelabels=True)
+                           edgelabels=True)
 graph.write_svg('usercase_ontology-parents.svg')

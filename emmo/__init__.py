@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 import sys
 
-
 # Ensure correct Python version
 if sys.version_info < (3, 4):
     raise RuntimeError('emmo requires Python 3.4 or later')
-
 
 # Ensure emmo is imported before owlready2...
 if 'owlready2' in sys.modules.keys():
@@ -13,6 +11,9 @@ if 'owlready2' in sys.modules.keys():
 
 # Appends EMMO to the ontology search path
 from . import owldir
+
+# Monkey patch Owlready2 by injecting some methods
+from . import patch
 
 # Import get_ontology(), which is our main entry point
 from .ontology import get_ontology

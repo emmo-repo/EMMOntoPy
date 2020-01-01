@@ -11,11 +11,6 @@ This script uses the Atomistic Simulation Environment (ASE) to load
 a atomistic Al-Fe4Al13 interface structure from a cif file and
 represents it using the same metadata framework as used in step 1.
 """
-import ase
-import ase.io
-from ase.spacegroup import Spacegroup
-from ase.visualize import view
-
 import dlite
 
 

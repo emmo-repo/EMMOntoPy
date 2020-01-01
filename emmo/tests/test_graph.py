@@ -8,9 +8,6 @@ sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
 from emmo import get_ontology
 
 
-##########################################################
-## EMMO base
-##########################################################
 emmo = get_ontology()
 emmo.load()
 

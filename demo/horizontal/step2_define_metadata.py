@@ -19,8 +19,11 @@ import dlite
 
 # Create an ASE Atoms subclass that also inherits from dlite atoms.json
 BaseAtoms = dlite.classfactory(ase.Atoms, url='json://atoms.json?mode=r#')
+
+
 class DLiteAtoms(BaseAtoms):
     """ASE Atoms class extended as a dlite entity."""
+
     def _dlite_get_info(self):
         d = self.info.copy()
         sg = Spacegroup(d.get('spacegroup', 'P 1'))

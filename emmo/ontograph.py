@@ -19,7 +19,6 @@ A module adding graphing functionality to emmo.ontology
 #
 import os
 import re
-import itertools
 import warnings
 import tempfile
 import xml.etree.ElementTree as ET
@@ -27,7 +26,6 @@ import xml.etree.ElementTree as ET
 import owlready2
 
 from .utils import asstring
-import emmo
 
 
 def getlabel(e):
@@ -40,7 +38,6 @@ def getlabel(e):
         return str(e.name)
     else:
         return repr(e)
-        #raise ValueError('Cannot infer a label for entity: %r' % (e, ))
 
 
 class OntoGraph:
@@ -48,10 +45,11 @@ class OntoGraph:
     functionality for generating graph representations of the ontology.
     """
     _default_style = {
-        'graph': {'graph_type': 'digraph', 'rankdir': 'RL', 'fontsize': 8,
-                  #'fontname': 'Bitstream Vera Sans', 'splines': 'ortho',
-                  #'engine': 'neato',
-            },
+        'graph': {
+            'graph_type': 'digraph', 'rankdir': 'RL', 'fontsize': 8,
+            # 'fontname': 'Bitstream Vera Sans', 'splines': 'ortho',
+            # 'engine': 'neato',
+        },
         'class': {
             'style': 'filled',
             'fillcolor': '#ffffcc',
@@ -65,7 +63,7 @@ class OntoGraph:
         'equivalent_to': {'color': 'green3', },
         'disjoint_with': {'color': 'red', },
         'inverse_of': {'color': 'orange', },
-        #'other': {'color': 'blue', },
+        # 'other': {'color': 'blue', },
         'relations': {
             'enclosing': {'color': 'red', 'arrowtail': 'diamond',
                           'dir': 'back'},
@@ -80,18 +78,19 @@ class OntoGraph:
         }
 
     _uml_style = {
-        'graph': {'graph_type': 'digraph', 'rankdir': 'RL', 'fontsize': 8,
-              #'splines': 'ortho',
-            },
+        'graph': {
+            'graph_type': 'digraph', 'rankdir': 'RL', 'fontsize': 8,
+            # 'splines': 'ortho',
+        },
         'class': {
-            #'shape': 'record',
+            # 'shape': 'record',
             'shape': 'box',
             'fontname': 'Bitstream Vera Sans',
             'style': 'filled',
             'fillcolor': '#ffffe0',
         },
         'defined_class': {
-            #'shape': 'record',
+            # 'shape': 'record',
             'shape': 'box',
             'fontname': 'Bitstream Vera Sans',
             'style': 'filled',
@@ -102,7 +101,7 @@ class OntoGraph:
         'equivalent_to': {'color': 'green3'},
         'disjoint_with': {'color': 'red', 'arrowhead': 'none'},
         'inverse_of': {'color': 'orange', 'arrowhead': 'none'},
-        #'other': {'color': 'blue', 'arrowtail': 'diamond', 'dir': 'back'},
+        # 'other': {'color': 'blue', 'arrowtail': 'diamond', 'dir': 'back'},
         'relations': {
             'enclosing': {'color': 'red', 'arrowtail': 'diamond',
                           'dir': 'back'},
@@ -115,7 +114,6 @@ class OntoGraph:
         },
         'other': {'color': 'blue'},
     }
-
 
     def get_dot_graph(self, root=None, graph=None, relations='is_a',
                       leafs=None, parents=False, style=None,
@@ -224,7 +222,7 @@ class OntoGraph:
             self._get_dot_add_edges(
                 graph, entity, targets, 'relations',
                 relations,
-                #style=style.get('relations', style.get('other', {})),
+                # style=style.get('relations', style.get('other', {})),
                 style=style.get('other', {}),
                 edgelabels=edgelabels,
                 constraint=constraint,
@@ -251,8 +249,8 @@ class OntoGraph:
 
             # Add inverse_of
             if (hasattr(entity, 'inverse_property') and
-                (relations is True or 'inverse_of' in relations) and
-                entity.inverse_property is not None):
+                    (relations is True or 'inverse_of' in relations) and
+                    entity.inverse_property is not None):
                 self._get_dot_add_edges(
                     graph, entity, [entity.inverse_property], 'inverse_of',
                     relations, style.get('inverse_of', {}),
@@ -294,7 +292,6 @@ class OntoGraph:
                         edge.set_constraint(constraint)
                     graph.add_edge(edge)
             elif isinstance(e, owlready2.Restriction):
-                #rname = e.property.label.first()
                 rname = getlabel(e.property)
                 rtype = owlready2.class_construct._restriction_type_2_label[
                     e.type]
@@ -309,8 +306,8 @@ class OntoGraph:
                     # Only proceede if there is only one node named `vname`
                     # and an edge to that node does not already exists
                     if (len(others) == 1 and
-                        (node.get_name(), vname) not in
-                        graph.obj_dict['edges'].keys()):
+                            (node.get_name(), vname) not in
+                            graph.obj_dict['edges'].keys()):
                         other = others[0]
                     else:
                         continue
@@ -335,8 +332,6 @@ class OntoGraph:
             elif hasattr(self, '_verbose') and self._verbose:
                 print('* get_dot_graph() * Ignoring: '
                       '%s %s %s' % (node.get_name(), relation, s))
-
-
 
     def _get_dot_graph(self, root=None, graph=None, relations='is_a',
                        leafs=None, style=None, visited=None,
@@ -432,7 +427,8 @@ class OntoGraph:
 
         return graph
 
-    def get_dot_relations_graph(self, graph=None, relations='is_a', style=None):
+    def get_dot_relations_graph(self, graph=None, relations='is_a',
+                                style=None):
         """Returns a disjoined graph of all relations.
 
         This method simply calls get_dot_graph() with all root relations.
@@ -443,7 +439,6 @@ class OntoGraph:
                  if not any([r in rels for r in relation.is_a])]
         return self.get_dot_graph(root=roots, graph=graph, relations=relations,
                                   style=style)
-
 
 
 def get_figsize(graph):
