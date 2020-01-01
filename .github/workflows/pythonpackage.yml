@@ -21,6 +21,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        apt-get install graphviz
+        apt-get install pandoc
+        apt-get install texlive-xetex
+        apt-get install texlive-was
     - name: Lint with flake8
       run: |
         pip install flake8
