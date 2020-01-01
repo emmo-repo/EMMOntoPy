@@ -83,7 +83,7 @@ class EMMO2Meta:
         """Returns a generator yielding all subclasses of owl class `cls`."""
         yield cls
         for subcls in cls.subclasses():
-            yield from all_subclasses(subcls)
+            yield from self.get_subclasses(subcls)
 
     def get_uri(self, name, version=None):
         """Returns uri (namespace/version/name)."""

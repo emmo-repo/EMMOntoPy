@@ -27,7 +27,7 @@ class DLiteAtoms(BaseAtoms):
         d['spacegroup'] = sg.symbol
         return [(k, str(v)) for k, v in d.items()]
 
-    def _dlite_set_info(value):
+    def _dlite_set_info(self, value):
         self.info.update(value)
         self.info['spacegroup'] = Spacegroup(self.info['spacegroup'])
 

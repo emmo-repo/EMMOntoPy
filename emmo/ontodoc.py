@@ -267,15 +267,16 @@ class OntoDoc:
         # ...add disjoint_with relations
         if hasattr(item, 'disjoints'):
             for d in item.disjoints():
-                for e in d.entities:
-                    if e is not item:
-                        points.append(point_template.format(
-                            point='disjoint_with ' + asstring(e, link_style),
-                            ontology=onto))
-                s = ', '.join([asstring(e, link_style) for e in d.entities
-                               if e is not item])
+                s = ', '.join(asstring(e, link_style) for e in d)
                 points.append(point_style.format(
-                    point='disjoint_with ' + s, ontology=onto))
+                    point='disjoint_width ' + s, ontology=onto))
+
+        # ...add disjoint_unions
+        if hasattr(item, 'disjoint_unions'):
+            for u in item.disjoint_unions:
+                s = ', '.join(asstring(e, link_style) for e in u)
+                points.append(point_style.format(
+                    point='disjoint_union_of ' + s, ontology=onto))
 
         # ...add inverse_of relations
         if hasattr(item, 'inverse_property') and item.inverse_property:
@@ -303,7 +304,7 @@ class OntoDoc:
         # Instances (individuals)
         if hasattr(item, 'instances'):
             points = []
-            for e in item.instances():
+            for e in [i for i in item.instances() if item in i.is_instance_of]:
                 points.append(point_style.format(
                     point=asstring(e, link_style), ontology=onto))
             if points:

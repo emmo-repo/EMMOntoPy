@@ -2,6 +2,7 @@
 """Python reference API for the Europeean Materials & Modelling Ontology (EMMO).
 """
 import os
+import re
 import setuptools
 from glob import glob
 
@@ -10,13 +11,18 @@ def rglob(patt):
     return [f for f in glob(patt, recursive=True) if os.path.isfile(f)]
 
 
+# Read long description from README.md file replacing references to local
+# files to github urls
+baseurl = 'https://raw.githubusercontent.com/emmo-repo/EMMO-python/master/'
 with open("README.md", "r") as f:
-    long_description = f.read()
+    long_description = re.sub(
+        r'(\[[^]]+\])\(([^:)]+)\)', rf'\1(%s\2)' % baseurl, f.read())
+
 
 setuptools.setup(
     name='emmo',
     version='1.0.0',
-    author='Europeean Materials Modelling Council (EMMC)',
+    author='Jesper Friis, Francesca Lønstad Bleken, Bjørn Tore Løvfall',
     author_email='jesper.friis@sintef.no',
     description = ('Python reference API for the Europeean Materials & '
                    'Modelling Ontology'),
@@ -35,10 +41,13 @@ setuptools.setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
         "Topic :: Scientific/Engineering :: Physics",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "Topic :: Software Development :: Libraries :: Python Modules",
+    ],
+    install_requires=[
+        'Owlready2>=0.22',
+        'pydot',
     ],
     packages=['emmo'],
     scripts=['tools/ontodoc'],

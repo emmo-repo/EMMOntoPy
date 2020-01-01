@@ -74,9 +74,13 @@ In addition EMMO-python includes a few examples and demos:
     documentation of EMMO is generated using the `ontodoc` tool.
 
 
-
-Dependencies
+Installation
 ------------
+Install with
+
+    pip install emmo
+
+### Dependencies
   * Python 3.6 or greater
   * [Owlready2][Owlready2]: Install it with:
 

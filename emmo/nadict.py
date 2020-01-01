@@ -59,16 +59,16 @@ class NADict:
         elif '.' in key:
             k1, k2 = key.split('.', 1)
             if k1 not in self._dict:
-                self._dict[k1] = NestedAttrDict()
+                self._dict[k1] = NADict()
             self._dict[k1][k2] = value
         elif key in self._dict:
-            if isinstance(self._dict[key], NestedAttrDict):
+            if isinstance(self._dict[key], NADict):
                 self._dict[key].update(value)
             else:
                 self._dict[key] = value
         else:
             if isinstance(value, collections.abc.Mapping):
-                self._dict[key] = NestedAttrDict(value)
+                self._dict[key] = NADict(value)
             else:
                 self._dict[key] = value
 
@@ -109,7 +109,7 @@ class NADict:
     def __iter__(self, prefix=''):
         for k, v in self._dict.items():
             key = '%s.%s' % (prefix, k) if prefix else k
-            if isinstance(v, NestedAttrDict):
+            if isinstance(v, NADict):
                 yield from v.__iter__(key)
             else:
                 yield key
@@ -129,11 +129,11 @@ class NADict:
 
     @staticmethod
     def fromkeys(self, iterable, value=None):
-        """Returns a new NestedAttrDict with keys from `iterable` and values
+        """Returns a new NADict with keys from `iterable` and values
         set to `value`."""
-        n = NestedAttrDict()
+        n = NADict()
         for key in iterable:
-            n[k] = value
+            n[key] = value
         return n
 
     def get(self, key, default=None):
@@ -149,7 +149,7 @@ class NADict:
         """Returns an iterator over all items as (key, value) pairs."""
         for k, v in self._dict.items():
             key = '%s.%s' % (prefix, k) if prefix else k
-            if isinstance(v, NestedAttrDict):
+            if isinstance(v, NADict):
                 yield from v.items(key)
             else:
                 yield (key, v)
@@ -158,7 +158,7 @@ class NADict:
         """Returns an iterator over all keys."""
         for k, v in self._dict.items():
             key = '%s.%s' % (prefix, k) if prefix else k
-            if isinstance(v, NestedAttrDict):
+            if isinstance(v, NADict):
                 yield from v.keys(key)
             else:
                 yield key
@@ -176,7 +176,7 @@ class NADict:
     def popitem(self, prefix=''):
         """Removes and returns some (key, value). Raises KeyError if empty."""
         item = self._dict.popitem()
-        if isinstance(item, NestedAttrDict):
+        if isinstance(item, NADict):
             k, v = item
             item2 = item.popitem(k)
             self._dict[k] = v
