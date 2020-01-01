@@ -49,6 +49,7 @@ setuptools.setup(
     install_requires=[
         'Owlready2>=0.22',
         'pydot',
+        'PyYAML',
     ],
     packages=['emmo'],
     scripts=['tools/ontodoc'],
