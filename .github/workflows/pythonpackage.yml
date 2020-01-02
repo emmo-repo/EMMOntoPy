@@ -5,6 +5,9 @@ on: [push]
 jobs:
   build:
 
+    env:
+      PYTHONPATH: $GITHUB_WORKSPACE/emmo
+
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -60,7 +63,7 @@ jobs:
       run: |
         pwd
         ls $PWD/emmo
-        export PYTHONPATH=$PWD/emmo:$PYTHONPATH
+        echo $PYTHONPATH
         cd demo/vertical
         python define_ontology.py
         python plot_ontology.py
