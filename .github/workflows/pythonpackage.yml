@@ -23,6 +23,13 @@ jobs:
     - name: Where are we
       run: |
         pwd
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings
+        flake8 . --count --exit-zero --max-line-length=79 --statistics
     - name: Install pandoc 2.1.2
       run: |
         #sudo apt-get install pandoc
@@ -35,13 +42,9 @@ jobs:
         sudo apt-get install graphviz
         sudo apt-get install texlive-xetex
         sudo apt-get install texlive-latex-extra
-    - name: Lint with flake8
+    - name: Add emmo to PYTHONPATH
       run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings
-        flake8 . --count --exit-zero --max-line-length=79 --statistics
+        export PYTHONPATH=$PWD/emmo:$PYTHONPATH
     - name: Test with pytest
       run: |
         pip install pytest
@@ -52,10 +55,10 @@ jobs:
         python ../../tools/ontodoc -f simple-html emmo-inferred.owl emmo-simple.html
         python ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.html
         python ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.pdf
-        cd ../..
+        cd -
     - name: Run vertical demo
       run: |
         cd demo/vertical
         python define_ontology.py
         python plot_ontology.py
-        cd ../..
+        cd -
