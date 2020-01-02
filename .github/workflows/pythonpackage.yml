@@ -38,9 +38,11 @@ jobs:
         pytest
     - name: Create EMMO documentation
       run: |
+      	pwd
         cd examples/emmodoc && ../../tools/ontodoc -t emmo.md -f simple-html emmo-inferred.owl emmo-simple.html
         cd examples/emmodoc && ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.html
         cd examples/emmodoc && ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.pdf
     - name: Run vertical demo
       run: |
         cd demo/vertical && python define_ontology.py
+        cd demo/vertical && python plot_ontology.py
