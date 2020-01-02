@@ -37,6 +37,7 @@ jobs:
         pip install pytest
         pytest
     - name: Create EMMO documentation
+      run: |
         cd examples/emmodoc && ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.html
         cd examples/emmodoc && ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.pdf
     - name: Run vertical demo
