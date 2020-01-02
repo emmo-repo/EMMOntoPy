@@ -38,7 +38,7 @@ jobs:
         pytest
     - name: pytest2
       run: |
-        pytest
+        pwd
     - name: Create EMMO documentation
       run: |
         cd examples/emmodoc && ../../tools/ontodoc -t emmo.md -f simple-html emmo-inferred.owl emmo-simple.html
