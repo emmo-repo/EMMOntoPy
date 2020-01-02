@@ -6,7 +6,7 @@ jobs:
   build:
 
     env:
-      PYTHONPATH: ${{ GITHUB_WORKSPACE }}/emmo
+      PYTHONPATH: ${GITHUB_WORKSPACE}/emmo
 
     runs-on: ubuntu-latest
     strategy:
