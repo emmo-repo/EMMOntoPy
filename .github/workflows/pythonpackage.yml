@@ -20,6 +20,9 @@ jobs:
     - name: Check Ubuntu version we are running under
       run: |
         uname -a
+    - name: Where are we
+      run: |
+        pwd
     - name: Install pandoc 2.1.2
       run: |
         #sudo apt-get install pandoc
@@ -49,10 +52,10 @@ jobs:
         python ../../tools/ontodoc -f simple-html emmo-inferred.owl emmo-simple.html
         python ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.html
         python ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.pdf
-        cd
-        pwd
+        cd ../..
     - name: Run vertical demo
       run: |
-        cd ~/demo/vertical
+        cd demo/vertical
         python define_ontology.py
         python plot_ontology.py
+        cd ../..
