@@ -6,7 +6,7 @@ jobs:
   build:
 
     env:
-      PYTHONPATH: $GITHUB_WORKSPACE/emmo
+      PYTHONPATH: ${{ GITHUB_WORKSPACE }}/emmo
 
     runs-on: ubuntu-latest
     strategy:
@@ -23,9 +23,9 @@ jobs:
     - name: Check Ubuntu version we are running under
       run: |
         uname -a
-    - name: Where are we
+    - name: Current environment
       run: |
-        pwd
+        env
     - name: Lint with flake8
       run: |
         pip install flake8
@@ -61,8 +61,6 @@ jobs:
         cd -
     - name: Run vertical demo
       run: |
-        pwd
-        ls $PWD/emmo
         echo $PYTHONPATH
         cd demo/vertical
         python define_ontology.py
