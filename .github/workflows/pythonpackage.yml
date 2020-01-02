@@ -58,6 +58,9 @@ jobs:
         cd -
     - name: Run vertical demo
       run: |
+        pwd
+        ls $PWD/emmo
+        export PYTHONPATH=$PWD/emmo:$PYTHONPATH
         cd demo/vertical
         python define_ontology.py
         python plot_ontology.py
