@@ -36,9 +36,9 @@ jobs:
       run: |
         pip install pytest
         pytest
-    - name: Figure out where we are...
+    - name: pytest2
       run: |
-      	pytest
+        pytest
     - name: Create EMMO documentation
       run: |
         cd examples/emmodoc && ../../tools/ontodoc -t emmo.md -f simple-html emmo-inferred.owl emmo-simple.html
