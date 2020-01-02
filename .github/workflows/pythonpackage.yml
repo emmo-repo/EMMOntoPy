@@ -5,9 +5,6 @@ on: [push]
 jobs:
   build:
 
-    env:
-      PYTHONPATH: ${GITHUB_WORKSPACE}/emmo
-
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -45,9 +42,9 @@ jobs:
         sudo apt-get install graphviz
         sudo apt-get install texlive-xetex
         sudo apt-get install texlive-latex-extra
-    - name: Add emmo to PYTHONPATH
+    - name: Install EMMO-python
       run: |
-        export PYTHONPATH=$PWD/emmo:$PYTHONPATH
+        python setup.py install
     - name: Test with pytest
       run: |
         pip install pytest
