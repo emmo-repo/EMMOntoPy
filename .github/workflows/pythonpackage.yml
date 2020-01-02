@@ -42,9 +42,9 @@ jobs:
     - name: Create EMMO documentation
       run: |
         cd examples/emmodoc
-	../../tools/ontodoc -t emmo.md -f simple-html emmo-inferred.owl emmo-simple.html
-        ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.html
-        ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.pdf
+	python ../../tools/ontodoc -t emmo.md -f simple-html emmo-inferred.owl emmo-simple.html
+        python ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.html
+        python ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.pdf
 	cd
 	pwd
     - name: Run vertical demo
