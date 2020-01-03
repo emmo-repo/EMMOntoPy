@@ -30,7 +30,7 @@ jobs:
         sudo apt-get install make
         sudo apt-get install cmake
         cd ..
-        git clone git@github.com:SINTEF/dlite.git
+        git clone https://github.com/SINTEF/dlite.git
         cd dlite
         mkdir build
         cd build
