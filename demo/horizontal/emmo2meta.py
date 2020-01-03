@@ -4,7 +4,7 @@ DLite metadata entities.
 
 Entities in the ontology are mapped to DLite as follows:
   - owl class (except EMMO property, see below) -> metadata entities
-  - owl `has_property` restrictions are interpreted. The "object"
+  - owl `hasProperty` restrictions are interpreted. The "object"
     entity of the relation is added as a SOFT property to the
     "subject" entity.
   - all other owl restriction -> entity + relation(s)
@@ -20,6 +20,7 @@ import re
 import dlite
 from dlite import Instance, Dimension, Property
 from emmo import get_ontology
+from emmo.utils import asstring
 import owlready2
 
 
@@ -145,9 +146,10 @@ class EMMO2Meta:
                     self.coll.add_relation(label, "is_a", r.label.first())
                     self.add_class(r)
                 elif isinstance(r, owlready2.Restriction):
-                    if (issubclass(r.property, self.onto.has_property) and
-                            isinstance(r.value, owlready2.ThingClass) and
-                            isinstance(r.value, self.onto.property)):
+                    # Correct this test if EMMO reintroduce isPropertyOf
+                    if (isinstance(r.value, owlready2.ThingClass) and
+                            isinstance(r.value, self.onto.Property) and
+                            issubclass(r.property, self.onto.hasProperty)):
                         self.add_class(r.value)
                     else:
                         self.add_restriction(r)
@@ -164,7 +166,7 @@ class EMMO2Meta:
         props = []
         dimindices = {}
         propnames = set()
-        types = dict(integer='int', real='double', string='string')
+        types = dict(Integer='int', Real='double', String='string')
 
         def get_dim(r, name, descr=None):
             """Returns dimension index corresponding to dimension name `name`
@@ -183,19 +185,32 @@ class EMMO2Meta:
             if not isinstance(c, owlready2.ThingClass):
                 continue
             for r in c.is_a:
+                # Note that EMMO currently does not define an inverse for
+                # hasProperty.  If we reintroduce that, we should replace
+                #
+                #     not isinstance(r.property, Inverse) and
+                #     issubclass(r.property, self.onto.hasProperty)
+                #
+                # with
+                #
+                #     ((isinstance(r.property, Inverse) and
+                #       issubclass(Inverse(r.property), onto.isPropertyFor)) or
+                #      issubclass(r.property, self.onto.hasProperty))
+                #
                 if (isinstance(r, owlready2.Restriction) and
-                        issubclass(r.property, self.onto.has_property) and
+                        not isinstance(r.property, owlready2.Inverse) and
+                        issubclass(r.property, self.onto.hasProperty) and
                         isinstance(r.value, owlready2.ThingClass) and
-                        isinstance(r.value, self.onto.property)):
+                        isinstance(r.value, self.onto.Property)):
                     name = self.get_label(r.value)
                     if name in propnames:
                         continue
                     propnames.add(name)
 
                     # Default type, ndims and unit
-                    if isinstance(r.value, (self.onto.descriptive_property,
-                                            self.onto.qualitative_property,
-                                            self.onto.subjective_property)):
+                    if isinstance(r.value, (self.onto.DescriptiveProperty,
+                                            self.onto.QualitativeProperty,
+                                            self.onto.SubjectiveProperty)):
                         ptype = 'string'
                     else:
                         ptype = 'double'
@@ -207,12 +222,12 @@ class EMMO2Meta:
                     # Update type, ndims and unit from relations
                     for r2 in [r] + r.value.is_a:
                         if isinstance(r2, owlready2.Restriction):
-                            if issubclass(r2.property, self.onto.has_type):
+                            if issubclass(r2.property, self.onto.hasType):
                                 typelabel = self.get_label(r2.value)
                                 ptype = types[typelabel]
                                 d.extend(get_dim(r2, '%s_length' % name,
                                                  'Length of %s' % name))
-                            elif issubclass(r2.property, self.onto.has_unit):
+                            elif issubclass(r2.property, self.onto.hasUnit):
                                 unit = self.get_label(r2.value)
 
                     descr = self.get_description(r.value)
@@ -232,7 +247,7 @@ class EMMO2Meta:
         label = inst.uuid
         vlabel = self.get_label(r.value)
         self.coll.add(label, inst)
-        self.coll.add_relation(label, r.property.label.first(), vlabel)
+        self.coll.add_relation(label, asstring(r.property), vlabel)
         if not self.coll.has(vlabel):
             self.add(r.value)
         return inst
