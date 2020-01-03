@@ -90,7 +90,7 @@ jobs:
     - name: Run horizontal demo
       run: |
         cd demo/horizontal
-        python step1_generate_metadata.py
+        #python step1_generate_metadata.py
         #python step2_define_metadata.py
         #python step3_instantiate.py
         #python step4_map_instance.py
