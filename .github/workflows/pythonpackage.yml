@@ -37,6 +37,8 @@ jobs:
         cd ..
         git clone https://github.com/SINTEF/dlite.git
         cd dlite
+        git submodule init
+        git submodule update
         mkdir build
         cd build
         cmake ..
