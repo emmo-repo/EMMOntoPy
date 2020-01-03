@@ -26,28 +26,28 @@ jobs:
     - name: Install DLite
       run: |
         emmodir=$PWD
-        sudo apt-get install gcc
-        sudo apt-get install make
-        sudo apt-get install cmake
-        sudo apt-get install libjansson-dev
-        sudo apt-get install libhdf5-dev
-        sudo apt-get install python-dev
-        sudo apt-get install swig3.0
-        sudo apt-get install doxygen
-        pip install numpy
-        cd ..
-        git clone https://github.com/SINTEF/dlite.git
-        cd dlite
-        git submodule init
-        git submodule update
-        mkdir build
-        cd build
-        cmake ..
-        make
-        make test
-        sudo make install
-        cd $emmodir
-        pwd
+        #sudo apt-get install gcc
+        #sudo apt-get install make
+        #sudo apt-get install cmake
+        #sudo apt-get install libjansson-dev
+        #sudo apt-get install libhdf5-dev
+        #sudo apt-get install python-dev
+        #sudo apt-get install swig3.0
+        #sudo apt-get install doxygen
+        #pip install numpy
+        #cd ..
+        #git clone https://github.com/SINTEF/dlite.git
+        #cd dlite
+        #git submodule init
+        #git submodule update
+        #mkdir build
+        #cd build
+        #cmake ..
+        #make
+        #make test
+        #sudo make install
+        #cd $emmodir
+        #pwd
     - name: Lint with flake8
       run: |
         pip install flake8
@@ -91,7 +91,7 @@ jobs:
       run: |
         cd demo/horizontal
         python step1_generate_metadata.py
-        python step2_define_metadata.py
-        python step3_instantiate.py
-        python step4_map_instance.py
+        #python step2_define_metadata.py
+        #python step3_instantiate.py
+        #python step4_map_instance.py
         cd -
