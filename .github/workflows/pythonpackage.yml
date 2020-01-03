@@ -26,6 +26,7 @@ jobs:
     - name: Install DLite
       run: |
         emmodir=$PWD
+        sudo apt-get install python-dev
         sudo apt-get install gcc
         sudo apt-get install make
         sudo apt-get install cmake
