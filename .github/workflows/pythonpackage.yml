@@ -23,6 +23,22 @@ jobs:
     - name: Current environment
       run: |
         env
+    - name: Install DLite
+      run: |
+        emmodir=$PWD
+        sudo apt-get install gcc
+        sudo apt-get install make
+        sudo apt-get install cmake
+        cd ..
+        git clone git@github.com:SINTEF/dlite.git
+        cd dlite
+        mkdir build
+        cd build
+        cmake ..
+        make
+        sudo make install
+        cd $emmodir
+        pwd
     - name: Lint with flake8
       run: |
         pip install flake8
