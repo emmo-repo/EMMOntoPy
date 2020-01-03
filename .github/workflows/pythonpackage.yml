@@ -29,6 +29,9 @@ jobs:
         sudo apt-get install gcc
         sudo apt-get install make
         sudo apt-get install cmake
+        sudo apt-get install libjansson-dev
+        sudo apt-get install libhdf5-dev
+        pip install numpy
         cd ..
         git clone https://github.com/SINTEF/dlite.git
         cd dlite
