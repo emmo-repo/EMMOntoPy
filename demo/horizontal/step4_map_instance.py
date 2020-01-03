@@ -33,6 +33,10 @@ def map_app2common(inst, metacoll, out_id=None):
     atcoll : Collection
         New collection with the atom structure represented as instances
         of metadata in `metacoll`.
+
+    Notes
+    -----
+    We use lowercase and underscore notation for the individuals.
     """
     infodict = dict(inst.info)  # make dict out of the info field
 
@@ -40,9 +44,9 @@ def map_app2common(inst, metacoll, out_id=None):
     atcoll = dlite.Collection(out_id)
 
     # Get metadata from metacoll
-    Crystal = metacoll['crystal']
-    UnitCell = metacoll['crystal_unit_cell']
-    EBondedAtom = metacoll['e-bonded_atom']
+    Crystal = metacoll['Crystal']
+    UnitCell = metacoll['CrystalUnitCell']
+    EBondedAtom = metacoll['BondedAtom']
 
     # Instanciate the structure
     crystal = Crystal([])
@@ -52,15 +56,15 @@ def map_app2common(inst, metacoll, out_id=None):
     unit_cell = UnitCell([3, 3, 36])
     unit_cell.lattice_vector = inst.cell
     atcoll.add('unit_cell', unit_cell)
-    atcoll.add_relation('crystal', 'has_spatial_direct_part', 'unit_cell')
+    atcoll.add_relation('crystal', 'hasSpatialDirectPart', 'unit_cell')
 
     for i in range(inst.natoms):
         label = 'atom%d' % i
         a = EBondedAtom([3])
-        a.atomic_number = inst.numbers[i]
-        a.position = inst.positions[i]
+        a.AtomicNumber = inst.numbers[i]
+        a.Position = inst.positions[i]
         atcoll.add(label, a)
-        atcoll.add_relation('unit_cell', 'has_spatial_direct_part', label)
+        atcoll.add_relation('unit_cell', 'hasSpatialDirectPart', label)
 
     return atcoll
 

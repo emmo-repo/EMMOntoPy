@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
+"""\
 Step 2 - define metadata for the ASE Atoms class
 ------------------------------------------------
 In this step we define metadata for the Atoms class in the Atomistic
 Simulation Environment (ASE).  This metadata is defined in the file
 atoms.json.
 
-We use the dlite.classfactory() to create a subclass of ASE Atoms that
-also exposes the attributes as dlite properties. The subclass DLiteAtoms
+The actual definition are provided in atoms.json.  Below we use the
+dlite.classfactory() to create a subclass of ASE Atoms that also
+exposes the attributes as dlite properties. The subclass DLiteAtoms
 adds some methods for handling some special attributes.
+
 """
 import ase
 from ase.spacegroup import Spacegroup
