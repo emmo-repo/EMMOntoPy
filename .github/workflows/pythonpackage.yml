@@ -25,11 +25,11 @@ jobs:
         env
     - name: Install latest version of cmake
       run: |
-        sudo apt-get install -y apt-transport-https
-        sudo apt-get install -y ca-certificates
-        sudo apt-get install -y gnupg
-        sudo apt-get install -y software-properties-common
-        sudo apt-get install -y wget
+        sudo apt-get install apt-transport-https
+        sudo apt-get install ca-certificates
+        sudo apt-get install gnupg
+        sudo apt-get install software-properties-common
+        sudo apt-get install wget
         # Obtain signing key
         wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | apt-key add -
         # Add Kitware repo
