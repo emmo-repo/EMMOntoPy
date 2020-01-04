@@ -27,11 +27,11 @@ jobs:
       run: |
         #sudo apt-get install apt-transport-https
         #sudo apt-get install ca-certificates
-        sudo apt-get install -y gnupg
+        #sudo apt-get install -y gnupg
         #sudo apt-get install -y software-properties-common
         #sudo apt-get install wget
         # Obtain signing key
-        sudo wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | apt-key add -
+        wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
         # Add Kitware repo
         sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
         sudo apt-get install cmake
