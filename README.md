@@ -1,5 +1,8 @@
 EMMO-python - Python API for the Euroean Materials & Modelling Ontology (EMMO)
 ==============================================================================
+
+![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20tests/badge.svg)
+
 This package is based on [Owlready2] and provides an intuitive
 representation of EMMO in Python.
 
@@ -82,16 +85,12 @@ Install with
 
 ### Dependencies
   * Python 3.6 or greater
-  * [Owlready2][Owlready2]: Install it with:
-
-        pip3 install Owlready2
-
-  * [pydot][pydot].  Required for generating graphs.  Install it with:
-
-        pip3 install pydot
+      - [Owlready2][Owlready2]
+      - [pydot][pydot]:  Required for generating graphs.
+      - PyYAML:  Required for generating documentation with pandoc.
 
   * Java. Needed for reasoning.
-
+  * [Graphviz][Graphviz]: Needed for graph generation.
   * [pandoc][pandoc]: Only used for generated documentation from markdown to
     nicely formatted html or pdf.
 
@@ -106,6 +105,7 @@ Install with
 [IPython]: https://ipython.org/
 [DLite]: https://github.com/SINTEF/dlite/
 [pydot]: https://pypi.org/project/pydot/
+[Graphviz]: https://www.graphviz.org/
 [pandoc]: http://pandoc.org
 [XeLaTeX]: https://www.overleaf.com/learn/latex/XeLaTeX
 [pdfLaTeX]: https://www.latex-project.org/

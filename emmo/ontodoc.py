@@ -100,7 +100,7 @@ class OntoDoc:
             ('\u03bc', r'$\\upmu$'),
             ('\u03bd', r'$\\upnu$'),
             ('\u03be', r'$\\upxi$'),
-            ('\u03bf', r'$\\upomekron$'),
+            ('\u03bf', r'$\\upomicron$'),
             ('\u03c0', r'$\\uppi$'),
             ('\u03c1', r'$\\uprho$'),
             ('\u03c2', r'$\\upvarsigma$'),

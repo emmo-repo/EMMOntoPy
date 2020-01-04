@@ -1,1 +1,4 @@
+Cython
 Owlready2>=0.22
+pydot
+PyYAML

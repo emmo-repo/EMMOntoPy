@@ -47,8 +47,10 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     install_requires=[
+        'Cython',
         'Owlready2>=0.22',
         'pydot',
+        'PyYAML',
     ],
     packages=['emmo'],
     scripts=['tools/ontodoc'],
