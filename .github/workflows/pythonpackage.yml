@@ -23,31 +23,43 @@ jobs:
     - name: Current environment
       run: |
         env
+    - name: Install latest version of cmake
+      run: |
+        sudo apt-get install -y apt-transport-https
+        sudo apt-get install -y ca-certificates
+        sudo apt-get install -y gnupg
+        sudo apt-get install -y software-properties-common
+        sudo apt-get install -y wget
+        # Obtain signing key
+        wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | apt-key add -
+        # Add Kitware repo
+        sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
+        sudo apt-get install cmake
     - name: Install DLite
       run: |
         emmodir=$PWD
-        #sudo apt-get install gcc
-        #sudo apt-get install make
-        #sudo apt-get install cmake
-        #sudo apt-get install libjansson-dev
-        #sudo apt-get install libhdf5-dev
-        #sudo apt-get install python-dev
-        #sudo apt-get install swig3.0
-        #sudo apt-get install doxygen
-        #pip install numpy
-        #cd ..
-        #git clone https://github.com/SINTEF/dlite.git
-        #cd dlite
-        #git submodule init
-        #git submodule update
-        #mkdir build
-        #cd build
-        #cmake ..
-        #make
-        #make test
-        #sudo make install
-        #cd $emmodir
-        #pwd
+        sudo apt-get install gcc
+        sudo apt-get install make
+        sudo apt-get install libjansson-dev
+        sudo apt-get install libhdf5-dev
+        sudo apt-get install python-dev
+        sudo apt-get install swig3.0
+        sudo apt-get install doxygen
+        sudo apt-get install python3-numpy
+        sudo apt-get install python3-yaml
+        sudo apt-get install python3-psycopg2
+        cd ..
+        git clone https://github.com/SINTEF/dlite.git
+        cd dlite
+        git submodule init
+        git submodule update
+        mkdir build
+        cd build
+        cmake ..
+        make
+        make test
+        sudo make install
+        cd $emmodir
     - name: Lint with flake8
       run: |
         pip install flake8
