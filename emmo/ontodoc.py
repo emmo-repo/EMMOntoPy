@@ -794,8 +794,8 @@ class DocPP:
             self.process_includes()
             self._processed = True
 
-    def write(self, outfile, format=None, pandoc_args=None, genfile=None,
-              verbose=True):
+    def write(self, outfile, format=None, pandoc_option_files=None,
+              genfile=None, verbose=True):
         """Writes documentation to `outfile`.
 
         Parameters
@@ -807,7 +807,7 @@ class DocPP:
             the built-in template generator is used.  Otherwise
             pandoc is used.  If not given, the format is inferred
             from the `outfile` name extension.
-        pandoc_args : sequence
+        pandoc_option_files : sequence
             Sequence with command line arguments provided to pandoc.
         genfile : str
             Store temporary generated markdown input file to pandoc
@@ -827,7 +827,8 @@ class DocPP:
             else:
                 with open(genfile, 'wt') as f:
                     f.write(content)
-            run_pandoc(genfile, outfile, format, pandoc_args=pandoc_args,
+            run_pandoc(genfile, outfile, format,
+                       pandoc_option_files=pandoc_option_files,
                        verbose=verbose)
         else:
             if verbose:
@@ -836,7 +837,7 @@ class DocPP:
                 f.write(content)
 
 
-def load_pandoc_options(yamlfile):
+def load_pandoc_option_file(yamlfile):
     """Loads pandoc options from `yamlfile` and return a list with
     corresponding pandoc command line arguments."""
     with open(yamlfile) as f:
@@ -859,7 +860,7 @@ def load_pandoc_options(yamlfile):
     return args
 
 
-def run_pandoc(genfile, outfile, format, pandoc_args=[], verbose=True):
+def run_pandoc(genfile, outfile, format, pandoc_option_files=[], verbose=True):
     """Runs pandoc.
 
     Parameters
@@ -870,19 +871,19 @@ def run_pandoc(genfile, outfile, format, pandoc_args=[], verbose=True):
         Output file name.
     format : str
         Output format.
-    pandoc_args : sequence
+    pandoc_option_files : sequence
         List of files with additional pandoc options.
     verbose : bool
         Whether to print the pandoc command before execution.
     """
     # Create pandoc argument list
     args = [genfile]
-    files = ['pandoc-args.yaml', 'pandoc-%s-args.yaml' % format]
-    if pandoc_args:
-        files.extend(pandoc_args)
+    files = ['pandoc-options.yaml', 'pandoc-%s-options.yaml' % format]
+    if pandoc_option_files:
+        files.extend(pandoc_option_files)
     for fname in files:
         if os.path.exists(fname):
-            args.extend(load_pandoc_options(fname))
+            args.extend(load_pandoc_option_file(fname))
         else:
             warnings.warn('missing pandoc option file: %s' % fname)
     args.append('--output=%s' % outfile)
