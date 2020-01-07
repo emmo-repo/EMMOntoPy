@@ -794,8 +794,8 @@ class DocPP:
             self.process_includes()
             self._processed = True
 
-    def write(self, outfile, format=None, pandoc_option_files=None,
-              genfile=None, verbose=True):
+    def write(self, outfile, format=None, pandoc_option_files=(),
+              pandoc_options=(), genfile=None, verbose=True):
         """Writes documentation to `outfile`.
 
         Parameters
@@ -809,6 +809,9 @@ class DocPP:
             from the `outfile` name extension.
         pandoc_option_files : sequence
             Sequence with command line arguments provided to pandoc.
+        pandoc_options : sequence
+            Additional pandoc options overriding options read from
+        `pandoc_option_files`.
         genfile : str
             Store temporary generated markdown input file to pandoc
             to this file (for debugging).
@@ -829,6 +832,7 @@ class DocPP:
                     f.write(content)
             run_pandoc(genfile, outfile, format,
                        pandoc_option_files=pandoc_option_files,
+                       pandoc_options=pandoc_options,
                        verbose=verbose)
         else:
             if verbose:
@@ -842,25 +846,64 @@ def load_pandoc_option_file(yamlfile):
     corresponding pandoc command line arguments."""
     with open(yamlfile) as f:
         d = yaml.safe_load(f)
-    args = d.pop('input-files', [])
+    options = d.pop('input-files', [])
     variables = d.pop('variables', {})
 
     for k, v in d.items():
         if isinstance(v, bool):
             if v:
-                args.append('--%s' % k)
+                options.append('--%s' % k)
         else:
-            args.append('--%s=%s' % (k, v))
+            options.append('--%s=%s' % (k, v))
 
     for k, v in variables.items():
         if k == 'date' and v == 'now':
             v = time.strftime('%B %d, %Y')
-        args.append('--variable=%s:%s' % (k, v))
+        options.append('--variable=%s:%s' % (k, v))
 
-    return args
+    return options
 
 
-def run_pandoc(genfile, outfile, format, pandoc_option_files=[], verbose=True):
+def append_pandoc_options(options, updates):
+    """Append `updates` to pandoc options `options`.
+
+    Parameters
+    ----------
+    options : sequence
+        Sequence with initial Pandoc options.
+    updates : sequence of str
+        Sequence of add strings of the form "--longoption=value", where
+        ``longoption`` is a valid pandoc long option and ``value`` is the
+        new value.  The "=value" part is optional.
+
+        Strings of the form "no-longoption" will filter out "--longoption"
+        from `options`.
+
+    Returns
+    -------
+    new_options : list
+        Updated pandoc options.
+    """
+    # Valid pandoc options starting with "--no-XXX"
+    no_options = set('no-highlight')
+
+    u = {}
+    for s in updates:
+        k, sep, v = s.partition('=')
+        u[k.lstrip('-')] = v if sep else None
+    filter_out = set(k for k, v in u.items()
+                     if k.startswith('no-') and k not in no_options)
+    _filter_out = set('--' + k[3:] for k in filter_out)
+    new_options = [opt for opt in options
+                   if opt.partition('=')[0] not in _filter_out]
+    new_options.extend(['--%s' % k if v is None else '--%s=%s' % (k, v)
+                        for k, v in u.items()
+                        if k not in filter_out])
+    return new_options
+
+
+def run_pandoc(genfile, outfile, format, pandoc_option_files=(),
+               pandoc_options=(), verbose=True):
     """Runs pandoc.
 
     Parameters
@@ -872,21 +915,35 @@ def run_pandoc(genfile, outfile, format, pandoc_option_files=[], verbose=True):
     format : str
         Output format.
     pandoc_option_files : sequence
-        List of files with additional pandoc options.
+        List of files with additional pandoc options.  Default is to read
+        "pandoc-options.yaml" and "pandoc-FORMAT-options.yml", where
+        `FORMAT` is the output format.
+    pandoc_options : sequence
+        Additional pandoc options overriding options read from
+        `pandoc_option_files`.
     verbose : bool
         Whether to print the pandoc command before execution.
+
+    Raises
+    ------
+    subprocess.CalledProcessError
+        If the pandoc process returns with non-zero status.  The `returncode`
+        attribute will hold the exit code.
     """
     # Create pandoc argument list
     args = [genfile]
     files = ['pandoc-options.yaml', 'pandoc-%s-options.yaml' % format]
     if pandoc_option_files:
-        files.extend(pandoc_option_files)
+        files = pandoc_option_files
     for fname in files:
         if os.path.exists(fname):
             args.extend(load_pandoc_option_file(fname))
         else:
             warnings.warn('missing pandoc option file: %s' % fname)
     args.append('--output=%s' % outfile)
+
+    # Update pandoc argument list
+    args = append_pandoc_options(args, pandoc_options)
 
     # Run pandoc
     cmd = ['pandoc'] + args
