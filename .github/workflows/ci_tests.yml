@@ -81,15 +81,12 @@ jobs:
         python ../../tools/ontodoc -f simple-html emmo-inferred.owl emmo-simple.html
         python ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.html
         python ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.pdf
-        mkdir output
-        mv emmo.html emmo.pdf output
         cd -
     - name: Upload EMMO documentation as artifact
       uses: actions/upload-artifact@v1
       with:
         name: emmodoc
-        #path: examples/emmodoc/output
-        path: examples/emmodoc/output/emmo.pdf
+        path: examples/emmodoc
     - name: Run vertical demo
       run: |
         cd demo/vertical
