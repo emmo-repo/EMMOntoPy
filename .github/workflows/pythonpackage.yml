@@ -31,12 +31,12 @@ jobs:
         #sudo apt-get install cmake
         #sudo apt-get install libjansson-dev
         #sudo apt-get install libhdf5-dev
-        #sudo apt-get install python-dev
-        #sudo apt-get install swig3.0
-        #sudo apt-get install doxygen
+        #sudo apt-get install python3-dev
         #sudo apt-get install python3-numpy
         #sudo apt-get install python3-yaml
         #sudo apt-get install python3-psycopg2
+        #sudo apt-get install swig3.0
+        #sudo apt-get install doxygen
         #cd ..
         #git clone https://github.com/SINTEF/dlite.git
         #cd dlite

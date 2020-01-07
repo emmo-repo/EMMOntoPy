@@ -1,4 +1,4 @@
-EMMO-python - Python API for the Euroean Materials & Modelling Ontology (EMMO)
+EMMO - Python API for the Euroean Materials & Modelling Ontology (EMMO)
 ==============================================================================
 
 ![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20tests/badge.svg)
@@ -81,7 +81,7 @@ Installation
 ------------
 Install with
 
-    pip install emmo
+    pip install EMMO
 
 ### Dependencies
   * Python 3.6 or greater
@@ -90,14 +90,17 @@ Install with
       - PyYAML:  Required for generating documentation with pandoc.
 
   * Java. Needed for reasoning.
+
   * [Graphviz][Graphviz]: Needed for graph generation.
+
   * [pandoc][pandoc]: Only used for generated documentation from markdown to
-    nicely formatted html or pdf.
+    nicely formatted html or pdf.  Tested with v2.1.2.
 
   * [XeLaTeX][XeLaTeX] or [pdfLaTeX][pdfLaTeX] and the `upgreek` latex
-    package (included in texlive-was on RetHat-based distributions)
-    for generation of pdf documentation.  If your ontology contains unicode
-    characters, we recommend XeLaTeX.
+    package (included in `texlive-was` on RetHat-based distributions
+    and `texlive-latex-extra` on Ubuntu) for generation of pdf
+    documentation.  If your ontology contains unicode characters, we
+    recommend XeLaTeX.
 
 
 [Owlready2]: https://pypi.org/project/Owlready2/
@@ -106,6 +109,6 @@ Install with
 [DLite]: https://github.com/SINTEF/dlite/
 [pydot]: https://pypi.org/project/pydot/
 [Graphviz]: https://www.graphviz.org/
-[pandoc]: http://pandoc.org
-[XeLaTeX]: https://www.overleaf.com/learn/latex/XeLaTeX
+[pandoc]: http://pandoc.org/
+[XeLaTeX]: https://www.overleaf.com/learn/latex/XeLaTeX/
 [pdfLaTeX]: https://www.latex-project.org/

@@ -21,8 +21,8 @@ with open("README.md", "r") as f:
 
 
 setuptools.setup(
-    name='emmo',
-    version='1.0.0',
+    name='EMMO',
+    version='1.0.0-alpha',
     author='Jesper Friis, Francesca Lønstad Bleken, Bjørn Tore Løvfall',
     author_email='jesper.friis@sintef.no',
     description=('Python reference API for the Europeean Materials & '
