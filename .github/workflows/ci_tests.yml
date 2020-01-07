@@ -84,11 +84,12 @@ jobs:
         mkdir output
         mv emmo.html emmo.pdf output
         cd -
-    - name: Upload EMMO documentation
+    - name: Upload EMMO documentation as artifact
       uses: actions/upload-artifact@v1
       with:
         name: emmodoc
-        path: examples/emmodoc/output
+        #path: examples/emmodoc/output
+        path: examples/emmodoc/output/emmo.pdf
     - name: Run vertical demo
       run: |
         cd demo/vertical
