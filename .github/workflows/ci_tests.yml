@@ -81,7 +81,14 @@ jobs:
         python ../../tools/ontodoc -f simple-html emmo-inferred.owl emmo-simple.html
         python ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.html
         python ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.pdf
+        mkdir output
+        mv emmo.html emmo.pdf output
         cd -
+    - name: Upload EMMO documentation
+      uses: actions/upload-artifact@v1
+      with:
+        name: emmodoc
+        path: examples/emmodoc/output
     - name: Run vertical demo
       run: |
         cd demo/vertical
@@ -96,8 +103,7 @@ jobs:
         #python step3_instantiate.py
         #python step4_map_instance.py
         cd -
-
-
+#
 #    - name: Install latest version of cmake
 #      run: |
 #        #sudo apt-get install apt-transport-https
@@ -110,3 +116,18 @@ jobs:
 #        # Add Kitware repo
 #        sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
 #        sudo apt-get install cmake
+#
+#    - name: Create Release
+#      id: create_release
+#      uses: actions/create_release@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # token provided by actions
+#      with:
+#        tag_name: ${{ github.ref }}
+#        release_name: ${{ github.ref }}
+#        body: |
+#          Changes in this Release
+#          - First change
+#          - Second change
+#        draft: false
+#        prerelease: true
