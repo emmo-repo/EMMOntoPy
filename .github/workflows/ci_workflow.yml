@@ -142,10 +142,12 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          # This token is provided by Actions, you do not need to
+          # create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           #tag_name: ${{ github.ref }}
-          tag_name: v1.0.0-alpha
+          tag_name: v1.0.0-alpha.5
           release_name: Release ${{ github.ref }}
           body: |
             Changes in this Release
@@ -162,16 +164,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@master
-      #- name: Build project # This would actually build your project, using zip for an example artifact
-      #  run: |
-      #    zip --junk-paths my-artifact README.md
       - name: Download emmodoc as artifact
         uses: actions/download-artifact@v1
         with:
           name: emmodoc
-      - name: Unzip emmodoc
-        run: |
-          unzip emmodoc.zip
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.0
@@ -179,7 +175,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           #tag_name: ${{ github.ref }}
-          tag_name: v1.0.0-alpha
+          tag_name: v1.0.0-alpha.5
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: true
@@ -189,7 +185,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          # This pulls from the CREATE RELEASE step above, referencing
+          # it's ID to get its outputs object, which include a
+          # `upload_url`. See this blog post for more info:
+          # https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./emmodoc/emmo.pdf
           asset_name: emmo.pdf
           asset_content_type: application/pdf
