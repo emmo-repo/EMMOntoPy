@@ -1,5 +1,11 @@
-recursive-include examples *
-recursive-exclude examples old genfigs *.pdf *.html *~
+include README.md LICENSE.txt
+recursive-exclude .github *
+exclude .readthedocs.yml
+
+recursive-include demo emmo/owl *.owl
+
+recursive-include examples/emmodoc *
+recursive-exclude examples/emmodoc old/** genfigs/** *.pdf *.html *~
 
 recursive-include demo *
 recursive-exclude demo old __pycache__ *~ *.pyc
