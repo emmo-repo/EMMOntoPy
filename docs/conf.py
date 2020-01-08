@@ -12,9 +12,10 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+sys.path.insert(0, os.path.abspath('.'))
+import emmo
 
 
 # -- Project information -----------------------------------------------------
@@ -24,10 +25,11 @@ copyright = '2020, European Materials Modelling Council'
 author = 'European Materials Modelling Council'
 
 # The short X.Y version
-version = ''
+version = emmo.VERSION
 # The full version, including alpha/beta/rc tags
-release = '1.0.0-alpha'
+release = emmo.VERSION
 
+#github_doc_root = 'https://github.com/emmo-repo/EMMO-python/tree/master/docs/'
 
 # -- General configuration ---------------------------------------------------
 
@@ -42,8 +44,10 @@ extensions = [
     'recommonmark',
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
+    #'sphinx.ext.napoleon',
+    'numpydoc',
     'sphinx.ext.mathjax',
-    'sphinx.ext.githubpages',
+    #'sphinx.ext.githubpages',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -52,8 +56,8 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
-source_suffix = '.md'
+source_suffix = ['.rst', '.md']
+#source_suffix = '.md'
 
 # The master toctree document.
 master_doc = 'index'
@@ -68,7 +72,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = []
+exclude_patterns = ['docker-instructions.md']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -161,3 +165,20 @@ texinfo_documents = [
 
 
 # -- Extension configuration -------------------------------------------------
+#from recommonmark.parser import CommonMarkParser
+
+#source_parsers = {'.md': CommonMarkParser}
+
+#source_suffix = ['.rst', '.md']
+
+# app setup hook
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+        #'url_resolver': lambda url: github_doc_root + url,
+        'auto_toc_tree_section': 'Contents',
+        'enable_math': True,
+        'enable_inline_math': True,
+        'enable_eval_rst': True,
+        'enable_auto_doc_ref': True,
+    }, True)
+    #app.add_transform(AutoStructify)

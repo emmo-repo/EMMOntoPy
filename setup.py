@@ -7,6 +7,8 @@ import re
 import setuptools
 from glob import glob
 
+import emmo
+
 
 def rglob(patt):
     return [f for f in glob(patt, recursive=True) if os.path.isfile(f)]
@@ -22,7 +24,7 @@ with open("README.md", "r") as f:
 
 setuptools.setup(
     name='EMMO',
-    version='1.0.0-alpha',
+    version=emmo.VERSION,
     author='Jesper Friis, Francesca Lønstad Bleken, Bjørn Tore Løvfall',
     author_email='jesper.friis@sintef.no',
     description=('Python reference API for the Europeean Materials & '

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import sys
 
+VERSION = '1.0.0-alpha'
+
+
 # Ensure correct Python version
 if sys.version_info < (3, 4):
     raise RuntimeError('emmo requires Python 3.4 or later')
