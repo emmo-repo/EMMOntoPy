@@ -103,6 +103,9 @@ Install with
     recommend XeLaTeX.
 
 
+See [docs/docker-dockerinstructions.md](#docs/docker-dockerinstructions.md)
+for how to build a docker image.
+
 [Owlready2]: https://pypi.org/project/Owlready2/
 [Owlready2-doc]: https://pythonhosted.org/Owlready2/
 [IPython]: https://ipython.org/
