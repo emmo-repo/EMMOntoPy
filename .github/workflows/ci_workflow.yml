@@ -79,14 +79,25 @@ jobs:
       run: |
         cd examples/emmodoc
         python ../../tools/ontodoc -f simple-html emmo-inferred.owl emmo-simple.html
-        python ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.html
+        python ../../tools/ontodoc -t emmo.md -p no-self-contained emmo-inferred.owl emmo.html
         python ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.pdf
         cd -
+
     - name: Upload EMMO documentation as artifact
       uses: actions/upload-artifact@v1
       with:
         name: emmodoc
         path: examples/emmodoc
+
+    - name: Deploy to github pages
+      # See https://github.com/marketplace/actions/deploy-to-github-pages
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BRANCH: gh-pages           # The branch the action should deploy to
+        FOLDER: examples/emmodoc   # The folder the action should deploy
+        TARGET_FOLDER: latest
+
     - name: Run vertical demo
       run: |
         cd demo/vertical
@@ -129,70 +140,3 @@ jobs:
 #          - Second change
 #        draft: false
 #        prerelease: true
-
-
-  create_release:
-    name: Create Release
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@master
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          # This token is provided by Actions, you do not need to
-          # create your own token
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          #tag_name: ${{ github.ref }}
-          #release_name: Release ${{ github.ref }}
-          tag_name: v1.0.0-alpha.${{ github.sha }}
-          release_name: Release v1.0.0-alpha.${{ github.sha }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: false
-          prerelease: true
-
-
-  release:
-    name: Upload Release Asset
-    runs-on: ubuntu-latest
-    needs: create_release
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@master
-      - name: Download emmodoc as artifact
-        uses: actions/download-artifact@v1
-        with:
-          name: emmodoc
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          #tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          tag_name: v1.0.0-alpha.${{ github.sha }}
-          release_name: Release v1.0.0-alpha.${{ github.sha }}
-          draft: false
-          prerelease: true
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          # This pulls from the CREATE RELEASE step above, referencing
-          # it's ID to get its outputs object, which include a
-          # `upload_url`. See this blog post for more info:
-          # https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./emmodoc/emmo.pdf
-          asset_name: emmo.pdf
-          asset_content_type: application/pdf
-          #asset_content_type: application/zip

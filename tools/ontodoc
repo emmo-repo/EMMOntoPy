@@ -41,14 +41,14 @@ def main():
         'the current directory, if --template is not given. Default: '
         '"genfigs"')
     parser.add_argument(
-        '--pandoc-option', '-p', metavar='STRING', nargs='*',
-        dest='pandoc_options', default=(),
+        '--pandoc-option', '-p', metavar='STRING', action='append',
+        dest='pandoc_options',
         help='Additional pandoc long options overriding those read from '
-        '--pandoc-option-file.  It is possible to remove option --XXX with '
-        '"--pandoc-option=no-XXX".  This option may be provided multiple '
+        '--pandoc-option-file.  It is possible to remove pandoc option --XXX '
+        'with "--pandoc-option=no-XXX".  This option may be provided multiple '
         'times.')
     parser.add_argument(
-        '--pandoc-option-file', '-P', metavar='FILE', nargs='*',
+        '--pandoc-option-file', '-P', metavar='FILE', action='append',
         dest='pandoc_option_files',
         help='YAML file with additional pandoc options.  Note, that default '
         'pandoc options are read from the files "pandoc-options.yaml" and '

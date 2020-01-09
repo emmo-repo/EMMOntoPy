@@ -887,6 +887,9 @@ def append_pandoc_options(options, updates):
     # Valid pandoc options starting with "--no-XXX"
     no_options = set('no-highlight')
 
+    if not updates:
+        return list(options)
+
     u = {}
     for s in updates:
         k, sep, v = s.partition('=')
