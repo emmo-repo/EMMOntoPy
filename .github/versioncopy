@@ -19,8 +19,8 @@
 [ $# -lt 2 -o $# -gt 3 ] && \
     echo "Usage: publish_versions path pubdir [regex]" >&2 && \
     exit 1
-pubdir="$1"
-docdir="$2"
+path="$1"
+pubdir="$2"
 regex="$3"
 
 # Enter git root directory
@@ -33,12 +33,12 @@ for tag in $(git tag); do
     # If 'regex' is provided, only publish tags matching 'regex'
     [ -n "$regex" ] && [[ ! $tag =~ $regex ]] && continue
 
-    if [ "$tag" == "$(git describe --tag)" ] && [ ! -d $tag ]; then
-        mv $pubdir/$docdir tmp.$tag
-        if git checkout $tag -- $docdir; then
+    if [ ! -e $pubdir/$tag ]; then
+        [ -e $path ] && mv $path tmp.$tag
+        if git checkout $tag -- $path; then
             git reset HEAD .  # unstage everything in docdir
-            mv $docdir $tag
+            mv $path $pubdir/$tag
         fi
-        mv tmp.$tag $docdir
+        [ -e tmp.$tag ] && mv tmp.$tag $path
     fi
 done

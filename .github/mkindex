@@ -9,7 +9,7 @@ for tag in $(git tag); do
     # If 'regex' is provided, only publish tags matching 'regex'
     [ -n "$regex" ] && [[ ! $tag =~ $regex ]] && continue
 
-    vers="$vers<li><a href=\"#${tag}\">${tag}</a></li>\n"
+    vers="$vers<li><a href=\"${tag}\">${tag}</a></li>\n"
 done
 
 date=$(LC_TIME=en date '+%B %d, %Y') \
