@@ -1,0 +1,18 @@
+#!/bin/sh
+# Write index.html to stdout
+
+rootdir="$(git rev-parse --show-toplevel)"  # git root dir
+regex='v.+'
+
+vers=''
+for tag in $(git tag); do
+    # If 'regex' is provided, only publish tags matching 'regex'
+    [ -n "$regex" ] && [[ ! $tag =~ $regex ]] && continue
+
+    vers="$vers<li><a href=\"#${tag}\">${tag}</a></li>\n"
+done
+
+date=$(LC_TIME=en date '+%B %d, %Y') \
+    version=$(git describe) \
+    vers=$(echo -e "$vers") \
+    envsubst <$rootdir/.github/index.html
