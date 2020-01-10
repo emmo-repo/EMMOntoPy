@@ -111,9 +111,9 @@ jobs:
         cp examples/emmodoc/emmo.html public/latest/.
         cp -r examples/emmodoc/figs public/latest/.
         cp -r examples/emmodoc/genfigs public/latest/.
-        bash .github/mkindex >public/index.html
 
         bash .github/versioncopy public/latest public "v.+"
+        bash .github/mkindex >public/index.html
 
     - name: Deploy to github pages
       # See https://github.com/marketplace/actions/github-pages
