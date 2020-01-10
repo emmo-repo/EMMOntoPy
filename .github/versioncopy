@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# Usage: publish_versions.sh path pubdir [regex]
+# Create version copies of 'path' in directory 'pubdir'.
+#
+# For each tag (matching 'regex' if 'regex' is given), get a version of
+# 'path' corresponding to that tag.  Then copy it to 'pubdir' and renamed
+# to the tag name.
+#
+# 'path' may be a file or a directory and should be specified relative
+# to the git root dir.
+#
+# 'pubdir' must be an existing directory.  It should be specified relative
+# to the git root dir.
+#
+# If 'regex' is given, it should be a regular expression.  Only tag names
+# matching 'regex' will be considered.
+#
+[ $# -lt 2 -o $# -gt 3 ] && \
+    echo "Usage: publish_versions path pubdir [regex]" >&2 && \
+    exit 1
+pubdir="$1"
+docdir="$2"
+regex="$3"
+
+# Enter git root directory
+rootdir="$(git rev-parse --show-toplevel)"  # git root dir
+cd "$rootdir"
+
+set -x
+
+for tag in $(git tag); do
+    # If 'regex' is provided, only publish tags matching 'regex'
+    [ -n "$regex" ] && [[ ! $tag =~ $regex ]] && continue
+
+    if [ "$tag" == "$(git describe --tag)" ] && [ ! -d $tag ]; then
+        mv $pubdir/$docdir tmp.$tag
+        if git checkout $tag -- $docdir; then
+            git reset HEAD .  # unstage everything in docdir
+            mv $docdir $tag
+        fi
+        mv tmp.$tag $docdir
+    fi
+done

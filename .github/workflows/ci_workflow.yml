@@ -89,15 +89,6 @@ jobs:
         name: emmodoc
         path: examples/emmodoc
 
-    - name: Deploy to github pages
-      # See https://github.com/marketplace/actions/deploy-to-github-pages
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        BRANCH: gh-pages           # The branch the action should deploy to
-        FOLDER: examples/emmodoc   # The folder the action should deploy
-        TARGET_FOLDER: latest
-
     - name: Run vertical demo
       run: |
         cd demo/vertical
@@ -112,6 +103,28 @@ jobs:
         #python step3_instantiate.py
         #python step4_map_instance.py
         cd -
+
+    - name: Prepare github pages
+      run: |
+        mkdir -p public/latest
+        cp examples/emmodoc/emmo.pdf public/latest/.
+        cp examples/emmodoc/emmo.html public/latest/.
+        cp -r examples/emmodoc/figs public/latest/.
+        cp -r examples/emmodoc/genfigs public/latest/.
+
+        bash .github/versioncopy public/latest public "v.+"
+
+    - name: Deploy to github pages
+      # See https://github.com/marketplace/actions/github-pages
+      uses: crazy-max/ghaction-github-pages@v1.2.5
+      with:
+        target_branch: gh-pages
+        build_dir: public
+      env:
+        GITHUB_PAT: ${{ secrets.ACCESS_TOKEN }}
+
+
+
 #
 #    - name: Install latest version of cmake
 #      run: |
