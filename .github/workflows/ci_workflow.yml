@@ -13,42 +13,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Check Ubuntu version we are running under
       run: |
         uname -a
+
     - name: Current environment
       run: |
         env
-    - name: Install DLite
-      run: |
-        emmodir=$PWD
-        #sudo apt-get install gcc
-        #sudo apt-get install make
-        #sudo apt-get install cmake
-        #sudo apt-get install libjansson-dev
-        #sudo apt-get install libhdf5-dev
-        #sudo apt-get install python3-dev
-        #sudo apt-get install python3-numpy
-        #sudo apt-get install python3-yaml
-        #sudo apt-get install python3-psycopg2
-        #sudo apt-get install swig3.0
-        #sudo apt-get install doxygen
-        #cd ..
-        #git clone https://github.com/SINTEF/dlite.git
-        #cd dlite
-        #git submodule init
-        #git submodule update
-        #mkdir build
-        #cd build
-        #cmake ..
-        #make
-        #make test
-        #sudo make install
-        #cd $emmodir
+
     - name: Lint with flake8
       run: |
         pip install flake8
@@ -56,11 +34,13 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings
         flake8 . --count --exit-zero --max-line-length=79 --statistics
+
     - name: Install pandoc 2.1.2
       run: |
         #sudo apt-get install pandoc
         wget https://github.com/jgm/pandoc/releases/download/2.1.2/pandoc-2.1.2-1-amd64.deb
         sudo apt-get install ./pandoc-2.1.2-1-amd64.deb
+
     - name: Install other dependencies
       run: |
         python -m pip install --upgrade pip
@@ -68,13 +48,16 @@ jobs:
         sudo apt-get install graphviz
         sudo apt-get install texlive-xetex
         sudo apt-get install texlive-latex-extra
+
     - name: Install EMMO-python
       run: |
         python setup.py install
+
     - name: Test with pytest
       run: |
         pip install pytest
         pytest
+
     - name: Create EMMO documentation
       run: |
         cd examples/emmodoc
@@ -134,6 +117,8 @@ jobs:
         PUBLISH_DIR: public
       with:
         keepFiles: true
+
+
 
 #    - name: Deploy to github pages
 #      # See https://github.com/marketplace/actions/github-pages
