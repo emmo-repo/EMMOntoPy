@@ -31,14 +31,15 @@ set -x
 
 for tag in $(git tag); do
     # If 'regex' is provided, only publish tags matching 'regex'
-    [ -n "$regex" ] && [[ ! $tag =~ $regex ]] && continue
+    if [ -n "$regex" ] && [[ ! $tag =~ $regex ]]; then
+        continue
+    fi
 
     if [ ! -e $pubdir/$tag ]; then
-        [ -e $path ] && mv $path tmp.$tag
-        if git checkout $tag -- $path; then
-            git reset HEAD .  # unstage everything in docdir
-            mv $path $pubdir/$tag
+        if [ $tag == $(git describe --tag) ]; then
+            cp -rp $path $pubdir/$tag
+        else
+            echo "Missing documentation for tag: $tag" >&2
         fi
-        [ -e tmp.$tag ] && mv tmp.$tag $path
     fi
 done
