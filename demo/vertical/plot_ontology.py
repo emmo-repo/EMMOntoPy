@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Plots the user case ontology created with the script `define_ontology.py`."""
+"""Plots the user case ontology created with the script `define_ontology.py`.
+"""
 from emmo import get_ontology
 
 
-# Load EMMO
+# Load usercase ontology
 
 # Create a new ontology with out extensions that imports EMMO
 onto = get_ontology('usercase_ontology.owl')
@@ -16,7 +17,7 @@ onto.load()
 # Visualise our new EMMO-based ontology
 # =====================================
 
-# Update the uml-stype to generate
+# Update the uml-style to generate
 del onto._uml_style['class']['shape']
 del onto._uml_style['defined_class']['shape']
 
@@ -28,23 +29,23 @@ graph.write_svg('usercase_ontology.svg')
 
 
 # Categories of classes
-units = [c for c in onto.classes() if issubclass(c, onto.SI_unit)]
+units = [c for c in onto.classes() if issubclass(c, onto.SIUnit)]
 properties = [c for c in onto.classes()
-              if issubclass(c, onto.property) and not c in units]
+              if issubclass(c, onto.Property) and c not in units]
 leaf_prop = [c for c in properties if len(c.descendants()) == 1]
 materials = [c for c in onto.classes() if issubclass(c, (
-    onto.subatomic, onto.atomic, onto.mesoscopic, onto.continuum,
-    onto.boundary, onto.engineered_entity))]
+    onto.Subatomic, onto.Atomic, onto.Mesoscopic, onto.Continuum,
+    onto.Boundary, onto.Engineered))]
 subdimensional = [c for c in onto.classes() if issubclass(c, (
-    onto.point, onto.line, onto.surface, onto.volume))]
-types = [onto.integer, onto.real, onto.string]
+    onto.Point, onto.Line, onto.Plane, onto.EuclideanSpace))]
+types = [onto.Integer, onto.Real, onto.String]
 
 # Update the uml-stype to generate
 onto._uml_style['graph']['rankdir'] = 'BT'
 
 # Units and properties
 #graph = onto.get_dot_graph([onto.SI_unit] + leaf_prop, relations=True,
-graph = onto.get_dot_graph([onto.SI_unit] + properties, relations=True,
+graph = onto.get_dot_graph([onto.SIUnit] + properties, relations=True,
                            style='uml', constraint=None)
 graph.write_svg('units+properties.svg')
 
@@ -55,14 +56,14 @@ graph.write_svg('types+properties.svg')
 
 # Properties and materials
 items = [
-    onto.physical_quantity, onto['e-bonded_atom']] + materials + subdimensional
+    onto.PhysicalQuantity, onto.BondedAtom] + materials + subdimensional
 graph = onto.get_dot_graph(items, relations=True, style='uml', constraint=None)
 graph.write_svg('properties+materials.svg')
 
 # Material
 #items = [onto.atomic, onto.continuum, onto.boundary]
-items = [onto.state] + materials
-leafs = ['elementary', 'symbolic', 'subatomic', 'standalone_atom']
+items = [onto.State] + materials
+leafs = ['Elementary', 'Symbolic', 'Subatomic', 'StandaloneAtom']
 graph = onto.get_dot_graph(items, leafs=leafs, relations=True,
                            parents=False, style='uml')
 graph.write_svg('materials.svg')
@@ -70,8 +71,8 @@ graph.write_svg('materials.svg')
 # Also include the parents of our new classes (this graph becomes
 # rather large...)
 parents = {e.mro()[1] for e in onto.classes()}
-classes = list(parents.union(onto.classes())) + [onto.space]
+classes = list(parents.union(onto.classes()))  # + [onto.Space]
 onto._uml_style['graph']['rankdir'] = 'RL'
 graph = onto.get_dot_graph(classes, relations=True, style='uml',
-                            edgelabels=True)
+                           edgelabels=True)
 graph.write_svg('usercase_ontology-parents.svg')

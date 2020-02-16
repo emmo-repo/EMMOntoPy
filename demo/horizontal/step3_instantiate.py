@@ -9,7 +9,6 @@ represents it using the metadata defined in step 2.
 """
 import ase
 import ase.io
-from ase.spacegroup import Spacegroup
 
 import dlite
 
@@ -20,9 +19,11 @@ from step2_define_metadata import DLiteAtoms
 # See https://materialsproject.org/docs/api for instructions for getting
 # personal access.
 # Not used in the current demo
-#from pymatgen.ext.matproj import MPRester
-#with MPRester('USER_API_KEY') as m:
-#    structure = m.get_structure_by_material_id('mp-2018')
+#
+#     from pymatgen.ext.matproj import MPRester
+#     with MPRester('USER_API_KEY') as m:
+#         structure = m.get_structure_by_material_id('mp-2018')
+#
 
 
 # Load atom structure from cif file

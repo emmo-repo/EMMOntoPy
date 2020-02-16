@@ -3,7 +3,6 @@
 includes:
   - Visualisation of taxonomy and ontology as graphs (using pydot, see
     ontograph.py).
-  - Generation of a controlled vocabulary from an ontology (see ontovocab.py).
 
 The class extension is defined within.
 
@@ -16,15 +15,14 @@ If desirable some of this may be moved back into owlready2.
 #   - Update to work with latest version of Owlready2
 #   - Rename get_dot_graph to get_graph().
 #   - Deprecate methods that are not needed.
-import os
 import itertools
 import inspect
+import warnings
 
 import owlready2
 
-from .relations import EntityClass, ThingClass, PropertyClass
+from .utils import asstring
 from .ontograph import OntoGraph
-from .ontovocab import OntoVocab
 
 
 class NoSuchLabelError(LookupError):
@@ -32,29 +30,14 @@ class NoSuchLabelError(LookupError):
     pass
 
 
-# owl types
+# owl categories
 categories = (
     'annotation_properties',
     'data_properties',
     'object_properties',
     'classes',
     'individuals',
-    #'properties',
 )
-
-# Improve default rendering of entities
-def render_func(entity):
-    name = entity.label[0] if len(entity.label) == 1 else entity.name
-    return "%s.%s" % (entity.namespace.name, name)
-owlready2.set_render_func(render_func)
-
-def _get_parents(self):
-    """Returns a list of all parents (in case of multiple inheritance)."""
-    return [cls for cls in self.is_a if isinstance(cls, owlready2.ThingClass)]
-
-# Inject get_parents() into ThingClass
-setattr(owlready2.ThingClass, 'get_parents', _get_parents)
-
 
 
 def get_ontology(base_iri='emmo-inferred.owl', verbose=False):
@@ -72,7 +55,7 @@ def get_ontology(base_iri='emmo-inferred.owl', verbose=False):
     return onto
 
 
-class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
+class Ontology(owlready2.Ontology, OntoGraph):
     """A generic class extending owlready2.Ontology.
     """
     def __getitem__(self, name):
@@ -85,11 +68,15 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
         return attr
 
     def __dir__(self):
-        """Include classes in dir() listing."""
-        f = lambda s: s[s.rindex('.') + 1: ] if '.' in s else s
+        """Extend in dir() listing."""
         s = set(object.__dir__(self))
         for onto in [get_ontology(uri) for uri in self._namespaces.keys()]:
-            s.update([f(repr(cls)) for cls in onto.classes()])
+            s.update([cls.label.first() for cls in onto.classes()])
+            s.update([cls.label.first() for cls in onto.individuals()])
+            s.update([cls.label.first() for cls in onto.properties()])
+            s.update([cls.name for cls in onto.classes()])
+            s.update([cls.name for cls in onto.individuals()])
+            s.update([cls.name for cls in onto.properties()])
         return sorted(s)
 
     def __objclass__(self):
@@ -101,6 +88,23 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
         return [cls for cls in self.classes()
                 if not cls.ancestors().difference(set([cls, owlready2.Thing]))]
 
+    def get_root_object_properties(self):
+        """Returns a list of root object properties."""
+        props = set(self.object_properties())
+        return [p for p in props if not props.intersection(p.is_a)]
+
+    def get_root_data_properties(self):
+        """Returns a list of root object properties."""
+        props = set(self.data_properties())
+        return [p for p in props if not props.intersection(p.is_a)]
+
+    def get_roots(self):
+        """Returns all class, object_property and data_property roots."""
+        roots = self.get_root_classes()
+        roots.extend(self.get_root_object_properties())
+        roots.extend(self.get_root_data_properties())
+        return roots
+
     def get_by_label(self, label):
         """Returns entity by label.
 
@@ -108,7 +112,6 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
         found first is returned.  A KeyError is raised if `label`
         cannot be found.
         """
-        #label = label.replace("-", "") FLB: problem with - in variable
         # Check for name in all categories in self
         for category in categories:
             method = getattr(self, category)
@@ -122,12 +125,12 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
         if label in d:
             return d[label]
         # Check whether `label` matches a Python class name of any category
-        l = [cls for cls in itertools.chain.from_iterable(
+        lst = [cls for cls in itertools.chain.from_iterable(
             getattr(self, category)() for category in categories)
              if hasattr(cls, '__name__') and cls.__name__ == label]
-        if len(l) == 1:
-            return l[0]
-        elif len(l) > 1:
+        if len(lst) == 1:
+            return lst[0]
+        elif len(lst) > 1:
             raise NoSuchLabelError('There is more than one Python class with '
                                    'name %r' % label)
         # Check imported ontologies
@@ -139,13 +142,13 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
                 pass
         # Fallback to check whether we have a class in the current or any
         # of the imported ontologies whos name matches `label`
-        #for onto in [self] + self.imported_ontologies:
-        #    l = [cls for cls in onto.classes() if cls.__name__ == label]
-        #    if len(l) == 1:
-        #        return l[0]
-        #    elif len(l) > 1:
-        #        raise NoSuchLabelError('There is more than one class with '
-        #                               'name %r' % label)
+        for onto in [self] + self.imported_ontologies:
+            lst = [cls for cls in onto.classes() if cls.__name__ == label]
+            if len(lst) == 1:
+                return lst[0]
+            elif len(lst) > 1:
+                raise NoSuchLabelError('There is more than one class with '
+                                       'name %r' % label)
         # Label cannot be found
         raise NoSuchLabelError('Ontology "%s" has no such label: %s' % (
             self.name, label))
@@ -175,7 +178,7 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
                 owlready2.sync_reasoner(*args)
             else:
                 raise ValueError('unknown reasoner %r.  Supported reasoners'
-                                     'are "Pellet" and "HermiT".', reasoner)
+                                 'are "Pellet" and "HermiT".', reasoner)
         if include_imported:
             with self:
                 run()
@@ -221,6 +224,9 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
     def get_annotations(self, entity):
         """Returns a dict with annotations for `entity`.  Entity may be given
         either as a ThingClass object or as a label."""
+        warnings.warn('Ontology.get_annotations(cls) is deprecated.  '
+                      'Use cls.get_annotations() instead.', DeprecationWarning)
+
         if isinstance(entity, str):
             entity = self.get_by_label(entity)
         d = {'comment': getattr(entity, 'comment', '')}
@@ -254,15 +260,19 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
         leafs = set(self.get_by_label(leaf) if isinstance(leaf, str)
                     else leaf for leaf in leafs)
         leafs.discard(root)
-        return _branch(root, leafs)
+        branch = _branch(root, leafs)
+        # Sort according to depth, then by label
+        return sorted(sorted(set(branch), key=lambda x: asstring(x)),
+                      key=lambda x: len(x.mro()))
 
     def is_individual(self, entity):
         """Returns true if entity is an individual."""
         if isinstance(entity, str):
             entity = self.get_by_label(entity)
-        #return isinstance(type(entity), owlready2.ThingClass)
         return isinstance(entity, owlready2.Thing)
 
+    # FIXME - deprecate this method as soon the ThingClass property
+    #         `defined_class` works correct in Owlready2
     def is_defined(self, entity):
         """Returns true if the entity is a defined class."""
         if isinstance(entity, str):
@@ -270,8 +280,8 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
         return hasattr(entity, 'equivalent_to') and bool(entity.equivalent_to)
 
     def common_ancestors(self, cls1, cls2):
-         """Return a list of common ancestors"""
-         return set(cls1.ancestors()).intersection(cls2.ancestors())
+        """Return a list of common ancestors"""
+        return set(cls1.ancestors()).intersection(cls2.ancestors())
 
     def number_of_generations(self, descendant, ancestor):
         """ Return shortest distance from ancestor to descendant"""
@@ -280,7 +290,8 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
         return self._number_of_generations(descendant, ancestor, 0)
 
     def _number_of_generations(self, descendant, ancestor, n):
-        """ Recursive help function to number_of_generations(), return distance between a ancestor-descendant pair (n+1). """
+        """Recursive help function to number_of_generations(), return
+        distance between a ancestor-descendant pair (n+1)."""
         if descendant.name == ancestor.name:
             return n
         return min(self._number_of_generations(parent, ancestor, n + 1)
@@ -291,5 +302,7 @@ class Ontology(owlready2.Ontology, OntoGraph, OntoVocab):
         """Returns a list  with closest_common_ancestor to cls1 and cls2"""
         distances = {}
         for ancestor in self.common_ancestors(cls1, cls2):
-            distances[ancestor] = self.number_of_generations(cls1, ancestor) + self.number_of_generations(cls2, ancestor)
-        return [ancestor for ancestor, distance in distances.items() if distance == min(distances.values())]
+            distances[ancestor] = (self.number_of_generations(cls1, ancestor) +
+                                   self.number_of_generations(cls2, ancestor))
+        return [ancestor for ancestor, distance in distances.items()
+                if distance == min(distances.values())]

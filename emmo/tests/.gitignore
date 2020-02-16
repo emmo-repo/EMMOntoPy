@@ -1,9 +1,10 @@
 *.pdf
 *.png
-*.md
 *.svg
 emmo.html
 emmo-noreason.html
 emmodoc.html
 
+doc-output.md
+genfigs
 old

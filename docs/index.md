@@ -1,10 +1,7 @@
-EMMO - Python API for the Euroean Materials & Modelling Ontology (EMMO)
-==============================================================================
-
-![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20Tests/badge.svg)
-
-This package is based on [Owlready2] and provides an intuitive
-representation of EMMO in Python.
+EMMO -- A Python API for the Euroean Materials & Modelling Ontology (EMMO)
+==========================================================================
+This is a Python API for EMMO based on [Owlready2], which provides an
+intuitive representation of EMMO in Python.
 
 EMMO is an ongoing effort to create an ontology that takes into
 account fundamental concepts of physics, chemistry and materials
@@ -75,43 +72,3 @@ In addition EMMO-python includes a few examples and demos:
 
   - [examples/emmodoc](examples/emmodoc/README.md) shows how the
     documentation of EMMO is generated using the `ontodoc` tool.
-
-
-Installation
-------------
-Install with
-
-    pip install EMMO
-
-### Dependencies
-  * Python 3.6 or greater
-      - [Owlready2][Owlready2]
-      - [pydot][pydot]:  Required for generating graphs.
-      - PyYAML:  Required for generating documentation with pandoc.
-
-  * Java. Needed for reasoning.
-
-  * [Graphviz][Graphviz]: Needed for graph generation.
-
-  * [pandoc][pandoc]: Only used for generated documentation from markdown to
-    nicely formatted html or pdf.  Tested with v2.1.2.
-
-  * [XeLaTeX][XeLaTeX] or [pdfLaTeX][pdfLaTeX] and the `upgreek` latex
-    package (included in `texlive-was` on RetHat-based distributions
-    and `texlive-latex-extra` on Ubuntu) for generation of pdf
-    documentation.  If your ontology contains unicode characters, we
-    recommend XeLaTeX.
-
-
-See [docs/docker-dockerinstructions.md](#docs/docker-dockerinstructions.md)
-for how to build a docker image.
-
-[Owlready2]: https://pypi.org/project/Owlready2/
-[Owlready2-doc]: https://pythonhosted.org/Owlready2/
-[IPython]: https://ipython.org/
-[DLite]: https://github.com/SINTEF/dlite/
-[pydot]: https://pypi.org/project/pydot/
-[Graphviz]: https://www.graphviz.org/
-[pandoc]: http://pandoc.org/
-[XeLaTeX]: https://www.overleaf.com/learn/latex/XeLaTeX/
-[pdfLaTeX]: https://www.latex-project.org/
