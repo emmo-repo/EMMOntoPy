@@ -12,7 +12,7 @@ from emmo import get_ontology
 #emmo.load()
 
 # If false, read from cached json file (much faster...)
-load_emmo = False
+load_emmo = True
 
 
 def setmodules(onto, modules):
@@ -35,7 +35,7 @@ def getname(iri):
 
 
 if load_emmo:
-    emmo = get_ontology('/home/friisj/prosjekter/EMMC/EMMO/emmo.owl')
+    emmo = get_ontology()
     emmo.load()
 
     modules = {}
@@ -76,3 +76,4 @@ for module, deps in modules.items():
         dot.edge(getname(dep), getname(module))
 dot.render('emmo-modules', format='pdf', view=False)
 dot.render('emmo-modules', format='png', view=False)
+dot.render('emmo-modules', format='svg', view=False)
