@@ -45,7 +45,7 @@ def main():
         '--style', '-s', default='default',
         help='Select plot stype. May be "default" or "uml".')
     parser.add_argument(
-        '--leafs', '-l', action='append',
+        '--leafs', '-l', action='append', default=[],
         help='Leafs nodes for plotting sub-graphs.  May be provided as '
         'comma-separated string and/or with multiple --leafs options.')
     args = parser.parse_args()

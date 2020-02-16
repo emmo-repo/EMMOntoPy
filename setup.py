@@ -55,7 +55,7 @@ setuptools.setup(
         'PyYAML',
     ],
     packages=['emmo'],
-    scripts=['tools/ontodoc'],
+    scripts=['tools/ontodoc', 'tools/ontograph'],
     package_data={'emmo': ['owl/emmo-inferred.owl', 'tests/*.py']},
     data_files=[
         ('share/EMMO-python', ['README.md', 'LICENSE.txt']),
