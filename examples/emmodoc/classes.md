@@ -33,33 +33,38 @@ branch of mereotopology.
 
 
 %BRANCHDOC Physical
-
 %BRANCHDOC Elementary
-%BRANCHDOC Subatomic
-%BRANCHDOC Atomic
-%BRANCHDOC Mesoscopic
-%BRANCHDOC Continuum
 
 
-%BRANCHDOC Impression
+%BRANCHDOC Holistic
+%BRANCHDOC Conventional
+%BRANCHDOC Icon
 
+
+%BRANCHDOC Perceptual
 %BRANCHDOC Graphical
 %BRANCHDOC Geometrical
-
-%BRANCHDOC Symbolic
 %BRANCHDOC Symbol
-%BRANCHDOC String
-
-%BRANCHDOC Property
+%BRANCHDOC Metrological
 %BRANCHDOC Mathematical
+%BRANCHDOC Number
+%BRANCHDOC SIBaseUnit
+%BRANCHDOC SpecialSIDerivedUnit
+%BRANCHDOC PrefixedUnit
+%BRANCHDOC Quantity
+%BRANCHDOC BaseQuantity
+%BRANCHDOC DerivedQuantity
+%BRANCHDOC PhysicalConstant
 
 
-%BRANCHDOC Processual
-%BRANCHDOC Sign
-%BRANCHDOC Icon
-%BRANCHDOC Conventional
+%BRANCHDOC Reductionistic
+%BRANCHDOC Expression
+%BRANCHDOC Formula
 
-%BRANCHDOC Type
-
-
-%BRANCHDOC Process
+%BRANCHDOC Physicalistic
+%BRANCHDOC ElementaryParticle
+%BRANCHDOC MaterialState
+%BRANCHDOC Continuum
+%BRANCHDOC Mesoscopic
+%BRANCHDOC Atomic
+%BRANCHDOC Subatomic
