@@ -266,11 +266,11 @@ class OntoDoc:
                 point='equivalent_to ' + asstring(e, link_style)))
 
         # ...add disjoint_with relations
-        if hasattr(item, 'disjoints'):
-            for d in item.disjoints():
-                s = ', '.join(asstring(e, link_style) for e in d.entities)
-                points.append(point_style.format(
-                    point='disjoint_width ' + s, ontology=onto))
+        if hasattr(item, 'disjoint_with'):
+            s = set(item.disjoint_with(reduce=True))
+            points.append(point_style.format(
+                point='disjoint_with ' + ', '.join(asstring(e, link_style)
+                                                   for e in s), ontology=onto))
 
         # ...add disjoint_unions
         if hasattr(item, 'disjoint_unions'):

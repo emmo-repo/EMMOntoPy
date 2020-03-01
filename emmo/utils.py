@@ -1,16 +1,18 @@
 """Some generic utility functions.
 """
 import re
+import datetime
 
 import owlready2
 
 
-def asstring(expr, link='{name}', n=0):
+def asstring(expr, link='{name}', n=0, exclude_object=False):
     """Returns a string representation of `expr`, which may be an entity,
     restriction, or logical expression of these.  `link` is a format
     string for formatting references to entities or relations.  It may
     contain the keywords "name" and "url".
     `n` is the recursion depth and only intended for internal use.
+    If `exclude_object` is true, the object will be excluded in restrictions.
     """
     def fmt(e):
         """Returns the formatted label of `e`."""
@@ -31,17 +33,31 @@ def asstring(expr, link='{name}', n=0):
         return fmt(expr)
     elif isinstance(expr, owlready2.Restriction):
         rlabel = owlready2.class_construct._restriction_type_2_label[expr.type]
+
+        if isinstance(expr.property, owlready2.ObjectPropertyClass):
+            s = fmt(expr.property)
+        elif isinstance(expr.property, owlready2.Inverse):
+            s = 'Inverse(%s)' % asstring(expr.property.property, link, n + 1)
+        else:
+            print('*** WARNING: unknown restriction property: %r' %
+                  expr.property)
+            s = fmt(expr.property)
+
         if not rlabel:
-            s = '%s %s'
+            pass
         elif expr.type in (owlready2.MIN, owlready2.MAX, owlready2.EXACTLY):
-            s = '(%%s %s %d %%s)' % (rlabel, expr.cardinality)
+            s += ' %s %d' % (rlabel, expr.cardinality)
         elif expr.type in (owlready2.SOME, owlready2.ONLY,
                            owlready2.VALUE, owlready2.HAS_SELF):
-            s = '(%%s %s %%s)' % rlabel
+            s += ' %s' % rlabel
         else:
             print('*** WARNING: unknown relation', expr, rlabel)
-            s = '(%%s %s %%s)' % rlabel
-        return s % (fmt(expr.property), asstring(expr.value, link, n + 1))
+            s += ' %s' % rlabel
+
+        if not exclude_object:
+            s += ' %s' % asstring(expr.value, link, n + 1)
+        return s
+
     elif isinstance(expr, owlready2.Or):
         s = '%s' if n == 0 else '(%s)'
         return s % ' or '.join([asstring(c, link, n + 1)
@@ -64,6 +80,14 @@ def asstring(expr, link='{name}', n=0):
         return fmt(expr)
     elif isinstance(expr, owlready2.disjoint.AllDisjoint):
         return fmt(expr)
+    elif issubclass(expr, (bool, int, float, str)):
+        return fmt(expr.__class__.__name__)
+    elif issubclass(expr, datetime.date):
+        return 'date'
+    elif issubclass(expr, datetime.time):
+        return 'datetime'
+    elif issubclass(expr, datetime.datetime):
+        return 'datetime'
     else:
         raise RuntimeError('Unknown expression: %r (type: %r)' % (
             expr, type(expr)))

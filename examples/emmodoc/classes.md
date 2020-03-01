@@ -37,8 +37,10 @@ branch of mereotopology.
 
 
 %BRANCHDOC Holistic
+%BRANCHDOC Semiotic
 %BRANCHDOC Conventional
 %BRANCHDOC Icon
+%BRANCHDOC Process
 
 
 %BRANCHDOC Perceptual
@@ -48,9 +50,12 @@ branch of mereotopology.
 %BRANCHDOC Metrological
 %BRANCHDOC Mathematical
 %BRANCHDOC Number
+%BRANCHDOC MathematicalOperator
+%BRANCHDOC MeasurementUnit
 %BRANCHDOC SIBaseUnit
 %BRANCHDOC SpecialSIDerivedUnit
 %BRANCHDOC PrefixedUnit
+%BRANCHDOC MetricPrefix
 %BRANCHDOC Quantity
 %BRANCHDOC BaseQuantity
 %BRANCHDOC DerivedQuantity

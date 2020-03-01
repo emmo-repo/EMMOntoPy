@@ -18,6 +18,7 @@ If desirable some of this may be moved back into owlready2.
 import itertools
 import inspect
 import warnings
+from collections import defaultdict
 
 import owlready2
 
@@ -73,11 +74,19 @@ class Ontology(owlready2.Ontology, OntoGraph):
         for onto in [get_ontology(uri) for uri in self._namespaces.keys()]:
             s.update([cls.label.first() for cls in onto.classes()])
             s.update([cls.label.first() for cls in onto.individuals()])
-            s.update([cls.label.first() for cls in onto.properties()])
+            s.update([cls.label.first() for cls in onto.properties()] )
             s.update([cls.name for cls in onto.classes()])
             s.update([cls.name for cls in onto.individuals()])
             s.update([cls.name for cls in onto.properties()])
+            s.difference_update({None})  # get rid of possible None
         return sorted(s)
+
+    def __contains__(self, other):
+        try:
+            self[other]
+            return True
+        except NoSuchLabelError:
+            return False
 
     def __objclass__(self):
         # Play nice with inspect...
@@ -299,10 +308,24 @@ class Ontology(owlready2.Ontology, OntoGraph):
                    if ancestor in parent.ancestors())
 
     def closest_common_ancestors(self, cls1, cls2):
-        """Returns a list  with closest_common_ancestor to cls1 and cls2"""
+        """Returns a list with closest_common_ancestor for cls1 and cls2"""
         distances = {}
         for ancestor in self.common_ancestors(cls1, cls2):
             distances[ancestor] = (self.number_of_generations(cls1, ancestor) +
                                    self.number_of_generations(cls2, ancestor))
         return [ancestor for ancestor, distance in distances.items()
                 if distance == min(distances.values())]
+
+    def closest_common_ancestor(self, *classes):
+        """Returns closest_common_ancestor for the given classes."""
+        mros = [cls.mro() for cls in classes]
+        track = defaultdict(int)
+        while mros:
+            for mro in mros:
+                cur = mro.pop(0)
+                track[cur] += 1
+                if track[cur] == len(classes):
+                    return cur
+                if len(mro) == 0:
+                    mros.remove(mro)
+        raise RuntimeError('')
