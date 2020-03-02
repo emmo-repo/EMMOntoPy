@@ -52,6 +52,7 @@ setuptools.setup(
         'Cython',
         'Owlready2>=0.22',
         'pydot',
+        'graphviz',
         'PyYAML',
     ],
     packages=['emmo'],
