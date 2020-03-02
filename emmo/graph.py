@@ -12,7 +12,7 @@ import owlready2
 import graphviz
 
 from .utils import asstring
-from .ontology import NoSuchLabelError
+from .ontology import get_ontology, NoSuchLabelError
 
 typenames = owlready2.class_construct._restriction_type_2_label
 
@@ -57,6 +57,9 @@ class OntoGraph:
               - defined_class : nodes for defined classes (N)
               - class_construct : nodes for class constructs (N)
               - individual : nodes for invididuals (N)
+              - object_property : nodes for object properties (N)
+              - data_property : nodes for data properties (N)
+              - annotation_property : nodes for annotation properties (N)
               - is_a : edges for is_a relations (E)
               - equivalent_to : edges for equivalent_to relations (E)
               - disjoint_with : edges for disjoint_with relations (E)
@@ -106,7 +109,24 @@ class OntoGraph:
         'individual': {
             'shape': 'diamond',
             'style': 'filled',
-            'fillcolor': 'blue',
+            'fillcolor': '#874b82',
+            'fontcolor': 'white',
+        },
+        'object_property': {
+            'shape': 'box',
+            'style': 'filled',
+            'fillcolor': '#0079ba',
+            'fontcolor': 'white',
+        },
+        'data_property': {
+            'shape': 'box',
+            'style': 'filled',
+            'fillcolor': 'green',
+        },
+        'annotation_property': {
+            'shape': 'box',
+            'style': 'filled',
+            'fillcolor': 'orange',
         },
         'is_a': {'arrowhead': 'empty'},
         'equivalent_to': {'color': 'green3'},
@@ -233,7 +253,6 @@ class OntoGraph:
             else:
                 label = None
 
-            #kw = self.get_attrs(subject, attrs, type=predicate)
             kw = self.get_edge_attrs(predicate, attrs)
             self.dot.edge(subject, object, label=label, **kw)
             self.edges.add(key)
@@ -258,7 +277,8 @@ class OntoGraph:
         for r in e.is_a:
 
             # is_a
-            if isinstance(r, owlready2.ThingClass):
+            if isinstance(r, (owlready2.ThingClass,
+                              owlready2.ObjectPropertyClass)):
                 if 'all' in relations or 'is_a' in relations:
                     rlabel = getlabel(r)
                     if not self.add_missing_node(r, addnodes=addnodes):
@@ -281,6 +301,20 @@ class OntoGraph:
                         obj = self.add_class_construct(r.value)
                     pred = asstring(r, exclude_object=True)
                     self.add_edge(label, pred, obj, edgelabels, **attrs)
+
+            # inverse
+            if isinstance(r, owlready2.Inverse):
+                if 'all' in relations or 'inverse' in relations:
+                    rlabel = getlabel(r)
+                    if not self.add_missing_node(r, addnodes=addnodes):
+                        continue
+                    if r not in e.get_parents(strict=True):
+                        continue
+                    self.add_edge(
+                        subject=label, predicate='inverse', object=rlabel,
+                        **attrs)
+
+
 
     def add_edges(self, sources=None, relations=None, edgelabels=None,
                   addnodes=None, addconstructs=None, **attrs):
@@ -329,6 +363,15 @@ class OntoGraph:
         # individual
         elif isinstance(e, owlready2.Thing):
             kw = self.style.get('individual', {})
+        # object property
+        elif isinstance(e, owlready2.ObjectPropertyClass):
+            kw = self.style.get('object_property', {})
+        # data property
+        elif isinstance(e, owlready2.DataPropertyClass):
+            kw = self.style.get('data_property', {})
+        # annotation property
+        elif isinstance(e, owlready2.AnnotationPropertyClass):
+            kw = self.style.get('annotation_property', {})
         else:
             raise TypeError('Unknown entity type: %r' % e)
         kw = kw.copy()
@@ -378,6 +421,7 @@ class OntoGraph:
         base, ext = os.path.splitext(filename)
         if format is None:
             format = ext.lstrip('.')
+        kwargs.setdefault('cleanup', True)
         self.dot.render(base, format=format, **kwargs)
 
     def view(self):
@@ -398,3 +442,54 @@ def get_figsize(graph):
         height = svg.attrib['height']
         assert width.endswith('pt')  # ensure that units are in points
     return asfloat(width), asfloat(height)
+
+
+def get_dependencies(iri, strip_base=None):
+    """Reads `iri` and returns a dict mapping ontology names to a list of
+    ontologies that they depends on.  If `strip_base` is true, the base IRI
+    is stripped from ontology names."""
+    onto = get_ontology(iri)
+    onto.load()
+    base = onto.base_iri.rstrip('#')
+    modules = {}
+
+    def setmodules(onto):
+        for o in onto.imported_ontologies:
+            if onto.base_iri in modules:
+                modules[onto.base_iri].add(o.base_iri)
+            else:
+                modules[onto.base_iri] = set([o.base_iri])
+            if o.base_iri not in modules:
+                modules[o.base_iri] = set()
+            setmodules(o)
+
+    setmodules(onto)
+    return modules
+
+
+def plot_modules(iri, filename=None, format=None, show=False):
+    """Plot module dependency graph."""
+    modules = get_dependencies(iri)
+
+    dot = graphviz.Digraph(comment='Module dependencies')
+    dot.attr(rankdir='BT')
+    dot.node_attr.update(style='filled', fillcolor='lightblue', shape='box',
+                         edgecolor='blue')
+    dot.edge_attr.update(arrowtail='open', dir='back')
+
+    for iri in modules.keys():
+        dot.node(iri, label=iri, URL=iri)
+
+    for iri, deps in modules.items():
+        for dep in deps:
+            print(iri, '->', dep)
+            dot.edge("'" + iri + "'", "'" + dep + "'")
+
+    if filename:
+        base, ext = os.path.splitext(filename)
+        if format is None:
+            format = ext.lstrip('.')
+        dot.render(base, format=format, view=False, cleanup=True)
+
+    if show:
+        dot.view(cleanup=True)
