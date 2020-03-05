@@ -208,8 +208,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
         If `sync_imported` is true, all imported ontologies are also
         updated.
         """
-        for cls in itertools.chain(self.classes(), self.object_properties(),
-                                   self.individuals()):
+        for cls in itertools.chain(self.classes(), self.object_properties()):
+                                   #self.individuals()):
             if not cls.label:
                 cls.label.append(cls.__name__)
             if not cls.comment and cls.__doc__:
