@@ -74,12 +74,13 @@ def asstring(expr, link='{name}', n=0, exclude_object=False):
         return fmt(expr)
     elif isinstance(expr, owlready2.Thing):  # instance (individual)
         return fmt(expr)
-    elif isinstance(expr, bool):
-        return repr(expr)
     elif isinstance(expr, owlready2.class_construct.Inverse):
         return fmt(expr)
     elif isinstance(expr, owlready2.disjoint.AllDisjoint):
         return fmt(expr)
+    elif isinstance(expr, (bool, int, float, str)):
+        return repr(expr)
+    # Check for subclasses
     elif issubclass(expr, (bool, int, float, str)):
         return fmt(expr.__class__.__name__)
     elif issubclass(expr, datetime.date):
