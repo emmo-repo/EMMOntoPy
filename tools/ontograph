@@ -40,10 +40,8 @@ def main():
     #    '--reasoner', '-n', action='store_true',
     #    help='Run the reasoner on the ontology before plotting.')
     parser.add_argument(
-        '--rankdir', '-d', default='BT', choices=['BT', 'TB', 'RL', 'LR'],
-        help='Graph direction (from leaves to root).  Possible values are: '
-        '"BT" (bottom-top, default), "TB" (top-bottom), "RL" (right-left) and '
-        '"LR" (left-right).')
+        '--parents', '-p', metavar='N', type=int, default=0,
+        help='Adds N levels of parents to graph.')
     parser.add_argument(
         '--relations', '-R', default='isA',
         help='Comma-separated string of relations to visualise.  Default is '
@@ -57,6 +55,11 @@ def main():
     parser.add_argument(
         '--addconstructs', '-c', action='store_true',
         help='Whether to add nodes representing class constructs.')
+    parser.add_argument(
+        '--rankdir', '-d', default='BT', choices=['BT', 'TB', 'RL', 'LR'],
+        help='Graph direction (from leaves to root).  Possible values are: '
+        '"BT" (bottom-top, default), "TB" (top-bottom), "RL" (right-left) and '
+        '"LR" (left-right).')
     parser.add_argument(
         '--style-file', '-s', metavar='JSON_FILE',
         help='A json file with style definitions.')

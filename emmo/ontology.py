@@ -147,6 +147,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
         elif len(lst) > 1:
             raise NoSuchLabelError('There is more than one Python class with '
                                    'name %r' % label)
+        elif label is owlready2.Thing or label == 'Thing':
+            return owlready2.Thing
         # Check imported ontologies
         for onto in self.imported_ontologies:
             onto.__class__ = self.__class__  # magically change type of onto
@@ -264,7 +266,21 @@ class Ontology(owlready2.Ontology, OntoGraph):
             if root not in leafs:
                 branch = [root]
                 for c in root.subclasses():
-                    branch.extend(_branch(c, leafs))
+                    # Defining a branch is actually quite tricky.  Consider
+                    # the case:
+                    #
+                    #      L isA R
+                    #      A isA L
+                    #      A isA R
+                    #
+                    # where R is the root, L is a leaf and A is a direct
+                    # child of both.  Logically, since A is a child of the
+                    # leaf we want to skip A.  But a strait forward imple-
+                    # mentation will see that A is a child of the root and
+                    # include it.  Requireing that the R should be a strict
+                    # parent of A solves this.
+                    if root in c.get_parents(strict=True):
+                        branch.extend(_branch(c, leafs))
             else:
                 branch = [root] if include_leafs else []
             return branch
@@ -275,53 +291,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
                     else leaf for leaf in leafs)
         leafs.discard(root)
         branch = _branch(root, leafs)
-        # Sort according to depth, then by label
-        return sorted(sorted(set(branch), key=lambda x: asstring(x)),
-                      key=lambda x: len(x.mro()))
-
-    def get_branch2(self, root, leafs=(), include_leafs=True,
-                   exclude_leaf_descendants=True):
-        """Returns a list with all direct and indirect subclasses of `root`.
-        Any subclass found in the sequence `leafs` will be included in
-        the returned list, but its subclasses will not.
-
-        If `include_leafs` is true, the leafs are included in the returned
-        list, otherwise they are not.
-
-        If `exclude_leaf_descendants` is true, any class that is a descentant
-        of a leaf, will also be considered to be a leaf.
-
-        The elements of `leafs` may be ThingClass objects or labels.
-        """
-        def _branch(root, leafs):
-            if root not in leafs:
-                branch = [root]
-                for c in root.subclasses():
-                    branch.extend(_branch(c, leafs))
-            elif include_leafs and root not in underleafs:
-                branch = [root]
-            else:
-                branch = []
-            return branch
-
-        if isinstance(root, str):
-            root = self.get_by_label(root)
-        leafs = set(self.get_by_label(leaf) if isinstance(leaf, str)
-                    else leaf for leaf in leafs)
-        startleafs = leafs.copy()
-        underleafs = set()
-        if exclude_leaf_descendants:
-            for leaf in leafs.copy():
-                underleafs.update(leaf.descendants())
-            leafs.update(underleafs)
-        leafs.discard(root)
-        branch = _branch(root, leafs)
-        # Excluding descendants may also exclude leafs
-        if exclude_leaf_descendants:
-            for l in startleafs:
-                print(l)
-                if l not in branch:
-                    branch.append(l)
         # Sort according to depth, then by label
         return sorted(sorted(set(branch), key=lambda x: asstring(x)),
                       key=lambda x: len(x.mro()))

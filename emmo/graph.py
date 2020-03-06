@@ -79,9 +79,8 @@ class OntoGraph:
             Whether to add missing target nodes in relations.
         addconstructs : bool
             Whether to add nodes representing class constructs.
-        parents : bool | str
-            Whether to include parent nodes.  If `parents` is a string,
-            only parent nodes down to the given name will included.
+        parents : int
+            Include `parents` levels of parents.
         graph : None | pydot.Dot instance
             Graphviz Digraph object to plot into.  If None, a new graph object
             is created using the keyword arguments.
@@ -149,7 +148,7 @@ class OntoGraph:
     def __init__(self, ontology, root=None, leafs=None,
                  relations='isA', style=None, edgelabels=True,
                  addnodes=False, addconstructs=False,
-                 parents=False, graph=None, **kwargs):
+                 parents=0, graph=None, **kwargs):
         if style is None or style == 'default':
             style = self._default_style
         if graph is None:
@@ -183,8 +182,8 @@ class OntoGraph:
                 relations=relations, edgelabels=edgelabels,
                 addnodes=addnodes, addconstructs=addconstructs)
             if parents:
-                self.add_parent(
-                    parents,
+                self.add_parents(
+                    root, levels=parents,
                     relations=relations, edgelabels=edgelabels,
                     addnodes=addnodes, addconstructs=addconstructs)
         else:
@@ -218,11 +217,22 @@ class OntoGraph:
             relations=relations, edgelabels=edgelabels,
             addnodes=addnodes, addconstructs=addconstructs, **attrs)
 
-    def add_parents(self, name, levels=None, relations='isA',
+    def add_parents(self, name, levels=1, relations='isA',
                     edgelabels=None, addnodes=False, addconstructs=False,
                     **attrs):
-        """Add `levels` levels of parents of entity `name`."""
-        raise NotImplementedError()
+        """Add `levels` levels of strict parents of entity `name`."""
+        def addparents(e, n, s):
+            if n > 0:
+                for p in e.get_parents(strict=True):
+                    s.add(p)
+                    addparents(p, n - 1, s)
+        e = self.ontology[name] if isinstance(name, str) else name
+        parents = set()
+        addparents(e, levels, parents)
+        self.add_entities(
+            entities=parents,
+            relations=relations, edgelabels=edgelabels,
+            addnodes=addnodes, addconstructs=addconstructs, **attrs)
 
     def add_node(self, name, **attrs):
         """Add node with given name. `attrs` are graphviz node attributes."""
@@ -295,9 +305,9 @@ class OntoGraph:
                               owlready2.ObjectPropertyClass)):
                 if 'all' in relations or 'isA' in relations:
                     rlabel = getlabel(r)
-                    if not self.add_missing_node(r, addnodes=addnodes):
-                        continue
                     if r not in e.get_parents(strict=True):
+                        continue
+                    if not self.add_missing_node(r, addnodes=addnodes):
                         continue
                     self.add_edge(
                         subject=label, predicate='isA', object=rlabel, **attrs)

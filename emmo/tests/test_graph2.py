@@ -36,7 +36,16 @@ g = OntoGraph(emmo, emmo.Quantity,
               addconstructs=True)
 g.save('Quantity.svg')
 
-#iri = 'http://emmo.info/emmo/1.0.0-alpha'
-#modules = get_module_dependencies(iri)
-#plot_modules(iri, filename='modules.png', modules=modules)
-#check_module_dependencies(modules)
+g = OntoGraph(emmo, emmo.EMMO, leafs=[emmo.Perspective, emmo.Elementary],
+              relations='isA', edgelabels=None, addnodes=False,
+              addconstructs=False)
+g.save('top.svg')
+
+
+leafs = set()
+for s in emmo.Perspective.subclasses():
+    leafs.update(s.subclasses())
+g = OntoGraph(emmo, emmo.Perspective, leafs=leafs, parents=1,
+              relations='isA', edgelabels=None, addnodes=False,
+              addconstructs=False)
+g.save('Perspectives.svg')
