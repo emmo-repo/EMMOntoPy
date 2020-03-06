@@ -36,7 +36,7 @@ g = OntoGraph(emmo, emmo.Quantity,
               addconstructs=True)
 g.save('Quantity.svg')
 
-iri = 'http://emmo.info/emmo/1.0.0-alpha'
-modules = get_module_dependencies(iri)
-plot_modules(iri, filename='modules.png', modules=modules)
-check_module_dependencies(modules)
+#iri = 'http://emmo.info/emmo/1.0.0-alpha'
+#modules = get_module_dependencies(iri)
+#plot_modules(iri, filename='modules.png', modules=modules)
+#check_module_dependencies(modules)

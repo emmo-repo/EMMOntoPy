@@ -3,8 +3,9 @@
 import sys
 import os
 import argparse
+import json
 
-import pydot
+#import pydot
 
 # Support to run from uninstalled version by adding parent dir to sys path
 rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
@@ -12,7 +13,8 @@ rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
 sys.path.insert(1, rootdir)
 
 from emmo import get_ontology
-from emmo.ontograph import OntoGraph
+from emmo.graph import OntoGraph
+#from emmo.ontograph import OntoGraph
 
 
 def main():
@@ -21,48 +23,81 @@ def main():
         'iri', metavar='IRI',  # default='emmo-inferred.owl', nargs='?',
         help='OWL file/source to plot.')
     parser.add_argument(
-        'output',
+        'output', nargs='?',
         help='name of output file.')
-    parser.add_argument(
-        '--root', '-r',
-        help='Name of root node in the graph.')
-    parser.add_argument(
-        '--reasoner', '-n', action='store_true',
-        help='Run the reasoner on the ontology before plotting.')
     parser.add_argument(
         '--format', '-f',
         help='Format of output file.  By default it is inferred from '
         'the output file extension.')
     parser.add_argument(
-        '--rankdir', '-R', default='BT', choices=['BT', 'TB', 'RL', 'LR'],
-        help='Graph direction (from leaves to root).  Possible values are: '
-        '"BT" (bottom-top, default), "TB" (top-bottom), "RL" (right-left) and '
-        '"LR" (left-right).')
-    parser.add_argument(
-        '--relations', action='store_true',
-        help='Create a graph with only relations.')
-    parser.add_argument(
-        '--style', '-s', default='default',
-        help='Select plot stype. May be "default" or "uml".')
+        '--root', '-r',
+        help='Name of root node in the graph.  Defaults to all classes.')
     parser.add_argument(
         '--leafs', '-l', action='append', default=[],
         help='Leafs nodes for plotting sub-graphs.  May be provided as '
         'comma-separated string and/or with multiple --leafs options.')
+    #parser.add_argument(
+    #    '--reasoner', '-n', action='store_true',
+    #    help='Run the reasoner on the ontology before plotting.')
+    parser.add_argument(
+        '--rankdir', '-d', default='BT', choices=['BT', 'TB', 'RL', 'LR'],
+        help='Graph direction (from leaves to root).  Possible values are: '
+        '"BT" (bottom-top, default), "TB" (top-bottom), "RL" (right-left) and '
+        '"LR" (left-right).')
+    parser.add_argument(
+        '--relations', '-R', default='isA',
+        help='Comma-separated string of relations to visualise.  Default is '
+        '"isA".')
+    parser.add_argument(
+        '--edgelabels', '-e', action='store_true',
+        help='Whether to add labels to edges.')
+    parser.add_argument(
+        '--addnodes', '-n', action='store_true',
+        help='Whether to add missing target nodes in relations.')
+    parser.add_argument(
+        '--addconstructs', '-c', action='store_true',
+        help='Whether to add nodes representing class constructs.')
+    parser.add_argument(
+        '--style-file', '-s', metavar='JSON_FILE',
+        help='A json file with style definitions.')
+    parser.add_argument(
+        '--generate-style-file', '-S', action='store_true',
+        help='Write default style file to `output` instead of graph.  '
+        '`format` will always be json.')
+    parser.add_argument(
+        '--display', '-D', action='store_true',
+        help='Whether to display graph.')
     args = parser.parse_args()
 
     onto = get_ontology(args.iri)
     onto.load()
 
-    if args.reasoner:
-        onto.sync_reasoner()
+    #if args.reasoner:
+    #    onto.sync_reasoner()
 
-    # rankdir = 'RL' if args.horizontal else 'BT'
+    # Customise style
+    style = OntoGraph._default_style
+    style['graph']['rankdir'] = args.rankdir
+
+    # Write style to json file and exit
+    if args.generate_style_file:
+        if not args.output:
+            parser.error('--generate-style-file requires that an output '
+                         'file is provided')
+        with open(args.output, 'wt') as f:
+            json.dump(style, f, indent=4)
+        return
+
+    # Update style from json file
+    if args.style_file:
+        with open(args.style_file, 'rt') as f:
+            style.update(json.load(f))
+
+    # Infer format from output file name if not given
     format = args.format if args.format else os.path.splitext(
         args.output)[1][1:]
 
-    style = getattr(OntoGraph, '_%s_style' % args.style)
-    style['graph']['rankdir'] = args.rankdir
-
+    # Join all --leaf options
     leafs = set()
     for leaf in args.leafs:
         if ',' in leaf:
@@ -70,16 +105,40 @@ def main():
         else:
             leafs.add(leaf)
 
+    # Split relations
+    relations = None
     if args.relations:
-        graph = onto.get_dot_relations_graph(style=style, leafs=leafs)
-    else:
-        graph = onto.get_dot_graph(args.root, style=style, leafs=leafs)
+        relations = [r.strip() for r in args.relations.split(',')]
 
-    try:
-        graph.write(path=args.output, format=format)
-    except pydot.InvocationException as e:
-        sys.stderr.write(str(e))
-        sys.exit(1)
+    # Load ontology
+    onto = get_ontology(args.iri)
+    onto.load()
+
+    # Create graph
+    graph = OntoGraph(
+        onto, root=args.root, leafs=leafs,
+        relations=relations, style=style,
+        edgelabels=args.edgelabels, addnodes=args.addnodes,
+        addconstructs=args.addconstructs,
+        #parents=args.parents
+    )
+
+    if args.output:
+        graph.save(args.output, format=format)
+
+    if not args.output or args.display:
+        graph.view()
+
+    #if args.relations:
+    #    graph = onto.get_dot_relations_graph(style=style, leafs=leafs)
+    #else:
+    #    graph = onto.get_dot_graph(args.root, style=style, leafs=leafs)
+    #
+    #try:
+    #    graph.write(path=args.output, format=format)
+    #except pydot.InvocationException as e:
+    #    sys.stderr.write(str(e))
+    #    sys.exit(1)
 
 
 if __name__ == '__main__':

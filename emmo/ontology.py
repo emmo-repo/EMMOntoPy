@@ -15,6 +15,7 @@ If desirable some of this may be moved back into owlready2.
 #   - Update to work with latest version of Owlready2
 #   - Rename get_dot_graph to get_graph().
 #   - Deprecate methods that are not needed.
+import os
 import itertools
 import inspect
 import warnings
@@ -24,6 +25,7 @@ import owlready2
 
 from .utils import asstring
 from .ontograph import OntoGraph
+from .owldir import owldir
 
 
 class NoSuchLabelError(LookupError):
@@ -41,11 +43,14 @@ categories = (
 )
 
 
-def get_ontology(base_iri='emmo-inferred.owl', verbose=False):
+def get_ontology(base_iri='emmo-inferred', verbose=False):
     """Returns a new Ontology from `base_iri`.
 
     If `verbose` is true, a lot of dianostics is written.
     """
+    if ':' not in base_iri and not os.path.exists(os.path.join(
+            owldir, base_iri.rstrip('#'))):
+        base_iri += '.owl'
     if (not base_iri.endswith('/')) and (not base_iri.endswith('#')):
         base_iri = '%s#' % base_iri
     if base_iri in owlready2.default_world.ontologies:
@@ -270,6 +275,53 @@ class Ontology(owlready2.Ontology, OntoGraph):
                     else leaf for leaf in leafs)
         leafs.discard(root)
         branch = _branch(root, leafs)
+        # Sort according to depth, then by label
+        return sorted(sorted(set(branch), key=lambda x: asstring(x)),
+                      key=lambda x: len(x.mro()))
+
+    def get_branch2(self, root, leafs=(), include_leafs=True,
+                   exclude_leaf_descendants=True):
+        """Returns a list with all direct and indirect subclasses of `root`.
+        Any subclass found in the sequence `leafs` will be included in
+        the returned list, but its subclasses will not.
+
+        If `include_leafs` is true, the leafs are included in the returned
+        list, otherwise they are not.
+
+        If `exclude_leaf_descendants` is true, any class that is a descentant
+        of a leaf, will also be considered to be a leaf.
+
+        The elements of `leafs` may be ThingClass objects or labels.
+        """
+        def _branch(root, leafs):
+            if root not in leafs:
+                branch = [root]
+                for c in root.subclasses():
+                    branch.extend(_branch(c, leafs))
+            elif include_leafs and root not in underleafs:
+                branch = [root]
+            else:
+                branch = []
+            return branch
+
+        if isinstance(root, str):
+            root = self.get_by_label(root)
+        leafs = set(self.get_by_label(leaf) if isinstance(leaf, str)
+                    else leaf for leaf in leafs)
+        startleafs = leafs.copy()
+        underleafs = set()
+        if exclude_leaf_descendants:
+            for leaf in leafs.copy():
+                underleafs.update(leaf.descendants())
+            leafs.update(underleafs)
+        leafs.discard(root)
+        branch = _branch(root, leafs)
+        # Excluding descendants may also exclude leafs
+        if exclude_leaf_descendants:
+            for l in startleafs:
+                print(l)
+                if l not in branch:
+                    branch.append(l)
         # Sort according to depth, then by label
         return sorted(sorted(set(branch), key=lambda x: asstring(x)),
                       key=lambda x: len(x.mro()))

@@ -182,14 +182,29 @@ class OntoGraph:
                 root, leafs,
                 relations=relations, edgelabels=edgelabels,
                 addnodes=addnodes, addconstructs=addconstructs)
-        if parents:
-            self.add_parent(
-                parents,
+            if parents:
+                self.add_parent(
+                    parents,
+                    relations=relations, edgelabels=edgelabels,
+                    addnodes=addnodes, addconstructs=addconstructs)
+        else:
+            self.add_entities(
                 relations=relations, edgelabels=edgelabels,
                 addnodes=addnodes, addconstructs=addconstructs)
 
+    def add_entities(self, entities=None, relations='isA', edgelabels=True,
+                     addnodes=False, addconstructs=False, **attrs):
+        """Adds a sequence of entities to the graph.  If `entities` is None,
+        add all classes to the graph."""
+        if entities is None:
+            entities = self.ontology.classes()
+        self.add_nodes(entities, **attrs)
+        self.add_edges(
+            relations=relations, edgelabels=edgelabels,
+            addnodes=addnodes, addconstructs=addconstructs, **attrs)
+
     def add_branch(self, root, leafs=None, include_leafs=True,
-                   relations='isA', style=None, edgelabels=True,
+                   relations='isA', edgelabels=True,
                    addnodes=False, addconstructs=False, **attrs):
         """Adds branch under `root` ending at any entiry included in the
         sequence `leafs`.  If `include_leafs` is true, leafs classes are
@@ -198,16 +213,16 @@ class OntoGraph:
             leafs = ()
         classes = self.ontology.get_branch(
             root=root, leafs=leafs, include_leafs=include_leafs)
-        self.add_nodes(classes, **attrs)
-        self.add_edges(
+        self.add_entities(
+            entities=classes,
             relations=relations, edgelabels=edgelabels,
             addnodes=addnodes, addconstructs=addconstructs, **attrs)
 
-    def add_parents(self, name, levels=None, relations=None,
+    def add_parents(self, name, levels=None, relations='isA',
                     edgelabels=None, addnodes=False, addconstructs=False,
                     **attrs):
         """Add `levels` levels of parents of entity `name`."""
-        pass
+        raise NotImplementedError()
 
     def add_node(self, name, **attrs):
         """Add node with given name. `attrs` are graphviz node attributes."""
