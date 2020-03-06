@@ -7,7 +7,8 @@ thisdir = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
 from emmo import get_ontology
 
-from emmo.graph import OntoGraph, plot_modules
+from emmo.graph import (OntoGraph, plot_modules, get_module_dependencies,
+                        check_module_dependencies)
 
 
 emmo = get_ontology()
@@ -28,4 +29,14 @@ g.save('SIBaseUnit.png')
 g = OntoGraph(emmo, emmo.EMMORelation, relations='all', edgelabels=None)
 g.save('EMMORelation.png')
 
-plot_modules('http://emmo.info/emmo/1.0.0-alpha', filename='modules.png')
+g = OntoGraph(emmo, emmo.Quantity,
+              leafs=[emmo.DerivedQuantity, emmo.BaseQuantity,
+                     emmo.PhysicalConstant],
+              relations='all', edgelabels=None, addnodes=True,
+              addconstructs=True)
+g.save('Quantity.svg')
+
+iri = 'http://emmo.info/emmo/1.0.0-alpha'
+modules = get_module_dependencies(iri)
+plot_modules(iri, filename='modules.png', modules=modules)
+check_module_dependencies(modules)

@@ -20,14 +20,14 @@ typenames = owlready2.class_construct._restriction_type_2_label
 
 def getlabel(e):
     """Returns the label of entity `e`."""
-    if hasattr(e, 'label'):
+    if hasattr(e, 'label') and e.label:
         return e.label.first()
     elif hasattr(e, '__name__'):
         return e.__name__
     elif hasattr(e, 'name'):
         return str(e.name)
     else:
-        return repr(e)
+        return asstring(e)
 
 
 
@@ -60,7 +60,8 @@ class OntoGraph:
               - object_property : nodes for object properties (N)
               - data_property : nodes for data properties (N)
               - annotation_property : nodes for annotation properties (N)
-              - is_a : edges for is_a relations (E)
+              - isA : edges for isA relations (E)
+              - not : edges for not class constructs (E)
               - equivalent_to : edges for equivalent_to relations (E)
               - disjoint_with : edges for disjoint_with relations (E)
               - inverse_of : edges for inverse_of relations (E)
@@ -102,7 +103,6 @@ class OntoGraph:
             'fillcolor': '#ffc880',
         },
         'class_construct': {
-            'shape': 'box',
             'style': 'filled',
             'fillcolor': 'gray',
         },
@@ -128,19 +128,17 @@ class OntoGraph:
             'style': 'filled',
             'fillcolor': 'orange',
         },
-        'is_a': {'arrowhead': 'empty'},
+        'isA': {'arrowhead': 'empty'},
+        'not': {'color': 'gray', 'style': 'dotted'},
         'equivalent_to': {'color': 'green3'},
         'disjoint_with': {'color': 'red', 'constraint': 'false'},
         'inverse_of': {'color': 'orange', },
         'default_relation': {'color': 'olivedrab', 'constraint': 'false'},
         'relations': {
             'disconnected': {'color': 'red', 'style': 'dashed'},
-            #'encloses': {'color': 'red', 'arrowtail': 'diamond',
-            #             'dir': 'back'},
-            #'hasPart': {'color': 'red', 'arrowtail': 'diamond',
-            #                     'dir': 'back', 'style': 'dashed'},
             'encloses': {'color': 'blue'},
             'hasPart': {'color': 'blue', 'style': 'dashed'},
+            'hasSpatialDirectPart': {'color': 'darkgreen', 'style': 'dashed'},
             'hasReferenceUnit': {'color': 'magenta'},
             'hasSign': {'color': 'orange', 'style': 'dotted'},
             'hasProperty': {'color': 'orange'},
@@ -149,7 +147,7 @@ class OntoGraph:
     }
 
     def __init__(self, ontology, root=None, leafs=None,
-                 relations='is_a', style=None, edgelabels=True,
+                 relations='isA', style=None, edgelabels=True,
                  addnodes=False, addconstructs=False,
                  parents=False, graph=None, **kwargs):
         if style is None or style == 'default':
@@ -191,7 +189,7 @@ class OntoGraph:
                 addnodes=addnodes, addconstructs=addconstructs)
 
     def add_branch(self, root, leafs=None, include_leafs=True,
-                   relations='is_a', style=None, edgelabels=True,
+                   relations='isA', style=None, edgelabels=True,
                    addnodes=False, addconstructs=False, **attrs):
         """Adds branch under `root` ending at any entiry included in the
         sequence `leafs`.  If `include_leafs` is true, leafs classes are
@@ -217,7 +215,8 @@ class OntoGraph:
         label = getlabel(e)
         if label not in self.nodes:
             kw = self.get_node_attrs(e, attrs)
-            kw.setdefault('URL', e.iri)
+            if hasattr(e, 'iri'):
+                kw.setdefault('URL', e.iri)
             self.dot.node(label, label=label, **kw)
             self.nodes.add(label)
 
@@ -276,17 +275,17 @@ class OntoGraph:
         label = getlabel(e)
         for r in e.is_a:
 
-            # is_a
+            # isA
             if isinstance(r, (owlready2.ThingClass,
                               owlready2.ObjectPropertyClass)):
-                if 'all' in relations or 'is_a' in relations:
+                if 'all' in relations or 'isA' in relations:
                     rlabel = getlabel(r)
                     if not self.add_missing_node(r, addnodes=addnodes):
                         continue
                     if r not in e.get_parents(strict=True):
                         continue
                     self.add_edge(
-                        subject=label, predicate='is_a', object=rlabel, **attrs)
+                        subject=label, predicate='isA', object=rlabel, **attrs)
 
             # restriction
             elif isinstance(r, owlready2.Restriction):
@@ -297,8 +296,11 @@ class OntoGraph:
                         obj = getlabel(r.value)
                         if not self.add_missing_node(r.value, addnodes):
                             continue
-                    elif isinstance(r.value, owlready2.ClassConstruct):
+                    elif (isinstance(r.value, owlready2.ClassConstruct) and
+                          self.addconstructs):
                         obj = self.add_class_construct(r.value)
+                    else:
+                        continue
                     pred = asstring(r, exclude_object=True)
                     self.add_edge(label, pred, obj, edgelabels, **attrs)
 
@@ -345,7 +347,30 @@ class OntoGraph:
 
     def add_class_construct(self, c):
         """Adds class construct `c` and return its label."""
-        raise NotImplementedError()
+        self.add_node(c, **self.style.get('class_construct', {}))
+        label = getlabel(c)
+        if isinstance(c, owlready2.Or):
+            for cls in c.Classes:
+                clslabel = getlabel(cls)
+                if not clslabel in self.nodes and self.addnodes:
+                    self.add_node(clslabel)
+                if clslabel in self.nodes:
+                    self.add_edge(getlabel(cls), 'isA', label)
+        elif isinstance(c, owlready2.And):
+            for cls in c.Classes:
+                clslabel = getlabel(cls)
+                if not clslabel in self.nodes and self.addnodes:
+                    self.add_node(clslabel)
+                if clslabel in self.nodes:
+                    self.add_edge(label, 'isA', getlabel(cls))
+        elif isinstance(c, owlready2.Not):
+            clslabel = getlabel(c.Class)
+            if not clslabel in self.nodes and self.addnodes:
+                self.add_node(clslabel)
+            if clslabel in self.nodes:
+                self.add_edge(getlabel(cls), 'not', label)
+        # Neither and nor inverse constructs are
+        return label
 
     def get_node_attrs(self, name, attrs):
         """Returns attributes for node or edge `name`.  `attrs` overrides
@@ -382,7 +407,7 @@ class OntoGraph:
         """Returns attributes for node or edge `name`.  `attrs` overrides
         the default style."""
         # given type
-        types = ('is_a', 'equivalent_to', 'disjoint_with', 'inverse_of')
+        types = ('isA', 'equivalent_to', 'disjoint_with', 'inverse_of')
         if predicate in types:
             kw = self.style.get(predicate, {}).copy()
         else:
@@ -444,46 +469,70 @@ def get_figsize(graph):
     return asfloat(width), asfloat(height)
 
 
-def get_dependencies(iri, strip_base=None):
+def get_module_dependencies(iri, strip_base=None):
     """Reads `iri` and returns a dict mapping ontology names to a list of
     ontologies that they depends on.  If `strip_base` is true, the base IRI
     is stripped from ontology names."""
     onto = get_ontology(iri)
     onto.load()
-    base = onto.base_iri.rstrip('#')
     modules = {}
+
+    def strip(base_iri):
+        if isinstance(strip_base, str):
+            return base_iri.lstrip(strip_base)
+        elif strip_base:
+            return base_iri.strip(onto.base_iri)
+        else:
+            return base_iri
 
     def setmodules(onto):
         for o in onto.imported_ontologies:
             if onto.base_iri in modules:
-                modules[onto.base_iri].add(o.base_iri)
+                modules[strip(onto.base_iri)].add(strip(o.base_iri))
             else:
-                modules[onto.base_iri] = set([o.base_iri])
+                modules[strip(onto.base_iri)] = set([strip(o.base_iri)])
             if o.base_iri not in modules:
-                modules[o.base_iri] = set()
+                modules[strip(o.base_iri)] = set()
             setmodules(o)
 
     setmodules(onto)
     return modules
 
 
-def plot_modules(iri, filename=None, format=None, show=False):
-    """Plot module dependency graph."""
-    modules = get_dependencies(iri)
+def plot_modules(iri, filename=None, format=None, show=False, modules=None,
+                 ignore_redundant=True):
+    """Plot module dependency graph to `filename`.
+
+    If `format` is None, the output format is inferred from
+    `filename`.
+
+    If `show` is true, the graph is displayed.
+
+    If `modules` is given, it should be a dict returned by
+    get_module_dependencies().
+
+    If `ignore_redundant` is true, redundant dependencies are not plotted.
+    """
+    if modules is None:
+        modules = get_module_dependencies(iri)
+    if ignore_redundant:
+        modules = check_module_dependencies(modules, verbose=False)
 
     dot = graphviz.Digraph(comment='Module dependencies')
-    dot.attr(rankdir='BT')
+    dot.attr(rankdir='TB')
     dot.node_attr.update(style='filled', fillcolor='lightblue', shape='box',
                          edgecolor='blue')
     dot.edge_attr.update(arrowtail='open', dir='back')
 
     for iri in modules.keys():
-        dot.node(iri, label=iri, URL=iri)
+        iriname = iri.split(':', 1)[1]
+        dot.node(iriname, label=iri, URL=iri)
 
     for iri, deps in modules.items():
         for dep in deps:
-            print(iri, '->', dep)
-            dot.edge("'" + iri + "'", "'" + dep + "'")
+            iriname = iri.split(':', 1)[1]
+            depname = dep.split(':', 1)[1]
+            dot.edge(depname, iriname)
 
     if filename:
         base, ext = os.path.splitext(filename)
@@ -493,3 +542,41 @@ def plot_modules(iri, filename=None, format=None, show=False):
 
     if show:
         dot.view(cleanup=True)
+
+
+def check_module_dependencies(modules, verbose=True):
+    """Check module dependencies and return a copy of modules with
+    redundant dependencies removed.
+
+    If `verbose` is true, warnings are printed for each module that
+
+    If `modules` is given, it should be a dict returned by
+    get_module_dependencies().
+    """
+    def get_deps(iri, excl=None):
+        """Returns a set with all dependencies of `iri`, excluding `excl` and
+        its dependencies."""
+        deps = set()
+        for d in modules[iri]:
+            if d != excl:
+                deps.add(d)
+                deps.update(get_deps(d))
+        return deps
+
+    mods = {}
+    redundant = []
+    for iri, deps in modules.items():
+        for dep in deps:
+            if dep in get_deps(iri, dep):
+                redundant.append((iri, dep))
+            elif iri in mods:
+                mods[iri].add(dep)
+            else:
+                mods[iri] = set([dep])
+
+    if redundant and verbose:
+        print('** Warning: Redundant module dependency:')
+        for iri, dep in redundant:
+            print('%s -> %s' % (iri, dep))
+
+    return mods
