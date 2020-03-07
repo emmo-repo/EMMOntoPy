@@ -494,13 +494,18 @@ def get_figsize(graph):
     return asfloat(width), asfloat(height)
 
 
-def get_module_dependencies(iri, strip_base=None):
-    """Reads `iri` and returns a dict mapping ontology names to a list of
-    ontologies that they depends on.  If `strip_base` is true, the base IRI
-    is stripped from ontology names."""
-    onto = get_ontology(iri)
-    onto.load()
-    modules = {}
+def get_module_dependencies(iri_or_onto, strip_base=None):
+    """Reads `iri_or_onto` and returns a dict mapping ontology names to a
+    list of ontologies that they depends on.  If `strip_base` is true,
+    the base IRI is stripped from ontology names.
+    """
+    if isinstance(iri_or_onto, str):
+        onto = get_ontology(iri)
+        onto.load()
+    else:
+        onto = iri_or_onto
+
+    modules = {onto.base_iri: set()}
 
     def strip(base_iri):
         if isinstance(strip_base, str):
@@ -526,7 +531,7 @@ def get_module_dependencies(iri, strip_base=None):
 
 def plot_modules(iri, filename=None, format=None, show=False, modules=None,
                  ignore_redundant=True):
-    """Plot module dependency graph to `filename`.
+    """Plot module dependency graph to `filename` and return graph object.
 
     If `format` is None, the output format is inferred from
     `filename`.
@@ -540,6 +545,7 @@ def plot_modules(iri, filename=None, format=None, show=False, modules=None,
     """
     if modules is None:
         modules = get_module_dependencies(iri)
+
     if ignore_redundant:
         modules = check_module_dependencies(modules, verbose=False)
 
@@ -568,6 +574,8 @@ def plot_modules(iri, filename=None, format=None, show=False, modules=None,
     if show:
         dot.view(cleanup=True)
 
+    return dot
+
 
 def check_module_dependencies(modules, verbose=True):
     """Check module dependencies and return a copy of modules with
@@ -591,6 +599,8 @@ def check_module_dependencies(modules, verbose=True):
     mods = {}
     redundant = []
     for iri, deps in modules.items():
+        if not deps:
+            mods[iri] = set()
         for dep in deps:
             if dep in get_deps(iri, dep):
                 redundant.append((iri, dep))

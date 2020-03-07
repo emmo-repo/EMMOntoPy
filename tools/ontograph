@@ -13,8 +13,9 @@ rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
 sys.path.insert(1, rootdir)
 
 from emmo import get_ontology
-from emmo.graph import OntoGraph
-#from emmo.ontograph import OntoGraph
+from emmo.graph import OntoGraph, plot_modules
+
+import owlready2
 
 
 def main():
@@ -64,43 +65,33 @@ def main():
         '--style-file', '-s', metavar='JSON_FILE',
         help='A json file with style definitions.')
     parser.add_argument(
-        '--generate-style-file', '-S', action='store_true',
-        help='Write default style file to `output` instead of graph.  '
-        '`format` will always be json.')
+        '--generate-style-file', '-S', metavar='JSON_FILE',
+        help='Write default style file to a json file.')
+    parser.add_argument(
+        '--plot-modules', '-m', action='store_true',
+        help='Whether to plot module inter-dependencies instead of their '
+        'content.')
     parser.add_argument(
         '--display', '-D', action='store_true',
         help='Whether to display graph.')
     args = parser.parse_args()
 
-    onto = get_ontology(args.iri)
-    onto.load()
-
-    #if args.reasoner:
-    #    onto.sync_reasoner()
 
     # Customise style
     style = OntoGraph._default_style
     style['graph']['rankdir'] = args.rankdir
-
-    # Write style to json file and exit
-    if args.generate_style_file:
-        if not args.output:
-            parser.error('--generate-style-file requires that an output '
-                         'file is provided')
-        with open(args.output, 'wt') as f:
-            json.dump(style, f, indent=4)
-        return
 
     # Update style from json file
     if args.style_file:
         with open(args.style_file, 'rt') as f:
             style.update(json.load(f))
 
-    # Infer format from output file name if not given
-    format = args.format if args.format else os.path.splitext(
-        args.output)[1][1:]
+    # Write style to json file
+    if args.generate_style_file:
+        with open(args.generate_style_file, 'wt') as f:
+            json.dump(style, f, indent=4)
 
-    # Join all --leaf options
+    # Join all --leafs options
     leafs = set()
     for leaf in args.leafs:
         if ',' in leaf:
@@ -115,7 +106,20 @@ def main():
 
     # Load ontology
     onto = get_ontology(args.iri)
-    onto.load()
+    try:
+        onto.load()
+    except owlready2.OwlReadyOntologyParsingError as e:
+        print('Invalid IRI:', e, file=sys.stderr)
+        sys.exit(1)
+    #if args.sync_reasoner:
+    #    onto.sync_reasoner()
+
+
+    # Plot modules
+    if args.plot_modules:
+        plot_modules(onto, filename=args.output, format=args.format,
+                     show=args.display, ignore_redundant=True)
+        return
 
     # Create graph
     graph = OntoGraph(
@@ -126,22 +130,12 @@ def main():
         #parents=args.parents
     )
 
+    # Plot and display
     if args.output:
-        graph.save(args.output, format=format)
+        graph.save(args.output, format=args.format)
 
     if not args.output or args.display:
         graph.view()
-
-    #if args.relations:
-    #    graph = onto.get_dot_relations_graph(style=style, leafs=leafs)
-    #else:
-    #    graph = onto.get_dot_graph(args.root, style=style, leafs=leafs)
-    #
-    #try:
-    #    graph.write(path=args.output, format=format)
-    #except pydot.InvocationException as e:
-    #    sys.stderr.write(str(e))
-    #    sys.exit(1)
 
 
 if __name__ == '__main__':
