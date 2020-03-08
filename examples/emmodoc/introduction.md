@@ -36,10 +36,6 @@ materials modelling and characterisation, including:
 
 ![The aspects of materials modelling and characterisation covered by EMMO.](figs/emmo-scope.png){ width=360px }
 
-<!--
-ADD MAIN FEATURES OF EMMO FROM GERHARDS SLIDE
--->
-
 
 EMMO is released under the [Creative Commons license][CC] and is
 available at [emmo.info/][EMMO].  The OWL2-DL sources are available in
@@ -96,14 +92,6 @@ Individuals are the basic, "ground level" components of EMMO.  They
 may include concrete objects such as cars, flowers, stars, persons and
 molecules, as well as abstract individuals such as a measured height,
 a specific equation and software programs.
-
-<!--
-They are a logical picture of the real world entity they represent.
-
-    Remove this for now, since Anne thinks this sentence no longer
-    ahere to realism since we make a distinction between individuals
-    and the real world.
--->
 
 Individuals possess attributes in form of axioms that are defined by
 the user (interpreter) upon declaration.
@@ -501,87 +489,6 @@ parthood relations.
 ![Direct parthood.](figs/emmo-direct_part.png){ width=220px }
 
 
-%%<!--
-%%### EMMO Core
-%%EMMO core contains three levels as illustrated in the figure below.
-%%
-%%![Toplevel structure of EMMO Core.](figs/emmo-core.png){ width=180px }
-%%
-%%  - **The abstract conceptual level** makes a clear separation
-%%    between `set` (set theory) and `item` (mereotopology).
-%%
-%%  - **The geometric/topological level** contains the space (3D) and time
-%%    (1D) in which all items unfolds.
-%%
-%%  - **The physical level** holds the 4D `spacetime` in which all real
-%%    world entities exists.  A `spacetime` that can be perceived by
-%%    (interact with) the interpreater is a `physical`.  If the
-%%    `spacetime` entity is empty in terms of perception, it is a
-%%    `void`.
-%%
-%%EMMO defines a parthood hierachy under `physical` by introducing the
-%%following concepts (illustrated in the figure below):
-%%
-%%  - **`elementary`** is the fundamental, non-divisible constituent of entities
-%%
-%%  - **`state`** is a `physical`whose parts have a constant cardinality
-%%    during its life time
-%%
-%%  - **`existent`** is a succession of states
-%%
-%%![Parthood hierachy under `physical`.](figs/physical.png){ width=500px }
-%%
-%%Via the mereological direct parthood relation, EMMO can describe
-%%entities made of parts at different levels of granularity.  This is
-%%paramount for cross scale interoperability.  Every material in EMMO is
-%%placed on a granularity level and the ontology gives information about
-%%the direct upper and direct lower level classes using
-%%the non-transitive direct parthood relations.
-%%
-%%![Direct parthood.](figs/emmo-direct_part.png){ width=220px }
-%%
-%%
-%%### EMMO Materials
-%%EMMO Material contains a first draft of a materials ontology.  It
-%%relies on direct parthood to identify granularity levels.  It is
-%%generic and flexible enough to represent both classical and quantum
-%%mechanical systems in a way that is compatible with different
-%%interpretations (e.g. the Copenhagen and De Broglie-Bohm
-%%interpretations of quantum mechanics) and levels of approximations
-%%(e.g. classical physics and Born-Oppenheimer approximation).
-%%
-%%
-%%### EMMO Semiotics
-%%
-%%The semiotics module introduces three connected branches, `symbolic`,
-%%`semiosis` and `semiotic_role` in addition to the
-%%`has_sign`/`stands_for` family of relations.
-%%
-%%
-%%
-%%Since the EMMO must represent models and properties (which are signs
-%%that stand for a physical entity), the semiotic process must be
-%%described also within the EMMO itself.  The concepts of Peirce
-%%semiotics (interpreter, object, sign) are included in the semiotic
-%%branch, together with the semiosis process.
-%%
-%%
-%%### EMMO Formal languages
-%%
-%%
-%%
-%%
-%%### EMMO Data formats
-%%
-%%### EMMO Math
-%%
-%%### EMMO Properties
-%%
-%%### EMMO Models
-%%
-%%### EMMO Characterisation
-%%-->
-
 
 ### Annotations
 All entities and relations in EMMO have some attributes, called
@@ -590,15 +497,6 @@ Resource Identifier* (IRI) and *relations* are provided.  However,
 descriptive annotations, like *elucidation* and *comment*, are planned
 to be added for all classes and relations.  Possible annotations are:
 
-%%- **Definition** is a human readable definition of the class.  Definition
-%%  annotations are currently not used in EMMO.
-%%
-%%- **Axiom**
-%%  Currently not used in EMMO.
-%%
-%%- **Theorem**
-%%  Currently not used in EMMO.
-%%
 * __Elucidation__ is a human readable explanation and clearification
   of the documented class or relation.
 * __Example__ clearifies the elucidation through an example.  A class may

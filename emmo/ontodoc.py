@@ -157,7 +157,8 @@ class OntoDoc:
 
     def get_default_template(self):
         """Returns default template."""
-        title = os.path.splitext(os.path.basename(self.onto.base_iri))[0]
+        title = os.path.splitext(
+            os.path.basename(self.onto.base_iri.rstrip('/#')))[0]
         irilink = self.style.get('link', '{name}').format(
             name=self.onto.base_iri, url=self.onto.base_iri,
             lowerurl=self.onto.base_iri)
@@ -731,7 +732,7 @@ class DocPP:
                 type = tokens[1]
                 opts = get_options(tokens[2:], path='', level=3, terminated=0,
                                    include_leafs=1, strict_leafs=1, width=0,
-                                   leafs='', relations='all', edgelabels=1,
+                                   leafs='', relations='isA', edgelabels=0,
                                    rankdir='BT')
                 if type == 'classes':
                     roots = onto.get_root_classes()
