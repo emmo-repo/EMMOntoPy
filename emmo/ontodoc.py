@@ -58,6 +58,7 @@ class OntoDoc:
             # logic/math symbols
             ('\u2200', r'$\\forall$'),
             ('\u2203', r'$\\exists$'),
+            ('\u2206', r'$\\nabla$'),
             ('\u2227', r'$\\land$'),
             ('\u2228', r'$\\lor$'),
             # uppercase greek letters
@@ -118,6 +119,8 @@ class OntoDoc:
             ('\u00e1', r"$\\acute{\\mathrm{a}}$"),
             ('\u03cc', r"$\\acute{\\upomicron}$"),
             ('\u014d', r"$\\bar{\\mathrm{o}}$"),
+            ('\u1f45', r'$\\acute{\\omicron}$'),
+
         ],
     )
     _html_style = dict(
