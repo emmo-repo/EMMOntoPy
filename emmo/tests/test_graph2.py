@@ -10,9 +10,21 @@ from emmo import get_ontology
 from emmo.graph import (OntoGraph, plot_modules, get_module_dependencies,
                         check_module_dependencies)
 
+# Create output directory
+outdir = 'test_graph2'
+if not os.path.exists(outdir):
+    os.makedirs(outdir)
+os.chdir(outdir)
+
 
 emmo = get_ontology()
 emmo.load()
+
+g = OntoGraph(emmo, emmo.hasPart, leafs=('mereotopological', 'semiotical',
+                                         'connected'))
+g.save('hasPart.svg')
+
+g.save('MaterialState.png')
 
 g = OntoGraph(emmo, emmo.MaterialState, relations='all', addnodes=True,
               edgelabels=None)
@@ -36,16 +48,39 @@ g = OntoGraph(emmo, emmo.Quantity,
               addconstructs=True)
 g.save('Quantity.svg')
 
-g = OntoGraph(emmo, emmo.EMMO, leafs=[emmo.Perspective, emmo.Elementary],
-              relations='isA', edgelabels=None, addnodes=False,
-              addconstructs=False)
-g.save('top.svg')
+
+## Used for figures
+
+g = OntoGraph(emmo)
+g.add_legend('all')
+g.save('legend.png')
+
+
+g = OntoGraph(emmo, emmo.EMMO, leafs=[emmo.Perspective, emmo.Elementary])
+g.save('top.png')
 
 
 leafs = set()
 for s in emmo.Perspective.subclasses():
     leafs.update(s.subclasses())
-g = OntoGraph(emmo, emmo.Perspective, leafs=leafs, parents=1,
-              relations='isA', edgelabels=None, addnodes=False,
-              addconstructs=False)
-g.save('Perspectives.svg')
+g = OntoGraph(emmo, emmo.Perspective, leafs=leafs, parents=1)
+g.save('Perspectives.png')
+
+
+leafs = {emmo.Interpreter, emmo.Conventional, emmo.Icon, emmo.Observation,
+         emmo.Object}
+hidden = {emmo.SIUnitSymbol, emmo.SpecialUnit, emmo.Manufacturing,
+          emmo.Engineered, emmo.PhysicalPhenomenon}
+semiotic = emmo.get_branch(emmo.Holistic, leafs=leafs.union(hidden))
+semiotic.difference_update(hidden)
+g = OntoGraph(emmo)
+g.add_entities(semiotic, relations='all', edgelabels=False)
+#g.add_entities(semiotic, edgelabels=None)
+g.save('Semiotic.png')
+g.add_legend()
+g.save('Semiotic+legend.png')
+
+
+l = OntoGraph(emmo)
+l.add_legend(g.get_relations())
+l.save('Semiotic-legend.png')

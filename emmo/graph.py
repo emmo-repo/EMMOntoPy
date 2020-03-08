@@ -17,6 +17,9 @@ from .ontology import get_ontology, NoSuchLabelError
 typenames = owlready2.class_construct._restriction_type_2_label
 
 
+# Literal for `root` arguments
+ALL = 1
+
 
 def getlabel(e):
     """Returns the label of entity `e`."""
@@ -38,10 +41,10 @@ class OntoGraph:
         ----------
         ontology : emmo.Ontology instance
             Ontology to visualize.
-        root : None | string | owlready2.ThingClass instance
+        root : None | graph.ALL | string | owlready2.ThingClass instance
             Name or owlready2 entity of root node to plot subgraph
-            below.  If `root` is None, all classes will be included in the
-            subgraph.
+            below.  If `root` is `graph.ALL`, all classes will be included
+            in the subgraph.
         leafs : None | sequence
             A sequence of leaf node names for generating sub-graphs.
         relations : "all" | str | None | sequence
@@ -54,6 +57,8 @@ class OntoGraph:
               - graphtype : "Digraph" | "Graph"
               - graph : graph attributes (G)
               - class : nodes for classes (N)
+              - root : additional attributes for root nodes (N)
+              - leaf : additional attributes for leaf nodes (N)
               - defined_class : nodes for defined classes (N)
               - class_construct : nodes for class constructs (N)
               - individual : nodes for invididuals (N)
@@ -67,7 +72,10 @@ class OntoGraph:
               - inverse_of : edges for inverse_of relations (E)
               - default_relation : default edges relations and restrictions (E)
               - relations : dict of styles for different relations (E)
+              - inverse : default edges for inverse relations (E)
               - default_dataprop : default edges for data properties (E)
+              - nodes : attribute for individual nodes (N)
+              - edges : attribute for individual edges (E)
             If style is None or "default", the default style is used.
             See https://www.graphviz.org/doc/info/attrs.html
         edgelabels : bool | dict
@@ -97,6 +105,8 @@ class OntoGraph:
             'style': 'filled',
             'fillcolor': '#ffffcc',
         },
+        'root': {'penwidth': '2'},
+        'leaf': {'penwidth': '2'},
         'defined_class': {
             'style': 'filled',
             'fillcolor': '#ffc880',
@@ -134,15 +144,23 @@ class OntoGraph:
         'inverse_of': {'color': 'orange', },
         'default_relation': {'color': 'olivedrab', 'constraint': 'false'},
         'relations': {
-            'disconnected': {'color': 'red', 'style': 'dashed'},
-            'encloses': {'color': 'blue'},
-            'hasPart': {'color': 'blue', 'style': 'dashed'},
-            'hasSpatialDirectPart': {'color': 'darkgreen', 'style': 'dashed'},
-            'hasReferenceUnit': {'color': 'magenta'},
-            'hasSign': {'color': 'orange', 'style': 'dotted'},
-            'hasProperty': {'color': 'orange'},
+            'disconnected': {'color': 'red', 'style': 'dotted',
+                             'arrowhead': 'odot'},
+            #'encloses': {'color': 'blue'},
+            'hasPart': {'color': 'blue'},
+            'hasProperPart': {'color': 'blue', 'style': 'dashed'},
+            'hasParticipant': {'color': 'red'},
+            'hasProperParticipant': {'color': 'red', 'style': 'dashed'},
+            'hasSpatialDirectPart': {'color': 'darkgreen'},
+            'hasReferenceUnit': {'color': 'darkgreen', 'style': 'dashed'},
+            'hasSign': {'color': 'orange'},
+            'hasConvention': {'color': 'orange', 'style': 'dashed'},
+            'hasProperty': {'color': 'orange', 'style': 'dotted'},
         },
+        'inverse': {'arrowhead': 'inv'},
         'default_dataprop': {'color': 'green', 'constraint': 'false'},
+        'node': {},
+        'edge': {},
     }
 
     def __init__(self, ontology, root=None, leafs=None,
@@ -151,6 +169,7 @@ class OntoGraph:
                  parents=0, graph=None, **kwargs):
         if style is None or style == 'default':
             style = self._default_style
+
         if graph is None:
             graphtype = style.get('graphtype', 'Digraph')
             dotcls = getattr(graphviz, graphtype)
@@ -176,7 +195,11 @@ class OntoGraph:
         self.addnodes = addnodes
         self.addconstructs = addconstructs
 
-        if root:
+        if root == ALL:
+            self.add_entities(
+                relations=relations, edgelabels=edgelabels,
+                addnodes=addnodes, addconstructs=addconstructs)
+        elif root:
             self.add_branch(
                 root, leafs,
                 relations=relations, edgelabels=edgelabels,
@@ -186,36 +209,47 @@ class OntoGraph:
                     root, levels=parents,
                     relations=relations, edgelabels=edgelabels,
                     addnodes=addnodes, addconstructs=addconstructs)
-        else:
-            self.add_entities(
-                relations=relations, edgelabels=edgelabels,
-                addnodes=addnodes, addconstructs=addconstructs)
 
     def add_entities(self, entities=None, relations='isA', edgelabels=True,
-                     addnodes=False, addconstructs=False, **attrs):
+                     addnodes=False, addconstructs=False,
+                     nodeattrs=None, **attrs):
         """Adds a sequence of entities to the graph.  If `entities` is None,
-        add all classes to the graph."""
+        all classes are added to the graph.
+
+        `nodeattrs` is a dict mapping node names to are attributes for
+        dedicated nodes.
+        """
         if entities is None:
             entities = self.ontology.classes()
-        self.add_nodes(entities, **attrs)
+        self.add_nodes(entities, nodeattrs=nodeattrs, **attrs)
         self.add_edges(
             relations=relations, edgelabels=edgelabels,
             addnodes=addnodes, addconstructs=addconstructs, **attrs)
 
     def add_branch(self, root, leafs=None, include_leafs=True,
-                   relations='isA', edgelabels=True,
-                   addnodes=False, addconstructs=False, **attrs):
+                   strict_leafs=False, exclude=None, relations='isA',
+                   edgelabels=True, addnodes=False, addconstructs=False,
+                   **attrs):
         """Adds branch under `root` ending at any entiry included in the
         sequence `leafs`.  If `include_leafs` is true, leafs classes are
         also included."""
         if leafs is None:
             leafs = ()
+
         classes = self.ontology.get_branch(
-            root=root, leafs=leafs, include_leafs=include_leafs)
+            root=root, leafs=leafs, include_leafs=include_leafs,
+            strict_leafs=strict_leafs, exclude=exclude)
+
+        nodeattrs = {}
+        nodeattrs[getlabel(root)] = self.style.get('root', {})
+        for leaf in leafs:
+            nodeattrs[getlabel(leaf)] = self.style.get('leaf', {})
+
         self.add_entities(
             entities=classes,
             relations=relations, edgelabels=edgelabels,
-            addnodes=addnodes, addconstructs=addconstructs, **attrs)
+            addnodes=addnodes, addconstructs=addconstructs,
+            nodeattrs=nodeattrs, **attrs)
 
     def add_parents(self, name, levels=1, relations='isA',
                     edgelabels=None, addnodes=False, addconstructs=False,
@@ -234,21 +268,21 @@ class OntoGraph:
             relations=relations, edgelabels=edgelabels,
             addnodes=addnodes, addconstructs=addconstructs, **attrs)
 
-    def add_node(self, name, **attrs):
+    def add_node(self, name, nodeattrs=None, **attrs):
         """Add node with given name. `attrs` are graphviz node attributes."""
         e = self.ontology[name] if isinstance(name, str) else name
         label = getlabel(e)
         if label not in self.nodes:
-            kw = self.get_node_attrs(e, attrs)
+            kw = self.get_node_attrs(e, nodeattrs=nodeattrs, attrs=attrs)
             if hasattr(e, 'iri'):
                 kw.setdefault('URL', e.iri)
             self.dot.node(label, label=label, **kw)
             self.nodes.add(label)
 
-    def add_nodes(self, names, **attrs):
+    def add_nodes(self, names, nodeattrs, **attrs):
         """Add nodes with given names. `attrs` are graphviz node attributes."""
         for name in names:
-            self.add_node(name, **attrs)
+            self.add_node(name, nodeattrs=nodeattrs, **attrs)
 
     def add_edge(self, subject, predicate, object, edgelabel=None, **attrs):
         """Add edge corresponding for ``(subject, predicate, object)``
@@ -277,12 +311,12 @@ class OntoGraph:
             else:
                 label = None
 
-            kw = self.get_edge_attrs(predicate, attrs)
+            kw = self.get_edge_attrs(predicate, attrs=attrs)
             self.dot.edge(subject, object, label=label, **kw)
             self.edges.add(key)
 
     def add_source_edges(self, source, relations=None, edgelabels=None,
-                  addnodes=None, addconstructs=None, **attrs):
+                         addnodes=None, addconstructs=None, **attrs):
         """Adds all relations originating from entity `source` who's type
         are listed in `relations`."""
         if relations is None:
@@ -310,7 +344,8 @@ class OntoGraph:
                     if not self.add_missing_node(r, addnodes=addnodes):
                         continue
                     self.add_edge(
-                        subject=label, predicate='isA', object=rlabel, **attrs)
+                        subject=label, predicate='isA', object=rlabel,
+                        edgelabel=edgelabels, **attrs)
 
             # restriction
             elif isinstance(r, owlready2.Restriction):
@@ -327,7 +362,8 @@ class OntoGraph:
                     else:
                         continue
                     pred = asstring(r, exclude_object=True)
-                    self.add_edge(label, pred, obj, edgelabels, **attrs)
+                    self.add_edge(label, pred, obj, edgelabel=edgelabels,
+                                  **attrs)
 
             # inverse
             if isinstance(r, owlready2.Inverse):
@@ -339,9 +375,7 @@ class OntoGraph:
                         continue
                     self.add_edge(
                         subject=label, predicate='inverse', object=rlabel,
-                        **attrs)
-
-
+                        edgelabel=edgelabels, **attrs)
 
     def add_edges(self, sources=None, relations=None, edgelabels=None,
                   addnodes=None, addconstructs=None, **attrs):
@@ -397,10 +431,11 @@ class OntoGraph:
         # Neither and nor inverse constructs are
         return label
 
-    def get_node_attrs(self, name, attrs):
+    def get_node_attrs(self, name, nodeattrs, attrs):
         """Returns attributes for node or edge `name`.  `attrs` overrides
         the default style."""
         e = self.ontology[name] if isinstance(name, str) else name
+        label = getlabel(e)
         # class
         if isinstance(e, owlready2.ThingClass):
             if self.ontology.is_defined(e):
@@ -425,6 +460,9 @@ class OntoGraph:
         else:
             raise TypeError('Unknown entity type: %r' % e)
         kw = kw.copy()
+        kw.update(self.style.get('nodes', {}).get(label, {}))
+        if nodeattrs:
+            kw.update(nodeattrs.get(label, {}))
         kw.update(attrs)
         return kw
 
@@ -442,6 +480,9 @@ class OntoGraph:
             m = re.match(r'Inverse\((.*)\)', name)
             if m:
                 name, = m.groups()
+                attrs = attrs.copy()
+                for k, v in self.style.get('inverse', {}).items():
+                    attrs.setdefault(k, v)
             e = self.ontology[name] if isinstance(name, str) else name
             relations = self.style.get('relations', {})
             rels = set(self.ontology[r] for r in relations.keys()
@@ -462,8 +503,80 @@ class OntoGraph:
                 kw.update(rattrs)
             else:
                 raise TypeError('Unknown entity type: %r' % e)
+        kw.update(self.style.get('edges', {}).get(predicate, {}))
         kw.update(attrs)
         return kw
+
+    def add_legend(self, relations=None):
+        """Adds legend for specified relations to the graph.
+
+        If `relations` is "all", the legend will contain all relations
+        that are defined in the style.  By default the legend will
+        only contain relations that are currently included in the
+        graph.
+
+        Hence, you usually want to call add_legend() as the last method
+        before saving or displaying.
+        """
+        rels = self.style.get('relations', {})
+        if relations is None:
+            relations = self.get_relations(sort=True)
+        elif relations == 'all':
+            relations = ['isA'] + list(rels.keys()) + ['inverse']
+        elif isinstance(relations, str):
+            relations = relations.split(',')
+
+        t = '<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">'
+        label1 = [t]
+        label2 = [t]
+        for i, r in enumerate(relations):
+            label1.append(
+                '<tr><td align="right" port="i%d">%s</td></tr>' % (i, r))
+            label2.append('<tr><td port="i%d">&nbsp;</td></tr>' % i)
+        label1.append('</table>>')
+        label2.append('</table>>')
+        self.dot.node('key1', label='\n'.join(label1), shape='plaintext')
+        self.dot.node('key2', label='\n'.join(label2), shape='plaintext')
+
+        rankdir = self.dot.graph_attr.get('rankdir', 'TB')
+        constraint = 'false' if rankdir in ('TB', 'BT') else 'true'
+        inv = True if rankdir in ('BT', 'RL') else False
+
+        n = len(relations)
+        for i in range(n):
+            r = relations[n - 1 - i] if inv else relations[i]
+            if r == 'inverse':
+                kw = self.style.get('inverse', {}).copy()
+            else:
+                kw = self.get_edge_attrs(r, {}).copy()
+            kw['constraint'] = constraint
+            if rankdir in ('BT', 'LR'):
+                self.dot.edge('key1:i%d:e' % i, 'key2:i%d:w' % i, **kw)
+            else:
+                self.dot.edge('key2:i%d:w' % i, 'key1:i%d:e' % i, **kw)
+
+    def get_relations(self, sort=True):
+        """Returns a set of relations in current graph.  If `sort` is true,
+        a sorted list is returned."""
+        relations = set()
+        for s, p, o in self.edges:
+            if p.startswith('Inverse'):
+                relations.add('inverse')
+            else:
+                relations.add(p.split(None, 1)[0])
+
+        # Sort, but place 'isA' first and 'inverse' last
+        if sort:
+            start, end = [], []
+            if 'isA' in relations:
+                relations.remove('isA')
+                start.append('isA')
+            if 'inverse' in relations:
+                relations.remove('inverse')
+                end.append('inverse')
+            relations = start + sorted(relations) + end
+
+        return relations
 
     def save(self, filename, format=None, **kwargs):
         """Saves graph to `filename`.  If format is not given, it is
@@ -478,20 +591,18 @@ class OntoGraph:
         """Shows the graph in a viewer."""
         self.dot.view(cleanup=True)
 
-
-def get_figsize(graph):
-    """Returns figure size (width, height) in points of figures for the
-    current pydot graph object `graph`."""
-    with tempfile.TemporaryDirectory() as tmpdir:
-        tmpfile = os.path.join(tmpdir, 'graph.svg')
-        graph.write_svg(tmpfile)
-        xml = ET.parse(tmpfile)
-        svg = xml.getroot()
-        asfloat = lambda s: float(re.match(r'^[\d.]+', s).group())
-        width = svg.attrib['width']
-        height = svg.attrib['height']
-        assert width.endswith('pt')  # ensure that units are in points
-    return asfloat(width), asfloat(height)
+    def get_figsize(self):
+        """Returns the default figure size (width, height) in points."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpfile = os.path.join(tmpdir, 'graph.svg')
+            self.save(tmpfile)
+            xml = ET.parse(tmpfile)
+            svg = xml.getroot()
+            width = svg.attrib['width']
+            height = svg.attrib['height']
+            assert width.endswith('pt')  # ensure that units are in points
+            asfloat = lambda s: float(re.match(r'^[\d.]+', s).group())
+        return asfloat(width), asfloat(height)
 
 
 def get_module_dependencies(iri_or_onto, strip_base=None):

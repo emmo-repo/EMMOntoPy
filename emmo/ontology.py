@@ -252,19 +252,28 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 self.get_triples(entity.storid, a.storid, None)]
         return d
 
-    def get_branch(self, root, leafs=(), include_leafs=True):
-        """Returns a list with all direct and indirect subclasses of `root`.
+    def get_branch(self, root, leafs=(), include_leafs=True,
+                   strict_leafs=False, exclude=None, sort=False):
+        """Returns a set with all direct and indirect subclasses of `root`.
         Any subclass found in the sequence `leafs` will be included in
-        the returned list, but its subclasses will not.
+        the returned list, but its subclasses will not.  The elements
+        of `leafs` may be ThingClass objects or labels.
 
         If `include_leafs` is true, the leafs are included in the returned
         list, otherwise they are not.
 
-        The elements of `leafs` may be ThingClass objects or labels.
+        If `strict_leafs` is true, any descendant of a leaf will be excluded
+        in the returned set.
+
+        If given, `exclude` may be a sequence of classes, including
+        their subclasses, to exclude from the output.
+
+        If `sort` is True, a list sorted according to depth and label
+        will be returned instead of a set.
         """
         def _branch(root, leafs):
             if root not in leafs:
-                branch = [root]
+                branch = {root, }
                 for c in root.subclasses():
                     # Defining a branch is actually quite tricky.  Consider
                     # the case:
@@ -280,20 +289,43 @@ class Ontology(owlready2.Ontology, OntoGraph):
                     # include it.  Requireing that the R should be a strict
                     # parent of A solves this.
                     if root in c.get_parents(strict=True):
-                        branch.extend(_branch(c, leafs))
+                        branch.update(_branch(c, leafs))
             else:
-                branch = [root] if include_leafs else []
+                branch = {root, } if include_leafs else set()
             return branch
 
         if isinstance(root, str):
             root = self.get_by_label(root)
+
         leafs = set(self.get_by_label(leaf) if isinstance(leaf, str)
                     else leaf for leaf in leafs)
         leafs.discard(root)
+
+        if exclude:
+            exclude = set(self.get_by_label(e) if isinstance(e, str)
+                          else e for e in exclude)
+            #orig_leafs = leafs
+            leafs.update(exclude)
+
         branch = _branch(root, leafs)
+
+        # Exclude all descendants of any leaf
+        if strict_leafs:
+            descendants = root.descendants()
+            for leaf in leafs:
+                if leaf in descendants:
+                    branch.difference_update(leaf.descendants(
+                        include_self=False))
+
+        if exclude:
+            branch.difference_update(exclude)
+
         # Sort according to depth, then by label
-        return sorted(sorted(set(branch), key=lambda x: asstring(x)),
-                      key=lambda x: len(x.mro()))
+        if sort:
+            branch = sorted(sorted(branch, key=lambda x: asstring(x)),
+                            key=lambda x: len(x.mro()))
+
+        return branch
 
     def is_individual(self, entity):
         """Returns true if entity is an individual."""
@@ -308,6 +340,14 @@ class Ontology(owlready2.Ontology, OntoGraph):
         if isinstance(entity, str):
             entity = self.get_by_label(entity)
         return hasattr(entity, 'equivalent_to') and bool(entity.equivalent_to)
+
+    def get_graph(self, **kwargs):
+        """Returns a new graph object.  See  emmo.graph.OntoGraph.
+
+        Note that this method requires the Python graphviz package.
+        """
+        from .graph import OntoGraph
+        return OntoGraph(self, **kwargs)
 
     def common_ancestors(self, cls1, cls2):
         """Return a list of common ancestors"""

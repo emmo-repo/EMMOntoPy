@@ -34,7 +34,9 @@ def asstring(expr, link='{name}', n=0, exclude_object=False):
     elif isinstance(expr, owlready2.Restriction):
         rlabel = owlready2.class_construct._restriction_type_2_label[expr.type]
 
-        if isinstance(expr.property, owlready2.ObjectPropertyClass):
+        if isinstance(expr.property, (
+                owlready2.ObjectPropertyClass,
+                owlready2.DataPropertyClass)):
             s = fmt(expr.property)
         elif isinstance(expr.property, owlready2.Inverse):
             s = 'Inverse(%s)' % asstring(expr.property.property, link, n + 1)

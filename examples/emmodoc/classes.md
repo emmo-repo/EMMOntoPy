@@ -32,13 +32,17 @@ branch of mereotopology.
 %BRANCH EMMO
 
 
-%BRANCHDOC Physical
 %BRANCHDOC Elementary
+%BRANCHDOC Perspective
 
 
 %BRANCHDOC Holistic
 %BRANCHDOC Semiotic
+%BRANCHDOC Sign
+%BRANCHDOC Interpreter
+%BRANCHDOC Object
 %BRANCHDOC Conventional
+%BRANCHDOC Property
 %BRANCHDOC Icon
 %BRANCHDOC Process
 
@@ -47,18 +51,23 @@ branch of mereotopology.
 %BRANCHDOC Graphical
 %BRANCHDOC Geometrical
 %BRANCHDOC Symbol
-%BRANCHDOC Metrological
 %BRANCHDOC Mathematical
-%BRANCHDOC Number
+%BRANCHDOC MathematicalSymbol
+%BRANCHDOC MathematicalModel
 %BRANCHDOC MathematicalOperator
+%BRANCHDOC Metrological
+%BRANCHDOC PhysicalQuantity
+%BRANCHDOC Number
 %BRANCHDOC MeasurementUnit
+%BRANCHDOC UTF8
 %BRANCHDOC SIBaseUnit
-%BRANCHDOC SpecialSIDerivedUnit
+%BRANCHDOC SISpecialUnit        rankdir=RL
+%BRANCHDOC KindOfUnit           rankdir=RL
 %BRANCHDOC PrefixedUnit
-%BRANCHDOC MetricPrefix
+%BRANCHDOC MetricPrefix         rankdir=RL
 %BRANCHDOC Quantity
 %BRANCHDOC BaseQuantity
-%BRANCHDOC DerivedQuantity
+%BRANCHDOC DerivedQuantity      rankdir=RL
 %BRANCHDOC PhysicalConstant
 
 
@@ -69,7 +78,4 @@ branch of mereotopology.
 %BRANCHDOC Physicalistic
 %BRANCHDOC ElementaryParticle
 %BRANCHDOC MaterialState
-%BRANCHDOC Continuum
-%BRANCHDOC Mesoscopic
-%BRANCHDOC Atomic
 %BRANCHDOC Subatomic

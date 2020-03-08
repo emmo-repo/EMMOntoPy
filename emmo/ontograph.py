@@ -163,6 +163,14 @@ class OntoGraph:
 
         Note: This method requires pydot.
         """
+
+        warnings.warn(
+            """The emmo.ontology.get_dot_graph() method is deprecated.
+            Use emmo.ontology.get_graph() instead.
+
+            This requires that you install graphviz instead of the old
+            pydot package.""", DeprecationWarning)
+
         # FIXME - double inheritance leads to dublicated nodes. Make sure
         #         to only add a node once!
         import pydot

@@ -36,17 +36,19 @@ def main():
     parser.add_argument(
         '--leafs', '-l', action='append', default=[],
         help='Leafs nodes for plotting sub-graphs.  May be provided as '
-        'comma-separated string and/or with multiple --leafs options.')
-    #parser.add_argument(
-    #    '--reasoner', '-n', action='store_true',
-    #    help='Run the reasoner on the ontology before plotting.')
+        'a comma-separated string and/or with multiple --leafs options.')
+    parser.add_argument(
+        '--exclude', '-E', action='append', default=[],
+        help='Nodes, including their subclasses, to exclude from sub-graphs. '
+        'May be provided as a comma-separated string and/or with multiple '
+        '--exclude options.')
     parser.add_argument(
         '--parents', '-p', metavar='N', type=int, default=0,
         help='Adds N levels of parents to graph.')
     parser.add_argument(
         '--relations', '-R', default='isA',
         help='Comma-separated string of relations to visualise.  Default is '
-        '"isA".')
+        '"isA".  "all" means include all relations.')
     parser.add_argument(
         '--edgelabels', '-e', action='store_true',
         help='Whether to add labels to edges.')
@@ -64,6 +66,12 @@ def main():
     parser.add_argument(
         '--style-file', '-s', metavar='JSON_FILE',
         help='A json file with style definitions.')
+    parser.add_argument(
+        '--legend', '-L', action='store_true',
+        help='Whether to add a legend to the graph.')
+    #parser.add_argument(
+    #    '--reasoner', '-n', action='store_true',
+    #    help='Run the reasoner on the ontology before plotting.')
     parser.add_argument(
         '--generate-style-file', '-S', metavar='JSON_FILE',
         help='Write default style file to a json file.')
@@ -99,6 +107,14 @@ def main():
         else:
             leafs.add(leaf)
 
+    # Join all --exclude options
+    exclude = set()
+    for e in args.exclude:
+        if ',' in e:
+            exclude.update(e.split(','))
+        else:
+            exclude.add(e)
+
     # Split relations
     relations = None
     if args.relations:
@@ -122,13 +138,16 @@ def main():
         return
 
     # Create graph
-    graph = OntoGraph(
-        onto, root=args.root, leafs=leafs,
-        relations=relations, style=style,
+    graph = OntoGraph(onto, style=style)
+    graph.add_branch(
+        root=args.root, leafs=leafs, exclude=exclude,
+        relations=relations,
         edgelabels=args.edgelabels, addnodes=args.addnodes,
         addconstructs=args.addconstructs,
         #parents=args.parents
     )
+    if args.legend:
+        graph.add_legend()
 
     # Plot and display
     if args.output:
