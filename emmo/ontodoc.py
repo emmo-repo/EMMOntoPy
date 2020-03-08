@@ -15,7 +15,6 @@ import yaml
 import owlready2
 
 from .utils import asstring, camelsplit
-#from .ontograph import get_figsize
 from .graph import OntoGraph
 
 

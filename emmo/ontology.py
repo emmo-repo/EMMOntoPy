@@ -79,7 +79,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         for onto in [get_ontology(uri) for uri in self._namespaces.keys()]:
             s.update([cls.label.first() for cls in onto.classes()])
             s.update([cls.label.first() for cls in onto.individuals()])
-            s.update([cls.label.first() for cls in onto.properties()] )
+            s.update([cls.label.first() for cls in onto.properties()])
             s.update([cls.name for cls in onto.classes()])
             s.update([cls.name for cls in onto.individuals()])
             s.update([cls.name for cls in onto.properties()])
@@ -216,7 +216,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         updated.
         """
         for cls in itertools.chain(self.classes(), self.object_properties()):
-                                   #self.individuals()):
+                                    # self.individuals()):
             if not cls.label:
                 cls.label.append(cls.__name__)
             if not cls.comment and cls.__doc__:
@@ -304,7 +304,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
         if exclude:
             exclude = set(self.get_by_label(e) if isinstance(e, str)
                           else e for e in exclude)
-            #orig_leafs = leafs
             leafs.update(exclude)
 
         branch = _branch(root, leafs)
@@ -389,4 +388,4 @@ class Ontology(owlready2.Ontology, OntoGraph):
                     return cur
                 if len(mro) == 0:
                     mros.remove(mro)
-        raise RuntimeError('')
+        assert(0)  # should never be reached...

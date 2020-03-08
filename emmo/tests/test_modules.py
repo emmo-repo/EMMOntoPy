@@ -7,7 +7,7 @@ thisdir = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
 from emmo import get_ontology
 
-from emmo.graph import (OntoGraph, plot_modules, get_module_dependencies,
+from emmo.graph import (plot_modules, get_module_dependencies,
                         check_module_dependencies)
 
 
@@ -16,6 +16,5 @@ emmo = get_ontology(iri)
 emmo.load()
 
 modules = get_module_dependencies(emmo)
-#modules = get_module_dependencies(iri)
 plot_modules(iri, filename='modules.png', modules=modules)
 check_module_dependencies(modules)

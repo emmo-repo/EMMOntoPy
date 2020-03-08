@@ -6,9 +6,7 @@ import os
 thisdir = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
 from emmo import get_ontology
-
-from emmo.graph import (OntoGraph, plot_modules, get_module_dependencies,
-                        check_module_dependencies)
+from emmo.graph import OntoGraph
 
 # Create output directory
 outdir = 'test_graph2'
@@ -49,7 +47,7 @@ g = OntoGraph(emmo, emmo.Quantity,
 g.save('Quantity.svg')
 
 
-## Used for figures
+# Used for figures
 
 g = OntoGraph(emmo)
 g.add_legend('all')
@@ -75,12 +73,11 @@ semiotic = emmo.get_branch(emmo.Holistic, leafs=leafs.union(hidden))
 semiotic.difference_update(hidden)
 g = OntoGraph(emmo)
 g.add_entities(semiotic, relations='all', edgelabels=False)
-#g.add_entities(semiotic, edgelabels=None)
 g.save('Semiotic.png')
 g.add_legend()
 g.save('Semiotic+legend.png')
 
 
-l = OntoGraph(emmo)
-l.add_legend(g.get_relations())
-l.save('Semiotic-legend.png')
+legend = OntoGraph(emmo)
+legend.add_legend(g.get_relations())
+legend.save('Semiotic-legend.png')

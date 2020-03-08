@@ -33,12 +33,14 @@ def _get_parents(self, strict=False):
     else:
         assert 0
 
+
 def _dir(self):
     """Extend in dir() listing of ontology classes."""
     s = set(object.__dir__(self))
     props = self.__class__.namespace.world._props.keys()
     s.update(props)
     return sorted(s)
+
 
 def get_class_annotations(self, all=False):
     """Returns a dict with non-empty annotations.
@@ -53,6 +55,7 @@ def get_class_annotations(self, all=False):
         return d
     else:
         return {k: v for k, v in d.items() if v and k != 'label'}
+
 
 def disjoint_with(self, reduce=False):
     """Returns a generator with all classes that are disjoint with `self`.

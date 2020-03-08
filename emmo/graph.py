@@ -4,7 +4,6 @@ A module for visualising ontologies using graphviz.
 """
 import os
 import re
-import warnings
 import tempfile
 import xml.etree.ElementTree as ET
 
@@ -12,7 +11,7 @@ import owlready2
 import graphviz
 
 from .utils import asstring
-from .ontology import get_ontology, NoSuchLabelError
+from .ontology import get_ontology
 
 typenames = owlready2.class_construct._restriction_type_2_label
 
@@ -31,7 +30,6 @@ def getlabel(e):
         return str(e.name)
     else:
         return asstring(e)
-
 
 
 class OntoGraph:
@@ -146,7 +144,6 @@ class OntoGraph:
         'relations': {
             'disconnected': {'color': 'red', 'style': 'dotted',
                              'arrowhead': 'odot'},
-            #'encloses': {'color': 'blue'},
             'hasPart': {'color': 'blue'},
             'hasProperPart': {'color': 'blue', 'style': 'dashed'},
             'hasParticipant': {'color': 'red'},
@@ -411,20 +408,20 @@ class OntoGraph:
         if isinstance(c, owlready2.Or):
             for cls in c.Classes:
                 clslabel = getlabel(cls)
-                if not clslabel in self.nodes and self.addnodes:
+                if clslabel not in self.nodes and self.addnodes:
                     self.add_node(clslabel)
                 if clslabel in self.nodes:
                     self.add_edge(getlabel(cls), 'isA', label)
         elif isinstance(c, owlready2.And):
             for cls in c.Classes:
                 clslabel = getlabel(cls)
-                if not clslabel in self.nodes and self.addnodes:
+                if clslabel not in self.nodes and self.addnodes:
                     self.add_node(clslabel)
                 if clslabel in self.nodes:
                     self.add_edge(label, 'isA', getlabel(cls))
         elif isinstance(c, owlready2.Not):
             clslabel = getlabel(c.Class)
-            if not clslabel in self.nodes and self.addnodes:
+            if clslabel not in self.nodes and self.addnodes:
                 self.add_node(clslabel)
             if clslabel in self.nodes:
                 self.add_edge(getlabel(cls), 'not', label)
@@ -474,8 +471,6 @@ class OntoGraph:
         if predicate in types:
             kw = self.style.get(predicate, {}).copy()
         else:
-            default_rel = self.style.get('default_relation', {})
-            default_dprop = self.style.get('default_dataprop', {})
             name = predicate.split(None, 1)[0]
             m = re.match(r'Inverse\((.*)\)', name)
             if m:
@@ -493,7 +488,7 @@ class OntoGraph:
             rattrs = relations[getlabel(r)] if r in rels else {}
             # object property
             if isinstance(e, (owlready2.ObjectPropertyClass,
-                                owlready2.ObjectProperty)):
+                              owlready2.ObjectProperty)):
                 kw = self.style.get('default_relation', {}).copy()
                 kw.update(rattrs)
             # data property
@@ -526,7 +521,8 @@ class OntoGraph:
         elif isinstance(relations, str):
             relations = relations.split(',')
 
-        t = '<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">'
+        t = ('<<table border="0" cellpadding="2" cellspacing="0" '
+             'cellborder="0">')
         label1 = [t]
         label2 = [t]
         for i, r in enumerate(relations):
@@ -601,7 +597,9 @@ class OntoGraph:
             width = svg.attrib['width']
             height = svg.attrib['height']
             assert width.endswith('pt')  # ensure that units are in points
-            asfloat = lambda s: float(re.match(r'^[\d.]+', s).group())
+
+            def asfloat(s):
+                return float(re.match(r'^[\d.]+', s).group())
         return asfloat(width), asfloat(height)
 
 
@@ -611,7 +609,7 @@ def get_module_dependencies(iri_or_onto, strip_base=None):
     the base IRI is stripped from ontology names.
     """
     if isinstance(iri_or_onto, str):
-        onto = get_ontology(iri)
+        onto = get_ontology(iri_or_onto)
         onto.load()
     else:
         onto = iri_or_onto

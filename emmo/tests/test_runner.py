@@ -67,7 +67,7 @@ def test(verbosity=1, stream=sys.stdout):
 
 
 if __name__ == "__main__":
-    #unittest.main()
+    # unittest.main()
     results = test()
     if results.errors or results.failures:
         sys.exit(1)
