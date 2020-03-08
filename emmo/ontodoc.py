@@ -154,6 +154,7 @@ class OntoDoc:
                 style = getattr(self, '_%s_style' % style)
         self.onto = onto
         self.style = style
+        self.url_regex = re.compile(r'https?:\/\/[^\s ]+')
 
     def get_default_template(self):
         """Returns default template."""
@@ -239,13 +240,19 @@ class OntoDoc:
             annotations = item.get_individual_annotations()
         else:
             annotations = item.get_annotations()
+
         for key in sorted(annotations.keys(),
                           key=lambda key: order.get(key, key)):
             for value in annotations[key]:
-                for reg, sub in substitutions:
-                    value = re.sub(reg, sub, value)
-                doc.append(annotation_style.format(
-                    key=key.capitalize(), value=value))
+                if self.url_regex.match(value):
+                    doc.append(annotation_style.format(
+                        key=key.capitalize(),
+                        value=asstring(value, link_style)))
+                else:
+                    for reg, sub in substitutions:
+                        value = re.sub(reg, sub, value)
+                    doc.append(annotation_style.format(
+                        key=key.capitalize(), value=value))
 
         # ...add relations from is_a
         points = []
