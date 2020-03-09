@@ -57,7 +57,10 @@ def asstring(expr, link='{name}', n=0, exclude_object=False):
             s += ' %s' % rlabel
 
         if not exclude_object:
-            s += ' %s' % asstring(expr.value, link, n + 1)
+            if isinstance(expr.value, str):
+                s += ' "%s"' % asstring(expr.value, link, n + 1)
+            else:
+                s += ' %s' % asstring(expr.value, link, n + 1)
         return s
 
     elif isinstance(expr, owlready2.Or):
@@ -80,7 +83,7 @@ def asstring(expr, link='{name}', n=0, exclude_object=False):
         return fmt(expr)
     elif isinstance(expr, owlready2.disjoint.AllDisjoint):
         return fmt(expr)
-    elif isinstance(expr, (bool, int, float, str)):
+    elif isinstance(expr, (bool, int, float)):
         return repr(expr)
     # Check for subclasses
     elif issubclass(expr, (bool, int, float, str)):
