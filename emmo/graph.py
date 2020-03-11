@@ -149,6 +149,8 @@ class OntoGraph:
             'hasParticipant': {'color': 'red'},
             'hasProperParticipant': {'color': 'red', 'style': 'dashed'},
             'hasSpatialDirectPart': {'color': 'darkgreen'},
+            'hasTemporalPart': {'color': 'magenta'},
+            'hasTemporalDirectPart': {'color': 'magenta', 'style': 'dashed'},
             'hasReferenceUnit': {'color': 'darkgreen', 'style': 'dashed'},
             'hasSign': {'color': 'orange'},
             'hasConvention': {'color': 'orange', 'style': 'dashed'},
