@@ -21,15 +21,15 @@ class ColourTextTestResult(TestResult):
     separator1 = '=' * 70
     separator2 = '-' * 70
     indent = ' ' * 4
-    checkmode = False  # if true, simplified output will be generated with no
-                       # traceback
-
+    # if `checkmode` is true, simplified output will be generated with
+    # no traceback
+    checkmode = False
     _terminal = Terminal()
     colours = {
         None: str,
         'error': _terminal.bold_red,
         'expected': _terminal.blue,
-        #'fail': _terminal.bold_yellow,
+        # 'fail': _terminal.bold_yellow,
         'fail': _terminal.bold_magenta,
         'skip': str,
         'success': _terminal.green,
@@ -40,7 +40,8 @@ class ColourTextTestResult(TestResult):
     _test_class = None
 
     def __init__(self, stream, descriptions, verbosity):
-        super(ColourTextTestResult, self).__init__(stream, descriptions, verbosity)
+        super(ColourTextTestResult, self).__init__(
+            stream, descriptions, verbosity)
         self.stream = stream
         self.showAll = verbosity > 1
         self.dots = verbosity == 1
@@ -77,8 +78,8 @@ class ColourTextTestResult(TestResult):
             self.stream.write(descr)
             pos += len(descr)
             self.stream.write(' ' * (70 - pos))
-            #self.stream.write(' ' * (self._terminal.width - 10 - pos))
-            #self.stream.write(' ... ')
+            # self.stream.write(' ' * (self._terminal.width - 10 - pos))
+            # self.stream.write(' ... ')
             self.stream.flush()
 
     def printResult(self, short, extended, colour_key=None):

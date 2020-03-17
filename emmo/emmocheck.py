@@ -80,7 +80,7 @@ class TestEMMOConventions(unittest.TestCase):
                     self.assertTrue(label[2].isupper())
                     self.assertTrue(label.endswith('Of'))
 
-    #@unittest.skip("skipping checking unit dimensions")
+    # @unittest.skip("skipping checking unit dimensions")
     def test_unit_dimension(self):
         """Check that all measurement units have a physical dimension.
 
@@ -113,7 +113,7 @@ class TestEMMOConventions(unittest.TestCase):
             'siunits.SIUnit',
         ))
         if ('MeasurementUnit.categorization_classes' in self.config and
-            self.config['MeasurementUnit.categorization_classes']):
+                self.config['MeasurementUnit.categorization_classes']):
             cat.update(self.config['MeasurementUnit.categorization_classes'])
         for cls in self.onto.MeasurementUnit.descendants():
             # Assume that actual units are not subclassed
@@ -156,7 +156,7 @@ class TestEMMOConventions(unittest.TestCase):
             'units-extension.AtomAndNuclearPhysicsDerivedQuantity',
         ))
         if ('PhysicalQuantity.categorization_classes' in self.config and
-            self.config['PhysicalQuantity.categorization_classes']):
+                self.config['PhysicalQuantity.categorization_classes']):
             cat.update(self.config['PhysicalQuantity.categorization_classes'])
         for cls in self.onto.Quantity.descendants():
             if repr(cls) not in cat:
@@ -175,14 +175,6 @@ class TestEMMOConventions(unittest.TestCase):
                                      onto.individuals(),
                                      onto.annotation_properties()):
                 with self.subTest(iri=e.iri, base_iri=onto.base_iri):
-                    #if True:
-                    #if (not e.iri.endswith(e.name) or
-                    #    e.iri[:-len(e.name)] != onto.base_iri):
-                    #    print()
-                    #    print('*** base_iri:', onto.base_iri)
-                    #    print('*** name:', e.name)
-                    #    print('*** endswith:', e.iri.endswith(e.name))
-                    #    print('*** e.base_iri:', e.iri[:-len(e.name)])
                     self.assertTrue(
                         e.iri.endswith(e.name),
                         msg='the final part of entity IRIs must be their name')
@@ -195,7 +187,6 @@ class TestEMMOConventions(unittest.TestCase):
                 checker(imp_onto)
 
         checker(self.onto)
-
 
 
 def main():
@@ -225,11 +216,11 @@ def main():
             TestEMMOConventions.config.update(
                 yaml.load(f, Loader=yaml.SafeLoader))
 
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestEMMOConventions)
+    unittest.TestLoader().loadTestsFromTestCase(TestEMMOConventions)
     runner = TextTestRunner(verbosity=verbosity)
     runner.resultclass.checkmode = True
     unittest.main(module=__name__, testRunner=runner)
 
 
 if __name__ == '__main__':
-    run()
+    main()
