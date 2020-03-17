@@ -18,7 +18,6 @@ import owlready2
 
 from .utils import asstring
 from .ontograph import OntoGraph  # FIXME: depricate...
-from .owldir import owldir
 
 
 class NoSuchLabelError(LookupError, AttributeError):
@@ -36,11 +35,17 @@ categories = (
 )
 
 
-def get_ontology(base_iri='emmo-inferred', verbose=False):
+def get_ontology(base_iri=None, verbose=False):
     """Returns a new Ontology from `base_iri`.
+
+    The default is to load the latest pre-inferred version of EMMO.
 
     If `verbose` is true, a lot of dianostics is written.
     """
+    if base_iri is None:
+        base_iri = ('https://github.com/emmo-repo/EMMO/blob/master/'
+                    'emmo-inferred.owl?raw=true')
+
     if base_iri in owlready2.default_world.ontologies:
         onto = owlready2.default_world.ontologies[base_iri]
     elif base_iri + '#' in owlready2.default_world.ontologies:
@@ -50,10 +55,6 @@ def get_ontology(base_iri='emmo-inferred', verbose=False):
             iri = base_iri
         elif os.path.exists(base_iri + '.owl'):
             iri = base_iri + '.owl'
-        elif os.path.exists(os.path.join(owldir, base_iri)):
-            iri = os.path.join(owldir, base_iri)
-        elif os.path.exists(os.path.join(owldir, base_iri + '.owl')):
-            iri = os.path.join(owldir, base_iri + '.owl')
         else:
             iri = base_iri
         if iri[-1] not in '/#':

@@ -12,9 +12,6 @@ if sys.version_info < (3, 6):
 if 'owlready2' in sys.modules.keys():
     raise RuntimeError('emmo must be imported before owlready2')
 
-# Appends EMMO to the ontology search path
-from . import owldir
-
 # Monkey patch Owlready2 by injecting some methods
 from . import patch
 
