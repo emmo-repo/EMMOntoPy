@@ -4,15 +4,12 @@ A module for testing an ontology against conventions defined for EMMO.
 
 A yaml file can be provided with additional test configurations.
 
+Example configuration file:
 
-Configurations
---------------
-MeasurementUnit.categorization_classes : list
-    Classes for categorising measurement units that should not be included
-    in checks.
-Quantity.categorization_classes : list
-    Classes for categorising quantities that should not be included
-    in checks.
+    test_unit_dimensions:
+      exceptions:
+        - myunits.MyUnitCategory1
+        - myunits.MyUnitCategory2
 """
 import sys
 import unittest
@@ -38,7 +35,7 @@ class TestEMMOConventions(unittest.TestCase):
         self.onto.load()
 
     def test_num_labels(self):
-        """Check that all entities has one label.
+        """Check that all entities have one and only one label.
 
         The only allowed exception is entities who's representation
         starts with "owl."."""
@@ -84,16 +81,10 @@ class TestEMMOConventions(unittest.TestCase):
     def test_unit_dimension(self):
         """Check that all measurement units have a physical dimension.
 
-        Classes for categorising units are not included. Domain
-        ontologies can add additional quantities to ignore by listing
-        them under
-
-            MeasurementUnit.categorization_classes
-
-        in the configuration file.
+        Configurations:
+            exceptions - full class names of classes to ignore.
         """
-        patt = re.compile(r'metrology\.hasPhysicsDimension\.only\(.*\)')
-        cat = set((
+        exceptions = set((
             'metrology.MultipleUnit',
             'metrology.SubMultipleUnit',
             'metrology.OffSystemUnit',
@@ -112,31 +103,24 @@ class TestEMMOConventions(unittest.TestCase):
             'siunits.SIUnitSymbol',
             'siunits.SIUnit',
         ))
-        if ('MeasurementUnit.categorization_classes' in self.config and
-                self.config['MeasurementUnit.categorization_classes']):
-            cat.update(self.config['MeasurementUnit.categorization_classes'])
+        exceptions.update(
+            self.get_config('test_unit_dimension.exceptions', ()))
+
         for cls in self.onto.MeasurementUnit.descendants():
             # Assume that actual units are not subclassed
-            if not list(cls.subclasses()) and repr(cls) not in cat:
+            if not list(cls.subclasses()) and repr(cls) not in exceptions:
                 with self.subTest(cls=cls):
                     self.assertTrue(
                         any(patt.match(repr(r))
                             for r in cls.get_indirect_is_a()), msg=cls)
 
     def test_quantity_dimension(self):
-        """Check that all quantities have units.
+        """Check that all quantities have units (defined via dimensionality).
 
-        Classes for categorising quantities are not included. Domain
-        ontologies can add additional quantities to ignore by listing
-        them under
-
-            Quantity.categorization_classes
-
-        in the configuration file.
+        Configurations:
+            exceptions - full class names of classes to ignore.
         """
-        patt = re.compile(r'metrology.hasReferenceUnit.only\('
-                          r'metrology.hasPhysicsDimension.only\(.*\)\)')
-        cat = set((
+        exceptions = set((
             'properties.ModelledQuantitativeProperty',
             'properties.QuantitativeProperty',
             'properties.MeasuredQuantitativeProperty',
@@ -155,11 +139,11 @@ class TestEMMOConventions(unittest.TestCase):
             'siunits.SIExactConstant',
             'units-extension.AtomAndNuclearPhysicsDerivedQuantity',
         ))
-        if ('PhysicalQuantity.categorization_classes' in self.config and
-                self.config['PhysicalQuantity.categorization_classes']):
-            cat.update(self.config['PhysicalQuantity.categorization_classes'])
+        exceptions.update(
+            self.get_config('test_quantity_dimension.exceptions', ()))
+
         for cls in self.onto.Quantity.descendants():
-            if repr(cls) not in cat:
+            if repr(cls) not in exceptions:
                 with self.subTest(cls=cls):
                     self.assertTrue(
                         any(patt.match(repr(r))
@@ -167,8 +151,16 @@ class TestEMMOConventions(unittest.TestCase):
 
     def test_namespace(self):
         """Check that all IRIs are namespaced after their (sub)ontology.
+
+        Configurations:
+            exceptions - full name of entities to ignore.
         """
-        visited = set()
+        exceptions = set((
+            'mereotopology.Item',
+            'owl.qualifiedCardinality',
+            'owl.minQualifiedCardinality',
+        ))
+        exceptions.update(self.get_config('test_namespace.exceptions', ()))
 
         def checker(onto):
             for e in itertools.chain(onto.classes(),
@@ -176,22 +168,42 @@ class TestEMMOConventions(unittest.TestCase):
                                      onto.data_properties(),
                                      onto.individuals(),
                                      onto.annotation_properties()):
-                if e in visited:
-                    continue
-                visited.add(e)
-                with self.subTest(iri=e.iri, base_iri=onto.base_iri):
-                    self.assertTrue(
-                        e.iri.endswith(e.name),
-                        msg='the final part of entity IRIs must be their name')
-                    self.assertEqual(
-                        e.iri[:-len(e.name)], onto.base_iri,
-                        msg='IRI %r does not correspond to module '
-                        'namespace: %r' % (e.iri, onto.base_iri))
+                if e not in visited and repr(e) not in exceptions:
+                    visited.add(e)
+                    with self.subTest(
+                            iri=e.iri, base_iri=onto.base_iri, entity=str(e)):
+                        self.assertTrue(
+                            e.iri.endswith(e.name),
+                            msg='the final part of entity IRIs must be their '
+                            'name')
+                        self.assertEqual(
+                            e.iri[:-len(e.name)], onto.base_iri,
+                            msg='IRI %r does not correspond to module '
+                            'namespace: %r' % (e.iri, onto.base_iri))
 
             for imp_onto in onto.imported_ontologies:
                 checker(imp_onto)
 
+        visited = set()
         checker(self.onto)
+
+    def get_config(self, string, default=None):
+        """Returns the configuration specified by `string`.
+
+        If configuration is not found in the configuration file, `default`
+        is returned.
+
+        Sub-configurations can be accessed by separating the components with
+        dots, like "test_namespace.exceptions".
+        """
+        c = self.config
+        try:
+            for token in string.split('.'):
+                c = c[token]
+        except KeyError:
+            return default
+        return c
+
 
 
 def main():

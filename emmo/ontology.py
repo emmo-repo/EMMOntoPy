@@ -21,7 +21,7 @@ from .ontograph import OntoGraph  # FIXME: depricate...
 from .owldir import owldir
 
 
-class NoSuchLabelError(LookupError):
+class NoSuchLabelError(LookupError, AttributeError):
     """Error raised when a label cannot be found."""
     pass
 
