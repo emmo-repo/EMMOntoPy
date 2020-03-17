@@ -168,12 +168,17 @@ class TestEMMOConventions(unittest.TestCase):
     def test_namespace(self):
         """Check that all IRIs are namespaced after their (sub)ontology.
         """
+        visited = set()
+
         def checker(onto):
             for e in itertools.chain(onto.classes(),
                                      onto.object_properties(),
                                      onto.data_properties(),
                                      onto.individuals(),
                                      onto.annotation_properties()):
+                if e in visited:
+                    continue
+                visited.add(e)
                 with self.subTest(iri=e.iri, base_iri=onto.base_iri):
                     self.assertTrue(
                         e.iri.endswith(e.name),
