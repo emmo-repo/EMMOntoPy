@@ -11,6 +11,7 @@ Example configuration file:
         - myunits.MyUnitCategory1
         - myunits.MyUnitCategory2
 """
+import os
 import sys
 import unittest
 import re
