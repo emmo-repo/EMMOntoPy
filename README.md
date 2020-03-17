@@ -85,8 +85,8 @@ Install with
 
 ### Dependencies
   * Python 3.6 or greater
-      - [Owlready2][Owlready2]
-      - [pydot][pydot]:  Required for generating graphs.
+      - [Owlready2][Owlready2]: v0.23 or later
+      - [pydot][pydot]: Required for generating graphs.
       - PyYAML:  Required for generating documentation with pandoc.
 
   * Java. Needed for reasoning.

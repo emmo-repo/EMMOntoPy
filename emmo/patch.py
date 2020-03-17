@@ -74,6 +74,16 @@ def disjoint_with(self, reduce=False):
                     yield e
 
 
+def get_indirect_is_a(self):
+    """Returns the set of all isSubclassOf relations of self and its
+    ancestors."""
+    s = set()
+    for e in self.mro():
+        if hasattr(e, 'is_a'):
+            s.update(e.is_a)
+    return s
+
+
 #
 # Extending PropertyClass (properties)
 #
@@ -116,6 +126,7 @@ setattr(ThingClass, '__dir__', _dir)
 setattr(ThingClass, 'get_parents', _get_parents)
 setattr(ThingClass, 'get_annotations', get_class_annotations)
 setattr(ThingClass, 'disjoint_with', disjoint_with)
+setattr(ThingClass, 'get_indirect_is_a', get_indirect_is_a)
 setattr(PropertyClass, 'get_parents', _get_parents)
 setattr(PropertyClass, 'get_annotations', get_property_annotations)
 type.__setattr__(Thing, 'get_individual_annotations',

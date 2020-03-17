@@ -21,6 +21,8 @@ class ColourTextTestResult(TestResult):
     separator1 = '=' * 70
     separator2 = '-' * 70
     indent = ' ' * 4
+    checkmode = False  # if true, simplified output will be generated with no
+                       # traceback
 
     _terminal = Terminal()
     colours = {
@@ -101,8 +103,10 @@ class ColourTextTestResult(TestResult):
 
     def addSkip(self, test, reason):
         super(ColourTextTestResult, self).addSkip(test, reason)
-        #self.printResult('s', 'skipped {0!r}'.format(reason), 'skip')
-        self.printResult('s', 'skipped', 'skip')
+        if self.checkmode:
+            self.printResult('s', 'skipped', 'skip')
+        else:
+            self.printResult('s', 'skipped {0!r}'.format(reason), 'skip')
 
     def addExpectedFailure(self, test, err):
         super(ColourTextTestResult, self).addExpectedFailure(test, err)
@@ -122,11 +126,28 @@ class ColourTextTestResult(TestResult):
         colour = self.colours[flavour.lower()]
 
         for test, err in errors:
-            self.stream.writeln(self.separator1)
-            title = '%s: %s' % (flavour, self.getLongDescription(test))
-            self.stream.writeln(colour(title))
-            self.stream.writeln(self.separator2)
-            self.stream.writeln(highlight(err, self.lexer, self.formatter))
+            if self.checkmode and flavour == 'FAIL':
+                self.stream.writeln(self.separator1)
+                title = '%s: %s' % (flavour, test.shortDescription())
+                self.stream.writeln(colour(title))
+                self.stream.writeln(str(test))
+                if self.showAll:
+                    self.stream.writeln(self.separator2)
+                    lines = str(err).split('\n')
+                    i = 1
+                    for line in lines[1:]:
+                        if line.startswith(' '):
+                            i += 1
+                        else:
+                            break
+                    self.stream.writeln(highlight(
+                        '\n'.join(lines[i:]), self.lexer, self.formatter))
+            else:
+                self.stream.writeln(self.separator1)
+                title = '%s: %s' % (flavour, self.getLongDescription(test))
+                self.stream.writeln(colour(title))
+                self.stream.writeln(self.separator2)
+                self.stream.writeln(highlight(err, self.lexer, self.formatter))
 
 
 class ColourTextTestRunner(TextTestRunner):

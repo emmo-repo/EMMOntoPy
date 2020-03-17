@@ -8,13 +8,6 @@ The class extension is defined within.
 
 If desirable some of this may be moved back into owlready2.
 """
-#
-# This module was written before I had a good understanding of DL.
-# Should be simplified and improved:
-#   - Replace the mixin classes with composition.
-#   - Update to work with latest version of Owlready2
-#   - Rename get_dot_graph to get_graph().
-#   - Deprecate methods that are not needed.
 import os
 import itertools
 import inspect
@@ -24,7 +17,7 @@ from collections import defaultdict
 import owlready2
 
 from .utils import asstring
-from .ontograph import OntoGraph
+from .ontograph import OntoGraph  # FIXME: depricate...
 from .owldir import owldir
 
 
@@ -48,15 +41,24 @@ def get_ontology(base_iri='emmo-inferred', verbose=False):
 
     If `verbose` is true, a lot of dianostics is written.
     """
-    if ':' not in base_iri and not os.path.exists(os.path.join(
-            owldir, base_iri.rstrip('#'))):
-        base_iri += '.owl'
-    if (not base_iri.endswith('/')) and (not base_iri.endswith('#')):
-        base_iri = '%s#' % base_iri
     if base_iri in owlready2.default_world.ontologies:
         onto = owlready2.default_world.ontologies[base_iri]
+    elif base_iri + '#' in owlready2.default_world.ontologies:
+        onto = owlready2.default_world.ontologies[base_iri + '#']
     else:
-        onto = Ontology(owlready2.default_world, base_iri)
+        if os.path.exists(base_iri):
+            iri = base_iri
+        elif os.path.exists(base_iri + '.owl'):
+            iri = base_iri + '.owl'
+        elif os.path.exists(os.path.join(owldir, base_iri)):
+            iri = os.path.join(owldir, base_iri)
+        elif os.path.exists(os.path.join(owldir, base_iri + '.owl')):
+            iri = os.path.join(owldir, base_iri + '.owl')
+        else:
+            iri = base_iri
+        if iri[-1] not in '/#':
+            iri += '#'
+        onto = Ontology(owlready2.default_world, iri)
     onto._verbose = verbose
     return onto
 
