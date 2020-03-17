@@ -111,7 +111,7 @@ class TestEMMOConventions(unittest.TestCase):
             if not list(cls.subclasses()) and repr(cls) not in exceptions:
                 with self.subTest(cls=cls):
                     self.assertTrue(
-                        any(patt.match(repr(r))
+                        any(exceptions.match(repr(r))
                             for r in cls.get_indirect_is_a()), msg=cls)
 
     def test_quantity_dimension(self):
@@ -146,7 +146,7 @@ class TestEMMOConventions(unittest.TestCase):
             if repr(cls) not in exceptions:
                 with self.subTest(cls=cls):
                     self.assertTrue(
-                        any(patt.match(repr(r))
+                        any(exceptions.match(repr(r))
                             for r in cls.get_indirect_is_a()), msg=cls)
 
     def test_namespace(self):
