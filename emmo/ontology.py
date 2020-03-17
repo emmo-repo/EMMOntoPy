@@ -42,7 +42,7 @@ def get_ontology(base_iri=None, verbose=False):
 
     If `verbose` is true, a lot of dianostics is written.
     """
-    if base_iri is None:
+    if base_iri is None or base_iri == 'emmo-inferred':
         base_iri = ('https://github.com/emmo-repo/EMMO/blob/master/'
                     'emmo-inferred.owl?raw=true')
 

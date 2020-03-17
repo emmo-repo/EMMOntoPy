@@ -22,8 +22,7 @@ EMMO in Python.  On top of that EMMO-python provides:
     property names in EMMO are based on UUIDs).
   - Generation of graphs.
   - Generation of documentation.
-  - Pre-inferred [OWL file](emmo/owl/emmo-inferred.owl) of EMMO.
-  - ++
+  - Test suite for EMMO-based ontologies.
 
 Some examples of what you can do with EMMO-python includes:
 
