@@ -75,8 +75,8 @@ jobs:
     - name: Run vertical demo
       run: |
         cd demo/vertical
-        python define_ontology.py
-        python plot_ontology.py
+        #python define_ontology.py
+        #python plot_ontology.py
         cd -
     - name: Run horizontal demo
       run: |

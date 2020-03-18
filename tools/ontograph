@@ -3,8 +3,9 @@
 import sys
 import os
 import argparse
+import json
 
-import pydot
+#import pydot
 
 # Support to run from uninstalled version by adding parent dir to sys path
 rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
@@ -12,7 +13,9 @@ rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
 sys.path.insert(1, rootdir)
 
 from emmo import get_ontology
-from emmo.ontograph import OntoGraph
+from emmo.graph import OntoGraph, plot_modules
+
+import owlready2
 
 
 def main():
@@ -21,48 +24,82 @@ def main():
         'iri', metavar='IRI',  # default='emmo-inferred.owl', nargs='?',
         help='OWL file/source to plot.')
     parser.add_argument(
-        'output',
+        'output', nargs='?',
         help='name of output file.')
-    parser.add_argument(
-        '--root', '-r',
-        help='Name of root node in the graph.')
-    parser.add_argument(
-        '--reasoner', '-n', action='store_true',
-        help='Run the reasoner on the ontology before plotting.')
     parser.add_argument(
         '--format', '-f',
         help='Format of output file.  By default it is inferred from '
         'the output file extension.')
     parser.add_argument(
-        '--rankdir', '-R', default='BT', choices=['BT', 'TB', 'RL', 'LR'],
+        '--root', '-r',
+        help='Name of root node in the graph.  Defaults to all classes.')
+    parser.add_argument(
+        '--leafs', '-l', action='append', default=[],
+        help='Leafs nodes for plotting sub-graphs.  May be provided as '
+        'a comma-separated string and/or with multiple --leafs options.')
+    parser.add_argument(
+        '--exclude', '-E', action='append', default=[],
+        help='Nodes, including their subclasses, to exclude from sub-graphs. '
+        'May be provided as a comma-separated string and/or with multiple '
+        '--exclude options.')
+    parser.add_argument(
+        '--parents', '-p', metavar='N', type=int, default=0,
+        help='Adds N levels of parents to graph.')
+    parser.add_argument(
+        '--relations', '-R', default='isA',
+        help='Comma-separated string of relations to visualise.  Default is '
+        '"isA".  "all" means include all relations.')
+    parser.add_argument(
+        '--edgelabels', '-e', action='store_true',
+        help='Whether to add labels to edges.')
+    parser.add_argument(
+        '--addnodes', '-n', action='store_true',
+        help='Whether to add missing target nodes in relations.')
+    parser.add_argument(
+        '--addconstructs', '-c', action='store_true',
+        help='Whether to add nodes representing class constructs.')
+    parser.add_argument(
+        '--rankdir', '-d', default='BT', choices=['BT', 'TB', 'RL', 'LR'],
         help='Graph direction (from leaves to root).  Possible values are: '
         '"BT" (bottom-top, default), "TB" (top-bottom), "RL" (right-left) and '
         '"LR" (left-right).')
     parser.add_argument(
-        '--relations', action='store_true',
-        help='Create a graph with only relations.')
+        '--style-file', '-s', metavar='JSON_FILE',
+        help='A json file with style definitions.')
     parser.add_argument(
-        '--style', '-s', default='default',
-        help='Select plot stype. May be "default" or "uml".')
+        '--legend', '-L', action='store_true',
+        help='Whether to add a legend to the graph.')
+    #parser.add_argument(
+    #    '--reasoner', '-n', action='store_true',
+    #    help='Run the reasoner on the ontology before plotting.')
     parser.add_argument(
-        '--leafs', '-l', action='append', default=[],
-        help='Leafs nodes for plotting sub-graphs.  May be provided as '
-        'comma-separated string and/or with multiple --leafs options.')
+        '--generate-style-file', '-S', metavar='JSON_FILE',
+        help='Write default style file to a json file.')
+    parser.add_argument(
+        '--plot-modules', '-m', action='store_true',
+        help='Whether to plot module inter-dependencies instead of their '
+        'content.')
+    parser.add_argument(
+        '--display', '-D', action='store_true',
+        help='Whether to display graph.')
     args = parser.parse_args()
 
-    onto = get_ontology(args.iri)
-    onto.load()
 
-    if args.reasoner:
-        onto.sync_reasoner()
-
-    # rankdir = 'RL' if args.horizontal else 'BT'
-    format = args.format if args.format else os.path.splitext(
-        args.output)[1][1:]
-
-    style = getattr(OntoGraph, '_%s_style' % args.style)
+    # Customise style
+    style = OntoGraph._default_style
     style['graph']['rankdir'] = args.rankdir
 
+    # Update style from json file
+    if args.style_file:
+        with open(args.style_file, 'rt') as f:
+            style.update(json.load(f))
+
+    # Write style to json file
+    if args.generate_style_file:
+        with open(args.generate_style_file, 'wt') as f:
+            json.dump(style, f, indent=4)
+
+    # Join all --leafs options
     leafs = set()
     for leaf in args.leafs:
         if ',' in leaf:
@@ -70,16 +107,54 @@ def main():
         else:
             leafs.add(leaf)
 
-    if args.relations:
-        graph = onto.get_dot_relations_graph(style=style, leafs=leafs)
-    else:
-        graph = onto.get_dot_graph(args.root, style=style, leafs=leafs)
+    # Join all --exclude options
+    exclude = set()
+    for e in args.exclude:
+        if ',' in e:
+            exclude.update(e.split(','))
+        else:
+            exclude.add(e)
 
+    # Split relations
+    relations = None
+    if args.relations:
+        relations = [r.strip() for r in args.relations.split(',')]
+
+    # Load ontology
+    onto = get_ontology(args.iri)
     try:
-        graph.write(path=args.output, format=format)
-    except pydot.InvocationException as e:
-        sys.stderr.write(str(e))
+        onto.load()
+    except owlready2.OwlReadyOntologyParsingError as e:
+        print('Invalid IRI:', e, file=sys.stderr)
         sys.exit(1)
+    #if args.sync_reasoner:
+    #    onto.sync_reasoner()
+
+
+    # Plot modules
+    if args.plot_modules:
+        plot_modules(onto, filename=args.output, format=args.format,
+                     show=args.display, ignore_redundant=True)
+        return
+
+    # Create graph
+    graph = OntoGraph(onto, style=style)
+    graph.add_branch(
+        root=args.root, leafs=leafs, exclude=exclude,
+        relations=relations,
+        edgelabels=args.edgelabels, addnodes=args.addnodes,
+        addconstructs=args.addconstructs,
+        #parents=args.parents
+    )
+    if args.legend:
+        graph.add_legend()
+
+    # Plot and display
+    if args.output:
+        graph.save(args.output, format=args.format)
+
+    if not args.output or args.display:
+        graph.view()
 
 
 if __name__ == '__main__':

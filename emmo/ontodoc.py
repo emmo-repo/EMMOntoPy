@@ -15,7 +15,7 @@ import yaml
 import owlready2
 
 from .utils import asstring, camelsplit
-from .ontograph import get_figsize
+from .graph import OntoGraph
 
 
 class OntoDoc:
@@ -58,6 +58,7 @@ class OntoDoc:
             # logic/math symbols
             ('\u2200', r'$\\forall$'),
             ('\u2203', r'$\\exists$'),
+            ('\u2206', r'$\\nabla$'),
             ('\u2227', r'$\\land$'),
             ('\u2228', r'$\\lor$'),
             # uppercase greek letters
@@ -118,6 +119,8 @@ class OntoDoc:
             ('\u00e1', r"$\\acute{\\mathrm{a}}$"),
             ('\u03cc', r"$\\acute{\\upomicron}$"),
             ('\u014d', r"$\\bar{\\mathrm{o}}$"),
+            ('\u1f45', r'$\\acute{\\omicron}$'),
+
         ],
     )
     _html_style = dict(
@@ -154,10 +157,12 @@ class OntoDoc:
                 style = getattr(self, '_%s_style' % style)
         self.onto = onto
         self.style = style
+        self.url_regex = re.compile(r'https?:\/\/[^\s ]+')
 
     def get_default_template(self):
         """Returns default template."""
-        title = os.path.splitext(os.path.basename(self.onto.base_iri))[0]
+        title = os.path.splitext(
+            os.path.basename(self.onto.base_iri.rstrip('/#')))[0]
         irilink = self.style.get('link', '{name}').format(
             name=self.onto.base_iri, url=self.onto.base_iri,
             lowerurl=self.onto.base_iri)
@@ -238,13 +243,19 @@ class OntoDoc:
             annotations = item.get_individual_annotations()
         else:
             annotations = item.get_annotations()
+
         for key in sorted(annotations.keys(),
                           key=lambda key: order.get(key, key)):
             for value in annotations[key]:
-                for reg, sub in substitutions:
-                    value = re.sub(reg, sub, value)
-                doc.append(annotation_style.format(
-                    key=key.capitalize(), value=value))
+                if self.url_regex.match(value):
+                    doc.append(annotation_style.format(
+                        key=key.capitalize(),
+                        value=asstring(value, link_style)))
+                else:
+                    for reg, sub in substitutions:
+                        value = re.sub(reg, sub, value)
+                    doc.append(annotation_style.format(
+                        key=key.capitalize(), value=value))
 
         # ...add relations from is_a
         points = []
@@ -266,11 +277,11 @@ class OntoDoc:
                 point='equivalent_to ' + asstring(e, link_style)))
 
         # ...add disjoint_with relations
-        if hasattr(item, 'disjoints'):
-            for d in item.disjoints():
-                s = ', '.join(asstring(e, link_style) for e in d)
-                points.append(point_style.format(
-                    point='disjoint_width ' + s, ontology=onto))
+        if hasattr(item, 'disjoint_with'):
+            s = set(item.disjoint_with(reduce=True))
+            points.append(point_style.format(
+                point='disjoint_with ' + ', '.join(asstring(e, link_style)
+                                                   for e in s), ontology=onto))
 
         # ...add disjoint_unions
         if hasattr(item, 'disjoint_unions'):
@@ -402,7 +413,8 @@ class DocPP:
         separated list of leaf node names.
 
             %BRANCHFIG name [path='' caption='' terminated=1 include_leafs=1
-                             width=0px leafs='']
+                             strict_leafs=1, width=0px leafs='' relations=all
+                             edgelabels=1]
 
       * This is a combination of the %HEADER and %BRANCHFIG directives.
 
@@ -415,7 +427,7 @@ class DocPP:
         element.
 
             %BRANCHDOC name [level=2  path='' caption='' terminated=1
-                             include_leafs=1 width=0px leafs='']
+                             width=0px leafs='']
 
       * Insert generated documentation for all entities of the given type.
         Valid values of `type` are: "classes", "individuals",
@@ -573,16 +585,22 @@ class DocPP:
                 self.lines[i: i] = self.ontodoc.itemsdoc(
                     branch, int(opts.header_level)).split('\n')
 
-    def _make_branchfig(self, name, path, style, terminated, width, leafs):
+    def _make_branchfig(self, name, path, terminated, include_leafs,
+                        strict_leafs, width, leafs, relations, edgelabels,
+                        rankdir):
         """Help method for process_branchfig().
 
         Args:
             name: name of branch root
             path: optional figure path name
-            style: optional graph style
+            include_leafs: whether to include leafs
+            strict_leafs: whether strictly exclude leafs descendants
             terminated: whether the graph should be terminated at leaf nodes
             width: optional figure width
             leafs: optional leafs node names for graph termination
+            relations: comma-separated list of relations to include
+            edgelabels: whether to include edgelabels
+            rankdir: graph direction (BT, TB, RL, LR)
 
         Returns:
             filepath: path to generated figure
@@ -598,31 +616,6 @@ class DocPP:
             leafs.discard(name)
         else:
             leafs = None
-        graph = onto.get_dot_graph(name, relations=True,
-                                   leafs=leafs, style=style)
-        if not width:
-            figwidth, figheight = get_figsize(graph)
-            width = self.figscale * figwidth
-            if self.maxwidth and width > self.maxwidth:
-                width = self.maxwidth
-
-        # Set node URLs. Hmm, shouldn't that be done in ontograph.py?
-        for node in graph.get_nodes():
-            node.set_URL(onto[node.get_name()].iri)
-            node.set_target("_top")
-
-        # Add extra border to leafs nodes
-        roots = set(asstring(r) for r in onto.get_roots())
-        for leaf in set(self.get_branches()).difference(roots):
-            nodes = graph.get_node(asstring(leaf))
-            for node in nodes:
-                node.set_penwidth(3)
-
-        # Change root nodes to double octagons
-        for root in roots:
-            nodes = graph.get_node(asstring(root))
-            for node in nodes:
-                node.set_shape('doubleoctagon')
 
         if path:
             figdir = os.path.dirname(path)
@@ -638,12 +631,23 @@ class DocPP:
             term = 'T' if terminated else ''
             path = os.path.join(figdir, name + term) + '.' + format
 
+        # Create graph
+        graph = OntoGraph(onto, graph_attr={'rankdir': rankdir})
+        graph.add_branch(root=name, leafs=leafs, include_leafs=include_leafs,
+                         strict_leafs=strict_leafs, relations=relations,
+                         edgelabels=edgelabels)
+
+        if not width:
+            figwidth, figheight = graph.get_figsize()
+            width = self.figscale * figwidth
+            if self.maxwidth and width > self.maxwidth:
+                width = self.maxwidth
+
         filepath = os.path.join(self.basedir, path)
         destdir = os.path.dirname(filepath)
         if not os.path.exists(destdir):
             os.makedirs(destdir)
-        writer = getattr(graph, 'write_' + format)
-        writer(filepath)
+        graph.save(filepath, format=format)
         return filepath, leafs, width
 
     def process_branchfigs(self):
@@ -652,12 +656,14 @@ class DocPP:
             if line.startswith('%BRANCHFIG '):
                 tokens = shlex.split(line)
                 name = tokens[1]
-                opts = get_options(tokens[2:], path='', caption='',
-                                   terminated=1, width=0, style='default',
-                                   leafs='')
+                opts = get_options(
+                    tokens[2:], path='', caption='', terminated=1,
+                    include_leafs=1, strict_leafs=1, width=0, leafs='',
+                    relations='all', edgelabels=1, rankdir='BT')
                 filepath, leafs, width = self._make_branchfig(
-                    name, opts.path, opts.style, opts.terminated, opts.width,
-                    opts.leafs)
+                    name, opts.path, opts.terminated, opts.include_leafs,
+                    opts.strict_leafs, opts.width, opts.leafs, opts.relations,
+                    opts.edgelabels, opts.rankdir)
 
                 del self.lines[i]
                 self.lines[i: i] = self.ontodoc.get_figure(
@@ -676,12 +682,15 @@ class DocPP:
                 title = title[0].upper() + title[1:] + ' branch'
                 opts = get_options(tokens[2:], level=2, path='', title=title,
                                    caption=title + '.', terminated=1,
-                                   include_leafs=0, width=0, style='default',
-                                   leafs='')
+                                   strict_leafs=1, width=0,
+                                   leafs='', relations='all', edgelabels=1,
+                                   rankdir='BT')
 
+                include_leafs = 1
                 filepath, leafs, width = self._make_branchfig(
-                    name, opts.path, opts.style, opts.terminated, opts.width,
-                    opts.leafs)
+                    name, opts.path, opts.terminated, include_leafs,
+                    opts.strict_leafs, opts.width, opts.leafs, opts.relations,
+                    opts.edgelabels, opts.rankdir)
 
                 sec = []
                 sec.append(
@@ -690,7 +699,8 @@ class DocPP:
                     self.ontodoc.get_figure(filepath, caption=opts.caption,
                                             width=width))
                 if with_branch:
-                    branch = onto.get_branch(name, leafs, opts.include_leafs)
+                    include_leafs = 0
+                    branch = onto.get_branch(name, leafs, include_leafs)
                     sec.append(
                         self.ontodoc.itemsdoc(branch, int(opts.level + 1)))
 
@@ -730,9 +740,10 @@ class DocPP:
             if line.startswith('%ALLFIG '):
                 tokens = shlex.split(line)
                 type = tokens[1]
-                opts = get_options(tokens[2:], path='', level=3,
-                                   terminated=0, width=0, style='default',
-                                   leafs='')
+                opts = get_options(tokens[2:], path='', level=3, terminated=0,
+                                   include_leafs=1, strict_leafs=1, width=0,
+                                   leafs='', relations='isA', edgelabels=0,
+                                   rankdir='BT')
                 if type == 'classes':
                     roots = onto.get_root_classes()
                 elif type in ('object_properties', 'relations'):
@@ -747,8 +758,9 @@ class DocPP:
                 for root in roots:
                     name = asstring(root)
                     filepath, leafs, width = self._make_branchfig(
-                        name, opts.path, opts.style, opts.terminated,
-                        opts.width, opts.leafs)
+                        name, opts.path, opts.terminated, opts.include_leafs,
+                        opts.strict_leafs, opts.width, opts.leafs,
+                        opts.relations, opts.edgelabels, opts.rankdir)
                     title = 'Taxonomy of %s.' % name
                     sec.append(
                         self.ontodoc.get_header(title, int(opts.level)))

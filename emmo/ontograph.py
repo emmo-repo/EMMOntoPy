@@ -163,6 +163,14 @@ class OntoGraph:
 
         Note: This method requires pydot.
         """
+
+        warnings.warn(
+            """The emmo.ontology.get_dot_graph() method is deprecated.
+            Use emmo.ontology.get_graph() instead.
+
+            This requires that you install graphviz instead of the old
+            pydot package.""", DeprecationWarning)
+
         # FIXME - double inheritance leads to dublicated nodes. Make sure
         #         to only add a node once!
         import pydot
@@ -178,6 +186,8 @@ class OntoGraph:
                                     style=style, edgelabels=edgelabels)
 
         # Add parents
+        # FIXME - facture out into an recursive function to support
+        #         multiple inheritance
         if parents and root:
             r = self.get_by_label(root) if isinstance(root, str) else root
             while True:
@@ -250,7 +260,7 @@ class OntoGraph:
             # Add inverse_of
             if (hasattr(entity, 'inverse_property') and
                     (relations is True or 'inverse_of' in relations) and
-                    entity.inverse_property is not None):
+                    entity.inverse_property not in (None, entity)):
                 self._get_dot_add_edges(
                     graph, entity, [entity.inverse_property], 'inverse_of',
                     relations, style.get('inverse_of', {}),

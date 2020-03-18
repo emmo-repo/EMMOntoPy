@@ -9,7 +9,7 @@ from emmo import get_ontology
 
 emmo = get_ontology()
 emmo.load()
-#emmo.sync_reasoner()
+# emmo.sync_reasoner()
 
 
 H = emmo.Atom(label='H')

@@ -16,9 +16,22 @@ owlready2.set_render_func(render_func)
 #
 # Extending ThingClass (classes)
 #
-def _get_parents(self):
-    """Returns a list of all parents (in case of multiple inheritance)."""
-    return [cls for cls in self.is_a if isinstance(cls, owlready2.ThingClass)]
+def _get_parents(self, strict=False):
+    """Returns a list of all parents.  If `strict` is true, parents that are
+    parents of other parents are excluded."""
+    if strict:
+        s = self.get_parents()
+        for e in s.copy():
+            s.difference_update(e.ancestors(include_self=False))
+        return s
+    elif isinstance(self, owlready2.ThingClass):
+        return {cls for cls in self.is_a
+                if isinstance(cls, owlready2.ThingClass)}
+    elif isinstance(self, owlready2.ObjectPropertyClass):
+        return {cls for cls in self.is_a
+                if isinstance(cls, owlready2.ObjectPropertyClass)}
+    else:
+        assert 0
 
 
 def _dir(self):
@@ -42,6 +55,23 @@ def get_class_annotations(self, all=False):
         return d
     else:
         return {k: v for k, v in d.items() if v and k != 'label'}
+
+
+def disjoint_with(self, reduce=False):
+    """Returns a generator with all classes that are disjoint with `self`.
+    If `reduce` is true, all classes that are a descendant of another class
+    will be excluded."""
+    if reduce:
+        s = set(self.disjoint_with())
+        for e in s.copy():
+            s.difference_update(e.descendants(include_self=False))
+        for e in s:
+            yield e
+    else:
+        for d in self.disjoints():
+            for e in d.entities:
+                if e is not self:
+                    yield e
 
 
 #
@@ -82,9 +112,11 @@ def get_individual_annotations(self, all=False):
 
 
 # Inject methods into Owlready2 classes
-setattr(owlready2.ThingClass, 'get_parents', _get_parents)
 setattr(ThingClass, '__dir__', _dir)
+setattr(ThingClass, 'get_parents', _get_parents)
 setattr(ThingClass, 'get_annotations', get_class_annotations)
+setattr(ThingClass, 'disjoint_with', disjoint_with)
+setattr(PropertyClass, 'get_parents', _get_parents)
 setattr(PropertyClass, 'get_annotations', get_property_annotations)
 type.__setattr__(Thing, 'get_individual_annotations',
                  get_individual_annotations)

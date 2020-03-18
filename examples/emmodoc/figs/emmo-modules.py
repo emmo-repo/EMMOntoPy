@@ -35,7 +35,7 @@ def getname(iri):
 
 
 if load_emmo:
-    emmo = get_ontology('/home/friisj/prosjekter/EMMC/EMMO/emmo.owl')
+    emmo = get_ontology('http://emmo.info/emmo/1.0.0-alpha')
     emmo.load()
 
     modules = {}

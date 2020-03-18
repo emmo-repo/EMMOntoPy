@@ -36,10 +36,6 @@ materials modelling and characterisation, including:
 
 ![The aspects of materials modelling and characterisation covered by EMMO.](figs/emmo-scope.png){ width=360px }
 
-<!--
-ADD MAIN FEATURES OF EMMO FROM GERHARDS SLIDE
--->
-
 
 EMMO is released under the [Creative Commons license][CC] and is
 available at [emmo.info/][EMMO].  The OWL2-DL sources are available in
@@ -97,14 +93,6 @@ may include concrete objects such as cars, flowers, stars, persons and
 molecules, as well as abstract individuals such as a measured height,
 a specific equation and software programs.
 
-<!--
-They are a logical picture of the real world entity they represent.
-
-    Remove this for now, since Anne thinks this sentence no longer
-    ahere to realism since we make a distinction between individuals
-    and the real world.
--->
-
 Individuals possess attributes in form of axioms that are defined by
 the user (interpreter) upon declaration.
 
@@ -124,7 +112,7 @@ Non-defined classes are defined as an abstract group of objects,
 whose members are defined as belonging to the class.  They are yellow
 in the graphical representations.
 
-%BRANCHFIG EMMO leafs=Physical,Elementary caption='Example of the top-level entity branch showing some classes and relationships between them.'
+%BRANCHFIG EMMO leafs=Perspective,Elementary caption='Example of the top-level branch of EMMO showing some classes and relationships between them.'
 
 
 ### Axioms
@@ -219,7 +207,11 @@ introducing the following concepts (illustrated in the figure below):
 
 ### Metrology
 Metrology is the science of measurements.  It introduces units and
-links them to properties.
+links them to properties.  The description of metrology in EMMO
+is based on the standards of
+[International System of Quantities (ISQ)](https://en.wikipedia.org/wiki/International_System_of_Quantities)
+and
+[International System of Units (SI)](https://en.wikipedia.org/wiki/International_System_of_Units).
 
 
 ### Description logic
@@ -435,104 +427,54 @@ Not a man:
 
 ## The structure of EMMO
 
-EMMO is structures in a hierarchical set of modules covering,
-expressed by specific ontology fragments, that extends from
-fundamental concepts to the application domains, following the
-dependency flow.  The modules and their interdependencies
-are shows in the figure below.  Each module correspond to a separate
-OWL file.  The special module `emmo.owl` includes all of EMMO.
-
-![The hierarchy of EMMO modules and their interdependencies grouped into three groups; base, perspectives and domains.](figs/modules.png){ width=668px }
+The EMMO ontology is structured in shells, expressed by specific ontology fragments, that extends from fundamental concepts to the application domains, following the dependency flow.
 
 
-### EMMO core groups
-  * __Base:__  The [emmo-base](http://emmo.info/emmo-base.owl) is the fundamental group of axioms that
-    constitutes the philosophical foundation of the EMMO. Following a
-    physicalistic/nominalistic perspective the EMMO defines real world
-    objects as 4D objects that always extends in space and time (i.e. real
-    world objects cannot be spaceless or timeless).
+### Top Level
+The [EMMO top level](top.owl) is the group of fundamental axioms that constitute the philosophical foundation of the EMMO.  Adopting a physicalistic/nominalistic perspective, the EMMO defines real world objects as 4D objects that are always extended in space and time (i.e. real world objects cannot be spaceless nor timeless).  For this reason abstract objects, i.e. objects that does not extend in space and time, are forbidden in the EMMO.
 
-    For this reason abstract objects, i.e. objects that does not extend in
-    space and time, are forbidden in the EMMO. The role of abstract
-    objects is fulfilled by semiotics objects, i.e. real world objects
-    (e.g. symbols) that stand for other real world objects within a
-    semiotic process.
+EMMO is strongly based on the analytical philosophy dicipline semiotic.
+The role of abstract objects are in EMMO fulfilled by semiotic objects, i.e. real world objects (e.g. symbol or sign) that stand for other real world objects that are to be interpreted by an agent. These symbols appear in actions (semiotic processes) meant to communicate meaning by establishing relationships between symbols (signs).
 
-    The EMMO is also based on atomistic mereology applied to 4D. The EMMO
-    calls it 'quantum mereology', since the atomic mereological object in
-    the EMMO is a portion of spacetime at Planck level in time and space.
+Another important building block of from analytical philosophy is atomistic mereology applied to 4D objects.  The EMMO calls it 'quantum mereology', since the there is a epistemological limit to how fine we can resolve space and time due to the uncertanity principles.
 
-    The [emmo-mereotopology](http://emmo.info/base/emmo-mereotopology.owl)
-    introduces the fundamental mereotopological concepts and their
-    relations with the real world objects that they represent that lay
-    the ground for all the subsequent ontology modules. The concept of
-    topological connection is used to define the first distinction
-    between ontology entities according to definition of self
-    connectedness, by introducing the *item* and *collection*
-    classes. Quantum mereology is represented by the *quantum*
-    class. Connectivity is related to the concept of phisical
-    causality.
+The [mereotopology](top/mereotopology.owl) module introduces the fundamental mereotopological concepts and their relations with the real world objects that they represent.  The EMMO uses mereotopology as the ground for all the subsequent ontology modules.  The concept of topological connection is used to define the first distinction between ontology entities namely the *Item* and *Collection* classes.  Items are causally self-connected objects, while collections are causally disconnected.  Quantum mereology is represented by the *Quantum* class. This module introduces also the fundamental mereotopological relations used to distinguish between space and time dimensions.
 
-    The [emmo-4d](http://emmo.info/base/emmo-4d.owl)
-    introduces the fundamental mereotopological relations used to
-    distinguish between space and time dimensions.
+The [physical](top/physical.owl) module, defines the *Physical* objects and the concept of *Void* that plays a fundamental role in the description of multiscale objects and quantum systems. It also define the *Elementary* class, that restricts mereological atomism in space.
 
-    The [emmo-physical](http://emmo.info/base/emmo-physical.owl) introduces the fundamental
-    definitions in order to define the *physical* objects and the concept
-    of *void* that plays a fundamental role in the description of
-    multiscale objects and quantum systems. It also define the *elemetary*
-    object that restricts mereological atomism in space, and refers to the
-    concept of elementary particles coming from the Standard Model of
-    Particles.
+![The EMMO top level.](figs/top.png)
 
-  * __Perspectives:__  For the EMMO, the only univocally defined real world objects are the
-    *item* individual call **universe** that stands for the Universe and
-    the *quantum* individuals. Every other real world object is a
-    composition in time and space of *quantum* objects up to the most
-    comprehensive object: the **universe**. These intermediate objects are
-    not univocally defined, but their definition is provided according to
-    some specific perspectives.
+In EMMO, the only univocally defined real world object is the *Item* individual called **Universe** that stands for the universe. Every other real world object is a composition of elementaries up to the most comprehensive object; the **Universe**. Intermediate objects are not univocally defined, but their definition is provided according to some specific philosophical perspectives.  This is an expression of reductionism (i.e. objects are made of sub-objects) and epistemological pluralism (i.e. objects are always defined according to the perspective of an interpreter, or a class of interpreters).
 
-    This is an expression of reductionism (i.e. objects are made of
-    sub-objects) and epistemological pluralism (i.e. objects are always
-    defined according to the perspective of an interpreter, or a class of
-    interpreters).
-
-    The ontologies collected in the
-    [emmo-perspectives](http://emmo.info/emmo-perspectives.owl) are different ways to
-    represent the objects that populate the conceptual region between
-    quantum and universe levels.
-
-    The [emmo-existent](http://emmo.info/perspectives/emmo-existent.owl) introduces the fundamental
-    non-transitive parthood relations, called direct parthood, that
-    provides a powerful granularity description of multi scale real world
-    objects. The EMMO can in principle represents the **universe** as a
-    direct rooted tree up to its quantum constituents.
-
-    The [emmo-impression](http://emmo.info/perspectives/emmo-impression.owl) introduces the concept of
-    real world objects that have a meaning for the EMMO user, by means of
-    a recognizable pattern in space or time that impress the user. Under
-    this class the EMMO categorize e.g. formal languages, pictures,
-    geometry, mathematics, sounds. Impressions can be used in a semiotic
-    process as signs.
-
-    The [emmo-processsual](http://emmo.info/perspectives/emmo-processual.owl) introduces the concept of
-    real world objects that unfold in time in a way that has a meaning for
-    the EMMO user, through the definition of the classes *process* and
-    *participant*.
-
-    The [emmo-semiotics](http://emmo.info/perspectives/emmo-semiotics.owl) introduces the concept of
-    semiotic process that is used in the EMMO to represent e.g. models,
-    formal languages, theories, information, properties.
-
-  * __Domains:__  The domains ontologies act as roots for extending the EMMO under
-    specific application domains. Up to now the EMMO includes
-    graphical, geometry, material, mathematics, models, properties,
-    physical properties and usercase.
+The *Perspective* class collects the different ways to represent the objects that populate the conceptual region between the elementary and universe levels.
 
 
-### Relations
-All EMMO relations are subrelations of two roots relations: `mereotopological` and `semiotical`. The relation hierarchy extends more vertically (i.e. subrelations) than horizontally (i.e. sibling realtions), facilitating the categorization and inferencing of individual.  See also the [EMMO Relations](#emmo-relations) chapter.
+### Middle Level
+The middle level ontologies act as roots for extending the EMMO towards specific application domains.
+
+![The EMMO perspectives.](figs/Perspectives.png)
+
+The *Reductionistic* perspective class uses the fundamental non-transitive parthood relation, called direct parthood, to provide a powerful granularity description of multiscale real world objects. The EMMO can in principle represents the **Universe** with direct parthood relations as a direct rooted tree up to its elementary constituents.
+
+The *Phenomenic* perspective class introduces the concept of real world objects that express of a recognisable pattern in space or time that impress the user. Under this class the EMMO categorises e.g. formal languages, pictures, geometry, mathematics and sounds. Phenomenic objects can be used in a semiotic process as signs.
+
+The *Physicalistic* perspective class introduces the concept of real world objects that have a meaning for the under applied physics perspective.
+
+The *Holistic* perspective class introduces the concept of real world objects that unfold in time in a way that has a meaning for the EMMO user, through the definition of the classes *Process* and *Participant*.
+The [semiotics](top/semiotics.owl) module introduces the concepts of
+semiotics and the *Semiosis* process that has a *Sign*, an *Object*
+and an *Interpreter* as participants.  This forms the basis in EMMO to
+represent e.g. models, formal languages, theories, information and
+properties.
+
+![The semiotic level, showing both the taxonomy (open black arrows) and
+other relations as listed in the caption. The inverted arrows corresponds to inverse relations.](figs/Semiotic.png)
+
+### EMMO relations
+All EMMO relations are subrelations of the relations found in the two roots: *mereotopological* and *semiotical*. The relation hierarchy extends more vertically (i.e. more subrelations) than horizontally (i.e. less sibling relations), facilitating the categorisation and inferencing of individuals.
+See also the chapter [EMMO Relations](#emmo-relations).
+
+Imposing all relations to fall under mereotopology or semiotics is how the EMMO force the developers to respect its perspectives. Two entities are related only by contact or parthood (mereotopology) or by standing one for another (semiosis): no other types of relation are possible within the EMMO.
 
 A unique feature in EMMO, is the introduction of _direct parthood_.
 As illustrated in the figure below, it is a mereological relation
@@ -547,87 +489,6 @@ parthood relations.
 ![Direct parthood.](figs/emmo-direct_part.png){ width=220px }
 
 
-%%<!--
-%%### EMMO Core
-%%EMMO core contains three levels as illustrated in the figure below.
-%%
-%%![Toplevel structure of EMMO Core.](figs/emmo-core.png){ width=180px }
-%%
-%%  - **The abstract conceptual level** makes a clear separation
-%%    between `set` (set theory) and `item` (mereotopology).
-%%
-%%  - **The geometric/topological level** contains the space (3D) and time
-%%    (1D) in which all items unfolds.
-%%
-%%  - **The physical level** holds the 4D `spacetime` in which all real
-%%    world entities exists.  A `spacetime` that can be perceived by
-%%    (interact with) the interpreater is a `physical`.  If the
-%%    `spacetime` entity is empty in terms of perception, it is a
-%%    `void`.
-%%
-%%EMMO defines a parthood hierachy under `physical` by introducing the
-%%following concepts (illustrated in the figure below):
-%%
-%%  - **`elementary`** is the fundamental, non-divisible constituent of entities
-%%
-%%  - **`state`** is a `physical`whose parts have a constant cardinality
-%%    during its life time
-%%
-%%  - **`existent`** is a succession of states
-%%
-%%![Parthood hierachy under `physical`.](figs/physical.png){ width=500px }
-%%
-%%Via the mereological direct parthood relation, EMMO can describe
-%%entities made of parts at different levels of granularity.  This is
-%%paramount for cross scale interoperability.  Every material in EMMO is
-%%placed on a granularity level and the ontology gives information about
-%%the direct upper and direct lower level classes using
-%%the non-transitive direct parthood relations.
-%%
-%%![Direct parthood.](figs/emmo-direct_part.png){ width=220px }
-%%
-%%
-%%### EMMO Materials
-%%EMMO Material contains a first draft of a materials ontology.  It
-%%relies on direct parthood to identify granularity levels.  It is
-%%generic and flexible enough to represent both classical and quantum
-%%mechanical systems in a way that is compatible with different
-%%interpretations (e.g. the Copenhagen and De Broglie-Bohm
-%%interpretations of quantum mechanics) and levels of approximations
-%%(e.g. classical physics and Born-Oppenheimer approximation).
-%%
-%%
-%%### EMMO Semiotics
-%%
-%%The semiotics module introduces three connected branches, `symbolic`,
-%%`semiosis` and `semiotic_role` in addition to the
-%%`has_sign`/`stands_for` family of relations.
-%%
-%%
-%%
-%%Since the EMMO must represent models and properties (which are signs
-%%that stand for a physical entity), the semiotic process must be
-%%described also within the EMMO itself.  The concepts of Peirce
-%%semiotics (interpreter, object, sign) are included in the semiotic
-%%branch, together with the semiosis process.
-%%
-%%
-%%### EMMO Formal languages
-%%
-%%
-%%
-%%
-%%### EMMO Data formats
-%%
-%%### EMMO Math
-%%
-%%### EMMO Properties
-%%
-%%### EMMO Models
-%%
-%%### EMMO Characterisation
-%%-->
-
 
 ### Annotations
 All entities and relations in EMMO have some attributes, called
@@ -636,15 +497,6 @@ Resource Identifier* (IRI) and *relations* are provided.  However,
 descriptive annotations, like *elucidation* and *comment*, are planned
 to be added for all classes and relations.  Possible annotations are:
 
-%%- **Definition** is a human readable definition of the class.  Definition
-%%  annotations are currently not used in EMMO.
-%%
-%%- **Axiom**
-%%  Currently not used in EMMO.
-%%
-%%- **Theorem**
-%%  Currently not used in EMMO.
-%%
 * __Elucidation__ is a human readable explanation and clearification
   of the documented class or relation.
 * __Example__ clearifies the elucidation through an example.  A class may

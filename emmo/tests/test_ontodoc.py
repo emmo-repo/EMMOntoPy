@@ -16,7 +16,7 @@ emmo.load()
 baseiri = 'http://emmo.info/'
 iris = set(c.namespace.base_iri for c in emmo.classes())
 iris.update(set(c.namespace.base_iri for c in emmo.object_properties()))
-#iris.update(set(c.namespace.base_iri for c in emmo.annotation_properties()))
+# iris.update(set(c.namespace.base_iri for c in emmo.annotation_properties()))
 
 for s in sorted(iris):
     print(s)
