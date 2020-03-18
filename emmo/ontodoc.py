@@ -101,7 +101,7 @@ class OntoDoc:
             ('\u03bc', r'$\\upmu$'),
             ('\u03bd', r'$\\upnu$'),
             ('\u03be', r'$\\upxi$'),
-            ('\u03bf', r'$\\upomicron$'),
+            ('\u03bf', r'o'),  # no \upomicron
             ('\u03c0', r'$\\uppi$'),
             ('\u03c1', r'$\\uprho$'),
             ('\u03c2', r'$\\upvarsigma$'),
@@ -117,9 +117,9 @@ class OntoDoc:
             ('\u1e17', r"$\\acute{\\bar{\\mathrm{e}}}$"),
             ('\u03ac', r"$\\acute{\\upalpha}$"),
             ('\u00e1', r"$\\acute{\\mathrm{a}}$"),
-            ('\u03cc', r"$\\acute{\\upomicron}$"),
+            ('\u03cc', r"$\\acute{o}$"),  # no \upomicron
             ('\u014d', r"$\\bar{\\mathrm{o}}$"),
-            ('\u1f45', r'$\\acute{\\omicron}$'),
+            ('\u1f45', r'$\\acute{o}$'),  # no \omicron
 
         ],
     )
@@ -414,7 +414,7 @@ class DocPP:
 
             %BRANCHFIG name [path='' caption='' terminated=1 include_leafs=1
                              strict_leafs=1, width=0px leafs='' relations=all
-                             edgelabels=1]
+                             edgelabels=0]
 
       * This is a combination of the %HEADER and %BRANCHFIG directives.
 
@@ -587,7 +587,7 @@ class DocPP:
 
     def _make_branchfig(self, name, path, terminated, include_leafs,
                         strict_leafs, width, leafs, relations, edgelabels,
-                        rankdir):
+                        rankdir, legend):
         """Help method for process_branchfig().
 
         Args:
@@ -601,6 +601,7 @@ class DocPP:
             relations: comma-separated list of relations to include
             edgelabels: whether to include edgelabels
             rankdir: graph direction (BT, TB, RL, LR)
+            legend: whether to add legend
 
         Returns:
             filepath: path to generated figure
@@ -636,6 +637,8 @@ class DocPP:
         graph.add_branch(root=name, leafs=leafs, include_leafs=include_leafs,
                          strict_leafs=strict_leafs, relations=relations,
                          edgelabels=edgelabels)
+        if legend:
+            graph.add_legend()
 
         if not width:
             figwidth, figheight = graph.get_figsize()
@@ -659,11 +662,11 @@ class DocPP:
                 opts = get_options(
                     tokens[2:], path='', caption='', terminated=1,
                     include_leafs=1, strict_leafs=1, width=0, leafs='',
-                    relations='all', edgelabels=1, rankdir='BT')
+                    relations='all', edgelabels=0, rankdir='BT', legend=1)
                 filepath, leafs, width = self._make_branchfig(
                     name, opts.path, opts.terminated, opts.include_leafs,
                     opts.strict_leafs, opts.width, opts.leafs, opts.relations,
-                    opts.edgelabels, opts.rankdir)
+                    opts.edgelabels, opts.rankdir, opts.legend)
 
                 del self.lines[i]
                 self.lines[i: i] = self.ontodoc.get_figure(
@@ -683,14 +686,14 @@ class DocPP:
                 opts = get_options(tokens[2:], level=2, path='', title=title,
                                    caption=title + '.', terminated=1,
                                    strict_leafs=1, width=0,
-                                   leafs='', relations='all', edgelabels=1,
-                                   rankdir='BT')
+                                   leafs='', relations='all', edgelabels=0,
+                                   rankdir='BT', legend=1)
 
                 include_leafs = 1
                 filepath, leafs, width = self._make_branchfig(
                     name, opts.path, opts.terminated, include_leafs,
                     opts.strict_leafs, opts.width, opts.leafs, opts.relations,
-                    opts.edgelabels, opts.rankdir)
+                    opts.edgelabels, opts.rankdir, opts.legend)
 
                 sec = []
                 sec.append(
@@ -743,7 +746,7 @@ class DocPP:
                 opts = get_options(tokens[2:], path='', level=3, terminated=0,
                                    include_leafs=1, strict_leafs=1, width=0,
                                    leafs='', relations='isA', edgelabels=0,
-                                   rankdir='BT')
+                                   rankdir='BT', legend=1)
                 if type == 'classes':
                     roots = onto.get_root_classes()
                 elif type in ('object_properties', 'relations'):
@@ -760,7 +763,8 @@ class DocPP:
                     filepath, leafs, width = self._make_branchfig(
                         name, opts.path, opts.terminated, opts.include_leafs,
                         opts.strict_leafs, opts.width, opts.leafs,
-                        opts.relations, opts.edgelabels, opts.rankdir)
+                        opts.relations, opts.edgelabels, opts.rankdir,
+                        opts.legend)
                     title = 'Taxonomy of %s.' % name
                     sec.append(
                         self.ontodoc.get_header(title, int(opts.level)))

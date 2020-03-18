@@ -275,6 +275,7 @@ class OntoGraph:
             kw = self.get_node_attrs(e, nodeattrs=nodeattrs, attrs=attrs)
             if hasattr(e, 'iri'):
                 kw.setdefault('URL', e.iri)
+            #print('    === add_node:', label)
             self.dot.node(label, label=label, **kw)
             self.nodes.add(label)
 
@@ -311,6 +312,7 @@ class OntoGraph:
                 label = None
 
             kw = self.get_edge_attrs(predicate, attrs=attrs)
+            #print('    === add_edge:', label)
             self.dot.edge(subject, object, label=label, **kw)
             self.edges.add(key)
 
@@ -533,9 +535,12 @@ class OntoGraph:
             label2.append('<tr><td port="i%d">&nbsp;</td></tr>' % i)
         label1.append('</table>>')
         label2.append('</table>>')
+        print('    === add_legend1')
         self.dot.node('key1', label='\n'.join(label1), shape='plaintext')
+        print('    === add_legend2')
         self.dot.node('key2', label='\n'.join(label2), shape='plaintext')
 
+        print('    === set rankdir: TB')
         rankdir = self.dot.graph_attr.get('rankdir', 'TB')
         constraint = 'false' if rankdir in ('TB', 'BT') else 'true'
         inv = True if rankdir in ('BT', 'RL') else False
@@ -549,8 +554,12 @@ class OntoGraph:
                 kw = self.get_edge_attrs(r, {}).copy()
             kw['constraint'] = constraint
             if rankdir in ('BT', 'LR'):
+                print('    === label edge1')
+                print('        kw:', kw)
                 self.dot.edge('key1:i%d:e' % i, 'key2:i%d:w' % i, **kw)
+                print('    ---')
             else:
+                print('    === label edge2')
                 self.dot.edge('key2:i%d:w' % i, 'key1:i%d:e' % i, **kw)
 
     def get_relations(self, sort=True):
@@ -560,6 +569,9 @@ class OntoGraph:
         for s, p, o in self.edges:
             if p.startswith('Inverse'):
                 relations.add('inverse')
+                m = re.match(r'Inverse\((.+)\)', p)
+                assert m
+                relations.add(m.groups()[0])
             else:
                 relations.add(p.split(None, 1)[0])
 
@@ -583,7 +595,10 @@ class OntoGraph:
         if format is None:
             format = ext.lstrip('.')
         kwargs.setdefault('cleanup', True)
+        print('    === render:', base)
+        print('        format, kw:', format, kwargs)
         self.dot.render(base, format=format, **kwargs)
+        print('    ---')
 
     def view(self):
         """Shows the graph in a viewer."""
