@@ -459,8 +459,11 @@ def get_figsize(graph):
         graph.write_svg(tmpfile)
         xml = ET.parse(tmpfile)
         svg = xml.getroot()
-        asfloat = lambda s: float(re.match(r'^[\d.]+', s).group())
         width = svg.attrib['width']
         height = svg.attrib['height']
         assert width.endswith('pt')  # ensure that units are in points
+
+    def asfloat(s):
+        return float(re.match(r'^[\d.]+', s).group())
+
     return asfloat(width), asfloat(height)

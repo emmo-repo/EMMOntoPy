@@ -83,15 +83,17 @@ Install with
 
     pip install EMMO
 
-### Dependencies
+### Required Dependencies
   * Python 3.6 or greater
-      - [Owlready2][Owlready2]
-      - [pydot][pydot]:  Required for generating graphs.
-      - PyYAML:  Required for generating documentation with pandoc.
+      - [Owlready2][Owlready2]: v0.23 or later
 
   * Java. Needed for reasoning.
 
-  * [Graphviz][Graphviz]: Needed for graph generation.
+
+### Optional Dependencies
+  * [Graphviz][Graphviz]: Needed for graph generation. With support for generation 
+    pdf, png and svg figures for tests and generation of documentation 
+    automatically (ontodoc). 
 
   * [pandoc][pandoc]: Only used for generated documentation from markdown to
     nicely formatted html or pdf.  Tested with v2.1.2.
@@ -101,7 +103,13 @@ Install with
     and `texlive-latex-extra` on Ubuntu) for generation of pdf
     documentation.  If your ontology contains unicode characters, we
     recommend XeLaTeX.
-
+ 
+### Optional Pythonp Packages
+  - [graphviz][graphviz]: Generation of documentation and graphs.
+  - [Pygments][Pygments]: Coloured output for emmocheck
+  - [blessings][blessings]: Clean output for emmocheck
+  - [pydot][pydot]: Required for generating graphs. Will be deprecated.
+  - [PyYAML][PyYAML]:  Required for generating documentation with pandoc.
 
 See [docs/docker-dockerinstructions.md](#docs/docker-dockerinstructions.md)
 for how to build a docker image.
@@ -115,3 +123,7 @@ for how to build a docker image.
 [pandoc]: http://pandoc.org/
 [XeLaTeX]: https://www.overleaf.com/learn/latex/XeLaTeX/
 [pdfLaTeX]: https://www.latex-project.org/
+[graphviz]: https://pypi.org/project/
+[Pygments]: https://pypi.org/project/Pygments/
+[blessings]: https://pypi.org/project/blessings/
+[PyYAML]: https://pypi.org/project/PyYAML/

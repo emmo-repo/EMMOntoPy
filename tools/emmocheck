@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+"""Tool for checking that ontologies confirms to EMMO conventions.
+"""
+import sys
+import os
+import argparse
+
+# Support to run from uninstalled version by adding parent dir to sys path
+rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
+    os.path.dirname(__file__)))))
+sys.path.insert(1, rootdir)
+
+from emmo import get_ontology
+from emmo.emmocheck import main
+
+import owlready2
+
+
+#def main():
+#    parser = argparse.ArgumentParser(description=__doc__)
+#    parser.add_argument(
+#        '--iri', '-i',
+#        help='File name or URI to the ontology to test.')
+#    parser.add_argument(
+#        '--verbosity', '-v', type=int, default=2,
+#        help='Verbosity level.  Default is 2.')
+#    args, argv = parser.parse_known_args()
+#    sys.argv.extend(argv)
+#
+#    run(iri=args.iri, verbosity=args.verbosity)
+
+
+if __name__ == '__main__':
+    main()

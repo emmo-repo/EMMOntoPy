@@ -50,13 +50,13 @@ setuptools.setup(
     ],
     install_requires=[
         'Cython',
-        'Owlready2>=0.22',
+        'Owlready2>=0.23',
         'pydot',
         'graphviz',
         'PyYAML',
     ],
     packages=['emmo'],
-    scripts=['tools/ontodoc', 'tools/ontograph'],
+    scripts=['tools/ontodoc', 'tools/ontograph', 'tools/emmocheck'],
     package_data={'emmo': ['owl/emmo-inferred.owl', 'tests/*.py']},
     data_files=[
         ('share/EMMO-python', ['README.md', 'LICENSE.txt']),
