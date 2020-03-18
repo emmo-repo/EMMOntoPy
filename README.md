@@ -1,5 +1,5 @@
 EMMO - Python API for the Euroean Materials & Modelling Ontology (EMMO)
-==============================================================================
+=======================================================================
 
 ![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20Tests/badge.svg)
 
@@ -23,6 +23,7 @@ EMMO in Python.  On top of that EMMO-python provides:
   - Generation of graphs.
   - Generation of documentation.
   - Test suite for EMMO-based ontologies.
+  - Command-line tools (ontograph, ontodoc and emmocheck).
 
 Some examples of what you can do with EMMO-python includes:
 
@@ -33,6 +34,8 @@ Some examples of what you can do with EMMO-python includes:
   - Generate graphs and documentation of your ontologies.  EMMO-python
     includes `ontodoc`, which is a dedicated command line tool for this.
     You find it in the [tools/](tools) sub directory.
+  - Check that a EMMO-based domain or application ontology ahead to the
+    conventions of EMMO.
   - Interactively explore an ontology in e.g. [IPython].  Tab completion
     makes exploration easy and fast.  Below is an example of an IPython
     session where we check the relations of `Matter`:
@@ -83,16 +86,14 @@ Install with
     pip install EMMO
 
 ### Required Dependencies
-  * Python 3.6 or greater
-      - [Owlready2][Owlready2]: v0.23 or later
-
-  * Java. Needed for reasoning.
+  * [Python][Python] 3.6 or later
+  * [Owlready2][Owlready2]: v0.23 or later
 
 
 ### Optional Dependencies
-  * [Graphviz][Graphviz]: Needed for graph generation. With support for generation 
-    pdf, png and svg figures for tests and generation of documentation 
-    automatically (ontodoc). 
+  * [Graphviz][Graphviz]: Needed for graph generation. With support for generation
+    pdf, png and svg figures for tests and generation of documentation
+    automatically (ontodoc).
 
   * [pandoc][pandoc]: Only used for generated documentation from markdown to
     nicely formatted html or pdf.  Tested with v2.1.2.
@@ -102,19 +103,22 @@ Install with
     and `texlive-latex-extra` on Ubuntu) for generation of pdf
     documentation.  If your ontology contains unicode characters, we
     recommend XeLaTeX.
- 
-### Optional Pythonp Packages
-  - [graphviz][graphviz]: Generation of documentation and graphs.
-  - [Pygments][Pygments]: Coloured output for emmocheck
-  - [blessings][blessings]: Clean output for emmocheck
-  - [pydot][pydot]: Required for generating graphs. Will be deprecated.
-  - [PyYAML][PyYAML]:  Required for generating documentation with pandoc.
+
+  * Java. Needed for reasoning.
+
+  * Python packages
+    - [graphviz][graphviz]: Generation of documentation and graphs.
+    - [Pygments][Pygments]: Coloured output for emmocheck
+    - [blessings][blessings]: Clean output for emmocheck
+    - [pydot][pydot]: Required for generating graphs. Will be deprecated.
+    - [PyYAML][PyYAML]:  Required for generating documentation with pandoc.
 
 See [docs/docker-dockerinstructions.md](#docs/docker-dockerinstructions.md)
 for how to build a docker image.
 
 [Owlready2]: https://pypi.org/project/Owlready2/
 [Owlready2-doc]: https://pythonhosted.org/Owlready2/
+[Python]: https://www.python.org/
 [IPython]: https://ipython.org/
 [DLite]: https://github.com/SINTEF/dlite/
 [pydot]: https://pypi.org/project/pydot/
