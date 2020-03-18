@@ -1,5 +1,7 @@
 Cython
-Owlready2>=0.22
-pydot
+Owlready2>=0.23
 graphviz
 PyYAML
+blessings
+Pygments
+pydot
