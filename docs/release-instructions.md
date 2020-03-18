@@ -11,4 +11,11 @@ Steps for creating a new release
 
        python3 -m twine upload dist/*
 
-6. Merge release branch to master on GitHub
+6. Push release branch to GitHub and create a pull request for merging to master
+
+7. Once accepted, merged to master
+
+8. Create a release on GitHub with a short release description.
+
+   Set the tag to the version number prefixed with "v" and title to
+   the version number.
