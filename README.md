@@ -106,7 +106,7 @@ Install with
 
   * Java. Needed for reasoning.
 
-  * Python packages
+  * Optional Python packages
     - [graphviz][graphviz]: Generation of documentation and graphs.
     - [Pygments][Pygments]: Coloured output for emmocheck
     - [blessings][blessings]: Clean output for emmocheck
