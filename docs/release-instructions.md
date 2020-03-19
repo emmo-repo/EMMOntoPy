@@ -1,7 +1,7 @@
 Steps for creating a new release
 ================================
 
-1. Create release branch
+1. Create release branch (branch name can be target version number)
 
 2. Update version number in emmo/__init__.py
 
@@ -18,8 +18,9 @@ Steps for creating a new release
 
 7. Create distribution package
 
+       rm -r dist
        python3 setup.py sdist bdist_wheel
 
-8. Upload to pypi
+8. Upload to PyPI
 
-       python3 -m twine upload dist/*
+       twine upload dist/*
