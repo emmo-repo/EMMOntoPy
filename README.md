@@ -6,6 +6,9 @@ EMMO - Python API for the Euroean Materials & Modelling Ontology (EMMO)
 This package is based on [Owlready2] and provides an intuitive
 representation of EMMO in Python.
 
+It is available on [GitHub][EMMP-python] and on [PYPI][EMMO-pypi] under the
+open source [BSD license](LICENSE.txt).
+
 EMMO is an ongoing effort to create an ontology that takes into
 account fundamental concepts of physics, chemistry and materials
 science and is designed to pave the road for semantic
@@ -108,14 +111,16 @@ Install with
 
   * Python packages
     - [graphviz][graphviz]: Generation of documentation and graphs.
-    - [Pygments][Pygments]: Coloured output for emmocheck
-    - [blessings][blessings]: Clean output for emmocheck
-    - [pydot][pydot]: Required for generating graphs. Will be deprecated.
     - [PyYAML][PyYAML]:  Required for generating documentation with pandoc.
+    - [blessings][blessings]: Coloured output for emmocheck
+    - [Pygments][Pygments]: Highlighted verbose output for emmocheck
+    - [pydot][pydot]: Required for generating graphs. Will be deprecated.
 
 See [docs/docker-dockerinstructions.md](#docs/docker-dockerinstructions.md)
 for how to build a docker image.
 
+[EMMO-python]: https://github.com/emmo-repo/EMMO-python
+[EMMO-pypi]: https://pypi.org/project/EMMO/
 [Owlready2]: https://pypi.org/project/Owlready2/
 [Owlready2-doc]: https://pythonhosted.org/Owlready2/
 [Python]: https://www.python.org/
@@ -127,6 +132,6 @@ for how to build a docker image.
 [XeLaTeX]: https://www.overleaf.com/learn/latex/XeLaTeX/
 [pdfLaTeX]: https://www.latex-project.org/
 [graphviz]: https://pypi.org/project/
-[Pygments]: https://pypi.org/project/Pygments/
-[blessings]: https://pypi.org/project/blessings/
 [PyYAML]: https://pypi.org/project/PyYAML/
+[blessings]: https://pypi.org/project/blessings/
+[Pygments]: https://pypi.org/project/Pygments/
