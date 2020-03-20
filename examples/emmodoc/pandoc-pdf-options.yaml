@@ -3,7 +3,7 @@
 #
 from: markdown+auto_identifiers
 template: pandoc-template.tex
-pdf-engine: pdflatex
+pdf-engine: xelatex
 variables:
   urlcolor: blue
   tocolor: blue
