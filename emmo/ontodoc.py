@@ -7,9 +7,10 @@ import re
 import time
 import warnings
 import shlex
+import shutil
 import subprocess
 from textwrap import dedent
-from tempfile import NamedTemporaryFile
+from tempfile import NamedTemporaryFile, TemporaryDirectory
 
 import yaml
 import owlready2
@@ -61,6 +62,9 @@ class OntoDoc:
             ('\u2206', r'$\\nabla$'),
             ('\u2227', r'$\\land$'),
             ('\u2228', r'$\\lor$'),
+            ('\u2207', r'$\\nabla$'),
+            ('\u2212', r'-'),
+            ('->', r'$\\rightarrow$'),
             # uppercase greek letters
             ('\u0391', r'$\\Upalpha$'),
             ('\u0392', r'$\\Upbeta$'),
@@ -202,7 +206,7 @@ class OntoDoc:
         return figure_style.format(path=path, caption=caption,
                                    figwidth=figwidth)
 
-    def itemdoc(self, item, header_level=3):
+    def itemdoc(self, item, header_level=3, show_disjoints=False):
         """Returns documentation of `item`.
 
         Parameters
@@ -211,6 +215,8 @@ class OntoDoc:
             The class, individual or relation to document.
         header_level : int
             Header level. Defaults to 3.
+        show_disjoints : Bool
+            Whether to show `disjoint_with` relations.
         """
         onto = self.onto
         if isinstance(item, str):
@@ -277,7 +283,7 @@ class OntoDoc:
                 point='equivalent_to ' + asstring(e, link_style)))
 
         # ...add disjoint_with relations
-        if hasattr(item, 'disjoint_with'):
+        if show_disjoints and hasattr(item, 'disjoint_with'):
             s = set(item.disjoint_with(reduce=True))
             points.append(point_style.format(
                 point='disjoint_with ' + ', '.join(asstring(e, link_style)
@@ -836,6 +842,11 @@ class DocPP:
         """
         self.process()
         content = self.get_buffer()
+
+        substitutions = self.ontodoc.style.get('substitutions', [])
+        for reg, sub in substitutions:
+            content = re.sub(reg, sub, content)
+
         format = get_format(outfile, format)
         if format not in ('simple-html', 'markdown', 'md'):  # Run pandoc
             if not genfile:
@@ -888,7 +899,7 @@ def append_pandoc_options(options, updates):
     options : sequence
         Sequence with initial Pandoc options.
     updates : sequence of str
-        Sequence of add strings of the form "--longoption=value", where
+        Sequence of strings of the form "--longoption=value", where
         ``longoption`` is a valid pandoc long option and ``value`` is the
         new value.  The "=value" part is optional.
 
@@ -910,14 +921,14 @@ def append_pandoc_options(options, updates):
     for s in updates:
         k, sep, v = s.partition('=')
         u[k.lstrip('-')] = v if sep else None
-    filter_out = set(k for k, v in u.items()
-                     if k.startswith('no-') and k not in no_options)
-    _filter_out = set('--' + k[3:] for k in filter_out)
-    new_options = [opt for opt in options
-                   if opt.partition('=')[0] not in _filter_out]
-    new_options.extend(['--%s' % k if v is None else '--%s=%s' % (k, v)
-                        for k, v in u.items()
-                        if k not in filter_out])
+        filter_out = set(k for k, v in u.items()
+                         if k.startswith('no-') and k not in no_options)
+        _filter_out = set('--' + k[3:] for k in filter_out)
+        new_options = [opt for opt in options
+                       if opt.partition('=')[0] not in _filter_out]
+        new_options.extend(['--%s' % k if v is None else '--%s=%s' % (k, v)
+                            for k, v in u.items()
+                            if k not in filter_out])
     return new_options
 
 
@@ -959,18 +970,80 @@ def run_pandoc(genfile, outfile, format, pandoc_option_files=(),
             args.extend(load_pandoc_option_file(fname))
         else:
             warnings.warn('missing pandoc option file: %s' % fname)
-    args.append('--output=%s' % outfile)
 
     # Update pandoc argument list
     args = append_pandoc_options(args, pandoc_options)
 
+    # pdf output requires a special attention...
+    if format == 'pdf':
+        pdf_engine = 'pdflatex'
+        for arg in args:
+            if arg.startswith('--pdf-engine'):
+                pdf_engine = arg.split('=', 1)[1]
+                break
+        with TemporaryDirectory() as tmpdir:
+            run_pandoc_pdf(tmpdir, pdf_engine, outfile, args, verbose=verbose)
+    else:
+        args.append('--output=%s' % outfile)
+        cmd = ['pandoc'] + args
+        if verbose:
+            print()
+            print('* Executing command:')
+            print(' '.join(shlex.quote(s) for s in cmd))
+        subprocess.check_call(cmd)
+
+
+def run_pandoc_pdf(latex_dir, pdf_engine, outfile, args, verbose=True):
+    """Run pandoc for pdf generation."""
+    basename = os.path.join(latex_dir, os.path.splitext(
+        os.path.basename(outfile))[0])
+
     # Run pandoc
+    texfile = basename + '.tex'
+    args.append('--output=%s' % texfile)
     cmd = ['pandoc'] + args
     if verbose:
         print()
-        print('* Executing command:')
+        print('* Executing commands:')
         print(' '.join(shlex.quote(s) for s in cmd))
     subprocess.check_call(cmd)
+
+    # Fixing tex output
+    texfile2 = basename + '2.tex'
+    with open(texfile, 'rt') as f:
+        content = f.read().replace(r'\$\Uptheta\$', r'$\Uptheta$')
+    with open(texfile2, 'wt') as f:
+        f.write(content)
+
+    # Run latex
+    pdffile = basename + '2.pdf'
+    cmd = [pdf_engine, texfile2, '-halt-on-error',
+           '-output-directory=%s' % latex_dir]
+    if verbose:
+        print()
+        print(' '.join(shlex.quote(s) for s in cmd))
+    output = subprocess.check_output(cmd, timeout=60)
+
+    # Workaround for non-working "-output-directory" latex option
+    if not os.path.exists(pdffile):
+        if os.path.exists(os.path.basename(pdffile)):
+            pdffile = os.path.basename(pdffile)
+            for ext in 'aux', 'out', 'toc', 'log':
+                filename = os.path.splitext(pdffile)[0] + '.' + ext
+                if os.path.exists(filename):
+                    os.remove(filename)
+        else:
+            print()
+            print(output)
+            print()
+            raise RuntimeError('latex did not produced pdf file: ' + pdffile)
+
+    # Copy pdffile
+    if not os.path.samefile(pdffile, outfile):
+        if verbose:
+            print()
+            print('move %s to %s' % (pdffile, outfile))
+        shutil.move(pdffile, outfile)
 
 
 def get_format(outfile, format=None):
@@ -998,7 +1071,7 @@ def get_style(format):
 def get_figformat(format):
     """Infer preferred figure format from output format."""
     if format == 'pdf':
-        figformat = 'pdf'
+        figformat = 'pdf'  # XXX
     elif 'html' in format:
         figformat = 'svg'
     else:

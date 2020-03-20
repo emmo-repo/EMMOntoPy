@@ -535,7 +535,6 @@ class OntoGraph:
         label2.append('</table>>')
         self.dot.node('key1', label='\n'.join(label1), shape='plaintext')
         self.dot.node('key2', label='\n'.join(label2), shape='plaintext')
-        # XXX use rank=same
 
         rankdir = self.dot.graph_attr.get('rankdir', 'TB')
         constraint = 'false' if rankdir in ('TB', 'BT') else 'true'
@@ -549,10 +548,12 @@ class OntoGraph:
             else:
                 kw = self.get_edge_attrs(r, {}).copy()
             kw['constraint'] = constraint
-            if rankdir in ('BT', 'LR'):
-                self.dot.edge('key1:i%d:e' % i, 'key2:i%d:w' % i, **kw)
-            else:
-                self.dot.edge('key2:i%d:w' % i, 'key1:i%d:e' % i, **kw)
+            with self.dot.subgraph(name='sub%d' % i) as s:
+                s.attr(rank='same')
+                if rankdir in ('BT', 'LR'):
+                    self.dot.edge('key1:i%d:e' % i, 'key2:i%d:w' % i, **kw)
+                else:
+                    self.dot.edge('key2:i%d:w' % i, 'key1:i%d:e' % i, **kw)
 
     def get_relations(self, sort=True):
         """Returns a set of relations in current graph.  If `sort` is true,

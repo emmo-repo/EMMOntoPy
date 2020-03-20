@@ -112,7 +112,7 @@ Non-defined classes are defined as an abstract group of objects,
 whose members are defined as belonging to the class.  They are yellow
 in the graphical representations.
 
-%BRANCHFIG EMMO leafs=Perspective,Elementary caption='Example of the top-level branch of EMMO showing some classes and relationships between them.'
+%BRANCHFIG EMMO leafs=Perspective,Elementary caption='Example of the top-level branch of EMMO showing some classes and relationships between them.' width=460
 
 
 ### Axioms
@@ -442,7 +442,7 @@ The [mereotopology](top/mereotopology.owl) module introduces the fundamental mer
 
 The [physical](top/physical.owl) module, defines the *Physical* objects and the concept of *Void* that plays a fundamental role in the description of multiscale objects and quantum systems. It also define the *Elementary* class, that restricts mereological atomism in space.
 
-![The EMMO top level.](figs/top.png)
+![The EMMO top level.](figs/top.png){ width=440px }
 
 In EMMO, the only univocally defined real world object is the *Item* individual called **Universe** that stands for the universe. Every other real world object is a composition of elementaries up to the most comprehensive object; the **Universe**. Intermediate objects are not univocally defined, but their definition is provided according to some specific philosophical perspectives.  This is an expression of reductionism (i.e. objects are made of sub-objects) and epistemological pluralism (i.e. objects are always defined according to the perspective of an interpreter, or a class of interpreters).
 
@@ -468,7 +468,7 @@ represent e.g. models, formal languages, theories, information and
 properties.
 
 ![The semiotic level, showing both the taxonomy (open black arrows) and
-other relations as listed in the caption. The inverted arrows corresponds to inverse relations.](figs/Semiotic.png)
+other relations as listed in the caption. The inverted arrows corresponds to inverse relations.](figs/Semiotic.png){ width=540px }
 
 ### EMMO relations
 All EMMO relations are subrelations of the relations found in the two roots: *mereotopological* and *semiotical*. The relation hierarchy extends more vertically (i.e. more subrelations) than horizontally (i.e. less sibling relations), facilitating the categorisation and inferencing of individuals.

@@ -98,10 +98,10 @@ Install with
   * [pandoc][pandoc]: Only used for generated documentation from markdown to
     nicely formatted html or pdf.  Tested with v2.1.2.
 
-  * [XeLaTeX][XeLaTeX] or [pdfLaTeX][pdfLaTeX] and the `upgreek` latex
+  * [pdfLaTeX][pdfLaTeX] or [XeLaTeX][XeLaTeX] and the `upgreek` latex
     package (included in `texlive-was` on RetHat-based distributions
     and `texlive-latex-extra` on Ubuntu) for generation of pdf
-    documentation.  If your ontology contains unicode characters, we
+    documentation.  If your ontology contain exotic unicode characters, we
     recommend XeLaTeX.
 
   * Java. Needed for reasoning.
