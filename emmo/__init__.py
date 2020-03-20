@@ -13,7 +13,7 @@ if 'owlready2' in sys.modules.keys():
     raise RuntimeError('emmo must be imported before owlready2')
 
 # Monkey patch Owlready2 by injecting some methods
-from . import patch
+from . import patch  # noqa: E402, F401
 
 # Import get_ontology(), which is our main entry point
-from .ontology import get_ontology
+from .ontology import get_ontology  # noqa: E402, F401

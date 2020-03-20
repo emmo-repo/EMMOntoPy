@@ -14,7 +14,6 @@ Example configuration file:
 import os
 import sys
 import unittest
-import re
 import itertools
 import argparse
 
@@ -206,10 +205,9 @@ class TestEMMOConventions(unittest.TestCase):
         return c
 
 
-
 def main():
-    """Run all checks on ontology `iri`.  Default is 'http://emmo.info/emmo'."""
-
+    """Run all checks on ontology `iri`.  Default is 'http://emmo.info/emmo'.
+    """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         '--iri', '-i',
