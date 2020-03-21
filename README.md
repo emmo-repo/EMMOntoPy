@@ -28,7 +28,7 @@ EMMO in Python.  On top of that EMMO-python provides:
   - Generation of graphs.
   - Generation of documentation.
   - Test suite for EMMO-based ontologies.
-  - Command-line tools (ontograph, ontodoc and emmocheck).
+  - Command-line tools (ontograph, ontodoc and emmocheck, ontoversion).
 
 Some examples of what you can do with EMMO-python includes:
 

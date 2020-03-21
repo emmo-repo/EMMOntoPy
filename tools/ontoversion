@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+"""Prints version of an ontology to standard output.
+
+This script uses rdflib and the versionIRI tag on an ontology to infer
+the version.
+"""
+import os
+import sys
+import argparse
+
+import rdflib
+
+
+def infer_version(iri, version_iri):
+    """Infer version from IRI and versionIRI."""
+    if str(version_iri[:len(iri)]) == str(iri):
+        version = version_iri[len(iri):]
+    else:
+        j = 0
+        v = []
+        for i in range(len(iri)):
+            while iri[i] != version_iri[i + j]:
+                v.append(version_iri[i + j])
+                j += 1
+        version = ''.join(v)
+    return version.lstrip('/').rstrip('/#')
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        'iri', metavar='IRI',
+        help='IRI/file to OWL source to extract the version from.')
+    parser.add_argument(
+        '--format', '-f', default='xml',
+        help='OWL format.  Default is "xml".')
+    try:
+        args = parser.parse_args()
+    except SystemExit as e:
+        os._exit(e.code)  # Exit without traceback on invalid arguments
+
+    # Extract base IRI and versionIRI
+    g = rdflib.Graph()
+    g.parse(args.iri, format=args.format)
+    iri, version_iri = list(g.subject_objects(rdflib.URIRef(
+        'http://www.w3.org/2002/07/owl#versionIRI')))[0]
+
+    # Infer version from IRI and versionIRI
+    version = infer_version(iri, version_iri)
+
+    print(version)
+
+
+if __name__ == '__main__':
+    main()
