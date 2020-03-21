@@ -9,7 +9,7 @@ EMMO - Python API for the Euroean Materials & Modelling Ontology (EMMO)
 This package is based on [Owlready2] and provides an intuitive
 representation of EMMO in Python.
 
-It is available on [GitHub][EMMP-python] and on [PyPI][PyPI:EMMO]
+It is available on [GitHub][EMMO-python] and on [PyPI][PyPI:EMMO]
 under the open source BSD license.
 
 EMMO is an ongoing effort to create an ontology that takes into
