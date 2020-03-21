@@ -1,5 +1,5 @@
-EMMO - Python API for the Euroean Materials & Modelling Ontology (EMMO)
-=======================================================================
+EMMO - Python API for the European Materials & Modelling Ontology
+=================================================================
 
 ![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20Tests/badge.svg)
 [![PyPI package](https://badge.fury.io/py/EMMO.svg)](https://pypi.org/project/EMMO/)
@@ -7,17 +7,16 @@ EMMO - Python API for the Euroean Materials & Modelling Ontology (EMMO)
 
 
 This package is based on [Owlready2] and provides an intuitive
-representation of EMMO in Python.
-
+representation of [EMMO] in Python.
 It is available on [GitHub][EMMO-python] and on [PyPI][PyPI:EMMO]
-under the open source BSD license.
+under the open source BSD 3-Clause license.
 
-EMMO is an ongoing effort to create an ontology that takes into
-account fundamental concepts of physics, chemistry and materials
-science and is designed to pave the road for semantic
-interoperability.  The aim of EMMO is to be generic and provide a
-common ground for describing materials, models and data that can be
-adapted by all domains.
+The European Materials & Modelling Ontology (EMMO) is an ongoing
+effort to create an ontology that takes into account fundamental
+concepts of physics, chemistry and materials science and is designed
+to pave the road for semantic interoperability.  The aim of EMMO is to
+be generic and provide a common ground for describing materials,
+models and data that can be adapted by all domains.
 
 EMMO is formulated using OWL.  EMMO-python is a Python API for using
 EMMO to solving real problems.  By using the excellent Python package
@@ -124,7 +123,8 @@ for how to build a docker image.
 
 [Owlready2]: https://pypi.org/project/Owlready2/
 [Owlready2-doc]: https://pythonhosted.org/Owlready2/
-[EMMO-python]: https://github.com/emmo-repo/EMMO-python
+[EMMO]: https://github.com/emmo-repo/EMMO/
+[EMMO-python]: https://github.com/emmo-repo/EMMO-python/
 [PyPI:EMMO]: https://pypi.org/project/EMMO/
 [Python]: https://www.python.org/
 [IPython]: https://ipython.org/
