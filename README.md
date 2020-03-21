@@ -3,6 +3,12 @@ EMMO - Python API for the Euroean Materials & Modelling Ontology (EMMO)
 
 ![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20Tests/badge.svg)
 ![PyPI package](https://badge.fury.io/py/EMMO.svg)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://github.com/emmo-repo/EMMO-python/blob/pypi-badge/LICENSE.txt)
+
+<!--
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+-->
+
 
 This package is based on [Owlready2] and provides an intuitive
 representation of EMMO in Python.
