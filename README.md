@@ -2,6 +2,7 @@ EMMO - Python API for the Euroean Materials & Modelling Ontology (EMMO)
 =======================================================================
 
 ![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20Tests/badge.svg)
+![PyPI package](https://badge.fury.io/py/EMMO.svg)
 
 This package is based on [Owlready2] and provides an intuitive
 representation of EMMO in Python.
