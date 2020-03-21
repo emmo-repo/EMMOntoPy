@@ -9,6 +9,9 @@ EMMO - Python API for the Euroean Materials & Modelling Ontology (EMMO)
 This package is based on [Owlready2] and provides an intuitive
 representation of EMMO in Python.
 
+It is available on [GitHub][EMMP-python] and on [PyPI][PyPI:EMMO]
+under the open source BSD license.
+
 EMMO is an ongoing effort to create an ontology that takes into
 account fundamental concepts of physics, chemistry and materials
 science and is designed to pave the road for semantic
@@ -89,19 +92,19 @@ Install with
     pip install EMMO
 
 ### Required Dependencies
-  * [Python][Python] 3.6 or later
-  * [Owlready2][Owlready2]: v0.23 or later
+  * [Python] 3.6 or later
+  * [Owlready2] v0.23 or later
 
 
 ### Optional Dependencies
-  * [Graphviz][Graphviz]: Needed for graph generation. With support for generation
+  * [Graphviz]: Needed for graph generation. With support for generation
     pdf, png and svg figures for tests and generation of documentation
     automatically (ontodoc).
 
-  * [pandoc][pandoc]: Only used for generated documentation from markdown to
+  * [pandoc]: Only used for generated documentation from markdown to
     nicely formatted html or pdf.  Tested with v2.1.2.
 
-  * [pdfLaTeX][pdfLaTeX] or [XeLaTeX][XeLaTeX] and the `upgreek` latex
+  * [pdfLaTeX] or [XeLaTeX] and the `upgreek` latex
     package (included in `texlive-was` on RetHat-based distributions
     and `texlive-latex-extra` on Ubuntu) for generation of pdf
     documentation.  If your ontology contain exotic unicode characters, we
@@ -110,17 +113,19 @@ Install with
   * Java. Needed for reasoning.
 
   * Optional Python packages
-    - [graphviz][graphviz]: Generation of documentation and graphs.
-    - [Pygments][Pygments]: Coloured output for emmocheck
-    - [blessings][blessings]: Clean output for emmocheck
-    - [pydot][pydot]: Required for generating graphs. Will be deprecated.
-    - [PyYAML][PyYAML]:  Required for generating documentation with pandoc.
+    - [graphviz]: Generation of documentation and graphs.
+    - [Pygments]: Coloured output for emmocheck
+    - [blessings]: Clean output for emmocheck
+    - [pydot]: Required for generating graphs. Will be deprecated.
+    - [PyYAML]:  Required for generating documentation with pandoc.
 
 See [docs/docker-dockerinstructions.md](#docs/docker-dockerinstructions.md)
 for how to build a docker image.
 
 [Owlready2]: https://pypi.org/project/Owlready2/
 [Owlready2-doc]: https://pythonhosted.org/Owlready2/
+[EMMO-python]: https://github.com/emmo-repo/EMMO-python
+[PyPI:EMMO]: https://pypi.org/project/EMMO/
 [Python]: https://www.python.org/
 [IPython]: https://ipython.org/
 [DLite]: https://github.com/SINTEF/dlite/
