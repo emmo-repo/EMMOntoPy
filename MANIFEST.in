@@ -8,4 +8,4 @@ recursive-include examples/emmodoc *
 recursive-exclude examples/emmodoc old/** genfigs/** *.pdf *.html *~
 
 recursive-include demo *
-recursive-exclude demo old __pycache__ *~ *.pyc
+recursive-exclude demo old __pycache__ *~ *.pyc *.off
