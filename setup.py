@@ -51,9 +51,11 @@ setuptools.setup(
     install_requires=[
         'Cython',
         'Owlready2>=0.23',
-        'pydot',
         'graphviz',
         'PyYAML',
+        'blessings',
+        'Pygments',
+        'pydot',
     ],
     packages=['emmo'],
     scripts=['tools/ontodoc', 'tools/ontograph', 'tools/emmocheck'],

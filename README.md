@@ -113,14 +113,16 @@ Install with
 
   * Optional Python packages
     - [graphviz]: Generation of documentation and graphs.
-    - [Pygments]: Coloured output for emmocheck
-    - [blessings]: Clean output for emmocheck
-    - [pydot]: Required for generating graphs. Will be deprecated.
     - [PyYAML]:  Required for generating documentation with pandoc.
+    - [blessings]: Clean output for emmocheck
+    - [Pygments]: Coloured output for emmocheck
+    - [pydot]: Required for generating graphs. Will be deprecated.
 
 See [docs/docker-dockerinstructions.md](#docs/docker-dockerinstructions.md)
 for how to build a docker image.
 
+[EMMO-python]: https://github.com/emmo-repo/EMMO-python/
+[EMMO-pypi]: https://pypi.org/project/EMMO/
 [Owlready2]: https://pypi.org/project/Owlready2/
 [Owlready2-doc]: https://pythonhosted.org/Owlready2/
 [EMMO]: https://github.com/emmo-repo/EMMO/
@@ -135,6 +137,6 @@ for how to build a docker image.
 [XeLaTeX]: https://www.overleaf.com/learn/latex/XeLaTeX/
 [pdfLaTeX]: https://www.latex-project.org/
 [graphviz]: https://pypi.org/project/
-[Pygments]: https://pypi.org/project/Pygments/
-[blessings]: https://pypi.org/project/blessings/
 [PyYAML]: https://pypi.org/project/PyYAML/
+[blessings]: https://pypi.org/project/blessings/
+[Pygments]: https://pypi.org/project/Pygments/
