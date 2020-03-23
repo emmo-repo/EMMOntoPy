@@ -220,9 +220,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         `name_policy` specify wether and how the names in the ontology
         should be updated.  Valid values are:
-          None         not changed
-          "uuid"       set to `name_prefix` followed by an unique id (UUID).
-          "sequential" set to `name_prefix` followed a sequantial number.
+          None          not changed
+          "uuid"        `name_prefix` followed by a global unique id (UUID).
+          "sequential"  `name_prefix` followed a sequantial number.
+        EMMO conventions imply ``name_policy=='uuid'``.
 
         If `sync_imported` is true, all imported ontologies are also
         updated.
