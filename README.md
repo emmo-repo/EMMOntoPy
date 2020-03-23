@@ -117,6 +117,7 @@ Install with
     - [blessings]: Clean output for emmocheck
     - [Pygments]: Coloured output for emmocheck
     - [pydot]: Required for generating graphs. Will be deprecated.
+    - [rdflib]: Required for ontoversion-tool
 
 See [docs/docker-dockerinstructions.md](#docs/docker-dockerinstructions.md)
 for how to build a docker image.
@@ -140,3 +141,4 @@ for how to build a docker image.
 [PyYAML]: https://pypi.org/project/PyYAML/
 [blessings]: https://pypi.org/project/blessings/
 [Pygments]: https://pypi.org/project/Pygments/
+[rdflib]: https://pypi.org/project/rdflib/
