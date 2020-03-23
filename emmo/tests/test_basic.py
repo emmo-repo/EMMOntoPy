@@ -37,4 +37,10 @@ with onto:
     w.hasSpatialDirectPart = [H1, H2,  O]
 
 
+onto.sync_attributes(name_policy='sequential', name_prefix='myonto_')
+assert 'myonto_0' in onto
+assert 'myonto_6' in onto
+
 onto.sync_attributes(name_policy='uuid', name_prefix='onto_')
+assert w.name.startswith('onto_')
+assert len(w.name) == 5 + 36

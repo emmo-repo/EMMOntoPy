@@ -230,8 +230,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
         for cls in itertools.chain(
                 self.classes(), self.object_properties(),
                 self.data_properties(), self.annotation_properties()):
-            if not cls.label:
-                cls.label.append(cls.name)
+            if not cls.label and hasattr(cls, '__name__'):
+                cls.label.append(cls.__name__)
             if not cls.comment and hasattr(cls, '__doc__') and cls.__doc__:
                 cls.comment.append(inspect.cleandoc(cls.__doc__))
 
