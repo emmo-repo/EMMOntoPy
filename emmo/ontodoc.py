@@ -623,7 +623,6 @@ class DocPP:
             leafs.discard(name)
         else:
             leafs = None
-
         if path:
             figdir = os.path.dirname(path)
             formatext = os.path.splitext(path)[1]
@@ -1022,6 +1021,7 @@ def run_pandoc_pdf(latex_dir, pdf_engine, outfile, args, verbose=True):
     if verbose:
         print()
         print(' '.join(shlex.quote(s) for s in cmd))
+    output = subprocess.check_output(cmd, timeout=60)
     output = subprocess.check_output(cmd, timeout=60)
 
     # Workaround for non-working "-output-directory" latex option
