@@ -41,7 +41,7 @@ def main():
 
     # Extract base IRI and versionIRI
     g = rdflib.Graph()
-    g.parse(args.iri, format=args.format)
+    g.parse(args.iri.rstrip('/#'), format=args.format)
     iri, version_iri = list(g.subject_objects(rdflib.URIRef(
         'http://www.w3.org/2002/07/owl#versionIRI')))[0]
 
