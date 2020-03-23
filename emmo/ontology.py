@@ -266,6 +266,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
         be excluded from the returned list, where the elements of `leafs`
         may be ThingClass objects or labels.
 
+        If `include_leafs` is true, the leafs are included in the returned
+        list, otherwise they are not.
+
         If `strict_leafs` is true, any descendant of a leaf will be excluded
         in the returned set.
 
@@ -297,19 +300,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
             else:
                 branch = {root, } if include_leafs else set()
             return branch
-
-        def _ancestors(root, ancestors=set()):
-            if not include_ancestors:
-                return []
-            for parent in [c for c in root.is_a
-                           if isinstance(c, owlready2.ThingClass)]:
-                ancestors.add(parent)
-                label = parent.label.first() if parent.label else str(parent)
-                if include_ancestors is True or (
-                        parent not in include_ancestors and
-                        label not in include_ancestors):
-                    _ancestors(parent, ancestors)
-            return ancestors
 
         if isinstance(root, str):
             root = self.get_by_label(root)
