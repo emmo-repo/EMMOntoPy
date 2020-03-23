@@ -37,8 +37,9 @@ onto.base_iri = 'http://www.emmc.info/emmc-csa/demo#'
 # Generate metadata and store it in a JSON file
 #
 # This does not include all of EMMO, but only the new classes,
-# e-bonded_atom and all classes that these relates to.
-classes = list(onto.classes()) + [onto['e-bonded_atom']]
+# bonded_atom and all classes that these relates to.
+classes = list(onto.classes()) + [
+    onto.BondedAtom, onto.Integer, onto.Real, onto.String]
 e = EMMO2Meta(ontology=onto, classes=classes, collid='usercase_ontology')
 e.save('json', 'usercase_metadata.json', 'mode=w')
 

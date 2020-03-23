@@ -1,0 +1,9 @@
+Cython
+Owlready2>=0.23
+graphviz
+PyYAML
+blessings
+Pygments
+rdflib
+semver
+pydot

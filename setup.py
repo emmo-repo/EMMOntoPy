@@ -1,24 +1,92 @@
-#!/usr/bin/env python
-"""Python reference API for the Europeean Materials & Modelling Ontology (EMMO).
+#!/usr/bin/env python3
+"""\
+Python reference API for the Europeean Materials & Modelling Ontology (EMMO).
 """
+import os
+import re
+import setuptools
+from glob import glob
 
-from distutils.core import setup
+import emmo
 
 
-setup(name='emmo',
-      version='0.9.9',
-      description = 'Python reference API for the Europeean Materials & Modelling Ontology',
-      long_description=__doc__,
-      author='Europeean Materials Modelling Council (EMMC)',
-      author_email='jesper.friis@sintef.no',
-      url='https://github.com/emmo-repo/emmo-python',
-      packages=['emmo'],
-      scripts=[],
-      license='BSD',
-      python_requires='>=3.4.0',
-      package_dir={'emmo': 'emmo'},
-      package_data={'emmo': ['tests/*.py']},
-      #data_files=[
-      #    ('.', ['README.md']),
-      #    ]
-     )
+rootdir = os.path.dirname(__file__)
+
+
+def rglob(patt):
+    """Recursive glob function that only returns ordinary files."""
+    return [f for f in glob(patt, recursive=True) if os.path.isfile(f)]
+
+
+def fglob(patt):
+    """Glob function that only returns ordinary files."""
+    return [f for f in glob(patt) if os.path.isfile(f) and not f.endswith('~')]
+
+
+# Read long description from README.md file replacing references to local
+# files to github urls
+baseurl = 'https://raw.githubusercontent.com/emmo-repo/EMMO-python/master/'
+with open(os.path.join(rootdir, 'README.md'), 'rt') as f:
+    long_description = re.sub(
+        r'(\[[^]]+\])\(([^:)]+)\)', rf'\1(%s\2)' % baseurl, f.read())
+
+# Read requirements from requirements.txt file
+with open(os.path.join(rootdir, 'requirements.txt'), 'rt') as f:
+    requirements = f.read().split()
+
+
+
+setuptools.setup(
+    name='EMMO',
+    version=emmo.VERSION,
+    author='Jesper Friis, Francesca Lønstad Bleken, Bjørn Tore Løvfall',
+    author_email='jesper.friis@sintef.no',
+    description=('Python reference API for the Europeean Materials & '
+                 'Modelling Ontology'),
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url='https://github.com/emmo-repo/EMMO-python',
+    license='BSD',
+    python_requires='>=3.6.0',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        "Intended Audience :: Information Technology",
+        "Intended Audience :: Science/Research",
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        "Topic :: Scientific/Engineering :: Physics",
+        "Topic :: Scientific/Engineering :: Artificial Intelligence",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+    ],
+    install_requires=requirements,
+    #install_requires=[
+    #    'Cython',
+    #    'Owlready2>=0.23',
+    #    'graphviz',
+    #    'PyYAML',
+    #    'blessings',
+    #    'Pygments',
+    #    'rdflib',
+    #    'semver',
+    #    'pydot',
+    #],
+    packages=['emmo'],
+    scripts=['tools/ontodoc', 'tools/ontograph', 'tools/emmocheck'],
+    package_data={'emmo': ['owl/emmo-inferred.owl', 'tests/*.py']},
+    data_files=[
+        ('share/EMMO-python', ['README.md', 'LICENSE.txt']),
+        ('share/EMMO-python/examples/emmodoc',
+         glob('examples/emmodoc/*.md') +
+         glob('examples/emmodoc/*.yaml') +
+         glob('examples/emmodoc/pandoc-*')
+        ),
+        ('share/EMMO-python/examples/emmodoc/figs',
+         fglob('examples/emmodoc/figs/*')),
+        #('share/EMMO-python/examples', rglob('examples/**')),
+        ('share/EMMO-python/demo', rglob('demo/**')),
+    ],
+)

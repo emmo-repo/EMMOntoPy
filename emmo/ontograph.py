@@ -17,13 +17,27 @@ A module adding graphing functionality to emmo.ontology
 #     very useful interface to Jupyter Notebook and Qt Console integration,
 #     see https://pypi.org/project/graphviz/.
 #
-import itertools
+import os
+import re
 import warnings
+import tempfile
+import xml.etree.ElementTree as ET
 
 import owlready2
 
 from .utils import asstring
-import emmo
+
+
+def getlabel(e):
+    """Returns the label of entity `e`."""
+    if hasattr(e, 'label'):
+        return e.label.first()
+    elif hasattr(e, '__name__'):
+        return e.__name__
+    elif hasattr(e, 'name'):
+        return str(e.name)
+    else:
+        return repr(e)
 
 
 class OntoGraph:
@@ -31,10 +45,11 @@ class OntoGraph:
     functionality for generating graph representations of the ontology.
     """
     _default_style = {
-        'graph': {'graph_type': 'digraph', 'rankdir': 'RL', 'fontsize': 8,
-                  #'fontname': 'Bitstream Vera Sans', 'splines': 'ortho',
-                  #'engine': 'neato',
-            },
+        'graph': {
+            'graph_type': 'digraph', 'rankdir': 'RL', 'fontsize': 8,
+            # 'fontname': 'Bitstream Vera Sans', 'splines': 'ortho',
+            # 'engine': 'neato',
+        },
         'class': {
             'style': 'filled',
             'fillcolor': '#ffffcc',
@@ -48,7 +63,7 @@ class OntoGraph:
         'equivalent_to': {'color': 'green3', },
         'disjoint_with': {'color': 'red', },
         'inverse_of': {'color': 'orange', },
-        #'other': {'color': 'blue', },
+        # 'other': {'color': 'blue', },
         'relations': {
             'enclosing': {'color': 'red', 'arrowtail': 'diamond',
                           'dir': 'back'},
@@ -63,18 +78,19 @@ class OntoGraph:
         }
 
     _uml_style = {
-        'graph': {'graph_type': 'digraph', 'rankdir': 'RL', 'fontsize': 8,
-              #'splines': 'ortho',
-            },
+        'graph': {
+            'graph_type': 'digraph', 'rankdir': 'RL', 'fontsize': 8,
+            # 'splines': 'ortho',
+        },
         'class': {
-            #'shape': 'record',
+            # 'shape': 'record',
             'shape': 'box',
             'fontname': 'Bitstream Vera Sans',
             'style': 'filled',
             'fillcolor': '#ffffe0',
         },
         'defined_class': {
-            #'shape': 'record',
+            # 'shape': 'record',
             'shape': 'box',
             'fontname': 'Bitstream Vera Sans',
             'style': 'filled',
@@ -85,7 +101,7 @@ class OntoGraph:
         'equivalent_to': {'color': 'green3'},
         'disjoint_with': {'color': 'red', 'arrowhead': 'none'},
         'inverse_of': {'color': 'orange', 'arrowhead': 'none'},
-        #'other': {'color': 'blue', 'arrowtail': 'diamond', 'dir': 'back'},
+        # 'other': {'color': 'blue', 'arrowtail': 'diamond', 'dir': 'back'},
         'relations': {
             'enclosing': {'color': 'red', 'arrowtail': 'diamond',
                           'dir': 'back'},
@@ -98,7 +114,6 @@ class OntoGraph:
         },
         'other': {'color': 'blue'},
     }
-
 
     def get_dot_graph(self, root=None, graph=None, relations='is_a',
                       leafs=None, parents=False, style=None,
@@ -148,6 +163,16 @@ class OntoGraph:
 
         Note: This method requires pydot.
         """
+
+        warnings.warn(
+            """The emmo.ontology.get_dot_graph() method is deprecated.
+            Use emmo.ontology.get_graph() instead.
+
+            This requires that you install graphviz instead of the old
+            pydot package.""", DeprecationWarning)
+
+        # FIXME - double inheritance leads to dublicated nodes. Make sure
+        #         to only add a node once!
         import pydot
         from .ontology import NoSuchLabelError
 
@@ -161,6 +186,8 @@ class OntoGraph:
                                     style=style, edgelabels=edgelabels)
 
         # Add parents
+        # FIXME - facture out into an recursive function to support
+        #         multiple inheritance
         if parents and root:
             r = self.get_by_label(root) if isinstance(root, str) else root
             while True:
@@ -205,7 +232,7 @@ class OntoGraph:
             self._get_dot_add_edges(
                 graph, entity, targets, 'relations',
                 relations,
-                #style=style.get('relations', style.get('other', {})),
+                # style=style.get('relations', style.get('other', {})),
                 style=style.get('other', {}),
                 edgelabels=edgelabels,
                 constraint=constraint,
@@ -232,8 +259,8 @@ class OntoGraph:
 
             # Add inverse_of
             if (hasattr(entity, 'inverse_property') and
-                (relations is True or 'inverse_of' in relations) and
-                entity.inverse_property is not None):
+                    (relations is True or 'inverse_of' in relations) and
+                    entity.inverse_property not in (None, entity)):
                 self._get_dot_add_edges(
                     graph, entity, [entity.inverse_property], 'inverse_of',
                     relations, style.get('inverse_of', {}),
@@ -275,7 +302,7 @@ class OntoGraph:
                         edge.set_constraint(constraint)
                     graph.add_edge(edge)
             elif isinstance(e, owlready2.Restriction):
-                rname = e.property.label.first()
+                rname = getlabel(e.property)
                 rtype = owlready2.class_construct._restriction_type_2_label[
                     e.type]
 
@@ -289,8 +316,8 @@ class OntoGraph:
                     # Only proceede if there is only one node named `vname`
                     # and an edge to that node does not already exists
                     if (len(others) == 1 and
-                        (node.get_name(), vname) not in
-                        graph.obj_dict['edges'].keys()):
+                            (node.get_name(), vname) not in
+                            graph.obj_dict['edges'].keys()):
                         other = others[0]
                     else:
                         continue
@@ -316,8 +343,6 @@ class OntoGraph:
                 print('* get_dot_graph() * Ignoring: '
                       '%s %s %s' % (node.get_name(), relation, s))
 
-
-
     def _get_dot_graph(self, root=None, graph=None, relations='is_a',
                        leafs=None, style=None, visited=None,
                        edgelabels=True):
@@ -327,7 +352,9 @@ class OntoGraph:
         import pydot
 
         if graph is None:
-            graph = pydot.Dot(**style.get('graph', {}))
+            kwargs = style.get('graph', {})
+            kwargs.setdefault('newrank', True)
+            graph = pydot.Dot(**kwargs)
 
         if relations is True:
             relations = ['is_a'] + list(self.get_relations())
@@ -410,7 +437,8 @@ class OntoGraph:
 
         return graph
 
-    def get_dot_relations_graph(self, graph=None, relations='is_a', style=None):
+    def get_dot_relations_graph(self, graph=None, relations='is_a',
+                                style=None):
         """Returns a disjoined graph of all relations.
 
         This method simply calls get_dot_graph() with all root relations.
@@ -421,3 +449,21 @@ class OntoGraph:
                  if not any([r in rels for r in relation.is_a])]
         return self.get_dot_graph(root=roots, graph=graph, relations=relations,
                                   style=style)
+
+
+def get_figsize(graph):
+    """Returns figure size (width, height) in points of figures for the
+    current pydot graph object `graph`."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpfile = os.path.join(tmpdir, 'graph.svg')
+        graph.write_svg(tmpfile)
+        xml = ET.parse(tmpfile)
+        svg = xml.getroot()
+        width = svg.attrib['width']
+        height = svg.attrib['height']
+        assert width.endswith('pt')  # ensure that units are in points
+
+    def asfloat(s):
+        return float(re.match(r'^[\d.]+', s).group())
+
+    return asfloat(width), asfloat(height)

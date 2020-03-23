@@ -1,0 +1,22 @@
+#!/bin/sh
+# Write index.html to stdout
+# Run this script after versioncopy
+
+rootdir="$(git rev-parse --show-toplevel)"  # git root dir
+regex='v.+'
+
+vers=''
+for tag in $(git tag); do
+    # If 'regex' is provided, only publish tags matching 'regex'
+    [ -n "$regex" ] && [[ ! $tag =~ $regex ]] && continue
+
+    # Only generate links to existing tagged versions
+    if [ -e $rootdir/public/$tag ]; then
+        vers="$vers<li><a href=\"${tag}/emmo.html\">${tag}</a></li>\n"
+    fi
+done
+
+date=$(LC_TIME=en date '+%B %d, %Y') \
+    version=$(git describe) \
+    vers=$(echo -e "$vers") \
+    envsubst <$rootdir/.github/index.html

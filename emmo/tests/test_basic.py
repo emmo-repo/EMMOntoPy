@@ -9,12 +9,29 @@ from emmo import get_ontology
 
 emmo = get_ontology()
 emmo.load()
+<<<<<<< HEAD
 #emmo.sync_reasoner()
+=======
+# emmo.sync_reasoner()
+>>>>>>> master
 
 
-H = emmo.atom(label='H')
-e = emmo.electron(label='e')
-p = emmo.proton(label='p')
-v = emmo.vacuum(label='v')
+H = emmo.Atom(label='H')
+e = emmo.Electron(label='e')
+p = emmo.Proton(label='p')
+v = emmo.Vacuum(label='v')
 
 H.has_spatial_direct_part = [e, p, v]
+<<<<<<< HEAD
+=======
+
+
+print()
+print("Atom")
+print([s for s in dir(emmo.Atom) if not s.startswith('_')])
+
+
+print()
+print("H")
+print([s for s in dir(H) if not s.startswith('_')])
+>>>>>>> master

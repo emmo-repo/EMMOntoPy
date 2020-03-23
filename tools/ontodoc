@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+import os
+import sys
+import argparse
+import subprocess
+
+
+# Support to run from uninstalled version by adding parent dir to sys path
+rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
+    os.path.dirname(__file__)))))
+sys.path.insert(1, rootdir)
+
+from emmo import get_ontology
+from emmo.ontodoc import (
+    OntoDoc, get_format, get_style, get_figformat, get_maxwidth, get_docpp)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Tool for documenting ontologies.')
+    parser.add_argument(
+        'iri', metavar='IRI',  # default='emmo-inferred.owl', nargs='?',
+        help='OWL file/source to document.')
+    parser.add_argument(
+        'outfile', metavar='OUTFILE',
+        help='Output file.')
+
+    parser.add_argument(
+        '--template', '-t', metavar='FILE',
+        help='ontodoc input template.  If not provided, a simple default '
+        'template will be used.  Don\'t confuse it with the pandoc templates.')
+    parser.add_argument(
+        '--format', '-f', metavar='FORMAT',
+        help='Output format.  May be "md", "simple-html" or any other format '
+        'supported by pandoc.  By default the format is inferred from '
+        '--output.')
+    parser.add_argument(
+        '--figdir', '-d', metavar='DIR', default='genfigs',
+        help='Default directory to store generated figures.  If a relative '
+        'path is given, it is relative to the template (see --template), or '
+        'the current directory, if --template is not given. Default: '
+        '"genfigs"')
+    parser.add_argument(
+        '--pandoc-option', '-p', metavar='STRING', action='append',
+        dest='pandoc_options',
+        help='Additional pandoc long options overriding those read from '
+        '--pandoc-option-file.  It is possible to remove pandoc option --XXX '
+        'with "--pandoc-option=no-XXX".  This option may be provided multiple '
+        'times.')
+    parser.add_argument(
+        '--pandoc-option-file', '-P', metavar='FILE', action='append',
+        dest='pandoc_option_files',
+        help='YAML file with additional pandoc options.  Note, that default '
+        'pandoc options are read from the files "pandoc-options.yaml" and '
+        '"pandoc-FORMAT-options.yaml" (where FORMAT is format specified with '
+        '--format).  This option allows to override the defaults and add '
+        'additional pandoc options.  This option may be provided multiple '
+        'times.')
+    parser.add_argument(
+        '--keep-generated', '-k', metavar='FILE', dest='genfile',
+        help='Keep a copy of generated markdown input file for pandoc '
+        '(for debugging).')
+
+    try:
+        args = parser.parse_args()
+    except SystemExit as e:
+        os._exit(e.code)  # Exit without traceback on invalid arguments
+
+    # Load ontology and instantiate ontodoc instance
+    onto = get_ontology(base_iri=args.iri)
+    onto.load()
+    format = get_format(args.outfile, args.format)
+    style = get_style(format)
+    figformat = get_figformat(format)
+    maxwidth = get_maxwidth(format)
+    ontodoc = OntoDoc(onto, style=style)
+    docpp = get_docpp(ontodoc, args.template, figdir=args.figdir,
+                      figformat=figformat, maxwidth=maxwidth)
+    docpp.process()
+
+    try:
+        docpp.write(args.outfile, format=args.format,
+                    pandoc_option_files=args.pandoc_option_files,
+                    pandoc_options=args.pandoc_options,
+                    genfile=args.genfile)
+    except subprocess.CalledProcessError as e:
+        os._exit(e.returncode)  # Exit without traceback on pandoc errors
+
+    return docpp
+
+
+if __name__ == '__main__':
+    docpp = main()
