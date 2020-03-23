@@ -1036,7 +1036,7 @@ def run_pandoc_pdf(latex_dir, pdf_engine, outfile, args, verbose=True):
             print()
             print(output)
             print()
-            raise RuntimeError('latex did not produced pdf file: ' + pdffile)
+            raise RuntimeError('latex did not produce pdf file: ' + pdffile)
 
     # Copy pdffile
     if not os.path.exists(outfile) or not os.path.samefile(pdffile, outfile):
