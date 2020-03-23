@@ -19,7 +19,7 @@ def main():
     parser = argparse.ArgumentParser(
         description='Tool for documenting ontologies.')
     parser.add_argument(
-        'iri', metavar='IRI',  # default='emmo-inferred.owl', nargs='?',
+        'iri', metavar='IRI',  # nargs='?',
         help='OWL file/source to document.')
     parser.add_argument(
         'outfile', metavar='OUTFILE',

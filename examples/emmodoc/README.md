@@ -8,7 +8,7 @@ both pdf and html generation.
 For a standalone html documentation including all inferred relations,
 enter this directory and run
 
-    ontodoc --template=emmo.md --format=html emmo-inferred.owl emmo.html
+    ontodoc --template=emmo.md --format=html emmo-inferred emmo.html
 
 Pandoc options may be adjusted with the files
 [pandoc-args.yaml](pandoc-args.yaml) and
@@ -16,7 +16,7 @@ Pandoc options may be adjusted with the files
 
 Similarly, for generating pdf documentation, enter this directory and run
 
-    ontodoc --template=emmo.md emmo-inferred.owl emmo.pdf
+    ontodoc --template=emmo.md emmo-inferred emmo.pdf
 
 By default, we have configured pandoc to use xelatex for better unicode
 support.  It is possible to change these settings in
