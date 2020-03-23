@@ -12,6 +12,7 @@ import os
 import itertools
 import inspect
 import warnings
+import uuid
 from collections import defaultdict
 
 import owlready2
@@ -203,41 +204,61 @@ class Ontology(owlready2.Ontology, OntoGraph):
         else:
             run([self])
 
-    def sync_attributes(self, sync_imported=False):
+    def sync_attributes(self, name_policy=None, name_prefix='',
+                        sync_imported=False):
         """This method is intended to be called after you have added new
         classes (typically via Python) to make sure that attributes like
         `label` and `comments` are defined.
 
-        If a class, object property or individual in the current
-        ontology has no label, the name of the corresponding Python class
-        will be assigned as label.
+        If a class, object property, data property or annotation
+        property in the current ontology has no label, the name of
+        the corresponding Python class will be assigned as label.
 
-        If a class, object property or individual has no comment, it will
-        be assigned the docstring of the corresponding Python class.
+        If a class, object property, data property or annotation
+        property has no comment, it will be assigned the docstring of
+        the corresponding Python class.
+
+        `name_policy` specify wether and how the names in the ontology
+        should be updated.  Valid values are:
+          None         not changed
+          "uuid"       set to `name_prefix` followed by an unique id (UUID).
+          "sequential" set to `name_prefix` followed a sequantial number.
 
         If `sync_imported` is true, all imported ontologies are also
         updated.
         """
-        for cls in itertools.chain(self.classes(), self.object_properties()):
-                                    # self.individuals()):
+        for cls in itertools.chain(
+                self.classes(), self.object_properties(),
+                self.data_properties(), self.annotation_properties()):
             if not cls.label:
-                cls.label.append(cls.__name__)
-            if not cls.comment and cls.__doc__:
+                cls.label.append(cls.name)
+            if not cls.comment and hasattr(cls, '__doc__') and cls.__doc__:
                 cls.comment.append(inspect.cleandoc(cls.__doc__))
+
+        chain = itertools.chain(
+            self.classes(), self.individuals(), self.object_properties(),
+            self.data_properties(), self.annotation_properties())
+        if name_policy == 'uuid':
+            for obj in chain:
+                obj.name = name_prefix + str(uuid.uuid4())
+        elif name_policy == 'sequential':
+            for obj in chain:
+                n = 0
+                while name_prefix + str(n) in self:
+                    n += 1
+                obj.name = name_prefix + str(n)
+        elif name_policy is not None:
+            raise TypeError('invalid name_policy: %r' % (name_policy, ))
+
         if sync_imported:
             for onto in self.imported_ontologies:
                 onto.sync_attributes()
-        # FIXME - optionally, consider to also update the class names.
-        # Possible options could be:
-        #   - do not change names (defalt)
-        #   - set name to ``prefix + "_" + uuid`` where `prefix` is any
-        #     string (e.g. "EMMO") and `uuid` is an uuid.  This is the
-        #     default for EMMO.
-        #   - set names to the name of the corresponding Python class
-        #   - set names equal to labels
 
     def get_relations(self):
         """Returns a generator for all relations."""
+        warnings.warn('Ontology.get_relations() is deprecated.  '
+                      'Use onto.object_properties() instead.',
+                      DeprecationWarning)
         return self.object_properties()
 
     def get_annotations(self, entity):

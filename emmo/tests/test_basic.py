@@ -12,19 +12,29 @@ emmo.load()
 # emmo.sync_reasoner()
 
 
-H = emmo.Atom(label='H')
-e = emmo.Electron(label='e')
-p = emmo.Proton(label='p')
-v = emmo.Vacuum(label='v')
+onto = get_ontology('onto.owl')
+onto.imported_ontologies.append(emmo)
+onto.base_iri = 'http://emmo.info/examples/test#'
 
-H.has_spatial_direct_part = [e, p, v]
+with onto:
+
+    class Hydrogen(emmo.Atom):
+        pass
+
+    class Oxygen(emmo.Atom):
+        pass
+
+    class H2O(emmo.Molecule):
+        """Water molecule."""
+        emmo.hasSpatialDirectPart.exactly(2, Hydrogen)
+        emmo.hasSpatialDirectPart.exactly(1, Oxygen)
+
+    # Create some
+    H1 = Hydrogen()
+    H2 = Hydrogen()
+    O = Oxygen()
+    w = H2O()
+    w.hasSpatialDirectPart = [H1, H2,  O]
 
 
-print()
-print("Atom")
-print([s for s in dir(emmo.Atom) if not s.startswith('_')])
-
-
-print()
-print("H")
-print([s for s in dir(H) if not s.startswith('_')])
+onto.sync_attributes(name_policy='uuid', name_prefix='onto_')
