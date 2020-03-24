@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 import sys
 import os
+import itertools
 
 # Add emmo to sys path
 thisdir = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
 from emmo import get_ontology
+
+import owlready2
+
 
 emmo = get_ontology()
 emmo.load()
@@ -44,3 +48,9 @@ assert 'myonto_6' in onto
 onto.sync_attributes(name_policy='uuid', name_prefix='onto_')
 assert w.name.startswith('onto_')
 assert len(w.name) == 5 + 36
+
+
+# Remove all traces of onto such that they do not mess up other tests
+# when running pytest
+for e in itertools.chain(onto.classes(), onto.individuals()):
+    owlready2.destroy_entity(e)

@@ -182,9 +182,9 @@ class OntoGraph:
             if ontology != graph.ontology:
                 ValueError(
                     'the same ontology must be used when extending a graph')
-            self.dot = graph.dot
-            self.nodes = graph.nodes
-            self.edges = graph.edges
+            self.dot = graph.dot.copy()
+            self.nodes = graph.nodes.copy()
+            self.edges = graph.edges.copy()
 
         self.ontology = ontology
         self.relations = set(
