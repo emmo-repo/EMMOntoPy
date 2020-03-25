@@ -5,4 +5,5 @@ PyYAML
 blessings
 Pygments
 rdflib
+semver
 pydot
