@@ -116,7 +116,9 @@ Install with
     - [PyYAML]:  Required for generating documentation with pandoc.
     - [blessings]: Clean output for emmocheck
     - [Pygments]: Coloured output for emmocheck
-    - [pydot]: Required for generating graphs. Will be deprecated.
+    - [rdflib]: Required for ontoversion-tool
+    - [semver]: Required for ontoversion-tool
+    - [pydot]: Used for generating graphs. Will be deprecated.
 
 See [docs/docker-dockerinstructions.md](#docs/docker-dockerinstructions.md)
 for how to build a docker image.
@@ -140,3 +142,5 @@ for how to build a docker image.
 [PyYAML]: https://pypi.org/project/PyYAML/
 [blessings]: https://pypi.org/project/blessings/
 [Pygments]: https://pypi.org/project/Pygments/
+[semver]: https://pypi.org/project/semver/
+[rdflib]: https://pypi.org/project/rdflib/
