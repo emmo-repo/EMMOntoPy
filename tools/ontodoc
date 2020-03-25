@@ -19,7 +19,7 @@ def main():
     parser = argparse.ArgumentParser(
         description='Tool for documenting ontologies.')
     parser.add_argument(
-        'iri', metavar='IRI',  # default='emmo-inferred.owl', nargs='?',
+        'iri', metavar='IRI',  # nargs='?',
         help='OWL file/source to document.')
     parser.add_argument(
         'outfile', metavar='OUTFILE',
@@ -40,6 +40,13 @@ def main():
         'path is given, it is relative to the template (see --template), or '
         'the current directory, if --template is not given. Default: '
         '"genfigs"')
+    parser.add_argument(
+        '--figformat', '-F',
+        help='Format for generated figures.  The default is inferred from '
+        '--format."')
+    parser.add_argument(
+        '--max-figwidth', '-w',
+        help='Maximum figure width.  The default is inferred from --format.')
     parser.add_argument(
         '--pandoc-option', '-p', metavar='STRING', action='append',
         dest='pandoc_options',
@@ -71,8 +78,8 @@ def main():
     onto.load()
     format = get_format(args.outfile, args.format)
     style = get_style(format)
-    figformat = get_figformat(format)
-    maxwidth = get_maxwidth(format)
+    figformat = args.figformat if args.figformat else get_figformat(format)
+    maxwidth = args.max_figwidth if args.max_figwidth else get_maxwidth(format)
     ontodoc = OntoDoc(onto, style=style)
     docpp = get_docpp(ontodoc, args.template, figdir=args.figdir,
                       figformat=figformat, maxwidth=maxwidth)

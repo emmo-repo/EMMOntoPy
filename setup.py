@@ -76,7 +76,7 @@ setuptools.setup(
     #],
     packages=['emmo'],
     scripts=['tools/ontodoc', 'tools/ontograph', 'tools/emmocheck'],
-    package_data={'emmo': ['owl/emmo-inferred.owl', 'tests/*.py']},
+    package_data={'emmo': ['tests/*.py']},
     data_files=[
         ('share/EMMO-python', ['README.md', 'LICENSE.txt']),
         ('share/EMMO-python/examples/emmodoc',

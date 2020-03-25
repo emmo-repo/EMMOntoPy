@@ -61,9 +61,9 @@ jobs:
     - name: Create EMMO documentation
       run: |
         cd examples/emmodoc
-        python ../../tools/ontodoc -f simple-html emmo-inferred.owl emmo-simple.html
-        python ../../tools/ontodoc -t emmo.md -p no-self-contained emmo-inferred.owl emmo.html
-        python ../../tools/ontodoc -t emmo.md emmo-inferred.owl emmo.pdf
+        python ../../tools/ontodoc -f simple-html emmo-inferred emmo-simple.html
+        python ../../tools/ontodoc -t emmo.md -p no-self-contained emmo-inferred emmo.html
+        python ../../tools/ontodoc -t emmo.md emmo-inferred emmo.pdf
         cd -
 
     - name: Upload EMMO documentation as artifact
