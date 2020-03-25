@@ -142,4 +142,5 @@ for how to build a docker image.
 [PyYAML]: https://pypi.org/project/PyYAML/
 [blessings]: https://pypi.org/project/blessings/
 [Pygments]: https://pypi.org/project/Pygments/
+[semver]: https://pypi.org/project/semver/
 [rdflib]: https://pypi.org/project/rdflib/
