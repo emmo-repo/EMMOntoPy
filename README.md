@@ -1,20 +1,22 @@
-EMMO - Python API for the Euroean Materials & Modelling Ontology (EMMO)
-=======================================================================
+EMMO - Python API for the European Materials & Modelling Ontology
+=================================================================
 
 ![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20Tests/badge.svg)
+[![PyPI package](https://badge.fury.io/py/EMMO.svg)](https://pypi.org/project/EMMO/)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://github.com/emmo-repo/EMMO-python/blob/pypi-badge/LICENSE.txt)
+
 
 This package is based on [Owlready2] and provides an intuitive
-representation of EMMO in Python.
+representation of [EMMO] in Python.
+It is available on [GitHub][EMMO-python] and on [PyPI][PyPI:EMMO]
+under the open source BSD 3-Clause license.
 
-It is available on [GitHub][EMMP-python] and on [PYPI][EMMO-pypi] under the
-open source [BSD license](LICENSE.txt).
-
-EMMO is an ongoing effort to create an ontology that takes into
-account fundamental concepts of physics, chemistry and materials
-science and is designed to pave the road for semantic
-interoperability.  The aim of EMMO is to be generic and provide a
-common ground for describing materials, models and data that can be
-adapted by all domains.
+The European Materials & Modelling Ontology (EMMO) is an ongoing
+effort to create an ontology that takes into account fundamental
+concepts of physics, chemistry and materials science and is designed
+to pave the road for semantic interoperability.  The aim of EMMO is to
+be generic and provide a common ground for describing materials,
+models and data that can be adapted by all domains.
 
 EMMO is formulated using OWL.  EMMO-python is a Python API for using
 EMMO to solving real problems.  By using the excellent Python package
@@ -26,7 +28,7 @@ EMMO in Python.  On top of that EMMO-python provides:
   - Generation of graphs.
   - Generation of documentation.
   - Test suite for EMMO-based ontologies.
-  - Command-line tools (ontograph, ontodoc and emmocheck).
+  - Command-line tools (ontograph, ontodoc and emmocheck, ontoversion).
 
 Some examples of what you can do with EMMO-python includes:
 
@@ -89,19 +91,19 @@ Install with
     pip install EMMO
 
 ### Required Dependencies
-  * [Python][Python] 3.6 or later
-  * [Owlready2][Owlready2]: v0.23 or later
+  * [Python] 3.6 or later
+  * [Owlready2] v0.23 or later
 
 
 ### Optional Dependencies
-  * [Graphviz][Graphviz]: Needed for graph generation. With support for generation
+  * [Graphviz]: Needed for graph generation. With support for generation
     pdf, png and svg figures for tests and generation of documentation
     automatically (ontodoc).
 
-  * [pandoc][pandoc]: Only used for generated documentation from markdown to
+  * [pandoc]: Only used for generated documentation from markdown to
     nicely formatted html or pdf.  Tested with v2.1.2.
 
-  * [pdfLaTeX][pdfLaTeX] or [XeLaTeX][XeLaTeX] and the `upgreek` latex
+  * [pdfLaTeX] or [XeLaTeX] and the `upgreek` latex
     package (included in `texlive-was` on RetHat-based distributions
     and `texlive-latex-extra` on Ubuntu) for generation of pdf
     documentation.  If your ontology contain exotic unicode characters, we
@@ -110,19 +112,24 @@ Install with
   * Java. Needed for reasoning.
 
   * Optional Python packages
-    - [graphviz][graphviz]: Generation of documentation and graphs.
-    - [PyYAML][PyYAML]:  Required for generating documentation with pandoc.
-    - [blessings][blessings]: Coloured output for emmocheck
-    - [Pygments][Pygments]: Highlighted verbose output for emmocheck
-    - [pydot][pydot]: Required for generating graphs. Will be deprecated.
+    - [graphviz]: Generation of documentation and graphs.
+    - [PyYAML]:  Required for generating documentation with pandoc.
+    - [blessings]: Clean output for emmocheck
+    - [Pygments]: Coloured output for emmocheck
+    - [rdflib]: Required for ontoversion-tool
+    - [semver]: Required for ontoversion-tool
+    - [pydot]: Used for generating graphs. Will be deprecated.
 
 See [docs/docker-dockerinstructions.md](#docs/docker-dockerinstructions.md)
 for how to build a docker image.
 
-[EMMO-python]: https://github.com/emmo-repo/EMMO-python
+[EMMO-python]: https://github.com/emmo-repo/EMMO-python/
 [EMMO-pypi]: https://pypi.org/project/EMMO/
 [Owlready2]: https://pypi.org/project/Owlready2/
 [Owlready2-doc]: https://pythonhosted.org/Owlready2/
+[EMMO]: https://github.com/emmo-repo/EMMO/
+[EMMO-python]: https://github.com/emmo-repo/EMMO-python/
+[PyPI:EMMO]: https://pypi.org/project/EMMO/
 [Python]: https://www.python.org/
 [IPython]: https://ipython.org/
 [DLite]: https://github.com/SINTEF/dlite/
@@ -135,3 +142,5 @@ for how to build a docker image.
 [PyYAML]: https://pypi.org/project/PyYAML/
 [blessings]: https://pypi.org/project/blessings/
 [Pygments]: https://pypi.org/project/Pygments/
+[semver]: https://pypi.org/project/semver/
+[rdflib]: https://pypi.org/project/rdflib/
