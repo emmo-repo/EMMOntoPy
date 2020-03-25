@@ -548,10 +548,12 @@ class OntoGraph:
             else:
                 kw = self.get_edge_attrs(r, {}).copy()
             kw['constraint'] = constraint
-            if rankdir in ('BT', 'LR'):
-                self.dot.edge('key1:i%d:e' % i, 'key2:i%d:w' % i, **kw)
-            else:
-                self.dot.edge('key2:i%d:w' % i, 'key1:i%d:e' % i, **kw)
+            with self.dot.subgraph(name='sub%d' % i) as s:
+                s.attr(rank='same')
+                if rankdir in ('BT', 'LR'):
+                    self.dot.edge('key1:i%d:e' % i, 'key2:i%d:w' % i, **kw)
+                else:
+                    self.dot.edge('key2:i%d:w' % i, 'key1:i%d:e' % i, **kw)
 
     def get_relations(self, sort=True):
         """Returns a set of relations in current graph.  If `sort` is true,
@@ -560,6 +562,9 @@ class OntoGraph:
         for s, p, o in self.edges:
             if p.startswith('Inverse'):
                 relations.add('inverse')
+                m = re.match(r'Inverse\((.+)\)', p)
+                assert m
+                relations.add(m.groups()[0])
             else:
                 relations.add(p.split(None, 1)[0])
 

@@ -11,9 +11,9 @@ Example configuration file:
         - myunits.MyUnitCategory1
         - myunits.MyUnitCategory2
 """
+import os
 import sys
 import unittest
-import re
 import itertools
 import argparse
 
@@ -205,10 +205,9 @@ class TestEMMOConventions(unittest.TestCase):
         return c
 
 
-
 def main():
-    """Run all checks on ontology `iri`.  Default is 'emmo-inferred'."""
-
+    """Run all checks on ontology `iri`.  Default is 'http://emmo.info/emmo'.
+    """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         '--iri', '-i',
@@ -219,8 +218,12 @@ def main():
     parser.add_argument(
         '--configfile', '-c',
         help='A yaml file with additional test configurations.')
-    args, argv = parser.parse_known_args()
-    sys.argv[1:] = argv
+
+    try:
+        args, argv = parser.parse_known_args()
+        sys.argv[1:] = argv
+    except SystemExit as e:
+        os._exit(e.code)  # Exit without traceback on invalid arguments
 
     verbosity = 2 if args.verbose else 1
 

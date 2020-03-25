@@ -21,7 +21,7 @@ import owlready2
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        'iri', metavar='IRI',  # default='emmo-inferred.owl', nargs='?',
+        'iri', metavar='IRI',  # nargs='?',
         help='OWL file/source to plot.')
     parser.add_argument(
         'output', nargs='?',

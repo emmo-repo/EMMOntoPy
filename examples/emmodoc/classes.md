@@ -56,13 +56,13 @@ branch of mereotopology.
 %BRANCHDOC MathematicalModel
 %BRANCHDOC MathematicalOperator
 %BRANCHDOC Metrological
+%BRANCHDOC PhysicsDimension     rankdir=RL
 %BRANCHDOC PhysicalQuantity
 %BRANCHDOC Number
 %BRANCHDOC MeasurementUnit
 %BRANCHDOC UTF8
 %BRANCHDOC SIBaseUnit
 %BRANCHDOC SISpecialUnit        rankdir=RL
-%BRANCHDOC KindOfUnit           rankdir=RL
 %BRANCHDOC PrefixedUnit
 %BRANCHDOC MetricPrefix         rankdir=RL
 %BRANCHDOC Quantity
