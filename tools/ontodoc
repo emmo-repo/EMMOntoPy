@@ -41,6 +41,13 @@ def main():
         'the current directory, if --template is not given. Default: '
         '"genfigs"')
     parser.add_argument(
+        '--figformat', '-F',
+        help='Format for generated figures.  The default is inferred from '
+        '--format."')
+    parser.add_argument(
+        '--max-figwidth', '-w',
+        help='Maximum figure width.  The default is inferred from --format.')
+    parser.add_argument(
         '--pandoc-option', '-p', metavar='STRING', action='append',
         dest='pandoc_options',
         help='Additional pandoc long options overriding those read from '
@@ -71,8 +78,8 @@ def main():
     onto.load()
     format = get_format(args.outfile, args.format)
     style = get_style(format)
-    figformat = get_figformat(format)
-    maxwidth = get_maxwidth(format)
+    figformat = args.figformat if args.figformat else get_figformat(format)
+    maxwidth = args.max_figwidth if args.max_figwidth else get_maxwidth(format)
     ontodoc = OntoDoc(onto, style=style)
     docpp = get_docpp(ontodoc, args.template, figdir=args.figdir,
                       figformat=figformat, maxwidth=maxwidth)
