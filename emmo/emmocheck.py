@@ -13,6 +13,7 @@ Example configuration file:
 """
 import os
 import sys
+import re
 import unittest
 import itertools
 import argparse
@@ -26,7 +27,7 @@ except ImportError:
 
 
 class TestEMMOConventions(unittest.TestCase):
-    """Test against basic conventions."""
+    """Base class for testing an ontology against EMMO conventions."""
     iri = 'http://emmo.info/emmo'
     config = {}  # configurations
 
@@ -34,7 +35,10 @@ class TestEMMOConventions(unittest.TestCase):
         self.onto = get_ontology(self.iri)
         self.onto.load()
 
-    def test_num_labels(self):
+
+class TestSyntacticEMMOConventions(TestEMMOConventions):
+    """Test syntactic EMMO conventions."""
+    def test_number_of_labels(self):
         """Check that all entities have one and only one label.
 
         The only allowed exception is entities who's representation
@@ -77,7 +81,9 @@ class TestEMMOConventions(unittest.TestCase):
                     self.assertTrue(label[2].isupper())
                     self.assertTrue(label.endswith('Of'))
 
-    # @unittest.skip("skipping checking unit dimensions")
+
+class TestFunctionalEMMOConventions(TestEMMOConventions):
+    """Test functional EMMO conventions."""
     def test_unit_dimension(self):
         """Check that all measurement units have a physical dimension.
 
@@ -105,13 +111,13 @@ class TestEMMOConventions(unittest.TestCase):
         ))
         exceptions.update(
             self.get_config('test_unit_dimension.exceptions', ()))
-
+        regex = re.compile(r'^metrology.hasPhysicsDimension.only\(.*\)$')
         for cls in self.onto.MeasurementUnit.descendants():
             # Assume that actual units are not subclassed
             if not list(cls.subclasses()) and repr(cls) not in exceptions:
                 with self.subTest(cls=cls):
                     self.assertTrue(
-                        any(exceptions.match(repr(r))
+                        any(regex.match(repr(r))
                             for r in cls.get_indirect_is_a()), msg=cls)
 
     def test_quantity_dimension(self):
@@ -141,12 +147,14 @@ class TestEMMOConventions(unittest.TestCase):
         ))
         exceptions.update(
             self.get_config('test_quantity_dimension.exceptions', ()))
-
+        regex = re.compile(
+            r'^metrology.hasReferenceUnit.only\(metrology.'
+            'hasPhysicsDimension.only\(.*\)\)$')
         for cls in self.onto.Quantity.descendants():
             if repr(cls) not in exceptions:
                 with self.subTest(cls=cls):
                     self.assertTrue(
-                        any(exceptions.match(repr(r))
+                        any(regex.match(repr(r))
                             for r in cls.get_indirect_is_a()), msg=cls)
 
     def test_namespace(self):
@@ -210,8 +218,11 @@ def main():
     """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        '--iri', '-i',
+        'iri',
         help='File name or URI to the ontology to test.')
+    # parser.add_argument(
+    #     '--iri', '-i',
+    #     help='File name or URI to the ontology to test.')
     parser.add_argument(
         '--verbose', '-v', action='store_true',
         help='Verbosity level.')
@@ -224,6 +235,8 @@ def main():
         sys.argv[1:] = argv
     except SystemExit as e:
         os._exit(e.code)  # Exit without traceback on invalid arguments
+
+    print('*** args:', args)
 
     verbosity = 2 if args.verbose else 1
 
