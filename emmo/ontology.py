@@ -14,6 +14,7 @@ import inspect
 import warnings
 import uuid
 from collections import defaultdict
+import xml.etree.ElementTree as ET
 
 import owlready2
 
@@ -63,6 +64,67 @@ def get_ontology(base_iri=None, verbose=False):
         onto = Ontology(owlready2.default_world, iri)
     onto._verbose = verbose
     return onto
+
+
+def read_catalog(path, catalog_name='catalog-v001.xml', recursive=False,
+                 return_paths=False):
+    """Reads a Protègè catalog file and returns a dict mapping IRIs to
+    absolute paths.
+
+    The `catalog_name` argument spesifies the catalog file name and is
+    used if `path` is used when `recursive` is true and if `path` is a
+    directory.
+
+    If `recursive` is true, catalog files in sub-folders are read.
+
+    If `return_paths` is true, a list of directory paths with source
+    files is returned instead of the default dict.
+    """
+    iris = {}
+    dirs = set()
+    if os.path.isdir(path):
+        #abspath = os.path.abspath(path)
+        #dirs.append(abspath)
+        #filename = os.path.join(abspath, catalog_name)
+        dirname = os.path.abspath(path)
+        filepath = os.path.join(dirname, catalog_name)
+    else:
+        #filename = os.path.abspath(path)
+        #dirs.append(os.path.dirname(filename)
+        catalog_name = os.path.basename(path)
+        filepath = os.path.abspath(path)
+        dirsname = os.path.dirname(filename)
+
+    def gettag(e):
+        return e.tag.rsplit('}', 1)[-1]
+
+    def load_catalog(filepath):
+        dirname = os.path.dirname(filepath)
+        dirs.add(dirname)
+        xml = ET.parse(filepath)
+        root = xml.getroot()
+        if gettag(root) != 'catalog':
+            raise ValueError('expected root tag of catalog file %r to be '
+                             '"catalog"', filepath)
+        for child in root:
+            if gettag.child == 'uri':
+                load_uri(child, dirname)
+            elif gettag.child == 'group':
+                for uri in child:
+                    load_uri(uri, dirname)
+
+    def load_uri(uri, dirname):
+        assert gettab(uri) == 'uri'
+        filepath = os.path.join(dirname, uri.attrib['uri'])
+        iris.setdefault(uri.attrib['name'], filepath)
+        dir = os.path.dirname(filepath)
+        if recursive and dir not in dirs:
+            catalog = os.path.join(dirname, catalog_name)
+            load_catalog
+
+
+    load_catalog(filepath)
+    return dirs if return_paths else iris
 
 
 class Ontology(owlready2.Ontology, OntoGraph):
