@@ -149,6 +149,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
             Implies `only_local`.  If provided as a string, it will be used
             instead of the default "catalog-v001.xml".
         """
+        if self.loaded and not reload:
+            return self
         if catalog_file:
             only_local = True
             dirpath = os.path.normpath(
@@ -161,6 +163,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 owlready2.onto_path.append(d)
         super().load(only_local=only_local, fileobj=fileobj, reload=reload,
                      reload_if_newer=reload_if_newer, **kwargs)
+        return self
 
     def get_imported_ontologies(self, recursive=False):
         """Return imported ontologies."""
