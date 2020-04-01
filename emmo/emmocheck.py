@@ -28,12 +28,7 @@ except ImportError:
 
 class TestEMMOConventions(unittest.TestCase):
     """Base class for testing an ontology against EMMO conventions."""
-    iri = 'http://emmo.info/emmo'
     config = {}  # configurations
-
-    def setUp(self):
-        self.onto = get_ontology(self.iri)
-        self.onto.load()
 
 
 class TestSyntacticEMMOConventions(TestEMMOConventions):
@@ -128,9 +123,9 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         """
         exceptions = set((
             'properties.ModelledQuantitativeProperty',
-            'properties.QuantitativeProperty',
             'properties.MeasuredQuantitativeProperty',
             'properties.ConventionalQuantitativeProperty',
+            'metrology.QuantitativeProperty',
             'metrology.Quantity',
             'metrology.OrdinalQuantity',
             'metrology.BaseQuantity',
@@ -220,9 +215,10 @@ def main():
     parser.add_argument(
         'iri',
         help='File name or URI to the ontology to test.')
-    # parser.add_argument(
-    #     '--iri', '-i',
-    #     help='File name or URI to the ontology to test.')
+    parser.add_argument(
+        '--catalog-file', '--local', '-l', nargs='?', const=True,
+        help='Use Protègè to read imported ontologies locally.  The default '
+        'catalog file name is "catalog-v001.xml".')
     parser.add_argument(
         '--verbose', '-v', action='store_true',
         help='Verbosity level.')
@@ -236,13 +232,10 @@ def main():
     except SystemExit as e:
         os._exit(e.code)  # Exit without traceback on invalid arguments
 
-    print('*** args:', args)
+    TestEMMOConventions.onto = get_ontology(args.iri)
+    TestEMMOConventions.onto.load(catalog_file=args.catalog_file)
 
     verbosity = 2 if args.verbose else 1
-
-    if args.iri:
-        TestEMMOConventions.iri = args.iri
-
     if args.configfile:
         import yaml
         with open(args.configfile, 'rt') as f:
