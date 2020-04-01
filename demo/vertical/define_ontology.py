@@ -118,57 +118,47 @@ with onto:
             \ c_1211  c_1222  c_1233  c_1223  c_1231  c_1212 /
 
         """
-        is_a = [hasUnit.exactly(1, Pascal),
-                hasType.exactly(36, emmo.Real)]
+        is_a = [hasType.exactly(36, emmo.Real)]   #Vent å se om Emanulee legger inn dimensionalitet
 
-    class AtomicNumber(emmo.PhysicalQuantity):
-        """Number of protons in the nucleus of an atom."""
-        is_a = [hasType.exactly(1, emmo.Integer)]
 
-    class LatticeVector(emmo.PhysicalQuantity):
+    class LatticeVector(emmo.Length):
         """A vector that participitates defining the unit cell."""
-        is_a = [hasUnit.exactly(1, Meter),
-                hasType.exactly(3, emmo.Real)]
+        is_a = [hasType.exactly(3, emmo.Real)]
 
-    class Spacegroup(emmo.DescriptiveProperty):
-        """A spacegroup is the symmetry group off all symmetry operations
-        that apply to a crystal structure.
+    #class Spacegroup(emmo.DescriptiveProperty):
+    #    """A spacegroup is the symmetry group off all symmetry operations
+    #    that apply to a crystal structure.
+    #
+    #    It is identifies by its Hermann-Mauguin symbol or space group
+    #    number (and setting) in the International tables of
+    #    Crystallography."""
+    #    is_a = [hasType.exactly(1, emmo.String)]
+    #    pass
 
-        It is identifies by its Hermann-Mauguin symbol or space group
-        number (and setting) in the International tables of
-        Crystallography."""
-        is_a = [hasType.exactly(1, emmo.String)]
-        pass
+    #class Plasticity(emmo.PhysicalQuantity):
+    #    """Describes Yield stress and material hardening."""
+    #    is_a = [hasUnit.exactly(1, Pascal),
+    #            hasType.min(2, emmo.Real)]
+    
+    ''' Will be included when dimensionality is inplace in EMMO'''
+     
+    #class TractionSeparation(Pressure):
+    #    """The force required to separate two materials a certain distance per
+    #    interface area.  Hence, traction_separation is a curve, that
+    #    numerically can be represented as a series of (force,
+    #    separation_distance) pairs."""
+    #    is_a = [hasUnit.exactly(1, Pascal),
+    #            hasType.min(4, emmo.Real)]
 
-    class Plasticity(emmo.PhysicalQuantity):
-        """Describes Yield stress and material hardening."""
-        is_a = [hasUnit.exactly(1, Pascal),
-                hasType.min(2, emmo.Real)]
-
-    class TractionSeparation(Pressure):
-        """The force required to separate two materials a certain distance per
-        interface area.  Hence, traction_separation is a curve, that
-        numerically can be represented as a series of (force,
-        separation_distance) pairs."""
-        is_a = [hasUnit.exactly(1, Pascal),
-                hasType.min(4, emmo.Real)]
-
-    class LoadCurve(Pressure):
-        """A measure for the displacement of a material as function of the
-        appliced force."""
-        is_a = [hasUnit.exactly(1, Pascal),
-                hasType.min(4, emmo.Real)]
+    #class LoadCurve(Pressure):
+    #    """A measure for the displacement of a material as function of the
+    #    appliced force."""
+    #    is_a = [hasUnit.exactly(1, Pascal),
+    #            hasType.min(4, emmo.Real)]
 
     #
     # Subdimensional
     # ==============
-    class Interface(emmo.Plane):
-        """A 2D surface associated with a boundary.
-
-        Commonly referred to as "interface".
-        """
-        is_a = [emmo.hasProperty.exactly(1, Area),
-                emmo.hasProperty.exactly(1, TractionSeparation)]
 
     #
     # Material classes
@@ -176,21 +166,21 @@ with onto:
 
     # Crystallography-related classes
     # -------------------------------
-    class CrystalUnitCell(emmo.Mesoscopic):
+    class CrystalUnitCell(emmo.MaterialState):
         """A volume defined by the 3 unit cell vectors.  It contains the atoms
         constituting the unit cell of a crystal."""
         is_a = [emmo.hasSpatialDirectPart.some(emmo.BondedAtom),
-                emmo.hasSpatialPart.some(Interface),
                 emmo.hasProperty.exactly(3, LatticeVector),
                 emmo.hasProperty.exactly(1, StiffnessTensor)]
 
+    class InterfaceModel(CrystalUnitCell):
+        is_a = [emmo.hasProperty.some(Area)]
+
     class Crystal(emmo.Solid):
         """A periodic crystal structure."""
-        is_a = [emmo.hasSpatialDirectPart.only(CrystalUnitCell),
-                emmo.hasProperty.exactly(1, Spacegroup)]
+        is_a = [emmo.hasSpatialDirectPart.only(CrystalUnitCell)]
 
     # Add some properties to our atoms
-    emmo.BondedAtom.is_a.append(emmo.hasProperty.exactly(1, AtomicNumber))
     emmo.BondedAtom.is_a.append(emmo.hasProperty.exactly(1, Position))
 
     # Continuum
@@ -198,14 +188,13 @@ with onto:
     class Boundary(emmo.Continuum):
         """A boundary is a 4D region of spacetime shared by two material
         entities."""
-        equivalient_to = [emmo.hasSpatialDirectPart.exactly(2, emmo.Continuum)]
-        is_a = [emmo.hasSpatialPart.exactly(1, Interface)]
+        equivalent_to = [emmo.hasSpatialDirectPart.exactly(2, emmo.Continuum)]
+        is_a = [emmo.hasProperty.exactly(1, Area)]
 
     class Phase(emmo.Continuum):
         """A phase is a continuum in which properties are homogeneous and can
         have different state of matter."""
-        is_a = [emmo.hasProperty.exactly(1, StiffnessTensor),
-                emmo.hasProperty.exactly(1, Plasticity)]
+        is_a = [emmo.hasProperty.exactly(1, StiffnessTensor)]
 
     class RVE(emmo.Continuum):
         """Representative volume element.  The minimum volume that is
@@ -218,8 +207,8 @@ with onto:
         parts 3 materials and two boundaries."""
         is_a = [
             emmo.hasSpatialDirectPart.exactly(3, emmo.Material),
-            emmo.hasSpatialDirectPart.exactly(2, Boundary),
-            emmo.hasProperty.exactly(1, LoadCurve)]
+            emmo.hasSpatialDirectPart.exactly(2, Boundary)]#,
+            #emmo.hasProperty.exactly(1, LoadCurve)]
 
     #
     # Models

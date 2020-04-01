@@ -34,10 +34,10 @@ properties = [c for c in onto.classes()
               if issubclass(c, onto.Property) and c not in units]
 leaf_prop = [c for c in properties if len(c.descendants()) == 1]
 materials = [c for c in onto.classes() if issubclass(c, (
-    onto.Subatomic, onto.Atomic, onto.Mesoscopic, onto.Continuum,
+    onto.Subatomic, onto.Atom, onto.Molecule, onto.Continuum,
     onto.Boundary, onto.Engineered))]
-subdimensional = [c for c in onto.classes() if issubclass(c, (
-    onto.Point, onto.Line, onto.Plane, onto.EuclideanSpace))]
+#subdimensional = [c for c in onto.classes() if issubclass(c, (
+#    onto.Point, onto.Line, onto.Plane, onto.EuclideanSpace))]
 types = [onto.Integer, onto.Real, onto.String]
 
 # Update the uml-stype to generate
@@ -56,7 +56,7 @@ graph.write_svg('types+properties.svg')
 
 # Properties and materials
 items = [
-    onto.PhysicalQuantity, onto.BondedAtom] + materials + subdimensional
+    onto.PhysicalQuantity, onto.BondedAtom] + materials #+ subdimensional
 graph = onto.get_dot_graph(items, relations=True, style='uml', constraint=None)
 graph.write_svg('properties+materials.svg')
 
