@@ -35,7 +35,6 @@ with open(os.path.join(rootdir, 'requirements.txt'), 'rt') as f:
     requirements = f.read().split()
 
 
-
 setuptools.setup(
     name='EMMO',
     version=emmo.VERSION,
@@ -63,30 +62,22 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     install_requires=requirements,
-    #install_requires=[
-    #    'Cython',
-    #    'Owlready2>=0.23',
-    #    'graphviz',
-    #    'PyYAML',
-    #    'blessings',
-    #    'Pygments',
-    #    'rdflib',
-    #    'semver',
-    #    'pydot',
-    #],
     packages=['emmo'],
     scripts=['tools/ontodoc', 'tools/ontograph', 'tools/emmocheck'],
     package_data={'emmo': ['tests/*.py']},
     data_files=[
         ('share/EMMO-python', ['README.md', 'LICENSE.txt']),
-        ('share/EMMO-python/examples/emmodoc',
-         glob('examples/emmodoc/*.md') +
-         glob('examples/emmodoc/*.yaml') +
-         glob('examples/emmodoc/pandoc-*')
+        (
+            'share/EMMO-python/examples/emmodoc',
+            glob('examples/emmodoc/*.md') +
+            glob('examples/emmodoc/*.yaml') +
+            glob('examples/emmodoc/pandoc-*'),
         ),
-        ('share/EMMO-python/examples/emmodoc/figs',
-         fglob('examples/emmodoc/figs/*')),
-        #('share/EMMO-python/examples', rglob('examples/**')),
+        (
+            'share/EMMO-python/examples/emmodoc/figs',
+            fglob('examples/emmodoc/figs/*'),
+        ),
+        # ('share/EMMO-python/examples', rglob('examples/**')),
         ('share/EMMO-python/demo', rglob('demo/**')),
     ],
 )

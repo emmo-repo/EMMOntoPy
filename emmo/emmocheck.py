@@ -144,7 +144,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             self.get_config('test_quantity_dimension.exceptions', ()))
         regex = re.compile(
             r'^metrology.hasReferenceUnit.only\(metrology.'
-            'hasPhysicsDimension.only\(.*\)\)$')
+            r'hasPhysicsDimension.only\(.*\)\)$')
         for cls in self.onto.Quantity.descendants():
             if repr(cls) not in exceptions:
                 with self.subTest(cls=cls):
