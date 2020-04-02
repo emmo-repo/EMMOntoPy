@@ -128,7 +128,7 @@ def main():
     # Load ontology
     onto = get_ontology(args.iri)
     try:
-        onto.load(args.catalog_file)
+        onto.load(catalog_file=args.catalog_file)
     except owlready2.OwlReadyOntologyParsingError as e:
         print('Invalid IRI:', e, file=sys.stderr)
         sys.exit(1)
