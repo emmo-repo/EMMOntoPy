@@ -2,7 +2,7 @@ EMMO - Python API for the European Materials & Modelling Ontology
 =================================================================
 
 ![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20Tests/badge.svg)
-[![PyPI package](https://badge.fury.io/py/EMMO.svg)](https://pypi.org/project/EMMO/)
+[![PyPI version](https://badge.fury.io/py/EMMO.svg)](https://badge.fury.io/py/EMMO)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://github.com/emmo-repo/EMMO-python/blob/pypi-badge/LICENSE.txt)
 
 
