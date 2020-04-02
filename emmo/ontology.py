@@ -8,6 +8,7 @@ The class extension is defined within.
 
 If desirable some of this may be moved back into owlready2.
 """
+import sys
 import os
 import itertools
 import inspect
@@ -17,7 +18,7 @@ from collections import defaultdict
 
 import owlready2
 
-from .utils import asstring
+from .utils import asstring, read_catalog
 from .ontograph import OntoGraph  # FIXME: depricate...
 
 
@@ -53,9 +54,9 @@ def get_ontology(base_iri=None, verbose=False):
         onto = owlready2.default_world.ontologies[base_iri + '#']
     else:
         if os.path.exists(base_iri):
-            iri = base_iri
+            iri = os.path.abspath(base_iri)
         elif os.path.exists(base_iri + '.owl'):
-            iri = base_iri + '.owl'
+            iri = os.path.abspath(base_iri + '.owl')
         else:
             iri = base_iri
         if iri[-1] not in '/#':
@@ -65,9 +66,18 @@ def get_ontology(base_iri=None, verbose=False):
     return onto
 
 
+def isinteractive():
+    """Returns true if we are running from an interactive interpreater,
+    false otherwise."""
+    return bool(hasattr(__builtins__, '__IPYTHON__') or
+                sys.flags.interactive or
+                hasattr(sys, 'ps1'))
+
+
 class Ontology(owlready2.Ontology, OntoGraph):
     """A generic class extending owlready2.Ontology.
     """
+
     def __getitem__(self, name):
         return self.__getattr__(name)
 
@@ -77,17 +87,33 @@ class Ontology(owlready2.Ontology, OntoGraph):
             attr = self.get_by_label(name)
         return attr
 
+    # Some properties for customising dir() listing.
+    # Very useful in interactive sessions.
+    dir_labels = property(
+        fget=lambda self: getattr(self, '_dir_labels', isinteractive()),
+        fset=lambda self, v: setattr(self, '_dir_labels', bool(v)),
+        doc='Whether to include entity labels in dir() listing.')
+    dir_names = property(
+        fget=lambda self: getattr(self, '_dir_names', False),
+        fset=lambda self, v: setattr(self, '_dir_names', bool(v)),
+        doc='Whether to entity names in dir() listing.')
+    dir_imported = property(
+        fget=lambda self: getattr(self, '_dir_imported', isinteractive()),
+        fset=lambda self, v: setattr(self, '_dir_imported', bool(v)),
+        doc='Whether to include imported ontologies in dir() '
+        'listing.')
+
     def __dir__(self):
-        """Extend in dir() listing."""
-        s = set(object.__dir__(self))
-        for onto in [get_ontology(uri) for uri in self._namespaces.keys()]:
-            s.update([cls.label.first() for cls in onto.classes()])
-            s.update([cls.label.first() for cls in onto.individuals()])
-            s.update([cls.label.first() for cls in onto.properties()])
-            s.update([cls.name for cls in onto.classes()])
-            s.update([cls.name for cls in onto.individuals()])
-            s.update([cls.name for cls in onto.properties()])
-            s.difference_update({None})  # get rid of possible None
+        s = set(super().__dir__())
+        if self.dir_labels:
+            s.update(e.label.first() for e in
+                     self.get_entities(imported=self.dir_imported)
+                     if hasattr(e, 'label'))
+        if self.dir_names:
+            s.update(e.name for e in
+                     self.get_entities(imported=self.dir_imported)
+                     if hasattr(e, 'name'))
+        s.difference_update({None})  # get rid of possible None
         return sorted(s)
 
     def __contains__(self, other):
@@ -100,6 +126,84 @@ class Ontology(owlready2.Ontology, OntoGraph):
     def __objclass__(self):
         # Play nice with inspect...
         pass
+
+    def load(self, only_local=False, fileobj=None, reload=None,
+             reload_if_newer=False, catalog_file=None, **kwargs):
+        """Load the ontology.
+
+        Parameters
+        ----------
+        only_local : bool
+            Whether to only read local files.  This requires that you
+            have appended the path to the ontology to owlready2.onto_path.
+        fileobj : str
+            File name to load the ontology from.  Default to the base_iri
+            provided to get_ontology().
+        reload : bool
+            Whether to reload the ontology if it is already loaded.
+        reload_if_newer : bool
+            Whether to reload the ontology if the source has changed since
+            last time it was loaded.
+        catalog_file : bool | str
+            Whether to load ontology paths from Protègè catalog files.
+            Implies `only_local`.  If provided as a string, it will be used
+            instead of the default "catalog-v001.xml".
+        """
+        if self.loaded and not reload:
+            return self
+        if catalog_file:
+            only_local = True
+            dirpath = os.path.normpath(
+                os.path.dirname(fileobj or self.base_iri.rstrip('/#')))
+            kw = dict(recursive=True, return_paths=True)
+            if isinstance(catalog_file, str):
+                kw['catalog_name'] = catalog_file
+            iris, dirs = read_catalog(dirpath, **kw)
+            for d in sorted(dirs, reverse=True):
+                owlready2.onto_path.append(d)
+        super().load(only_local=only_local, fileobj=fileobj, reload=reload,
+                     reload_if_newer=reload_if_newer, **kwargs)
+        return self
+
+    def get_imported_ontologies(self, recursive=False):
+        """Return imported ontologies."""
+
+        def rec_imported(onto):
+            for o in onto.imported_ontologies:
+                imported.add(o)
+                rec_imported(o)
+
+        if recursive:
+            imported = set()
+            rec_imported(self)
+            return list(imported)
+        else:
+            return self.imported_ontologies
+
+    def get_entities(self, imported=True, classes=True, individuals=True,
+                     object_properties=True, data_properties=True,
+                     annotation_properties=True):
+        """Return a generator over (optionally) all classes, individuals,
+        object_properties, data_properties and annotation_properties.
+
+        If `imported` is true, entities in imported ontologies will also
+        be included.
+        """
+        categories = set([
+            'classes' if classes else None,
+            'individuals' if individuals else None,
+            'object_properties' if object_properties else None,
+            'data_properties' if data_properties else None,
+            'annotation_properties' if annotation_properties else None,
+        ]).difference([None])
+        for e in itertools.chain.from_iterable(
+                getattr(self, c)() for c in categories):
+            yield e
+        if imported:
+            for onto in self.get_imported_ontologies(recursive=True):
+                for e in itertools.chain.from_iterable(
+                        getattr(onto, c)() for c in categories):
+                    yield e
 
     def get_root_classes(self):
         """Returns a list or root classes."""
@@ -379,7 +483,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         return OntoGraph(self, **kwargs)
 
     def common_ancestors(self, cls1, cls2):
-        """Return a list of common ancestors"""
+        """Return a list of common ancestors for `cls1` and `cls2`."""
         return set(cls1.ancestors()).intersection(cls2.ancestors())
 
     def number_of_generations(self, descendant, ancestor):

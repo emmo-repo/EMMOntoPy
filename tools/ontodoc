@@ -26,6 +26,10 @@ def main():
         help='Output file.')
 
     parser.add_argument(
+        '--catalog-file', '--local', '-l', nargs='?', const=True,
+        help='Use Protègè catalog files to read imported ontologies locally.  '
+        'The default catalog file name is "catalog-v001.xml".')
+    parser.add_argument(
         '--template', '-t', metavar='FILE',
         help='ontodoc input template.  If not provided, a simple default '
         'template will be used.  Don\'t confuse it with the pandoc templates.')
@@ -75,7 +79,7 @@ def main():
 
     # Load ontology and instantiate ontodoc instance
     onto = get_ontology(base_iri=args.iri)
-    onto.load()
+    onto.load(catalog_file=args.catalog_file)
     format = get_format(args.outfile, args.format)
     style = get_style(format)
     figformat = args.figformat if args.figformat else get_figformat(format)

@@ -39,7 +39,7 @@ from emmo import get_ontology
 
 
 # Load EMMO
-emmo = get_ontology()
+emmo = get_ontology('http://emmo.info/emmo/1.0.0-alpha2')
 emmo.load()
 #emmo.sync_reasoner()
 
@@ -54,14 +54,6 @@ with onto:
     #
     # Relations
     # =========
-    class hasUnit(emmo.hasPart):
-        """Associates a unit to a property."""
-        pass
-
-    class isUnitFor(emmo.hasPart):
-        """Associates a property to a unit."""
-        inverse_property = hasUnit
-
     class hasType(emmo.hasConvention):
         """Associates a type (string, number...) to a property."""
         pass
@@ -85,39 +77,30 @@ with onto:
     #
     # Units
     # =====
-    class SIUnit(emmo.MeasurementUnit):
-        """Base class for all SI units."""
-        pass
 
-    class Meter(SIUnit):
-        label = ['m']
-
-    class SquareMeter(SIUnit):
-        label = ['m²']
-
-    class Pascal(SIUnit):
-        label = ['Pa']
-
+    class SquareMeter(emmo.SICoherentDerivedUnit):
+        emmo.altLabel = ['m²']
+        #emmo.hasPhysicsDimension.only(emmo.squareLengthDimension)
+        # Fix this when new emmo accepted
     #
     # Properties
     # ==========
-    class Position(emmo.PhysicalQuantity):
+    class Position(emmo.Length):
         """Spatial position of an physical entity."""
-        is_a = [hasUnit.exactly(1, Meter),
+        is_a = [emmo.hasReferenceUnit.only(emmo.hasPhysicsDimension.only(
+                 emmo.LengthDimension)),
                 hasType.exactly(3, emmo.Real)]
 
-    class Area(emmo.PhysicalQuantity):
+    class Area(emmo.ISQDerivedQuantity):
         """Area of a surface."""
-        is_a = [hasUnit.exactly(1, SquareMeter),
-                hasType.exactly(1, emmo.Real)]
+        #is_a = [emmo.hasReferenceUnit.only(emmo.hasPhysicsDimension.only(
+        #         emmo.SquareLengthDimension))]
 
-    class Pressure(emmo.PhysicalQuantity):
-        """The force applied perpendicular to the surface of an object per
-        unit area."""
-        is_a = [hasUnit.exactly(1, Pascal),
-                hasType.exactly(1, emmo.Real)]
+        is_a = [hasType.exactly(1, emmo.Real)]
 
-    class StiffnessTensor(Pressure):
+    emmo.Pressure.is_a.append(hasType.exactly(1,emmo.Real))
+
+    class StiffnessTensor(emmo.Pressure):
         r"""The stiffness tensor $c_{ijkl}$ is a property of a continuous
         elastic material that relates stresses to strains (Hooks's
         law) according to
