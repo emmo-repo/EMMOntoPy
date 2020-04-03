@@ -8,7 +8,7 @@ from emmo import get_ontology
 # Load usercase ontology
 
 # Create a new ontology with out extensions that imports EMMO
-onto = get_ontology('usercase_ontology.owl')
+onto = get_ontology('demo.owl')
 onto.load()
 #onto.base_iri = 'http://www.emmc.info/emmc-csa/demo#'
 
@@ -25,7 +25,7 @@ del onto._uml_style['defined_class']['shape']
 # Save graph with our new classes
 graph = onto.get_dot_graph(list(onto.classes()), relations=True,
                            style='uml', constraint=None)
-graph.write_svg('usercase_ontology.svg')
+graph.write_svg('demo.svg')
 
 
 # Categories of classes
@@ -75,4 +75,4 @@ classes = list(parents.union(onto.classes()))  # + [onto.Space]
 onto._uml_style['graph']['rankdir'] = 'RL'
 graph = onto.get_dot_graph(classes, relations=True, style='uml',
                            edgelabels=True)
-graph.write_svg('usercase_ontology-parents.svg')
+graph.write_svg('demo-parents.svg')
