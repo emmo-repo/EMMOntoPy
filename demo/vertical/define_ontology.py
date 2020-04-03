@@ -229,7 +229,7 @@ onto.sync_attributes()
 # It seems that owlready2 by default is appending to the existing
 # ontology.  To get a clean version, we simply delete the owl file if
 # it already exists.
-owlfile = 'usercase_ontology.owl'
+owlfile = 'demo.owl'
 if os.path.exists(owlfile):
     os.remove(owlfile)
 onto.save(owlfile)
