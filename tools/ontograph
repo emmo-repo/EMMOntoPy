@@ -26,10 +26,15 @@ def main():
     parser.add_argument(
         'output', nargs='?',
         help='name of output file.')
+
     parser.add_argument(
         '--format', '-f',
         help='Format of output file.  By default it is inferred from '
         'the output file extension.')
+    parser.add_argument(
+        '--catalog-file', '--local', '-l', nargs='?', const=True,
+        help='Use Protègè catalog files to read imported ontologies locally.  '
+        'The default catalog file name is "catalog-v001.xml".')
     parser.add_argument(
         '--root', '-r',
         help='Name of root node in the graph.  Defaults to all classes.')
@@ -123,7 +128,7 @@ def main():
     # Load ontology
     onto = get_ontology(args.iri)
     try:
-        onto.load()
+        onto.load(catalog_file=args.catalog_file)
     except owlready2.OwlReadyOntologyParsingError as e:
         print('Invalid IRI:', e, file=sys.stderr)
         sys.exit(1)
