@@ -16,4 +16,4 @@ if 'owlready2' in sys.modules.keys():
 from . import patch  # noqa: E402, F401
 
 # Import get_ontology(), which is our main entry point
-from .ontology import get_ontology  # noqa: E402, F401
+from .ontology import World, get_ontology  # noqa: E402, F401
