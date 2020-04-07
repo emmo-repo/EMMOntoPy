@@ -144,7 +144,7 @@ def read_catalog(path, catalog_name='catalog-v001.xml', recursive=False,
     else:
         catalog_name = os.path.basename(path)
         filepath = os.path.abspath(path)
-        dirsname = os.path.dirname(filepath)
+        dirname = os.path.dirname(filepath)
 
     def gettag(e):
         return e.tag.rsplit('}', 1)[-1]
