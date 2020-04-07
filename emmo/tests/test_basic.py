@@ -8,7 +8,7 @@ thisdir = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
 from emmo import get_ontology  # noqa: E402, F401
 
-import owlready2
+import owlready2  # noqa: E402, F401
 
 
 emmo = get_ontology()
@@ -36,7 +36,7 @@ with onto:
     # Create some
     H1 = Hydrogen()
     H2 = Hydrogen()
-    O = Oxygen()
+    O = Oxygen()  # noqa: E741
     w = H2O()
     w.hasSpatialDirectPart = [H1, H2,  O]
 
