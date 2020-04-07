@@ -65,8 +65,9 @@ class World(owlready2.World):
           - "emmo-inferred": load latest inferred version of EMMO (default)
         """
         if base_iri == 'emmo-inferred':
-            base_iri = ('https://emmo-repo.github.io/versions/1.0.0-alpha2/'
-                        'emmo-inferred.owl')
+            base_iri = (
+                'https://emmo-repo.github.io/unstable/emmo-inferred.owl')
+
         elif base_iri == 'emmo':
             base_iri = 'http://emmo.info/emmo'
 
