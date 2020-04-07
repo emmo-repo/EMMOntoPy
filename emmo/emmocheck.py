@@ -19,6 +19,7 @@ import itertools
 import argparse
 
 from .ontology import World
+from . import onto_path
 
 try:
     from .colortest import ColourTextTestRunner as TextTestRunner
@@ -229,15 +230,21 @@ def main():
         'want to check.')
     parser.add_argument(
         '--local', '-l', action='store_true',
-        help='Load local versions of imported ontologies using a Protègè '
-        'catalog file.')
+        help='Load imported ontologies locally.  Their paths are specified '
+        'in Protègè catalog files or via the --path option.  The IRI should '
+        'be a file name.')
+    parser.add_argument(
+        '--catalog-file', default='catalog-v001.xml',
+        help='Name of Protègè catalog file in the same folder as the '
+        'ontology.  This option is used together with --local and '
+        'defaults to "catalog-v001.xml".')
+    parser.add_argument(
+        '--path', action='append', default=[],
+        help='Paths where imported ontologies can be found.  May be provided '
+        'as a comma-separated string and/or with multiple --path options.')
     parser.add_argument(
         '--check-imported', '-i', action='store_true',
         help='Whether to check imported ontologies.')
-    parser.add_argument(
-        '--catalog-file', '-C', nargs='?', const='catalog-v001.xml',
-        help='Path to Protègè catalog file used together with --local.  '
-        'Defaults to "catalog-v001.xml".')
     parser.add_argument(
         '--verbose', '-v', action='store_true',
         help='Verbosity level.')
@@ -251,9 +258,14 @@ def main():
     except SystemExit as e:
         os._exit(e.code)  # Exit without traceback on invalid arguments
 
+    # Append to onto_path
+    for paths in args.path:
+        for path in paths.split(','):
+            if path not in onto_path:
+                onto.path.append(path)
+
     # Load ontology
     world = World(filename=args.database)
-
     if args.database != ':memory:' and args.iri not in world.ontologies:
         parser.error('The IRI argument should be one of the ontologies in '
                      'the database:\n  ' +

@@ -122,12 +122,12 @@ def camelsplit(s):
     return ''.join(result)
 
 
-def read_catalog(path, catalog_name='catalog-v001.xml', recursive=False,
+def read_catalog(path, catalog_file='catalog-v001.xml', recursive=False,
                  return_paths=False):
     """Reads a Protègè catalog file and returns a dict mapping IRIs to
     absolute paths.
 
-    The `catalog_name` argument spesifies the catalog file name and is
+    The `catalog_file` argument spesifies the catalog file name and is
     used if `path` is used when `recursive` is true and if `path` is a
     directory.
 
@@ -140,9 +140,9 @@ def read_catalog(path, catalog_name='catalog-v001.xml', recursive=False,
     dirs = set()
     if os.path.isdir(path):
         dirname = os.path.abspath(path)
-        filepath = os.path.join(dirname, catalog_name)
+        filepath = os.path.join(dirname, catalog_file)
     else:
-        catalog_name = os.path.basename(path)
+        catalog_file = os.path.basename(path)
         filepath = os.path.abspath(path)
         dirname = os.path.dirname(filepath)
 
@@ -170,7 +170,7 @@ def read_catalog(path, catalog_name='catalog-v001.xml', recursive=False,
         iris.setdefault(uri.attrib['name'], filepath)
         dir = os.path.normpath(os.path.dirname(filepath))
         if recursive and dir not in dirs:
-            catalog = os.path.join(dir, catalog_name)
+            catalog = os.path.join(dir, catalog_file)
             load_catalog(catalog)
 
     load_catalog(filepath)

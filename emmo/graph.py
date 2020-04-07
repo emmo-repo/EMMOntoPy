@@ -539,6 +539,10 @@ class OntoGraph:
         elif isinstance(relations, str):
             relations = relations.split(',')
 
+        n = len(relations)
+        if n == 0:
+            return
+
         t = ('<<table border="0" cellpadding="2" cellspacing="0" '
              'cellborder="0">')
         label1 = [t]
@@ -556,7 +560,6 @@ class OntoGraph:
         constraint = 'false' if rankdir in ('TB', 'BT') else 'true'
         inv = True if rankdir in ('BT', ) else False
 
-        n = len(relations)
         for i in range(n):
             r = relations[n - 1 - i] if inv else relations[i]
             if r == 'inverse':
