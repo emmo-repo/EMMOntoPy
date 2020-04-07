@@ -11,7 +11,8 @@ import owlready2  # noqa: E402, F401
 
 
 emmodir = os.path.join(thisdir, '..', '..', '..', 'EMMO')
-owlready2.set_log_level(1)
+owlready2.set_log_level(0)
+
 
 
 # Load latest stable EMMO

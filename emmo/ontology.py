@@ -55,23 +55,27 @@ def isinteractive():
 class World(owlready2.World):
     """A subclass of owlready2.World."""
 
-    def get_ontology(self, base_iri=None, verbose=False):
+    def get_ontology(self, base_iri='emmo-inferred'):
         """Returns a new Ontology from `base_iri`.
 
-        The default is to load the latest pre-inferred version of EMMO.
-
-        If `verbose` is true, a lot of dianostics is written.
+        The `base_iri` argument may be one of:
+          - valid URL (possible excluding final .owl)
+          - file name (possible excluding final .owl)
+          - "emmo": load latest stable version of EMMO
+          - "emmo-inferred": load latest inferred version of EMMO (default)
         """
-        if base_iri is None or base_iri == 'emmo-inferred':
+        if base_iri == 'emmo-inferred':
             base_iri = ('https://emmo-repo.github.io/versions/1.0.0-alpha2/'
                         'emmo-inferred.owl')
         elif base_iri == 'emmo':
-            base_iri = 'http://emmo.repo/emmo'
+            base_iri = 'http://emmo.info/emmo'
 
         if base_iri in self.ontologies:
             onto = self.ontologies[base_iri]
         elif base_iri + '#' in self.ontologies:
             onto = self.ontologies[base_iri + '#']
+        elif base_iri + '/' in self.ontologies:
+            onto = self.ontologies[base_iri + '/']
         else:
             if os.path.exists(base_iri):
                 iri = os.path.abspath(base_iri)
@@ -82,7 +86,7 @@ class World(owlready2.World):
             if iri[-1] not in '/#':
                 iri += '#'
             onto = Ontology(self, iri)
-        onto._verbose = verbose
+
         return onto
 
 
@@ -139,7 +143,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Play nice with inspect...
         pass
 
-    def load(self, only_local=False, fileobj=None, reload=None,
+    def loadx(self, only_local=False, fileobj=None, reload=None,
              reload_if_newer=False, catalog_file=None, **kwargs):
         """Load the ontology.
 
@@ -161,8 +165,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
             Implies `only_local`.  If provided as a string, it will be used
             instead of the default "catalog-v001.xml".
         """
-        if self.loaded and not reload:
-            return self
         if catalog_file:
             only_local = True
             dirpath = os.path.normpath(
@@ -172,7 +174,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 kw['catalog_name'] = catalog_file
             iris, dirs = read_catalog(dirpath, **kw)
             for d in sorted(dirs, reverse=True):
-                owlready2.onto_path.append(d)
+                if d not in owlready2.onto_path:
+                    owlready2.onto_path.append(d)
         super().load(only_local=only_local, fileobj=fileobj, reload=reload,
                      reload_if_newer=reload_if_newer, **kwargs)
         return self
