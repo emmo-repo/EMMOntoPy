@@ -45,6 +45,8 @@ class OntoGraph:
             in the subgraph.
         leafs : None | sequence
             A sequence of leaf node names for generating sub-graphs.
+        entities : None | sequence
+            A sequence of entities to add to the graph.
         relations : "all" | str | None | sequence
             Sequence of relations to visualise.  If "all", means to include
             all relations.
@@ -63,6 +65,7 @@ class OntoGraph:
               - object_property : nodes for object properties (N)
               - data_property : nodes for data properties (N)
               - annotation_property : nodes for annotation properties (N)
+              - added_node : nodes added because `addnodes` is true (N)
               - isA : edges for isA relations (E)
               - not : edges for not class constructs (E)
               - equivalent_to : edges for equivalent_to relations (E)
@@ -87,6 +90,8 @@ class OntoGraph:
             Whether to add nodes representing class constructs.
         parents : int
             Include `parents` levels of parents.
+        excluded_nodes : None | sequence
+            Sequence of labels of nodes to exclude.
         graph : None | pydot.Dot instance
             Graphviz Digraph object to plot into.  If None, a new graph object
             is created using the keyword arguments.
@@ -135,6 +140,9 @@ class OntoGraph:
             'style': 'filled',
             'fillcolor': 'orange',
         },
+        'added_node': {
+            'color': 'red',
+        },
         'isA': {'arrowhead': 'empty'},
         'not': {'color': 'gray', 'style': 'dotted'},
         'equivalent_to': {'color': 'green3'},
@@ -162,10 +170,10 @@ class OntoGraph:
         'edge': {},
     }
 
-    def __init__(self, ontology, root=None, leafs=None,
+    def __init__(self, ontology, root=None, leafs=None, entities=None,
                  relations='isA', style=None, edgelabels=True,
                  addnodes=False, addconstructs=False,
-                 parents=0, graph=None, **kwargs):
+                 parents=0, excluded_nodes=None, graph=None, **kwargs):
         if style is None or style == 'default':
             style = self._default_style
 
@@ -193,6 +201,7 @@ class OntoGraph:
         self.edgelabels = edgelabels
         self.addnodes = addnodes
         self.addconstructs = addconstructs
+        self.excluded_nodes = set(excluded_nodes) if excluded_nodes else set()
 
         if root == ALL:
             self.add_entities(
@@ -208,6 +217,11 @@ class OntoGraph:
                     root, levels=parents,
                     relations=relations, edgelabels=edgelabels,
                     addnodes=addnodes, addconstructs=addconstructs)
+
+        if entities:
+            self.add_entities(entities=entities, relations=relations,
+                              edgelabels=edgelabels, addnodes=addnodes,
+                              addconstructs=addconstructs)
 
     def add_entities(self, entities=None, relations='isA', edgelabels=True,
                      addnodes=False, addconstructs=False,
@@ -271,7 +285,7 @@ class OntoGraph:
         """Add node with given name. `attrs` are graphviz node attributes."""
         e = self.ontology[name] if isinstance(name, str) else name
         label = getlabel(e)
-        if label not in self.nodes:
+        if label not in self.nodes.union(self.excluded_nodes):
             kw = self.get_node_attrs(e, nodeattrs=nodeattrs, attrs=attrs)
             if hasattr(e, 'iri'):
                 kw.setdefault('URL', e.iri)
@@ -290,6 +304,8 @@ class OntoGraph:
         predicate = predicate if isinstance(predicate, str) else getlabel(
             predicate)
         object = object if isinstance(object, str) else getlabel(object)
+        if subject in self.excluded_nodes or object in self.excluded_nodes:
+            return
         if not isinstance(subject, str) or not isinstance(object, str):
             raise TypeError('`subject` and `object` must be strings')
         if subject not in self.nodes:
@@ -398,7 +414,7 @@ class OntoGraph:
         label = getlabel(e)
         if label not in self.nodes:
             if addnodes:
-                self.add_node(e)
+                self.add_node(e, **self.style.get('added_node', {}))
             else:
                 return False
         return True
@@ -538,7 +554,7 @@ class OntoGraph:
 
         rankdir = self.dot.graph_attr.get('rankdir', 'TB')
         constraint = 'false' if rankdir in ('TB', 'BT') else 'true'
-        inv = True if rankdir in ('BT', 'RL') else False
+        inv = True if rankdir in ('BT', ) else False
 
         n = len(relations)
         for i in range(n):
