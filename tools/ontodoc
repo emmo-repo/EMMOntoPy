@@ -10,7 +10,7 @@ rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
     os.path.dirname(__file__)))))
 sys.path.insert(1, rootdir)
 
-from emmo import get_ontology
+from emmo import World
 from emmo.ontodoc import (
     OntoDoc, get_format, get_style, get_figformat, get_maxwidth, get_docpp)
 
@@ -19,16 +19,25 @@ def main():
     parser = argparse.ArgumentParser(
         description='Tool for documenting ontologies.')
     parser.add_argument(
-        'iri', metavar='IRI',  # nargs='?',
+        'iri', metavar='IRI',
         help='OWL file/source to document.')
     parser.add_argument(
         'outfile', metavar='OUTFILE',
         help='Output file.')
 
     parser.add_argument(
-        '--catalog-file', '--local', '-l', nargs='?', const=True,
-        help='Use Protègè catalog files to read imported ontologies locally.  '
-        'The default catalog file name is "catalog-v001.xml".')
+        '--database', '-d', metavar='FILENAME',
+        help='Load ontology from Owlready2 sqlite3 database.  The `iri` '
+        'argument should in this case be the IRI of the ontology you '
+        'want to check.')
+    parser.add_argument(
+        '--local', '-l', action='store_true',
+        help='Load local versions of imported ontologies using a Protègè '
+        'catalog file.')
+    parser.add_argument(
+        '--catalog-file', '-C', default='catalog-v001.xml',
+        help='Path to Protègè catalog file used together with --local.  '
+        'Defaults to "catalog-v001.xml".')
     parser.add_argument(
         '--template', '-t', metavar='FILE',
         help='ontodoc input template.  If not provided, a simple default '
@@ -77,9 +86,17 @@ def main():
     except SystemExit as e:
         os._exit(e.code)  # Exit without traceback on invalid arguments
 
-    # Load ontology and instantiate ontodoc instance
-    onto = get_ontology(base_iri=args.iri)
-    onto.load(catalog_file=args.catalog_file)
+    # Load ontology
+    world = World(filename=args.database)
+    if args.database and args.iri not in world.ontologies:
+        parser.error('The IRI argument should be one of the ontologies in '
+                     'the database:\n  ' +
+                     '\n  '.join(world.ontologies.keys()))
+    onto = world.get_ontology(args.iri)
+    catalog_file = args.catalog_file if args.local else None
+    onto.load(only_local=args.local, catalog_file=catalog_file)
+
+    # Instantiate ontodoc instance
     format = get_format(args.outfile, args.format)
     style = get_style(format)
     figformat = args.figformat if args.figformat else get_figformat(format)

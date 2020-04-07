@@ -223,7 +223,7 @@ def main():
         'iri',
         help='File name or URI to the ontology to test.')
     parser.add_argument(
-        '--database', '-d', metavar='FILENAME',
+        '--database', '-d', metavar='FILENAME', default=':memory:',
         help='Load ontology from Owlready2 sqlite3 database.  The `iri` '
         'argument should in this case be the IRI of the ontology you '
         'want to check.')
@@ -254,7 +254,7 @@ def main():
     # Load ontology
     world = World(filename=args.database)
 
-    if args.database and args.iri not in world.ontologies:
+    if args.database != ':memory:' and args.iri not in world.ontologies:
         parser.error('The IRI argument should be one of the ontologies in '
                      'the database:\n  ' +
                      '\n  '.join(world.ontologies.keys()))
