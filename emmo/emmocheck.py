@@ -262,7 +262,7 @@ def main():
     for paths in args.path:
         for path in paths.split(','):
             if path not in onto_path:
-                onto.path.append(path)
+                onto_path.append(path)
 
     # Load ontology
     world = World(filename=args.database)

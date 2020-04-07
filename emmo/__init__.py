@@ -19,4 +19,4 @@ from . import patch  # noqa: E402, F401
 from .ontology import World, get_ontology  # noqa: E402, F401
 
 # Global list of ontology search paths
-from owlready2 import onto_path
+from owlready2 import onto_path  # noqa: E402, F401
