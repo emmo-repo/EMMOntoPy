@@ -14,10 +14,7 @@ emmodir = os.path.join(thisdir, '..', '..', '..', 'EMMO')
 owlready2.set_log_level(0)
 
 
-
 # Load latest stable EMMO
-# emmo = get_ontology('https://raw.githubusercontent.com/emmo-repo/EMMO/'
-#                     'master/emmo.owl')
 emmo = get_ontology('emmo')
 emmo.load()
 

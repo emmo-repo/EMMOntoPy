@@ -143,7 +143,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Play nice with inspect...
         pass
 
-    def loadx(self, only_local=False, fileobj=None, reload=None,
+    def load(self, only_local=False, fileobj=None, reload=None,
              reload_if_newer=False, catalog_file=None, **kwargs):
         """Load the ontology.
 
