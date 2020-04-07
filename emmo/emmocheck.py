@@ -18,7 +18,7 @@ import unittest
 import itertools
 import argparse
 
-from .ontology import get_ontology
+from .ontology import World
 
 try:
     from .colortest import ColourTextTestRunner as TextTestRunner
@@ -107,7 +107,10 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         exceptions.update(
             self.get_config('test_unit_dimension.exceptions', ()))
         regex = re.compile(r'^metrology.hasPhysicsDimension.only\(.*\)$')
+        classes = set(self.onto.classes())
         for cls in self.onto.MeasurementUnit.descendants():
+            if not self.check_imported and cls not in classes:
+                continue
             # Assume that actual units are not subclassed
             if not list(cls.subclasses()) and repr(cls) not in exceptions:
                 with self.subTest(cls=cls):
@@ -145,7 +148,10 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         regex = re.compile(
             r'^metrology.hasReferenceUnit.only\(metrology.'
             r'hasPhysicsDimension.only\(.*\)\)$')
+        classes = set(self.onto.classes())
         for cls in self.onto.Quantity.descendants():
+            if not self.check_imported and cls not in classes:
+                continue
             if repr(cls) not in exceptions:
                 with self.subTest(cls=cls):
                     self.assertTrue(
@@ -184,8 +190,9 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                             msg='IRI %r does not correspond to module '
                             'namespace: %r' % (e.iri, onto.base_iri))
 
-            for imp_onto in onto.imported_ontologies:
-                checker(imp_onto)
+            if self.check_imported:
+                for imp_onto in onto.imported_ontologies:
+                    checker(imp_onto)
 
         visited = set()
         checker(self.onto)
@@ -216,9 +223,21 @@ def main():
         'iri',
         help='File name or URI to the ontology to test.')
     parser.add_argument(
-        '--catalog-file', '--local', '-l', nargs='?', const=True,
-        help='Use Protègè to read imported ontologies locally.  The default '
-        'catalog file name is "catalog-v001.xml".')
+        '--database', '-d', metavar='FILENAME',
+        help='Load ontology from Owlready2 sqlite3 database.  The `iri` '
+        'argument should in this case be the IRI of the ontology you '
+        'want to check.')
+    parser.add_argument(
+        '--local', '-l', action='store_true',
+        help='Load local versions of imported ontologies using a Protègè '
+        'catalog file.')
+    parser.add_argument(
+        '--check-imported', '-i', action='store_true',
+        help='Whether to check imported ontologies.')
+    parser.add_argument(
+        '--catalog-file', '-C', default='catalog-v001.xml',
+        help='Path to Protègè catalog file used together with --local.  '
+        'Defaults to "catalog-v001.xml".')
     parser.add_argument(
         '--verbose', '-v', action='store_true',
         help='Verbosity level.')
@@ -232,9 +251,23 @@ def main():
     except SystemExit as e:
         os._exit(e.code)  # Exit without traceback on invalid arguments
 
-    TestEMMOConventions.onto = get_ontology(args.iri)
-    TestEMMOConventions.onto.load(catalog_file=args.catalog_file)
+    # Load ontology
+    world = World(filename=args.database)
 
+    if args.database and args.iri not in world.ontologies:
+        parser.error('The IRI argument should be one of the ontologies in '
+                     'the database:\n  ' +
+                     '\n  '.join(world.ontologies.keys()))
+
+    onto = world.get_ontology(args.iri)
+    catalog_file = args.catalog_file if args.local else None
+    onto.load(only_local=args.local, catalog_file=catalog_file)
+
+    # Store settings TestEMMOConventions
+    TestEMMOConventions.onto = onto
+    TestEMMOConventions.check_imported = args.check_imported
+
+    # Set up and run tests
     verbosity = 2 if args.verbose else 1
     if args.configfile:
         import yaml
