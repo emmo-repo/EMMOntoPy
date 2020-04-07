@@ -83,6 +83,7 @@ class World(owlready2.World):
                 iri = os.path.abspath(base_iri + '.owl')
             else:
                 iri = base_iri
+
             if iri[-1] not in '/#':
                 iri += '#'
             onto = Ontology(self, iri)
@@ -162,11 +163,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
             last time it was loaded.
         catalog_file : bool | str
             Whether to load ontology paths from Protègè catalog files.
-            Implies `only_local`.  If provided as a string, it will be used
-            instead of the default "catalog-v001.xml".
+            If provided as a string, it will be used instead of the default
+            "catalog-v001.xml".
         """
         if catalog_file:
-            only_local = True
             dirpath = os.path.normpath(
                 os.path.dirname(fileobj or self.base_iri.rstrip('/#')))
             kw = dict(recursive=True, return_paths=True)
@@ -176,6 +176,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
             for d in sorted(dirs, reverse=True):
                 if d not in owlready2.onto_path:
                     owlready2.onto_path.append(d)
+
         super().load(only_local=only_local, fileobj=fileobj, reload=reload,
                      reload_if_newer=reload_if_newer, **kwargs)
         return self

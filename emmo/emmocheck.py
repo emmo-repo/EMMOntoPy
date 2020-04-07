@@ -235,7 +235,7 @@ def main():
         '--check-imported', '-i', action='store_true',
         help='Whether to check imported ontologies.')
     parser.add_argument(
-        '--catalog-file', '-C', default='catalog-v001.xml',
+        '--catalog-file', '-C', nargs='?', const='catalog-v001.xml',
         help='Path to Protègè catalog file used together with --local.  '
         'Defaults to "catalog-v001.xml".')
     parser.add_argument(
@@ -260,8 +260,7 @@ def main():
                      '\n  '.join(world.ontologies.keys()))
 
     onto = world.get_ontology(args.iri)
-    catalog_file = args.catalog_file if args.local else None
-    onto.load(only_local=args.local, catalog_file=catalog_file)
+    onto.load(only_local=args.local, catalog_file=args.catalog_file)
 
     # Store settings TestEMMOConventions
     TestEMMOConventions.onto = onto
