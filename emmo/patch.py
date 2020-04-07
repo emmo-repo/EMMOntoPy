@@ -37,7 +37,7 @@ def _get_parents(self, strict=False):
 def _dir(self):
     """Extend in dir() listing of ontology classes."""
     s = set(object.__dir__(self))
-    props = self.__class__.namespace.world._props.keys()
+    props = self.namespace.world._props.keys()
     s.update(props)
     return sorted(s)
 
