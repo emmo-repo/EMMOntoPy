@@ -440,9 +440,9 @@ class OntoGraph:
         elif isinstance(c, owlready2.Not):
             clslabel = getlabel(c.Class)
             if clslabel not in self.nodes and self.addnodes:
-                self.add_node(clslabel)
+                self.add_node(c.Class)
             if clslabel in self.nodes:
-                self.add_edge(getlabel(cls), 'not', label)
+                self.add_edge(clslabel, 'not', label)
         # Neither and nor inverse constructs are
         return label
 
@@ -489,6 +489,7 @@ class OntoGraph:
         if predicate in types:
             kw = self.style.get(predicate, {}).copy()
         else:
+            kw = {}
             name = predicate.split(None, 1)[0]
             m = re.match(r'Inverse\((.*)\)', name)
             if m:
@@ -496,26 +497,27 @@ class OntoGraph:
                 attrs = attrs.copy()
                 for k, v in self.style.get('inverse', {}).items():
                     attrs.setdefault(k, v)
-            e = self.ontology[name] if isinstance(name, str) else name
-            relations = self.style.get('relations', {})
-            rels = set(self.ontology[r] for r in relations.keys()
-                       if r in self.ontology)
-            for r in e.mro():
-                if r in rels:
-                    break
-            rattrs = relations[getlabel(r)] if r in rels else {}
-            # object property
-            if isinstance(e, (owlready2.ObjectPropertyClass,
-                              owlready2.ObjectProperty)):
-                kw = self.style.get('default_relation', {}).copy()
-                kw.update(rattrs)
-            # data property
-            elif isinstance(e, (owlready2.DataPropertyClass,
-                                owlready2.DataProperty)):
-                kw = self.style.get('default_dataprop', {}).copy()
-                kw.update(rattrs)
-            else:
-                raise TypeError('Unknown entity type: %r' % e)
+            if not isinstance(name, str) or name in self.ontology:
+                e = self.ontology[name] if isinstance(name, str) else name
+                relations = self.style.get('relations', {})
+                rels = set(self.ontology[r] for r in relations.keys()
+                           if r in self.ontology)
+                for r in e.mro():
+                    if r in rels:
+                        break
+                rattrs = relations[getlabel(r)] if r in rels else {}
+                # object property
+                if isinstance(e, (owlready2.ObjectPropertyClass,
+                                  owlready2.ObjectProperty)):
+                    kw = self.style.get('default_relation', {}).copy()
+                    kw.update(rattrs)
+                # data property
+                elif isinstance(e, (owlready2.DataPropertyClass,
+                                    owlready2.DataProperty)):
+                    kw = self.style.get('default_dataprop', {}).copy()
+                    kw.update(rattrs)
+                else:
+                    raise TypeError('Unknown entity type: %r' % e)
         kw.update(self.style.get('edges', {}).get(predicate, {}))
         kw.update(attrs)
         return kw
@@ -607,7 +609,13 @@ class OntoGraph:
         if format is None:
             format = ext.lstrip('.')
         kwargs.setdefault('cleanup', True)
-        self.dot.render(base, format=format, **kwargs)
+        if format in ('graphviz', 'gv'):
+            if 'dictionary' in kwargs:
+                self.dot.save(filename, dictionary=kwargs['dictionary'])
+            else:
+                self.dot.save(filename)
+        else:
+            self.dot.render(base, format=format, **kwargs)
 
     def view(self):
         """Shows the graph in a viewer."""

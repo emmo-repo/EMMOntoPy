@@ -394,7 +394,10 @@ class OntoGraph:
         label = root.label.first() if len(root.label) == 1 else root.name
         nodes = graph.get_node(label)
         if nodes:
-            node, = nodes
+            if len(nodes) > 1:
+                warnings.warn(
+                    'More than one node corresponding to label: %s' % label)
+            node = nodes[0]
         else:
             if self.is_individual(label):
                 node = pydot.Node(label, **style.get('individual', {}))
