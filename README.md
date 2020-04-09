@@ -29,13 +29,13 @@ EMMO in Python.  On top of that EMMO-python provides:
   - Generation of graphs.
   - Generation of documentation.
   - Command-line tools:
-      - [emmocheck][docs/tools-instructions.md#emmocheck]:
+      - [emmocheck](docs/tools-instructions.md#emmocheck):
         checks an ontology against EMMO conventions
-      - [ontoversion][docs/tools-instructions.md#ontoversion]:
+      - [ontoversion](docs/tools-instructions.md#ontoversion):
         prints ontology version number
-      - [ontograph][docs/tools-instructions.md#ontograph]:
+      - [ontograph](docs/tools-instructions.md#ontograph):
         vertasile tool for visualising (parts of) an ontology
-      - [ontodoc][docs/tools-instructions.md#ontodoc]:
+      - [ontodoc](docs/tools-instructions.md#ontodoc):
         documents an ontology
 
 Some examples of what you can do with EMMO-python includes:

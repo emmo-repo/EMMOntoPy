@@ -251,8 +251,8 @@ Basic documentation of an ontology `demo.owl` can e.g. be generated with
 
     ontodoc --format=simple-html --local demo.owl demo.html
 
-See [examples/emmodoc/README.md][../examples/emmodoc/README.md] for
+See [examples/emmodoc/README.md](../examples/emmodoc/README.md) for
 how this tool is used to generate the
-[html][https://emmo-repo.github.io/latest/emmo.html] and
-[pdf][https://emmo-repo.github.io/latest/emmo.pdf] documentation of
+[html](https://emmo-repo.github.io/latest/emmo.html) and
+[pdf](https://emmo-repo.github.io/latest/emmo.pdf) documentation of
 EMMO itself.
