@@ -1,7 +1,15 @@
 Instructions for tools available in EMMO-python
 ===============================================
 
-[[_TOC_]]
+**Content:**
+
+- [emmocheck](#emmocheck)
+- [ontoversion](#ontoversion)
+- [ontograph](#ontograph)
+- [ontodoc](#ontodoc)
+
+---
+
 
 emmocheck
 ---------
@@ -52,6 +60,8 @@ Tool for checking that ontologies conform to EMMO conventions.
         - myunits.MyUnitCategory1
         - myunits.MyUnitCategory2
 
+---
+
 
 ontoversion
 -----------
@@ -82,6 +92,8 @@ the version.
     ontoversion http://emmo.info/emmo/1.0.0-alpha
 
 Comment: Fails if ontology has no versionIRI tag.
+
+---
 
 
 ontograph
@@ -157,6 +169,8 @@ Tool for visualizing ontologies.
 ### Examples:
 
     ontograph --root=MaterialState http://emmo.info/emmo/1.0.0-alpha materialstate.png
+
+---
 
 
 ontodoc
