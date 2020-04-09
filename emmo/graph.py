@@ -427,14 +427,14 @@ class OntoGraph:
             for cls in c.Classes:
                 clslabel = getlabel(cls)
                 if clslabel not in self.nodes and self.addnodes:
-                    self.add_node(clslabel)
+                    self.add_node(cls)
                 if clslabel in self.nodes:
                     self.add_edge(getlabel(cls), 'isA', label)
         elif isinstance(c, owlready2.And):
             for cls in c.Classes:
                 clslabel = getlabel(cls)
                 if clslabel not in self.nodes and self.addnodes:
-                    self.add_node(clslabel)
+                    self.add_node(cls)
                 if clslabel in self.nodes:
                     self.add_edge(label, 'isA', getlabel(cls))
         elif isinstance(c, owlready2.Not):
