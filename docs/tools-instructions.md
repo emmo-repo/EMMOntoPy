@@ -167,8 +167,11 @@ Tool for visualizing ontologies.
 
 
 ### Examples:
+The figure below is e.g. generated with the following command
 
-    ontograph --root=MaterialState http://emmo.info/emmo/1.0.0-alpha materialstate.png
+    ontograph --root=MaterialState --relations=all --legend emmo-inferred materialstate.png
+
+![Graph generated with the ontograph tool.](materialstate.png)
 
 ---
 
