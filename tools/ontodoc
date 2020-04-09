@@ -4,7 +4,6 @@ import sys
 import argparse
 import subprocess
 
-
 # Support running from uninstalled package by adding parent dir to sys path
 rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
     os.path.dirname(__file__)))))
@@ -13,6 +12,8 @@ sys.path.insert(1, rootdir)
 from emmo import World, onto_path
 from emmo.ontodoc import (
     OntoDoc, get_format, get_style, get_figformat, get_maxwidth, get_docpp)
+
+import owlready2
 
 
 def main():

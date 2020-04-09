@@ -245,3 +245,14 @@ positional arguments:
       --keep-generated FILE, -k FILE
                             Keep a copy of generated markdown input file for
                             pandoc (for debugging).
+
+### Examples:
+Basic documentation of an ontology `demo.owl` can e.g. be generated with
+
+    ontodoc --format=simple-html --local demo.owl demo.html
+
+See [examples/emmodoc/README.md][../examples/emmodoc/README.md] for
+how this tool is used to generate the
+[html][https://emmo-repo.github.io/latest/emmo.html] and
+[pdf][https://emmo-repo.github.io/latest/emmo.pdf] documentation of
+EMMO itself.
