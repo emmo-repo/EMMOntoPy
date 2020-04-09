@@ -145,8 +145,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Play nice with inspect...
         pass
 
-    def load(self, only_local=False, fileobj=None, reload=None,
-             reload_if_newer=False, catalog_file=None, **kwargs):
+    def load(self, only_local=False, filename=None, reload=None,
+             reload_if_newer=False, catalog_file='catalog-v001.xml',
+             **kwargs):
         """Load the ontology.
 
         Parameters
@@ -154,31 +155,34 @@ class Ontology(owlready2.Ontology, OntoGraph):
         only_local : bool
             Whether to only read local files.  This requires that you
             have appended the path to the ontology to owlready2.onto_path.
-        fileobj : str
-            File name to load the ontology from.  Default to the base_iri
+        filename : str
+            Path to file to load the ontology from.  Defaults to `base_iri`
             provided to get_ontology().
         reload : bool
             Whether to reload the ontology if it is already loaded.
         reload_if_newer : bool
             Whether to reload the ontology if the source has changed since
             last time it was loaded.
-        catalog_file : bool | str
-            Whether to load ontology paths from Protègè catalog files.
-            If provided as a string, it will be used instead of the default
-            "catalog-v001.xml".
+        catalog_file : str
+            Name of Protègè catalog file in the same folder as the
+            ontology.  This option is used together with --local and
+            defaults to "catalog-v001.xml".
+        kwargs
+            Additional keyword arguments passed on to
+            owlready2.Ontology.load().
         """
-        if catalog_file:
-            dirpath = os.path.normpath(
-                os.path.dirname(fileobj or self.base_iri.rstrip('/#')))
-            kw = dict(recursive=True, return_paths=True)
-            if isinstance(catalog_file, str):
-                kw['catalog_name'] = catalog_file
-            iris, dirs = read_catalog(dirpath, **kw)
+        # Append paths from catalog file to onto_path
+        dirpath = os.path.normpath(
+            os.path.dirname(filename or self.base_iri.rstrip('/#')))
+        if only_local and os.path.exists(os.path.join(dirpath, catalog_file)):
+            iris, dirs = read_catalog(
+                dirpath, recursive=True, return_paths=True,
+                catalog_file=catalog_file)
             for d in sorted(dirs, reverse=True):
                 if d not in owlready2.onto_path:
                     owlready2.onto_path.append(d)
 
-        super().load(only_local=only_local, fileobj=fileobj, reload=reload,
+        super().load(only_local=only_local, fileobj=filename, reload=reload,
                      reload_if_newer=reload_if_newer, **kwargs)
         return self
 

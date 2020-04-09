@@ -15,5 +15,8 @@ if 'owlready2' in sys.modules.keys():
 # Monkey patch Owlready2 by injecting some methods
 from . import patch  # noqa: E402, F401
 
-# Import get_ontology(), which is our main entry point
+# Import World and get_ontology(), which are our main entry points
 from .ontology import World, get_ontology  # noqa: E402, F401
+
+# Global list of ontology search paths
+from owlready2 import onto_path  # noqa: E402, F401
