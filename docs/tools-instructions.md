@@ -1,149 +1,233 @@
-# Instructions for tools available in emmopython #
+Instructions for tools available in EMMO-python
+===============================================
 
-## emmocheck ##
+[[_TOC_]]
+
+emmocheck
+---------
 Tool for checking that ontologies conform to EMMO conventions.
 
-### usage: ###
-emmocheck [options] iri
+### Usage:
 
-### options: ###
---catalog-file CATALOGFILE : Name of Protègè catalog file in the same 
-folder as the ontology. This option is used together with --local and 
-defaults to "catalog-v001.xml".  
---check-imported (-i) :     Whether to check imported ontologies.  
---configfile (-c) CONFIGURE : A yaml file with additional test configurations.  
---database (-d) FILENAME : Load ontology from Owlready sqlite3 database. The iri should be one of the ontologies in the database.  
--h : help  
---local (-l) : Load imported ontologies locally.  Their paths are specified
-in Protègè catalog files or via the --path option. The IRI should be a 
-file name.  
---path PATH : Paths where imported ontologies can be found.  May be provided
-as a comma-separated string and/or with multiple --path options.  
---verbose (-v) :  
+    emmocheck [options] iri
 
-### examples: 
-emmocheck http://emmo.info/emmo/1.0.0-alpha2  
-emmocheck --database demo.sqlite3 http://www.emmc.info/emmc-csa/demo#  
-emmocheck -l emmo.owl (in folder to which emmo was downloaded locally)  
+### Options:
 
-(Missing example with local and path)  
+    positional arguments:
+      iri                   File name or URI to the ontology to test.
 
-## ontoversion ##
-Prints version of an ontology to standard output
+    optional arguments:
+      -h, --help            show this help message and exit
+      --database FILENAME, -d FILENAME
+                            Load ontology from Owlready2 sqlite3 database. The
+                            `iri` argument should in this case be the IRI of the
+                            ontology you want to check.
+      --local, -l           Load imported ontologies locally. Their paths are
+                            specified in ProtÃ¨gÃ¨ catalog files or via the --path
+                            option. The IRI should be a file name.
+      --catalog-file CATALOG_FILE
+                            Name of ProtÃ¨gÃ¨ catalog file in the same folder as the
+                            ontology. This option is used together with --local
+                            and defaults to "catalog-v001.xml".
+      --path PATH           Paths where imported ontologies can be found. May be
+                            provided as a comma-separated string and/or with
+                            multiple --path options.
+      --check-imported, -i  Whether to check imported ontologies.
+      --verbose, -v         Verbosity level.
+      --configfile CONFIGFILE, -c CONFIGFILE
+                            A yaml file with additional test configurations.
+
+### Examples:
+
+    emmocheck http://emmo.info/emmo/1.0.0-alpha2
+    emmocheck --database demo.sqlite3 http://www.emmc.info/emmc-csa/demo#
+    emmocheck -l emmo.owl (in folder to which emmo was downloaded locally)
+
+(Missing example with local and path)
+
+### Example configuration file:
+
+    test_unit_dimensions:
+      exceptions:
+        - myunits.MyUnitCategory1
+        - myunits.MyUnitCategory2
+
+
+ontoversion
+-----------
+Prints version of an ontology to standard output.
 
 This script uses rdflib and the versionIRI tag of the ontology to infer
 the version.
 
-### usage: ###
-ontoversion [options] iri
+### Usage:
 
-### special dependencies: ###
-rdflib (python package)
+    ontoversion [options] iri
 
-### options: ###
---format (-f) FORMAT: OWL format.  Default is "xml".  
--h :  help
+### Special dependencies:
+- rdflib (python package)
 
-### examples: ###
-ontoversion http://emmo.info/emmo/1.0.0-alpha
+### Options:
 
-Comment: Fails if no versionIRI is given
+    positional arguments:
+      IRI                   IRI/file to OWL source to extract the version from.
 
-## ontograph ##
+    optional arguments:
+      -h, --help            show this help message and exit
+      --format FORMAT, -f FORMAT
+                            OWL format. Default is "xml".
+
+### Examples:
+
+    ontoversion http://emmo.info/emmo/1.0.0-alpha
+
+Comment: Fails if ontology has no versionIRI tag.
+
+
+ontograph
+---------
 Tool for visualizing ontologies.
 
-### usage: ###
-ontograph [options] iri [output]
+### Usage:
 
-### dependencies : ###
-Graphviz
+    ontograph [options] iri [output]
 
-### options: ###
---addconstructs (-c) : Whether to add nodes representing class constructs.  
---addnodes (-n) : Whether to add missing target nodes in relations.'  
---catalog-file CATALOG_FILE : Name of Protègè catalog file in the same 
-folder as the ontology.  This option is used together with --local and 
-defaults to "catalog-v001.xml"  
---database (-d) FILENAME : Load ontology from Owlready2 sqlite3 database.
-The `iri` argument should in this case be the IRI of the ontology 
-you want to visualise.  
---display (-D) : Whether to display graph.  
---edgelabels (-e) : Whether to add labels to edges.  
---exclude (-E) EXCLUDE : Nodes, including their subclasses, 
-to exclude from sub-graphs. May be provided as a comma-separated 
-string and/or with multiple --exclude options.  
---format (-f) FORMAT :Format of output file.  By default it is inferred 
-from the output file extension.  
---generate-style-file (-S) JSON_FILE : Write default style file 
-to a json file.  
--h : help  
---legend (-L) : Whether to add a legend to the graph.  
---leafs LEAFS : Leaf nodes for plotting sub-graphs.  May be provided as 
-a comma-separated string and/or with multiple --leafs options.  
---local (l) :Load imported ontologies locally.  Their paths are specified
-in Protègè catalog files or via the --path option.  The IRI should
-be a file name.  
---path PATH : Paths where imported ontologies can be found.  
-May be provided as a comma-separated string and/or with 
-multiple --path options.  
---parents (-p) N : Adds N levels of parents to graph.  
---plot-modules (-m) : Whether to plot module inter-dependencies 
-instead of their content.  
---rankdir {BT,TB,RL,LR} : Graph direction (from leaves to root).  
-Possible values are: "BT" (bottom-top, default), "TB" (top-bottom), 
-"RL" (right-left) and "LR" (left-right).  
---reasoner [{HermiT,Pellet}] : Run given reasoner on the ontology.
-Valid reasoners are "HermiT" (default) and "Pellet".
-Note: these reasoners do not work well with EMMO.  
---relations (-R) RELATIONS : Comma-separated string of relations 
-to visualise.  Default is "isA".  "all" means include all relations.  
---root ROOT : Name of root node in the graph.  Defaults to all classes.  
---style-file (-s) JSON_FILE : A json file with style definitions.  
+### Dependencies:
+- Graphviz
 
-### examples: ###
+### Options:
+
+    positional arguments:
+      IRI                   File name or URI of the ontology to visualise.
+      output                name of output file.
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      --format FORMAT, -f FORMAT
+                            Format of output file. By default it is inferred from
+                            the output file extension.
+      --database FILENAME, -d FILENAME
+                            Load ontology from Owlready2 sqlite3 database. The
+                            `iri` argument should in this case be the IRI of the
+                            ontology you want to visualise.
+      --local, -l           Load imported ontologies locally. Their paths are
+                            specified in ProtÃ¨gÃ¨ catalog files or via the --path
+                            option. The IRI should be a file name.
+      --catalog-file CATALOG_FILE
+                            Name of ProtÃ¨gÃ¨ catalog file in the same folder as the
+                            ontology. This option is used together with --local
+                            and defaults to "catalog-v001.xml".
+      --path PATH           Paths where imported ontologies can be found. May be
+                            provided as a comma-separated string and/or with
+                            multiple --path options.
+      --reasoner [{HermiT,Pellet}]
+                            Run given reasoner on the ontology. Valid reasoners
+                            are "HermiT" (default) and "Pellet". Note: these
+                            reasoners doesn't work well with EMMO.
+      --root ROOT, -r ROOT  Name of root node in the graph. Defaults to all
+                            classes.
+      --leafs LEAFS         Leafs nodes for plotting sub-graphs. May be provided
+                            as a comma-separated string and/or with multiple
+                            --leafs options.
+      --exclude EXCLUDE, -E EXCLUDE
+                            Nodes, including their subclasses, to exclude from
+                            sub-graphs. May be provided as a comma-separated
+                            string and/or with multiple --exclude options.
+      --parents N, -p N     Adds N levels of parents to graph.
+      --relations RELATIONS, -R RELATIONS
+                            Comma-separated string of relations to visualise.
+                            Default is "isA". "all" means include all relations.
+      --edgelabels, -e      Whether to add labels to edges.
+      --addnodes, -n        Whether to add missing target nodes in relations.
+      --addconstructs, -c   Whether to add nodes representing class constructs.
+      --rankdir {BT,TB,RL,LR}
+                            Graph direction (from leaves to root). Possible values
+                            are: "BT" (bottom-top, default), "TB" (top-bottom),
+                            "RL" (right-left) and "LR" (left-right).
+      --style-file JSON_FILE, -s JSON_FILE
+                            A json file with style definitions.
+      --legend, -L          Whether to add a legend to the graph.
+      --generate-style-file JSON_FILE, -S JSON_FILE
+                            Write default style file to a json file.
+      --plot-modules, -m    Whether to plot module inter-dependencies instead of
+                            their content.
+      --display, -D         Whether to display graph.
 
 
+### Examples:
 
-## ontodoc ##
+    ontograph --root=MaterialState http://emmo.info/emmo/1.0.0-alpha materialstate.png
+
+
+ontodoc
+-------
 Tool for documenting ontologies.
-### usage: ###
-ontodoc [options] iri outfile
 
-### dependencies: ###
-pandoc
-pdflatex or xelatex
+### Usage:
 
-### options: ###
---catalog-file CATALOG_FILE : Name of Protègè catalog file in the same folder as the 
-ontology.  This option is used together with --local and defaults to "catalog-v001.xml".  
---database (-d) FILENAME :  Load ontology from Owlready2 sqlite3 database. 
-The `iri` argument should in this case be the IRI of the ontology you want to document.  
---figdir (-D) DIR :  Default directory to store generated figures.  If a relative 
-path is given, it is relative to the template (see --template), or 
-the current directory, if --template is not given. Default: "genfigs"  
---figformat (-F) FIGFORMAT : Format for generated figures.  The default is inferred from 
---format.  
---format (-f) FORMAT : Output format.  May be "md", "simple-html" or any other format 
-supported by pandoc.  By default the format is inferred from --output.  
--h : help  
---keep-generated (-k) FILE : Keep a copy of generated markdown input file for pandoc (for debugging).  
---local (-l):  Load imported ontologies locally.  Their paths are specified
-in Protègè catalog files or via the --path option.  The IRI should 
-be a file name. 
---max-figwidth (-w) MAX_FIGWIDTH : Maximum figure width.  The default is inferred from --format.  
---pandoc-option (-p) STRING : Additional pandoc long options overriding those read from --pandoc-option-file.
-It is possible to remove pandoc option --XXX with "--pandoc-option=no-XXX". This option may be provided 
-multiple times.   
---pandoc-option-file (-P) FILE :  YAML file with additional pandoc options.  Note, that default 
-pandoc options are read from the files "pandoc-options.yaml" and "pandoc-FORMAT-options.yaml" 
-(where FORMAT is format specified with '--format).
-This option allows to override the defaults and add additional pandoc options.
-This option may be provided multiple times.  
---path PATH : Paths where imported ontologies can be found.  
-May be provided as a comma-separated string and/or with 
-multiple --path options. 
---reasoner [{HermiT,Pellet} :  Run given reasoner on the ontology.
-Valid reasoners are "HermiT" (default) and "Pellet".
-Note: these reasoners do not work well with EMMO.  
---template (-t) FILE : ontodoc input template.  If not provided, a simple default 
-template will be used.  Do not confuse it with the pandoc templates.
+    ontodoc [options] iri outfile
+
+### dependencies:
+- pandoc
+- pdflatex or xelatex
+
+### Options:
+
+positional arguments:
+  IRI                   File name or URI of the ontology to document.
+  OUTFILE               Output file.
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      --database FILENAME, -d FILENAME
+                            Load ontology from Owlready2 sqlite3 database. The
+                            `iri` argument should in this case be the IRI of the
+                            ontology you want to document.
+      --local, -l           Load imported ontologies locally. Their paths are
+                            specified in ProtÃ¨gÃ¨ catalog files or via the --path
+                            option. The IRI should be a file name.
+      --catalog-file CATALOG_FILE
+                            Name of ProtÃ¨gÃ¨ catalog file in the same folder as the
+                            ontology. This option is used together with --local
+                            and defaults to "catalog-v001.xml".
+      --path PATH           Paths where imported ontologies can be found. May be
+                            provided as a comma-separated string and/or with
+                            multiple --path options.
+      --reasoner [{HermiT,Pellet}]
+                            Run given reasoner on the ontology. Valid reasoners
+                            are "HermiT" (default) and "Pellet". Note: these
+                            reasoners doesn't work well with EMMO.
+      --template FILE, -t FILE
+                            ontodoc input template. If not provided, a simple
+                            default template will be used. Don't confuse it with
+                            the pandoc templates.
+      --format FORMAT, -f FORMAT
+                            Output format. May be "md", "simple-html" or any other
+                            format supported by pandoc. By default the format is
+                            inferred from --output.
+      --figdir DIR, -D DIR  Default directory to store generated figures. If a
+                            relative path is given, it is relative to the template
+                            (see --template), or the current directory, if
+                            --template is not given. Default: "genfigs"
+      --figformat FIGFORMAT, -F FIGFORMAT
+                            Format for generated figures. The default is inferred
+                            from --format."
+      --max-figwidth MAX_FIGWIDTH, -w MAX_FIGWIDTH
+                            Maximum figure width. The default is inferred from
+                            --format.
+      --pandoc-option STRING, -p STRING
+                            Additional pandoc long options overriding those read
+                            from --pandoc-option-file. It is possible to remove
+                            pandoc option --XXX with "--pandoc-option=no-XXX".
+                            This option may be provided multiple times.
+      --pandoc-option-file FILE, -P FILE
+                            YAML file with additional pandoc options. Note, that
+                            default pandoc options are read from the files
+                            "pandoc-options.yaml" and "pandoc-FORMAT-options.yaml"
+                            (where FORMAT is format specified with --format). This
+                            option allows to override the defaults and add
+                            additional pandoc options. This option may be provided
+                            multiple times.
+      --keep-generated FILE, -k FILE
+                            Keep a copy of generated markdown input file for
+                            pandoc (for debugging).
