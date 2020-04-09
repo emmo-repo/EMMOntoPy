@@ -18,7 +18,7 @@ from collections import defaultdict
 
 import owlready2
 
-from .utils import asstring, read_catalog
+from .utils import asstring, read_catalog, infer_version
 from .ontograph import OntoGraph  # FIXME: depricate...
 
 
@@ -510,6 +510,47 @@ class Ontology(owlready2.Ontology, OntoGraph):
         if isinstance(entity, str):
             entity = self.get_by_label(entity)
         return hasattr(entity, 'equivalent_to') and bool(entity.equivalent_to)
+
+    def get_version(self, as_iri=False):
+        """Returns the version number of the ontology as inferred from the
+        owl:versionIRI tag.
+
+        If `as_iri` is True, the full versionIRI is returned.
+        """
+        versionIRI_storid = self.world._abbreviate(
+            'http://www.w3.org/2002/07/owl#versionIRI')
+        tokens = self.get_triples(s=self.storid, p=versionIRI_storid)
+        if not tokens:
+            raise TypeError('No versionIRI in Ontology %r' % self.base_iri)
+        s, p, o = tokens[0]
+        versionIRI = self.world._unabbreviate(o)
+        if as_iri:
+            return versionIRI
+        else:
+            return infer_version(self.base_iri, versionIRI)
+
+    def set_version(self, version=None, version_iri=None):
+        """Assign version to ontology by asigning owl:versionIRI.
+
+        If `version` but not `version_iri` is provided, the version
+        IRI will be the combination of `base_iri` and `version`.
+        """
+        versionIRI = 'http://www.w3.org/2002/07/owl#versionIRI'
+        versionIRI_storid = self.world._abbreviate(versionIRI)
+        if self._has_obj_triple_spo(s=self.storid, p=versionIRI_storid):
+            self._del_obj_triple_spo(s=self.storid, p=versionIRI_storid)
+
+        if not version_iri:
+            if not version:
+                raise TypeError(
+                    'Either `version` or `version_iri` must be provided')
+            version_iri = self.base_iri.rstrip('#/') + '/' + version
+
+        self._add_obj_triple_spo(
+            s=self.storid,
+            p=self.world._abbreviate(versionIRI),
+            o=self.world._abbreviate(version_iri),
+        )
 
     def get_graph(self, **kwargs):
         """Returns a new graph object.  See  emmo.graph.OntoGraph.
