@@ -31,10 +31,10 @@ Tool for checking that ontologies conform to EMMO conventions.
                             `iri` argument should in this case be the IRI of the
                             ontology you want to check.
       --local, -l           Load imported ontologies locally. Their paths are
-                            specified in ProtÃ¨gÃ¨ catalog files or via the --path
+                            specified in Protégé catalog files or via the --path
                             option. The IRI should be a file name.
       --catalog-file CATALOG_FILE
-                            Name of ProtÃ¨gÃ¨ catalog file in the same folder as the
+                            Name of Protégé catalog file in the same folder as the
                             ontology. This option is used together with --local
                             and defaults to "catalog-v001.xml".
       --path PATH           Paths where imported ontologies can be found. May be
@@ -54,6 +54,9 @@ Tool for checking that ontologies conform to EMMO conventions.
 (Missing example with local and path)
 
 ### Example configuration file:
+Example of YAML configuration file provided with the --configfile option
+that will omit `myunits.MyUnitCategory1` and `myunits.MyUnitCategory1`
+from the _unit dimensions test_.
 
     test_unit_dimensions:
       exceptions:
@@ -123,10 +126,10 @@ Tool for visualizing ontologies.
                             `iri` argument should in this case be the IRI of the
                             ontology you want to visualise.
       --local, -l           Load imported ontologies locally. Their paths are
-                            specified in ProtÃ¨gÃ¨ catalog files or via the --path
+                            specified in Protégé catalog files or via the --path
                             option. The IRI should be a file name.
       --catalog-file CATALOG_FILE
-                            Name of ProtÃ¨gÃ¨ catalog file in the same folder as the
+                            Name of Protégé catalog file in the same folder as the
                             ontology. This option is used together with --local
                             and defaults to "catalog-v001.xml".
       --path PATH           Paths where imported ontologies can be found. May be
@@ -201,10 +204,10 @@ positional arguments:
                             `iri` argument should in this case be the IRI of the
                             ontology you want to document.
       --local, -l           Load imported ontologies locally. Their paths are
-                            specified in ProtÃ¨gÃ¨ catalog files or via the --path
+                            specified in Protégé catalog files or via the --path
                             option. The IRI should be a file name.
       --catalog-file CATALOG_FILE
-                            Name of ProtÃ¨gÃ¨ catalog file in the same folder as the
+                            Name of Protégé catalog file in the same folder as the
                             ontology. This option is used together with --local
                             and defaults to "catalog-v001.xml".
       --path PATH           Paths where imported ontologies can be found. May be
