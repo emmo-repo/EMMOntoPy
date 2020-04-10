@@ -54,18 +54,22 @@ Some examples of what you can do with EMMO-python includes:
     session where we check the relations of `Matter`:
 
     ```python
-    >>> from emmo import get_ontology
+    In [1]: from emmo import get_ontology
 
-    >>> emmo = get_ontology()
-    >>> emmo.load()
+    In [2]: emmo = get_ontology()
 
-    >>> emmo.Matter
-    emmo-material.Matter
+    In [3]: emmo.load()
+    Out[3]: get_ontology("http://emmo.info/emmo/emmo-inferred#")
 
-    >>> emmo.Matter.is_a
-    [emmo-material.Type,
-     emmo-mereotopology.hasPart.some(emmo-material.Massive),
-     emmo-mereotopology.hasTemporalPart.only(emmo-material.Matter)]
+    In [4]: emmo.Matter
+    Out[4]: physicalistic.Matter
+
+    In [5]: emmo.Matter.is_a
+    Out[5]:
+    [physicalistic.Physicalistic,
+     physical.Physical,
+     mereotopology.hasPart.some(physicalistic.Massive),
+     physical.hasTemporalPart.only(physicalistic.Matter)]
     ```
 
 
