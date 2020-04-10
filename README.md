@@ -25,10 +25,18 @@ EMMO in Python.  On top of that EMMO-python provides:
 
   - Access by label (as well as by names, important since class and
     property names in EMMO are based on UUIDs).
+  - Test suite for EMMO-based ontologies.
   - Generation of graphs.
   - Generation of documentation.
-  - Test suite for EMMO-based ontologies.
-  - Command-line tools (ontograph, ontodoc and emmocheck, ontoversion).
+  - Command-line tools:
+      - [emmocheck](docs/tools-instructions.md#emmocheck):
+        checks an ontology against EMMO conventions
+      - [ontoversion](docs/tools-instructions.md#ontoversion):
+        prints ontology version number
+      - [ontograph](docs/tools-instructions.md#ontograph):
+        vertasile tool for visualising (parts of) an ontology
+      - [ontodoc](docs/tools-instructions.md#ontodoc):
+        documents an ontology
 
 Some examples of what you can do with EMMO-python includes:
 

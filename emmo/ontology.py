@@ -37,33 +37,11 @@ categories = (
 )
 
 
-def get_ontology(base_iri=None, verbose=False):
+def get_ontology(*args, **kwargs):
     """Returns a new Ontology from `base_iri`.
 
-    The default is to load the latest pre-inferred version of EMMO.
-
-    If `verbose` is true, a lot of dianostics is written.
-    """
-    if base_iri is None or base_iri == 'emmo-inferred':
-        base_iri = ('https://github.com/emmo-repo/EMMO/blob/master/'
-                    'emmo-inferred.owl?raw=true')
-
-    if base_iri in owlready2.default_world.ontologies:
-        onto = owlready2.default_world.ontologies[base_iri]
-    elif base_iri + '#' in owlready2.default_world.ontologies:
-        onto = owlready2.default_world.ontologies[base_iri + '#']
-    else:
-        if os.path.exists(base_iri):
-            iri = os.path.abspath(base_iri)
-        elif os.path.exists(base_iri + '.owl'):
-            iri = os.path.abspath(base_iri + '.owl')
-        else:
-            iri = base_iri
-        if iri[-1] not in '/#':
-            iri += '#'
-        onto = Ontology(owlready2.default_world, iri)
-    onto._verbose = verbose
-    return onto
+    This is a convenient function for calling World.get_ontology()."""
+    return World().get_ontology(*args, **kwargs)
 
 
 def isinteractive():
@@ -72,6 +50,46 @@ def isinteractive():
     return bool(hasattr(__builtins__, '__IPYTHON__') or
                 sys.flags.interactive or
                 hasattr(sys, 'ps1'))
+
+
+class World(owlready2.World):
+    """A subclass of owlready2.World."""
+
+    def get_ontology(self, base_iri='emmo-inferred'):
+        """Returns a new Ontology from `base_iri`.
+
+        The `base_iri` argument may be one of:
+          - valid URL (possible excluding final .owl)
+          - file name (possible excluding final .owl)
+          - "emmo": load latest stable version of EMMO
+          - "emmo-inferred": load latest inferred version of EMMO (default)
+        """
+        if base_iri == 'emmo-inferred':
+            base_iri = (
+                'https://emmo-repo.github.io/unstable/emmo-inferred.owl')
+
+        elif base_iri == 'emmo':
+            base_iri = 'http://emmo.info/emmo'
+
+        if base_iri in self.ontologies:
+            onto = self.ontologies[base_iri]
+        elif base_iri + '#' in self.ontologies:
+            onto = self.ontologies[base_iri + '#']
+        elif base_iri + '/' in self.ontologies:
+            onto = self.ontologies[base_iri + '/']
+        else:
+            if os.path.exists(base_iri):
+                iri = os.path.abspath(base_iri)
+            elif os.path.exists(base_iri + '.owl'):
+                iri = os.path.abspath(base_iri + '.owl')
+            else:
+                iri = base_iri
+
+            if iri[-1] not in '/#':
+                iri += '#'
+            onto = Ontology(self, iri)
+
+        return onto
 
 
 class Ontology(owlready2.Ontology, OntoGraph):
@@ -127,8 +145,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Play nice with inspect...
         pass
 
-    def load(self, only_local=False, fileobj=None, reload=None,
-             reload_if_newer=False, catalog_file=None, **kwargs):
+    def load(self, only_local=False, filename=None, reload=None,
+             reload_if_newer=False, catalog_file='catalog-v001.xml',
+             **kwargs):
         """Load the ontology.
 
         Parameters
@@ -136,38 +155,53 @@ class Ontology(owlready2.Ontology, OntoGraph):
         only_local : bool
             Whether to only read local files.  This requires that you
             have appended the path to the ontology to owlready2.onto_path.
-        fileobj : str
-            File name to load the ontology from.  Default to the base_iri
+        filename : str
+            Path to file to load the ontology from.  Defaults to `base_iri`
             provided to get_ontology().
         reload : bool
             Whether to reload the ontology if it is already loaded.
         reload_if_newer : bool
             Whether to reload the ontology if the source has changed since
             last time it was loaded.
-        catalog_file : bool | str
-            Whether to load ontology paths from Protègè catalog files.
-            Implies `only_local`.  If provided as a string, it will be used
-            instead of the default "catalog-v001.xml".
+        catalog_file : str
+            Name of Protègè catalog file in the same folder as the
+            ontology.  This option is used together with --local and
+            defaults to "catalog-v001.xml".
+        kwargs
+            Additional keyword arguments passed on to
+            owlready2.Ontology.load().
         """
-        if self.loaded and not reload:
-            return self
-        if catalog_file:
-            only_local = True
-            dirpath = os.path.normpath(
-                os.path.dirname(fileobj or self.base_iri.rstrip('/#')))
-            kw = dict(recursive=True, return_paths=True)
-            if isinstance(catalog_file, str):
-                kw['catalog_name'] = catalog_file
-            iris, dirs = read_catalog(dirpath, **kw)
+        # Append paths from catalog file to onto_path
+        dirpath = os.path.normpath(
+            os.path.dirname(filename or self.base_iri.rstrip('/#')))
+        if only_local and os.path.exists(os.path.join(dirpath, catalog_file)):
+            iris, dirs = read_catalog(
+                dirpath, recursive=True, return_paths=True,
+                catalog_file=catalog_file)
             for d in sorted(dirs, reverse=True):
-                owlready2.onto_path.append(d)
-        super().load(only_local=only_local, fileobj=fileobj, reload=reload,
+                if d not in owlready2.onto_path:
+                    owlready2.onto_path.append(d)
+
+        super().load(only_local=only_local, fileobj=filename, reload=reload,
                      reload_if_newer=reload_if_newer, **kwargs)
         return self
 
-    def get_imported_ontologies(self, recursive=False):
-        """Return imported ontologies."""
+    def save(self, filename=None, format='rdfxml', overwrite=False, **kwargs):
+        """Writes the ontology to file.
 
+        If `overwrite` is true and filename exists, it will be removed
+        before saving.  The default is to append an existing ontology.
+        """
+        if overwrite and filename and os.path.exists(filename):
+            os.remove(filename)
+        super().save(file=filename, format=format, **kwargs)
+
+    def get_imported_ontologies(self, recursive=False):
+        """Return a list with imported ontologies.
+
+        If `recursive` is true, ontologies imported by imported ontologies
+        are also returned.
+        """
         def rec_imported(onto):
             for o in onto.imported_ontologies:
                 imported.add(o)
@@ -286,28 +320,31 @@ class Ontology(owlready2.Ontology, OntoGraph):
                     getattr(self, c)() for c in categories)
                 if hasattr(entity, 'label') and label in entity.label]
 
-    def sync_reasoner(self, reasoner='HermiT', include_imported=False):
+    def sync_reasoner(self, reasoner='HermiT', include_imported=False,
+                      **kwargs):
         """Update current ontology by running the given reasoner.
 
         Supported values for `reasoner` are 'Pellet' and 'HermiT'.
 
         If `include_imported` is true, the reasoner will also reason
-        over imported ontologies.  Note that this may be **very** with
-        the current supported reasoners (FaCT++ seems must faster).
+        over imported ontologies.  Note that this may be **very** slow
+        with the current supported reasoners (FaCT++ seems must faster).
+
+        Keyword arguments are passed to the underlying owlready2 function.
         """
-        def run(*args):
-            if reasoner == 'Pellet':
-                owlready2.sync_reasoner_pellet(*args)
-            elif reasoner == 'HermiT':
-                owlready2.sync_reasoner(*args)
-            else:
-                raise ValueError('unknown reasoner %r.  Supported reasoners'
-                                 'are "Pellet" and "HermiT".', reasoner)
+        if reasoner == 'Pellet':
+            sync = owlready2.sync_reasoner_pellet
+        elif reasoner == 'HermiT':
+            sync = owlready2.sync_reasoner_hermit
+        else:
+            raise ValueError('unknown reasoner %r.  Supported reasoners'
+                             'are "Pellet" and "HermiT".', reasoner)
+
         if include_imported:
             with self:
-                run()
+                sync(**kwargs)
         else:
-            run([self])
+            sync([self], **kwargs)
 
     def sync_attributes(self, name_policy=None, name_prefix='',
                         sync_imported=False):

@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
-"""Tool for plotting ontologies."""
+"""Tool for visualising ontologies."""
 import sys
 import os
 import argparse
 import json
 
-#import pydot
-
-# Support to run from uninstalled version by adding parent dir to sys path
+# Support running from uninstalled package by adding parent dir to sys path
 rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
     os.path.dirname(__file__)))))
 sys.path.insert(1, rootdir)
 
-from emmo import get_ontology
+from emmo import World, onto_path
 from emmo.graph import OntoGraph, plot_modules
 
 import owlready2
@@ -21,8 +19,8 @@ import owlready2
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        'iri', metavar='IRI',  # nargs='?',
-        help='OWL file/source to plot.')
+        'iri', metavar='IRI',
+        help='File name or URI of the ontology to visualise.')
     parser.add_argument(
         'output', nargs='?',
         help='name of output file.')
@@ -32,14 +30,34 @@ def main():
         help='Format of output file.  By default it is inferred from '
         'the output file extension.')
     parser.add_argument(
-        '--catalog-file', '--local', '-l', nargs='?', const=True,
-        help='Use Protègè catalog files to read imported ontologies locally.  '
-        'The default catalog file name is "catalog-v001.xml".')
+        '--database', '-d', metavar='FILENAME', default=':memory:',
+        help='Load ontology from Owlready2 sqlite3 database.  The `iri` '
+        'argument should in this case be the IRI of the ontology you '
+        'want to visualise.')
+    parser.add_argument(
+        '--local', '-l', action='store_true',
+        help='Load imported ontologies locally.  Their paths are specified '
+        'in Protègè catalog files or via the --path option.  The IRI should '
+        'be a file name.')
+    parser.add_argument(
+        '--catalog-file', default='catalog-v001.xml',
+        help='Name of Protègè catalog file in the same folder as the '
+        'ontology.  This option is used together with --local and '
+        'defaults to "catalog-v001.xml".')
+    parser.add_argument(
+        '--path', action='append', default=[],
+        help='Paths where imported ontologies can be found.  May be provided '
+        'as a comma-separated string and/or with multiple --path options.')
+    parser.add_argument(
+        '--reasoner', nargs='?', const='HermiT', choices=['HermiT', 'Pellet'],
+        help='Run given reasoner on the ontology.  Valid reasoners are '
+        '"HermiT" (default) and "Pellet".  Note: these reasoners doesn\'t '
+        'work well with EMMO.')
     parser.add_argument(
         '--root', '-r',
         help='Name of root node in the graph.  Defaults to all classes.')
     parser.add_argument(
-        '--leafs', '-l', action='append', default=[],
+        '--leafs', action='append', default=[],
         help='Leafs nodes for plotting sub-graphs.  May be provided as '
         'a comma-separated string and/or with multiple --leafs options.')
     parser.add_argument(
@@ -64,7 +82,7 @@ def main():
         '--addconstructs', '-c', action='store_true',
         help='Whether to add nodes representing class constructs.')
     parser.add_argument(
-        '--rankdir', '-d', default='BT', choices=['BT', 'TB', 'RL', 'LR'],
+        '--rankdir', default='BT', choices=['BT', 'TB', 'RL', 'LR'],
         help='Graph direction (from leaves to root).  Possible values are: '
         '"BT" (bottom-top, default), "TB" (top-bottom), "RL" (right-left) and '
         '"LR" (left-right).')
@@ -74,9 +92,6 @@ def main():
     parser.add_argument(
         '--legend', '-L', action='store_true',
         help='Whether to add a legend to the graph.')
-    #parser.add_argument(
-    #    '--reasoner', '-n', action='store_true',
-    #    help='Run the reasoner on the ontology before plotting.')
     parser.add_argument(
         '--generate-style-file', '-S', metavar='JSON_FILE',
         help='Write default style file to a json file.')
@@ -89,6 +104,11 @@ def main():
         help='Whether to display graph.')
     args = parser.parse_args()
 
+    # Append to onto_path
+    for paths in args.path:
+        for path in paths.split(','):
+            if path not in onto_path:
+                onto_path.append(path)
 
     # Customise style
     style = OntoGraph._default_style
@@ -126,15 +146,21 @@ def main():
         relations = [r.strip() for r in args.relations.split(',')]
 
     # Load ontology
-    onto = get_ontology(args.iri)
+    world = World(filename=args.database)
+    if args.database != ':memory:' and args.iri not in world.ontologies:
+        parser.error('The IRI argument should be one of the ontologies in '
+                     'the database:\n  ' +
+                     '\n  '.join(world.ontologies.keys()))
+    onto = world.get_ontology(args.iri)
+    catalog_file = args.catalog_file if args.local else None
     try:
-        onto.load(catalog_file=args.catalog_file)
+        onto.load(only_local=args.local, catalog_file=catalog_file)
     except owlready2.OwlReadyOntologyParsingError as e:
-        print('Invalid IRI:', e, file=sys.stderr)
-        sys.exit(1)
-    #if args.sync_reasoner:
-    #    onto.sync_reasoner()
+        parser.error('error parsing %r: %s' % (args.iri, e))
 
+    # Sync reasoner
+    if args.reasoner:
+        onto.sync_reasoner(reasoner=args.reasoner)
 
     # Plot modules
     if args.plot_modules:

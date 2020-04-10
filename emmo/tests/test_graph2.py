@@ -33,7 +33,9 @@ g = OntoGraph(emmo, emmo.ElementaryParticle, relations='all', addnodes=True,
 g.save('ElementaryParticle.png')
 
 g = OntoGraph(emmo, emmo.SIBaseUnit, relations='all', addnodes=True,
-              edgelabels=True)
+              edgelabels=True,
+              addconstructs=False, graph_attr={'rankdir': 'RL'})
+g.add_legend()
 g.save('SIBaseUnit.png')
 
 g = OntoGraph(emmo, emmo.EMMORelation, relations='all', edgelabels=None)
@@ -43,7 +45,8 @@ g = OntoGraph(emmo, emmo.Quantity,
               leafs=[emmo.DerivedQuantity, emmo.BaseQuantity,
                      emmo.PhysicalConstant],
               relations='all', edgelabels=None, addnodes=True,
-              addconstructs=True)
+              addconstructs=True, graph_attr={'rankdir': 'RL'})
+g.add_legend()
 g.save('Quantity.svg')
 
 
