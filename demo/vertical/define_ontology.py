@@ -210,6 +210,8 @@ onto.sync_attributes(name_policy='uuid', name_prefix='DEMO_')
 # Run the reasoner
 # onto.sync_reasoner()
 
+# set version of ontology
+onto.set_version("0.9")
 
 # Save our new EMMO-based ontology to demo.owl
 onto.save('demo.owl', overwrite=True)

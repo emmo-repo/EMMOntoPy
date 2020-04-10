@@ -178,3 +178,22 @@ def read_catalog(path, catalog_file='catalog-v001.xml', recursive=False,
         return iris, dirs
     else:
         return iris
+
+
+def infer_version(iri, version_iri):
+    """Infer version from IRI and versionIRI."""
+    if str(version_iri[:len(iri)]) == str(iri):
+        version = version_iri[len(iri):].lstrip('/')
+    else:
+        j = 0
+        v = []
+        for i in range(len(iri)):
+            while i + j < len(version_iri) and iri[i] != version_iri[i + j]:
+                v.append(version_iri[i + j])
+                j += 1
+        version = ''.join(v).lstrip('/').rstrip('/#')
+
+    if '/' in version:
+        raise ValueError('version IRI %r is not consistent with base IRI '
+                         '%r' % (version_iri, iri))
+    return version
