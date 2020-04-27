@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-VERSION = '1.0.0-alpha-9'
+VERSION = '1.0.0-alpha-10'
 
 
 # Ensure correct Python version

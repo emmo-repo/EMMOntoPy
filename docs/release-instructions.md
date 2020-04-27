@@ -3,7 +3,7 @@ Steps for creating a new release
 
 1. Create release branch (branch name can be target version number)
 
-2. Update version number in emmo/__init__.py
+2. Update version number in `emmo/__init__.py`
 
 3. Commit and push to origin
 
