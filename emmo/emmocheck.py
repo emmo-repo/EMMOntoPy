@@ -2,7 +2,7 @@
 """
 A module for testing an ontology against conventions defined for EMMO.
 
-A yaml file can be provided with additional test configurations.
+A YAML file can be provided with additional test configurations.
 
 Example configuration file:
 
@@ -31,25 +31,52 @@ class TestEMMOConventions(unittest.TestCase):
     """Base class for testing an ontology against EMMO conventions."""
     config = {}  # configurations
 
+    def get_config(self, string, default=None):
+        """Returns the configuration specified by `string`.
+
+        If configuration is not found in the configuration file, `default`
+        is returned.
+
+        Sub-configurations can be accessed by separating the components with
+        dots, like "test_namespace.exceptions".
+        """
+        c = self.config
+        try:
+            for token in string.split('.'):
+                c = c[token]
+        except KeyError:
+            return default
+        return c
+
 
 class TestSyntacticEMMOConventions(TestEMMOConventions):
     """Test syntactic EMMO conventions."""
     def test_number_of_labels(self):
         """Check that all entities have one and only one label.
 
+        Use "altLabel" for synonyms.
+
         The only allowed exception is entities who's representation
-        starts with "owl."."""
+        starts with "owl.".
+        """
+        exceptions = set((
+            'terms.license',
+            'terms.abstract',
+        ))
+        exceptions.update(self.get_config('test_number_of_labels', ()))
+
         for e in itertools.chain(self.onto.classes(),
                                  self.onto.object_properties(),
                                  self.onto.data_properties(),
                                  self.onto.individuals(),
                                  self.onto.annotation_properties()):
-            with self.subTest(e=e, labels=e.label):
-                if not repr(e).startswith('owl.'):
-                    self.assertEqual(1, len(e.label))
+            if repr(e) not in exceptions:
+                with self.subTest(entity=e, labels=e.label):
+                    if not repr(e).startswith('owl.'):
+                        self.assertEqual(1, len(e.label))
 
     def test_class_label(self):
-        """Check that labels are CamelCase.
+        """Check that class labels are CamelCase.
 
         For now we just we just check that they start with upper case."""
         for cls in self.onto.classes():
@@ -169,6 +196,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'mereotopology.Item',
             'owl.qualifiedCardinality',
             'owl.minQualifiedCardinality',
+            'terms.license',
+            'terms.abstract',
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
 
@@ -181,7 +210,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 if e not in visited and repr(e) not in exceptions:
                     visited.add(e)
                     with self.subTest(
-                            iri=e.iri, base_iri=onto.base_iri, entity=str(e)):
+                            iri=e.iri, base_iri=onto.base_iri, entity=repr(e)):
                         self.assertTrue(
                             e.iri.endswith(e.name),
                             msg='the final part of entity IRIs must be their '
@@ -197,23 +226,6 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
 
         visited = set()
         checker(self.onto)
-
-    def get_config(self, string, default=None):
-        """Returns the configuration specified by `string`.
-
-        If configuration is not found in the configuration file, `default`
-        is returned.
-
-        Sub-configurations can be accessed by separating the components with
-        dots, like "test_namespace.exceptions".
-        """
-        c = self.config
-        try:
-            for token in string.split('.'):
-                c = c[token]
-        except KeyError:
-            return default
-        return c
 
 
 def main():
