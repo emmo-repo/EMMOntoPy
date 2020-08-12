@@ -17,6 +17,7 @@ import re
 import unittest
 import itertools
 import argparse
+import fnmatch
 
 from .ontology import World
 from . import onto_path
@@ -107,6 +108,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
 class TestFunctionalEMMOConventions(TestEMMOConventions):
     """Test functional EMMO conventions."""
+
     def test_unit_dimension(self):
         """Check that all measurement units have a physical dimension.
 
@@ -263,6 +265,10 @@ def main():
     parser.add_argument(
         '--configfile', '-c',
         help='A yaml file with additional test configurations.')
+    parser.add_argument(
+        '--skip', '-s', action='append', default=[],
+        help=('Shell pattern matching tests to skip.  This option may be '
+              'provided multiple times.'))
 
     try:
         args, argv = parser.parse_known_args()
@@ -290,7 +296,7 @@ def main():
     TestEMMOConventions.onto = onto
     TestEMMOConventions.check_imported = args.check_imported
 
-    # Set up and run tests
+    # Configure tests
     verbosity = 2 if args.verbose else 1
     if args.configfile:
         import yaml
@@ -298,10 +304,21 @@ def main():
             TestEMMOConventions.config.update(
                 yaml.load(f, Loader=yaml.SafeLoader))
 
-    unittest.TestLoader().loadTestsFromTestCase(TestEMMOConventions)
-    runner = TextTestRunner(verbosity=verbosity)
-    runner.resultclass.checkmode = True
-    unittest.main(module=__name__, testRunner=runner)
+    # Run all subclasses of TestEMMOConventions as test suites
+    for cls in TestEMMOConventions.__subclasses__():
+        suite = unittest.TestLoader().loadTestsFromTestCase(cls)
+
+        # Skip tests from command line
+        for pattern in args.skip:
+            for test in suite:
+                name = test.id().split('.')[-1]
+                if fnmatch.fnmatchcase(name, pattern):
+                    setattr(test, 'setUp',
+                            lambda: test.skipTest('skipped from command line'))
+
+        runner = TextTestRunner(verbosity=verbosity)
+        runner.resultclass.checkmode = True
+        runner.run(suite)
 
 
 if __name__ == '__main__':
