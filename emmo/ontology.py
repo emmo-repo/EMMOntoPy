@@ -168,7 +168,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
             ontology.  This option is used together with --local and
             defaults to "catalog-v001.xml".
         kwargs
-            Additional keyword arguments passed on to
+            Additional keyword arguments are passed on to
             owlready2.Ontology.load().
         """
         # Append paths from catalog file to onto_path

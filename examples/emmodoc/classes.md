@@ -77,3 +77,7 @@ branch of mereotopology.
 %BRANCHDOC Physicalistic
 %BRANCHDOC ElementaryParticle
 %BRANCHDOC Subatomic
+%BRANCHDOC Matter
+%BRANCHDOC Fluid
+%BRANCHDOC Mixture
+%BRANCHDOC StateOfMatter
