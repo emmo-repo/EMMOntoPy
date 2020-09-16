@@ -56,7 +56,7 @@ branch of mereotopology.
 %BRANCHDOC MathematicalModel
 %BRANCHDOC MathematicalOperator
 %BRANCHDOC Metrological
-%BRANCHDOC PhysicsDimension     rankdir=RL
+%BRANCHDOC PhysicalDimension     rankdir=RL
 %BRANCHDOC PhysicalQuantity
 %BRANCHDOC Number
 %BRANCHDOC MeasurementUnit
@@ -73,9 +73,7 @@ branch of mereotopology.
 
 %BRANCHDOC Reductionistic
 %BRANCHDOC Expression
-%BRANCHDOC Formula
 
 %BRANCHDOC Physicalistic
 %BRANCHDOC ElementaryParticle
-%BRANCHDOC MaterialState
 %BRANCHDOC Subatomic
