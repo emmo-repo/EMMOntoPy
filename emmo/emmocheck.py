@@ -305,6 +305,7 @@ def main():
                 yaml.load(f, Loader=yaml.SafeLoader))
 
     # Run all subclasses of TestEMMOConventions as test suites
+    status = 0
     for cls in TestEMMOConventions.__subclasses__():
         suite = unittest.TestLoader().loadTestsFromTestCase(cls)
 
@@ -318,8 +319,13 @@ def main():
 
         runner = TextTestRunner(verbosity=verbosity)
         runner.resultclass.checkmode = True
-        runner.run(suite)
+        result = runner.run(suite)
+        if result.failures:
+            status = 1
+
+    return status
 
 
 if __name__ == '__main__':
-    main()
+    status = main()
+    sys.exit(status)

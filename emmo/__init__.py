@@ -3,7 +3,6 @@ import sys
 
 VERSION = '1.0.0-alpha-13'
 
-
 # Ensure correct Python version
 if sys.version_info < (3, 6):
     raise RuntimeError('emmo requires Python 3.6 or later')
