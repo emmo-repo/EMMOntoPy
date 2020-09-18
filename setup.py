@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-"""\
+"""
 Python reference API for the Europeean Materials & Modelling Ontology (EMMO).
 """
 import os
 import re
 import setuptools
 from glob import glob
-
-import emmo
 
 
 rootdir = os.path.dirname(__file__)
@@ -34,10 +32,20 @@ with open(os.path.join(rootdir, 'README.md'), 'rt') as f:
 with open(os.path.join(rootdir, 'requirements.txt'), 'rt') as f:
     requirements = f.read().split()
 
+# Retrieve emmo-package version
+with open(os.path.join(rootdir, 'emmo/__init__.py')) as handle:
+    for line in handle:
+        match = re.match(r"__version__ = '(.*)'", line)
+        if match is not None:
+            VERSION = match.group(1)
+            break
+    else:
+        raise RuntimeError(f'Could not determine package version from {handle.name} !')
+
 
 setuptools.setup(
     name='EMMO',
-    version=emmo.VERSION,
+    version=VERSION,
     author='Jesper Friis, Francesca Lønstad Bleken, Bjørn Tore Løvfall',
     author_email='jesper.friis@sintef.no',
     description=('Python reference API for the Europeean Materials & '
