@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-__version__ = '1.0.0-alpha-12'
-
+VERSION = '1.0.0-alpha-13'
 
 # Ensure correct Python version
 if sys.version_info < (3, 6):

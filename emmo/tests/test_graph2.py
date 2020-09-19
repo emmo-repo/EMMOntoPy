@@ -23,9 +23,9 @@ g = OntoGraph(emmo, emmo.hasPart, leafs=('mereotopological', 'semiotical',
 g.save('hasPart.svg')
 
 
-g = OntoGraph(emmo, emmo.MaterialState, relations='all', addnodes=True,
+g = OntoGraph(emmo, emmo.Matter, relations='all', addnodes=True,
               edgelabels=None)
-g.save('MaterialState.png')
+g.save('Matter.png')
 
 g = OntoGraph(emmo, emmo.ElementaryParticle, relations='all', addnodes=True,
               edgelabels=None)
@@ -88,7 +88,7 @@ legend.save('Semiotic-legend.png')
 # Reductionistic perspective
 g = OntoGraph(emmo, emmo.Reductionistic, relations='all', addnodes=False,
               leafs=[emmo.Quantity, emmo.String, emmo.PrefixedUnit,
-                     emmo.SymbolicComposition, emmo.MaterialState],
+                     emmo.SymbolicComposition, emmo.Matter],
               parents=2,
               #entities=[emmo.Symbolic],
               edgelabels=None)
