@@ -67,13 +67,13 @@ with onto:
     # =====
 
     # TODO: remove
-    class SquareLengthDimension(emmo.PhysicsDimension):
+    class SquareLengthDimension(emmo.PhysicalDimension):
         is_a = [emmo.hasSymbolData.value('T0 L2 M0 I0 Θ0 N0 J0')]
 
     # TODO: remove
     class SquareMetre(emmo.SICoherentDerivedUnit):
         emmo.altLabel = ['m²']
-        is_a = [emmo.hasPhysicsDimension.only(SquareLengthDimension)]
+        is_a = [emmo.hasPhysicalDimension.only(SquareLengthDimension)]
 
     #
     # Properties
@@ -82,7 +82,7 @@ with onto:
     # TODO: update instead of redefine Position
     class Position(emmo.Length):
         """Spatial position of an physical entity."""
-        is_a = [emmo.hasReferenceUnit.only(emmo.hasPhysicsDimension.only(
+        is_a = [emmo.hasReferenceUnit.only(emmo.hasPhysicalDimension.only(
                  emmo.LengthDimension)),
                 hasType.exactly(3, emmo.Real)]
 
@@ -90,7 +90,7 @@ with onto:
     class Area(emmo.ISQDerivedQuantity):
         """Extent of a surface."""
         is_a = [
-            emmo.hasReferenceUnit.only(emmo.hasPhysicsDimension.only(
+            emmo.hasReferenceUnit.only(emmo.hasPhysicalDimension.only(
                 SquareLengthDimension)),
             hasType.exactly(1, emmo.Real),
         ]
@@ -156,7 +156,9 @@ with onto:
         """A vector that participitates defining the unit cell."""
         is_a = [hasType.exactly(3, emmo.Real)]
 
-    class CrystalUnitCell(emmo.MaterialState):
+    # FIXME - CrystalUnitCell is not a matter, but a model or a symbolic
+    #         Just use crystalography
+    class CrystalUnitCell(emmo.Material):
         """A volume defined by the 3 unit cell vectors.  It contains the atoms
         constituting the unit cell of a crystal."""
         is_a = [emmo.hasSpatialDirectPart.some(emmo.BondedAtom),
