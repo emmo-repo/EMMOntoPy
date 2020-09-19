@@ -198,8 +198,15 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'mereotopology.Item',
             'owl.qualifiedCardinality',
             'owl.minQualifiedCardinality',
+            'terms.creator',
+            'terms.contributor',
+            'terms.publisher',
+            'terms.title',
             'terms.license',
             'terms.abstract',
+            'core.prefLabel',
+            'core.altLabel',
+            'core.hiddenLabel',
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
 
