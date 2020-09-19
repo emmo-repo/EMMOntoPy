@@ -18,7 +18,14 @@ Steps for creating a new release
 
 7. Create distribution package
 
-       rm -r dist
+   If you have emmo installed locally, reinstall it (possible use the -e
+   option):
+
+       pip install upgrade -e .
+
+   Create package
+
+       rm -rf dist
        python3 setup.py sdist bdist_wheel
 
 8. Upload to PyPI
