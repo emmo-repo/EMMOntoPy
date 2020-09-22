@@ -6,7 +6,14 @@ from owlready2 import ThingClass, PropertyClass, Thing
 
 # Improve default rendering of entities
 def render_func(entity):
-    name = entity.label[0] if len(entity.label) == 1 else entity.name
+    if hasattr(entity, 'prefLabel') and entity.prefLabel:
+        name = entity.prefLabel[0]
+    elif hasattr(entity, 'label') and entity.label:
+        name = entity.label[0]
+    elif hasattr(entity, 'altLabel') and entity.altLabel:
+        name = entity.altLabel[0]
+    else:
+        name = entity.name
     return "%s.%s" % (entity.namespace.name, name)
 
 

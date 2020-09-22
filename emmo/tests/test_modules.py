@@ -11,7 +11,7 @@ from emmo.graph import (plot_modules, get_module_dependencies,
                         check_module_dependencies)  # noqa: E402, F401
 
 
-iri = 'http://emmo.info/emmo/1.0.0-alpha'
+iri = 'http://emmo.info/emmo/1.0.0-alpha2'
 emmo = get_ontology(iri)
 emmo.load()
 

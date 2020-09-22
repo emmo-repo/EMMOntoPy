@@ -182,8 +182,14 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 if d not in owlready2.onto_path:
                     owlready2.onto_path.append(d)
 
-        super().load(only_local=only_local, fileobj=filename, reload=reload,
-                     reload_if_newer=reload_if_newer, **kwargs)
+        fileobj = open(filename, 'rb') if filename else None
+        try:
+            super().load(only_local=only_local, fileobj=fileobj, reload=reload,
+                         reload_if_newer=reload_if_newer,**kwargs)
+        finally:
+            if fileobj:
+                fileobj.close()
+
         return self
 
     def save(self, filename=None, format='rdfxml', overwrite=False, **kwargs):
@@ -272,7 +278,11 @@ class Ontology(owlready2.Ontology, OntoGraph):
         for category in categories:
             method = getattr(self, category)
             for entity in method():
-                if label in entity.label:
+                if hasattr(entity, 'prefLabel') and label in entity.prefLabel:
+                    return entity
+                elif hasattr(entity, 'label') and label in entity.label:
+                    return entity
+                elif hasattr(entity, 'altLabel') and label in entity.altLabel:
                     return entity
         # Check for special names
         d = {
