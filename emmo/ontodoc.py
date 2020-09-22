@@ -236,7 +236,7 @@ class OntoDoc:
         doc = []
 
         # Header
-        label = item.label.first()
+        label = item.prefLabel.first()
         doc.append(header_style.format(
             '', level=header_level, label=label, lowerlabel=label.lower()))
 
