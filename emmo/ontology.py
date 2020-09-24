@@ -328,7 +328,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         return [entity for entity in
                 itertools.chain.from_iterable(
                     getattr(self, c)() for c in categories)
-                if hasattr(entity, 'prefLabel') and prefLabel in entity.prefLabel]
+                if hasattr(entity, 'prefLabel') and label in entity.prefLabel]
 
     def sync_reasoner(self, reasoner='HermiT', include_imported=False,
                       **kwargs):
