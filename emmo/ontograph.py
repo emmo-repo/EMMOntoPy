@@ -188,7 +188,7 @@ class OntoGraph:
         #         multiple inheritance
 
         if parents and root:
-            r = self.get_by_label(root) if isinstance(root, str) else getroot
+            r = self.get_by_label(root) if isinstance(root, str) else root
             while True:
                 parent = r.is_a.first()
                 if (parent is None or parent is owlready2.Thing):
