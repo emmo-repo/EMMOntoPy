@@ -328,7 +328,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         return [entity for entity in
                 itertools.chain.from_iterable(
                     getattr(self, c)() for c in categories)
-                if hasattr(entity, 'label') and label in entity.label]
+                if hasattr(entity, 'prefLabel') and prefLabel in entity.prefLabel]
 
     def sync_reasoner(self, reasoner='HermiT', include_imported=False,
                       **kwargs):
@@ -419,7 +419,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         either as a ThingClass object or as a label."""
         warnings.warn('Ontology.get_annotations(cls) is deprecated.  '
                       'Use cls.get_annotations() instead.', DeprecationWarning)
-
+        
         if isinstance(entity, str):
             entity = self.get_by_label(entity)
         d = {'comment': getattr(entity, 'comment', '')}
