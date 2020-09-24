@@ -274,6 +274,12 @@ class Ontology(owlready2.Ontology, OntoGraph):
         found first is returned.  A KeyError is raised if `label`
         cannot be found.
         """
+        # Handle labels of the form 'namespace.label' recursively
+        if '.' in label:
+            head, sep, tail = label.partition('.')
+            ns = self.get_namespace(head)
+            return ns.ontology.get_by_label(tail)
+
         # Check for name in all categories in self
         for category in categories:
             method = getattr(self, category)
@@ -419,7 +425,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         either as a ThingClass object or as a label."""
         warnings.warn('Ontology.get_annotations(cls) is deprecated.  '
                       'Use cls.get_annotations() instead.', DeprecationWarning)
-        
+
         if isinstance(entity, str):
             entity = self.get_by_label(entity)
         d = {'comment': getattr(entity, 'comment', '')}
