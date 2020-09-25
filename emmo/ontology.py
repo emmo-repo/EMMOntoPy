@@ -182,8 +182,14 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 if d not in owlready2.onto_path:
                     owlready2.onto_path.append(d)
 
-        super().load(only_local=only_local, fileobj=filename, reload=reload,
-                     reload_if_newer=reload_if_newer, **kwargs)
+        fileobj = open(filename, 'rb') if filename else None
+        try:
+            super().load(only_local=only_local, fileobj=fileobj, reload=reload,
+                         reload_if_newer=reload_if_newer,**kwargs)
+        finally:
+            if fileobj:
+                fileobj.close()
+
         return self
 
     def save(self, filename=None, format='rdfxml', overwrite=False, **kwargs):
@@ -268,11 +274,21 @@ class Ontology(owlready2.Ontology, OntoGraph):
         found first is returned.  A KeyError is raised if `label`
         cannot be found.
         """
+        # Handle labels of the form 'namespace.label' recursively
+        if '.' in label:
+            head, sep, tail = label.partition('.')
+            ns = self.get_namespace(head)
+            return ns.ontology.get_by_label(tail)
+
         # Check for name in all categories in self
         for category in categories:
             method = getattr(self, category)
             for entity in method():
-                if label in entity.label:
+                if hasattr(entity, 'prefLabel') and label in entity.prefLabel:
+                    return entity
+                elif hasattr(entity, 'label') and label in entity.label:
+                    return entity
+                elif hasattr(entity, 'altLabel') and label in entity.altLabel:
                     return entity
         # Check for special names
         d = {
@@ -318,7 +334,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         return [entity for entity in
                 itertools.chain.from_iterable(
                     getattr(self, c)() for c in categories)
-                if hasattr(entity, 'label') and label in entity.label]
+                if hasattr(entity, 'prefLabel') and label in entity.prefLabel]
 
     def sync_reasoner(self, reasoner='HermiT', include_imported=False,
                       **kwargs):

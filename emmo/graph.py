@@ -22,14 +22,15 @@ ALL = 1
 
 def getlabel(e):
     """Returns the label of entity `e`."""
-    if hasattr(e, 'label') and e.label:
-        return e.label.first()
+    if hasattr(e, 'prefLabel'):
+        return e.prefLabel.first()
     elif hasattr(e, '__name__'):
         return e.__name__
     elif hasattr(e, 'name'):
         return str(e.name)
     else:
-        return asstring(e)
+        return repr(e)
+
 
 
 class OntoGraph:

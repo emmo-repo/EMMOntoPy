@@ -18,6 +18,7 @@ os.chdir(outdir)
 emmo = get_ontology()
 emmo.load()
 
+
 g = OntoGraph(emmo, emmo.hasPart, leafs=('mereotopological', 'semiotical',
                                          'connected'))
 g.save('hasPart.svg')
@@ -82,6 +83,25 @@ g.save('Semiotic+legend.png')
 legend = OntoGraph(emmo)
 legend.add_legend(g.get_relations())
 legend.save('Semiotic-legend.png')
+
+
+# Measurement
+leafs = {emmo.Object}
+
+hidden = {emmo.SIUnitSymbol, emmo.SpecialUnit, emmo.Manufacturing,
+          emmo.Engineered, emmo.PhysicalPhenomenon,
+          emmo.Icon, emmo.Interpretant, emmo.Index,
+          emmo.SubjectiveProperty,
+          emmo.NominalProperty,
+          emmo.ConventionalQuantitativeProperty,
+          emmo.ModelledQuantitativeProperty,
+          emmo.Theorization, emmo.Experiment, emmo.Theory, emmo.Variable}
+semiotic = emmo.get_branch(emmo.Holistic, leafs=leafs.union(hidden))
+semiotic.difference_update(hidden)
+g = OntoGraph(emmo)
+g.add_entities(semiotic, relations='all', edgelabels=False)
+g.add_legend()
+g.save('measurement.png')
 
 
 

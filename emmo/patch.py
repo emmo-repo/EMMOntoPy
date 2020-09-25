@@ -6,7 +6,14 @@ from owlready2 import ThingClass, PropertyClass, Thing
 
 # Improve default rendering of entities
 def render_func(entity):
-    name = entity.label[0] if len(entity.label) == 1 else entity.name
+    if hasattr(entity, 'prefLabel') and entity.prefLabel:
+        name = entity.prefLabel[0]
+    elif hasattr(entity, 'label') and entity.label:
+        name = entity.label[0]
+    elif hasattr(entity, 'altLabel') and entity.altLabel:
+        name = entity.altLabel[0]
+    else:
+        name = entity.name
     return "%s.%s" % (entity.namespace.name, name)
 
 
@@ -47,14 +54,14 @@ def get_class_annotations(self, all=False):
 
     If `all` is true, also annotations with no value are included."""
     onto = self.namespace.ontology
-    d = {a.label.first(): a._get_values_for_class(self)
-         for a in onto.annotation_properties()}
+    d = {a.prefLabel.first() if a.prefLabel else str(a).split('.')[1]: 
+         a._get_values_for_class(self) for a in onto.annotation_properties()}
     d.update({k: v._get_values_for_class(self)
               for k, v in self.__class__.namespace.world._props.items()})
     if all:
         return d
     else:
-        return {k: v for k, v in d.items() if v and k != 'label'}
+        return {k: v for k, v in d.items() if v and k != 'prefLabel'}
 
 
 def disjoint_with(self, reduce=False):

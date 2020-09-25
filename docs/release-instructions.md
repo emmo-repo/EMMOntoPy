@@ -21,7 +21,7 @@ Steps for creating a new release
    If you have emmo installed locally, reinstall it (possible use the -e
    option):
 
-       pip install upgrade -e .
+       pip install --upgrade -e .
 
    Create package
 
