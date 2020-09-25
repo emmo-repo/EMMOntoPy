@@ -306,11 +306,8 @@ class OntoGraph:
                     e.type]
 
                 if relations is True or rname in relations:
-                    #if hasattr(e.value, 'label'):
-                    vname = getlabel(e.value) #FLB check
-                    #else:
-                    #    vname = repr(e.value)
-                    others = graph.get_node(vname) #FLB check
+                    vname = getlabel(e.value)
+                    others = graph.get_node(vname)
 
                     # Only proceede if there is only one node named `vname`
                     # and an edge to that node does not already exists
