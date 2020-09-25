@@ -274,6 +274,12 @@ class Ontology(owlready2.Ontology, OntoGraph):
         found first is returned.  A KeyError is raised if `label`
         cannot be found.
         """
+        # Handle labels of the form 'namespace.label' recursively
+        if '.' in label:
+            head, sep, tail = label.partition('.')
+            ns = self.get_namespace(head)
+            return ns.ontology.get_by_label(tail)
+
         # Check for name in all categories in self
         for category in categories:
             method = getattr(self, category)
@@ -328,7 +334,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         return [entity for entity in
                 itertools.chain.from_iterable(
                     getattr(self, c)() for c in categories)
-                if hasattr(entity, 'label') and label in entity.label]
+                if hasattr(entity, 'prefLabel') and label in entity.prefLabel]
 
     def sync_reasoner(self, reasoner='HermiT', include_imported=False,
                       **kwargs):

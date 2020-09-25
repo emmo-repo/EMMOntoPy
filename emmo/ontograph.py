@@ -30,8 +30,8 @@ from .utils import asstring
 
 def getlabel(e):
     """Returns the label of entity `e`."""
-    if hasattr(e, 'label'):
-        return e.label.first()
+    if hasattr(e, 'prefLabel'):
+        return e.prefLabel.first()
     elif hasattr(e, '__name__'):
         return e.__name__
     elif hasattr(e, 'name'):
@@ -175,26 +175,25 @@ class OntoGraph:
         #         to only add a node once!
         import pydot
         from .ontology import NoSuchLabelError
-
+        
         if style is None or style == 'default':
             style = self._default_style
         elif style == 'uml':
             style = self._uml_style
-
         graph = self._get_dot_graph(root=root, graph=graph,
                                     relations=relations, leafs=leafs,
                                     style=style, edgelabels=edgelabels)
-
         # Add parents
         # FIXME - facture out into an recursive function to support
         #         multiple inheritance
+
         if parents and root:
             r = self.get_by_label(root) if isinstance(root, str) else root
             while True:
                 parent = r.is_a.first()
                 if (parent is None or parent is owlready2.Thing):
                     break
-                label = parent.label.first()
+                label = getlabel(parent)
                 if self.is_defined(label):
                     node = pydot.Node(label, **style.get('defined_class', {}))
                     # If label contains a hyphen, the node name will
@@ -211,13 +210,13 @@ class OntoGraph:
                         kw['label'] = edgelabels.get('is_a', 'is_a')
                     elif edgelabels:
                         kw['label'] = 'is_a'
-                    rootnode = graph.get_node(r.label.first())[0]
+
+                    rootnode = graph.get_node(getlabel(r))[0]
                     edge = pydot.Edge(rootnode, node, **kw)
                     graph.add_edge(edge)
                 if (isinstance(parents, str) and label == parents):
                     break
                 r = parent
-
         # Add edges
         for node in graph.get_nodes():
             try:
@@ -278,7 +277,7 @@ class OntoGraph:
         """
         import pydot
 
-        nodes = graph.get_node(entity.label.first())
+        nodes = graph.get_node(getlabel(entity))
         if not nodes:
             return
         node = nodes[0]
@@ -289,7 +288,7 @@ class OntoGraph:
                 pass
             elif isinstance(e, (owlready2.ObjectPropertyClass,
                                 owlready2.PropertyClass)):
-                label = e.label.first()
+                label = getlabel(e)
                 nodes = graph.get_node(label)
                 if nodes:
                     kw = style.copy()
@@ -307,10 +306,7 @@ class OntoGraph:
                     e.type]
 
                 if relations is True or rname in relations:
-                    if hasattr(e.value, 'label'):
-                        vname = e.value.label.first()
-                    else:
-                        vname = repr(e.value)
+                    vname = getlabel(e.value)
                     others = graph.get_node(vname)
 
                     # Only proceede if there is only one node named `vname`
@@ -361,7 +357,7 @@ class OntoGraph:
         elif isinstance(relations, str):
             relations = [relations]
         relations = set(r if isinstance(r, str) else
-                        r.label.first() if len(r.label) == 1 else r.name
+                        getlabel(r) if len(r.label) == 1 else r.name
                         for r in relations)
 
         if visited is None:
@@ -387,11 +383,11 @@ class OntoGraph:
         if root in visited:
             if hasattr(self, '_verbose') and self._verbose:
                 warnings.warn('Circular dependency of class %r' %
-                              root.label.first())
+                              getlabel(root))
             return graph
         visited.add(root)
 
-        label = root.label.first() if len(root.label) == 1 else root.name
+        label = getlabel(root) #if len(getlabel(root)) == 1 else root.name
         nodes = graph.get_node(label)
         if nodes:
             if len(nodes) > 1:
@@ -414,7 +410,7 @@ class OntoGraph:
             return graph
 
         for sc in root.subclasses():
-            label = sc.label.first() if len(sc.label) == 1 else sc.name
+            label = getlabel(sc) 
             if self.is_individual(label):
                 subnode = pydot.Node(label, **style.get('individual', {}))
                 subnode.set_name(label)
