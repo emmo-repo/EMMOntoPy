@@ -16,18 +16,5 @@ Steps for creating a new release
    Set the tag to the version number prefixed with "v" and title to
    the version number.
 
-7. Create distribution package
+7. PyPi distribution package is created automatically upon creation of new release on github.
 
-   If you have emmo installed locally, reinstall it (possible use the -e
-   option):
-
-       pip install --upgrade -e .
-
-   Create package
-
-       rm -rf dist
-       python3 setup.py sdist bdist_wheel
-
-8. Upload to PyPI
-
-       twine upload dist/*
