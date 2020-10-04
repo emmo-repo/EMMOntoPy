@@ -195,7 +195,6 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             exceptions - full name of entities to ignore.
         """
         exceptions = set((
-            'mereotopology.Item',
             'owl.qualifiedCardinality',
             'owl.minQualifiedCardinality',
             'terms.creator',
@@ -207,6 +206,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'core.prefLabel',
             'core.altLabel',
             'core.hiddenLabel',
+            'mereotopology.Item',
+            'manufacturing.EngineeredMaterial',
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
 
