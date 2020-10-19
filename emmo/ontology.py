@@ -253,6 +253,21 @@ class Ontology(owlready2.Ontology, OntoGraph):
                         getattr(onto, c)() for c in categories):
                     yield e
 
+    def annotation_properties(self, imported=False):
+        """Returns a generator iterating over all annotation properties
+        defined in the current ontology.
+
+        If `imported` is true, annotation properties in imported ontologies
+        will also be included.
+        """
+        if imported:
+            return self.get_entities(imported=True, classes=False,
+                                     individuals=False, object_properties=False,
+                                     data_properties=False,
+                                     annotation_properties=True)
+        else:
+            return super().annotation_properties()
+
     def get_root_classes(self):
         """Returns a list or root classes."""
         return [cls for cls in self.classes()
