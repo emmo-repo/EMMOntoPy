@@ -150,7 +150,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                             for r in cls.get_indirect_is_a()), msg=cls)
 
     def test_quantity_dimension(self):
-        """Check that all quantities have a hasPhysicalDimension annotation.
+        """Check that all quantities have a physicalDimension annotation.
 
         Configurations:
             exceptions - full class names of classes to ignore.
