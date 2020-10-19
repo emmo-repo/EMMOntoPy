@@ -53,7 +53,7 @@ class TestEMMOConventions(unittest.TestCase):
 class TestSyntacticEMMOConventions(TestEMMOConventions):
     """Test syntactic EMMO conventions."""
     def test_number_of_labels(self):
-        """Check that all entities have one and only one label.
+        """Check that all entities have one and only one prefLabel.
 
         Use "altLabel" for synonyms.
 
@@ -72,9 +72,10 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                                  self.onto.individuals(),
                                  self.onto.annotation_properties()):
             if repr(e) not in exceptions:
-                with self.subTest(entity=e, labels=e.label):
+                with self.subTest(entity=e, labels=e.prefLabel):
                     if not repr(e).startswith('owl.'):
-                        self.assertEqual(1, len(e.label))
+                        self.assertTrue(hasattr(e, 'prefLabel'))
+                        self.assertEqual(1, len(e.prefLabel))
 
     def test_class_label(self):
         """Check that class labels are CamelCase.
