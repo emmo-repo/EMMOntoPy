@@ -107,14 +107,18 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
     # Some properties for customising dir() listing.
     # Very useful in interactive sessions.
-    dir_labels = property(
-        fget=lambda self: getattr(self, '_dir_labels', isinteractive()),
-        fset=lambda self, v: setattr(self, '_dir_labels', bool(v)),
-        doc='Whether to include entity labels in dir() listing.')
-    dir_names = property(
-        fget=lambda self: getattr(self, '_dir_names', False),
-        fset=lambda self, v: setattr(self, '_dir_names', bool(v)),
-        doc='Whether to entity names in dir() listing.')
+    dir_preflabel = property(
+        fget=lambda self: getattr(self, '_dir_preflabel', isinteractive()),
+        fset=lambda self, v: setattr(self, '_dir_preflabel', bool(v)),
+        doc='Whether to include entity prefLabel in dir() listing.')
+    dir_label = property(
+        fget=lambda self: getattr(self, '_dir_label', isinteractive()),
+        fset=lambda self, v: setattr(self, '_dir_label', bool(v)),
+        doc='Whether to include entity label in dir() listing.')
+    dir_name = property(
+        fget=lambda self: getattr(self, '_dir_name', False),
+        fset=lambda self, v: setattr(self, '_dir_name', bool(v)),
+        doc='Whether to entity name in dir() listing.')
     dir_imported = property(
         fget=lambda self: getattr(self, '_dir_imported', isinteractive()),
         fset=lambda self, v: setattr(self, '_dir_imported', bool(v)),
@@ -123,11 +127,15 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
     def __dir__(self):
         s = set(super().__dir__())
-        if self.dir_labels:
+        if self.dir_preflabel:
+            s.update(e.prefLabel.first() for e in
+                     self.get_entities(imported=self.dir_imported)
+                     if hasattr(e, 'prefLabel'))
+        if self.dir_label:
             s.update(e.label.first() for e in
                      self.get_entities(imported=self.dir_imported)
                      if hasattr(e, 'label'))
-        if self.dir_names:
+        if self.dir_name:
             s.update(e.name for e in
                      self.get_entities(imported=self.dir_imported)
                      if hasattr(e, 'name'))
@@ -245,6 +253,21 @@ class Ontology(owlready2.Ontology, OntoGraph):
                         getattr(onto, c)() for c in categories):
                     yield e
 
+    def annotation_properties(self, imported=False):
+        """Returns a generator iterating over all annotation properties
+        defined in the current ontology.
+
+        If `imported` is true, annotation properties in imported ontologies
+        will also be included.
+        """
+        if imported:
+            return self.get_entities(imported=True, classes=False,
+                                     individuals=False, object_properties=False,
+                                     data_properties=False,
+                                     annotation_properties=True)
+        else:
+            return super().annotation_properties()
+
     def get_root_classes(self):
         """Returns a list or root classes."""
         return [cls for cls in self.classes()
@@ -334,7 +357,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
         return [entity for entity in
                 itertools.chain.from_iterable(
                     getattr(self, c)() for c in categories)
-                if hasattr(entity, 'prefLabel') and label in entity.prefLabel]
+                if ((hasattr(entity, 'prefLabel') and label in entity.prefLabel) or
+                    (hasattr(entity, 'label') and label in entity.label) or
+                    (hasattr(entity, 'altLabel') and label in entity.altLabel))]
 
     def sync_reasoner(self, reasoner='HermiT', include_imported=False,
                       **kwargs):

@@ -53,7 +53,7 @@ class TestEMMOConventions(unittest.TestCase):
 class TestSyntacticEMMOConventions(TestEMMOConventions):
     """Test syntactic EMMO conventions."""
     def test_number_of_labels(self):
-        """Check that all entities have one and only one label.
+        """Check that all entities have one and only one prefLabel.
 
         Use "altLabel" for synonyms.
 
@@ -72,9 +72,10 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                                  self.onto.individuals(),
                                  self.onto.annotation_properties()):
             if repr(e) not in exceptions:
-                with self.subTest(entity=e, labels=e.label):
+                with self.subTest(entity=e, labels=e.prefLabel):
                     if not repr(e).startswith('owl.'):
-                        self.assertEqual(1, len(e.label))
+                        self.assertTrue(hasattr(e, 'prefLabel'))
+                        self.assertEqual(1, len(e.prefLabel))
 
     def test_class_label(self):
         """Check that class labels are CamelCase.
@@ -136,7 +137,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         ))
         exceptions.update(
             self.get_config('test_unit_dimension.exceptions', ()))
-        regex = re.compile(r'^metrology.hasPhysicalDimension.only\(.*\)$')
+        regex = re.compile(r'^metrology.hasPhysicalDimension.some\(.*\)$')
         classes = set(self.onto.classes())
         for cls in self.onto.MeasurementUnit.descendants():
             if not self.check_imported and cls not in classes:
@@ -149,7 +150,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                             for r in cls.get_indirect_is_a()), msg=cls)
 
     def test_quantity_dimension(self):
-        """Check that all quantities have units (defined via dimensionality).
+        """Check that all quantities have a physicalDimension annotation.
 
         Configurations:
             exceptions - full class names of classes to ignore.
@@ -171,22 +172,22 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'isq.InternationalSystemOfQuantity',
             'isq.ISQDerivedQuantity',
             'siunits.SIExactConstant',
-            'units-extension.AtomAndNuclearPhysicsDerivedQuantity',
         ))
         exceptions.update(
             self.get_config('test_quantity_dimension.exceptions', ()))
         regex = re.compile(
-            r'^metrology.hasReferenceUnit.only\(metrology.'
-            r'hasPhysicalDimension.only\(.*\)\)$')
+            '^T([+-][1-9]|0) L([+-][1-9]|0) M([+-][1-9]|0) I([+-][1-9]|0) '
+            '(H|Θ)([+-][1-9]|0) N([+-][1-9]|0) J([+-][1-9]|0)$')
         classes = set(self.onto.classes())
-        for cls in self.onto.Quantity.descendants():
+        for cls in self.onto.PhysicalQuantity.descendants():
             if not self.check_imported and cls not in classes:
                 continue
             if repr(cls) not in exceptions:
                 with self.subTest(cls=cls):
-                    self.assertTrue(
-                        any(regex.match(repr(r))
-                            for r in cls.get_indirect_is_a()), msg=cls)
+                    anno = cls.get_annotations()
+                    self.assertIn('physicalDimension', anno, msg=cls)
+                    physdim = anno['physicalDimension'].first()
+                    self.assertRegex(physdim, regex, msg=cls)
 
     def test_namespace(self):
         """Check that all IRIs are namespaced after their (sub)ontology.
@@ -195,7 +196,6 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             exceptions - full name of entities to ignore.
         """
         exceptions = set((
-            'mereotopology.Item',
             'owl.qualifiedCardinality',
             'owl.minQualifiedCardinality',
             'terms.creator',
@@ -207,6 +207,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'core.prefLabel',
             'core.altLabel',
             'core.hiddenLabel',
+            'mereotopology.Item',
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
 

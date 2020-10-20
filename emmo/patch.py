@@ -49,13 +49,18 @@ def _dir(self):
     return sorted(s)
 
 
-def get_class_annotations(self, all=False):
+def get_class_annotations(self, all=False, imported=True):
     """Returns a dict with non-empty annotations.
 
-    If `all` is true, also annotations with no value are included."""
+    If `all` is true, also annotations with no value are included.
+
+    If `imported` is true, also include annotations defined in
+    imported ontologies.
+    """
     onto = self.namespace.ontology
-    d = {a.prefLabel.first() if a.prefLabel else str(a).split('.')[1]: 
-         a._get_values_for_class(self) for a in onto.annotation_properties()}
+    d = {a.prefLabel.first() if a.prefLabel else str(a).split('.')[1]:
+         a._get_values_for_class(self)
+         for a in onto.annotation_properties(imported=imported)}
     d.update({k: v._get_values_for_class(self)
               for k, v in self.__class__.namespace.world._props.items()})
     if all:
