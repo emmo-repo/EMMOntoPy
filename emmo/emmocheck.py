@@ -208,6 +208,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'core.altLabel',
             'core.hiddenLabel',
             'mereotopology.Item',
+            'manufacturing.EngineeredMaterial',
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
 
