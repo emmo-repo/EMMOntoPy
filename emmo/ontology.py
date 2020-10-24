@@ -61,15 +61,20 @@ class World(owlready2.World):
         The `base_iri` argument may be one of:
           - valid URL (possible excluding final .owl)
           - file name (possible excluding final .owl)
-          - "emmo": load latest stable version of EMMO
-          - "emmo-inferred": load latest inferred version of EMMO (default)
+          - "emmo": load latest stable version of asserted EMMO
+          - "emmo-inferred": load latest stable version of inferred EMMO
+            (default)
+          - "emmo-development": load latest inferred development version
+            of EMMO
         """
-        if base_iri == 'emmo-inferred':
+        if base_iri == 'emmo':
+            base_iri = 'http://emmo.info/emmo'
+        elif base_iri == 'emmo-inferred':
             base_iri = (
                 'https://emmo-repo.github.io/latest-stable/emmo-inferred.owl')
-
-        elif base_iri == 'emmo':
-            base_iri = 'http://emmo.info/emmo'
+        elif base_iri == 'emmo-development':
+            base_iri = (
+                'https://emmo-repo.github.io/development/emmo-inferred.owl')
 
         if base_iri in self.ontologies:
             onto = self.ontologies[base_iri]
