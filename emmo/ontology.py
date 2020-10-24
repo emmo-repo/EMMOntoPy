@@ -66,7 +66,7 @@ class World(owlready2.World):
         """
         if base_iri == 'emmo-inferred':
             base_iri = (
-                'https://emmo-repo.github.io/unstable/emmo-inferred.owl')
+                'https://emmo-repo.github.io/latest-stable/emmo-inferred.owl')
 
         elif base_iri == 'emmo':
             base_iri = 'http://emmo.info/emmo'
