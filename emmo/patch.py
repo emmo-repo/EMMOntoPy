@@ -77,15 +77,11 @@ def get_class_annotations(self, all=False, imported=True):
     imported ontologies.
     """
     onto = self.namespace.ontology
-    #d = {a.prefLabel.first() if a.prefLabel else str(a).split('.')[1]:
     d = {get_preferred_label(a): a._get_values_for_class(self)
          for a in onto.annotation_properties(imported=imported)}
-    d.update({k: v._get_values_for_class(self)
-              for k, v in self.__class__.namespace.world._props.items()})
     if all:
         return d
     else:
-        #return {k: v for k, v in d.items() if v and k != 'prefLabel'}
         return {k: v for k, v in d.items() if v}
 
 
@@ -126,38 +122,41 @@ def get_indirect_is_a(self, skip_classes=True):
 #
 # Extending PropertyClass (properties)
 #
-def get_property_annotations(self, all=False):
+def get_property_annotations(self, all=False, imported=True):
     """Returns a dict with non-empty property annotations.
 
-    If `all` is true, also annotations with no value are included."""
+    If `all` is true, also annotations with no value are included.
+
+    If `imported` is true, also include annotations defined in
+    imported ontologies.
+    """
     onto = self.namespace.ontology
-    d = {a.label.first(): a._get_values_for_class(self)
-         for a in onto.annotation_properties()}
-    d.update({k: v._get_values_for_class(self)
-              for k, v in self.__class__.namespace.world._props.items()})
+    d = {get_preferred_label(a): a._get_values_for_class(self)
+         for a in onto.annotation_properties(imported=imported)}
     if all:
         return d
     else:
-        return {k: v for k, v in d.items() if v and k != 'label'}
+        return {k: v for k, v in d.items() if v}
 
 
 #
 # Extending Thing (individuals)
 #
-def get_individual_annotations(self, all=False):
+def get_individual_annotations(self, all=False, imported=True):
     """Returns a dict with non-empty individual annotations.
 
-    If `all` is true, also annotations with no value are included."""
+    If `all` is true, also annotations with no value are included.
+
+    If `imported` is true, also include annotations defined in
+    imported ontologies.
+    """
     onto = self.namespace.ontology
-    props = self.__class__.__class__.namespace.world._props
-    d = {a.label.first(): a._get_values_for_class(self)
-         for a in onto.annotation_properties()}
-    d.update({k: v._get_values_for_individual(self)
-              for k, v in props.items()})
+    d = {get_preferred_label(a): a._get_values_for_individual(self)
+         for a in onto.annotation_properties(imported=imported)}
     if all:
         return d
     else:
-        return {k: v for k, v in d.items() if v and k != 'label'}
+        return {k: v for k, v in d.items() if v}
 
 
 #
