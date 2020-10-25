@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """This module injects some additional methods into owlready2 classes."""
+from types import MethodType
+
 import owlready2
-from owlready2 import ThingClass, PropertyClass, Thing
+from owlready2 import ThingClass, PropertyClass, Thing, ObjectPropertyClass
 
 
 # Improve default rendering of entities
@@ -20,10 +22,30 @@ def render_func(entity):
 owlready2.set_render_func(render_func)
 
 
+
 #
 # Extending ThingClass (classes)
 #
-def _get_parents(self, strict=False):
+
+# A better name would be get_preferred_label(), but that somehow
+# interfer with owlready2 and does not work...
+def get_preflabel(self):
+    """Returns the preferred label as a string (not list).
+
+    The following heuristics is used:
+      - if prefLabel annotation property exists, returns the first prefLabel
+      - if label annotation property exists, returns the first label
+      - otherwise return the name
+    """
+    if hasattr(self, 'prefLabel') and self.prefLabel:
+        return self.prefLabel[0]
+    elif hasattr(self, 'label') and self.label:
+        return self.label.first()
+    else:
+        return self.name
+
+
+def get_parents(self, strict=False):
     """Returns a list of all parents.  If `strict` is true, parents that are
     parents of other parents are excluded."""
     if strict:
@@ -31,12 +53,12 @@ def _get_parents(self, strict=False):
         for e in s.copy():
             s.difference_update(e.ancestors(include_self=False))
         return s
-    elif isinstance(self, owlready2.ThingClass):
+    elif isinstance(self, ThingClass):
         return {cls for cls in self.is_a
-                if isinstance(cls, owlready2.ThingClass)}
-    elif isinstance(self, owlready2.ObjectPropertyClass):
+                if isinstance(cls, ThingClass)}
+    elif isinstance(self, ObjectPropertyClass):
         return {cls for cls in self.is_a
-                if isinstance(cls, owlready2.ObjectPropertyClass)}
+                if isinstance(cls, ObjectPropertyClass)}
     else:
         assert 0
 
@@ -58,15 +80,16 @@ def get_class_annotations(self, all=False, imported=True):
     imported ontologies.
     """
     onto = self.namespace.ontology
-    d = {a.prefLabel.first() if a.prefLabel else str(a).split('.')[1]:
-         a._get_values_for_class(self)
+    #d = {a.prefLabel.first() if a.prefLabel else str(a).split('.')[1]:
+    d = {get_preflabel(a): a._get_values_for_class(self)
          for a in onto.annotation_properties(imported=imported)}
     d.update({k: v._get_values_for_class(self)
               for k, v in self.__class__.namespace.world._props.items()})
     if all:
         return d
     else:
-        return {k: v for k, v in d.items() if v and k != 'prefLabel'}
+        #return {k: v for k, v in d.items() if v and k != 'prefLabel'}
+        return {k: v for k, v in d.items() if v}
 
 
 def disjoint_with(self, reduce=False):
@@ -135,11 +158,15 @@ def get_individual_annotations(self, all=False):
 
 # Inject methods into Owlready2 classes
 setattr(ThingClass, '__dir__', _dir)
-setattr(ThingClass, 'get_parents', _get_parents)
+setattr(ThingClass, 'get_preferred_label', get_preflabel)
+setattr(ThingClass, 'get_parents', get_parents)
 setattr(ThingClass, 'get_annotations', get_class_annotations)
 setattr(ThingClass, 'disjoint_with', disjoint_with)
 setattr(ThingClass, 'get_indirect_is_a', get_indirect_is_a)
-setattr(PropertyClass, 'get_parents', _get_parents)
+
+setattr(PropertyClass, 'get_preferred_label', get_preflabel)
+setattr(PropertyClass, 'get_parents', get_parents)
 setattr(PropertyClass, 'get_annotations', get_property_annotations)
-type.__setattr__(Thing, 'get_individual_annotations',
-                 get_individual_annotations)
+
+type.__setattr__(Thing, 'get_preferred_label', get_preflabel)
+type.__setattr__(Thing, 'get_annotations', get_individual_annotations)
