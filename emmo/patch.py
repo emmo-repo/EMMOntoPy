@@ -3,7 +3,7 @@
 from types import MethodType
 
 import owlready2
-from owlready2 import ThingClass, PropertyClass, Thing, ObjectPropertyClass
+from owlready2 import ThingClass, PropertyClass, Thing, Restriction
 
 
 # Improve default rendering of entities
@@ -53,9 +53,9 @@ def get_parents(self, strict=False):
     elif isinstance(self, ThingClass):
         return {cls for cls in self.is_a
                 if isinstance(cls, ThingClass)}
-    elif isinstance(self, ObjectPropertyClass):
+    elif isinstance(self, owlready2.ObjectPropertyClass):
         return {cls for cls in self.is_a
-                if isinstance(cls, ObjectPropertyClass)}
+                if isinstance(cls, owlready2.ObjectPropertyClass)}
     else:
         assert 0
 
@@ -106,13 +106,20 @@ def disjoint_with(self, reduce=False):
                     yield e
 
 
-def get_indirect_is_a(self):
+def get_indirect_is_a(self, skip_classes=True):
     """Returns the set of all isSubclassOf relations of self and its
-    ancestors."""
+    ancestors.  If `skip_classes` is true, indirect classes are not
+    included in the returned set.
+    """
     s = set()
-    for e in self.mro():
+    for e in reversed(self.mro()):
         if hasattr(e, 'is_a'):
-            s.update(e.is_a)
+            if skip_classes:
+                s.update(r for r in e.is_a
+                         if not isinstance(r, owlready2.ThingClass))
+            else:
+                s.update(e.is_a)
+    s.update(self.is_a)
     return s
 
 
@@ -153,6 +160,13 @@ def get_individual_annotations(self, all=False):
         return {k: v for k, v in d.items() if v and k != 'label'}
 
 
+#
+# Extending Restruction
+#
+def get_typename(self):
+    return owlready2.class_construct._restriction_type_2_label[self.type]
+
+
 # Inject methods into Owlready2 classes
 setattr(ThingClass, '__dir__', _dir)
 setattr(ThingClass, 'get_preferred_label', get_preferred_label)
@@ -164,6 +178,8 @@ setattr(ThingClass, 'get_indirect_is_a', get_indirect_is_a)
 setattr(PropertyClass, 'get_preferred_label', get_preferred_label)
 setattr(PropertyClass, 'get_parents', get_parents)
 setattr(PropertyClass, 'get_annotations', get_property_annotations)
+
+setattr(Restriction, 'get_typename', get_typename)
 
 # Method names for individuals must be different from method names for classes
 type.__setattr__(Thing, 'get_preflabel', get_preferred_label)
