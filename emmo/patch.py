@@ -26,10 +26,7 @@ owlready2.set_render_func(render_func)
 #
 # Extending ThingClass (classes)
 #
-
-# A better name would be get_preferred_label(), but that somehow
-# interfer with owlready2 and does not work...
-def get_preflabel(self):
+def get_preferred_label(self):
     """Returns the preferred label as a string (not list).
 
     The following heuristics is used:
@@ -81,7 +78,7 @@ def get_class_annotations(self, all=False, imported=True):
     """
     onto = self.namespace.ontology
     #d = {a.prefLabel.first() if a.prefLabel else str(a).split('.')[1]:
-    d = {get_preflabel(a): a._get_values_for_class(self)
+    d = {get_preferred_label(a): a._get_values_for_class(self)
          for a in onto.annotation_properties(imported=imported)}
     d.update({k: v._get_values_for_class(self)
               for k, v in self.__class__.namespace.world._props.items()})
@@ -158,15 +155,16 @@ def get_individual_annotations(self, all=False):
 
 # Inject methods into Owlready2 classes
 setattr(ThingClass, '__dir__', _dir)
-setattr(ThingClass, 'get_preferred_label', get_preflabel)
+setattr(ThingClass, 'get_preferred_label', get_preferred_label)
 setattr(ThingClass, 'get_parents', get_parents)
 setattr(ThingClass, 'get_annotations', get_class_annotations)
 setattr(ThingClass, 'disjoint_with', disjoint_with)
 setattr(ThingClass, 'get_indirect_is_a', get_indirect_is_a)
 
-setattr(PropertyClass, 'get_preferred_label', get_preflabel)
+setattr(PropertyClass, 'get_preferred_label', get_preferred_label)
 setattr(PropertyClass, 'get_parents', get_parents)
 setattr(PropertyClass, 'get_annotations', get_property_annotations)
 
-type.__setattr__(Thing, 'get_preferred_label', get_preflabel)
-type.__setattr__(Thing, 'get_annotations', get_individual_annotations)
+# Method names for individuals must be different from method names for classes
+type.__setattr__(Thing, 'get_preflabel', get_preferred_label)
+type.__setattr__(Thing, 'get_individual_annotations', get_individual_annotations)
