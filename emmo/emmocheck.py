@@ -278,6 +278,9 @@ def main():
         '--skip', '-s', action='append', default=[],
         help=('Shell pattern matching tests to skip.  This option may be '
               'provided multiple times.'))
+    parser.add_argument(
+        '--url_from_catalog', '-u', action='store_true',
+        help=('Get url from catalog file'))
 
     try:
         args, argv = parser.parse_known_args()
@@ -299,7 +302,10 @@ def main():
                      '\n  '.join(world.ontologies.keys()))
 
     onto = world.get_ontology(args.iri)
-    onto.load(only_local=args.local, catalog_file=args.catalog_file)
+
+    onto.load(only_local=args.local, 
+              url_from_catalog = args.url_from_catalog, 
+              catalog_file=args.catalog_file)
 
     # Store settings TestEMMOConventions
     TestEMMOConventions.onto = onto
