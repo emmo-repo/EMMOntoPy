@@ -44,14 +44,19 @@ Tool for checking that ontologies conform to EMMO conventions.
       --verbose, -v         Verbosity level.
       --configfile CONFIGFILE, -c CONFIGFILE
                             A yaml file with additional test configurations.
+      --skip, -s ShellPattern
+        		    Shell pattern matching tests to skip.  This option may be
+                            provided multiple times.
+      --url_from_catalog, -u, 
+			    Get url from catalog file.
+
 
 ### Examples:
 
     emmocheck http://emmo.info/emmo/1.0.0-alpha2
     emmocheck --database demo.sqlite3 http://www.emmc.info/emmc-csa/demo#
-    emmocheck -l emmo.owl (in folder to which emmo was downloaded locally)
-
-(Missing example with local and path)
+    emmocheck -l emmo.owl (in folder to which emmo was downloaded locally) 
+(Missing example with local and path, and url_from_catalog)
 
 ### Example configuration file:
 Example of YAML configuration file provided with the --configfile option
