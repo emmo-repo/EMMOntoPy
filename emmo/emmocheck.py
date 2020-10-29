@@ -279,7 +279,7 @@ def main():
         help=('Shell pattern matching tests to skip.  This option may be '
               'provided multiple times.'))
     parser.add_argument(
-        '--url_from_catalog', '-u', action='store_true',
+        '--url-from-catalog', '-u', action='store_true',
         help=('Get url from catalog file'))
 
     try:
