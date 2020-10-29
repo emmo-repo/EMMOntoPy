@@ -159,7 +159,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
         pass
 
     def load(self, only_local=False, filename=None, reload=None,
-             reload_if_newer=False, catalog_file='catalog-v001.xml',
+             reload_if_newer=False, url_from_catalog=False,
+             catalog_file='catalog-v001.xml',
              **kwargs):
         """Load the ontology.
 
@@ -176,6 +177,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
         reload_if_newer : bool
             Whether to reload the ontology if the source has changed since
             last time it was loaded.
+        url_from_catalog : bool
+            Use catalog file if `base_iri` cannot be resolved.
         catalog_file : str
             Name of Protègè catalog file in the same folder as the
             ontology.  This option is used together with --local and
@@ -196,9 +199,31 @@ class Ontology(owlready2.Ontology, OntoGraph):
                     owlready2.onto_path.append(d)
 
         fileobj = open(filename, 'rb') if filename else None
+
         try:
             super().load(only_local=only_local, fileobj=fileobj, reload=reload,
-                         reload_if_newer=reload_if_newer,**kwargs)
+                         reload_if_newer=reload_if_newer, **kwargs)
+        except owlready2.OwlReadyOntologyParsingError:
+            if url_from_catalog:
+                # Use catalog file to update IRIs of imported ontologies
+                # in internal store and try to load again...
+                iris = read_catalog(dirpath, catalog_file=catalog_file)
+                for abbrev_iri in self.world._get_obj_triples_sp_o(
+                        self.storid, owlready2.owl_imports):
+                    iri = self._unabbreviate(abbrev_iri)
+                    if iri in iris:
+                        self._del_obj_triple_spo(self.storid,
+                                                 owlready2.owl_imports,
+                                                 abbrev_iri)
+                        self._add_obj_triple_spo(self.storid,
+                                                 owlready2.owl_imports,
+                                                 self._abbreviate(iris[iri]))
+                self.loaded = False
+                super().load(only_local=only_local, fileobj=fileobj,
+                             reload=reload, reload_if_newer=reload_if_newer,
+                             **kwargs)
+            else:
+                raise
         finally:
             if fileobj:
                 fileobj.close()

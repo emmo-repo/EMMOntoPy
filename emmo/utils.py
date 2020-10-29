@@ -166,12 +166,16 @@ def read_catalog(path, catalog_file='catalog-v001.xml', recursive=False,
 
     def load_uri(uri, dirname):
         assert gettag(uri) == 'uri'
-        filepath = os.path.join(dirname, uri.attrib['uri'])
-        iris.setdefault(uri.attrib['name'], filepath)
-        dir = os.path.normpath(os.path.dirname(filepath))
-        if recursive and dir not in dirs:
-            catalog = os.path.join(dir, catalog_file)
-            load_catalog(catalog)
+        s = uri.attrib['uri']
+        if s.startswith('http://') or s.startswith('https://'):
+            iris.setdefault(uri.attrib['name'], s)
+        else:
+            filepath = os.path.join(dirname, uri.attrib['uri'])
+            iris.setdefault(uri.attrib['name'], filepath)
+            dir = os.path.normpath(os.path.dirname(filepath))
+            if recursive and dir not in dirs:
+                catalog = os.path.join(dir, catalog_file)
+                load_catalog(catalog)
 
     load_catalog(filepath)
     if return_paths:
