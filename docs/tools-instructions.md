@@ -47,7 +47,7 @@ Tool for checking that ontologies conform to EMMO conventions.
       --skip, -s ShellPattern
         		    Shell pattern matching tests to skip.  This option may be
                             provided multiple times.
-      --url_from_catalog, -u, 
+      --url-from-catalog, -u, 
 			    Get url from catalog file.
 
 
