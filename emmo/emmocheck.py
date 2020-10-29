@@ -304,7 +304,7 @@ def main():
     onto = world.get_ontology(args.iri)
 
     onto.load(only_local=args.local, 
-              url_from_catalog = args.url_from_catalog, 
+              url_from_catalog=args.url_from_catalog, 
               catalog_file=args.catalog_file)
 
     # Store settings TestEMMOConventions
