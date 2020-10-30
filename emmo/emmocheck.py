@@ -211,7 +211,6 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'manufacturing.EngineeredMaterial',
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
-
         def checker(onto):
             for e in itertools.chain(onto.classes(),
                                      onto.object_properties(),
@@ -236,7 +235,10 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                     checker(imp_onto)
 
         visited = set()
-        checker(self.onto)
+        if self.onto.base_iri not in self.ignore_namespace:
+            checker(self.onto)
+        else:
+            print('Skipping namespace: ' + self.onto.base_iri)
 
 
 def main():
@@ -281,6 +283,10 @@ def main():
     parser.add_argument(
         '--url-from-catalog', '-u', action='store_true',
         help=('Get url from catalog file'))
+    parser.add_argument(
+        '--ignore-namespace', '-in', action='append', default=[],
+        help=('Base_iri for namespace to be ignored. Can be given multiple '
+              'times'))
 
     try:
         args, argv = parser.parse_known_args()
@@ -310,6 +316,7 @@ def main():
     # Store settings TestEMMOConventions
     TestEMMOConventions.onto = onto
     TestEMMOConventions.check_imported = args.check_imported
+    TestEMMOConventions.ignore_namespace = args.ignore_namespace
 
     # Configure tests
     verbosity = 2 if args.verbose else 1
