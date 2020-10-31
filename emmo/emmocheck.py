@@ -212,11 +212,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
         def checker(onto):
-            for e in itertools.chain(onto.classes(),
-                                     onto.object_properties(),
-                                     onto.data_properties(),
-                                     onto.individuals(),
-                                     onto.annotation_properties()):
+            for e in onto.get_entities():
                 if e not in visited and repr(e) not in exceptions:
                     visited.add(e)
                     with self.subTest(
@@ -226,7 +222,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                             msg='the final part of entity IRIs must be their '
                             'name')
                         self.assertEqual(
-                            e.iri[:-len(e.name)], onto.base_iri,
+                            e.iri, e.namespace.base_iri + e.name,
                             msg='IRI %r does not correspond to module '
                             'namespace: %r' % (e.iri, onto.base_iri))
 
@@ -309,8 +305,8 @@ def main():
 
     onto = world.get_ontology(args.iri)
 
-    onto.load(only_local=args.local, 
-              url_from_catalog=args.url_from_catalog, 
+    onto.load(only_local=args.local,
+              url_from_catalog=args.url_from_catalog,
               catalog_file=args.catalog_file)
 
     # Store settings TestEMMOConventions
