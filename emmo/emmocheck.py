@@ -211,35 +211,29 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'manufacturing.EngineeredMaterial',
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
-        def checker(onto,ignore_namespace):
-            for e in itertools.chain(onto.classes(),
-                                     onto.object_properties(),
-                                     onto.data_properties(),
-                                     onto.individuals(),
-                                     onto.annotation_properties()):
+        def checker(onto, ignore_namespace):
+            if onto.base_iri not in ignore_namespace:
+                return
+            for e in onto.get_entities():
                 if e not in visited and repr(e) not in exceptions:
                     visited.add(e)
-                    if onto.base_iri not in ignore_namespace:
+                    with self.subTest(
+                            iri=e.iri, base_iri=onto.base_iri, entity=repr(e)):
+                        self.assertTrue(
+                            e.iri.endswith(e.name),
+                            msg='the final part of entity IRIs must be their '
+                            'name')
+                        self.assertEqual(
+                            e.iri, e.namespace.base_iri + e.name,
+                            msg='IRI %r does not correspond to module '
+                            'namespace: %r' % (e.iri, onto.base_iri))
 
-                        with self.subTest(
-                                iri=e.iri, base_iri=onto.base_iri, entity=repr(e)):
-                            self.assertTrue(
-                                e.iri.endswith(e.name),
-                                msg='the final part of entity IRIs must be their '
-                                'name')
-                            self.assertEqual(
-                                e.iri[:-len(e.name)], onto.base_iri,
-                                msg='IRI %r does not correspond to module '
-                                'namespace: %r' % (e.iri, onto.base_iri))
-                    else:
-                        print('Skipping namespace: ' + self.onto.base_iri)
-
-                if self.check_imported:
-                    for imp_onto in onto.imported_ontologies:
-                        checker(imp_onto, ignore_namespace)
+            if self.check_imported:
+                for imp_onto in onto.imported_ontologies:
+                    checker(imp_onto)
 
         visited = set()
-        if list(filter(self.onto.base_iri.strip('#').endswith, 
+        if list(filter(self.onto.base_iri.strip('#').endswith,
                        self.ignore_namespace)) != []:
             print('Skipping namespace: ' + self.onto.base_iri)
         else:
@@ -313,9 +307,8 @@ def main():
                      '\n  '.join(world.ontologies.keys()))
 
     onto = world.get_ontology(args.iri)
-    print(onto)
-    onto.load(only_local=args.local, 
-              url_from_catalog=args.url_from_catalog, 
+    onto.load(only_local=args.local,
+              url_from_catalog=args.url_from_catalog,
               catalog_file=args.catalog_file)
     print(onto)
     print(onto.Atom)
