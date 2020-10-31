@@ -236,11 +236,14 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                             'namespace: %r' % (e.iri, onto.base_iri))
 
             if self.check_imported:
-                print(onto.imported_ontologies)
                 for imp_onto in onto.imported_ontologies:
-                    checker(imp_onto, ignore_namespace)
+                    if imp_onto not in visited_onto:
+                        #print(imp_onto)
+                        visited_onto.add(imp_onto)
+                        checker(imp_onto, ignore_namespace)
 
         visited = set()
+        visited_onto = set()
         if list(filter(self.onto.base_iri.strip('#').endswith,
                        self.ignore_namespace)) != []:
             print('Skipping namespace: ' + self.onto.base_iri)
