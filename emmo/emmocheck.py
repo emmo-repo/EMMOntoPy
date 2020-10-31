@@ -215,14 +215,11 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             if onto.base_iri.rstrip('#') in ignore_namespace:
                 print('Skipping namespace: ' + self.onto.base_iri)
                 return
-            if self.check_imported:
-                entities = onto.get_entities()
-            else:
-                entities = itertools.chain(onto.classes(),
-                                            onto.object_properties(),
-                                            onto.data_properties(),
-                                            onto.individuals(),
-                                            onto.annotation_properties())
+            entities = itertools.chain(onto.classes(),
+                                       onto.object_properties(),
+                                       onto.data_properties(),
+                                       onto.individuals(),
+                                       onto.annotation_properties())
             for e in entities:
                 if e not in visited and repr(e) not in exceptions:
                     visited.add(e)
@@ -233,11 +230,12 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                             msg='the final part of entity IRIs must be their '
                             'name')
                         self.assertEqual(
-                            e.iri, e.namespace.base_iri + e.name,
+                            e.iri, onto.base_iri + e.name,
                             msg='IRI %r does not correspond to module '
                             'namespace: %r' % (e.iri, onto.base_iri))
 
             if self.check_imported:
+                print(onto.imported_ontologies)
                 for imp_onto in onto.imported_ontologies:
                     checker(imp_onto, ignore_namespace)
 
