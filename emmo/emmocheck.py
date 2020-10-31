@@ -212,9 +212,18 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
         def checker(onto, ignore_namespace):
-            if onto.base_iri in ignore_namespace:
+            if onto.base_iri.rstrip('#') in ignore_namespace:
+                print('Skipping namespace: ' + self.onto.base_iri)
                 return
-            for e in onto.get_entities():
+            if self.check_imported:
+                entities = onto.get_entities()
+            else:
+                entities = itertools.chain(onto.classes(),
+                                            onto.object_properties(),
+                                            onto.data_properties(),
+                                            onto.individuals(),
+                                            onto.annotation_properties())
+            for e in entities:
                 if e not in visited and repr(e) not in exceptions:
                     visited.add(e)
                     with self.subTest(
