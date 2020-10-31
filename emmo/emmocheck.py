@@ -212,9 +212,19 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
         def checker(onto, ignore_namespace):
-            if onto.base_iri not in ignore_namespace:
+            if list(filter(self.onto.base_iri.strip('#').endswith,
+                           self.ignore_namespace)) != []:
+                print('Skipping namespace: ' + self.onto.base_iri)
                 return
-            for e in onto.get_entities():
+            if self.check_imported:
+                entities = onto.get_entities()
+            else:
+                entities = itertools.chain(onto.classes(),
+                                            onto.object_properties(),
+                                            onto.data_properties(),
+                                            onto.individuals(),
+                                            onto.annotation_properties())
+            for e in entities:
                 if e not in visited and repr(e) not in exceptions:
                     visited.add(e)
                     with self.subTest(
@@ -227,10 +237,6 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                             e.iri, e.namespace.base_iri + e.name,
                             msg='IRI %r does not correspond to module '
                             'namespace: %r' % (e.iri, onto.base_iri))
-
-            if self.check_imported:
-                for imp_onto in onto.imported_ontologies:
-                    checker(imp_onto)
 
         visited = set()
         if list(filter(self.onto.base_iri.strip('#').endswith,
@@ -310,14 +316,7 @@ def main():
     onto.load(only_local=args.local,
               url_from_catalog=args.url_from_catalog,
               catalog_file=args.catalog_file)
-    print(onto)
-    print(onto.Atom)
-    print(type(onto.Atom))
-    print(list(itertools.chain(onto.classes(),
-                               onto.object_properties(),
-                               onto.data_properties(),
-                               onto.individuals(),
-                               onto.annotation_properties())))
+    
     # Store settings TestEMMOConventions
     TestEMMOConventions.onto = onto
     TestEMMOConventions.check_imported = args.check_imported
