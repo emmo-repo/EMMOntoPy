@@ -212,11 +212,6 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
         def checker(onto,ignore_namespace):
-            print(list(itertools.chain(onto.classes(),
-                                     onto.object_properties(),
-                                     onto.data_properties(),
-                                     onto.individuals(),
-                                     onto.annotation_properties())))
             for e in itertools.chain(onto.classes(),
                                      onto.object_properties(),
                                      onto.data_properties(),
