@@ -212,7 +212,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
         def checker(onto, ignore_namespace):
-            if onto.base_iri not in ignore_namespace:
+            if onto.base_iri in ignore_namespace:
                 return
             for e in onto.get_entities():
                 if e not in visited and repr(e) not in exceptions:
@@ -230,7 +230,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
 
             if self.check_imported:
                 for imp_onto in onto.imported_ontologies:
-                    checker(imp_onto)
+                    checker(imp_onto, ignore_namespace)
 
         visited = set()
         if list(filter(self.onto.base_iri.strip('#').endswith,
@@ -292,7 +292,6 @@ def main():
         sys.argv[1:] = argv
     except SystemExit as e:
         os._exit(e.code)  # Exit without traceback on invalid arguments
-    print(args)
     # Append to onto_path
     for paths in args.path:
         for path in paths.split(','):
@@ -310,14 +309,7 @@ def main():
     onto.load(only_local=args.local,
               url_from_catalog=args.url_from_catalog,
               catalog_file=args.catalog_file)
-    print(onto)
-    print(onto.Atom)
-    print(type(onto.Atom))
-    print(list(itertools.chain(onto.classes(),
-                               onto.object_properties(),
-                               onto.data_properties(),
-                               onto.individuals(),
-                               onto.annotation_properties())))
+
     # Store settings TestEMMOConventions
     TestEMMOConventions.onto = onto
     TestEMMOConventions.check_imported = args.check_imported
