@@ -211,34 +211,55 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'manufacturing.EngineeredMaterial',
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
-        def checker(onto):
+        def checker(onto,ignore_namespace):
+            print(onto)
+            print(ignore_namespace)
+            print(list(itertools.chain(onto.classes(),
+                                     onto.object_properties(),
+                                     onto.data_properties(),
+                                     onto.individuals(),
+                                     onto.annotation_properties())))
             for e in itertools.chain(onto.classes(),
                                      onto.object_properties(),
                                      onto.data_properties(),
                                      onto.individuals(),
                                      onto.annotation_properties()):
+                print('in checker 1')
+                print(ignore_namespace)
+                print(onto.base_iri)
+                print(e)
                 if e not in visited and repr(e) not in exceptions:
                     visited.add(e)
-                    with self.subTest(
-                            iri=e.iri, base_iri=onto.base_iri, entity=repr(e)):
-                        self.assertTrue(
-                            e.iri.endswith(e.name),
-                            msg='the final part of entity IRIs must be their '
-                            'name')
-                        self.assertEqual(
-                            e.iri[:-len(e.name)], onto.base_iri,
-                            msg='IRI %r does not correspond to module '
-                            'namespace: %r' % (e.iri, onto.base_iri))
+                    #print(e.iri)
+                    print('inchecker 2')
+                    print(ignore_namespace)
+                    print(onto.base_iri)
+                    if onto.base_iri not in ignore_namespace:
 
-            if self.check_imported:
-                for imp_onto in onto.imported_ontologies:
-                    checker(imp_onto)
+                        with self.subTest(
+                                iri=e.iri, base_iri=onto.base_iri, entity=repr(e)):
+                            self.assertTrue(
+                                e.iri.endswith(e.name),
+                                msg='the final part of entity IRIs must be their '
+                                'name')
+                            self.assertEqual(
+                                e.iri[:-len(e.name)], onto.base_iri,
+                                msg='IRI %r does not correspond to module '
+                                'namespace: %r' % (e.iri, onto.base_iri))
+                    else:
+                        print('Skipping namespace: ' + self.onto.base_iri)
+
+                if self.check_imported:
+                    for imp_onto in onto.imported_ontologies:
+                        checker(imp_onto, ignore_namespace)
 
         visited = set()
-        if self.onto.base_iri not in self.ignore_namespace:
-            checker(self.onto)
-        else:
+        print('before checker')
+        if list(filter(self.onto.base_iri.strip('#').endswith, 
+                       self.ignore_namespace)) != []:
             print('Skipping namespace: ' + self.onto.base_iri)
+        else:
+            checker(self.onto, self.ignore_namespace)
 
 
 def main():
@@ -284,7 +305,7 @@ def main():
         '--url-from-catalog', '-u', action='store_true',
         help=('Get url from catalog file'))
     parser.add_argument(
-        '--ignore-namespace', '-in', action='append', default=[],
+        '--ignore-namespace', '-n', action='append', default=[],
         help=('Base_iri for namespace to be ignored. Can be given multiple '
               'times'))
 
@@ -293,7 +314,7 @@ def main():
         sys.argv[1:] = argv
     except SystemExit as e:
         os._exit(e.code)  # Exit without traceback on invalid arguments
-
+    print(args)
     # Append to onto_path
     for paths in args.path:
         for path in paths.split(','):
@@ -308,11 +329,18 @@ def main():
                      '\n  '.join(world.ontologies.keys()))
 
     onto = world.get_ontology(args.iri)
-
+    print(onto)
     onto.load(only_local=args.local, 
               url_from_catalog=args.url_from_catalog, 
               catalog_file=args.catalog_file)
-
+    print(onto)
+    print(onto.Atom)
+    print(type(onto.Atom))
+    print(list(itertools.chain(onto.classes(),
+                               onto.object_properties(),
+                               onto.data_properties(),
+                               onto.individuals(),
+                               onto.annotation_properties())))
     # Store settings TestEMMOConventions
     TestEMMOConventions.onto = onto
     TestEMMOConventions.check_imported = args.check_imported
