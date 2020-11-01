@@ -36,68 +36,70 @@ def getlabel(e):
 class OntoGraph:
     """Class for visualising an ontology.
 
-        Parameters
-        ----------
-        ontology : emmo.Ontology instance
-            Ontology to visualize.
-        root : None | graph.ALL | string | owlready2.ThingClass instance
-            Name or owlready2 entity of root node to plot subgraph
-            below.  If `root` is `graph.ALL`, all classes will be included
-            in the subgraph.
-        leafs : None | sequence
-            A sequence of leaf node names for generating sub-graphs.
-        entities : None | sequence
-            A sequence of entities to add to the graph.
-        relations : "all" | str | None | sequence
-            Sequence of relations to visualise.  If "all", means to include
-            all relations.
-        style : None | dict | "default"
-            A dict mapping the name of the different graphical elements
-            to dicts of dot graph attributes. Supported graphical elements
-            include:
-              - graphtype : "Digraph" | "Graph"
-              - graph : graph attributes (G)
-              - class : nodes for classes (N)
-              - root : additional attributes for root nodes (N)
-              - leaf : additional attributes for leaf nodes (N)
-              - defined_class : nodes for defined classes (N)
-              - class_construct : nodes for class constructs (N)
-              - individual : nodes for invididuals (N)
-              - object_property : nodes for object properties (N)
-              - data_property : nodes for data properties (N)
-              - annotation_property : nodes for annotation properties (N)
-              - added_node : nodes added because `addnodes` is true (N)
-              - isA : edges for isA relations (E)
-              - not : edges for not class constructs (E)
-              - equivalent_to : edges for equivalent_to relations (E)
-              - disjoint_with : edges for disjoint_with relations (E)
-              - inverse_of : edges for inverse_of relations (E)
-              - default_relation : default edges relations and restrictions (E)
-              - relations : dict of styles for different relations (E)
-              - inverse : default edges for inverse relations (E)
-              - default_dataprop : default edges for data properties (E)
-              - nodes : attribute for individual nodes (N)
-              - edges : attribute for individual edges (E)
-            If style is None or "default", the default style is used.
-            See https://www.graphviz.org/doc/info/attrs.html
-        edgelabels : bool | dict
-            Whether to add labels to the edges of the generated graph.
-            It is also possible to provide a dict mapping the
-            full labels (with cardinality stripped off for restrictions)
-            to some abbriviations.
-        addnodes : bool
-            Whether to add missing target nodes in relations.
-        addconstructs : bool
-            Whether to add nodes representing class constructs.
-        parents : int
-            Include `parents` levels of parents.
-        excluded_nodes : None | sequence
-            Sequence of labels of nodes to exclude.
-        graph : None | pydot.Dot instance
-            Graphviz Digraph object to plot into.  If None, a new graph object
-            is created using the keyword arguments.
-        kwargs :
-            Passed to graphviz.Digraph.
+    Parameters
+    ----------
+    ontology : emmo.Ontology instance
+        Ontology to visualize.
+    root : None | graph.ALL | string | owlready2.ThingClass instance
+        Name or owlready2 entity of root node to plot subgraph
+        below.  If `root` is `graph.ALL`, all classes will be included
+        in the subgraph.
+    leafs : None | sequence
+        A sequence of leaf node names for generating sub-graphs.
+    entities : None | sequence
+        A sequence of entities to add to the graph.
+    relations : "all" | str | None | sequence
+        Sequence of relations to visualise.  If "all", means to include
+        all relations.
+    style : None | dict | "default"
+        A dict mapping the name of the different graphical elements
+        to dicts of dot graph attributes. Supported graphical elements
+        include:
+          - graphtype : "Digraph" | "Graph"
+          - graph : graph attributes (G)
+          - class : nodes for classes (N)
+          - root : additional attributes for root nodes (N)
+          - leaf : additional attributes for leaf nodes (N)
+          - defined_class : nodes for defined classes (N)
+          - class_construct : nodes for class constructs (N)
+          - individual : nodes for invididuals (N)
+          - object_property : nodes for object properties (N)
+          - data_property : nodes for data properties (N)
+          - annotation_property : nodes for annotation properties (N)
+          - added_node : nodes added because `addnodes` is true (N)
+          - isA : edges for isA relations (E)
+          - not : edges for not class constructs (E)
+          - equivalent_to : edges for equivalent_to relations (E)
+          - disjoint_with : edges for disjoint_with relations (E)
+          - inverse_of : edges for inverse_of relations (E)
+          - default_relation : default edges relations and restrictions (E)
+          - relations : dict of styles for different relations (E)
+          - inverse : default edges for inverse relations (E)
+          - default_dataprop : default edges for data properties (E)
+          - nodes : attribute for individual nodes (N)
+          - edges : attribute for individual edges (E)
+        If style is None or "default", the default style is used.
+        See https://www.graphviz.org/doc/info/attrs.html
+    edgelabels : bool | dict
+        Whether to add labels to the edges of the generated graph.
+        It is also possible to provide a dict mapping the
+        full labels (with cardinality stripped off for restrictions)
+        to some abbriviations.
+    addnodes : bool
+        Whether to add missing target nodes in relations.
+    addconstructs : bool
+        Whether to add nodes representing class constructs.
+    parents : int
+        Include `parents` levels of parents.
+    excluded_nodes : None | sequence
+        Sequence of labels of nodes to exclude.
+    graph : None | pydot.Dot instance
+        Graphviz Digraph object to plot into.  If None, a new graph object
+        is created using the keyword arguments.
+    imported : bool
+        Whether to include imported classes if `entities` is None.
+    kwargs :
+        Passed to graphviz.Digraph.
     """
     _default_style = {
         'graphtype': 'Digraph',
@@ -174,7 +176,8 @@ class OntoGraph:
     def __init__(self, ontology, root=None, leafs=None, entities=None,
                  relations='isA', style=None, edgelabels=True,
                  addnodes=False, addconstructs=False,
-                 parents=0, excluded_nodes=None, graph=None, **kwargs):
+                 parents=0, excluded_nodes=None, graph=None,
+                 imported=False, **kwargs):
         if style is None or style == 'default':
             style = self._default_style
 
@@ -203,6 +206,7 @@ class OntoGraph:
         self.addnodes = addnodes
         self.addconstructs = addconstructs
         self.excluded_nodes = set(excluded_nodes) if excluded_nodes else set()
+        self.imported = imported
 
         if root == ALL:
             self.add_entities(
@@ -234,7 +238,7 @@ class OntoGraph:
         dedicated nodes.
         """
         if entities is None:
-            entities = self.ontology.classes()
+            entities = self.ontology.classes(imported=self.imported)
         self.add_nodes(entities, nodeattrs=nodeattrs, **attrs)
         self.add_edges(
             relations=relations, edgelabels=edgelabels,

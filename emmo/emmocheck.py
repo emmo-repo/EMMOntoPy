@@ -63,14 +63,17 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         exceptions = set((
             'terms.license',
             'terms.abstract',
+            'terms.contributor',
+            'terms.creator',
+            'terms.publisher',
+            'terms.title',
+            'core.prefLabel',
+            'core.altLabel',
+            'core.hiddenLabel',
         ))
         exceptions.update(self.get_config('test_number_of_labels', ()))
 
-        for e in itertools.chain(self.onto.classes(),
-                                 self.onto.object_properties(),
-                                 self.onto.data_properties(),
-                                 self.onto.individuals(),
-                                 self.onto.annotation_properties()):
+        for e in self.onto.get_entities():
             if repr(e) not in exceptions:
                 with self.subTest(entity=e, labels=e.prefLabel):
                     if not repr(e).startswith('owl.'):
@@ -81,7 +84,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         """Check that class labels are CamelCase.
 
         For now we just we just check that they start with upper case."""
-        for cls in self.onto.classes():
+        for cls in self.onto.classes(self.check_imported):
             for label in cls.label:
                 self.assertTrue(label[0].isupper() or label[0].isdigit())
 
@@ -138,7 +141,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         exceptions.update(
             self.get_config('test_unit_dimension.exceptions', ()))
         regex = re.compile(r'^metrology.hasPhysicalDimension.some\(.*\)$')
-        classes = set(self.onto.classes())
+        classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.MeasurementUnit.descendants():
             if not self.check_imported and cls not in classes:
                 continue
@@ -178,7 +181,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         regex = re.compile(
             '^T([+-][1-9]|0) L([+-][1-9]|0) M([+-][1-9]|0) I([+-][1-9]|0) '
             '(H|Θ)([+-][1-9]|0) N([+-][1-9]|0) J([+-][1-9]|0)$')
-        classes = set(self.onto.classes())
+        classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.PhysicalQuantity.descendants():
             if not self.check_imported and cls not in classes:
                 continue
