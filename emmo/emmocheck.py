@@ -238,7 +238,6 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             if self.check_imported:
                 for imp_onto in onto.imported_ontologies:
                     if imp_onto not in visited_onto:
-                        #print(imp_onto)
                         visited_onto.add(imp_onto)
                         checker(imp_onto, ignore_namespace)
 
