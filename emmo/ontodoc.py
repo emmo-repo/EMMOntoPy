@@ -463,7 +463,8 @@ class DocPP:
         Default scaling of generated figures.
     maxwidth : float
         Maximum figure width.  Figures larger than this will be rescaled.
-
+    imported : bool
+        Whether to include imported entities.
     """
 
     # FIXME - this class should be refractured:
@@ -477,7 +478,8 @@ class DocPP:
     #     directive, not in all included files as expedted.
 
     def __init__(self, template, ontodoc, basedir='.', figdir='genfigs',
-                 figformat='png', figscale=1.0, maxwidth=None):
+                 figformat='png', figscale=1.0, maxwidth=None,
+                 imported=False):
         self.lines = template.split('\n')
         self.ontodoc = ontodoc
         self.basedir = basedir
@@ -485,6 +487,7 @@ class DocPP:
         self.figformat = figformat
         self.figscale = figscale
         self.maxwidth = maxwidth
+        self.imported = imported
         self._branch_cache = None
         self._processed = False  # Whether process() has been called
 
@@ -724,15 +727,15 @@ class DocPP:
                 type = tokens[1]
                 opts = get_options(tokens[2:], header_level=3)
                 if type == 'classes':
-                    items = onto.classes()
+                    items = onto.classes(imported=self.imported)
                 elif type in ('object_properties', 'relations'):
-                    items = onto.object_properties()
+                    items = onto.object_properties(imported=self.imported)
                 elif type == 'data_properties':
-                    items = onto.data_properties()
+                    items = onto.data_properties(imported=self.imported)
                 elif type == 'annotation_properties':
-                    items = onto.annotation_properties()
+                    items = onto.annotation_properties(imported=self.imported)
                 elif type == 'individuals':
-                    items = onto.individuals()
+                    items = onto.individuals(imported=self.imported)
                 else:
                     raise InvalidTemplateError(
                         'Invalid argument to %%ALL: %s' % type)
@@ -753,11 +756,11 @@ class DocPP:
                                    leafs='', relations='isA', edgelabels=0,
                                    rankdir='BT', legend=1)
                 if type == 'classes':
-                    roots = onto.get_root_classes()
+                    roots = onto.get_root_classes(imported=self.imported)
                 elif type in ('object_properties', 'relations'):
-                    roots = onto.get_root_object_properties()
+                    roots = onto.get_root_object_properties(imported=self.imported)
                 elif type == 'data_properties':
-                    roots = onto.get_root_data_properties()
+                    roots = onto.get_root_data_properties(imported=self.imported)
                 else:
                     raise InvalidTemplateError(
                         'Invalid argument to %%ALL: %s' % type)
