@@ -211,13 +211,17 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'manufacturing.EngineeredMaterial',
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
-
-        def checker(onto):
-            for e in itertools.chain(onto.classes(),
-                                     onto.object_properties(),
-                                     onto.data_properties(),
-                                     onto.individuals(),
-                                     onto.annotation_properties()):
+        def checker(onto, ignore_namespace):
+            if list(filter(onto.base_iri.strip('#').endswith,
+                           self.ignore_namespace)) != []:
+                print('Skipping namespace: ' + self.onto.base_iri)
+                return
+            entities = itertools.chain(onto.classes(),
+                                       onto.object_properties(),
+                                       onto.data_properties(),
+                                       onto.individuals(),
+                                       onto.annotation_properties())
+            for e in entities:
                 if e not in visited and repr(e) not in exceptions:
                     visited.add(e)
                     with self.subTest(
@@ -227,16 +231,23 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                             msg='the final part of entity IRIs must be their '
                             'name')
                         self.assertEqual(
-                            e.iri[:-len(e.name)], onto.base_iri,
+                            e.iri, onto.base_iri + e.name,
                             msg='IRI %r does not correspond to module '
                             'namespace: %r' % (e.iri, onto.base_iri))
 
             if self.check_imported:
                 for imp_onto in onto.imported_ontologies:
-                    checker(imp_onto)
+                    if imp_onto not in visited_onto:
+                        visited_onto.add(imp_onto)
+                        checker(imp_onto, ignore_namespace)
 
         visited = set()
-        checker(self.onto)
+        visited_onto = set()
+        if list(filter(self.onto.base_iri.strip('#').endswith,
+                       self.ignore_namespace)) != []:
+            print('Skipping namespace: ' + self.onto.base_iri)
+        else:
+            checker(self.onto, self.ignore_namespace)
 
 
 def main():
@@ -281,13 +292,16 @@ def main():
     parser.add_argument(
         '--url-from-catalog', '-u', action='store_true',
         help=('Get url from catalog file'))
+    parser.add_argument(
+        '--ignore-namespace', '-n', action='append', default=[],
+        help=('Namespace to be ignored. Can be given multiple '
+              'times'))
 
     try:
         args, argv = parser.parse_known_args()
         sys.argv[1:] = argv
     except SystemExit as e:
         os._exit(e.code)  # Exit without traceback on invalid arguments
-
     # Append to onto_path
     for paths in args.path:
         for path in paths.split(','):
@@ -302,14 +316,14 @@ def main():
                      '\n  '.join(world.ontologies.keys()))
 
     onto = world.get_ontology(args.iri)
-
-    onto.load(only_local=args.local, 
-              url_from_catalog=args.url_from_catalog, 
+    onto.load(only_local=args.local,
+              url_from_catalog=args.url_from_catalog,
               catalog_file=args.catalog_file)
 
     # Store settings TestEMMOConventions
     TestEMMOConventions.onto = onto
     TestEMMOConventions.check_imported = args.check_imported
+    TestEMMOConventions.ignore_namespace = args.ignore_namespace
 
     # Configure tests
     verbosity = 2 if args.verbose else 1
