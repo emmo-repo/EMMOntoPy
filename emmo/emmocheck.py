@@ -174,7 +174,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'isq.ISQBaseQuantity',
             'isq.InternationalSystemOfQuantity',
             'isq.ISQDerivedQuantity',
-            'siunits.SIExactConstant',
+            'isq.SIExactConstant',
         ))
         exceptions.update(
             self.get_config('test_quantity_dimension.exceptions', ()))
