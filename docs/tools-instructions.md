@@ -47,8 +47,10 @@ Tool for checking that ontologies conform to EMMO conventions.
       --skip, -s ShellPattern
         		    Shell pattern matching tests to skip.  This option may be
                             provided multiple times.
-      --url-from-catalog, -u, 
+      --url-from-catalog, -u 
 			    Get url from catalog file.
+      --ignore-namespace, -n
+                            Namespace to be ignored. Can be given multiple times
 
 
 ### Examples:
@@ -56,6 +58,8 @@ Tool for checking that ontologies conform to EMMO conventions.
     emmocheck http://emmo.info/emmo/1.0.0-alpha2
     emmocheck --database demo.sqlite3 http://www.emmc.info/emmc-csa/demo#
     emmocheck -l emmo.owl (in folder to which emmo was downloaded locally) 
+    emmocheck --check-imported --ignore-namespace=physicalistic --verbose --url-from-catalog emmo.owl (in folder with downloaded EMMO)
+    
 (Missing example with local and path, and url_from_catalog)
 
 ### Example configuration file:

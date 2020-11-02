@@ -295,7 +295,7 @@ def main():
         help=('Get url from catalog file'))
     parser.add_argument(
         '--ignore-namespace', '-n', action='append', default=[],
-        help=('Base_iri for namespace to be ignored. Can be given multiple '
+        help=('Namespace to be ignored. Can be given multiple '
               'times'))
 
     try:
