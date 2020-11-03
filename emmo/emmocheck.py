@@ -296,11 +296,34 @@ def main():
         help=('Namespace to be ignored. Can be given multiple '
               'times'))
 
+    # Options to pass forward to unittest
+    parser.add_argument(
+        '--buffer', '-b',
+        dest='unittest', action='append_const', const='-b',
+        help=('The standard output and standard error streams are buffered '
+              'during the test run. Output during a passing test is '
+              'discarded. Output is echoed normally on test fail or error '
+              'and is added to the failure messages.'))
+    parser.add_argument(
+        '--catch',
+        dest='unittest', action='append_const', const='-c',
+        help=('Control-C during the test run waits for the current test to '
+              'end and then reports all the results so far. A second '
+              'control-C raises the normal KeyboardInterrupt exception'))
+    parser.add_argument(
+        '--failfast', '-f',
+        dest='unittest', action='append_const', const='-f',
+        help=('Stop the test run on the first error or failure.'))
+    parser.add_argument(
+        '--verbose', '-v',
+        dest='unittest', action='append_const', const='-v',
+        help=('Verbose output.'))
     try:
-        args, argv = parser.parse_known_args()
-        sys.argv[1:] = argv
+        args = parser.parse_args()
+        sys.argv[1:] = args.unittest if args.unittest else []
     except SystemExit as e:
         os._exit(e.code)  # Exit without traceback on invalid arguments
+
     # Append to onto_path
     for paths in args.path:
         for path in paths.split(','):
