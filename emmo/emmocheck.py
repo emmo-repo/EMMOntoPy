@@ -217,7 +217,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         def checker(onto, ignore_namespace):
             if list(filter(onto.base_iri.strip('#').endswith,
                            self.ignore_namespace)) != []:
-                print('Skipping namespace: ' + self.onto.base_iri)
+                print('Skipping namespace: ' + onto.base_iri)
                 return
             entities = itertools.chain(onto.classes(),
                                        onto.object_properties(),
@@ -246,11 +246,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
 
         visited = set()
         visited_onto = set()
-        if list(filter(self.onto.base_iri.strip('#').endswith,
-                       self.ignore_namespace)) != []:
-            print('Skipping namespace: ' + self.onto.base_iri)
-        else:
-            checker(self.onto, self.ignore_namespace)
+        checker(self.onto, self.ignore_namespace)
 
 
 def main():
