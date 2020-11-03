@@ -314,13 +314,11 @@ def main():
         '--failfast', '-f',
         dest='unittest', action='append_const', const='-f',
         help=('Stop the test run on the first error or failure.'))
-    parser.add_argument(
-        '--verbose', '-v',
-        dest='unittest', action='append_const', const='-v',
-        help=('Verbose output.'))
     try:
         args = parser.parse_args()
         sys.argv[1:] = args.unittest if args.unittest else []
+        if args.verbose:
+            sys.argv.append('-v')
     except SystemExit as e:
         os._exit(e.code)  # Exit without traceback on invalid arguments
 
