@@ -63,14 +63,17 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         exceptions = set((
             'terms.license',
             'terms.abstract',
+            'terms.contributor',
+            'terms.creator',
+            'terms.publisher',
+            'terms.title',
+            'core.prefLabel',
+            'core.altLabel',
+            'core.hiddenLabel',
         ))
         exceptions.update(self.get_config('test_number_of_labels', ()))
 
-        for e in itertools.chain(self.onto.classes(),
-                                 self.onto.object_properties(),
-                                 self.onto.data_properties(),
-                                 self.onto.individuals(),
-                                 self.onto.annotation_properties()):
+        for e in self.onto.get_entities():
             if repr(e) not in exceptions:
                 with self.subTest(entity=e, labels=e.prefLabel):
                     if not repr(e).startswith('owl.'):
@@ -81,7 +84,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         """Check that class labels are CamelCase.
 
         For now we just we just check that they start with upper case."""
-        for cls in self.onto.classes():
+        for cls in self.onto.classes(self.check_imported):
             for label in cls.label:
                 self.assertTrue(label[0].isupper() or label[0].isdigit())
 
@@ -138,7 +141,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         exceptions.update(
             self.get_config('test_unit_dimension.exceptions', ()))
         regex = re.compile(r'^metrology.hasPhysicalDimension.some\(.*\)$')
-        classes = set(self.onto.classes())
+        classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.MeasurementUnit.descendants():
             if not self.check_imported and cls not in classes:
                 continue
@@ -171,14 +174,14 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'isq.ISQBaseQuantity',
             'isq.InternationalSystemOfQuantity',
             'isq.ISQDerivedQuantity',
-            'siunits.SIExactConstant',
+            'isq.SIExactConstant',
         ))
         exceptions.update(
             self.get_config('test_quantity_dimension.exceptions', ()))
         regex = re.compile(
             '^T([+-][1-9]|0) L([+-][1-9]|0) M([+-][1-9]|0) I([+-][1-9]|0) '
             '(H|Θ)([+-][1-9]|0) N([+-][1-9]|0) J([+-][1-9]|0)$')
-        classes = set(self.onto.classes())
+        classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.PhysicalQuantity.descendants():
             if not self.check_imported and cls not in classes:
                 continue
@@ -214,7 +217,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         def checker(onto, ignore_namespace):
             if list(filter(onto.base_iri.strip('#').endswith,
                            self.ignore_namespace)) != []:
-                print('Skipping namespace: ' + self.onto.base_iri)
+                print('Skipping namespace: ' + onto.base_iri)
                 return
             entities = itertools.chain(onto.classes(),
                                        onto.object_properties(),
@@ -243,11 +246,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
 
         visited = set()
         visited_onto = set()
-        if list(filter(self.onto.base_iri.strip('#').endswith,
-                       self.ignore_namespace)) != []:
-            print('Skipping namespace: ' + self.onto.base_iri)
-        else:
-            checker(self.onto, self.ignore_namespace)
+        checker(self.onto, self.ignore_namespace)
 
 
 def main():
@@ -297,11 +296,32 @@ def main():
         help=('Namespace to be ignored. Can be given multiple '
               'times'))
 
+    # Options to pass forward to unittest
+    parser.add_argument(
+        '--buffer', '-b',
+        dest='unittest', action='append_const', const='-b',
+        help=('The standard output and standard error streams are buffered '
+              'during the test run. Output during a passing test is '
+              'discarded. Output is echoed normally on test fail or error '
+              'and is added to the failure messages.'))
+    parser.add_argument(
+        '--catch',
+        dest='unittest', action='append_const', const='-c',
+        help=('Control-C during the test run waits for the current test to '
+              'end and then reports all the results so far. A second '
+              'control-C raises the normal KeyboardInterrupt exception'))
+    parser.add_argument(
+        '--failfast', '-f',
+        dest='unittest', action='append_const', const='-f',
+        help=('Stop the test run on the first error or failure.'))
     try:
-        args, argv = parser.parse_known_args()
-        sys.argv[1:] = argv
+        args = parser.parse_args()
+        sys.argv[1:] = args.unittest if args.unittest else []
+        if args.verbose:
+            sys.argv.append('-v')
     except SystemExit as e:
         os._exit(e.code)  # Exit without traceback on invalid arguments
+
     # Append to onto_path
     for paths in args.path:
         for path in paths.split(','):
