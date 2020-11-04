@@ -275,13 +275,56 @@ class Ontology(owlready2.Ontology, OntoGraph):
             'annotation_properties' if annotation_properties else None,
         ]).difference([None])
         for e in itertools.chain.from_iterable(
-                getattr(self, c)() for c in categories):
+                getattr(owlready2.Ontology, c)(self) for c in categories):
             yield e
         if imported:
             for onto in self.get_imported_ontologies(recursive=True):
                 for e in itertools.chain.from_iterable(
-                        getattr(onto, c)() for c in categories):
+                        getattr(owlready2.Ontology, c)(onto)
+                        for c in categories):
                     yield e
+
+    def classes(self, imported=False):
+        """Returns an generator over all classes.
+
+        If `imported` is true, will imported classes are also returned.
+        """
+        return self.get_entities(
+            imported=imported, classes=True, individuals=False,
+            object_properties=False, data_properties=False,
+            annotation_properties=False)
+
+    def individuals(self, imported=False):
+        """Returns an generator over all individuals.
+
+        If `imported` is true, will imported individuals are also returned.
+        """
+        return self.get_entities(
+            imported=imported, classes=False, individuals=True,
+            object_properties=False, data_properties=False,
+            annotation_properties=False)
+
+    def object_properties(self, imported=False):
+        """Returns an generator over all object properties.
+
+        If `imported` is true, will imported object properties are also
+        returned.
+        """
+        return self.get_entities(
+            imported=imported, classes=False, individuals=False,
+            object_properties=True, data_properties=False,
+            annotation_properties=False)
+
+    def data_properties(self, imported=False):
+        """Returns an generator over all data properties.
+
+        If `imported` is true, will imported data properties are also
+        returned.
+        """
+        return self.get_entities(
+            imported=imported, classes=False, individuals=False,
+            object_properties=False, data_properties=True,
+            annotation_properties=False)
 
     def annotation_properties(self, imported=False):
         """Returns a generator iterating over all annotation properties
@@ -290,34 +333,31 @@ class Ontology(owlready2.Ontology, OntoGraph):
         If `imported` is true, annotation properties in imported ontologies
         will also be included.
         """
-        if imported:
-            return self.get_entities(imported=True, classes=False,
-                                     individuals=False, object_properties=False,
-                                     data_properties=False,
-                                     annotation_properties=True)
-        else:
-            return super().annotation_properties()
+        return self.get_entities(
+            imported=imported, classes=False, individuals=False,
+            object_properties=False, data_properties=False,
+            annotation_properties=True)
 
-    def get_root_classes(self):
+    def get_root_classes(self, imported=False):
         """Returns a list or root classes."""
-        return [cls for cls in self.classes()
+        return [cls for cls in self.classes(imported=imported)
                 if not cls.ancestors().difference(set([cls, owlready2.Thing]))]
 
-    def get_root_object_properties(self):
+    def get_root_object_properties(self, imported=False):
         """Returns a list of root object properties."""
-        props = set(self.object_properties())
+        props = set(self.object_properties(imported=imported))
         return [p for p in props if not props.intersection(p.is_a)]
 
-    def get_root_data_properties(self):
+    def get_root_data_properties(self, imported=False):
         """Returns a list of root object properties."""
-        props = set(self.data_properties())
+        props = set(self.data_properties(imported=imported))
         return [p for p in props if not props.intersection(p.is_a)]
 
-    def get_roots(self):
+    def get_roots(self, imported=False):
         """Returns all class, object_property and data_property roots."""
-        roots = self.get_root_classes()
-        roots.extend(self.get_root_object_properties())
-        roots.extend(self.get_root_data_properties())
+        roots = self.get_root_classes(imported=imported)
+        roots.extend(self.get_root_object_properties(imported=imported))
+        roots.extend(self.get_root_data_properties(imported=imported))
         return roots
 
     def get_by_label(self, label):
