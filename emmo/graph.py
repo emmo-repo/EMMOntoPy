@@ -644,8 +644,10 @@ class OntoGraph:
 
 def get_module_dependencies(iri_or_onto, strip_base=None):
     """Reads `iri_or_onto` and returns a dict mapping ontology names to a
-    list of ontologies that they depends on.  If `strip_base` is true,
-    the base IRI is stripped from ontology names.
+    list of ontologies that they depends on.
+
+    If `strip_base` is true, the base IRI is stripped from ontology
+    names.  If it is a string, it lstrip'ped from the base iri.
     """
     if isinstance(iri_or_onto, str):
         onto = get_ontology(iri_or_onto)
@@ -677,22 +679,28 @@ def get_module_dependencies(iri_or_onto, strip_base=None):
     return modules
 
 
-def plot_modules(iri, filename=None, format=None, show=False, modules=None,
-                 ignore_redundant=True):
-    """Plot module dependency graph to `filename` and return graph object.
+def plot_modules(src, filename=None, format=None, show=False,
+                 strip_base=None, ignore_redundant=True):
+    """Plot module dependency graph for `src` and return a graph object.
 
-    If `format` is None, the output format is inferred from
-    `filename`.
+    Here `src` may be an IRI, a path the the ontology or a dict returned by
+    get_module_dependencies().
+
+    If `filename` is given, write the graph to this file.
+
+    If `format` is None, the output format is inferred from `filename`.
 
     If `show` is true, the graph is displayed.
 
-    If `modules` is given, it should be a dict returned by
-    get_module_dependencies().
+    `strip_base` is passed on to get_module_dependencies() if `src` is not
+    a dict.
 
     If `ignore_redundant` is true, redundant dependencies are not plotted.
     """
-    if modules is None:
-        modules = get_module_dependencies(iri)
+    if isinstance(src, dict):
+        modules = src
+    elif
+        modules = get_module_dependencies(src, strip_base=strip_base)
 
     if ignore_redundant:
         modules = check_module_dependencies(modules, verbose=False)

@@ -20,6 +20,7 @@ import argparse
 import fnmatch
 
 from .ontology import World
+from .patch import get_preferred_label as get_label
 from . import onto_path
 
 try:
@@ -75,7 +76,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
         for e in self.onto.get_entities():
             if repr(e) not in exceptions:
-                with self.subTest(entity=e, labels=e.prefLabel):
+                with self.subTest(entity=e, labels=get_label(e)):
                     if not repr(e).startswith('owl.'):
                         self.assertTrue(hasattr(e, 'prefLabel'))
                         self.assertEqual(1, len(e.prefLabel))
@@ -147,7 +148,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 continue
             # Assume that actual units are not subclassed
             if not list(cls.subclasses()) and repr(cls) not in exceptions:
-                with self.subTest(cls=cls):
+                with self.subTest(cls=cls, label=get_label(cls)):
                     self.assertTrue(
                         any(regex.match(repr(r))
                             for r in cls.get_indirect_is_a()), msg=cls)
@@ -186,7 +187,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             if not self.check_imported and cls not in classes:
                 continue
             if repr(cls) not in exceptions:
-                with self.subTest(cls=cls):
+                with self.subTest(cls=cls, label=get_label(cls)):
                     anno = cls.get_annotations()
                     self.assertIn('physicalDimension', anno, msg=cls)
                     physdim = anno['physicalDimension'].first()
