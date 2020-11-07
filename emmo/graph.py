@@ -699,7 +699,7 @@ def plot_modules(src, filename=None, format=None, show=False,
     """
     if isinstance(src, dict):
         modules = src
-    elif
+    else:
         modules = get_module_dependencies(src, strip_base=strip_base)
 
     if ignore_redundant:
