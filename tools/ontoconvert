@@ -20,10 +20,12 @@ def main():
         help='Output file name.')
     parser.add_argument(
         '--input-format', '-f',
-        help='Input format (default is to infer from input.')
+        help='Input format (default is to infer from input).  Available '
+        'formats: "xml" (rdf/xml), "n3", "nt", "trix", "rdfa"')
     parser.add_argument(
         '--output-format', '-F',
-        help='Output format (default is to infer from output.')
+        help='Output format (default is to infer from output.  Available '
+        'formats: "xml" (rdf/xml), "n3", "turtle", "nt", "pretty-xml", "trix"')
     parser.add_argument(
         '--recursive', '-r', action='store_true',
         help='Whether to also convert imported ontologies recursively. '
@@ -55,7 +57,7 @@ def main():
                          input_format=input_format,
                          output_format=output_format)
     elif args.squash:
-        return squash_imported(args.input, args.output,
+        squash_imported(args.input, args.output,
                         input_format=input_format,
                         output_format=output_format)
     else:
@@ -145,7 +147,6 @@ def squash_imported(input, output, input_format=None, output_format='xml',
     recur(graph)
     graph.serialize(destination=output, format=output_format)
 
-    return graph
 
 if __name__ == '__main__':
-    g = main()
+    main()
