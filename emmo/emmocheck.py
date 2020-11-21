@@ -137,10 +137,29 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'siunits.SIBaseUnit',
             'siunits.SIUnitSymbol',
             'siunits.SIUnit',
+
+            'emmo.MultipleUnit',
+            'emmo.SubMultipleUnit',
+            'emmo.OffSystemUnit',
+            'emmo.PrefixedUnit',
+            'emmo.NonPrefixedUnit',
+            'emmo.SpecialUnit',
+            'emmo.DerivedUnit',
+            'emmo.BaseUnit',
+            'emmo.UnitSymbol',
+
+            'emmo.SICoherentDerivedUnit',
+            'emmo.SINonCoherentDerivedUnit',
+            'emmo.SISpecialUnit',
+            'emmo.SICoherentUnit',
+            'emmo.SIPrefixedUnit',
+            'emmo.SIBaseUnit',
+            'emmo.SIUnitSymbol',
+            'emmo.SIUnit',
         ))
         exceptions.update(
             self.get_config('test_unit_dimension.exceptions', ()))
-        regex = re.compile(r'^metrology.hasPhysicalDimension.some\(.*\)$')
+        regex = re.compile(r'^(metrology|emmo).hasPhysicalDimension.some\(.*\)$')
         classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.MeasurementUnit.descendants():
             if not self.check_imported and cls not in classes:
@@ -175,6 +194,25 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'isq.InternationalSystemOfQuantity',
             'isq.ISQDerivedQuantity',
             'isq.SIExactConstant',
+
+            'emmo.ModelledQuantitativeProperty',
+            'emmo.MeasuredQuantitativeProperty',
+            'emmo.ConventionalQuantitativeProperty',
+
+            'emmo.QuantitativeProperty',
+            'emmo.Quantity',
+            'emmo.OrdinalQuantity',
+            'emmo.BaseQuantity',
+            'emmo.PhysicalConstant',
+            'emmo.PhysicalQuantity',
+            'emmo.ExactConstant',
+            'emmo.MeasuredConstant',
+            'emmo.DerivedQuantity',
+
+            'emmo.ISQBaseQuantity',
+            'emmo.InternationalSystemOfQuantity',
+            'emmo.ISQDerivedQuantity',
+            'emmo.SIExactConstant',
         ))
         exceptions.update(
             self.get_config('test_quantity_dimension.exceptions', ()))
