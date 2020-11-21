@@ -117,11 +117,11 @@ def squash_imported(input, output, input_format=None, output_format='xml',
                      catalog_file='catalog-v001.xml'):
     """Convert imported ontologies and squash them into a single file.
 
-    Store the output in a directory structure matching the source
-    files.  This require catalog file(s) to be present.
+    If a catalog file exists in the same directory as the input file it will
+    be used to load possible imported ontologies.
     """
     inroot = os.path.dirname(os.path.abspath(input))
-    if os.path.exists(os.path.join(inroot, catalog_file)):
+    if catalog_file and os.path.exists(os.path.join(inroot, catalog_file)):
         d = read_catalog(inroot, catalog_file=catalog_file, recursive=True)
     else:
         d = {}
