@@ -82,12 +82,23 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                         self.assertEqual(1, len(e.prefLabel))
 
     def test_class_label(self):
-        """Check that class labels are CamelCase.
+        """Check that class labels are CamelCase and valid (Python) identifiers.
 
-        For now we just we just check that they start with upper case."""
+        For CamelCase, we are currently only checking that the labels
+        start with upper case.
+        """
+        exceptions = set((
+            '0-manifold',
+            '1-manifold',
+            '2-manifold',
+            '3-manifold',
+        ))
         for cls in self.onto.classes(self.check_imported):
-            for label in cls.label:
-                self.assertTrue(label[0].isupper() or label[0].isdigit())
+            for label in cls.label + getattr(cls, 'prefLabel', []):
+                if label not in exceptions:
+                    with self.subTest(entity=cls, label=label):
+                        self.assertTrue(label.isidentifier())
+                        self.assertTrue(label[0].isupper())
 
     def test_object_property_label(self):
         """Check that object property labels are lowerCamelCase.
