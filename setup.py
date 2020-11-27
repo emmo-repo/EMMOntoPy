@@ -71,7 +71,8 @@ setuptools.setup(
     ],
     install_requires=requirements,
     packages=['emmo'],
-    scripts=['tools/ontodoc', 'tools/ontograph', 'tools/emmocheck'],
+    scripts=['tools/ontodoc', 'tools/ontograph', 'tools/emmocheck',
+             'tools/ontoconvert'],
     package_data={'emmo': ['tests/*.py']},
     data_files=[
         ('share/EMMO-python', ['README.md', 'LICENSE.txt']),
