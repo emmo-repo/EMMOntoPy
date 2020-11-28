@@ -149,10 +149,12 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'siunits.SIBaseUnit',
             'siunits.SIUnitSymbol',
             'siunits.SIUnit',
+
+            'emmo.SIUnit',
         ))
         exceptions.update(
             self.get_config('test_unit_dimension.exceptions', ()))
-        regex = re.compile(r'^metrology.hasPhysicalDimension.some\(.*\)$')
+        regex = re.compile(r'^(emmo|metrology).hasPhysicalDimension.some\(.*\)$')
         classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.MeasurementUnit.descendants():
             if not self.check_imported and cls not in classes:
@@ -187,6 +189,12 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'isq.InternationalSystemOfQuantity',
             'isq.ISQDerivedQuantity',
             'isq.SIExactConstant',
+
+            'emmo.PhysicalQuantity',
+            'emmo.InternationalSystemOfQuantity',
+            'emmo.ISQDerivedQuantity',
+            'emmo.ISQBaseQuantity',
+            'emmo.PhysicalConstant',
         ))
         exceptions.update(
             self.get_config('test_quantity_dimension.exceptions', ()))
