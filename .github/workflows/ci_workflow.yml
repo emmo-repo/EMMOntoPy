@@ -37,17 +37,23 @@ jobs:
 
     - name: Install pandoc 2.1.2
       run: |
-        #sudo apt-get install pandoc
+        #sudo apt-get install -y pandoc
         wget https://github.com/jgm/pandoc/releases/download/2.1.2/pandoc-2.1.2-1-amd64.deb
-        sudo apt-get install ./pandoc-2.1.2-1-amd64.deb
+        sudo apt-get install -y ./pandoc-2.1.2-1-amd64.deb
+
+    - name: Install tzdata non-interactively
+      run: |
+        ln -fs /usr/share/zoneinfo/Europe/Oslo /etc/localtime
+        DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
+        dpkg-reconfigure --frontend noninteractive tzdata
 
     - name: Install other dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        sudo apt-get install graphviz
-        sudo apt-get install texlive-xetex
-        sudo apt-get install texlive-latex-extra
+        sudo apt-get install -y graphviz
+        sudo apt-get install -y texlive-xetex
+        sudo apt-get install -y texlive-latex-extra
 
     - name: Install EMMO-python
       run: |
