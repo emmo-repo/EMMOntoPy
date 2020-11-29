@@ -16,5 +16,5 @@ emmo = get_ontology(iri)
 emmo.load()
 
 modules = get_module_dependencies(emmo)
-plot_modules(iri, filename='modules.png', modules=modules)
+plot_modules(modules, filename='modules.png')
 check_module_dependencies(modules)
