@@ -20,6 +20,7 @@ import argparse
 import fnmatch
 
 from .ontology import World
+from .patch import get_preferred_label as get_label
 from . import onto_path
 
 try:
@@ -75,18 +76,29 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
         for e in self.onto.get_entities():
             if repr(e) not in exceptions:
-                with self.subTest(entity=e, labels=e.prefLabel):
+                with self.subTest(entity=e, labels=get_label(e)):
                     if not repr(e).startswith('owl.'):
                         self.assertTrue(hasattr(e, 'prefLabel'))
                         self.assertEqual(1, len(e.prefLabel))
 
     def test_class_label(self):
-        """Check that class labels are CamelCase.
+        """Check that class labels are CamelCase and valid (Python) identifiers.
 
-        For now we just we just check that they start with upper case."""
+        For CamelCase, we are currently only checking that the labels
+        start with upper case.
+        """
+        exceptions = set((
+            '0-manifold',
+            '1-manifold',
+            '2-manifold',
+            '3-manifold',
+        ))
         for cls in self.onto.classes(self.check_imported):
-            for label in cls.label:
-                self.assertTrue(label[0].isupper() or label[0].isdigit())
+            for label in cls.label + getattr(cls, 'prefLabel', []):
+                if label not in exceptions:
+                    with self.subTest(entity=cls, label=label):
+                        self.assertTrue(label.isidentifier())
+                        self.assertTrue(label[0].isupper())
 
     def test_object_property_label(self):
         """Check that object property labels are lowerCamelCase.
@@ -159,14 +171,14 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         ))
         exceptions.update(
             self.get_config('test_unit_dimension.exceptions', ()))
-        regex = re.compile(r'^(metrology|emmo).hasPhysicalDimension.some\(.*\)$')
+        regex = re.compile(r'^(emmo|metrology).hasPhysicalDimension.some\(.*\)$')
         classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.MeasurementUnit.descendants():
             if not self.check_imported and cls not in classes:
                 continue
             # Assume that actual units are not subclassed
             if not list(cls.subclasses()) and repr(cls) not in exceptions:
-                with self.subTest(cls=cls):
+                with self.subTest(cls=cls, label=get_label(cls)):
                     self.assertTrue(
                         any(regex.match(repr(r))
                             for r in cls.get_indirect_is_a()), msg=cls)
@@ -224,7 +236,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             if not self.check_imported and cls not in classes:
                 continue
             if repr(cls) not in exceptions:
-                with self.subTest(cls=cls):
+                with self.subTest(cls=cls, label=get_label(cls)):
                     anno = cls.get_annotations()
                     self.assertIn('physicalDimension', anno, msg=cls)
                     physdim = anno['physicalDimension'].first()

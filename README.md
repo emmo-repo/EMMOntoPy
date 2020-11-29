@@ -36,6 +36,9 @@ EMMO in Python.  On top of that EMMO-python provides:
         vertasile tool for visualising (parts of) an ontology
       - [ontodoc](docs/tools-instructions.md#ontodoc):
         documents an ontology
+      - [ontoconvert](docs/tools-instructions.md#ontoconvert):
+        converts between ontology formats
+
 
 Some examples of what you can do with EMMO-python includes:
 
