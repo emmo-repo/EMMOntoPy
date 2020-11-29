@@ -7,6 +7,7 @@ Instructions for tools available in EMMO-python
 - [ontoversion](#ontoversion)
 - [ontograph](#ontograph)
 - [ontodoc](#ontodoc)
+- [ontoconvert](#ontoconvert)
 
 ---
 
@@ -271,3 +272,41 @@ how this tool is used to generate the
 [html](https://emmo-repo.github.io/latest/emmo.html) and
 [pdf](https://emmo-repo.github.io/latest/emmo.pdf) documentation of
 EMMO itself.
+
+---
+
+
+ontoconvert
+-------
+Tool for converting between different ontology formats
+
+### Usage:
+
+    ontodoc [options] inputfile outputfile
+
+### dependencies:
+- rdflib
+
+### Options:
+
+positional arguments:
+  INPUTFILE              Name of inputfile.
+  OUTPUTFILE             Name og output file.
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      --input-format, -f INPUT_FORMAT 
+                            Inputformat. Default is to infer from input.
+      --output-format, -F OUTPUT_FORMAT
+			    Default is to infer from output.
+      --recursive, -r       The output is writte to the directories matching the input. This requires Protege catalog files to be present.
+      --squash, -s          Squash imported ontologies into a single output file.
+
+
+### Examples:
+
+ontoconvert --recursive emmo.ttl emmo.owl
+
+Not that it is then required to add argument only_local=True when
+loading the ontology in emmopython, e.g.
+o=get_ontology('emmo.owl').load(only_local=True)
