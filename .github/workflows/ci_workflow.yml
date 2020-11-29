@@ -22,6 +22,7 @@ jobs:
     - name: Check Ubuntu version we are running under
       run: |
         uname -a
+        apt-get update
 
     - name: Current environment
       run: |
