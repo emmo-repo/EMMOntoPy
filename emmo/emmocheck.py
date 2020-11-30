@@ -76,7 +76,8 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
         for e in self.onto.get_entities():
             if repr(e) not in exceptions:
-                with self.subTest(entity=e, labels=get_label(e)):
+                with self.subTest(entity=e, label=get_label(e),
+                                  prefLabels=e.prefLabel):
                     if not repr(e).startswith('owl.'):
                         self.assertTrue(hasattr(e, 'prefLabel'))
                         self.assertEqual(1, len(e.prefLabel))
