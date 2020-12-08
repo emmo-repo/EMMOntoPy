@@ -485,6 +485,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 self.classes(), self.object_properties(),
                 self.data_properties(), self.annotation_properties()):
             if not hasattr(cls, 'prefLabel'):
+                # no prefLabel - create new annotation property..
+                with self:
+                    class prefLabel(owlready2.label):
+                        pass
                 cls.prefLabel = [cls.__name__]
             elif not cls.prefLabel:
                 cls.prefLabel.append(cls.__name__)
