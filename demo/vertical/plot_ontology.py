@@ -23,13 +23,13 @@ graph.save('demo.svg')
 
 
 # Visualise units and quantities
-entities = [c for c in classes
-            if issubclass(c, (onto.MeasurementUnit, onto.Quantity))]
-graph = onto.get_graph(entities=entities, relations='all',
-                       edgelabels=False, addnodes=True, addconstructs=False,
-                       graph_attr={'rankdir': 'RL'})
-graph.add_legend()
-graph.save('units+properties.svg')
+#entities = [c for c in classes
+#            if issubclass(c, (onto.MeasurementUnit, onto.Quantity))]
+#graph = onto.get_graph(entities=entities, relations='all',
+#                       edgelabels=False, addnodes=True, addconstructs=False,
+#                       graph_attr={'rankdir': 'RL'})
+#graph.add_legend()
+#graph.save('units+properties.svg')
 
 
 # Visualise Material branch

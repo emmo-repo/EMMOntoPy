@@ -38,8 +38,7 @@ from emmo import World
 
 # Load EMMO
 world = World(filename='demo.sqlite3')
-# emmo = world.get_ontology('http://emmo.info/emmo/1.0.0-alpha2')
-emmo = world.get_ontology('emmo-inferred')
+emmo = world.get_ontology('http://emmo.info/emmo/1.0.0-alpha2')
 emmo.load()
 # emmo.sync_reasoner()
 
@@ -193,7 +192,7 @@ with onto:
         representative for the system in question."""
         is_a = [emmo.hasSpatialDirectPart.only(Phase | Boundary)]
 
-    class WeldedComponent(emmo.Component):
+    class WeldedComponent(emmo.EngineeredMaterial):
         """A welded component consisting of two materials welded together
         using a third welding material.  Hence it has spatial direct
         parts 3 materials and two boundaries."""
