@@ -60,8 +60,8 @@ Tool for checking that ontologies conform to EMMO conventions.
     emmocheck --database demo.sqlite3 http://www.emmc.info/emmc-csa/demo#
     emmocheck -l emmo.owl (in folder to which emmo was downloaded locally) 
     emmocheck --check-imported --ignore-namespace=physicalistic --verbose --url-from-catalog emmo.owl (in folder with downloaded EMMO)
-    
-(Missing example with local and path, and url_from_catalog)
+    emmocheck --check-imported --local --url-from-catalog --skip test_namespace emmo.owl 
+(Missing example with local and path)
 
 ### Example configuration file:
 Example of YAML configuration file provided with the --configfile option

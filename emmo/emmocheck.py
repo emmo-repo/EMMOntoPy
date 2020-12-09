@@ -76,7 +76,8 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
         for e in self.onto.get_entities():
             if repr(e) not in exceptions:
-                with self.subTest(entity=e, labels=get_label(e)):
+                with self.subTest(entity=e, label=get_label(e),
+                                  prefLabels=e.prefLabel):
                     if not repr(e).startswith('owl.'):
                         self.assertTrue(hasattr(e, 'prefLabel'))
                         self.assertEqual(1, len(e.prefLabel))
@@ -150,6 +151,23 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'siunits.SIUnitSymbol',
             'siunits.SIUnit',
 
+            'emmo.MultipleUnit',
+            'emmo.SubMultipleUnit',
+            'emmo.OffSystemUnit',
+            'emmo.PrefixedUnit',
+            'emmo.NonPrefixedUnit',
+            'emmo.SpecialUnit',
+            'emmo.DerivedUnit',
+            'emmo.BaseUnit',
+            'emmo.UnitSymbol',
+
+            'emmo.SICoherentDerivedUnit',
+            'emmo.SINonCoherentDerivedUnit',
+            'emmo.SISpecialUnit',
+            'emmo.SICoherentUnit',
+            'emmo.SIPrefixedUnit',
+            'emmo.SIBaseUnit',
+            'emmo.SIUnitSymbol',
             'emmo.SIUnit',
         ))
         exceptions.update(
@@ -190,11 +208,24 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'isq.ISQDerivedQuantity',
             'isq.SIExactConstant',
 
+            'emmo.ModelledQuantitativeProperty',
+            'emmo.MeasuredQuantitativeProperty',
+            'emmo.ConventionalQuantitativeProperty',
+
+            'emmo.QuantitativeProperty',
+            'emmo.Quantity',
+            'emmo.OrdinalQuantity',
+            'emmo.BaseQuantity',
+            'emmo.PhysicalConstant',
             'emmo.PhysicalQuantity',
+            'emmo.ExactConstant',
+            'emmo.MeasuredConstant',
+            'emmo.DerivedQuantity',
+
+            'emmo.ISQBaseQuantity',
             'emmo.InternationalSystemOfQuantity',
             'emmo.ISQDerivedQuantity',
-            'emmo.ISQBaseQuantity',
-            'emmo.PhysicalConstant',
+            'emmo.SIExactConstant',
         ))
         exceptions.update(
             self.get_config('test_quantity_dimension.exceptions', ()))
