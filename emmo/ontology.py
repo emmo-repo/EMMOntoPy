@@ -14,11 +14,13 @@ import itertools
 import inspect
 import warnings
 import uuid
+import tempfile
 from collections import defaultdict
 
+from rdflib.util import guess_format
 import owlready2
 
-from .utils import asstring, read_catalog, infer_version
+from .utils import asstring, read_catalog, infer_version, convert_imported
 from .ontograph import OntoGraph  # FIXME: depricate...
 
 
@@ -158,9 +160,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Play nice with inspect...
         pass
 
-    def load(self, only_local=False, filename=None, reload=None,
-             reload_if_newer=False, url_from_catalog=False,
-             catalog_file='catalog-v001.xml',
+    def load(self, only_local=False, filename=None, format=None,
+             reload=None, reload_if_newer=False, url_from_catalog=False,
+             catalog_file='catalog-v001.xml', tmpdir=None,
              **kwargs):
         """Load the ontology.
 
@@ -172,6 +174,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
         filename : str
             Path to file to load the ontology from.  Defaults to `base_iri`
             provided to get_ontology().
+        format : str
+            Format of `filename`.  Default is inferred from `filename`
+            extension.
         reload : bool
             Whether to reload the ontology if it is already loaded.
         reload_if_newer : bool
@@ -181,12 +186,45 @@ class Ontology(owlready2.Ontology, OntoGraph):
             Use catalog file if `base_iri` cannot be resolved.
         catalog_file : str
             Name of Protègè catalog file in the same folder as the
-            ontology.  This option is used together with --local and
+            ontology.  This option is used together with `only_local` and
             defaults to "catalog-v001.xml".
+        tmpdir : str
+            Path to temporary directory.
         kwargs
             Additional keyword arguments are passed on to
             owlready2.Ontology.load().
         """
+        # If filename is not given, infer it from base_iri (if possible)
+        web_protocols = ('http://', 'https://', )
+        if not filename and not self.base_iri.startswith(web_protocols):
+            filename = self.base_iri.rstrip('#/')
+            if filename.startswith('file://'):
+                filename = filename[7:]
+
+        # Convert filename to owl if it is in a format not supported
+        # by owlready2
+        if filename:
+            if not format:
+                fmap = {'n3': 'ntriples'}
+                format = guess_format(filename)
+            if format not in ('xml', 'ntriples'):
+                with tempfile.TemporaryDirectory() as tmpdir:
+                    if not os.path.exists(tmpdir):
+                        os.makedirs(tmpdir)
+                    output = os.path.join(tmpdir, os.path.splitext(
+                        os.path.basename(filename))[0] + '.owl')
+                    convert_imported(filename, output,
+                                     input_format=format, output_format='xml',
+                                     catalog_file=catalog_file)
+                    return self.load(only_local=True,
+                                     filename=output,
+                                     format='xml',
+                                     reload=reload,
+                                     reload_if_newer=reload_if_newer,
+                                     url_from_catalog=url_from_catalog,
+                                     catalog_file=catalog_file,
+                                     **kwargs)
+
         # Append paths from catalog file to onto_path
         dirpath = os.path.normpath(
             os.path.dirname(filename or self.base_iri.rstrip('/#')))
