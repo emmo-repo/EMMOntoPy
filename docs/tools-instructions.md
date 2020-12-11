@@ -299,14 +299,19 @@ positional arguments:
                             Inputformat. Default is to infer from input.
       --output-format, -F OUTPUT_FORMAT
 			    Default is to infer from output.
-      --recursive, -r       The output is writte to the directories matching the input. This requires Protege catalog files to be present.
+      --recursive, -r       The output is written to the directories matching the input. This requires Protege catalog files to be present.
       --squash, -s          Squash imported ontologies into a single output file.
 
 
 ### Examples:
 
-ontoconvert --recursive emmo.ttl emmo.owl
+    ontoconvert --recursive emmo.ttl emmo.owl
 
-Not that it is then required to add argument only_local=True when
-loading the ontology in emmopython, e.g.
-o=get_ontology('emmo.owl').load(only_local=True)
+Note that it is then required to add argument only_local=True when loading the ontology in emmopython, e.g.
+    python
+    >from emmo import get_ontology
+    >o=get_ontology('emmo.owl').load(only_local=True)
+
+Also, since the catalog file will be overwritten in the above example writing output to a separate directory is useful.
+   ontoconvert --recursive emmo.ttl owl/emmo.owl
+
