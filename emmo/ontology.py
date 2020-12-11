@@ -533,6 +533,16 @@ class Ontology(owlready2.Ontology, OntoGraph):
             if not cls.comment and hasattr(cls, '__doc__') and cls.__doc__:
                 cls.comment.append(inspect.cleandoc(cls.__doc__))
 
+        for ind in self.individuals():
+            if not hasattr(ind, 'prefLabel'):
+                # no prefLabel - create new annotation property..
+                with self:
+                    class prefLabel(owlready2.label):
+                        pass
+                ind.prefLabel = [ind.name]
+            elif not ind.prefLabel:
+                ind.prefLabel.append(ind.name)
+
         chain = itertools.chain(
             self.classes(), self.individuals(), self.object_properties(),
             self.data_properties(), self.annotation_properties())
