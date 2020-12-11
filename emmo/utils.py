@@ -5,6 +5,8 @@ import re
 import datetime
 import xml.etree.ElementTree as ET
 
+from rdflib import Graph, URIRef
+
 import owlready2
 
 
@@ -182,6 +184,97 @@ def read_catalog(path, catalog_file='catalog-v001.xml', recursive=False,
         return iris, dirs
     else:
         return iris
+
+
+def convert_imported(input, output, input_format=None, output_format='xml',
+                     catalog_file='catalog-v001.xml'):
+    """Convert imported ontologies.
+
+    Store the output in a directory structure matching the source
+    files.  This require catalog file(s) to be present.
+
+    Args:
+        input: input ontology file name
+        output: output ontology file path.  The directory part of `output`
+            will be the root of the generated directory structure
+        input_format: input format.  The default is to infer from `input`
+        output_format: output format.  The default is to infer from `output`
+        catalog_file: name of catalog file, that maps ontology IRIs to
+            local file names
+    """
+    inroot = os.path.dirname(os.path.abspath(input))
+    outroot = os.path.dirname(os.path.abspath(output))
+    d, dirs = read_catalog(inroot, catalog_file=catalog_file, recursive=True,
+                           return_paths=True)
+
+    # Create output dirs and copy catalog files
+    outext = os.path.splitext(output)[1]
+    for indir in dirs:
+        outdir = os.path.normpath(
+            os.path.join(outroot, os.path.relpath(indir, inroot)))
+        if not os.path.exists(outdir):
+            os.makedirs(outdir)
+        with open(os.path.join(indir, catalog_file), mode='rt') as f:
+            s = f.read()
+        for path in d.values():
+            newpath = os.path.splitext(path)[0] + outext
+            s = s.replace(os.path.basename(path), os.path.basename(newpath))
+        with open(os.path.join(outdir, catalog_file), mode='wt') as f:
+            f.write(s)
+
+    outpaths = set()
+    def recur(graph, outext):
+        for imported in graph.objects(predicate=URIRef(
+                'http://www.w3.org/2002/07/owl#imports')):
+            inpath = d[str(imported)]
+            outpath = os.path.splitext(os.path.normpath(
+                os.path.join(outroot, os.path.relpath(
+                    inpath, inroot))))[0] + outext
+            if outpath not in outpaths:
+                outpaths.add(outpath)
+                g = Graph()
+                g.parse(inpath, format=input_format)
+                g.serialize(destination=outpath, format=output_format)
+                recur(g, outext)
+
+    # Write output files
+    g = Graph()
+    g.parse(input, format=input_format)
+    g.serialize(destination=output, format=output_format)
+    recur(g, outext)
+
+
+def squash_imported(input, output, input_format=None, output_format='xml',
+                     catalog_file='catalog-v001.xml'):
+    """Convert imported ontologies and squash them into a single file.
+
+    If a catalog file exists in the same directory as the input file it will
+    be used to load possible imported ontologies.
+    """
+    inroot = os.path.dirname(os.path.abspath(input))
+    if catalog_file and os.path.exists(os.path.join(inroot, catalog_file)):
+        d = read_catalog(inroot, catalog_file=catalog_file, recursive=True)
+    else:
+        d = {}
+
+    imported = set()
+    def recur(g):
+        for s, p, o in g.triples(
+                (None, URIRef('http://www.w3.org/2002/07/owl#imports'), None)):
+            g.remove((s, p, o))
+            iri = d.get(str(o), str(o))
+            if iri not in imported:
+                imported.add(iri)
+                g2 = Graph()
+                g2.parse(iri, format=input_format)
+                recur(g2)
+                for t in g2.triples((None, None, None)):
+                    graph.add(t)
+
+    graph = Graph()
+    graph.parse(input, format=input_format)
+    recur(graph)
+    graph.serialize(destination=output, format=output_format)
 
 
 def infer_version(iri, version_iri):
