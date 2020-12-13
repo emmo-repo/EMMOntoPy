@@ -4,7 +4,7 @@
 import os
 import argparse
 
-from rdflib.util import guess_format
+from rdflib.util import Graph, guess_format
 
 from emmo.utils import convert_imported, squash_imported
 
