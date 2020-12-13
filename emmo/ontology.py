@@ -18,7 +18,9 @@ import tempfile
 from collections import defaultdict
 
 from rdflib.util import guess_format
+
 import owlready2
+from owlready2 import locstr
 
 from .utils import asstring, read_catalog, infer_version, convert_imported
 from .ontograph import OntoGraph  # FIXME: depricate...
@@ -469,6 +471,25 @@ class Ontology(owlready2.Ontology, OntoGraph):
                     (hasattr(entity, 'label') and label in entity.label) or
                     (hasattr(entity, 'altLabel') and label in entity.altLabel))]
 
+    def sync_python_names(self, annotations=('prefLabel', 'label', 'altLabel')):
+        """Update the `python_name` attribute of all properties.
+
+        The python_name attribute will be set to the first non-empty annotation
+        in the sequence of annotations in `annotations` for the property.
+        """
+        def update(gen):
+            for prop in gen:
+                for a in annotations:
+                    if hasattr(prop, a) and getattr(prop, a):
+                        prop.python_name = getattr(prop, a).first()
+                        break
+
+        update(self.get_entities(
+            classes=False, individuals=False,
+            object_properties=False, data_properties=False))
+        update(self.get_entities(
+            classes=False, individuals=False, annotation_properties=False))
+
     def sync_reasoner(self, reasoner='HermiT', include_imported=False,
                       **kwargs):
         """Update current ontology by running the given reasoner.
@@ -527,11 +548,22 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 with self:
                     class prefLabel(owlready2.label):
                         pass
-                cls.prefLabel = [cls.__name__]
+                cls.prefLabel = [locstr(cls.__name__, lang='en')]
             elif not cls.prefLabel:
-                cls.prefLabel.append(cls.__name__)
+                cls.prefLabel.append(locstr(cls.__name__, lang='en'))
             if not cls.comment and hasattr(cls, '__doc__') and cls.__doc__:
-                cls.comment.append(inspect.cleandoc(cls.__doc__))
+                cls.comment.append(
+                    locstr(inspect.cleandoc(cls.__doc__), lang='en'))
+
+        for ind in self.individuals():
+            if not hasattr(ind, 'prefLabel'):
+                # no prefLabel - create new annotation property..
+                with self:
+                    class prefLabel(owlready2.label):
+                        pass
+                ind.prefLabel = [locstr(ind.name, lang='en')]
+            elif not ind.prefLabel:
+                ind.prefLabel.append(locstr(ind.name, lang='en'))
 
         chain = itertools.chain(
             self.classes(), self.individuals(), self.object_properties(),
