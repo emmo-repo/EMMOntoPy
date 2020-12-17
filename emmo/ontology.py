@@ -201,8 +201,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
         if not filename:
             web_protocols = ('http://', 'https://', )
             fmt = format if format else guess_format(self.base_iri.rstrip('/#'))
-            print('**** base_iri:', self.base_iri)
-            print('**** fmt:', fmt)
             if not self.base_iri.startswith(web_protocols):
                 filename = self.base_iri.rstrip('#/')
                 if filename.startswith('file://'):
@@ -210,16 +208,16 @@ class Ontology(owlready2.Ontology, OntoGraph):
             elif fmt and fmt not in ('xml', 'ntriples'):
                 g = rdflib.Graph()
                 g.parse(self.base_iri, format=fmt)
-                #with tempfile.NamedTemporaryFile() as f:
-                with open('tmpfile.tmp', 'wb') as f:
-                    print('*** f.name:', f.name)
+                with tempfile.NamedTemporaryFile() as f:
                     g.serialize(destination=f, format='xml')
-                    return self.load(only_local=True, filename=f.name,
-                                     format='xml',
-                                     reload=reload,
-                                     reload_if_newer=reload_if_newer,
-                                     **kwargs)
-
+                    f.seek(0)
+                    self.loaded = False
+                    return super().load(only_local=True,
+                                        fileobj=f,
+                                        reload=reload,
+                                        reload_if_newer=reload_if_newer,
+                                        format='rdfxml',
+                                        **kwargs)
 
         # Convert filename to owl if it is in a format not supported
         # by owlready2
