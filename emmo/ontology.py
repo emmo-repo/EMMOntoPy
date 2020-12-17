@@ -209,6 +209,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 g = rdflib.Graph()
                 g.parse(self.base_iri, format=fmt)
                 with tempfile.NamedTemporaryFile() as f:
+                    # If reading from an URL of an unsupported format,
+                    # serialize to a temporary file in rdfxml format and
+                    # load() in the superclass
                     g.serialize(destination=f, format='xml')
                     f.seek(0)
                     self.loaded = False
