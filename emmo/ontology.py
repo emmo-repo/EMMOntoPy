@@ -264,6 +264,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                          reload_if_newer=reload_if_newer, **kwargs)
         except owlready2.OwlReadyOntologyParsingError:
             if url_from_catalog:
+                print('no url from catalog')
                 # Use catalog file to update IRIs of imported ontologies
                 # in internal store and try to load again...
                 iris = read_catalog(dirpath, catalog_file=catalog_file)
