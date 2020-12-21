@@ -17,6 +17,7 @@ import uuid
 import tempfile
 from collections import defaultdict
 
+import rdflib
 from rdflib.util import guess_format
 
 import owlready2
@@ -197,11 +198,29 @@ class Ontology(owlready2.Ontology, OntoGraph):
             owlready2.Ontology.load().
         """
         # If filename is not given, infer it from base_iri (if possible)
-        web_protocols = ('http://', 'https://', )
-        if not filename and not self.base_iri.startswith(web_protocols):
-            filename = self.base_iri.rstrip('#/')
-            if filename.startswith('file://'):
-                filename = filename[7:]
+        if not filename:
+            web_protocols = ('http://', 'https://', )
+            fmt = format if format else guess_format(self.base_iri.rstrip('/#'))
+            if not self.base_iri.startswith(web_protocols):
+                filename = self.base_iri.rstrip('#/')
+                if filename.startswith('file://'):
+                    filename = filename[7:]
+            elif fmt and fmt not in ('xml', 'ntriples'):
+                g = rdflib.Graph()
+                g.parse(self.base_iri, format=fmt)
+                with tempfile.NamedTemporaryFile() as f:
+                    # If reading from an URL of an unsupported format,
+                    # serialize to a temporary file in rdfxml format and
+                    # load() in the superclass
+                    g.serialize(destination=f, format='xml')
+                    f.seek(0)
+                    self.loaded = False
+                    return super().load(only_local=True,
+                                        fileobj=f,
+                                        reload=reload,
+                                        reload_if_newer=reload_if_newer,
+                                        format='rdfxml',
+                                        **kwargs)
 
         # Convert filename to owl if it is in a format not supported
         # by owlready2
@@ -245,6 +264,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                          reload_if_newer=reload_if_newer, **kwargs)
         except owlready2.OwlReadyOntologyParsingError:
             if url_from_catalog:
+                print('no url from catalog')
                 # Use catalog file to update IRIs of imported ontologies
                 # in internal store and try to load again...
                 iris = read_catalog(dirpath, catalog_file=catalog_file)

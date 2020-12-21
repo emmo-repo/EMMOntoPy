@@ -1,5 +1,5 @@
 Cython
-Owlready2>=0.23
+Owlready2==0.25
 graphviz
 PyYAML
 blessings
