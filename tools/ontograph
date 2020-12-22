@@ -152,9 +152,8 @@ def main():
                      'the database:\n  ' +
                      '\n  '.join(world.ontologies.keys()))
     onto = world.get_ontology(args.iri)
-    catalog_file = args.catalog_file if args.local else None
     try:
-        onto.load(only_local=args.local, catalog_file=catalog_file)
+        onto.load(only_local=args.local, catalog_file=args.catalog_file)
     except owlready2.OwlReadyOntologyParsingError as e:
         parser.error('error parsing %r: %s' % (args.iri, e))
 

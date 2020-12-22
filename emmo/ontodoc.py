@@ -16,7 +16,7 @@ import yaml
 import owlready2
 
 from .utils import asstring, camelsplit
-from .graph import OntoGraph
+from .graph import OntoGraph, getlabel
 
 
 class OntoDoc:
@@ -236,9 +236,14 @@ class OntoDoc:
         doc = []
 
         # Header
-        label = item.prefLabel.first()
+        label = getlabel(item)
         doc.append(header_style.format(
             '', level=header_level, label=label, lowerlabel=label.lower()))
+
+        # Add warning about missing prefLabel
+        if not hasattr(item, 'prefLabel') or not item.prefLabel.first():
+            doc.append(annotation_style.format(
+                key='Warning', value='Missing prefLabel'))
 
         # Add iri
         doc.append(annotation_style.format(

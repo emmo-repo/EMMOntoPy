@@ -170,6 +170,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'emmo.SIUnitSymbol',
             'emmo.SIUnit',
         ))
+        if not hasattr(self.onto, 'MeasurementUnit'):
+            return
         exceptions.update(
             self.get_config('test_unit_dimension.exceptions', ()))
         regex = re.compile(r'^(emmo|metrology).hasPhysicalDimension.some\(.*\)$')
@@ -227,6 +229,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'emmo.ISQDerivedQuantity',
             'emmo.SIExactConstant',
         ))
+        if not hasattr(self.onto, 'PhysicalQuantity'):
+            return
         exceptions.update(
             self.get_config('test_quantity_dimension.exceptions', ()))
         regex = re.compile(

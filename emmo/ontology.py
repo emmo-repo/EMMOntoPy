@@ -64,8 +64,8 @@ class World(owlready2.World):
         """Returns a new Ontology from `base_iri`.
 
         The `base_iri` argument may be one of:
-          - valid URL (possible excluding final .owl)
-          - file name (possible excluding final .owl)
+          - valid URL (possible excluding final .owl or .ttl)
+          - file name (possible excluding final .owl or .ttl)
           - "emmo": load latest stable version of asserted EMMO
           - "emmo-inferred": load latest stable version of inferred EMMO
             (default)
@@ -76,10 +76,10 @@ class World(owlready2.World):
             base_iri = 'http://emmo.info/emmo'
         elif base_iri == 'emmo-inferred':
             base_iri = (
-                'https://emmo-repo.github.io/latest-stable/emmo-inferred.owl')
+                'https://emmo-repo.github.io/latest-stable/emmo-inferred.ttl')
         elif base_iri == 'emmo-development':
             base_iri = (
-                'https://emmo-repo.github.io/development/emmo-inferred.owl')
+                'https://emmo-repo.github.io/development/emmo-inferred.ttl')
 
         if base_iri in self.ontologies:
             onto = self.ontologies[base_iri]
@@ -90,6 +90,8 @@ class World(owlready2.World):
         else:
             if os.path.exists(base_iri):
                 iri = os.path.abspath(base_iri)
+            elif os.path.exists(base_iri + '.ttl'):
+                iri = os.path.abspath(base_iri + '.ttl')
             elif os.path.exists(base_iri + '.owl'):
                 iri = os.path.abspath(base_iri + '.owl')
             else:
@@ -427,6 +429,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
         found first is returned.  A KeyError is raised if `label`
         cannot be found.
         """
+        # Strip off colon in labels
+        if ':' in label:
+            label = label.split(':')[-1]
+
         # Handle labels of the form 'namespace.label' recursively
         if '.' in label:
             head, sep, tail = label.partition('.')
