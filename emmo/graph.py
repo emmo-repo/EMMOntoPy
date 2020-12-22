@@ -361,7 +361,7 @@ class OntoGraph:
                               owlready2.ObjectPropertyClass)):
                 if 'all' in relations or 'isA' in relations:
                     rlabel = getlabel(r)
-                    if not isinstance(e, owlready2.ThingClass):
+                    if isinstance(e, owlready2.Thing):  # FIXME - we actually want to include individuals...
                         continue
                     if r not in e.get_parents(strict=True):
                         continue
