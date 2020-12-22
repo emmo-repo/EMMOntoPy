@@ -22,8 +22,10 @@ ALL = 1
 
 def getlabel(e):
     """Returns the label of entity `e`."""
-    if hasattr(e, 'prefLabel'):
+    if hasattr(e, 'prefLabel') and e.prefLabel:
         return e.prefLabel.first()
+    if hasattr(e, 'label') and e.label:
+        return e.label.first()
     elif hasattr(e, '__name__'):
         return e.__name__
     elif hasattr(e, 'name'):
@@ -359,6 +361,8 @@ class OntoGraph:
                               owlready2.ObjectPropertyClass)):
                 if 'all' in relations or 'isA' in relations:
                     rlabel = getlabel(r)
+                    if not isinstance(e, owlready2.ThingClass):
+                        continue
                     if r not in e.get_parents(strict=True):
                         continue
                     if not self.add_missing_node(r, addnodes=addnodes):
