@@ -171,12 +171,15 @@ def main():
         roots = onto.get_root_classes()
         roots.extend(onto.get_root_object_properties())
         roots.extend(onto.get_root_data_properties())
+
+        for i in onto.classes():
+            if i.get_parents().isdisjoint(onto.classes()):
+                roots.append(i)
     else:
         roots = [args.root]
 
     # Create graphs
     for root in roots:
-        print(root)
         graph = OntoGraph(onto, style=style)
         graph.add_branch(
             root=root, leafs=leafs, exclude=exclude,
