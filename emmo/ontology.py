@@ -429,6 +429,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
         found first is returned.  A KeyError is raised if `label`
         cannot be found.
         """
+        # Strip off colon in labels
+        if ':' in label:
+            label = label.split(':')[-1]
+
         # Handle labels of the form 'namespace.label' recursively
         if '.' in label:
             head, sep, tail = label.partition('.')
