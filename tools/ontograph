@@ -10,10 +10,10 @@ rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
     os.path.dirname(__file__)))))
 sys.path.insert(1, rootdir)
 
-from emmo import World, onto_path
-from emmo.graph import OntoGraph, plot_modules
+from emmo import World, onto_path  # noqa: E402
+from emmo.graph import OntoGraph, plot_modules  # noqa: E402
 
-import owlready2
+import owlready2  # noqa: E402
 
 
 def main():
@@ -186,17 +186,17 @@ def main():
             relations=relations,
             edgelabels=args.edgelabels, addnodes=args.addnodes,
             addconstructs=args.addconstructs,
-            #parents=args.parents
+            parents=args.parents,
         )
 
         if args.legend:
             graph.add_legend()
-        
+
         # Plot and display
         if args.output:
             if len(roots) > 1:
-                output_parts = args.output.split('.')
-                output = ".".join(args.output.split('.')[:-1]) + '.' + repr(root) + '.' + args.output.split('.')[-1]
+                head, tail = args.output.rsplit('.', maxsplit=1)
+                output = '.'.join((head, root, tail))
             else:
                 output = args.output
             graph.save(output, format=args.format)
