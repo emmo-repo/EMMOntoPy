@@ -20,8 +20,8 @@ Similarly, for generating pdf documentation, enter this directory and run
 
 By default, we have configured pandoc to use xelatex for better unicode
 support.  It is possible to change these settings in
-[pandoc-args.yaml](pandoc-args.yaml) and
-[pandoc-pdf-args.yaml](pandoc-pdf-args.yaml).
+[pandoc-options.yaml](pandoc-options.yaml) and
+[pandoc-pdf-options.yaml](pandoc-pdf-options.yaml).
 
 
 Content of this directory
@@ -38,10 +38,10 @@ Content of this directory
 ### `pandoc` configuration files
   * [emmodoc-meta.yaml](emmodoc-meta.yaml): Metadata for EMMO, like title,
     authers, abstract, etc.
-  * [pandoc-args.yaml](pandoc-args.yaml): General pandoc options.
-  * [pandoc-html-args.yaml](pandoc-html-args.yaml): Additional pandoc options
+  * [pandoc-options.yaml](pandoc-options.yaml): General pandoc options.
+  * [pandoc-html-options.yaml](pandoc-html-options.yaml): Additional pandoc options
     for html generation.
-  * [pandoc-pdf-args.yaml](pandoc-pdf-args.yaml): Additional pandoc options
+  * [pandoc-pdf-options.yaml](pandoc-pdf-options.yaml): Additional pandoc options
     for pdf generation.
   * [pandoc-html.css](pandoc-html.css): css file used for html generation.
   * [pandoc-template.html](pandoc-template.html): Modified copy of the
@@ -69,7 +69,7 @@ by pandoc), you can write your `ontodoc` template in markdown (with
   * Copy all the files starting with `pandoc-` to a new directory.
   * Create a metadata yaml file for your ontology. You can use
     [emmodoc-meta.yaml](emmodoc-meta.yaml) as a template.
-  * Update [pandoc-args.yaml](pandoc-args.yaml).  Especially change:
+  * Update [pandoc-options.yaml](pandoc-options.yaml).  Especially change:
       - `input-files` to the name of your new yaml metadata file
       - `logo` to the path of your logo (or remove it)
       - `titlegraphic` to the path of your title figure (or remove it)

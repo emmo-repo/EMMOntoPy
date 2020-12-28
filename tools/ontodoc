@@ -19,7 +19,13 @@ import owlready2  # noqa: E402
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Tool for documenting ontologies.')
+        description='Tool for documenting ontologies.',
+        epilog='The easiest way to generate nice-looking documentation '
+        'using pandoc is to copy the emmodoc example to the current '
+        'directory and adapt it.  See '
+        'https://github.com/emmo-repo/EMMO-python/tree/master/examples/emmodoc '
+        'for more info.'
+    )
     parser.add_argument(
         'iri', metavar='IRI',
         help='File name or URI of the ontology to document.')
@@ -80,9 +86,10 @@ def main():
         '--pandoc-option', '-p', metavar='STRING', action='append',
         dest='pandoc_options',
         help='Additional pandoc long options overriding those read from '
-        '--pandoc-option-file.  It is possible to remove pandoc option --XXX '
-        'with "--pandoc-option=no-XXX".  This option may be provided multiple '
-        'times.')
+        '--pandoc-option-file.  Use "--pandoc-option=XXX=Y" to add pandoc '
+        'option --XXX=Y. It is also possible to remove pandoc option --XXX '
+        'with "--pandoc-option=no-XXX".  This option may be provided '
+        'multiple times.')
     parser.add_argument(
         '--pandoc-option-file', '-P', metavar='FILE', action='append',
         dest='pandoc_option_files',
