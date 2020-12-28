@@ -9,11 +9,12 @@ rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
     os.path.dirname(__file__)))))
 sys.path.insert(1, rootdir)
 
-from emmo import World, onto_path
+from emmo import World, onto_path  # noqa: E402
 from emmo.ontodoc import (
-    OntoDoc, get_format, get_style, get_figformat, get_maxwidth, get_docpp)
+    OntoDoc, get_format, get_style, get_figformat, get_maxwidth, get_docpp,
+)  # noqa: E402
 
-import owlready2
+import owlready2  # noqa: E402
 
 
 def main():
@@ -36,6 +37,9 @@ def main():
         help='Load imported ontologies locally.  Their paths are specified '
         'in Protègè catalog files or via the --path option.  The IRI should '
         'be a file name.')
+    parser.add_argument(
+        '--imported', '-i', action='store_true',
+        help='Whether to also include imported ontologies.')
     parser.add_argument(
         '--catalog-file', default='catalog-v001.xml',
         help='Name of Protègè catalog file in the same folder as the '
@@ -123,7 +127,8 @@ def main():
     maxwidth = args.max_figwidth if args.max_figwidth else get_maxwidth(format)
     ontodoc = OntoDoc(onto, style=style)
     docpp = get_docpp(ontodoc, args.template, figdir=args.figdir,
-                      figformat=figformat, maxwidth=maxwidth)
+                      figformat=figformat, maxwidth=maxwidth,
+                      imported=args.imported)
     docpp.process()
 
     try:
