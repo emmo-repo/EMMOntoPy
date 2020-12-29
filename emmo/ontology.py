@@ -199,10 +199,16 @@ class Ontology(owlready2.Ontology, OntoGraph):
             Additional keyword arguments are passed on to
             owlready2.Ontology.load().
         """
+        fmap = {
+            'n3': 'ntriples',
+            'ttl': 'turtle',
+        }
+
         # If filename is not given, infer it from base_iri (if possible)
         if not filename:
             web_protocols = ('http://', 'https://', )
-            fmt = format if format else guess_format(self.base_iri.rstrip('/#'))
+            fmt = format if format else guess_format(
+                self.base_iri.rstrip('/#'), fmap=fmap)
             if not self.base_iri.startswith(web_protocols):
                 filename = self.base_iri.rstrip('#/')
                 if filename.startswith('file://'):
@@ -228,8 +234,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # by owlready2
         if filename:
             if not format:
-                fmap = {'n3': 'ntriples'}
-                format = guess_format(filename)
+                format = guess_format(filename, fmap=fmap)
             if format not in ('xml', 'ntriples'):
                 with tempfile.TemporaryDirectory() as tmpdir:
                     if not os.path.exists(tmpdir):
@@ -493,15 +498,20 @@ class Ontology(owlready2.Ontology, OntoGraph):
         return [entity for entity in
                 itertools.chain.from_iterable(
                     getattr(self, c)() for c in categories)
-                if ((hasattr(entity, 'prefLabel') and label in entity.prefLabel) or
-                    (hasattr(entity, 'label') and label in entity.label) or
-                    (hasattr(entity, 'altLabel') and label in entity.altLabel))]
+                if ((hasattr(entity, 'prefLabel') and
+                     label in entity.prefLabel) or
+                    (hasattr(entity, 'label') and
+                     label in entity.label) or
+                    (hasattr(entity, 'altLabel') and
+                     label in entity.altLabel))]
 
-    def sync_python_names(self, annotations=('prefLabel', 'label', 'altLabel')):
+    def sync_python_names(self,
+                          annotations=('prefLabel', 'label', 'altLabel')):
         """Update the `python_name` attribute of all properties.
 
-        The python_name attribute will be set to the first non-empty annotation
-        in the sequence of annotations in `annotations` for the property.
+        The python_name attribute will be set to the first non-empty
+        annotation in the sequence of annotations in `annotations` for
+        the property.
         """
         def update(gen):
             for prop in gen:
@@ -585,7 +595,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
             if not hasattr(ind, 'prefLabel'):
                 # no prefLabel - create new annotation property..
                 with self:
-                    class prefLabel(owlready2.label):
+                    class prefLabel(owlready2.label):  # noqa: F811
                         pass
                 ind.prefLabel = [locstr(ind.name, lang='en')]
             elif not ind.prefLabel:
@@ -595,7 +605,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
             if not hasattr(ind, 'prefLabel'):
                 # no prefLabel - create new annotation property..
                 with self:
-                    class prefLabel(owlready2.label):
+                    class prefLabel(owlready2.label):  # noqa: F811
                         pass
                 ind.prefLabel = [ind.name]
             elif not ind.prefLabel:

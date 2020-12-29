@@ -222,6 +222,7 @@ def convert_imported(input, output, input_format=None, output_format='xml',
             f.write(s)
 
     outpaths = set()
+
     def recur(graph, outext):
         for imported in graph.objects(predicate=URIRef(
                 'http://www.w3.org/2002/07/owl#imports')):
@@ -231,7 +232,7 @@ def convert_imported(input, output, input_format=None, output_format='xml',
             elif inpath.startswith('https://'):
                 outpath = inpath.split('/')[-1]
             else:
-                outpath=inpath
+                outpath = inpath
             outpath = os.path.splitext(os.path.normpath(
                 os.path.join(outroot, os.path.relpath(
                     outpath, inroot))))[0] + outext
@@ -250,7 +251,7 @@ def convert_imported(input, output, input_format=None, output_format='xml',
 
 
 def squash_imported(input, output, input_format=None, output_format='xml',
-                     catalog_file='catalog-v001.xml'):
+                    catalog_file='catalog-v001.xml'):
     """Convert imported ontologies and squash them into a single file.
 
     If a catalog file exists in the same directory as the input file it will
@@ -263,6 +264,7 @@ def squash_imported(input, output, input_format=None, output_format='xml',
         d = {}
 
     imported = set()
+
     def recur(g):
         for s, p, o in g.triples(
                 (None, URIRef('http://www.w3.org/2002/07/owl#imports'), None)):

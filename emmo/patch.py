@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """This module injects some additional methods into owlready2 classes."""
-from types import MethodType
 
 import owlready2
 from owlready2 import ThingClass, PropertyClass, Thing, Restriction
@@ -20,7 +19,6 @@ def render_func(entity):
 
 
 owlready2.set_render_func(render_func)
-
 
 
 #
@@ -182,4 +180,5 @@ setattr(Restriction, 'get_typename', get_typename)
 
 # Method names for individuals must be different from method names for classes
 type.__setattr__(Thing, 'get_preflabel', get_preferred_label)
-type.__setattr__(Thing, 'get_individual_annotations', get_individual_annotations)
+type.__setattr__(Thing, 'get_individual_annotations',
+                 get_individual_annotations)

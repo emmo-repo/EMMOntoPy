@@ -175,7 +175,7 @@ class OntoGraph:
         #         to only add a node once!
         import pydot
         from .ontology import NoSuchLabelError
-        
+
         if style is None or style == 'default':
             style = self._default_style
         elif style == 'uml':
@@ -387,7 +387,7 @@ class OntoGraph:
             return graph
         visited.add(root)
 
-        label = getlabel(root) #if len(getlabel(root)) == 1 else root.name
+        label = getlabel(root)
         nodes = graph.get_node(label)
         if nodes:
             if len(nodes) > 1:
@@ -410,7 +410,7 @@ class OntoGraph:
             return graph
 
         for sc in root.subclasses():
-            label = getlabel(sc) 
+            label = getlabel(sc)
             if self.is_individual(label):
                 subnode = pydot.Node(label, **style.get('individual', {}))
                 subnode.set_name(label)
