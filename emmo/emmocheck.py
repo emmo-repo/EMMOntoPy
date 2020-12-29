@@ -174,7 +174,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             return
         exceptions.update(
             self.get_config('test_unit_dimension.exceptions', ()))
-        regex = re.compile(r'^(emmo|metrology).hasPhysicalDimension.some\(.*\)$')
+        regex = re.compile(
+            r'^(emmo|metrology).hasPhysicalDimension.some\(.*\)$')
         classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.MeasurementUnit.descendants():
             if not self.check_imported and cls not in classes:
@@ -269,6 +270,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'manufacturing.EngineeredMaterial',
         ))
         exceptions.update(self.get_config('test_namespace.exceptions', ()))
+
         def checker(onto, ignore_namespace):
             if list(filter(onto.base_iri.strip('#').endswith,
                            self.ignore_namespace)) != []:

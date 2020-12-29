@@ -40,7 +40,8 @@ with open(os.path.join(rootdir, 'emmo/__init__.py')) as handle:
             VERSION = match.group(1)
             break
     else:
-        raise RuntimeError(f'Could not determine package version from {handle.name} !')
+        raise RuntimeError(
+            f'Could not determine package version from {handle.name} !')
 
 
 setuptools.setup(

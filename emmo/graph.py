@@ -34,7 +34,6 @@ def getlabel(e):
         return repr(e)
 
 
-
 class OntoGraph:
     """Class for visualising an ontology.
 
@@ -361,7 +360,8 @@ class OntoGraph:
                               owlready2.ObjectPropertyClass)):
                 if 'all' in relations or 'isA' in relations:
                     rlabel = getlabel(r)
-                    if isinstance(e, owlready2.Thing):  # FIXME - we actually want to include individuals...
+                    # FIXME - we actually want to include individuals...
+                    if isinstance(e, owlready2.Thing):
                         continue
                     if r not in e.get_parents(strict=True):
                         continue

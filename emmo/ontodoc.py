@@ -763,9 +763,11 @@ class DocPP:
                 if type == 'classes':
                     roots = onto.get_root_classes(imported=self.imported)
                 elif type in ('object_properties', 'relations'):
-                    roots = onto.get_root_object_properties(imported=self.imported)
+                    roots = onto.get_root_object_properties(
+                        imported=self.imported)
                 elif type == 'data_properties':
-                    roots = onto.get_root_data_properties(imported=self.imported)
+                    roots = onto.get_root_data_properties(
+                        imported=self.imported)
                 else:
                     raise InvalidTemplateError(
                         'Invalid argument to %%ALL: %s' % type)
