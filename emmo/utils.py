@@ -227,15 +227,13 @@ def convert_imported(input, output, input_format=None, output_format='xml',
         for imported in graph.objects(predicate=URIRef(
                 'http://www.w3.org/2002/07/owl#imports')):
             inpath = d[str(imported)]
-            if inpath.startswith('http://'):
-                outpath = inpath.split('/')[-1]
-            elif inpath.startswith('https://'):
-                outpath = inpath.split('/')[-1]
+            if inpath.startswith(('http://', 'https://')):
+                outpath = os.path.join(outroot, inpath.split('/')[-1])
             else:
-                outpath = inpath
+                outpath = os.path.join(outroot, os.path.relpath(
+                        inpath, inroot))
             outpath = os.path.splitext(os.path.normpath(
-                os.path.join(outroot, os.path.relpath(
-                    outpath, inroot))))[0] + outext
+                outpath))[0] + outext
             if outpath not in outpaths:
                 outpaths.add(outpath)
                 g = Graph()
