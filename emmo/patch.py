@@ -2,7 +2,7 @@
 """This module injects some additional methods into owlready2 classes."""
 
 import owlready2
-from owlready2 import ThingClass, PropertyClass, Thing, Restriction
+from owlready2 import ThingClass, PropertyClass, Thing, Restriction, Namespace
 
 
 # Improve default rendering of entities
@@ -117,6 +117,9 @@ def get_indirect_is_a(self, skip_classes=True):
     return s
 
 
+
+
+
 #
 # Extending PropertyClass (properties)
 #
@@ -158,10 +161,21 @@ def get_individual_annotations(self, all=False, imported=True):
 
 
 #
-# Extending Restruction
+# Extending Restriction
 #
 def get_typename(self):
     return owlready2.class_construct._restriction_type_2_label[self.type]
+
+
+#
+# Extending Namespace
+#
+orig_namespace_init = Namespace.__init__
+
+def namespace_init(self, world_or_ontology, base_iri, name=None):
+    orig_namespace_init(self, world_or_ontology, base_iri, name)
+    if self.name.endswith('.ttl'):
+        self.name = self.name[:-4]
 
 
 # Inject methods into Owlready2 classes
@@ -177,6 +191,8 @@ setattr(PropertyClass, 'get_parents', get_parents)
 setattr(PropertyClass, 'get_annotations', get_property_annotations)
 
 setattr(Restriction, 'get_typename', get_typename)
+
+setattr(Namespace, '__init__', namespace_init)
 
 # Method names for individuals must be different from method names for classes
 type.__setattr__(Thing, 'get_preflabel', get_preferred_label)
