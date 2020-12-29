@@ -1,5 +1,7 @@
 __pycache__
 old
+demo.owl
+demo.sqlite3
 
 usercase_ontology.owl
 *.svg

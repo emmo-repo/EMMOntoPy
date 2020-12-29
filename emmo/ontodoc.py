@@ -763,9 +763,11 @@ class DocPP:
                 if type == 'classes':
                     roots = onto.get_root_classes(imported=self.imported)
                 elif type in ('object_properties', 'relations'):
-                    roots = onto.get_root_object_properties(imported=self.imported)
+                    roots = onto.get_root_object_properties(
+                        imported=self.imported)
                 elif type == 'data_properties':
-                    roots = onto.get_root_data_properties(imported=self.imported)
+                    roots = onto.get_root_data_properties(
+                        imported=self.imported)
                 else:
                     raise InvalidTemplateError(
                         'Invalid argument to %%ALL: %s' % type)
@@ -1097,7 +1099,7 @@ def get_maxwidth(format):
 
 
 def get_docpp(ontodoc, infile, figdir='genfigs', figformat='png',
-              maxwidth=None):
+              maxwidth=None, imported=False):
     """Read `infile` and return a new docpp instance."""
     if infile:
         with open(infile, 'rt') as f:
@@ -1108,6 +1110,6 @@ def get_docpp(ontodoc, infile, figdir='genfigs', figformat='png',
         basedir = '.'
 
     docpp = DocPP(template, ontodoc, basedir=basedir, figdir=figdir,
-                  figformat=figformat, maxwidth=maxwidth)
+                  figformat=figformat, maxwidth=maxwidth, imported=imported)
 
     return docpp

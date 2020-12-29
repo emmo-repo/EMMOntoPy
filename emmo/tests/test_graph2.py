@@ -104,13 +104,11 @@ g.add_legend()
 g.save('measurement.png')
 
 
-
 # Reductionistic perspective
 g = OntoGraph(emmo, emmo.Reductionistic, relations='all', addnodes=False,
               leafs=[emmo.Quantity, emmo.String, emmo.PrefixedUnit,
                      emmo.SymbolicComposition, emmo.Matter],
               parents=2,
-              #entities=[emmo.Symbolic],
               edgelabels=None)
 g.add_legend()
 g.save('Reductionistic.png')
