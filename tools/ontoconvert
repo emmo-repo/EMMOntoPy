@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-"""Converts file format of input ontology and write it out output file(s).
+"""Converts file format of input ontology and write it to output file(s).
 """
 import argparse
 
 from rdflib.util import Graph, guess_format
 
 from emmo.utils import convert_imported, squash_imported
+from emmo.factpluspluswrapper.factppgraph import FaCTPPGraph
 
 
 def main():
@@ -25,6 +26,15 @@ def main():
         help='Output format (default is to infer from output.  Available '
         'formats: "xml" (rdf/xml), "n3", "turtle", "nt", "pretty-xml", "trix"')
     parser.add_argument(
+        '--inferred', '-i', action='store_true',
+        help='Add additional relations inferred by the FaCT++ reasoner to '
+        'the converted ontology.  Implies --squash.')
+    parser.add_argument(
+        '--base-iri', '-b',
+        help='Base iri of inferred ontology.  The default is the base iri of '
+        'the input ontology with "-inferred" appended to it.  Used together '
+        'with --inferred.')
+    parser.add_argument(
         '--recursive', '-r', action='store_true',
         help='Whether to also convert imported ontologies recursively. '
         'The output is written to a directory structure matching the input. '
@@ -32,7 +42,7 @@ def main():
     parser.add_argument(
         '--squash', '-s', action='store_true',
         help='Whether to also squash imported ontologies into a single output '
-        'file.')
+        'file.  Cannot be combined with --recursive.')
 
     args = parser.parse_args()
 
@@ -54,6 +64,14 @@ def main():
         convert_imported(args.input, args.output,
                          input_format=input_format,
                          output_format=output_format)
+    elif args.inferred:
+        g = squash_imported(args.input, None,
+                            input_format=input_format)
+        fg = FaCTPPGraph(g)
+        if args.base_iri:
+            fg.base_iri = args.base_iri
+        g2 = fg.inferred_graph()
+        g2.serialize(destination=args.output, format=output_format)
     elif args.squash:
         squash_imported(args.input, args.output,
                         input_format=input_format,
