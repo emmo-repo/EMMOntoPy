@@ -254,6 +254,8 @@ def squash_imported(input, output, input_format=None, output_format='xml',
 
     If a catalog file exists in the same directory as the input file it will
     be used to load possible imported ontologies.
+
+    The the squash rdflib graph is returned.
     """
     inroot = os.path.dirname(os.path.abspath(input))
     if catalog_file and os.path.exists(os.path.join(inroot, catalog_file)):
@@ -279,7 +281,9 @@ def squash_imported(input, output, input_format=None, output_format='xml',
     graph = Graph()
     graph.parse(input, format=input_format)
     recur(graph)
-    graph.serialize(destination=output, format=output_format)
+    if output:
+        graph.serialize(destination=output, format=output_format)
+    return graph
 
 
 def infer_version(iri, version_iri):
