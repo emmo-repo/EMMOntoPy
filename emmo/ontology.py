@@ -24,6 +24,7 @@ import owlready2
 from owlready2 import locstr
 
 from .utils import asstring, read_catalog, infer_version, convert_imported
+from .factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 from .ontograph import OntoGraph  # FIXME: depricate...
 
 
@@ -526,15 +527,32 @@ class Ontology(owlready2.Ontology, OntoGraph):
         update(self.get_entities(
             classes=False, individuals=False, annotation_properties=False))
 
-    def sync_reasoner(self, reasoner='HermiT', include_imported=False,
+    def sync_names(self,
+                   annotations=('prefLabel', 'label', 'altLabel')):
+        """Set `name` of all entities to the first non-empty annotation in
+        `annotations`.
+
+        Warning, this method changes all IRIs in the ontology.  However,
+        it may be useful to make the ontology more readable and to work
+        with it together with a triple store.
+        """
+        for e in self.get_entities():
+            for a in annotations:
+                if hasattr(e, a):
+                    name = getattr(e, a).first()
+                    if name:
+                        e.name = name
+                        break
+
+    def sync_reasoner(self, reasoner='FaCT++', include_imported=False,
                       **kwargs):
         """Update current ontology by running the given reasoner.
 
-        Supported values for `reasoner` are 'Pellet' and 'HermiT'.
+        Supported values for `reasoner` are 'Pellet', 'HermiT' and 'FaCT++'.
 
         If `include_imported` is true, the reasoner will also reason
         over imported ontologies.  Note that this may be **very** slow
-        with the current supported reasoners (FaCT++ seems must faster).
+        with Pellet and HermiT.
 
         Keyword arguments are passed to the underlying owlready2 function.
         """
@@ -542,9 +560,11 @@ class Ontology(owlready2.Ontology, OntoGraph):
             sync = owlready2.sync_reasoner_pellet
         elif reasoner == 'HermiT':
             sync = owlready2.sync_reasoner_hermit
+        elif reasoner == 'FaCT++':
+            sync = sync_reasoner_factpp
         else:
             raise ValueError('unknown reasoner %r.  Supported reasoners'
-                             'are "Pellet" and "HermiT".', reasoner)
+                             'are "Pellet", "HermiT" and "FaCT++".', reasoner)
 
         if include_imported:
             with self:
