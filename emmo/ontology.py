@@ -243,6 +243,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                         os.path.basename(filename))[0] + '.owl')
                     convert_imported(filename, output,
                                      input_format=format, output_format='xml',
+                                     url_from_catalog=url_from_catalog,
                                      catalog_file=catalog_file)
                     return self.load(only_local=True,
                                      filename=output,
