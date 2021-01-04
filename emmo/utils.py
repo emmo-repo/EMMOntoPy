@@ -187,7 +187,7 @@ def read_catalog(path, catalog_file='catalog-v001.xml', recursive=False,
 
 
 def convert_imported(input, output, input_format=None, output_format='xml',
-                     catalog_file='catalog-v001.xml'):
+                     url_from_catalog=False, catalog_file='catalog-v001.xml'):
     """Convert imported ontologies.
 
     Store the output in a directory structure matching the source
@@ -199,34 +199,40 @@ def convert_imported(input, output, input_format=None, output_format='xml',
             will be the root of the generated directory structure
         input_format: input format.  The default is to infer from `input`
         output_format: output format.  The default is to infer from `output`
+        url_from_catalog: bool.  Whether to read urls form catalog file.
         catalog_file: name of catalog file, that maps ontology IRIs to
             local file names
     """
     inroot = os.path.dirname(os.path.abspath(input))
     outroot = os.path.dirname(os.path.abspath(output))
-    d, dirs = read_catalog(inroot, catalog_file=catalog_file, recursive=True,
-                           return_paths=True)
-    # Create output dirs and copy catalog files
     outext = os.path.splitext(output)[1]
-    for indir in dirs:
-        outdir = os.path.normpath(
-            os.path.join(outroot, os.path.relpath(indir, inroot)))
-        if not os.path.exists(outdir):
-            os.makedirs(outdir)
-        with open(os.path.join(indir, catalog_file), mode='rt') as f:
-            s = f.read()
-        for path in d.values():
-            newpath = os.path.splitext(path)[0] + outext
-            s = s.replace(os.path.basename(path), os.path.basename(newpath))
-        with open(os.path.join(outdir, catalog_file), mode='wt') as f:
-            f.write(s)
+
+    if url_from_catalog:
+        d, dirs = read_catalog(inroot, catalog_file=catalog_file,
+                               recursive=True, return_paths=True)
+
+        # Create output dirs and copy catalog files
+        for indir in dirs:
+            outdir = os.path.normpath(
+                os.path.join(outroot, os.path.relpath(indir, inroot)))
+            if not os.path.exists(outdir):
+                os.makedirs(outdir)
+            with open(os.path.join(indir, catalog_file), mode='rt') as f:
+                s = f.read()
+            for path in d.values():
+                newpath = os.path.splitext(path)[0] + outext
+                s = s.replace(os.path.basename(path), os.path.basename(newpath))
+            with open(os.path.join(outdir, catalog_file), mode='wt') as f:
+                f.write(s)
+    else:
+        d = {}
 
     outpaths = set()
 
     def recur(graph, outext):
         for imported in graph.objects(predicate=URIRef(
                 'http://www.w3.org/2002/07/owl#imports')):
-            inpath = d[str(imported)]
+            inpath = d.get(str(imported), str(imported))
             if inpath.startswith(('http://', 'https://')):
                 outpath = os.path.join(outroot, inpath.split('/')[-1])
             else:
