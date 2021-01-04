@@ -186,8 +186,9 @@ def main():
             relations=relations,
             edgelabels=args.edgelabels, addnodes=args.addnodes,
             addconstructs=args.addconstructs,
-            parents=args.parents,
         )
+        if args.parents:
+            graph.add_parents(args.parents)
 
         if args.legend:
             graph.add_legend()

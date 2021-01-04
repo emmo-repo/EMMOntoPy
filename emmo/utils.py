@@ -233,15 +233,13 @@ def convert_imported(input, output, input_format=None, output_format='xml',
         for imported in graph.objects(predicate=URIRef(
                 'http://www.w3.org/2002/07/owl#imports')):
             inpath = d.get(str(imported), str(imported))
-            if inpath.startswith('http://'):
-                outpath = inpath.split('/')[-1]
-            elif inpath.startswith('https://'):
-                outpath = inpath.split('/')[-1]
+            if inpath.startswith(('http://', 'https://')):
+                outpath = os.path.join(outroot, inpath.split('/')[-1])
             else:
-                outpath = inpath
+                outpath = os.path.join(outroot, os.path.relpath(
+                        inpath, inroot))
             outpath = os.path.splitext(os.path.normpath(
-                os.path.join(outroot, os.path.relpath(
-                    outpath, inroot))))[0] + outext
+                outpath))[0] + outext
             if outpath not in outpaths:
                 outpaths.add(outpath)
                 g = Graph()
@@ -262,6 +260,8 @@ def squash_imported(input, output, input_format=None, output_format='xml',
 
     If a catalog file exists in the same directory as the input file it will
     be used to load possible imported ontologies.
+
+    The the squash rdflib graph is returned.
     """
     inroot = os.path.dirname(os.path.abspath(input))
     if catalog_file and os.path.exists(os.path.join(inroot, catalog_file)):
@@ -287,7 +287,9 @@ def squash_imported(input, output, input_format=None, output_format='xml',
     graph = Graph()
     graph.parse(input, format=input_format)
     recur(graph)
-    graph.serialize(destination=output, format=output_format)
+    if output:
+        graph.serialize(destination=output, format=output_format)
+    return graph
 
 
 def infer_version(iri, version_iri):
