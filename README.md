@@ -141,13 +141,12 @@ for how to build a docker image.
 Known issues
 ------------
 
-### Invalid serialising to turtle
-Due to rdflib issue
-[#1043](https://github.com/RDFLib/rdflib/issues/1043) ontoconvert may
-produce invalid turtle output (if your ontology contains real literals
-using scientific notation without a dot in the mantissa).  This issue
-was fixed after the release of rdflib 5.0.0.  Hence, install rdflib
-from github master if you need to serialise to turtle.
+* **Invalid serialising to turtle** Due to rdflib issue
+  [#1043](https://github.com/RDFLib/rdflib/issues/1043) ontoconvert may
+  produce invalid turtle output (if your ontology contains real literals
+  using scientific notation without a dot in the mantissa).  This issue
+  was fixed after the release of rdflib 5.0.0.  Hence, install rdflib
+  from github master if you need to serialise to turtle.
 
 
 Attributions and credits
