@@ -297,10 +297,10 @@ positional arguments:
       -h, --help            show this help message and exit
       --input-format, -f INPUT_FORMAT 
                             Inputformat. Default is to infer from input.
-      --output-format, -F OUTPUT_FORMAT
+      --output-format, -F OUTPUT_FORMAT 
 			    Default is to infer from output.
       --inferred, -i        Add additional relations inferred by the FaCT++ reasoner to the converted ontology. Implies --squash.
-      --base-iri BASE_IRI, -b BASE_IRI
+      --base-iri BASE_IRI, -b BASE_IRI 
                             Base iri of inferred ontology. The default is the base
                             iri of the input ontology with "-inferred" appended to
                             it. Used together with --inferred.
