@@ -297,21 +297,28 @@ positional arguments:
       -h, --help            show this help message and exit
       --input-format, -f INPUT_FORMAT 
                             Inputformat. Default is to infer from input.
-      --output-format, -F OUTPUT_FORMAT
+      --output-format, -F OUTPUT_FORMAT 
 			    Default is to infer from output.
+      --inferred, -i        Add additional relations inferred by the FaCT++ reasoner to the converted ontology. Implies --squash.
+      --base-iri BASE_IRI, -b BASE_IRI 
+                            Base iri of inferred ontology. The default is the base
+                            iri of the input ontology with "-inferred" appended to
+                            it. Used together with --inferred.
+ 
       --recursive, -r       The output is written to the directories matching the input. This requires Protege catalog files to be present.
       --squash, -s          Squash imported ontologies into a single output file.
 
 
 ### Examples:
 
-    ontoconvert --recursive emmo.ttl emmo.owl
+    ontoconvert --recursive emmo.ttl owl/emmo.owl
+    ontoconvert --inferred emmo.ttl emmo-inferred.owl
 
-Note that it is then required to add argument only_local=True when loading the ontology in emmopython, e.g.
+Note that it is then required to add argument only_local=True when loading the locally converted ontology in emmopython, e.g.
     python
     >from emmo import get_ontology
     >o=get_ontology('emmo.owl').load(only_local=True)
 
-Also, since the catalog file will be overwritten in the above example writing output to a separate directory is useful.
+Since the catalog file will be overwritten in the above example writing output to a separate directory is useful.
    ontoconvert --recursive emmo.ttl owl/emmo.owl
 
