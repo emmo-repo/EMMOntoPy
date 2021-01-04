@@ -141,7 +141,7 @@ for how to build a docker image.
 Known issues
 ------------
 
-* **Invalid serialising to turtle** Due to rdflib issue
+* **Invalid serialising to turtle:** Due to rdflib issue
   [#1043](https://github.com/RDFLib/rdflib/issues/1043) ontoconvert may
   produce invalid turtle output (if your ontology contains real literals
   using scientific notation without a dot in the mantissa).  This issue
