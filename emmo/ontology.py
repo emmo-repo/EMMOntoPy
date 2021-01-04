@@ -527,7 +527,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         update(self.get_entities(
             classes=False, individuals=False, annotation_properties=False))
 
-    def sync_names(self,
+    def rename_entities(self,
                    annotations=('prefLabel', 'label', 'altLabel')):
         """Set `name` of all entities to the first non-empty annotation in
         `annotations`.
