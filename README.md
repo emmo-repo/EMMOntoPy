@@ -138,6 +138,17 @@ See [docs/docker-dockerinstructions.md](#docs/docker-dockerinstructions.md)
 for how to build a docker image.
 
 
+Known issues
+------------
+
+### Invalid serialising to turtle
+Due to rdflib issue
+[#1043](https://github.com/RDFLib/rdflib/issues/1043) ontoconvert may
+produce invalid turtle output (if your ontology contains real literals
+using scientific notation without a dot in the mantissa).  This issue
+was fixed after the release of rdflib 5.0.0.  Hence, install rdflib
+from github master if you need to serialise to turtle.
+
 
 Attributions and credits
 ------------------------
@@ -147,16 +158,16 @@ EMMO-python is maintained by [EMMC-ASBL](https://emmc.eu/).  So far it has mainl
 ### Contributing projects
 - [EMMC-CSA](https://emmc.info/about-emmc-csa/);
   Grant Agreement No: 723867
-  <img src="https://i2.wp.com/emmc.info/wp-content/uploads/2018/10/emmc_logo-low.jpg?fit=1701%2C1701&ssl=1" width="120">
+  <img src="https://i2.wp.com/emmc.info/wp-content/uploads/2018/10/emmc_logo-low.jpg?fit=1701%2C1701&ssl=1" height="50">
 - [MarketPlace](https://www.the-marketplace-project.eu/);
   Grant Agreement No: 760173
   <img src="https://www.the-marketplace-project.eu/content/dam/iwm/the-marketplace-project/images/MARKETPLACE_LOGO_300dpi.png" width="120">
 - [OntoTrans](https://ontotrans.eu/project/);
   Grant Agreement No: 862136
-  <img src="https://ontotrans.eu/wp-content/uploads/2020/05/ot_logo_rosa_gro%C3%9F.svg" width="120">
+  <img src="https://ontotrans.eu/wp-content/uploads/2020/05/ot_logo_rosa_gro%C3%9F.svg" height="50">
 - [BIG-MAP](https://www.big-map.eu/);
   Grant Agreement No: 957189
-  <img src="https://avatars1.githubusercontent.com/u/72801303?s=200&v=4" width="120">
+  <img src="https://avatars1.githubusercontent.com/u/72801303?s=200&v=4" height="50">
 
 
 
