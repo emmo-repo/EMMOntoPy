@@ -46,9 +46,11 @@ docker run --rm -it -v $(pwd):/home/user/EMMO-python emmomount (linux)
 docker run --rm -it -v ${PWD}:/home/user/EMMO-python emmomount (windows10, Powershell)
 ```
 
-To install EMMO-python package in container:
-   cd EMMO-python
-   pip install .
+To install EMMO-python package inside container:
+```bash
+cd EMMO-python
+pip install .
+```
 
 ### Notes on mounting on windows
 
