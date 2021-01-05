@@ -29,22 +29,26 @@ docker run -it emmo
   in python. 
 
 
-### Dockerfile for development purposes (devel.Dockerfile)
+### Dockerfile for mounting EMMO-python as volume (mount.Dockerfile)
 
 ### Build docker image
 
 ```bash
-docker build -t emmodev -f devel.Dockerfile .
+docker build -t emmomount -f mount.Dockerfile .
 ```
 
 ### Run Docker container
 ```bash
-docker run --rm -it -v $(pwd):/home/user/emmo emmodev (linux)
+docker run --rm -it -v $(pwd):/home/user/EMMO-python emmomount (linux)
 ```
 
 ```PowerShell
-docker run --rm -it -v ${PWD}:/home/user/emmo emmodev (windows10, Powershell)
+docker run --rm -it -v ${PWD}:/home/user/EMMO-python emmomount (windows10, Powershell)
 ```
+
+To install EMMO-python package in container:
+   cd EMMO-python
+   pip install .
 
 ### Notes on mounting on windows
 
