@@ -182,7 +182,7 @@ Tool for visualizing ontologies.
 ### Examples:
 The figure below is e.g. generated with the following command
 
-    ontograph --root=MaterialState --relations=all --legend emmo-inferred materialstate.png
+    ontograph --root=Material --relations=all --legend emmo-inferred material.png
 
 ![Graph generated with the ontograph tool.](materialstate.png)
 
