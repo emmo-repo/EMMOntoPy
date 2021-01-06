@@ -574,7 +574,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
             sync([self], **kwargs)
 
     def sync_attributes(self, name_policy=None, name_prefix='',
-                        sync_imported=False):
+                        class_docstring='comment', sync_imported=False):
         """This method is intended to be called after you have added new
         classes (typically via Python) to make sure that attributes like
         `label` and `comments` are defined.
@@ -596,6 +596,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         If `sync_imported` is true, all imported ontologies are also
         updated.
+
+        The `class_docstring` argument specifies the annotation that
+        class docstrings are mapped to.  Defaults to "comment".
         """
         for cls in itertools.chain(
                 self.classes(), self.object_properties(),
@@ -608,8 +611,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 cls.prefLabel = [locstr(cls.__name__, lang='en')]
             elif not cls.prefLabel:
                 cls.prefLabel.append(locstr(cls.__name__, lang='en'))
-            if not cls.comment and hasattr(cls, '__doc__') and cls.__doc__:
-                cls.comment.append(
+            if class_docstring and hasattr(cls, '__doc__') and cls.__doc__:
+                getattr(cls, class_docstring).append(
                     locstr(inspect.cleandoc(cls.__doc__), lang='en'))
 
         for ind in self.individuals():
@@ -622,22 +625,13 @@ class Ontology(owlready2.Ontology, OntoGraph):
             elif not ind.prefLabel:
                 ind.prefLabel.append(locstr(ind.name, lang='en'))
 
-        for ind in self.individuals():
-            if not hasattr(ind, 'prefLabel'):
-                # no prefLabel - create new annotation property..
-                with self:
-                    class prefLabel(owlready2.label):  # noqa: F811
-                        pass
-                ind.prefLabel = [ind.name]
-            elif not ind.prefLabel:
-                ind.prefLabel.append(ind.name)
-
         chain = itertools.chain(
             self.classes(), self.individuals(), self.object_properties(),
             self.data_properties(), self.annotation_properties())
         if name_policy == 'uuid':
             for obj in chain:
-                obj.name = name_prefix + str(uuid.uuid4())
+                obj.name = name_prefix + str(uuid.uuid5(uuid.NAMESPACE_DNS,
+                                                        obj.name))
         elif name_policy == 'sequential':
             for obj in chain:
                 n = 0
