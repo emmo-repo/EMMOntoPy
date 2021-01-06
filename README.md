@@ -134,7 +134,7 @@ Install with
     - [semver]: Required for ontoversion-tool
     - [pydot]: Used for generating graphs. Will be deprecated.
 
-See [docs/docker-instructions.md](#docs/docker-dockerinstructions.md)
+See [docs/docker-instructions.md](#docs/docker-instructions.md)
 for how to build a docker image.
 
 
