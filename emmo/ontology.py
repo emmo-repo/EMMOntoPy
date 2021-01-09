@@ -482,16 +482,17 @@ class Ontology(owlready2.Ontology, OntoGraph):
                                    'name %r' % label)
         elif label is owlready2.Thing or label == 'Thing':
             return owlready2.Thing
+
         # Check imported ontologies
         for onto in self.imported_ontologies:
-            if onto in visited:
-                continue
-            visited.add(onto)
-            onto.__class__ = self.__class__  # magically change type of onto
-            try:
-                return onto._get_by_label(label, visited=visited)
-            except NoSuchLabelError:
-                pass
+            if onto not in visited:
+                visited.add(onto)
+                onto.__class__ = self.__class__  # magically change type of onto
+                try:
+                    return onto._get_by_label(label, visited=visited)
+                except NoSuchLabelError:
+                    pass
+
         # Fallback to check whether we have a class in the current or any
         # of the imported ontologies whos name matches `label`
         for onto in [self] + self.imported_ontologies:
