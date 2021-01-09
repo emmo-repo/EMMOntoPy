@@ -436,15 +436,24 @@ class Ontology(owlready2.Ontology, OntoGraph):
         found first is returned.  A KeyError is raised if `label`
         cannot be found.
         """
+        return self._get_by_label(label)
+
+    def _get_by_label(self, label, visited=None):
+        """Recursive help function for get_by_label()."""
         # Strip off colon in labels
         if ':' in label:
             label = label.split(':')[-1]
+
+        # Include self among already visited ontologies
+        if visited is None:
+            visited = set()
+        visited.add(self)
 
         # Handle labels of the form 'namespace.label' recursively
         if '.' in label:
             head, sep, tail = label.partition('.')
             ns = self.get_namespace(head)
-            return ns.ontology.get_by_label(tail)
+            return ns.ontology._get_by_label(tail, visited=visited)
 
         # Check for name in all categories in self
         for category in categories:
@@ -475,9 +484,12 @@ class Ontology(owlready2.Ontology, OntoGraph):
             return owlready2.Thing
         # Check imported ontologies
         for onto in self.imported_ontologies:
+            if onto in visited:
+                continue
+            visited.add(onto)
             onto.__class__ = self.__class__  # magically change type of onto
             try:
-                return onto.get_by_label(label)
+                return onto._get_by_label(label, visited=visited)
             except NoSuchLabelError:
                 pass
         # Fallback to check whether we have a class in the current or any
