@@ -317,8 +317,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """
         def rec_imported(onto):
             for o in onto.imported_ontologies:
-                imported.add(o)
                 if o not in imported:
+                    imported.add(o)
                     rec_imported(o)
 
         if recursive:
