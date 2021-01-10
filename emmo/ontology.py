@@ -318,7 +318,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
         def rec_imported(onto):
             for o in onto.imported_ontologies:
                 imported.add(o)
-                rec_imported(o)
+                if o not in imported:
+                    rec_imported(o)
 
         if recursive:
             imported = set()
