@@ -669,6 +669,7 @@ def get_module_dependencies(iri_or_onto, strip_base=None):
         else:
             return base_iri
 
+    visited = set()
     def setmodules(onto):
         for o in onto.imported_ontologies:
             if onto.base_iri in modules:
@@ -677,7 +678,9 @@ def get_module_dependencies(iri_or_onto, strip_base=None):
                 modules[strip(onto.base_iri)] = set([strip(o.base_iri)])
             if o.base_iri not in modules:
                 modules[strip(o.base_iri)] = set()
-            setmodules(o)
+            if o not in visited:
+                visited.add(o)
+                setmodules(o)
 
     setmodules(onto)
     return modules
@@ -746,9 +749,13 @@ def check_module_dependencies(modules, verbose=True):
     If `modules` is given, it should be a dict returned by
     get_module_dependencies().
     """
+    visited = set()
     def get_deps(iri, excl=None):
         """Returns a set with all dependencies of `iri`, excluding `excl` and
         its dependencies."""
+        if iri in visited:
+            return set()
+        visited.add(iri)
         deps = set()
         for d in modules[iri]:
             if d != excl:
