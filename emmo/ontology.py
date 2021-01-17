@@ -168,7 +168,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         pass
 
     def load(self, only_local=False, filename=None, format=None,
-             reload=None, reload_if_newer=False, url_from_catalog=False,
+             reload=None, reload_if_newer=False, url_from_catalog=True,
              catalog_file='catalog-v001.xml', tmpdir=None,
              **kwargs):
         """Load the ontology.

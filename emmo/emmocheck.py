@@ -89,7 +89,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         start with upper case.
         """
         exceptions = set((
-            '0-manifold',
+            '0-manifold',  # not needed in 1.0.0-beta
             '1-manifold',
             '2-manifold',
             '3-manifold',
@@ -229,6 +229,18 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             'emmo.InternationalSystemOfQuantity',
             'emmo.ISQDerivedQuantity',
             'emmo.SIExactConstant',
+
+            'emmo.NonSIUnits',
+            'emmo.StandardizedPhysicalQuantity',
+            'emmo.CategorizedPhysicalQuantity',
+
+            'emmo.AtomicAndNuclear',
+            'emmo.Defined',
+            'emmo.Electromagnetic',
+            'emmo.FrequentlyUsed',
+            'emmo.PhysicoChemical',
+            'emmo.ChemicalCompositionQuantity',
+            'emmo.Universal',
         ))
         if not hasattr(self.onto, 'PhysicalQuantity'):
             return
@@ -422,6 +434,14 @@ def main():
                 if fnmatch.fnmatchcase(name, pattern):
                     setattr(test, 'setUp',
                             lambda: test.skipTest('skipped from command line'))
+
+        # Skip tests from config file
+        for test in suite:
+            for pattern in test.get_config('skip', ()):
+                name = test.id().split('.')[-1]
+                if fnmatch.fnmatchcase(name, pattern):
+                    setattr(test, 'setUp',
+                            lambda: test.skipTest('skipped from config file'))
 
         runner = TextTestRunner(verbosity=verbosity)
         runner.resultclass.checkmode = True
