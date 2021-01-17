@@ -10,6 +10,10 @@ Example configuration file:
       exceptions:
         - myunits.MyUnitCategory1
         - myunits.MyUnitCategory2
+
+    skip:
+        - name_of_test_to_skip
+
 """
 import os
 import sys
