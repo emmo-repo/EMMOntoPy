@@ -24,7 +24,6 @@ import owlready2
 from owlready2 import locstr
 
 from .utils import asstring, read_catalog, infer_version, convert_imported
-from .utils import FMAP
 from .factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 from .ontograph import OntoGraph  # FIXME: depricate...
 
@@ -168,7 +167,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         pass
 
     def load(self, only_local=False, filename=None, format=None,
-             reload=None, reload_if_newer=False, url_from_catalog=True,
+             reload=None, reload_if_newer=False, url_from_catalog=False,
              catalog_file='catalog-v001.xml', tmpdir=None,
              **kwargs):
         """Load the ontology.
@@ -201,11 +200,16 @@ class Ontology(owlready2.Ontology, OntoGraph):
             Additional keyword arguments are passed on to
             owlready2.Ontology.load().
         """
+        fmap = {
+            'n3': 'ntriples',
+            'ttl': 'turtle',
+        }
+
         # If filename is not given, infer it from base_iri (if possible)
         if not filename:
             web_protocols = ('http://', 'https://', )
             fmt = format if format else guess_format(
-                self.base_iri.rstrip('/#'), fmap=FMAP)
+                self.base_iri.rstrip('/#'), fmap=fmap)
             if not self.base_iri.startswith(web_protocols):
                 filename = self.base_iri.rstrip('#/')
                 if filename.startswith('file://'):
@@ -231,7 +235,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # by owlready2
         if filename:
             if not format:
-                format = guess_format(filename, fmap=FMAP)
+                format = guess_format(filename, fmap=fmap)
             if format not in ('xml', 'ntriples'):
                 with tempfile.TemporaryDirectory() as tmpdir:
                     if not os.path.exists(tmpdir):
