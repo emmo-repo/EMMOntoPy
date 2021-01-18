@@ -1,0 +1,14 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/"
+  schedule:
+    interval: weekly
+  # Should be bigger than or equal to the total number of dependencies (currently 9)
+  open-pull-requests-limit: 15
+  target-branch: master
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: daily
+  target-branch: master
