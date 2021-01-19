@@ -26,7 +26,7 @@ def fglob(patt):
 baseurl = 'https://raw.githubusercontent.com/emmo-repo/EMMO-python/master/'
 with open(os.path.join(rootdir, 'README.md'), 'rt') as f:
     long_description = re.sub(
-        r'(\[[^]]+\])\(([^:)]+)\)', rf'\1(%s\2)' % baseurl, f.read())
+        r'(\[[^]]+\])\(([^:)]+)\)', r'\1(%s\2)' % baseurl, f.read())
 
 # Read requirements from requirements.txt file
 with open(os.path.join(rootdir, 'requirements.txt'), 'rt') as f:

@@ -488,7 +488,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         for onto in self.imported_ontologies:
             if onto not in visited:
                 visited.add(onto)
-                onto.__class__ = self.__class__  # magically change type of onto
+                onto.__class__ = self.__class__  # change type of onto (magic)
                 try:
                     return onto._get_by_label(label, visited=visited)
                 except NoSuchLabelError:
@@ -542,8 +542,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
         update(self.get_entities(
             classes=False, individuals=False, annotation_properties=False))
 
-    def rename_entities(self,
-                   annotations=('prefLabel', 'label', 'altLabel')):
+    def rename_entities(
+        self,
+        annotations=('prefLabel', 'label', 'altLabel'),
+    ):
         """Set `name` of all entities to the first non-empty annotation in
         `annotations`.
 

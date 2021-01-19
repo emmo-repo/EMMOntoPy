@@ -221,7 +221,9 @@ def convert_imported(input, output, input_format=None, output_format='xml',
                 s = f.read()
             for path in d.values():
                 newpath = os.path.splitext(path)[0] + outext
-                s = s.replace(os.path.basename(path), os.path.basename(newpath))
+                s = s.replace(
+                    os.path.basename(path), os.path.basename(newpath)
+                )
             with open(os.path.join(outdir, catalog_file), mode='wt') as f:
                 f.write(s)
     else:
