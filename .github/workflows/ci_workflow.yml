@@ -1,23 +1,80 @@
 name: CI Tests
 
-on: [push]
+on:
+  pull_request:
+  push:
+    branches:
+      - master
 
 jobs:
 
-  build:
+  lint:
+    name: Lint with flake8
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1
-      matrix:
-        python-version: [3.7]
-
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python 3.7
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.7
+
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 . --count --statistics
+
+  tests:
+    name: Pytest and demos
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+
+    - name: Install other dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest
+        sudo apt-get install -y graphviz
+
+    - name: Install EMMO-python
+      run: python setup.py install
+
+    - name: Test with pytest
+      run: pytest
+
+    - name: Run vertical demo
+      run: |
+        cd demo/vertical
+        #python define_ontology.py
+        #python plot_ontology.py
+        cd -
+    - name: Run horizontal demo
+      run: |
+        cd demo/horizontal
+        #python step1_generate_metadata.py
+        #python step2_define_metadata.py
+        #python step3_instantiate.py
+        #python step4_map_instance.py
+        cd -
+
+  documentation:
+    name: EMMO documentation
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
 
     - name: Check Ubuntu version we are running under
       run: |
@@ -25,16 +82,7 @@ jobs:
         sudo apt-get update
 
     - name: Current environment
-      run: |
-        env
-
-    - name: Lint with flake8
-      run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings
-        flake8 . --count --exit-zero --max-line-length=79 --statistics
+      run: env
 
     - name: Install pandoc 2.1.2
       run: |
@@ -60,11 +108,6 @@ jobs:
       run: |
         python setup.py install
 
-    - name: Test with pytest
-      run: |
-        pip install pytest
-        pytest
-
     - name: Create EMMO documentation
       run: |
         cd examples/emmodoc
@@ -73,17 +116,49 @@ jobs:
         python ../../tools/ontodoc -t emmo.md emmo-inferred emmo.pdf
         cd -
 
-    - name: Run vertical demo
+  build_package:
+    name: Build Python package and install (integrity test)
+    runs-on: ubuntu-latest
+    env:
+      SDIST_DIR: sdist_action
+      BDIST_DIR: bdist_action
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+
+    - name: Install Python dependencies
       run: |
-        cd demo/vertical
-        #python define_ontology.py
-        #python plot_ontology.py
-        cd -
-    - name: Run horizontal demo
+        python -m pip install --upgrade pip
+        pip install -U setuptools wheel
+        pip install -r requirements.txt
+
+    - name: Build source and built distributions
+      run: python setup.py sdist bdist_wheel
+
+    - name: Check build and installation of PyPI source distribution
       run: |
-        cd demo/horizontal
-        #python step1_generate_metadata.py
-        #python step2_define_metadata.py
-        #python step3_instantiate.py
-        #python step4_map_instance.py
-        cd -
+        python setup.py -v sdist -d ${SDIST_DIR} bdist_wheel -d ${BDIST_DIR}
+        SDIST_FILE=$( ls ${SDIST_DIR}/ )
+        echo "BDIST_FILE=$( ls ${BDIST_DIR}/ )" >> $GITHUB_ENV
+        ORIGINAL_PWD=$(pwd)
+        mkdir -p /tmp/installation_dir
+        cd /tmp/installation_dir
+        pip install ${ORIGINAL_PWD}/${SDIST_DIR}/${SDIST_FILE}
+
+    - name: Remove installation again
+      run: pip uninstall -y EMMO
+
+    - name: Install built distribution (wheel)
+      run: |
+        ORIGINAL_PWD=$(pwd)
+
+        if [ "${ORIGINAL_PWD}" == "/tmp/installation_dir" ]; then echo "Wrong original dir: ${ORIGINAL_PWD}"; exit 1; fi
+        mkdir -p /tmp/installation_dir
+        cd /tmp/installation_dir
+        pip install ${ORIGINAL_PWD}/${BDIST_DIR}/${{ env.BDIST_FILE }}

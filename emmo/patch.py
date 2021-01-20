@@ -117,9 +117,6 @@ def get_indirect_is_a(self, skip_classes=True):
     return s
 
 
-
-
-
 #
 # Extending PropertyClass (properties)
 #
@@ -171,6 +168,7 @@ def get_typename(self):
 # Extending Namespace
 #
 orig_namespace_init = Namespace.__init__
+
 
 def namespace_init(self, world_or_ontology, base_iri, name=None):
     orig_namespace_init(self, world_or_ontology, base_iri, name)
