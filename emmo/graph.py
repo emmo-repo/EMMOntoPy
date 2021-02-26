@@ -676,17 +676,13 @@ def filter_classes(classes, included_namespaces=(), included_ontologies=()):
     """
     if included_namespaces:
         included = set(c for c in classes
-                    if c.namespace.name in included_namespaces)
+                       if c.namespace.name in included_namespaces)
         # Do not exclude ancestors of included classes
         extended = set.union(*[c.ancestors() for c in included])
         excluded = set(classes).difference(extended)
         classes = [c for c in classes if c not in excluded]
 
     if included_ontologies:
-        print('*** classes')
-        print('    included_intologies:', included_ontologies)
-        print(set((c, c.namespace.ontology.name) for c in classes))
-
         included = set(c for c in classes
                        if c.namespace.ontology.name in included_ontologies)
         # Do not exclude ancestors of included classes
@@ -695,12 +691,7 @@ def filter_classes(classes, included_namespaces=(), included_ontologies=()):
         excluded = set(classes).difference(extended)
         classes = [c for c in classes if c not in excluded]
 
-        print('-->')
-        print(classes)
-
-
     return classes
-
 
 
 def get_module_dependencies(iri_or_onto, strip_base=None):
