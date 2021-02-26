@@ -445,7 +445,7 @@ class DocPP:
         Valid values of `type` are: "classes", "individuals",
         "object_properties", "data_properties", "annotations_properties"
 
-            %ALL type [header_level=3]
+            %ALL type [header_level=3, namespaces='', ontologies='']
 
       * Insert generated figure of all entities of the given type.
         Valid values of `type` are: "classes", "object_properties" and
@@ -476,8 +476,8 @@ class DocPP:
     # FIXME - this class should be refractured:
     #   * Instead of rescan the entire document for each pre-processer
     #     directive, we should scan the source like by line and handle
-    #     each directive as they occour.  The current implementation has
-    #     a lot of dublicated code.
+    #     each directive as they occour.
+    #   * The current implementation has a lot of dublicated code.
     #   * Instead of modifying the source in-place, we should copy to a
     #     result list. This will make good error reporting much easier.
     #   * Branch leaves are only looked up in the file witht the %BRANCH
@@ -783,7 +783,8 @@ class DocPP:
                 opts = get_options(tokens[2:], path='', level=3, terminated=0,
                                    include_leafs=1, strict_leafs=1, width=0,
                                    leafs='', relations='isA', edgelabels=0,
-                                   rankdir='BT', legend=1)
+                                   rankdir='BT', legend=1,
+                                   namespaces='', ontologies='')
                 if type == 'classes':
                     roots = onto.get_root_classes(imported=self.imported)
                 elif type in ('object_properties', 'relations'):
@@ -796,6 +797,11 @@ class DocPP:
                     raise InvalidTemplateError(
                         'Invalid argument to %%ALL: %s' % type)
 
+                included_namespaces = opts.namespaces.split(
+                    ',') if opts.namespaces else ()
+                included_ontologies = opts.ontologies.split(
+                    ',') if opts.ontologies else ()
+
                 sec = []
                 for root in roots:
                     name = asstring(root)
@@ -803,7 +809,7 @@ class DocPP:
                         name, opts.path, opts.terminated, opts.include_leafs,
                         opts.strict_leafs, opts.width, opts.leafs,
                         opts.relations, opts.edgelabels, opts.rankdir,
-                        opts.legend)
+                        opts.legend, included_namespaces, included_ontologies)
                     title = 'Taxonomy of %s.' % name
                     sec.append(
                         self.ontodoc.get_header(title, int(opts.level)))
