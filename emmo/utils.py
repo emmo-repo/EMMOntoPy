@@ -311,3 +311,15 @@ def infer_version(iri, version_iri):
         raise ValueError('version IRI %r is not consistent with base IRI '
                          '%r' % (version_iri, iri))
     return version
+
+
+def ontology_annotation(onto, imported=True):
+    """Annotate all entities with the `ontology_name` and `ontology_iri`.
+
+    If imported is true, imported ontologies will also be annotated.
+
+    The ontology name and IRI are important contextual information
+    that is lost when ontologies are inferred and/or squashed.  This
+    function retain this information as annotations.
+    """
+    pass
