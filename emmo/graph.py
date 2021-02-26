@@ -90,6 +90,14 @@ class OntoGraph:
         Whether to add missing target nodes in relations.
     addconstructs : bool
         Whether to add nodes representing class constructs.
+    included_namespaces : sequence
+        In combination with `root`, only include classes with one of
+        the listed namespaces.  If empty (the default), nothing is
+        excluded.
+    included_ontologies : sequence
+        In combination with `root`, only include classes defined in
+        one of the listed ontologies.  If empty (default), nothing is
+        excluded.
     parents : int
         Include `parents` levels of parents.
     excluded_nodes : None | sequence
@@ -177,6 +185,7 @@ class OntoGraph:
     def __init__(self, ontology, root=None, leafs=None, entities=None,
                  relations='isA', style=None, edgelabels=True,
                  addnodes=False, addconstructs=False,
+                 included_namespaces=(), included_ontologies=(),
                  parents=0, excluded_nodes=None, graph=None,
                  imported=False, **kwargs):
         if style is None or style == 'default':
@@ -217,12 +226,16 @@ class OntoGraph:
             self.add_branch(
                 root, leafs,
                 relations=relations, edgelabels=edgelabels,
-                addnodes=addnodes, addconstructs=addconstructs)
+                addnodes=addnodes, addconstructs=addconstructs,
+                included_namespaces=included_namespaces,
+                included_ontologies=included_ontologies,
+            )
             if parents:
                 self.add_parents(
                     root, levels=parents,
                     relations=relations, edgelabels=edgelabels,
-                    addnodes=addnodes, addconstructs=addconstructs)
+                    addnodes=addnodes, addconstructs=addconstructs,
+                )
 
         if entities:
             self.add_entities(entities=entities, relations=relations,
@@ -248,7 +261,7 @@ class OntoGraph:
     def add_branch(self, root, leafs=None, include_leafs=True,
                    strict_leafs=False, exclude=None, relations='isA',
                    edgelabels=True, addnodes=False, addconstructs=False,
-                   **attrs):
+                   included_namespaces=(), included_ontologies=(), **attrs):
         """Adds branch under `root` ending at any entiry included in the
         sequence `leafs`.  If `include_leafs` is true, leafs classes are
         also included."""
@@ -258,6 +271,11 @@ class OntoGraph:
         classes = self.ontology.get_branch(
             root=root, leafs=leafs, include_leafs=include_leafs,
             strict_leafs=strict_leafs, exclude=exclude)
+
+        classes = filter_classes(
+            classes,
+            included_namespaces=included_namespaces,
+            included_ontologies=included_ontologies)
 
         nodeattrs = {}
         nodeattrs[getlabel(root)] = self.style.get('root', {})
@@ -644,6 +662,36 @@ class OntoGraph:
             def asfloat(s):
                 return float(re.match(r'^[\d.]+', s).group())
         return asfloat(width), asfloat(height)
+
+
+def filter_classes(classes, included_namespaces=(), included_ontologies=()):
+    """Filter out classes whos namespace is not in `included_namespaces`
+    or whos ontology name is not in one of the ontologies in
+    `included_ontologies`.
+
+    `classes` should be a sequence of classes.
+
+    If `included_namespaces` is None or empty, all namespaces are
+    included. Likewise for `included_ontologies`.
+    """
+    if included_namespaces:
+        included = set(c for c in classes
+                       if c.namespace.name in included_namespaces)
+        # Do not exclude ancestors of included classes
+        extended = set.union(*[c.ancestors() for c in included])
+        excluded = set(classes).difference(extended)
+        classes = [c for c in classes if c not in excluded]
+
+    if included_ontologies:
+        included = set(c for c in classes
+                       if c.namespace.ontology.name in included_ontologies)
+        # Do not exclude ancestors of included classes
+        e = [c.ancestors() for c in included]
+        extended = set.union(*e) if e else set()
+        excluded = set(classes).difference(extended)
+        classes = [c for c in classes if c not in excluded]
+
+    return classes
 
 
 def get_module_dependencies(iri_or_onto, strip_base=None):

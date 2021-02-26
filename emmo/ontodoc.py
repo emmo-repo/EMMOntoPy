@@ -16,7 +16,7 @@ import yaml
 import owlready2
 
 from .utils import asstring, camelsplit
-from .graph import OntoGraph, getlabel
+from .graph import OntoGraph, getlabel, filter_classes
 
 
 class OntoDoc:
@@ -425,7 +425,7 @@ class DocPP:
 
             %BRANCHFIG name [path='' caption='' terminated=1 include_leafs=1
                              strict_leafs=1, width=0px leafs='' relations=all
-                             edgelabels=0]
+                             edgelabels=0 namespaces='' ontologies='']
 
       * This is a combination of the %HEADER and %BRANCHFIG directives.
 
@@ -437,14 +437,15 @@ class DocPP:
         header followed by a figure and then documentation of each
         element.
 
-            %BRANCHDOC name [level=2  path='' caption='' terminated=1
-                             width=0px leafs='']
+            %BRANCHDOC name [level=2  path='' title='' caption='' terminated=1
+                             strict_leafs=1 width=0px leafs='' relations='all'
+                             rankdir='BT' legend=1 namespaces='' ontologies='']
 
       * Insert generated documentation for all entities of the given type.
         Valid values of `type` are: "classes", "individuals",
         "object_properties", "data_properties", "annotations_properties"
 
-            %ALL type [header_level=3]
+            %ALL type [header_level=3, namespaces='', ontologies='']
 
       * Insert generated figure of all entities of the given type.
         Valid values of `type` are: "classes", "object_properties" and
@@ -475,8 +476,8 @@ class DocPP:
     # FIXME - this class should be refractured:
     #   * Instead of rescan the entire document for each pre-processer
     #     directive, we should scan the source like by line and handle
-    #     each directive as they occour.  The current implementation has
-    #     a lot of dublicated code.
+    #     each directive as they occour.
+    #   * The current implementation has a lot of dublicated code.
     #   * Instead of modifying the source in-place, we should copy to a
     #     result list. This will make good error reporting much easier.
     #   * Branch leaves are only looked up in the file witht the %BRANCH
@@ -601,7 +602,8 @@ class DocPP:
 
     def _make_branchfig(self, name, path, terminated, include_leafs,
                         strict_leafs, width, leafs, relations, edgelabels,
-                        rankdir, legend):
+                        rankdir, legend,
+                        included_namespaces, included_ontologies):
         """Help method for process_branchfig().
 
         Args:
@@ -616,7 +618,8 @@ class DocPP:
             edgelabels: whether to include edgelabels
             rankdir: graph direction (BT, TB, RL, LR)
             legend: whether to add legend
-
+            included_namespaces: sequence of names of namespaces to be included
+            included_ontologies: sequence of names of ontologies to be included
         Returns:
             filepath: path to generated figure
             leafs: used list of leaf node names
@@ -649,7 +652,10 @@ class DocPP:
         graph = OntoGraph(onto, graph_attr={'rankdir': rankdir})
         graph.add_branch(root=name, leafs=leafs, include_leafs=include_leafs,
                          strict_leafs=strict_leafs, relations=relations,
-                         edgelabels=edgelabels)
+                         edgelabels=edgelabels,
+                         included_namespaces=included_namespaces,
+                         included_ontologies=included_ontologies,
+                         )
         if legend:
             graph.add_legend()
 
@@ -675,11 +681,19 @@ class DocPP:
                 opts = get_options(
                     tokens[2:], path='', caption='', terminated=1,
                     include_leafs=1, strict_leafs=1, width=0, leafs='',
-                    relations='all', edgelabels=0, rankdir='BT', legend=1)
+                    relations='all', edgelabels=0, rankdir='BT', legend=1,
+                    namespaces='', ontologies='')
+
+                included_namespaces = opts.namespaces.split(
+                    ',') if opts.namespaces else ()
+                included_ontologies = opts.ontologies.split(
+                    ',') if opts.ontologies else ()
+
                 filepath, leafs, width = self._make_branchfig(
                     name, opts.path, opts.terminated, opts.include_leafs,
                     opts.strict_leafs, opts.width, opts.leafs, opts.relations,
-                    opts.edgelabels, opts.rankdir, opts.legend)
+                    opts.edgelabels, opts.rankdir, opts.legend,
+                    included_namespaces, included_ontologies)
 
                 del self.lines[i]
                 self.lines[i: i] = self.ontodoc.get_figure(
@@ -700,13 +714,20 @@ class DocPP:
                                    caption=title + '.', terminated=1,
                                    strict_leafs=1, width=0,
                                    leafs='', relations='all', edgelabels=0,
-                                   rankdir='BT', legend=1)
+                                   rankdir='BT', legend=1,
+                                   namespaces='', ontologies='')
+
+                included_namespaces = opts.namespaces.split(
+                    ',') if opts.namespaces else ()
+                included_ontologies = opts.ontologies.split(
+                    ',') if opts.ontologies else ()
 
                 include_leafs = 1
                 filepath, leafs, width = self._make_branchfig(
                     name, opts.path, opts.terminated, include_leafs,
                     opts.strict_leafs, opts.width, opts.leafs, opts.relations,
-                    opts.edgelabels, opts.rankdir, opts.legend)
+                    opts.edgelabels, opts.rankdir, opts.legend,
+                    included_namespaces, included_ontologies)
 
                 sec = []
                 sec.append(
@@ -716,7 +737,10 @@ class DocPP:
                                             width=width))
                 if with_branch:
                     include_leafs = 0
-                    branch = onto.get_branch(name, leafs, include_leafs)
+                    branch = filter_classes(
+                        onto.get_branch(name, leafs, include_leafs),
+                        included_namespaces=included_namespaces,
+                        included_ontologies=included_ontologies)
                     sec.append(
                         self.ontodoc.itemsdoc(branch, int(opts.level + 1)))
 
@@ -759,7 +783,8 @@ class DocPP:
                 opts = get_options(tokens[2:], path='', level=3, terminated=0,
                                    include_leafs=1, strict_leafs=1, width=0,
                                    leafs='', relations='isA', edgelabels=0,
-                                   rankdir='BT', legend=1)
+                                   rankdir='BT', legend=1,
+                                   namespaces='', ontologies='')
                 if type == 'classes':
                     roots = onto.get_root_classes(imported=self.imported)
                 elif type in ('object_properties', 'relations'):
@@ -772,6 +797,11 @@ class DocPP:
                     raise InvalidTemplateError(
                         'Invalid argument to %%ALL: %s' % type)
 
+                included_namespaces = opts.namespaces.split(
+                    ',') if opts.namespaces else ()
+                included_ontologies = opts.ontologies.split(
+                    ',') if opts.ontologies else ()
+
                 sec = []
                 for root in roots:
                     name = asstring(root)
@@ -779,7 +809,7 @@ class DocPP:
                         name, opts.path, opts.terminated, opts.include_leafs,
                         opts.strict_leafs, opts.width, opts.leafs,
                         opts.relations, opts.edgelabels, opts.rankdir,
-                        opts.legend)
+                        opts.legend, included_namespaces, included_ontologies)
                     title = 'Taxonomy of %s.' % name
                     sec.append(
                         self.ontodoc.get_header(title, int(opts.level)))
