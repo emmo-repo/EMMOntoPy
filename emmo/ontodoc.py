@@ -260,13 +260,12 @@ class OntoDoc:
             for value in annotations[key]:
                 if self.url_regex.match(value):
                     doc.append(annotation_style.format(
-                        key=key.capitalize(),
-                        value=asstring(value, link_style)))
+                        key=key, value=asstring(value, link_style)))
                 else:
                     for reg, sub in substitutions:
                         value = re.sub(reg, sub, value)
                     doc.append(annotation_style.format(
-                        key=key.capitalize(), value=value))
+                        key=key, value=value))
 
         # ...add relations from is_a
         points = []
@@ -317,12 +316,12 @@ class OntoDoc:
             points.append(point_style.format(
                 point='range ' + asstring(d, link_style)))
 
-        # Add relations
+        # Add points (from is_a)
         if points:
             value = points_style.format(
                 points=''.join(points), ontology=onto)
             doc.append(annotation_style.format(
-                key='Relations', value=value, ontology=onto))
+                key='Subclass of', value=value, ontology=onto))
 
         # Instances (individuals)
         if hasattr(item, 'instances'):
@@ -413,7 +412,8 @@ class DocPP:
             names in the final document.
           - include_leafs: Whether to include leaf.
 
-            %BRANCH name [header_level=3 terminated=1 include_leafs=0]
+            %BRANCH name [header_level=3 terminated=1 include_leafs=0
+                          namespaces='' ontologies='']
 
       * Insert generated figure of ontology branch `name`.  The figure
         is written to `path`.  The default path is `figdir`/`name`,
@@ -585,6 +585,8 @@ class DocPP:
 
     def process_branches(self):
         """Expand all %BRANCH specifications."""
+        onto = self.ontodoc.onto
+
         # Get all branch names in final document
         names = self.get_branches()
         for i, line in reversed(list(enumerate(self.lines))):
@@ -592,10 +594,20 @@ class DocPP:
                 tokens = shlex.split(line)
                 name = tokens[1]
                 opts = get_options(tokens[2:], header_level=3, terminated=1,
-                                   include_leafs=0)
+                                   include_leafs=0,
+                                   namespaces='', ontologies='')
                 leafs = names if opts.terminated else ()
-                branch = self.ontodoc.onto.get_branch(name, leafs,
-                                                      opts.include_leafs)
+
+                included_namespaces = opts.namespaces.split(
+                    ',') if opts.namespaces else ()
+                included_ontologies = opts.ontologies.split(
+                    ',') if opts.ontologies else ()
+
+                branch = filter_classes(
+                    onto.get_branch(name, leafs, opts.include_leafs),
+                    included_namespaces=included_namespaces,
+                    included_ontologies=included_ontologies)
+
                 del self.lines[i]
                 self.lines[i: i] = self.ontodoc.itemsdoc(
                     branch, int(opts.header_level)).split('\n')

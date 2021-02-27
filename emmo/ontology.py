@@ -865,3 +865,45 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 if len(mro) == 0:
                     mros.remove(mro)
         assert(0)  # should never be reached...
+
+    def get_ancestors(self, classes, include=None, strict=True):
+        """Return ancestors of all classes in `classes`.
+
+        The values of `include` may be:
+          - None: ignore this argument
+          - "all": Include all ancestors.
+          - "closest": Include all ancestors up to the closest common
+            ancestor of all classes.
+          - int: Include this number of ancestor levels.  Here `include`
+            may be an integer or a string that can be converted to int.
+        """
+        ancestors = set()
+        if not classes:
+            return ancestors
+
+        def addancestors(e, n, s):
+            if n > 0:
+                for p in e.get_parents(strict=True):
+                    s.add(p)
+                    addancestors(p, n - 1, s)
+
+        if isinstance(include, str) and include.isdigit():
+            include = int(include)
+
+        if include == 'all':
+            ancestors.update(*(c.ancestors() for c in classes))
+        elif include == 'closest':
+            closest = self.closest_common_ancestor(*classes)
+            for c in classes:
+                ancestors.update(a for a in c.ancestors()
+                                 if closest in a.ancestors())
+        elif isinstance(include, int):
+            for e in classes:
+                addancestors(e, int(include), ancestors)
+        elif include not in (None, 'None', 'none', ''):
+            raise ValueError('include must be "all", "closest" or None')
+
+        if strict:
+            return ancestors.difference(classes)
+        else:
+            return ancestors
