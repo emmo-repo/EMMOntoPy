@@ -14,23 +14,23 @@ def asstring(expr, link='{name}', n=0, exclude_object=False):
     """Returns a string representation of `expr`, which may be an entity,
     restriction, or logical expression of these.  `link` is a format
     string for formatting references to entities or relations.  It may
-    contain the keywords "name" and "url".
+    contain the keywords "name", "url" and "lowerurl".
     `n` is the recursion depth and only intended for internal use.
     If `exclude_object` is true, the object will be excluded in restrictions.
     """
     def fmt(e):
         """Returns the formatted label of `e`."""
-        name = str(e.label.first() if hasattr(e, 'label') and e.label else e)
-        if re.match(r'^[a-z]+://', name):
-            return link.format(name=name, url=name, lowerurl=name.lower())
-        if hasattr(e, 'label') and e.label:
-            name = e.label.first()
-            url = name if re.match(r'^[a-z]+://', name) else '#' + name
-            return link.format(name=name, url=url, lowerurl=url.lower())
-        elif re.match(r'^[a-z]+://', str(e)):
-            return link.format(name=e, url=e, lowerurl=e.lower())
-        else:
-            return str(e).replace('owl.', 'owl:')
+        name = None
+        for attr in ('prefLabel', 'label'):
+            if hasattr(e, attr) and getattr(e, attr):
+                name = getattr(e, attr)
+                if not isinstance(name, str) and hasattr(name, '__getitem__'):
+                    name = name[0]
+                break
+        if not name:
+            name = str(e).replace('.', ':')
+        url = name if re.match(r'^[a-z]+://', name) else '#' + name
+        return link.format(name=name, url=url, lowerurl=url.lower())
 
     if isinstance(expr, str):
         # return link.format(name=expr)
@@ -84,7 +84,7 @@ def asstring(expr, link='{name}', n=0, exclude_object=False):
     elif isinstance(expr, owlready2.Thing):  # instance (individual)
         return fmt(expr)
     elif isinstance(expr, owlready2.class_construct.Inverse):
-        return fmt(expr)
+        return 'inverse(%s)' % fmt(expr.property)
     elif isinstance(expr, owlready2.disjoint.AllDisjoint):
         return fmt(expr)
     elif isinstance(expr, (bool, int, float)):
