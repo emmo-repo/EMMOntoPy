@@ -10,6 +10,15 @@ from rdflib import Graph, URIRef
 import owlready2
 
 
+# Format mappings: file extension -> rdflib format name
+FMAP = {
+    'n3': 'ntriples',
+    'nt': 'ntriples',
+    'ttl': 'turtle',
+    'rdfxml': 'xml',
+}
+
+
 def asstring(expr, link='{name}', n=0, exclude_object=False):
     """Returns a string representation of `expr`, which may be an entity,
     restriction, or logical expression of these.  `link` is a format
@@ -20,13 +29,15 @@ def asstring(expr, link='{name}', n=0, exclude_object=False):
     """
     def fmt(e):
         """Returns the formatted label of `e`."""
-        name = str(e).replace('.', ':')
-        for attr in ('prefLabel', 'label', 'name'):
+        name = None
+        for attr in ('prefLabel', 'label'):
             if hasattr(e, attr) and getattr(e, attr):
                 name = getattr(e, attr)
-                if hasattr(name, '__getitem__'):
+                if not isinstance(name, str) and hasattr(name, '__getitem__'):
                     name = name[0]
                 break
+        if not name:
+            name = str(e).replace('.', ':')
         url = name if re.match(r'^[a-z]+://', name) else '#' + name
         return link.format(name=name, url=url, lowerurl=url.lower())
 
@@ -82,7 +93,7 @@ def asstring(expr, link='{name}', n=0, exclude_object=False):
     elif isinstance(expr, owlready2.Thing):  # instance (individual)
         return fmt(expr)
     elif isinstance(expr, owlready2.class_construct.Inverse):
-        return fmt(expr)
+        return 'inverse(%s)' % fmt(expr.property)
     elif isinstance(expr, owlready2.disjoint.AllDisjoint):
         return fmt(expr)
     elif isinstance(expr, (bool, int, float)):
