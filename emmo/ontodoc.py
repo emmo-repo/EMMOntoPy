@@ -137,8 +137,6 @@ class OntoDoc:
         points='    <ul>\n      {points}\n    </ul>\n',
         annotation='  <dd><strong>{key}:</strong>\n{value}  </dd>\n',
         substitutions=[
-            #(r'\n\n', r'<p>'),
-            #(r'\n', r'<br>\n'),
             (r'&', r"&#8210;"),
             (r'<p>', r'<p>\n\n'),
             (r'\u2018([^\u2019]*)\u2019', r'<q>\1</q>'),
