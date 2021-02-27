@@ -30,6 +30,8 @@ def getlabel(e):
         return e.__name__
     elif hasattr(e, 'name'):
         return str(e.name)
+    elif isinstance(e, str):
+        return e
     else:
         return repr(e)
 
@@ -152,6 +154,10 @@ class OntoGraph:
             'style': 'filled',
             'fillcolor': 'orange',
         },
+        'parent_node': {
+            'style': 'filled',
+            'fillcolor': 'lightgray',
+        },
         'added_node': {
             'color': 'red',
         },
@@ -261,7 +267,8 @@ class OntoGraph:
     def add_branch(self, root, leafs=None, include_leafs=True,
                    strict_leafs=False, exclude=None, relations='isA',
                    edgelabels=True, addnodes=False, addconstructs=False,
-                   included_namespaces=(), included_ontologies=(), **attrs):
+                   included_namespaces=(), included_ontologies=(),
+                   include_parents='closest', **attrs):
         """Adds branch under `root` ending at any entiry included in the
         sequence `leafs`.  If `include_leafs` is true, leafs classes are
         also included."""
@@ -287,6 +294,17 @@ class OntoGraph:
             relations=relations, edgelabels=edgelabels,
             addnodes=addnodes, addconstructs=addconstructs,
             nodeattrs=nodeattrs, **attrs)
+
+        parents = self.ontology.get_ancestors(classes, include=include_parents,
+                                              strict=True)
+        if parents:
+            for parent in parents:
+                nodeattrs[getlabel(parent)] = self.style.get('parent_node', {})
+            self.add_entities(
+                entities=parents,
+                relations=relations, edgelabels=edgelabels,
+                addnodes=addnodes, addconstructs=addconstructs,
+                nodeattrs=nodeattrs, **attrs)
 
     def add_parents(self, name, levels=1, relations='isA',
                     edgelabels=None, addnodes=False, addconstructs=False,
@@ -670,28 +688,15 @@ def filter_classes(classes, included_namespaces=(), included_ontologies=()):
     `included_ontologies`.
 
     `classes` should be a sequence of classes.
-
-    If `included_namespaces` is None or empty, all namespaces are
-    included. Likewise for `included_ontologies`.
     """
+    filtered = set(classes)
     if included_namespaces:
-        included = set(c for c in classes
+        filtered = set(c for c in filtered
                        if c.namespace.name in included_namespaces)
-        # Do not exclude ancestors of included classes
-        extended = set.union(*[c.ancestors() for c in included])
-        excluded = set(classes).difference(extended)
-        classes = [c for c in classes if c not in excluded]
-
     if included_ontologies:
-        included = set(c for c in classes
+        filtered = set(c for c in filtered
                        if c.namespace.ontology.name in included_ontologies)
-        # Do not exclude ancestors of included classes
-        e = [c.ancestors() for c in included]
-        extended = set.union(*e) if e else set()
-        excluded = set(classes).difference(extended)
-        classes = [c for c in classes if c not in excluded]
-
-    return classes
+    return filtered
 
 
 def get_module_dependencies(iri_or_onto, strip_base=None):
