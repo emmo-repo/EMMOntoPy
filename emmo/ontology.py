@@ -24,6 +24,7 @@ import owlready2
 from owlready2 import locstr
 
 from .utils import asstring, read_catalog, infer_version, convert_imported
+from .utils import FMAP
 from .factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 from .ontograph import OntoGraph  # FIXME: depricate...
 
@@ -167,7 +168,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         pass
 
     def load(self, only_local=False, filename=None, format=None,
-             reload=None, reload_if_newer=False, url_from_catalog=False,
+             reload=None, reload_if_newer=False, url_from_catalog=None,
              catalog_file='catalog-v001.xml', tmpdir=None,
              **kwargs):
         """Load the ontology.
@@ -188,8 +189,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
         reload_if_newer : bool
             Whether to reload the ontology if the source has changed since
             last time it was loaded.
-        url_from_catalog : bool
-            Use catalog file if `base_iri` cannot be resolved.
+        url_from_catalog : bool | None
+            Whether to use catalog file to resolve the location of `base_iri`.
+            If None, the catalog file is used if it exists in the same
+            directory as `filename`.
         catalog_file : str
             Name of Protègè catalog file in the same folder as the
             ontology.  This option is used together with `only_local` and
@@ -200,16 +203,11 @@ class Ontology(owlready2.Ontology, OntoGraph):
             Additional keyword arguments are passed on to
             owlready2.Ontology.load().
         """
-        fmap = {
-            'n3': 'ntriples',
-            'ttl': 'turtle',
-        }
-
         # If filename is not given, infer it from base_iri (if possible)
         if not filename:
             web_protocols = ('http://', 'https://', )
             fmt = format if format else guess_format(
-                self.base_iri.rstrip('/#'), fmap=fmap)
+                self.base_iri.rstrip('/#'), fmap=FMAP)
             if not self.base_iri.startswith(web_protocols):
                 filename = self.base_iri.rstrip('#/')
                 if filename.startswith('file://'):
@@ -235,7 +233,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # by owlready2
         if filename:
             if not format:
-                format = guess_format(filename, fmap=fmap)
+                format = guess_format(filename, fmap=FMAP)
             if format not in ('xml', 'ntriples'):
                 with tempfile.TemporaryDirectory() as tmpdir:
                     if not os.path.exists(tmpdir):
