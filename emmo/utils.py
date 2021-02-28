@@ -1,6 +1,7 @@
 """Some generic utility functions.
 """
 import os
+import sys
 import re
 import datetime
 import xml.etree.ElementTree as ET
@@ -18,6 +19,14 @@ FMAP = {
     'ttl': 'turtle',
     'rdfxml': 'xml',
 }
+
+
+def isinteractive():
+    """Returns true if we are running from an interactive interpreater,
+    false otherwise."""
+    return bool(hasattr(__builtins__, '__IPYTHON__') or
+                sys.flags.interactive or
+                hasattr(sys, 'ps1'))
 
 
 def asstring(expr, link='{name}', n=0, exclude_object=False):
