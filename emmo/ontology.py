@@ -98,7 +98,6 @@ class World(owlready2.World):
 class Ontology(owlready2.Ontology, OntoGraph):
     """A generic class extending owlready2.Ontology.
     """
-
     # Properties controlling what annotations that are considered by
     # get_by_label()
     _label_annotations = []
@@ -154,28 +153,11 @@ class Ontology(owlready2.Ontology, OntoGraph):
         return attr
 
     def __contains__(self, other):
-        try:
-            self[other]
-            return True
-        except NoSuchLabelError:
-            return False
+        return bool(self.world[other])
 
     def __objclass__(self):
         # Play nice with inspect...
         pass
-
-    def _add_special_labels(self):
-        """Add additional special labels."""
-        if not hasattr(self, '_special_labels'):
-            t = self.world['http://www.w3.org/2002/07/owl#topObjectProperty']
-            self._special_labels = {
-                'Thing': owlready2.Thing,
-                'Nothing': owlready2.Nothing,
-                'topObjectProperty': t,
-                'owl:Thing': owlready2.Thing,
-                'owl:Nothing': owlready2.Nothing,
-                'owl:topObjectProperty': t,
-            }
 
     def get_by_label(self, value, label_annotations=None):
         """Returns entity by label annotation value `value`.
@@ -202,8 +184,13 @@ class Ontology(owlready2.Ontology, OntoGraph):
             e = self.search_one(**{key: value})
             if e:
                 return e
-        if value in self._special_labels:
-            return self._special_labels[value]
+        try:
+            d = object.__getattr__(self, '_special_labels')
+            if value in d:
+                return d[value]
+        except AttributeError:
+            pass
+
         raise NoSuchLabelError('No label annotations matches %s' % value)
 
     def get_by_label_all(self, value, label_annotations=None):
@@ -280,6 +267,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
             Additional keyword arguments are passed on to
             owlready2.Ontology.load().
         """
+        if self.loaded:
+            return self
         self._load(only_local=only_local, filename=filename, format=format,
                    reload=reload, reload_if_newer=reload_if_newer,
                    url_from_catalog=url_from_catalog,
@@ -287,9 +276,20 @@ class Ontology(owlready2.Ontology, OntoGraph):
                    tmpdir=tmpdir, **kwargs)
 
         # Enable optimised search by get_by_label()
-        for iri in DEFAULT_LABEL_ANNOTATIONS:
-            self.add_label_annotation(iri)
-        self._add_special_labels()
+        try:
+            object.__getattr__(self, '_special_labels')
+        except AttributeError:
+            for iri in DEFAULT_LABEL_ANNOTATIONS:
+                self.add_label_annotation(iri)
+            t = self.world['http://www.w3.org/2002/07/owl#topObjectProperty']
+            self._special_labels = {
+                'Thing': owlready2.Thing,
+                'Nothing': owlready2.Nothing,
+                'topObjectProperty': t,
+                'owl:Thing': owlready2.Thing,
+                'owl:Nothing': owlready2.Nothing,
+                'owl:topObjectProperty': t,
+            }
 
         return self
 
@@ -339,14 +339,14 @@ class Ontology(owlready2.Ontology, OntoGraph):
                                      input_format=format, output_format='xml',
                                      url_from_catalog=url_from_catalog,
                                      catalog_file=catalog_file)
-                    return self.load(only_local=True,
-                                     filename=output,
-                                     format='xml',
-                                     reload=reload,
-                                     reload_if_newer=reload_if_newer,
-                                     url_from_catalog=url_from_catalog,
-                                     catalog_file=catalog_file,
-                                     **kwargs)
+                    return self._load(only_local=True,
+                                      filename=output,
+                                      format='xml',
+                                      reload=reload,
+                                      reload_if_newer=reload_if_newer,
+                                      url_from_catalog=url_from_catalog,
+                                      catalog_file=catalog_file,
+                                      **kwargs)
 
         # Append paths from catalog file to onto_path
         dirpath = os.path.normpath(
@@ -650,7 +650,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         elif name_policy == 'sequential':
             for obj in chain:
                 n = 0
-                while name_prefix + str(n) in self:
+                while f'{self.base_iri}{name_prefix}{n}' in self:
                     n += 1
                 obj.name = name_prefix + str(n)
         elif name_policy is not None:
