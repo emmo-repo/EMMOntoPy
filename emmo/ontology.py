@@ -105,6 +105,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
         fget=lambda self: self._label_annotations,
         doc='List of label annotation searched for by get_by_label().')
 
+    # Name of special unlabeled entities, like Thing, Nothing, etc...
+    _special_labels = None
+
     # Some properties for customising dir() listing - useful in
     # interactive sessions...
     _dir_preflabel = isinteractive()
@@ -184,12 +187,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
             e = self.search_one(**{key: value})
             if e:
                 return e
-        try:
-            d = object.__getattr__(self, '_special_labels')
-            if value in d:
-                return d[value]
-        except AttributeError:
-            pass
+
+        if self._special_labels and value in self._special_labels:
+            return self._special_labels[value]
 
         raise NoSuchLabelError('No label annotations matches %s' % value)
 
@@ -206,7 +206,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         e = self.world.search(**{annotations.__next__(): value})
         for key in annotations:
             e.extend(self.world.search(**{key: value}))
-        if value in self._special_labels:
+        if self._special_labels and value in self._special_labels:
             e.append(self._special_labels[value])
         return e
 
@@ -276,9 +276,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                    tmpdir=tmpdir, **kwargs)
 
         # Enable optimised search by get_by_label()
-        try:
-            object.__getattr__(self, '_special_labels')
-        except AttributeError:
+        if not self._special_labels:
             for iri in DEFAULT_LABEL_ANNOTATIONS:
                 self.add_label_annotation(iri)
             t = self.world['http://www.w3.org/2002/07/owl#topObjectProperty']
@@ -366,7 +364,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
                          reload_if_newer=reload_if_newer, **kwargs)
         except owlready2.OwlReadyOntologyParsingError:
             if url_from_catalog:
-                print('no url from catalog')
                 # Use catalog file to update IRIs of imported ontologies
                 # in internal store and try to load again...
                 iris = read_catalog(dirpath, catalog_file=catalog_file)
