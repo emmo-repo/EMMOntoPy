@@ -8,7 +8,6 @@ The class extension is defined within.
 
 If desirable some of this may be moved back into owlready2.
 """
-import sys
 import os
 import itertools
 import inspect
@@ -165,10 +164,18 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Play nice with inspect...
         pass
 
-    _special_labels = {
-        'Thing': owlready2.Thing,
-        'Nothing': owlready2.Nothing,
-    }
+    def _add_special_labels(self):
+        """Add additional special labels."""
+        if not hasattr(self, '_special_labels'):
+            t = self.world['http://www.w3.org/2002/07/owl#topObjectProperty']
+            self._special_labels = {
+                'Thing': owlready2.Thing,
+                'Nothing': owlready2.Nothing,
+                'topObjectProperty': t,
+                'owl:Thing': owlready2.Thing,
+                'owl:Nothing': owlready2.Nothing,
+                'owl:topObjectProperty': t,
+            }
 
     def get_by_label(self, value, label_annotations=None):
         """Returns entity by label annotation value `value`.
@@ -282,6 +289,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Enable optimised search by get_by_label()
         for iri in DEFAULT_LABEL_ANNOTATIONS:
             self.add_label_annotation(iri)
+        self._add_special_labels()
 
         return self
 
