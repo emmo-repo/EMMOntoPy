@@ -47,6 +47,10 @@ def main():
         '--imported', '-i', action='store_true',
         help='Whether to also include imported ontologies.')
     parser.add_argument(
+        '--no-catalog', '-n', action='store_false', dest='url_from_catalog',
+         default=None,
+        help='Whether to not read catalog file even if it exists.')
+    parser.add_argument(
         '--catalog-file', default='catalog-v001.xml',
         help='Name of Protègè catalog file in the same folder as the '
         'ontology.  This option is used together with --local and '
@@ -119,7 +123,9 @@ def main():
                      '\n  '.join(world.ontologies.keys()))
     onto = world.get_ontology(args.iri)
     try:
-        onto.load(only_local=args.local, catalog_file=args.catalog_file)
+        onto.load(only_local=args.local,
+                  url_from_catalog=args.url_from_catalog,
+                  catalog_file=args.catalog_file)
     except owlready2.OwlReadyOntologyParsingError as e:
         parser.error('error parsing %r: %s' % (args.iri, e))
 

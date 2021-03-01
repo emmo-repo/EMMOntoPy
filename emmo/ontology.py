@@ -8,7 +8,6 @@ The class extension is defined within.
 
 If desirable some of this may be moved back into owlready2.
 """
-import sys
 import os
 import itertools
 import inspect
@@ -24,9 +23,17 @@ import owlready2
 from owlready2 import locstr
 
 from .utils import asstring, read_catalog, infer_version, convert_imported
-from .utils import FMAP
+from .utils import FMAP, isinteractive
 from .factpluspluswrapper.sync_factpp import sync_reasoner_factpp
-from .ontograph import OntoGraph  # FIXME: depricate...
+from .ontograph import OntoGraph  # FIXME: deprecate...
+
+
+# Default annotations to look up
+DEFAULT_LABEL_ANNOTATIONS = [
+    'http://www.w3.org/2004/02/skos/core#prefLabel',
+    'http://www.w3.org/2000/01/rdf-schema#label',
+    'http://www.w3.org/2004/02/skos/core#altLabel',
+]
 
 
 class NoSuchLabelError(LookupError, AttributeError):
@@ -34,29 +41,11 @@ class NoSuchLabelError(LookupError, AttributeError):
     pass
 
 
-# owl categories
-categories = (
-    'annotation_properties',
-    'data_properties',
-    'object_properties',
-    'classes',
-    'individuals',
-)
-
-
 def get_ontology(*args, **kwargs):
     """Returns a new Ontology from `base_iri`.
 
     This is a convenient function for calling World.get_ontology()."""
     return World().get_ontology(*args, **kwargs)
-
-
-def isinteractive():
-    """Returns true if we are running from an interactive interpreater,
-    false otherwise."""
-    return bool(hasattr(__builtins__, '__IPYTHON__') or
-                sys.flags.interactive or
-                hasattr(sys, 'ps1'))
 
 
 class World(owlready2.World):
@@ -109,6 +98,53 @@ class World(owlready2.World):
 class Ontology(owlready2.Ontology, OntoGraph):
     """A generic class extending owlready2.Ontology.
     """
+    # Properties controlling what annotations that are considered by
+    # get_by_label()
+    _label_annotations = []
+    label_annotations = property(
+        fget=lambda self: self._label_annotations,
+        doc='List of label annotation searched for by get_by_label().')
+
+    # Name of special unlabeled entities, like Thing, Nothing, etc...
+    _special_labels = None
+
+    # Some properties for customising dir() listing - useful in
+    # interactive sessions...
+    _dir_preflabel = isinteractive()
+    _dir_label = isinteractive()
+    _dir_name = False
+    _dir_imported = isinteractive()
+    dir_preflabel = property(
+        fget=lambda self: self._dir_preflabel,
+        fset=lambda self, v: setattr(self, '_dir_preflabel', bool(v)),
+        doc='Whether to include entity prefLabel in dir() listing.')
+    dir_label = property(
+        fget=lambda self: self._dir_label,
+        fset=lambda self, v: setattr(self, '_dir_label', bool(v)),
+        doc='Whether to include entity label in dir() listing.')
+    dir_name = property(
+        fget=lambda self: self._dir_name,
+        fset=lambda self, v: setattr(self, '_dir_name', bool(v)),
+        doc='Whether to include entity name in dir() listing.')
+    dir_imported = property(
+        fget=lambda self: self._dir_imported,
+        fset=lambda self, v: setattr(self, '_dir_imported', bool(v)),
+        doc='Whether to include imported ontologies in dir() '
+        'listing.')
+
+    def __dir__(self):
+        s = set(super().__dir__())
+        lst = list(self.get_entities(imported=self._dir_imported))
+        if self._dir_preflabel:
+            s.update(e.prefLabel.first() for e in lst
+                     if hasattr(e, 'prefLabel'))
+        if self._dir_label:
+            s.update(e.label.first() for e in lst if hasattr(e, 'label'))
+        if self._dir_name:
+            s.update(e.name for e in lst if hasattr(e, 'name'))
+
+        s.difference_update({None})  # get rid of possible None
+        return sorted(s)
 
     def __getitem__(self, name):
         return self.__getattr__(name)
@@ -119,53 +155,81 @@ class Ontology(owlready2.Ontology, OntoGraph):
             attr = self.get_by_label(name)
         return attr
 
-    # Some properties for customising dir() listing.
-    # Very useful in interactive sessions.
-    dir_preflabel = property(
-        fget=lambda self: getattr(self, '_dir_preflabel', isinteractive()),
-        fset=lambda self, v: setattr(self, '_dir_preflabel', bool(v)),
-        doc='Whether to include entity prefLabel in dir() listing.')
-    dir_label = property(
-        fget=lambda self: getattr(self, '_dir_label', isinteractive()),
-        fset=lambda self, v: setattr(self, '_dir_label', bool(v)),
-        doc='Whether to include entity label in dir() listing.')
-    dir_name = property(
-        fget=lambda self: getattr(self, '_dir_name', False),
-        fset=lambda self, v: setattr(self, '_dir_name', bool(v)),
-        doc='Whether to entity name in dir() listing.')
-    dir_imported = property(
-        fget=lambda self: getattr(self, '_dir_imported', isinteractive()),
-        fset=lambda self, v: setattr(self, '_dir_imported', bool(v)),
-        doc='Whether to include imported ontologies in dir() '
-        'listing.')
-
-    def __dir__(self):
-        s = set(super().__dir__())
-        if self.dir_preflabel:
-            s.update(e.prefLabel.first() for e in
-                     self.get_entities(imported=self.dir_imported)
-                     if hasattr(e, 'prefLabel'))
-        if self.dir_label:
-            s.update(e.label.first() for e in
-                     self.get_entities(imported=self.dir_imported)
-                     if hasattr(e, 'label'))
-        if self.dir_name:
-            s.update(e.name for e in
-                     self.get_entities(imported=self.dir_imported)
-                     if hasattr(e, 'name'))
-        s.difference_update({None})  # get rid of possible None
-        return sorted(s)
-
     def __contains__(self, other):
-        try:
-            self[other]
-            return True
-        except NoSuchLabelError:
-            return False
+        return bool(self.world[other])
 
     def __objclass__(self):
         # Play nice with inspect...
         pass
+
+    def get_by_label(self, value, label_annotations=None):
+        """Returns entity by label annotation value `value`.
+
+        `label_annotations` is a sequence of label annotation names to look up.
+        Defaults to the `label_annotations` property.
+
+        If several entities have the same label, only the one which is
+        found first is returned.
+
+        A NoSuchLabelError is raised if `label` cannot be found.
+
+        Note
+        ----
+        The current implementation also supports "*" as a wildcard
+        matching any number of characters.
+        """
+        if label_annotations is None:
+            annotations = (la.name for la in self.label_annotations)
+        else:
+            annotations = (s.name if hasattr(s, 'storid') else s
+                           for s in label_annotations)
+        for key in annotations:
+            e = self.search_one(**{key: value})
+            if e:
+                return e
+
+        if self._special_labels and value in self._special_labels:
+            return self._special_labels[value]
+
+        raise NoSuchLabelError('No label annotations matches %s' % value)
+
+    def get_by_label_all(self, value, label_annotations=None):
+        """Like get_by_label(), but returns a list with all matching labels.
+
+        Returns an empty list if no matches could be found.
+        """
+        if label_annotations is None:
+            annotations = (la.name for la in self.label_annotations)
+        else:
+            annotations = (s.name if hasattr(s, 'storid') else s
+                           for s in label_annotations)
+        e = self.world.search(**{annotations.__next__(): value})
+        for key in annotations:
+            e.extend(self.world.search(**{key: value}))
+        if self._special_labels and value in self._special_labels:
+            e.append(self._special_labels[value])
+        return e
+
+    def add_label_annotation(self, iri):
+        """Adds label annotation used by get_by_label().
+
+        May be provided either as an IRI or as its owlready2 representation.
+        """
+        la = iri if hasattr(iri, 'storid') else self.world[iri]
+        if not la:
+            raise ValueError('IRI not in ontology: %s' % iri)
+        if la not in self._label_annotations:
+            self._label_annotations.append(la)
+
+    def remove_label_annotation(self, iri):
+        """Removes label annotation used by get_by_label().
+
+        May be provided either as an IRI or as its owlready2 representation.
+        """
+        la = iri if hasattr(iri, 'storid') else self.world[iri]
+        if not la:
+            raise ValueError('IRI not in ontology: %s' % iri)
+        self._label_annotations.remove(la)
 
     def load(self, only_local=False, filename=None, format=None,
              reload=None, reload_if_newer=False, url_from_catalog=None,
@@ -203,6 +267,35 @@ class Ontology(owlready2.Ontology, OntoGraph):
             Additional keyword arguments are passed on to
             owlready2.Ontology.load().
         """
+        if self.loaded:
+            return self
+        self._load(only_local=only_local, filename=filename, format=format,
+                   reload=reload, reload_if_newer=reload_if_newer,
+                   url_from_catalog=url_from_catalog,
+                   catalog_file=catalog_file,
+                   tmpdir=tmpdir, **kwargs)
+
+        # Enable optimised search by get_by_label()
+        if not self._special_labels:
+            for iri in DEFAULT_LABEL_ANNOTATIONS:
+                self.add_label_annotation(iri)
+            t = self.world['http://www.w3.org/2002/07/owl#topObjectProperty']
+            self._special_labels = {
+                'Thing': owlready2.Thing,
+                'Nothing': owlready2.Nothing,
+                'topObjectProperty': t,
+                'owl:Thing': owlready2.Thing,
+                'owl:Nothing': owlready2.Nothing,
+                'owl:topObjectProperty': t,
+            }
+
+        return self
+
+    def _load(self, only_local=False, filename=None, format=None,
+              reload=None, reload_if_newer=False, url_from_catalog=None,
+              catalog_file='catalog-v001.xml', tmpdir=None,
+              **kwargs):
+        """Help function for _load()."""
         # If filename is not given, infer it from base_iri (if possible)
         if not filename:
             web_protocols = ('http://', 'https://', )
@@ -244,14 +337,14 @@ class Ontology(owlready2.Ontology, OntoGraph):
                                      input_format=format, output_format='xml',
                                      url_from_catalog=url_from_catalog,
                                      catalog_file=catalog_file)
-                    return self.load(only_local=True,
-                                     filename=output,
-                                     format='xml',
-                                     reload=reload,
-                                     reload_if_newer=reload_if_newer,
-                                     url_from_catalog=url_from_catalog,
-                                     catalog_file=catalog_file,
-                                     **kwargs)
+                    return self._load(only_local=True,
+                                      filename=output,
+                                      format='xml',
+                                      reload=reload,
+                                      reload_if_newer=reload_if_newer,
+                                      url_from_catalog=url_from_catalog,
+                                      catalog_file=catalog_file,
+                                      **kwargs)
 
         # Append paths from catalog file to onto_path
         dirpath = os.path.normpath(
@@ -271,7 +364,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
                          reload_if_newer=reload_if_newer, **kwargs)
         except owlready2.OwlReadyOntologyParsingError:
             if url_from_catalog:
-                print('no url from catalog')
                 # Use catalog file to update IRIs of imported ontologies
                 # in internal store and try to load again...
                 iris = read_catalog(dirpath, catalog_file=catalog_file)
@@ -335,42 +427,39 @@ class Ontology(owlready2.Ontology, OntoGraph):
         If `imported` is true, entities in imported ontologies will also
         be included.
         """
-        categories = set([
-            'classes' if classes else None,
-            'individuals' if individuals else None,
-            'object_properties' if object_properties else None,
-            'data_properties' if data_properties else None,
-            'annotation_properties' if annotation_properties else None,
-        ]).difference([None])
-        for e in itertools.chain.from_iterable(
-                getattr(owlready2.Ontology, c)(self) for c in categories):
+        g = []
+        if classes:
+            g.append(self.classes(imported))
+        if individuals:
+            g.append(self.individuals(imported))
+        if object_properties:
+            g.append(self.object_properties(imported))
+        if data_properties:
+            g.append(self.data_properties(imported))
+        if annotation_properties:
+            g.append(self.annotation_properties(imported))
+        for e in itertools.chain(*g):
             yield e
-        if imported:
-            for onto in self.get_imported_ontologies(recursive=True):
-                for e in itertools.chain.from_iterable(
-                        getattr(owlready2.Ontology, c)(onto)
-                        for c in categories):
-                    yield e
 
     def classes(self, imported=False):
         """Returns an generator over all classes.
 
         If `imported` is true, will imported classes are also returned.
         """
-        return self.get_entities(
-            imported=imported, classes=True, individuals=False,
-            object_properties=False, data_properties=False,
-            annotation_properties=False)
+        if imported:
+            return self.world.classes()
+        else:
+            return super().classes()
 
     def individuals(self, imported=False):
         """Returns an generator over all individuals.
 
         If `imported` is true, will imported individuals are also returned.
         """
-        return self.get_entities(
-            imported=imported, classes=False, individuals=True,
-            object_properties=False, data_properties=False,
-            annotation_properties=False)
+        if imported:
+            return self.world.individuals()
+        else:
+            return super().individuals()
 
     def object_properties(self, imported=False):
         """Returns an generator over all object properties.
@@ -378,10 +467,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
         If `imported` is true, will imported object properties are also
         returned.
         """
-        return self.get_entities(
-            imported=imported, classes=False, individuals=False,
-            object_properties=True, data_properties=False,
-            annotation_properties=False)
+        if imported:
+            return self.world.object_properties()
+        else:
+            return super().object_properties()
 
     def data_properties(self, imported=False):
         """Returns an generator over all data properties.
@@ -389,10 +478,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
         If `imported` is true, will imported data properties are also
         returned.
         """
-        return self.get_entities(
-            imported=imported, classes=False, individuals=False,
-            object_properties=False, data_properties=True,
-            annotation_properties=False)
+        if imported:
+            return self.world.data_properties()
+        else:
+            return super().data_properties()
 
     def annotation_properties(self, imported=False):
         """Returns a generator iterating over all annotation properties
@@ -401,10 +490,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
         If `imported` is true, annotation properties in imported ontologies
         will also be included.
         """
-        return self.get_entities(
-            imported=imported, classes=False, individuals=False,
-            object_properties=False, data_properties=False,
-            annotation_properties=True)
+        if imported:
+            return self.world.annotation_properties()
+        else:
+            return super().annotation_properties()
 
     def get_root_classes(self, imported=False):
         """Returns a list or root classes."""
@@ -427,97 +516,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
         roots.extend(self.get_root_object_properties(imported=imported))
         roots.extend(self.get_root_data_properties(imported=imported))
         return roots
-
-    def get_by_label(self, label):
-        """Returns entity by label.
-
-        If several entities have the same label, only the one which is
-        found first is returned.  A KeyError is raised if `label`
-        cannot be found.
-        """
-        return self._get_by_label(label)
-
-    def _get_by_label(self, label, visited=None):
-        """Recursive help function for get_by_label()."""
-        # Strip off colon in labels
-        if ':' in label:
-            label = label.split(':')[-1]
-
-        # Include self among already visited ontologies
-        if visited is None:
-            visited = set()
-        visited.add(self)
-
-        # Handle labels of the form 'namespace.label' recursively
-        if '.' in label:
-            head, sep, tail = label.partition('.')
-            ns = self.get_namespace(head)
-            return ns.ontology._get_by_label(tail, visited=visited)
-
-        # Check for name in all categories in self
-        for category in categories:
-            method = getattr(self, category)
-            for entity in method():
-                if hasattr(entity, 'prefLabel') and label in entity.prefLabel:
-                    return entity
-                elif hasattr(entity, 'label') and label in entity.label:
-                    return entity
-                elif hasattr(entity, 'altLabel') and label in entity.altLabel:
-                    return entity
-        # Check for special names
-        d = {
-                'Nothing': owlready2.Nothing,
-        }
-        if label in d:
-            return d[label]
-        # Check whether `label` matches a Python class name of any category
-        lst = [cls for cls in itertools.chain.from_iterable(
-            getattr(self, category)() for category in categories)
-             if hasattr(cls, '__name__') and cls.__name__ == label]
-        if len(lst) == 1:
-            return lst[0]
-        elif len(lst) > 1:
-            raise NoSuchLabelError('There is more than one Python class with '
-                                   'name %r' % label)
-        elif label is owlready2.Thing or label == 'Thing':
-            return owlready2.Thing
-
-        # Check imported ontologies
-        for onto in self.imported_ontologies:
-            if onto not in visited:
-                visited.add(onto)
-                onto.__class__ = self.__class__  # change type of onto (magic)
-                try:
-                    return onto._get_by_label(label, visited=visited)
-                except NoSuchLabelError:
-                    pass
-
-        # Fallback to check whether we have a class in the current or any
-        # of the imported ontologies whos name matches `label`
-        for onto in [self] + self.imported_ontologies:
-            lst = [cls for cls in onto.classes() if cls.__name__ == label]
-            if len(lst) == 1:
-                return lst[0]
-            elif len(lst) > 1:
-                raise NoSuchLabelError('There is more than one class with '
-                                       'name %r' % label)
-        # Label cannot be found
-        raise NoSuchLabelError('Ontology "%s" has no such label: %s' % (
-            self.name, label))
-
-    def get_by_label_all(self, label):
-        """Like get_by_label(), but returns a list of all entities with
-        matching labels.
-        """
-        return [entity for entity in
-                itertools.chain.from_iterable(
-                    getattr(self, c)() for c in categories)
-                if ((hasattr(entity, 'prefLabel') and
-                     label in entity.prefLabel) or
-                    (hasattr(entity, 'label') and
-                     label in entity.label) or
-                    (hasattr(entity, 'altLabel') and
-                     label in entity.altLabel))]
 
     def sync_python_names(self,
                           annotations=('prefLabel', 'label', 'altLabel')):
@@ -649,7 +647,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         elif name_policy == 'sequential':
             for obj in chain:
                 n = 0
-                while name_prefix + str(n) in self:
+                while f'{self.base_iri}{name_prefix}{n}' in self:
                     n += 1
                 obj.name = name_prefix + str(n)
         elif name_policy is not None:

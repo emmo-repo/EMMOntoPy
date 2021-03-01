@@ -87,7 +87,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                         self.assertEqual(1, len(e.prefLabel))
 
     def test_class_label(self):
-        """Check that class labels are CamelCase and valid (Python) identifiers.
+        """Check that class labels are CamelCase and valid identifiers.
 
         For CamelCase, we are currently only checking that the labels
         start with upper case.
@@ -361,9 +361,13 @@ def main():
         '--skip', '-s', action='append', default=[],
         help=('Shell pattern matching tests to skip.  This option may be '
               'provided multiple times.'))
-    parser.add_argument(
-        '--url-from-catalog', '-u', action='store_true',
+    parser.add_argument(  # deprecated, replaced by --no-catalog
+        '--url-from-catalog', '-u', default=None, action='store_true',
         help=('Get url from catalog file'))
+    parser.add_argument(
+        '--no-catalog', action='store_false', dest='url_from_catalog',
+        default=None,
+        help='Whether to not read catalog file even if it exists.')
     parser.add_argument(
         '--ignore-namespace', '-n', action='append', default=[],
         help=('Namespace to be ignored. Can be given multiple '
