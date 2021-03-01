@@ -216,6 +216,8 @@ positional arguments:
       --local, -l           Load imported ontologies locally. Their paths are
                             specified in Protégé catalog files or via the --path
                             option. The IRI should be a file name.
+      --imported, -i        Include imported ontologies
+      --no-catalog, -n      Do not read url from catalog even if it exists.
       --catalog-file CATALOG_FILE
                             Name of Protégé catalog file in the same folder as the
                             ontology. This option is used together with --local
