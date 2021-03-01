@@ -299,6 +299,7 @@ positional arguments:
                             Inputformat. Default is to infer from input.
       --output-format, -F OUTPUT_FORMAT 
 			    Default is to infer from output.
+      --no-catalog, -n      Do not read catalog even if it exists.
       --inferred, -i        Add additional relations inferred by the FaCT++ reasoner to the converted ontology. Implies --squash.
       --base-iri BASE_IRI, -b BASE_IRI 
                             Base iri of inferred ontology. The default is the base

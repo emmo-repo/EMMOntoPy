@@ -319,7 +319,7 @@ class OntoDoc:
             value = points_style.format(
                 points=''.join(points), ontology=onto)
             doc.append(annotation_style.format(
-                key='Relations', value=value, ontology=onto))
+                key='Subclass of', value=value, ontology=onto))
 
         # Instances (individuals)
         if hasattr(item, 'instances'):

@@ -6,8 +6,19 @@ import datetime
 import xml.etree.ElementTree as ET
 
 from rdflib import Graph, URIRef
+from rdflib.util import guess_format
 
 import owlready2
+
+
+# Format mappings: file extension -> rdflib format name
+FMAP = {
+    'n3': 'ntriples',
+    'nt': 'ntriples',
+    'ttl': 'turtle',
+    'rdfxml': 'xml',
+    'owl': 'xml',
+}
 
 
 def asstring(expr, link='{name}', n=0, exclude_object=False):
@@ -187,7 +198,7 @@ def read_catalog(path, catalog_file='catalog-v001.xml', recursive=False,
 
 
 def convert_imported(input, output, input_format=None, output_format='xml',
-                     url_from_catalog=False, catalog_file='catalog-v001.xml'):
+                     url_from_catalog=None, catalog_file='catalog-v001.xml'):
     """Convert imported ontologies.
 
     Store the output in a directory structure matching the source
@@ -199,13 +210,17 @@ def convert_imported(input, output, input_format=None, output_format='xml',
             will be the root of the generated directory structure
         input_format: input format.  The default is to infer from `input`
         output_format: output format.  The default is to infer from `output`
-        url_from_catalog: bool.  Whether to read urls form catalog file.
+        url_from_catalog: bool | None.  Whether to read urls form catalog file.
+            If None, the catalog file will be used if it exists.
         catalog_file: name of catalog file, that maps ontology IRIs to
             local file names
     """
     inroot = os.path.dirname(os.path.abspath(input))
     outroot = os.path.dirname(os.path.abspath(output))
     outext = os.path.splitext(output)[1]
+
+    if url_from_catalog is None:
+        url_from_catalog = os.path.exists(os.path.join(inroot, catalog_file))
 
     if url_from_catalog:
         d, dirs = read_catalog(inroot, catalog_file=catalog_file,
@@ -244,29 +259,37 @@ def convert_imported(input, output, input_format=None, output_format='xml',
                 outpath))[0] + outext
             if outpath not in outpaths:
                 outpaths.add(outpath)
+                fmt = input_format if input_format else guess_format(
+                    inpath, fmap=FMAP)
                 g = Graph()
-                g.parse(inpath, format=input_format)
+                g.parse(inpath, format=fmt)
                 g.serialize(destination=outpath, format=output_format)
                 recur(g, outext)
 
     # Write output files
+    fmt = input_format if input_format else guess_format(input, fmap=FMAP)
     g = Graph()
-    g.parse(input, format=input_format)
+    g.parse(input, format=fmt)
     g.serialize(destination=output, format=output_format)
     recur(g, outext)
 
 
 def squash_imported(input, output, input_format=None, output_format='xml',
-                    catalog_file='catalog-v001.xml'):
+                    url_from_catalog=None, catalog_file='catalog-v001.xml'):
     """Convert imported ontologies and squash them into a single file.
 
-    If a catalog file exists in the same directory as the input file it will
-    be used to load possible imported ontologies.
+    If `url_from_catalog` is true the catalog file will be used to
+    load possible imported ontologies.  If `url_from_catalog` is None, it will
+    only be used if it exists in the same directory as the input file.
 
     The the squash rdflib graph is returned.
     """
     inroot = os.path.dirname(os.path.abspath(input))
-    if catalog_file and os.path.exists(os.path.join(inroot, catalog_file)):
+
+    if url_from_catalog is None:
+        url_from_catalog = os.path.exists(os.path.join(inroot, catalog_file))
+
+    if url_from_catalog:
         d = read_catalog(inroot, catalog_file=catalog_file, recursive=True)
     else:
         d = {}

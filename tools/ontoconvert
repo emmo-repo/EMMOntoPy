@@ -26,6 +26,10 @@ def main():
         help='Output format (default is to infer from output.  Available '
         'formats: "xml" (rdf/xml), "n3", "turtle", "nt", "pretty-xml", "trix"')
     parser.add_argument(
+        '--no-catalog', '-n', action='store_false', dest='url_from_catalog',
+         default=None,
+        help='Whether to not read catalog file even if it exists.')
+    parser.add_argument(
         '--inferred', '-i', action='store_true',
         help='Add additional relations inferred by the FaCT++ reasoner to '
         'the converted ontology.  Implies --squash.')
@@ -63,7 +67,8 @@ def main():
     if args.recursive:
         convert_imported(args.input, args.output,
                          input_format=input_format,
-                         output_format=output_format)
+                         output_format=output_format,
+                         url_from_catalog=args.url_from_catalog)
     elif args.inferred:
         g = squash_imported(args.input, None,
                             input_format=input_format)
@@ -75,7 +80,8 @@ def main():
     elif args.squash:
         squash_imported(args.input, args.output,
                         input_format=input_format,
-                        output_format=output_format)
+                        output_format=output_format,
+                        url_from_catalog=args.url_from_catalog)
     else:
         g = Graph()
         g.parse(args.input, format=input_format)
