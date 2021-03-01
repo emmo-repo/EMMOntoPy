@@ -17,6 +17,7 @@ FMAP = {
     'nt': 'ntriples',
     'ttl': 'turtle',
     'rdfxml': 'xml',
+    'owl': 'xml',
 }
 
 
