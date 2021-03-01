@@ -864,8 +864,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
                     mros.remove(mro)
         assert(0)  # should never be reached...
 
-    def get_ancestors(self, classes, include=None, strict=True):
+    def get_ancestors(self, classes, include='all', strict=True):
         """Return ancestors of all classes in `classes`.
+        classes to be provided as list
 
         The values of `include` may be:
           - None: ignore this argument
