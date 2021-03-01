@@ -366,7 +366,7 @@ def main():
         help=('Get url from catalog file'))
     parser.add_argument(
         '--no-catalog', action='store_false', dest='url_from_catalog',
-         default=None,
+        default=None,
         help='Whether to not read catalog file even if it exists.')
     parser.add_argument(
         '--ignore-namespace', '-n', action='append', default=[],
