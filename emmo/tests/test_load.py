@@ -1,32 +1,19 @@
 #!/usr/bin/env python3
-import sys
 import os
-
-# Add emmo to sys path
-thisdir = os.path.abspath(os.path.dirname(__file__))
-sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
-from emmo import get_ontology, World  # noqa: E402, F401
-
-import owlready2  # noqa: E402, F401
+from emmo import get_ontology
 
 
-emmodir = os.path.join(thisdir, '..', '..', '..', 'EMMO')
-owlready2.set_log_level(0)
+
+# Check that the defaults works
+emmo = get_ontology('emmo').load()  # owl format
+emmo = get_ontology('emmo-inferred').load()
+emmo = get_ontology('emmo-development').load()  # ttl format
+
+# Load a local ontology with catalog
+testonto = os.path.join(os.path.dirname(__file__), 'testonto', 'testonto.ttl')
+o = get_ontology(testonto).load()
 
 
-# Load latest stable EMMO
-emmo = get_ontology('emmo')
-emmo.load()
-
-
-# Load emmo-inferred
-world = World()
-inferred = world.get_ontology()
-inferred.load()
-
-
-# Load local EMMO
-if os.path.exists(os.path.join(emmodir, 'emmo.owl')):
-    world2 = World()
-    local = world2.get_ontology(os.path.join(emmodir, 'emmo.owl'))
-    local.load(catalog_file=True)
+# Use catalog file when downloading from web
+o = get_ontology(
+    'https://raw.githubusercontent.com/BIG-MAP/BattINFO/master/battinfo.ttl').load()
