@@ -271,7 +271,7 @@ def convert_imported(input, output, input_format=None, output_format='xml',
                 fmt = input_format if input_format else guess_format(
                     inpath, fmap=FMAP)
                 g = Graph()
-                g.parse(inpath, format=fmt)
+                g.parse(d.get(inpath, inpath), format=fmt)
                 g.serialize(destination=outpath, format=output_format)
                 recur(g, outext)
 
