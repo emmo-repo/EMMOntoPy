@@ -23,7 +23,7 @@ import owlready2
 from owlready2 import locstr
 
 from .utils import asstring, read_catalog, infer_version, convert_imported
-from .utils import FMAP, isinteractive
+from .utils import FMAP, isinteractive, ReadCatalogError
 from .factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 from .ontograph import OntoGraph  # FIXME: deprecate...
 
@@ -50,6 +50,11 @@ def get_ontology(*args, **kwargs):
 
 class World(owlready2.World):
     """A subclass of owlready2.World."""
+    def __init__(self, *args, **kwargs):
+        # Caches stored in the world
+        self._cached_catalogs = {}  # maps url to (mtime, iris, dirs)
+        self._iri_mappings = {}     # all iri mappings loaded so far
+        super().__init__(*args, **kwargs)
 
     def get_ontology(self, base_iri='emmo-inferred'):
         """Returns a new Ontology from `base_iri`.
@@ -267,6 +272,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
             Additional keyword arguments are passed on to
             owlready2.Ontology.load().
         """
+        # TODO: make sure that `only_local` argument is respected...
+
         if self.loaded:
             return self
         self._load(only_local=only_local, filename=filename, format=format,
@@ -296,22 +303,80 @@ class Ontology(owlready2.Ontology, OntoGraph):
               catalog_file='catalog-v001.xml', tmpdir=None,
               **kwargs):
         """Help function for _load()."""
-        # If filename is not given, infer it from base_iri (if possible)
-        if not filename:
-            web_protocols = ('http://', 'https://', )
-            fmt = format if format else guess_format(
-                self.base_iri.rstrip('/#'), fmap=FMAP)
-            if not self.base_iri.startswith(web_protocols):
-                filename = self.base_iri.rstrip('#/')
-                if filename.startswith('file://'):
-                    filename = filename[7:]
-            elif fmt and fmt not in ('xml', 'ntriples'):
+        web_protocol = 'http://', 'https://', 'ftp://'
+
+        url = filename or self.base_iri.rstrip('/#')
+        if url.startswith(web_protocol):
+            baseurl = os.path.dirname(url)
+            catalogurl = baseurl + '/' + catalog_file
+        else:
+            if url.startswith('file://'):
+                url = url[7:]
+            url = os.path.normpath(os.path.abspath(url))
+            baseurl = os.path.dirname(url)
+            catalogurl = os.path.join(baseurl, catalog_file)
+
+        def getmtime(path):
+            if os.path.exists(path):
+                return os.path.getmtime(path)
+            return 0.0
+
+        # Resolve url from catalog file
+        iris = {}
+        dirs = set()
+        if url_from_catalog or url_from_catalog is None:
+            if (catalogurl in self.world._cached_catalogs and
+                not reload and
+                (not reload_if_newer or
+                 getmtime(catalogurl) > self.world._cached_catalogs[
+                     catalogurl][0])):
+                mtime, iris, dirs = self.world._cached_catalogs[catalogurl]
+            else:
+
+                try:
+                    iris, dirs = read_catalog(
+                        uri=catalogurl,
+                        recursive=False,
+                        return_paths=True,
+                        catalog_file=catalog_file)
+                except ReadCatalogError:
+                    if url_from_catalog is not None:
+                        raise
+                    self.world._cached_catalogs[catalogurl] = (
+                        0.0, {}, set())
+                else:
+                    self.world._cached_catalogs[catalogurl] = (
+                        getmtime(catalogurl), iris, dirs)
+            self.world._iri_mappings.update(iris)
+        resolved_url = self.world._iri_mappings.get(url, url)
+
+        # Append paths from catalog file to onto_path
+        for d in sorted(dirs, reverse=True):
+            if d not in owlready2.onto_path:
+                owlready2.onto_path.append(d)
+
+        # Use catalog file to update IRIs of imported ontologies
+        # in internal store and try to load again...
+        if iris:
+            for abbrev_iri in self.world._get_obj_triples_sp_o(
+                    self.storid, owlready2.owl_imports):
+                iri = self._unabbreviate(abbrev_iri)
+                if iri in iris:
+                    self._del_obj_triple_spo(self.storid,
+                                             owlready2.owl_imports,
+                                             abbrev_iri)
+                    self._add_obj_triple_spo(self.storid,
+                                             owlready2.owl_imports,
+                                             self._abbreviate(iris[iri]))
+
+        # Load ontology
+        try:
+            fmt = format if format else guess_format(resolved_url, fmap=FMAP)
+            if fmt and fmt not in ('xml', 'ntriples'):
+                # Convert filename to rdfxml before passing it to owlready2
                 g = rdflib.Graph()
-                g.parse(self.base_iri, format=fmt)
+                g.parse(resolved_url, format=fmt)
                 with tempfile.NamedTemporaryFile() as f:
-                    # If reading from an URL of an unsupported format,
-                    # serialize to a temporary file in rdfxml format and
-                    # load() in the superclass
                     g.serialize(destination=f, format='xml')
                     f.seek(0)
                     self.loaded = False
@@ -321,73 +386,48 @@ class Ontology(owlready2.Ontology, OntoGraph):
                                         reload_if_newer=reload_if_newer,
                                         format='rdfxml',
                                         **kwargs)
+            elif resolved_url.startswith(web_protocol):
+                return super().load(only_local=only_local,
+                                    reload=reload,
+                                    reload_if_newer=reload_if_newer,
+                                    format=fmt,
+                                    **kwargs)
 
-        # Convert filename to owl if it is in a format not supported
-        # by owlready2
-        if filename:
-            if not format:
-                format = guess_format(filename, fmap=FMAP)
-            if format not in ('xml', 'ntriples'):
-                with tempfile.TemporaryDirectory() as tmpdir:
-                    if not os.path.exists(tmpdir):
-                        os.makedirs(tmpdir)
-                    output = os.path.join(tmpdir, os.path.splitext(
-                        os.path.basename(filename))[0] + '.owl')
-                    convert_imported(filename, output,
-                                     input_format=format, output_format='xml',
-                                     url_from_catalog=url_from_catalog,
-                                     catalog_file=catalog_file)
-                    return self._load(only_local=True,
-                                      filename=output,
-                                      format='xml',
-                                      reload=reload,
-                                      reload_if_newer=reload_if_newer,
-                                      url_from_catalog=url_from_catalog,
-                                      catalog_file=catalog_file,
-                                      **kwargs)
-
-        # Append paths from catalog file to onto_path
-        dirpath = os.path.normpath(
-            os.path.dirname(filename or self.base_iri.rstrip('/#')))
-        if only_local and os.path.exists(os.path.join(dirpath, catalog_file)):
-            iris, dirs = read_catalog(
-                dirpath, recursive=True, return_paths=True,
-                catalog_file=catalog_file)
-            for d in sorted(dirs, reverse=True):
-                if d not in owlready2.onto_path:
-                    owlready2.onto_path.append(d)
-
-        fileobj = open(filename, 'rb') if filename else None
-
-        try:
-            super().load(only_local=only_local, fileobj=fileobj, reload=reload,
-                         reload_if_newer=reload_if_newer, **kwargs)
-        except owlready2.OwlReadyOntologyParsingError:
-            if url_from_catalog:
-                # Use catalog file to update IRIs of imported ontologies
-                # in internal store and try to load again...
-                iris = read_catalog(dirpath, catalog_file=catalog_file)
-                for abbrev_iri in self.world._get_obj_triples_sp_o(
-                        self.storid, owlready2.owl_imports):
-                    iri = self._unabbreviate(abbrev_iri)
-                    if iri in iris:
-                        self._del_obj_triple_spo(self.storid,
-                                                 owlready2.owl_imports,
-                                                 abbrev_iri)
-                        self._add_obj_triple_spo(self.storid,
-                                                 owlready2.owl_imports,
-                                                 self._abbreviate(iris[iri]))
-                self.loaded = False
-                super().load(only_local=only_local, fileobj=fileobj,
-                             reload=reload, reload_if_newer=reload_if_newer,
-                             **kwargs)
             else:
-                raise
-        finally:
-            if fileobj:
-                fileobj.close()
+                with open(resolved_url, 'rt') as f:
+                    return super().load(only_local=only_local,
+                                        fileobj=f,
+                                        reload=reload,
+                                        reload_if_newer=reload_if_newer,
+                                        format=fmt,
+                                        **kwargs)
+        except owlready2.OwlReadyOntologyParsingError:
+            # Owlready2 is not able to parse the ontology - most
+            # likely because imported ontologies must be resolved
+            # using the catalog file.
 
-        return self
+            # Reraise if we don't want to read from the catalog file
+            if not url_from_catalog and url_from_catalog is not None:
+                raise
+
+            # Copy the ontology into a local folder and try again
+            with tempfile.TemporaryDirectory() as tmpdir:
+                output = os.path.join(tmpdir, os.path.basename(resolved_url))
+                convert_imported(input=resolved_url,
+                                 output=output,
+                                 input_format=fmt,
+                                 output_format='xml',
+                                 url_from_catalog=url_from_catalog,
+                                 catalog_file=catalog_file)
+
+                self.loaded = False
+                with open(output, 'rt') as f:
+                    return super().load(only_local=True,
+                                        fileobj=f,
+                                        reload=reload,
+                                        reload_if_newer=reload_if_newer,
+                                        format='rdfxml',
+                                        **kwargs)
 
     def save(self, filename=None, format='rdfxml', overwrite=False, **kwargs):
         """Writes the ontology to file.

@@ -4,6 +4,8 @@ import os
 import sys
 import re
 import datetime
+import tempfile
+import urllib.request
 import xml.etree.ElementTree as ET
 
 from rdflib import Graph, URIRef
@@ -144,22 +146,75 @@ def camelsplit(s):
     return ''.join(result)
 
 
-def read_catalog(path, catalog_file='catalog-v001.xml', recursive=False,
-                 return_paths=False):
-    """Reads a Protègè catalog file and returns a dict mapping IRIs to
-    absolute paths.
+class ReadCatalogError(IOError):
+    """Error reading catalog file."""
+    pass
+
+
+def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
+                 recursive=False, return_paths=False):
+    """Reads a Protègè catalog file and returns as a dict.
+
+    The returned dict maps the ontology IRI (name) to its actual
+    location (URI).  The location can be either an absolute file path
+    or a HTTP, HTTPS or FTP web location.
+
+    `uri` is a string locating the catalog file. It may be a http or
+    https web location or a file path.
 
     The `catalog_file` argument spesifies the catalog file name and is
     used if `path` is used when `recursive` is true or when `path` is a
     directory.
 
+    If `baseuri` is not None, it will be used as the base URI for the
+    mapped locations.  Otherwise it defaults to `uri` with its final
+    component omitted.
+
     If `recursive` is true, catalog files in sub-folders are also read.
 
     If `return_paths` is true, a set of directory paths to source
     files is returned in addition to the default dict.
+
+    A ReadCatalogError is raised if the catalog file cannot be found.
     """
-    iris = {}
-    dirs = set()
+    # Protocols supported by urllib.request
+    web_protocols = 'http://', 'https://', 'ftp://'
+
+    if uri.startswith(web_protocols):
+        # Call read_catalog() recursively to ensure that the temporary
+        # file is properly cleaned up
+        with tempfile.TemporaryDirectory() as tmpdir:
+            destfile = os.path.join(tmpdir, catalog_file)
+            uris = {  # maps uri to base
+                uri: (
+                    baseuri if baseuri else os.path.dirname(uri)),
+                f'{uri.rstrip("/")}/{catalog_file}': (
+                    baseuri if baseuri else uri.rstrip('/')),
+                f'{os.path.dirname(uri)}/{catalog_file}': (
+                    os.path.dirname(uri)),
+                }
+            for url, base in uris.items():
+                try:
+                    f, msg = urllib.request.urlretrieve(url, destfile)
+                except urllib.request.URLError:
+                    continue
+                else:
+                    if 'Content-Length' not in msg:
+                        raise ReadCatalogError(
+                            'url seems not to be a catalog file location: ' +
+                            url)
+                    return read_catalog(destfile,
+                                        catalog_file=catalog_file,
+                                        baseuri=base,
+                                        recursive=recursive,
+                                        return_paths=return_paths)
+            raise ReadCatalogError('Cannot download catalog from URLs: ' +
+                                   ", ".join(uris))
+    elif uri.startswith('file://'):
+        path = uri[7:]
+    else:
+        path = uri
+
     if os.path.isdir(path):
         dirname = os.path.abspath(path)
         filepath = os.path.join(dirname, catalog_file)
@@ -172,13 +227,15 @@ def read_catalog(path, catalog_file='catalog-v001.xml', recursive=False,
         return e.tag.rsplit('}', 1)[-1]
 
     def load_catalog(filepath):
+        if not os.path.exists(filepath):
+            raise ReadCatalogError('No such catalog file: ' + filepath)
         dirname = os.path.normpath(os.path.dirname(filepath))
         dirs.add(dirname)
         xml = ET.parse(filepath)
         root = xml.getroot()
         if gettag(root) != 'catalog':
-            raise ValueError('expected root tag of catalog file %r to be '
-                             '"catalog"', filepath)
+            raise ReadCatalogError('expected root tag of catalog file %r to '
+                                   'be "catalog"', filepath)
         for child in root:
             if gettag(child) == 'uri':
                 load_uri(child, dirname)
@@ -189,16 +246,20 @@ def read_catalog(path, catalog_file='catalog-v001.xml', recursive=False,
     def load_uri(uri, dirname):
         assert gettag(uri) == 'uri'
         s = uri.attrib['uri']
-        if s.startswith('http://') or s.startswith('https://'):
-            iris.setdefault(uri.attrib['name'], s)
+        if baseuri and baseuri.startswith(web_protocols):
+            url = f'{baseuri}/{s}'
         else:
-            filepath = os.path.join(dirname, uri.attrib['uri'])
-            iris.setdefault(uri.attrib['name'], filepath)
-            dir = os.path.normpath(os.path.dirname(filepath))
-            if recursive and dir not in dirs:
+            url = os.path.normpath(os.path.join(
+                baseuri if baseuri else dirname, uri.attrib['uri']))
+        iris.setdefault(uri.attrib['name'], url)
+        if recursive:
+            dir = os.path.dirname(url)
+            if dir not in dirs:
                 catalog = os.path.join(dir, catalog_file)
                 load_catalog(catalog)
 
+    iris = {}
+    dirs = set()
     load_catalog(filepath)
     if return_paths:
         return iris, dirs

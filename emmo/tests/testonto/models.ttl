@@ -18,4 +18,4 @@ skos:altLabel rdf:type owl:AnnotationProperty .
 
 :testclass rdf:type owl:Class ;
     rdfs:subClassOf owl:Thing ;
-    skos:prefLabel "testclass"@en .
+    skos:prefLabel "TestClass"@en .
