@@ -305,7 +305,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """Help function for _load()."""
         web_protocol = 'http://', 'https://', 'ftp://'
 
-        url = filename or self.base_iri.rstrip('/#')
+        url = filename if filename else self.base_iri.rstrip('/#')
         if url.startswith(web_protocol):
             baseurl = os.path.dirname(url)
             catalogurl = baseurl + '/' + catalog_file
@@ -357,20 +357,23 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         # Use catalog file to update IRIs of imported ontologies
         # in internal store and try to load again...
-        if iris:
+        if self.world._iri_mappings:
             for abbrev_iri in self.world._get_obj_triples_sp_o(
                     self.storid, owlready2.owl_imports):
                 iri = self._unabbreviate(abbrev_iri)
-                if iri in iris:
-                    self._del_obj_triple_spo(self.storid,
-                                             owlready2.owl_imports,
-                                             abbrev_iri)
-                    self._add_obj_triple_spo(self.storid,
-                                             owlready2.owl_imports,
-                                             self._abbreviate(iris[iri]))
+                if iri in self.world._iri_mappings:
+                    self._del_obj_triple_spo(
+                        self.storid,
+                        owlready2.owl_imports,
+                        abbrev_iri)
+                    self._add_obj_triple_spo(
+                        self.storid,
+                        owlready2.owl_imports,
+                        self._abbreviate(self.world._iri_mappings[iri]))
 
         # Load ontology
         try:
+            self.loaded = False
             fmt = format if format else guess_format(resolved_url, fmap=FMAP)
             if fmt and fmt not in ('xml', 'ntriples'):
                 # Convert filename to rdfxml before passing it to owlready2
@@ -379,7 +382,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 with tempfile.NamedTemporaryFile() as f:
                     g.serialize(destination=f, format='xml')
                     f.seek(0)
-                    self.loaded = False
                     return super().load(only_local=True,
                                         fileobj=f,
                                         reload=reload,

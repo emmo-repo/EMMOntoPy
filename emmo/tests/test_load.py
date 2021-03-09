@@ -28,3 +28,4 @@ assert o.TestClass.prefLabel.first() == 'TestClass'
 o = get_ontology(
     'https://raw.githubusercontent.com/BIG-MAP/BattINFO/master/'
     'battinfo.ttl').load()
+assert o.Electrolyte.prefLabel.first() == 'Electrolyte'
