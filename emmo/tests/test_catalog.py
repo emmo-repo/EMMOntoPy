@@ -51,8 +51,6 @@ except ReadCatalogError:
 else:
     assert False, 'expected ReadCatalogError'
 
-
-# TODO: enable use of baseuri
-# d = read_catalog('https://raw.githubusercontent.com/emmo-repo/EMMO/master/'
-#                  'catalog-v001.xml', baseuri='/abc')
-# assert '/abc/emmo.owl' in d.values()
+d = read_catalog('https://raw.githubusercontent.com/emmo-repo/EMMO/master/'
+                 'catalog-v001.xml', baseuri='/abc')
+assert '/abc/emmo.owl' in d.values()

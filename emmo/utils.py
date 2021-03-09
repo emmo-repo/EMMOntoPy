@@ -200,12 +200,10 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
                     continue
                 else:
                     if 'Content-Length' not in msg:
-                        raise ReadCatalogError(
-                            'url seems not to be a catalog file location: ' +
-                            url)
+                        continue
                     return read_catalog(destfile,
                                         catalog_file=catalog_file,
-                                        baseuri=base,
+                                        baseuri=baseuri if baseuri else base,
                                         recursive=recursive,
                                         return_paths=return_paths)
             raise ReadCatalogError('Cannot download catalog from URLs: ' +
