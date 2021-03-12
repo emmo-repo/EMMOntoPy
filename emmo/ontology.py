@@ -904,3 +904,14 @@ class Ontology(owlready2.Ontology, OntoGraph):
             return ancestors.difference(classes)
         else:
             return ancestors
+
+    def get_wu_palmer_measure(self, cls1, cls2):
+        '''
+        returns the Wu Palmer measure for semantic similarity between
+        two concepts
+        '''
+        cca = self.closest_common_ancestor(cls1, cls2)
+        ccadepth = self.number_of_generations(cca, self.Thing)
+        n1 = self.number_of_generations(cls1, cca)
+        n2 = self.number_of_generations(cls2, cca)
+        return 2 * ccadepth / (n1 + n2 + 2 * ccadepth)
