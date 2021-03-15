@@ -21,7 +21,6 @@ from rdflib.util import guess_format
 
 import owlready2
 from owlready2 import locstr
-from owlready2.driver import _guess_format
 
 from .utils import asstring, read_catalog, infer_version, convert_imported
 from .utils import FMAP, isinteractive, ReadCatalogError
