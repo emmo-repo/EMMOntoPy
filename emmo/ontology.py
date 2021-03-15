@@ -392,7 +392,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 return super().load(only_local=only_local,
                                     reload=reload,
                                     reload_if_newer=reload_if_newer,
-                                    format=fmt,
+                                    format='rdfxml' if fmt == 'xml' 
+                                                    else fmt,
                                     **kwargs)
 
             else:
@@ -401,7 +402,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
                                         fileobj=f,
                                         reload=reload,
                                         reload_if_newer=reload_if_newer,
-                                        format=fmt,
+                                        format='rdfxml' if fmt == 'xml' 
+                                                        else fmt,
                                         **kwargs)
         except owlready2.OwlReadyOntologyParsingError:
             # Owlready2 is not able to parse the ontology - most
@@ -423,7 +425,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                                  catalog_file=catalog_file)
 
                 self.loaded = False
-                with open(output, 'rt') as f:
+                with open(output, 'rb') as f:
                     return super().load(only_local=True,
                                         fileobj=f,
                                         reload=reload,
