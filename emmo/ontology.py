@@ -21,6 +21,7 @@ from rdflib.util import guess_format
 
 import owlready2
 from owlready2 import locstr
+from owlready2.driver import _guess_format
 
 from .utils import asstring, read_catalog, infer_version, convert_imported
 from .utils import FMAP, isinteractive, ReadCatalogError
@@ -392,8 +393,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 return super().load(only_local=only_local,
                                     reload=reload,
                                     reload_if_newer=reload_if_newer,
-                                    format='rdfxml' if fmt == 'xml'
-                                    else fmt,
                                     **kwargs)
 
             else:
@@ -402,8 +401,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
                                         fileobj=f,
                                         reload=reload,
                                         reload_if_newer=reload_if_newer,
-                                        format='rdfxml' if fmt == 'xml'
-                                        else fmt,
                                         **kwargs)
         except owlready2.OwlReadyOntologyParsingError:
             # Owlready2 is not able to parse the ontology - most
