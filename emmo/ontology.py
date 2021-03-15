@@ -69,7 +69,7 @@ class World(owlready2.World):
             of EMMO
         """
         if base_iri == 'emmo':
-            base_iri = 'http://emmo.info/emmo'
+            base_iri = 'https://emmo-repo.github.io/latest-stable/emmo.owl'
         elif base_iri == 'emmo-inferred':
             base_iri = (
                 'https://emmo-repo.github.io/latest-stable/emmo-inferred.ttl')
@@ -392,18 +392,18 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 return super().load(only_local=only_local,
                                     reload=reload,
                                     reload_if_newer=reload_if_newer,
-                                    format='rdfxml' if fmt == 'xml' 
-                                                    else fmt,
+                                    format='rdfxml' if fmt == 'xml'
+                                    else fmt,
                                     **kwargs)
 
             else:
-                with open(resolved_url, 'rt') as f:
+                with open(resolved_url, 'rb') as f:
                     return super().load(only_local=only_local,
                                         fileobj=f,
                                         reload=reload,
                                         reload_if_newer=reload_if_newer,
-                                        format='rdfxml' if fmt == 'xml' 
-                                                        else fmt,
+                                        format='rdfxml' if fmt == 'xml'
+                                        else fmt,
                                         **kwargs)
         except owlready2.OwlReadyOntologyParsingError:
             # Owlready2 is not able to parse the ontology - most
