@@ -909,7 +909,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         '''
         Returns the Wu Palmer measure for semantic similarity between
         two concepts.
-        Wu, Palmer; ACL 94: Proceedings of the 32nd annual meeting on 
+        Wu, Palmer; ACL 94: Proceedings of the 32nd annual meeting on
         Association for Computational Linguistics, June 1994.
         '''
         cca = self.closest_common_ancestor(cls1, cls2)
