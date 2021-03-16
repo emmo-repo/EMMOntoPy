@@ -69,13 +69,15 @@ class World(owlready2.World):
             of EMMO
         """
         if base_iri == 'emmo':
-            base_iri = 'http://emmo.info/emmo'
+            base_iri = (
+                'https://raw.githubusercontent.com/emmo-repo/'
+                'EMMO/master/emmo.owl')
         elif base_iri == 'emmo-inferred':
             base_iri = (
-                'https://emmo-repo.github.io/latest-stable/emmo-inferred.ttl')
+                'https://emmo-repo.github.io/latest-stable/emmo-inferred.owl')
         elif base_iri == 'emmo-development':
             base_iri = (
-                'https://emmo-repo.github.io/development/emmo-inferred.ttl')
+                'https://emmo-repo.github.io/development/emmo-inferred.owl')
 
         if base_iri in self.ontologies:
             onto = self.ontologies[base_iri]
@@ -392,16 +394,14 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 return super().load(only_local=only_local,
                                     reload=reload,
                                     reload_if_newer=reload_if_newer,
-                                    format=fmt,
                                     **kwargs)
 
             else:
-                with open(resolved_url, 'rt') as f:
+                with open(resolved_url, 'rb') as f:
                     return super().load(only_local=only_local,
                                         fileobj=f,
                                         reload=reload,
                                         reload_if_newer=reload_if_newer,
-                                        format=fmt,
                                         **kwargs)
         except owlready2.OwlReadyOntologyParsingError:
             # Owlready2 is not able to parse the ontology - most
@@ -423,7 +423,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                                  catalog_file=catalog_file)
 
                 self.loaded = False
-                with open(output, 'rt') as f:
+                with open(output, 'rb') as f:
                     return super().load(only_local=True,
                                         fileobj=f,
                                         reload=reload,
