@@ -69,13 +69,14 @@ class World(owlready2.World):
             of EMMO
         """
         if base_iri == 'emmo':
-            base_iri = 'https://emmo-repo.github.io/latest-stable/emmo.owl'
+            base_iri = (
+            'https://raw.githubusercontent.com/emmo-repo/EMMO/master/emmo.owl')
         elif base_iri == 'emmo-inferred':
             base_iri = (
-                'https://emmo-repo.github.io/latest-stable/emmo-inferred.ttl')
+                'https://emmo-repo.github.io/latest-stable/emmo-inferred.owl')
         elif base_iri == 'emmo-development':
             base_iri = (
-                'https://emmo-repo.github.io/development/emmo-inferred.ttl')
+                'https://emmo-repo.github.io/development/emmo-inferred.owl')
 
         if base_iri in self.ontologies:
             onto = self.ontologies[base_iri]
