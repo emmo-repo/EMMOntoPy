@@ -180,6 +180,8 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
     # Protocols supported by urllib.request
     web_protocols = 'http://', 'https://', 'ftp://'
 
+    print('=== read_catalog()', uri)
+
     if uri.startswith(web_protocols):
         # Call read_catalog() recursively to ensure that the temporary
         # file is properly cleaned up
@@ -225,10 +227,11 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
         return e.tag.rsplit('}', 1)[-1]
 
     def load_catalog(filepath):
+        print('  - filepath:', filepath)
         if not os.path.exists(filepath):
             raise ReadCatalogError('No such catalog file: ' + filepath)
         dirname = os.path.normpath(os.path.dirname(filepath))
-        dirs.add(dirname)
+        dirs.add(baseuri if baseuri else dirname)
         xml = ET.parse(filepath)
         root = xml.getroot()
         if gettag(root) != 'catalog':
@@ -244,17 +247,39 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
     def load_uri(uri, dirname):
         assert gettag(uri) == 'uri'
         s = uri.attrib['uri']
-        if baseuri and baseuri.startswith(web_protocols):
-            url = f'{baseuri}/{s}'
+        if s.startswith(web_protocols):
+            if baseuri:
+                url = baseuri.rstrip('/#') + '/' + os.path.basename(s)
+            else:
+                url = s
         else:
-            url = os.path.normpath(os.path.join(
-                baseuri if baseuri else dirname, uri.attrib['uri']))
+            s = os.path.normpath(s)
+            if baseuri and baseuri.startswith(web_protocols):
+                url = f'{baseuri}/{s}'
+            else:
+                url = os.path.normpath(os.path.join(
+                    baseuri if baseuri else dirname, s))
+
+        print('*** load_uri')
+        print('  * dirname:', dirname)
+        print('  * s:', s)
+        print('  * baseuri:', baseuri)
+        print('  * url:', url)
+        print('  * dirs:', dirs)
         iris.setdefault(uri.attrib['name'], url)
         if recursive:
             dir = os.path.dirname(url)
             if dir not in dirs:
                 catalog = os.path.join(dir, catalog_file)
-                load_catalog(catalog)
+                if catalog.startswith(web_protocols):
+                    iris_, dirs_ = read_catalog(
+                        catalog, catalog_file=catalog_file,
+                        baseuri=None, recursive=recursive,
+                        return_paths=True)
+                    iris.update(iris_)
+                    dirs.update(dirs_)
+                else:
+                    load_catalog(catalog)
 
     iris = {}
     dirs = set()
