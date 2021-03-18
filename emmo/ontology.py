@@ -412,6 +412,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
             if not url_from_catalog and url_from_catalog is not None:
                 raise
 
+            warnings.warn('Recovering from Owlready2 parsing error... '
+                          'might be deprecated')
+
             # Copy the ontology into a local folder and try again
             with tempfile.TemporaryDirectory() as tmpdir:
                 output = os.path.join(tmpdir, os.path.basename(resolved_url))

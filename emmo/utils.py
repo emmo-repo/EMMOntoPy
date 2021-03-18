@@ -228,7 +228,7 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
         if not os.path.exists(filepath):
             raise ReadCatalogError('No such catalog file: ' + filepath)
         dirname = os.path.normpath(os.path.dirname(filepath))
-        dirs.add(dirname)
+        dirs.add(baseuri if baseuri else dirname)
         xml = ET.parse(filepath)
         root = xml.getroot()
         if gettag(root) != 'catalog':
@@ -244,17 +244,33 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
     def load_uri(uri, dirname):
         assert gettag(uri) == 'uri'
         s = uri.attrib['uri']
-        if baseuri and baseuri.startswith(web_protocols):
-            url = f'{baseuri}/{s}'
+        if s.startswith(web_protocols):
+            if baseuri:
+                url = baseuri.rstrip('/#') + '/' + os.path.basename(s)
+            else:
+                url = s
         else:
-            url = os.path.normpath(os.path.join(
-                baseuri if baseuri else dirname, uri.attrib['uri']))
+            s = os.path.normpath(s)
+            if baseuri and baseuri.startswith(web_protocols):
+                url = f'{baseuri}/{s}'
+            else:
+                url = os.path.normpath(os.path.join(
+                    baseuri if baseuri else dirname, s))
+
         iris.setdefault(uri.attrib['name'], url)
         if recursive:
             dir = os.path.dirname(url)
             if dir not in dirs:
                 catalog = os.path.join(dir, catalog_file)
-                load_catalog(catalog)
+                if catalog.startswith(web_protocols):
+                    iris_, dirs_ = read_catalog(
+                        catalog, catalog_file=catalog_file,
+                        baseuri=None, recursive=recursive,
+                        return_paths=True)
+                    iris.update(iris_)
+                    dirs.update(dirs_)
+                else:
+                    load_catalog(catalog)
 
     iris = {}
     dirs = set()
@@ -318,7 +334,7 @@ def convert_imported(input, output, input_format=None, output_format='xml',
         for imported in graph.objects(predicate=URIRef(
                 'http://www.w3.org/2002/07/owl#imports')):
             inpath = d.get(str(imported), str(imported))
-            if inpath.startswith(('http://', 'https://')):
+            if inpath.startswith(('http://', 'https://', 'ftp://')):
                 outpath = os.path.join(outroot, inpath.split('/')[-1])
             else:
                 outpath = os.path.join(outroot, os.path.relpath(
