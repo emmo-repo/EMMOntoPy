@@ -312,30 +312,30 @@ def convert_imported(input, output, input_format=None, output_format='xml',
     outroot = os.path.dirname(os.path.abspath(output))
     outext = os.path.splitext(output)[1]
 
-    if url_from_catalog is None:
-        url_from_catalog = os.path.exists(os.path.join(inroot, catalog_file))
-
-    if url_from_catalog:
-        d, dirs = read_catalog(inroot, catalog_file=catalog_file,
-                               recursive=True, return_paths=True)
-
-        # Create output dirs and copy catalog files
-        for indir in dirs:
-            outdir = os.path.normpath(
-                os.path.join(outroot, os.path.relpath(indir, inroot)))
-            if not os.path.exists(outdir):
-                os.makedirs(outdir)
-            with open(os.path.join(indir, catalog_file), mode='rt') as f:
-                s = f.read()
-            for path in d.values():
-                newpath = os.path.splitext(path)[0] + outext
-                s = s.replace(
-                    os.path.basename(path), os.path.basename(newpath)
-                )
-            with open(os.path.join(outdir, catalog_file), mode='wt') as f:
-                f.write(s)
-    else:
-        d = {}
+    #if url_from_catalog is None:
+    #    url_from_catalog = os.path.exists(os.path.join(inroot, catalog_file))
+    #
+    #if url_from_catalog:
+    #    d, dirs = read_catalog(inroot, catalog_file=catalog_file,
+    #                           recursive=True, return_paths=True)
+    #
+    #    # Create output dirs and copy catalog files
+    #    for indir in dirs:
+    #        outdir = os.path.normpath(
+    #            os.path.join(outroot, os.path.relpath(indir, inroot)))
+    #        if not os.path.exists(outdir):
+    #            os.makedirs(outdir)
+    #        with open(os.path.join(indir, catalog_file), mode='rt') as f:
+    #            s = f.read()
+    #        for path in d.values():
+    #            newpath = os.path.splitext(path)[0] + outext
+    #            s = s.replace(
+    #                os.path.basename(path), os.path.basename(newpath)
+    #            )
+    #        with open(os.path.join(outdir, catalog_file), mode='wt') as f:
+    #            f.write(s)
+    #else:
+    #    d = {}
 
     outpaths = set()
 
@@ -343,7 +343,8 @@ def convert_imported(input, output, input_format=None, output_format='xml',
         for imported in graph.objects(predicate=URIRef(
                 'http://www.w3.org/2002/07/owl#imports')):
             inpath = d.get(str(imported), str(imported))
-            if inpath.startswith(('http://', 'https://')):
+            inbase = os.path.basename(inpath)
+            if inpath.startswith(('http://', 'https://', 'ftp://')):
                 outpath = os.path.join(outroot, inpath.split('/')[-1])
             else:
                 outpath = os.path.join(outroot, os.path.relpath(

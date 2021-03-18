@@ -69,13 +69,15 @@ class World(owlready2.World):
             of EMMO
         """
         if base_iri == 'emmo':
-            base_iri = 'http://emmo.info/emmo'
+            base_iri = (
+                'https://raw.githubusercontent.com/emmo-repo/'
+                'EMMO/master/emmo.owl')
         elif base_iri == 'emmo-inferred':
             base_iri = (
-                'https://emmo-repo.github.io/latest-stable/emmo-inferred.ttl')
+                'https://emmo-repo.github.io/latest-stable/emmo-inferred.owl')
         elif base_iri == 'emmo-development':
             base_iri = (
-                'https://emmo-repo.github.io/development/emmo-inferred.ttl')
+                'https://emmo-repo.github.io/development/emmo-inferred.owl')
 
         if base_iri in self.ontologies:
             onto = self.ontologies[base_iri]
@@ -401,7 +403,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                                     **kwargs)
 
             else:
-                with open(resolved_url, 'rt') as f:
+                with open(resolved_url, 'rb') as f:
                     return super().load(only_local=only_local,
                                         fileobj=f,
                                         reload=reload,
@@ -421,13 +423,13 @@ class Ontology(owlready2.Ontology, OntoGraph):
             with tempfile.TemporaryDirectory() as tmpdir:
                 output = os.path.join(tmpdir, os.path.basename(resolved_url))
 
-                print('*** url', url)
-                print('  * baseurl', baseurl)
-                print('  * catalogurl', catalogurl)
-                print('  * resolved_url', resolved_url)
-                print('  * url_from_catalog', url_from_catalog)
-                print('  * catalog_file', catalog_file)
-                print('  * fmt', fmt)
+                #print('*** url', url)
+                #print('  * baseurl', baseurl)
+                #print('  * catalogurl', catalogurl)
+                #print('  * resolved_url', resolved_url)
+                #print('  * url_from_catalog', url_from_catalog)
+                #print('  * catalog_file', catalog_file)
+                #print('  * fmt', fmt)
 
                 convert_imported(input=resolved_url,
                                  output=output,
@@ -437,7 +439,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                                  catalog_file=catalog_file)
 
                 self.loaded = False
-                with open(output, 'rt') as f:
+                with open(output, 'rb') as f:
                     return super().load(only_local=True,
                                         fileobj=f,
                                         reload=reload,
@@ -960,3 +962,16 @@ class Ontology(owlready2.Ontology, OntoGraph):
             return ancestors.difference(classes)
         else:
             return ancestors
+
+    def get_wu_palmer_measure(self, cls1, cls2):
+        '''
+        Returns the Wu Palmer measure for semantic similarity between
+        two concepts.
+        Wu, Palmer; ACL 94: Proceedings of the 32nd annual meeting on
+        Association for Computational Linguistics, June 1994.
+        '''
+        cca = self.closest_common_ancestor(cls1, cls2)
+        ccadepth = self.number_of_generations(cca, self.Thing)
+        n1 = self.number_of_generations(cls1, cca)
+        n2 = self.number_of_generations(cls2, cca)
+        return 2 * ccadepth / (n1 + n2 + 2 * ccadepth)
