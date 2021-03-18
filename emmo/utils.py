@@ -334,7 +334,6 @@ def convert_imported(input, output, input_format=None, output_format='xml',
         for imported in graph.objects(predicate=URIRef(
                 'http://www.w3.org/2002/07/owl#imports')):
             inpath = d.get(str(imported), str(imported))
-            inbase = os.path.basename(inpath)
             if inpath.startswith(('http://', 'https://', 'ftp://')):
                 outpath = os.path.join(outroot, inpath.split('/')[-1])
             else:
