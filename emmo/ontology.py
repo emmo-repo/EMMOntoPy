@@ -306,10 +306,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
               **kwargs):
         """Help function for _load()."""
         web_protocol = 'http://', 'https://', 'ftp://'
-        owlready2_formats = {  # maps rdflib format names to owlready2 names
-            'xml': 'rdfxml',
-            'owl': 'rdfxml',
-        }
 
         url = filename if filename else self.base_iri.rstrip('/#')
         if url.startswith(web_protocol):
@@ -381,7 +377,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
         try:
             self.loaded = False
             fmt = format if format else guess_format(resolved_url, fmap=FMAP)
-            owlready2_fmt = owlready2_formats.get(fmt, fmt)
             if fmt and fmt not in ('xml', 'ntriples'):
                 # Convert filename to rdfxml before passing it to owlready2
                 g = rdflib.Graph()
@@ -399,7 +394,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 return super().load(only_local=only_local,
                                     reload=reload,
                                     reload_if_newer=reload_if_newer,
-                                    format=owlready2_fmt,
                                     **kwargs)
 
             else:
@@ -408,7 +402,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
                                         fileobj=f,
                                         reload=reload,
                                         reload_if_newer=reload_if_newer,
-                                        format=owlready2_fmt,
                                         **kwargs)
         except owlready2.OwlReadyOntologyParsingError:
             # Owlready2 is not able to parse the ontology - most
@@ -419,18 +412,12 @@ class Ontology(owlready2.Ontology, OntoGraph):
             if not url_from_catalog and url_from_catalog is not None:
                 raise
 
+            warnings.warn('Recovering from Owlready2 parsing error... '
+                          'might be deprecated')
+
             # Copy the ontology into a local folder and try again
             with tempfile.TemporaryDirectory() as tmpdir:
                 output = os.path.join(tmpdir, os.path.basename(resolved_url))
-
-                #print('*** url', url)
-                #print('  * baseurl', baseurl)
-                #print('  * catalogurl', catalogurl)
-                #print('  * resolved_url', resolved_url)
-                #print('  * url_from_catalog', url_from_catalog)
-                #print('  * catalog_file', catalog_file)
-                #print('  * fmt', fmt)
-
                 convert_imported(input=resolved_url,
                                  output=output,
                                  input_format=fmt,

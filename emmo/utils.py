@@ -180,8 +180,6 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
     # Protocols supported by urllib.request
     web_protocols = 'http://', 'https://', 'ftp://'
 
-    print('=== read_catalog()', uri)
-
     if uri.startswith(web_protocols):
         # Call read_catalog() recursively to ensure that the temporary
         # file is properly cleaned up
@@ -227,7 +225,6 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
         return e.tag.rsplit('}', 1)[-1]
 
     def load_catalog(filepath):
-        print('  - filepath:', filepath)
         if not os.path.exists(filepath):
             raise ReadCatalogError('No such catalog file: ' + filepath)
         dirname = os.path.normpath(os.path.dirname(filepath))
@@ -260,12 +257,6 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
                 url = os.path.normpath(os.path.join(
                     baseuri if baseuri else dirname, s))
 
-        print('*** load_uri')
-        print('  * dirname:', dirname)
-        print('  * s:', s)
-        print('  * baseuri:', baseuri)
-        print('  * url:', url)
-        print('  * dirs:', dirs)
         iris.setdefault(uri.attrib['name'], url)
         if recursive:
             dir = os.path.dirname(url)
@@ -312,30 +303,30 @@ def convert_imported(input, output, input_format=None, output_format='xml',
     outroot = os.path.dirname(os.path.abspath(output))
     outext = os.path.splitext(output)[1]
 
-    #if url_from_catalog is None:
-    #    url_from_catalog = os.path.exists(os.path.join(inroot, catalog_file))
-    #
-    #if url_from_catalog:
-    #    d, dirs = read_catalog(inroot, catalog_file=catalog_file,
-    #                           recursive=True, return_paths=True)
-    #
-    #    # Create output dirs and copy catalog files
-    #    for indir in dirs:
-    #        outdir = os.path.normpath(
-    #            os.path.join(outroot, os.path.relpath(indir, inroot)))
-    #        if not os.path.exists(outdir):
-    #            os.makedirs(outdir)
-    #        with open(os.path.join(indir, catalog_file), mode='rt') as f:
-    #            s = f.read()
-    #        for path in d.values():
-    #            newpath = os.path.splitext(path)[0] + outext
-    #            s = s.replace(
-    #                os.path.basename(path), os.path.basename(newpath)
-    #            )
-    #        with open(os.path.join(outdir, catalog_file), mode='wt') as f:
-    #            f.write(s)
-    #else:
-    #    d = {}
+    if url_from_catalog is None:
+        url_from_catalog = os.path.exists(os.path.join(inroot, catalog_file))
+
+    if url_from_catalog:
+        d, dirs = read_catalog(inroot, catalog_file=catalog_file,
+                               recursive=True, return_paths=True)
+
+        # Create output dirs and copy catalog files
+        for indir in dirs:
+            outdir = os.path.normpath(
+                os.path.join(outroot, os.path.relpath(indir, inroot)))
+            if not os.path.exists(outdir):
+                os.makedirs(outdir)
+            with open(os.path.join(indir, catalog_file), mode='rt') as f:
+                s = f.read()
+            for path in d.values():
+                newpath = os.path.splitext(path)[0] + outext
+                s = s.replace(
+                    os.path.basename(path), os.path.basename(newpath)
+                )
+            with open(os.path.join(outdir, catalog_file), mode='wt') as f:
+                f.write(s)
+    else:
+        d = {}
 
     outpaths = set()
 
