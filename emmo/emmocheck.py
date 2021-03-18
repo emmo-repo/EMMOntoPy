@@ -76,7 +76,8 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
             'core.altLabel',
             'core.hiddenLabel',
         ))
-        exceptions.update(self.get_config('test_number_of_labels', ()))
+        exceptions.update(self.get_config(
+            'test_number_of_labels.exceptions', ()))
 
         for e in self.onto.get_entities():
             if repr(e) not in exceptions:
@@ -97,7 +98,10 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
             '1-manifold',
             '2-manifold',
             '3-manifold',
+            'C++',
         ))
+        exceptions.update(self.get_config('test_class_label.exceptions', ()))
+
         for cls in self.onto.classes(self.check_imported):
             for label in cls.label + getattr(cls, 'prefLabel', []):
                 if label not in exceptions:
@@ -115,16 +119,21 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
         If they start with "is" they should also end with "Of".
         """
+        exceptions = set()
+        exceptions.update(self.get_config(
+            'test_object_property_label.exceptions', ()))
+
         for op in self.onto.object_properties():
-            for label in op.label:
-                if label == 'EMMORelation':
-                    continue
-                self.assertTrue(label[0].islower())
-                if label.startswith('has'):
-                    self.assertTrue(label[3].isupper())
-                if label.startswith('is'):
-                    self.assertTrue(label[2].isupper())
-                    self.assertTrue(label.endswith('Of'))
+            if repr(op) not in exceptions:
+                for label in op.label:
+                    if label == 'EMMORelation':
+                        continue
+                    self.assertTrue(label[0].islower())
+                    if label.startswith('has'):
+                        self.assertTrue(label[3].isupper())
+                    if label.startswith('is'):
+                        self.assertTrue(label[2].isupper())
+                        self.assertTrue(label.endswith('Of'))
 
 
 class TestFunctionalEMMOConventions(TestEMMOConventions):
