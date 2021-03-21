@@ -5,7 +5,6 @@ import types
 import owlready2
 from owlready2 import ThingClass, PropertyClass, Thing, Restriction, Namespace
 from owlready2 import Metadata
-from owlready2 import rdf_type, owl_annotation_property
 
 
 # Improve default rendering of entities
@@ -26,7 +25,7 @@ owlready2.set_render_func(render_func)
 
 #
 # Extending ThingClass (classes)
-#
+# ==============================
 def get_preferred_label(self):
     """Returns the preferred label as a string (not list).
 
@@ -131,7 +130,7 @@ setattr(ThingClass, 'get_indirect_is_a', get_indirect_is_a)
 
 #
 # Extending PropertyClass (properties)
-#
+# ====================================
 def get_property_annotations(self, all=False, imported=True):
     """Returns a dict with non-empty property annotations.
 
@@ -156,7 +155,7 @@ setattr(PropertyClass, 'get_annotations', get_property_annotations)
 
 #
 # Extending Thing (individuals)
-#
+# =============================
 def get_individual_annotations(self, all=False, imported=True):
     """Returns a dict with non-empty individual annotations.
 
@@ -182,16 +181,17 @@ type.__setattr__(Thing, 'get_individual_annotations',
 
 #
 # Extending Restriction
-#
+# =====================
 def get_typename(self):
     return owlready2.class_construct._restriction_type_2_label[self.type]
+
 
 setattr(Restriction, 'get_typename', get_typename)
 
 
 #
 # Extending Namespace
-#
+# ===================
 orig_namespace_init = Namespace.__init__
 
 
@@ -200,12 +200,13 @@ def namespace_init(self, world_or_ontology, base_iri, name=None):
     if self.name.endswith('.ttl'):
         self.name = self.name[:-4]
 
+
 setattr(Namespace, '__init__', namespace_init)
 
 
 #
 # Extending Metadata
-#
+# ==================
 def keys(self):
     """Return a generator over annotation property names associates
     with this ontology."""
@@ -213,6 +214,7 @@ def keys(self):
     for a in ns.annotation_properties():
         if ns._has_data_triple_spod(s=ns.storid, p=a.storid):
             yield a
+
 
 def items(self):
     """Return a generator over annotation property (name, value_list)
@@ -222,15 +224,19 @@ def items(self):
         if ns._has_data_triple_spod(s=ns.storid, p=a.storid):
             yield a, self.__getattr__(a.name)
 
+
 def has(self, name):
     """Returns true if `name`"""
     return name in set(self.keys())
 
+
 def __contains__(self, name):
     return self.has(name)
 
+
 def __iter__(self):
     return self.keys()
+
 
 def __setattr__(self, attr, values):
     metadata__setattr__save(self, attr, values)
@@ -250,6 +256,7 @@ def __setattr__(self, attr, values):
         for e in lst[1:]:
             o, d = owlready2.to_literal(e)
             ns._set_data_triple_spod(ns.storid, prop.storid, o, d)
+
 
 def __repr__(self):
     s = ['Metadata(']
