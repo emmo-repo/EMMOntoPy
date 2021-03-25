@@ -5,6 +5,7 @@ import sys
 import re
 import datetime
 import tempfile
+import types
 import urllib.request
 import xml.etree.ElementTree as ET
 
@@ -22,6 +23,9 @@ FMAP = {
     'rdfxml': 'xml',
     'owl': 'xml',
 }
+
+# Format extension supported by owlready2
+OWLREADY2_FORMATS = 'rdfxml', 'owl', 'xml', 'ntriples'
 
 
 def isinteractive():
@@ -420,7 +424,7 @@ def infer_version(iri, version_iri):
     return version
 
 
-def ontology_annotation(onto, imported=True):
+def annotate_with_ontology(onto, imported=True):
     """Annotate all entities with the `ontology_name` and `ontology_iri`.
 
     If imported is true, imported ontologies will also be annotated.
@@ -429,4 +433,14 @@ def ontology_annotation(onto, imported=True):
     that is lost when ontologies are inferred and/or squashed.  This
     function retain this information as annotations.
     """
-    pass
+    with onto:
+        if 'ontology_name' not in onto.world._props:
+            types.new_class('ontology_name', (owlready2.AnnotationProperty, ))
+        if 'ontology_iri' not in onto.world._props:
+            types.new_class('ontology_iri', (owlready2.AnnotationProperty, ))
+
+    for e in onto.get_entities(imported=imported):
+        if onto.name not in getattr(e, 'ontology_name'):
+            setattr(e, 'ontology_name', onto.name)
+        if onto.base_iri not in getattr(e, 'ontology_iri'):
+            setattr(e, 'ontology_iri', onto.base_iri)

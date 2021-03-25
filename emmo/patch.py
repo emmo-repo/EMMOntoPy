@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """This module injects some additional methods into owlready2 classes."""
+import types
 
 import owlready2
 from owlready2 import ThingClass, PropertyClass, Thing, Restriction, Namespace
+from owlready2 import Metadata
 
 
 # Improve default rendering of entities
@@ -23,7 +25,7 @@ owlready2.set_render_func(render_func)
 
 #
 # Extending ThingClass (classes)
-#
+# ==============================
 def get_preferred_label(self):
     """Returns the preferred label as a string (not list).
 
@@ -117,9 +119,18 @@ def get_indirect_is_a(self, skip_classes=True):
     return s
 
 
+# Inject methods into ThingClass
+setattr(ThingClass, '__dir__', _dir)
+setattr(ThingClass, 'get_preferred_label', get_preferred_label)
+setattr(ThingClass, 'get_parents', get_parents)
+setattr(ThingClass, 'get_annotations', get_class_annotations)
+setattr(ThingClass, 'disjoint_with', disjoint_with)
+setattr(ThingClass, 'get_indirect_is_a', get_indirect_is_a)
+
+
 #
 # Extending PropertyClass (properties)
-#
+# ====================================
 def get_property_annotations(self, all=False, imported=True):
     """Returns a dict with non-empty property annotations.
 
@@ -137,9 +148,14 @@ def get_property_annotations(self, all=False, imported=True):
         return {k: v for k, v in d.items() if v}
 
 
+setattr(PropertyClass, 'get_preferred_label', get_preferred_label)
+setattr(PropertyClass, 'get_parents', get_parents)
+setattr(PropertyClass, 'get_annotations', get_property_annotations)
+
+
 #
 # Extending Thing (individuals)
-#
+# =============================
 def get_individual_annotations(self, all=False, imported=True):
     """Returns a dict with non-empty individual annotations.
 
@@ -157,16 +173,25 @@ def get_individual_annotations(self, all=False, imported=True):
         return {k: v for k, v in d.items() if v}
 
 
+# Method names for individuals must be different from method names for classes
+type.__setattr__(Thing, 'get_preflabel', get_preferred_label)
+type.__setattr__(Thing, 'get_individual_annotations',
+                 get_individual_annotations)
+
+
 #
 # Extending Restriction
-#
+# =====================
 def get_typename(self):
     return owlready2.class_construct._restriction_type_2_label[self.type]
 
 
+setattr(Restriction, 'get_typename', get_typename)
+
+
 #
 # Extending Namespace
-#
+# ===================
 orig_namespace_init = Namespace.__init__
 
 
@@ -176,23 +201,79 @@ def namespace_init(self, world_or_ontology, base_iri, name=None):
         self.name = self.name[:-4]
 
 
-# Inject methods into Owlready2 classes
-setattr(ThingClass, '__dir__', _dir)
-setattr(ThingClass, 'get_preferred_label', get_preferred_label)
-setattr(ThingClass, 'get_parents', get_parents)
-setattr(ThingClass, 'get_annotations', get_class_annotations)
-setattr(ThingClass, 'disjoint_with', disjoint_with)
-setattr(ThingClass, 'get_indirect_is_a', get_indirect_is_a)
-
-setattr(PropertyClass, 'get_preferred_label', get_preferred_label)
-setattr(PropertyClass, 'get_parents', get_parents)
-setattr(PropertyClass, 'get_annotations', get_property_annotations)
-
-setattr(Restriction, 'get_typename', get_typename)
-
 setattr(Namespace, '__init__', namespace_init)
 
-# Method names for individuals must be different from method names for classes
-type.__setattr__(Thing, 'get_preflabel', get_preferred_label)
-type.__setattr__(Thing, 'get_individual_annotations',
-                 get_individual_annotations)
+
+#
+# Extending Metadata
+# ==================
+def keys(self):
+    """Return a generator over annotation property names associates
+    with this ontology."""
+    ns = self.namespace
+    for a in ns.annotation_properties():
+        if ns._has_data_triple_spod(s=ns.storid, p=a.storid):
+            yield a
+
+
+def items(self):
+    """Return a generator over annotation property (name, value_list)
+    pairs associates with this ontology."""
+    ns = self.namespace
+    for a in ns.annotation_properties():
+        if ns._has_data_triple_spod(s=ns.storid, p=a.storid):
+            yield a, self.__getattr__(a.name)
+
+
+def has(self, name):
+    """Returns true if `name`"""
+    return name in set(self.keys())
+
+
+def __contains__(self, name):
+    return self.has(name)
+
+
+def __iter__(self):
+    return self.keys()
+
+
+def __setattr__(self, attr, values):
+    metadata__setattr__save(self, attr, values)
+    # Make sure that __setattr__() also updates the triplestore
+    lst = self.__dict__[attr]
+    if lst:
+        ns = self.namespace
+        annot = {
+            a.name: a for a in owlready2.AnnotationProperty.__subclasses__()}
+        if attr in annot:
+            prop = annot[attr]
+        else:
+            with ns.ontology:
+                prop = types.new_class(attr, (owlready2.AnnotationProperty, ))
+        o, d = owlready2.to_literal(lst[0])
+        ns._set_data_triple_spod(ns.storid, prop.storid, o, d)
+        for e in lst[1:]:
+            o, d = owlready2.to_literal(e)
+            ns._set_data_triple_spod(ns.storid, prop.storid, o, d)
+
+
+def __repr__(self):
+    s = ['Metadata(']
+    for a, values in self.items():
+        sep = '\n' + ' ' * (len(a.name) + 4)
+        s.append('  %s=[%s],' % (a.name, sep.join(repr(v) for v in values)))
+    s.append(')')
+    return '\n'.join(s)
+
+
+metadata__setattr__save = Metadata.__setattr__
+setattr(Metadata, 'keys', keys)
+setattr(Metadata, 'items', items)
+setattr(Metadata, 'has', has)
+setattr(Metadata, '__contains__', __contains__)
+setattr(Metadata, '__iter__', __iter__)
+setattr(Metadata, '__setattr__', __setattr__)
+setattr(Metadata, '__repr__', __repr__)
+Metadata.__getitem__ = Metadata.__getattr__
+Metadata.__setitem__ = Metadata.__setattr__
