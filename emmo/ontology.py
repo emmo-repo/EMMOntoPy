@@ -150,6 +150,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
         if self._dir_name:
             s.update(e.name for e in lst if hasattr(e, 'name'))
 
+        # updateing with namespace keys
+        # Attention: What to do if a prefLabel coincides with a namespace key?
+        s.update(self.namespaces.keys())
+        
         s.difference_update({None})  # get rid of possible None
         return sorted(s)
 
@@ -158,6 +162,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
     def __getattr__(self, name):
         attr = super().__getattr__(name)
+        print(name)
         if not attr:
             attr = self.get_by_label(name)
         return attr
@@ -185,6 +190,11 @@ class Ontology(owlready2.Ontology, OntoGraph):
         The current implementation also supports "*" as a wildcard
         matching any number of characters.
         """
+        print(value)
+        if value in self.namespaces:
+            return self.namespaces[value]
+
+
         if label_annotations is None:
             annotations = (la.name for la in self.label_annotations)
         else:
@@ -197,6 +207,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         if self._special_labels and value in self._special_labels:
             return self._special_labels[value]
+
+        #if value
 
         raise NoSuchLabelError('No label annotations matches %s' % value)
 
@@ -297,6 +309,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 'owl:Nothing': owlready2.Nothing,
                 'owl:topObjectProperty': t,
             }
+        self.namespaces = {e.namespace.name:e.namespace for e in self.get_entities()}
 
         return self
 
