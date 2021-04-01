@@ -153,7 +153,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # updateing with namespace keys
         # Attention: What to do if a prefLabel coincides with a namespace key?
         s.update(self.namespaces.keys())
-        
+
         s.difference_update({None})  # get rid of possible None
         return sorted(s)
 
@@ -191,16 +191,16 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """
         if namespace:
             try:
-
-                return self.get_by_label_all(value, 
-                                         label_annotations=label_annotations, 
-                                         namespace=namespace)[0]
-            except IndexError: #Should ad secial exception here
-                raise NoSuchLabelError('No label annotations matches %s in namespace %s' %(value,namespace))
+                return self.get_by_label_all(
+                            value,
+                            label_annotations=label_annotations,
+                            namespace=namespace)[0]
+            except IndexError:  # Should ad secial exception here
+                raise NoSuchLabelError('No label annotations matches %s'
+                                       'in namespace %s' % (value, namespace))
 
         if value in self.namespaces:
             return self.namespaces[value]
-
 
         if label_annotations is None:
             annotations = (la.name for la in self.label_annotations)
@@ -234,7 +234,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
             e.append(self._special_labels[value])
 
         if namespace:
-            return [l  for l in e if l.namespace.name == namespace]
+            return [ns for ns in e if ns.namespace.name == namespace]
         return e
 
     def add_label_annotation(self, iri):
@@ -317,7 +317,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 'owl:Nothing': owlready2.Nothing,
                 'owl:topObjectProperty': t,
             }
-        self.namespaces = {e.namespace.name:e.namespace for e in self.get_entities()}
+        self.namespaces = {e.namespace.name: e.namespace
+                           for e in self.get_entities()}
 
         return self
 
@@ -983,28 +984,3 @@ class Ontology(owlready2.Ontology, OntoGraph):
         n1 = self.number_of_generations(cls1, cca)
         n2 = self.number_of_generations(cls2, cca)
         return 2 * ccadepth / (n1 + n2 + 2 * ccadepth)
-
-class Namespace(owlready2.Namespace):
-    
-    def __dir__(self):
-        s = set(super().__dir__())
-        lst = list(self.ontology.get_entities(imported=self.ontology._dir_imported))
-        if self.ontology._dir_preflabel:
-            s.update(e.prefLabel.first() for e in lst if hasattr(e, 'prefLabel'))
-        if self.ontology._dir_label:
-            s.update(e.label.first() for e in lst if hasattr(e, 'label'))
-        if self.ontology._dir_name:
-            s.update(e.name for e in lst if hasattr(e, 'name'))
-        s.difference_update({None})  # get rid of possible None
-        return sorted(s)
-
-    def __getitem__(self, name):
-        return self.__getattr__(name)
-
-    def __getattr__(self, name):
-        attr = super().__getattr__(name)
-        if not attr:
-            attr = self.ontology.get_by_label(name, namespace=self.name)
-        return attr
-
-
