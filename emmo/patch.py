@@ -169,11 +169,37 @@ def get_typename(self):
 #
 orig_namespace_init = Namespace.__init__
 
-
 def namespace_init(self, world_or_ontology, base_iri, name=None):
     orig_namespace_init(self, world_or_ontology, base_iri, name)
     if self.name.endswith('.ttl'):
         self.name = self.name[:-4]
+
+
+def ns_get_by_label(self, value, label_annotations=None):
+    return self.ontology.get_by_label(value, label_annotations=label_annotations, 
+                                      namespace=self.name)
+def ns_get_by_label_all(self, value, label_annotations=None):
+    return self.ontology.get_by_label_all(value, label_annotations=label_annotations,
+                                      namespace=self.name)
+
+
+def namespace__dir__(self, world_or_ontology, base_iri, name=None):
+    #s = set(super().__dir__())
+    lst = list(self.ontology.get_entities(imported=self.ontology._dir_imported))
+    #if self.ontology._dir_preflabel:
+    #    s.update(e.prefLabel.first() for e in lst if hasattr(e, 'prefLabel'))
+    #if self.ontology._dir_label:
+    #    s.update(e.label.first() for e in lst if hasattr(e, 'label'))
+    #if self.ontology._dir_name:
+    #    s.update(e.name for e in lst if hasattr(e, 'name'))
+    #s.difference_update({None})  # get rid of possible None
+    return sorted(s) 
+
+def namespace__getattr__(self, name):
+    attr = super().__getattr__(name)
+    if not attr:
+        attr = self.get_by_label(name)
+    return attrr
 
 
 # Inject methods into Owlready2 classes
@@ -191,8 +217,36 @@ setattr(PropertyClass, 'get_annotations', get_property_annotations)
 setattr(Restriction, 'get_typename', get_typename)
 
 setattr(Namespace, '__init__', namespace_init)
+setattr(Namespace, 'get_by_label', ns_get_by_label)
+setattr(Namespace, 'get_by_label_all', ns_get_by_label_all)
+#setattr(Namespace, '__getattr__', namespace__getattr__)
 
 # Method names for individuals must be different from method names for classes
 type.__setattr__(Thing, 'get_preflabel', get_preferred_label)
 type.__setattr__(Thing, 'get_individual_annotations',
                  get_individual_annotations)
+
+#class Namespace(owlready2.Namespace):
+#
+#    def __dir__(self):
+#        s = set(super().__dir__())
+#        lst = list(self.ontology.get_entities(imported=self.ontology._dir_imported))
+#        if self.ontology._dir_preflabel:
+#            s.update(e.prefLabel.first() for e in lst if hasattr(e, 'prefLabel'))
+#        if self.ontology._dir_label:
+#            s.update(e.label.first() for e in lst if hasattr(e, 'label'))
+#        if self.ontology._dir_name:
+#            s.update(e.name for e in lst if hasattr(e, 'name'))
+#        s.difference_update({None})  # get rid of possible None
+#        return sorted(s)
+#
+#    def __getitem__(self, name):
+#        return self.__getattr__(name)
+#
+#    def __getattr__(self, name):
+#        attr = super().__getattr__(name)
+#        if not attr:
+#            attr = self.ontology.get_by_label(name, namespace=self.name)
+#
+#        return attrr
+

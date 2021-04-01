@@ -190,9 +190,13 @@ class Ontology(owlready2.Ontology, OntoGraph):
         matching any number of characters.
         """
         if namespace:
-            return self.get_by_label_all(value, 
+            try:
+
+                return self.get_by_label_all(value, 
                                          label_annotations=label_annotations, 
                                          namespace=namespace)[0]
+            except IndexError: #Should ad secial exception here
+                raise NoSuchLabelError('No label annotations matches %s in namespace %s' %(value,namespace))
 
         if value in self.namespaces:
             return self.namespaces[value]
@@ -210,8 +214,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         if self._special_labels and value in self._special_labels:
             return self._special_labels[value]
-
-        #if value
 
         raise NoSuchLabelError('No label annotations matches %s' % value)
 
