@@ -162,7 +162,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
     def __getattr__(self, name):
         attr = super().__getattr__(name)
-        print(name)
         if not attr:
             attr = self.get_by_label(name)
         return attr
@@ -174,7 +173,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Play nice with inspect...
         pass
 
-    def get_by_label(self, value, label_annotations=None):
+    def get_by_label(self, value, label_annotations=None, namespace=None):
         """Returns entity by label annotation value `value`.
 
         `label_annotations` is a sequence of label annotation names to look up.
@@ -190,7 +189,11 @@ class Ontology(owlready2.Ontology, OntoGraph):
         The current implementation also supports "*" as a wildcard
         matching any number of characters.
         """
-        print(value)
+        if namespace:
+            return self.get_by_label_all(value, 
+                                         label_annotations=label_annotations, 
+                                         namespace=namespace)[0]
+
         if value in self.namespaces:
             return self.namespaces[value]
 
@@ -212,7 +215,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         raise NoSuchLabelError('No label annotations matches %s' % value)
 
-    def get_by_label_all(self, value, label_annotations=None):
+    def get_by_label_all(self, value, label_annotations=None, namespace=None):
         """Like get_by_label(), but returns a list with all matching labels.
 
         Returns an empty list if no matches could be found.
@@ -227,6 +230,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
             e.extend(self.world.search(**{key: value}))
         if self._special_labels and value in self._special_labels:
             e.append(self._special_labels[value])
+
+        if namespace:
+            return [l  for l in e if l.namespace.name == namespace]
         return e
 
     def add_label_annotation(self, iri):
@@ -975,3 +981,28 @@ class Ontology(owlready2.Ontology, OntoGraph):
         n1 = self.number_of_generations(cls1, cca)
         n2 = self.number_of_generations(cls2, cca)
         return 2 * ccadepth / (n1 + n2 + 2 * ccadepth)
+
+class Namespace(owlready2.Namespace):
+    
+    def __dir__(self):
+        s = set(super().__dir__())
+        lst = list(self.ontology.get_entities(imported=self.ontology._dir_imported))
+        if self.ontology._dir_preflabel:
+            s.update(e.prefLabel.first() for e in lst if hasattr(e, 'prefLabel'))
+        if self.ontology._dir_label:
+            s.update(e.label.first() for e in lst if hasattr(e, 'label'))
+        if self.ontology._dir_name:
+            s.update(e.name for e in lst if hasattr(e, 'name'))
+        s.difference_update({None})  # get rid of possible None
+        return sorted(s)
+
+    def __getitem__(self, name):
+        return self.__getattr__(name)
+
+    def __getattr__(self, name):
+        attr = super().__getattr__(name)
+        if not attr:
+            attr = self.ontology.get_by_label(name, namespace=self.name)
+        return attr
+
+
