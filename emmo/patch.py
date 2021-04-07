@@ -195,6 +195,13 @@ def ns_dir(self):
     s.difference_update({None})
     return sorted(s)
 
+orig_namespace_getattr = Namespace.__getattr__
+
+def ns_getattr(self, name):
+    value = orig_namespace_getattr(self, name)
+    if not value:
+       value = self.get_by_label(name) 
+    return value
 
 # Inject methods into Owlready2 classes
 setattr(ThingClass, '__dir__', _dir)
@@ -214,8 +221,8 @@ setattr(Namespace, '__init__', namespace_init)
 setattr(Namespace, 'get_by_label', ns_get_by_label)
 setattr(Namespace, 'get_by_label_all', ns_get_by_label_all)
 setattr(Namespace, '__dir__', ns_dir)
-# setattr(Namespace, '__getattr__', ns_getattr)
-# setattr(Namespace, '__getitem__', ns_getitem)
+setattr(Namespace, '__getattr__', ns_getattr)
+setattr(Namespace, '__getitem__', ns_getattr)
 
 # Method names for individuals must be different from method names for classes
 type.__setattr__(Thing, 'get_preflabel', get_preferred_label)
