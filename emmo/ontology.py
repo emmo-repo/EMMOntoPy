@@ -199,7 +199,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 raise NoSuchLabelError('No label annotations matches %s'
                                        'in namespace %s' % (value, namespace))
 
-        if value in self.namespaces:
+        if 'namespaces' in self.__dict__ and value in self.namespaces:
             return self.namespaces[value]
 
         if label_annotations is None:
