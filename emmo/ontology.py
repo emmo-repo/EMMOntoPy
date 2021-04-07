@@ -20,10 +20,11 @@ import rdflib
 from rdflib.util import guess_format
 
 import owlready2
-from owlready2 import locstr
+from owlready2 import locstr, Namespace
 
 from .utils import asstring, read_catalog, infer_version, convert_imported
 from .utils import FMAP, OWLREADY2_FORMATS, isinteractive, ReadCatalogError
+from .utils import stripname
 from .factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 from .ontograph import OntoGraph  # FIXME: deprecate...
 
@@ -38,6 +39,11 @@ DEFAULT_LABEL_ANNOTATIONS = [
 
 class NoSuchLabelError(LookupError, AttributeError):
     """Error raised when a label cannot be found."""
+    pass
+
+
+class IRINotInOntologyError(NameError):
+    """Error raised when an expected IRI is not the ontology."""
     pass
 
 
@@ -183,34 +189,39 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Play nice with inspect...
         pass
 
-    def get_by_label(self, value, label_annotations=None, namespace=None):
-        """Returns entity by label annotation value `value`.
+    def get_by_label(self, label, label_annotations=None, namespace=None):
+        """Returns entity with label annotation `label`.
 
         `label_annotations` is a sequence of label annotation names to look up.
         Defaults to the `label_annotations` property.
 
+        If `namespace` is provided, it should be the last component of
+        the base iri of an ontology (with trailing slash (/) or hash
+        (#) stripped off).  The search for a matching label will be
+        limited to this namespace.
+
         If several entities have the same label, only the one which is
-        found first is returned.
+        found first is returned.  Use get_by_label_all() to get all matches.
 
         A NoSuchLabelError is raised if `label` cannot be found.
 
         Note
         ----
         The current implementation also supports "*" as a wildcard
-        matching any number of characters.
-        """
-        if namespace:
-            try:
-                return self.get_by_label_all(
-                            value,
-                            label_annotations=label_annotations,
-                            namespace=namespace)[0]
-            except IndexError:  # Should ad secial exception here
-                raise NoSuchLabelError('No label annotations matches %s'
-                                       'in namespace %s' % (value, namespace))
+        matching any number of characters.  This may change in the future.
 
-        if 'namespaces' in self.__dict__ and value in self.namespaces:
-            return self.namespaces[value]
+        """
+        if 'namespaces' in self.__dict__:
+            if namespace:
+                if namespace in self.namespaces:
+                    for e in self.get_by_label_all(
+                            label, label_annotations=label_annotations):
+                        if e.namespace == self.namespaces[namespace]:
+                            return e
+                raise NoSuchLabelError('No label annotations matches "%s" in '
+                                       'namespace "%s"' % (label, namespace))
+            elif label in self.namespaces:
+                return self.namespaces[label]
 
         if label_annotations is None:
             annotations = (la.name for la in self.label_annotations)
@@ -218,20 +229,20 @@ class Ontology(owlready2.Ontology, OntoGraph):
             annotations = (s.name if hasattr(s, 'storid') else s
                            for s in label_annotations)
         for key in annotations:
-            e = self.search_one(**{key: value})
+            e = self.search_one(**{key: label})
             if e:
                 return e
 
-        if self._special_labels and value in self._special_labels:
-            return self._special_labels[value]
+        if self._special_labels and label in self._special_labels:
+            return self._special_labels[label]
 
-        e = self.world[self.base_iri + value]
+        e = self.world[self.base_iri + label]
         if e:
             return e
 
-        raise NoSuchLabelError('No label annotations matches %s' % value)
+        raise NoSuchLabelError('No label annotations matches %s' % label)
 
-    def get_by_label_all(self, value, label_annotations=None, namespace=None):
+    def get_by_label_all(self, label, label_annotations=None, namespace=None):
         """Like get_by_label(), but returns a list with all matching labels.
 
         Returns an empty list if no matches could be found.
@@ -241,11 +252,11 @@ class Ontology(owlready2.Ontology, OntoGraph):
         else:
             annotations = (s.name if hasattr(s, 'storid') else s
                            for s in label_annotations)
-        e = self.world.search(**{annotations.__next__(): value})
+        e = self.world.search(**{annotations.__next__(): label})
         for key in annotations:
-            e.extend(self.world.search(**{key: value}))
-        if self._special_labels and value in self._special_labels:
-            e.append(self._special_labels[value])
+            e.extend(self.world.search(**{key: label}))
+        if self._special_labels and label in self._special_labels:
+            e.append(self._special_labels[label])
 
         if namespace:
             return [ns for ns in e if ns.namespace.name == namespace]
@@ -258,7 +269,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """
         la = iri if hasattr(iri, 'storid') else self.world[iri]
         if not la:
-            raise ValueError('IRI not in ontology: %s' % iri)
+            raise IRINotInOntologyError('IRI not in ontology: %s' % iri)
         if la not in self._label_annotations:
             self._label_annotations.append(la)
 
@@ -321,7 +332,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Enable optimised search by get_by_label()
         if not self._special_labels:
             for iri in DEFAULT_LABEL_ANNOTATIONS:
-                self.add_label_annotation(iri)
+                try:
+                    self.add_label_annotation(iri)
+                except IRINotInOntologyError:
+                    pass
             t = self.world['http://www.w3.org/2002/07/owl#topObjectProperty']
             self._special_labels = {
                 'Thing': owlready2.Thing,
@@ -331,8 +345,13 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 'owl:Nothing': owlready2.Nothing,
                 'owl:topObjectProperty': t,
             }
-        self.namespaces = {e.namespace.name: e.namespace
-                           for e in self.get_entities()}
+
+        self.namespaces = {}
+        for e in self.get_entities():
+            ns = e.namespace
+            if isinstance(ns, owlready2.Ontology):
+                ns = Namespace(self, stripname(e.iri))
+            self.namespaces[ns.name] = ns
 
         return self
 
@@ -748,6 +767,14 @@ class Ontology(owlready2.Ontology, OntoGraph):
         if sync_imported:
             for onto in self.imported_ontologies:
                 onto.sync_attributes()
+
+        if 'namespaces' not in self.__dict__:
+            self.namespaces = {}
+        for e in self.get_entities():
+            ns = e.namespace
+            if isinstance(ns, owlready2.Ontology):
+                ns = Namespace(self, stripname(e.iri))
+            self.namespaces[ns.name] = ns
 
     def get_relations(self):
         """Returns a generator for all relations."""

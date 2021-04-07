@@ -216,7 +216,7 @@ def ns_get_by_label_all(self, value, label_annotations=None):
 def ns_dir(self):
     s = set(object.__dir__(self))
     lst = self.get_by_label_all('*')
-    s.update(e.prefLabel.first() for e in lst if hasattr(e, 'prefLabel'))
+    s.update(get_preferred_label(e) for e in lst)
     s.difference_update({None})
     return sorted(s)
 

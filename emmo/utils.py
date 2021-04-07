@@ -36,6 +36,16 @@ def isinteractive():
                 hasattr(sys, 'ps1'))
 
 
+def stripname(iri):
+    """Returns `iri` with its name-part stripped off."""
+    if '#' in iri:
+        return iri.rsplit('#', 1)[0] + '#'
+    elif '/' in iri:
+        return iri.rsplit('/', 1)[0] + '/'
+    else:
+        return iri + '#'
+
+
 def asstring(expr, link='{name}', n=0, exclude_object=False):
     """Returns a string representation of `expr`, which may be an entity,
     restriction, or logical expression of these.  `link` is a format
