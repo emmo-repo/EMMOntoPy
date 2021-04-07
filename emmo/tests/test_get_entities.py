@@ -18,7 +18,5 @@ assert o.models.SpecialTestClass.namespace.name == 'models'
 assert o.testonto.SpecialTestClass.prefLabel.first() == 'SpecialTestClass'
 assert o.testonto.SpecialTestClass.namespace.name == 'testonto'
 
-assert o.get_by_label('SpecialTestClass', namespace = 'models').namespace.name == 'models'
-
-
-
+assert o.get_by_label('SpecialTestClass',
+                      namespace='models').namespace.name == 'models'
