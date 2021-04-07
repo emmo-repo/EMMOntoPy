@@ -23,7 +23,7 @@ import owlready2
 from owlready2 import locstr
 
 from .utils import asstring, read_catalog, infer_version, convert_imported
-from .utils import FMAP, isinteractive, ReadCatalogError
+from .utils import FMAP, OWLREADY2_FORMATS, isinteractive, ReadCatalogError
 from .factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 from .ontograph import OntoGraph  # FIXME: deprecate...
 
@@ -158,7 +158,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
         return sorted(s)
 
     def __getitem__(self, name):
-        return self.__getattr__(name)
+        item = super().__getitem__(name)
+        if not item:
+            item = self.get_by_label(name)
+        return item
 
     def __getattr__(self, name):
         attr = super().__getattr__(name)
@@ -167,7 +170,14 @@ class Ontology(owlready2.Ontology, OntoGraph):
         return attr
 
     def __contains__(self, other):
-        return bool(self.world[other])
+        if self.world[other]:
+            return True
+        try:
+            self.get_by_label(other)
+        except NoSuchLabelError:
+            return False
+        else:
+            return True
 
     def __objclass__(self):
         # Play nice with inspect...
@@ -214,6 +224,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         if self._special_labels and value in self._special_labels:
             return self._special_labels[value]
+
+        e = self.world[self.base_iri + value]
+        if e:
+            return e
 
         raise NoSuchLabelError('No label annotations matches %s' % value)
 
@@ -399,7 +413,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         try:
             self.loaded = False
             fmt = format if format else guess_format(resolved_url, fmap=FMAP)
-            if fmt and fmt not in ('xml', 'ntriples'):
+            if fmt and fmt not in OWLREADY2_FORMATS:
                 # Convert filename to rdfxml before passing it to owlready2
                 g = rdflib.Graph()
                 g.parse(resolved_url, format=fmt)
@@ -456,7 +470,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                                         format='rdfxml',
                                         **kwargs)
 
-    def save(self, filename=None, format='rdfxml', overwrite=False, **kwargs):
+    def save(self, filename=None, format=None, overwrite=False, **kwargs):
         """Writes the ontology to file.
 
         If `overwrite` is true and filename exists, it will be removed
@@ -464,7 +478,18 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """
         if overwrite and filename and os.path.exists(filename):
             os.remove(filename)
-        super().save(file=filename, format=format, **kwargs)
+
+        if not format:
+            format = guess_format(filename, fmap=FMAP)
+
+        if format in OWLREADY2_FORMATS:
+            super().save(file=filename, format=format, **kwargs)
+        else:
+            with tempfile.NamedTemporaryFile(suffix='.owl') as f:
+                super().save(file=f.name, format='rdfxml', **kwargs)
+                g = rdflib.Graph()
+                g.parse(f.name, format='xml')
+                g.serialize(destination=filename, format=format)
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
@@ -734,8 +759,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
     def get_annotations(self, entity):
         """Returns a dict with annotations for `entity`.  Entity may be given
         either as a ThingClass object or as a label."""
-        warnings.warn('Ontology.get_annotations(cls) is deprecated.  '
-                      'Use cls.get_annotations() instead.', DeprecationWarning)
+        warnings.warn('Ontology.get_annotations(entity) is deprecated.  '
+                      'Use entity.get_annotations() instead.',
+                      DeprecationWarning)
 
         if isinstance(entity, str):
             entity = self.get_by_label(entity)
@@ -871,7 +897,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
             if not version:
                 raise TypeError(
                     'Either `version` or `version_iri` must be provided')
-            version_iri = self.base_iri.rstrip('#/') + '/' + version
+            head, tail = self.base_iri.rstrip('#/').rsplit('/', 1)
+            version_iri = '/'.join([head, version, tail])
 
         self._add_obj_triple_spo(
             s=self.storid,
