@@ -12,7 +12,7 @@ testonto = os.path.join(os.path.dirname(__file__), 'testonto', 'testonto.ttl')
 o = get_ontology(testonto).load()
 assert o.TestClass.prefLabel.first() == 'TestClass'
 
-assert o.models.SpecialTestClass.prefLabel.first() == 'SpecielTestClass'
+assert o.models.SpecialTestClass.prefLabel.first() == 'SpecialTestClass'
 assert o.models.SpecialTestClass.namespace.name == 'models'
 
 assert o.testonto.SpecialTestClass.prefLabel.first() == 'SpecialTestClass'

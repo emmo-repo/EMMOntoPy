@@ -331,9 +331,21 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 'owl:Nothing': owlready2.Nothing,
                 'owl:topObjectProperty': t,
             }
+        #self.namespaces = {}
+        #for e in self.get_entities():
+        #    print('enentity', e, e.namespace)
+        #    print(isinstance(e.namespace, owlready2.Ontology))
+        #    if isinstance(e.namespace, owlready2.Ontology):
+        #        if (not base_iri.endswith("/")) and (not base_iri.endswith("#")):
+        #                 base_iri = "%s#" % base_iri
+        #        self.namespaces[e.namespace.name] = Namspace(e.namespace, base_iri, 
+        #                name or base_iri[:-1].rsplit('/',1)[-1])
+        #        #print(e.namespace.get_namespace(e.iri.rstrip(e.name)))
+        #    else:
+        #        self.namespaces[e.namespace.name] = e.namespace
+
         self.namespaces = {e.namespace.name: e.namespace
                            for e in self.get_entities()}
-
         return self
 
     def _load(self, only_local=False, filename=None, format=None,
@@ -748,6 +760,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
         if sync_imported:
             for onto in self.imported_ontologies:
                 onto.sync_attributes()
+
+        #if 'namespaces' not in self.__dict__:
+        #    self.namespaces = {}
+        #self.namespaces.update
 
     def get_relations(self):
         """Returns a generator for all relations."""
