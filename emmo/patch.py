@@ -119,6 +119,17 @@ def get_indirect_is_a(self, skip_classes=True):
     return s
 
 
+def get_namespace(self, base_iri, name=""):
+    """Returns the namespace of `self` with given base iri. If `name` is
+    provided, it will be used as the name of the namespace."""
+    if not base_iri.endswith(('/', '#')):
+        base_iri += '#'
+    r = self._namespaces.get(base_iri)
+    if r is not None and not isinstance(r, owlready2.Ontology):
+        return r
+    return Namespace(self, base_iri, name or base_iri[:-1].rsplit("/", 1)[-1])
+
+
 # Inject methods into ThingClass
 setattr(ThingClass, '__dir__', _dir)
 setattr(ThingClass, 'get_preferred_label', get_preferred_label)
@@ -126,6 +137,7 @@ setattr(ThingClass, 'get_parents', get_parents)
 setattr(ThingClass, 'get_annotations', get_class_annotations)
 setattr(ThingClass, 'disjoint_with', disjoint_with)
 setattr(ThingClass, 'get_indirect_is_a', get_indirect_is_a)
+setattr(ThingClass, 'get_namespace', get_namespace)
 
 
 #
@@ -216,7 +228,7 @@ def ns_get_by_label_all(self, value, label_annotations=None):
 def ns_dir(self):
     s = set(object.__dir__(self))
     lst = self.get_by_label_all('*')
-    s.update(e.prefLabel.first() for e in lst if hasattr(e, 'prefLabel'))
+    s.update(get_preferred_label(e) for e in lst)
     s.difference_update({None})
     return sorted(s)
 
