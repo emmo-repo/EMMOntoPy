@@ -79,13 +79,16 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         exceptions.update(self.get_config(
             'test_number_of_labels.exceptions', ()))
 
-        for e in self.onto.get_entities():
-            if repr(e) not in exceptions:
-                with self.subTest(entity=e, label=get_label(e),
-                                  prefLabels=e.prefLabel):
-                    if not repr(e).startswith('owl.'):
-                        self.assertTrue(hasattr(e, 'prefLabel'))
-                        self.assertEqual(1, len(e.prefLabel))
+        if 'prefLabel' in self.onto.world._props:
+            for e in self.onto.get_entities():
+                if repr(e) not in exceptions:
+                    with self.subTest(entity=e, label=get_label(e),
+                                      prefLabels=e.prefLabel):
+                        if not repr(e).startswith('owl.'):
+                            self.assertTrue(hasattr(e, 'prefLabel'))
+                            self.assertEqual(1, len(e.prefLabel))
+        else:
+            self.fail('ontology has no prefLabel')
 
     def test_class_label(self):
         """Check that class labels are CamelCase and valid identifiers.
@@ -119,21 +122,28 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
         If they start with "is" they should also end with "Of".
         """
-        exceptions = set()
+        exceptions = set((
+            'EMMORelation',
+        ))
         exceptions.update(self.get_config(
             'test_object_property_label.exceptions', ()))
 
         for op in self.onto.object_properties():
             if repr(op) not in exceptions:
                 for label in op.label:
-                    if label == 'EMMORelation':
-                        continue
-                    self.assertTrue(label[0].islower())
-                    if label.startswith('has'):
-                        self.assertTrue(label[3].isupper())
-                    if label.startswith('is'):
-                        self.assertTrue(label[2].isupper())
-                        self.assertTrue(label.endswith('Of'))
+                    with self.subTest(entity=op, label=label):
+                        self.assertTrue(label[0].islower(),
+                                        'label start with lowercase')
+                        if label.startswith('has'):
+                            self.assertTrue(label[3].isupper(),
+                                            'what follows "has" must be '
+                                            'uppercase')
+                        if label.startswith('is'):
+                            self.assertTrue(label[2].isupper(),
+                                            'what follows "is" must be '
+                                            'uppercase')
+                            self.assertTrue(label.endswith(('Of', 'With')),
+                                            'should end with "Of" or "With"')
 
 
 class TestFunctionalEMMOConventions(TestEMMOConventions):
