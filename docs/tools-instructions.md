@@ -145,10 +145,10 @@ Tool for visualizing ontologies.
       --path PATH           Paths where imported ontologies can be found. May be
                             provided as a comma-separated string and/or with
                             multiple --path options.
-      --reasoner [{HermiT,Pellet}]
+      --reasoner [{HermiT,Pellet,FaCT++}]
                             Run given reasoner on the ontology. Valid reasoners
-                            are "HermiT" (default) and "Pellet". Note: these
-                            reasoners doesn't work well with EMMO.
+                            are "FaCT++" (default), "HermiT" and "Pellet". 
+                            Note: FaCT++ is preferred with EMMO.
       --root ROOT, -r ROOT  Name of root node in the graph. Defaults to all
                             classes.
       --leafs LEAFS         Leafs nodes for plotting sub-graphs. May be provided
@@ -225,10 +225,10 @@ positional arguments:
       --path PATH           Paths where imported ontologies can be found. May be
                             provided as a comma-separated string and/or with
                             multiple --path options.
-      --reasoner [{HermiT,Pellet}]
+      --reasoner [{HermiT,Pellet,FaCT++}]
                             Run given reasoner on the ontology. Valid reasoners
-                            are "HermiT" (default) and "Pellet". Note: these
-                            reasoners doesn't work well with EMMO.
+                            are "FaCT++" (default), "HermiT" and "Pellet".
+                            Note: FaCT++ is preferred with EMMO.
       --template FILE, -t FILE
                             ontodoc input template. If not provided, a simple
                             default template will be used. Don't confuse it with
