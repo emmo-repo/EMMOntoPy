@@ -145,7 +145,7 @@ Tool for visualizing ontologies.
       --path PATH           Paths where imported ontologies can be found. May be
                             provided as a comma-separated string and/or with
                             multiple --path options.
-      --reasoner [{HermiT,Pellet,FaCT++}]
+      --reasoner [{FaCT++,HermiT,Pellet}]
                             Run given reasoner on the ontology. Valid reasoners
                             are "FaCT++" (default), "HermiT" and "Pellet". 
                             Note: FaCT++ is preferred with EMMO.
@@ -225,7 +225,7 @@ positional arguments:
       --path PATH           Paths where imported ontologies can be found. May be
                             provided as a comma-separated string and/or with
                             multiple --path options.
-      --reasoner [{HermiT,Pellet,FaCT++}]
+      --reasoner [{FaCT++,HermiT,Pellet}]
                             Run given reasoner on the ontology. Valid reasoners
                             are "FaCT++" (default), "HermiT" and "Pellet".
                             Note: FaCT++ is preferred with EMMO.
