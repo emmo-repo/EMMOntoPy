@@ -234,7 +234,7 @@ class OntoDoc:
         doc = []
 
         # Header
-        label = getlabel(item)
+        label = asstring(item)
         doc.append(header_style.format(
             '', level=header_level, label=label, lowerlabel=label.lower()))
 
