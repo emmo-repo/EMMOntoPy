@@ -28,16 +28,16 @@ import owlready2
 from .utils import asstring
 
 
-def getlabel(e):
-    """Returns the label of entity `e`."""
-    if hasattr(e, 'prefLabel'):
-        return e.prefLabel.first()
-    elif hasattr(e, '__name__'):
-        return e.__name__
-    elif hasattr(e, 'name'):
-        return str(e.name)
-    else:
-        return repr(e)
+#def getlabel(e):
+#    """Returns the label of entity `e`."""
+#    if hasattr(e, 'prefLabel'):
+#        return e.prefLabel.first()
+#    elif hasattr(e, '__name__'):
+#        return e.__name__
+#    elif hasattr(e, 'name'):
+#        return str(e.name)
+#    else:
+#        return repr(e)
 
 
 class OntoGraph:
@@ -277,7 +277,7 @@ class OntoGraph:
         """
         import pydot
 
-        nodes = graph.get_node(getlabel(entity))
+        nodes = graph.get_node(asstring(entity))
         if not nodes:
             return
         node = nodes[0]
@@ -288,7 +288,7 @@ class OntoGraph:
                 pass
             elif isinstance(e, (owlready2.ObjectPropertyClass,
                                 owlready2.PropertyClass)):
-                label = getlabel(e)
+                label = asstring(e)
                 nodes = graph.get_node(label)
                 if nodes:
                     kw = style.copy()
@@ -301,12 +301,12 @@ class OntoGraph:
                         edge.set_constraint(constraint)
                     graph.add_edge(edge)
             elif isinstance(e, owlready2.Restriction):
-                rname = getlabel(e.property)
+                rname = asstring(e.property)
                 rtype = owlready2.class_construct._restriction_type_2_label[
                     e.type]
 
                 if relations is True or rname in relations:
-                    vname = getlabel(e.value)
+                    vname = asstring(e.value)
                     others = graph.get_node(vname)
 
                     # Only proceede if there is only one node named `vname`
@@ -357,7 +357,7 @@ class OntoGraph:
         elif isinstance(relations, str):
             relations = [relations]
         relations = set(r if isinstance(r, str) else
-                        getlabel(r) if len(r.label) == 1 else r.name
+                        asstring(r) if len(r.label) == 1 else r.name
                         for r in relations)
 
         if visited is None:
@@ -383,11 +383,11 @@ class OntoGraph:
         if root in visited:
             if hasattr(self, '_verbose') and self._verbose:
                 warnings.warn('Circular dependency of class %r' %
-                              getlabel(root))
+                              asstring(root))
             return graph
         visited.add(root)
 
-        label = getlabel(root)
+        label = asstring(root)
         nodes = graph.get_node(label)
         if nodes:
             if len(nodes) > 1:
@@ -410,7 +410,7 @@ class OntoGraph:
             return graph
 
         for sc in root.subclasses():
-            label = getlabel(sc)
+            label = asstring(sc)
             if self.is_individual(label):
                 subnode = pydot.Node(label, **style.get('individual', {}))
                 subnode.set_name(label)
