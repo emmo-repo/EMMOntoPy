@@ -28,18 +28,6 @@ import owlready2
 from .utils import asstring
 
 
-#def getlabel(e):
-#    """Returns the label of entity `e`."""
-#    if hasattr(e, 'prefLabel'):
-#        return e.prefLabel.first()
-#    elif hasattr(e, '__name__'):
-#        return e.__name__
-#    elif hasattr(e, 'name'):
-#        return str(e.name)
-#    else:
-#        return repr(e)
-
-
 class OntoGraph:
     """A mixin class used by emmo.ontology.Ontology that adds
     functionality for generating graph representations of the ontology.
@@ -193,7 +181,7 @@ class OntoGraph:
                 parent = r.is_a.first()
                 if (parent is None or parent is owlready2.Thing):
                     break
-                label = getlabel(parent)
+                label = asstring(parent)
                 if self.is_defined(label):
                     node = pydot.Node(label, **style.get('defined_class', {}))
                     # If label contains a hyphen, the node name will
@@ -211,7 +199,7 @@ class OntoGraph:
                     elif edgelabels:
                         kw['label'] = 'is_a'
 
-                    rootnode = graph.get_node(getlabel(r))[0]
+                    rootnode = graph.get_node(asstring(r))[0]
                     edge = pydot.Edge(rootnode, node, **kw)
                     graph.add_edge(edge)
                 if (isinstance(parents, str) and label == parents):
