@@ -53,7 +53,7 @@ def main():
         help='Paths where imported ontologies can be found.  May be provided '
         'as a comma-separated string and/or with multiple --path options.')
     parser.add_argument(
-        '--reasoner', nargs='?', const='HermiT', 
+        '--reasoner', nargs='?', const='FaCT++', 
         choices=['FaCT++','HermiT', 'Pellet'],
         help='Run given reasoner on the ontology.  Valid reasoners are '
         '"FaCT++" (default), "HermiT" and "Pellet".Note: FaCT++ is preferred '
