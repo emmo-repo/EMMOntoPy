@@ -16,7 +16,7 @@ import yaml
 import owlready2
 
 from .utils import asstring, camelsplit
-from .graph import OntoGraph, getlabel, filter_classes
+from .graph import OntoGraph, filter_classes
 
 
 class OntoDoc:
