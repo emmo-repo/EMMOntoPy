@@ -45,11 +45,15 @@ def main():
         'ontology.  This option is used together with --local and '
         'defaults to "catalog-v001.xml".')
     parser.add_argument(
+        '--no-catalog', action='store_false', dest='url_from_catalog',
+        default=None,
+        help='Whether to not read catalog file even if it exists.')
+    parser.add_argument(
         '--path', action='append', default=[],
         help='Paths where imported ontologies can be found.  May be provided '
         'as a comma-separated string and/or with multiple --path options.')
     parser.add_argument(
-        '--reasoner', nargs='?', const='HermiT', 
+        '--reasoner', nargs='?', const='FaCT++', 
         choices=['FaCT++','HermiT', 'Pellet'],
         help='Run given reasoner on the ontology.  Valid reasoners are '
         '"FaCT++" (default), "HermiT" and "Pellet".Note: FaCT++ is preferred '
@@ -154,7 +158,8 @@ def main():
                      '\n  '.join(world.ontologies.keys()))
     onto = world.get_ontology(args.iri)
     try:
-        onto.load(only_local=args.local, url_from_catalog=True,
+        onto.load(only_local=args.local, 
+                  url_from_catalog=args.url_from_catalog,
                   catalog_file=args.catalog_file)
     except owlready2.OwlReadyOntologyParsingError as e:
         parser.error('error parsing %r: %s' % (args.iri, e))
