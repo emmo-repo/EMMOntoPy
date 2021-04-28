@@ -16,7 +16,7 @@ import yaml
 import owlready2
 
 from .utils import asstring, camelsplit
-from .graph import OntoGraph, getlabel, filter_classes
+from .graph import OntoGraph, filter_classes
 
 
 class OntoDoc:
@@ -234,7 +234,7 @@ class OntoDoc:
         doc = []
 
         # Header
-        label = getlabel(item)
+        label = asstring(item)
         doc.append(header_style.format(
             '', level=header_level, label=label, lowerlabel=label.lower()))
 

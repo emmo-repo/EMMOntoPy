@@ -47,7 +47,7 @@ def asstring(expr, link='{name}', n=0, exclude_object=False):
     def fmt(e):
         """Returns the formatted label of `e`."""
         name = None
-        for attr in ('prefLabel', 'label'):
+        for attr in ('prefLabel', 'label', '__name__', 'name'):
             if hasattr(e, attr) and getattr(e, attr):
                 name = getattr(e, attr)
                 if not isinstance(name, str) and hasattr(name, '__getitem__'):

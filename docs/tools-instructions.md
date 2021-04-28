@@ -284,7 +284,7 @@ Tool for converting between different ontology formats
 
 ### Usage:
 
-    ontodoc [options] inputfile outputfile
+    ontoconvert [options] inputfile outputfile
 
 ### dependencies:
 - rdflib

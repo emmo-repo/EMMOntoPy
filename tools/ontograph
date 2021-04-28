@@ -12,7 +12,7 @@ sys.path.insert(1, rootdir)
 
 from emmo import World, onto_path  # noqa: E402
 from emmo.graph import OntoGraph, plot_modules  # noqa: E402
-
+from emmo.utils import asstring
 import owlready2  # noqa: E402
 
 
@@ -204,7 +204,7 @@ def main():
         if args.output:
             if len(roots) > 1:
                 head, tail = args.output.rsplit('.', maxsplit=1)
-                output = '.'.join((head, root, tail))
+                output = '.'.join((head, asstring(root), tail))
             else:
                 output = args.output
             graph.save(output, format=args.format)
