@@ -20,8 +20,8 @@ FMAP = {
     'n3': 'ntriples',
     'nt': 'ntriples',
     'ttl': 'turtle',
-    'rdfxml': 'xml',
     'owl': 'xml',
+    'rdfxml': 'xml',
 }
 
 # Format extension supported by owlready2

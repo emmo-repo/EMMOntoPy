@@ -461,7 +461,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
             format = guess_format(filename, fmap=FMAP)
 
         if format in OWLREADY2_FORMATS:
-            super().save(file=filename, format=format, **kwargs)
+            revmap = {v: k for k, v in FMAP.items()}
+            super().save(file=filename, format=revmap[format], **kwargs)
         else:
             with tempfile.NamedTemporaryFile(suffix='.owl') as f:
                 super().save(file=f.name, format='rdfxml', **kwargs)
