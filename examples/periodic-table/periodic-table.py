@@ -99,13 +99,13 @@ onto.set_version(
 onto.dir_label = False
 thisdir = os.path.abspath(os.path.dirname(__file__))
 
-onto.metadata.abstract = (
+onto.metadata.abstract.append(en(
     'The periodic table domain ontology provide a simple reference '
     'implementation of all atoms in the periodic table with a few '
     'selected conventional properties.  It is ment as both an example '
     'for other domain ontologies as well as a useful assert by itself. '
     'Periodic table is released under the Creative Commons Attribution 4.0 '
-    'International license (CC BY 4.0).')
+    'International license (CC BY 4.0).'))
 
 
 onto.save(os.path.join(thisdir,'periodic-table.ttl'), overwrite=True)
