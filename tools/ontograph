@@ -12,7 +12,7 @@ sys.path.insert(1, rootdir)
 
 from emmo import World, onto_path  # noqa: E402
 from emmo.graph import OntoGraph, plot_modules  # noqa: E402
-
+from emmo.utils import asstring
 import owlready2  # noqa: E402
 
 
@@ -45,14 +45,19 @@ def main():
         'ontology.  This option is used together with --local and '
         'defaults to "catalog-v001.xml".')
     parser.add_argument(
+        '--no-catalog', action='store_false', dest='url_from_catalog',
+        default=None,
+        help='Whether to not read catalog file even if it exists.')
+    parser.add_argument(
         '--path', action='append', default=[],
         help='Paths where imported ontologies can be found.  May be provided '
         'as a comma-separated string and/or with multiple --path options.')
     parser.add_argument(
-        '--reasoner', nargs='?', const='HermiT', choices=['HermiT', 'Pellet'],
+        '--reasoner', nargs='?', const='FaCT++', 
+        choices=['FaCT++','HermiT', 'Pellet'],
         help='Run given reasoner on the ontology.  Valid reasoners are '
-        '"HermiT" (default) and "Pellet".  Note: these reasoners do not '
-        'work well with EMMO.')
+        '"FaCT++" (default), "HermiT" and "Pellet".Note: FaCT++ is preferred '
+        ' with EMMO.')
     parser.add_argument(
         '--root', '-r',
         help='Name of root node in the graph.  Defaults to all classes.')
@@ -153,7 +158,8 @@ def main():
                      '\n  '.join(world.ontologies.keys()))
     onto = world.get_ontology(args.iri)
     try:
-        onto.load(only_local=args.local, url_from_catalog=True,
+        onto.load(only_local=args.local, 
+                  url_from_catalog=args.url_from_catalog,
                   catalog_file=args.catalog_file)
     except owlready2.OwlReadyOntologyParsingError as e:
         parser.error('error parsing %r: %s' % (args.iri, e))
@@ -198,7 +204,7 @@ def main():
         if args.output:
             if len(roots) > 1:
                 head, tail = args.output.rsplit('.', maxsplit=1)
-                output = '.'.join((head, root, tail))
+                output = '.'.join((head, asstring(root), tail))
             else:
                 output = args.output
             graph.save(output, format=args.format)
