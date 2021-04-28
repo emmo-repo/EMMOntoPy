@@ -2,10 +2,8 @@ from emmo import World
 import ase
 import types
 import owlready2
-import rdflib
-from rdflib.namespace import OWL, DCTERMS, RDFS
-from rdflib import URIRef, Literal
 import os
+
 
 # define function that returns a string in English in owlready2
 def en(s):
@@ -108,4 +106,4 @@ onto.metadata.abstract.append(en(
     'International license (CC BY 4.0).'))
 
 
-onto.save(os.path.join(thisdir,'periodic-table.ttl'), overwrite=True)
+onto.save(os.path.join(thisdir, 'periodic-table.ttl'), overwrite=True)
