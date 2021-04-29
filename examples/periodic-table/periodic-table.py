@@ -105,5 +105,29 @@ onto.metadata.abstract.append(en(
     'Periodic table is released under the Creative Commons Attribution 4.0 '
     'International license (CC BY 4.0).'))
 
-
+onto.metadata.title.append(en('Periodic table'))
+onto.metadata.creator.append(en('Jesper Friis'))
+onto.metadata.contributor.append(en('SINTEF'))
+onto.metadata.creator.append(en('Emanuele Ghedini'))
+onto.metadata.contributor.append(en('University of Bologna'))
+onto.metadata.publisher.append(en('EMMC ASBL'))
+onto.metadata.publisher.append(en('EMMC ASBL'))
+#onto.metadata.licence.append(en(
+#    'https://creativecommons.org/licenses/by/4.0/legalcode'))
+version = '1.0.0-beta'
+onto.metadata.versionInfo.append(en(version))
+onto.metadata.comment.append(en(
+    'The EMMO requires FacT++ reasoner plugin in order to visualize all'
+    'inferences and class hierarchy (ctrl+R hotkey in Protege).'))
+onto.metadata.comment.append(en(
+    'This ontology is generated with data from the ASE Python package.'))
+onto.metadata.comment.append(en(
+    'Contacts:'
+    'Gerhard Goldbeck'
+    'Goldbeck Consulting Ltd (UK)'
+    'email: gerhard@goldbeck-consulting.com'
+    'Emanuele Ghedini'
+    'University of Bologna (IT)'
+    'email: emanuele.ghedini@unibo.it'
+    ))
 onto.save(os.path.join(thisdir, 'periodic-table.ttl'), overwrite=True)
