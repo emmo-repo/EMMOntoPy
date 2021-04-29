@@ -86,7 +86,7 @@ with onto:
         assignment.hasParticipant = [EMMOCommittee, at, number]
         print(
             at.hasConventionalQuantity[0].hasQuantityValue[0].hasNumericalData,
-            at.is_a[0].hasChemicalSymbol[0],
+            at.is_a[0].hasChemicalSymbol,
             at.name,
             at.hasConventionalQuantity[1].hasQuantityValue[0].hasNumericalData)
 
