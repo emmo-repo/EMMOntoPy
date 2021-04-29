@@ -111,8 +111,8 @@ onto.metadata.contributor.append(en('SINTEF'))
 onto.metadata.creator.append(en('Emanuele Ghedini'))
 onto.metadata.contributor.append(en('University of Bologna'))
 onto.metadata.publisher.append(en('EMMC ASBL'))
-# onto.metadata.licence.append(en(
-#    'https://creativecommons.org/licenses/by/4.0/legalcode'))
+onto.metadata.license.append(en(
+    'https://creativecommons.org/licenses/by/4.0/legalcode'))
 version = '1.0.0-beta'
 onto.metadata.versionInfo.append(en(version))
 onto.metadata.comment.append(en(
