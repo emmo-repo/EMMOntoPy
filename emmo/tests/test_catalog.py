@@ -6,6 +6,7 @@ import os
 thisdir = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
 from emmo.utils import read_catalog, ReadCatalogError  # noqa: E402, F401
+from emmo.utils import write_catalog  # noqa: E402, F401
 
 
 ontodir = os.path.join(thisdir, 'testonto')
@@ -54,3 +55,8 @@ else:
 d = read_catalog('https://raw.githubusercontent.com/emmo-repo/EMMO/master/'
                  'catalog-v001.xml', baseuri='/abc')
 assert '/abc/emmo.owl' in d.values()
+
+
+write_catalog(d, 'tmp-catalog.xml')
+d2 = read_catalog('tmp-catalog.xml')
+assert d2 == d
