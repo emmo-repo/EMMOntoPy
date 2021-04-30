@@ -51,6 +51,7 @@ def get_label(e):
     else:
         return repr(e)
 
+
 def asstring(expr, link='{name}', n=0, exclude_object=False):
     """Returns a string representation of `expr`, which may be an entity,
     restriction, or logical expression of these.  `link` is a format
