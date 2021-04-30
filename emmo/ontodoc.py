@@ -15,7 +15,7 @@ from tempfile import NamedTemporaryFile, TemporaryDirectory
 import yaml
 import owlready2
 
-from .utils import asstring, camelsplit
+from .utils import asstring, camelsplit, get_label
 from .graph import OntoGraph, filter_classes
 
 
@@ -234,7 +234,7 @@ class OntoDoc:
         doc = []
 
         # Header
-        label = asstring(item)
+        label = get_label(item)
         doc.append(header_style.format(
             '', level=header_level, label=label, lowerlabel=label.lower()))
 
