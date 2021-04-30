@@ -285,6 +285,30 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
         return iris
 
 
+def write_catalog(mappings, output='catalog-v001.xml'):
+    """Writes a catalog file.
+
+    `mappings` is a dict mapping ontology IRIs (name) to actual
+    locations (uri).  It has the same format as the dict returned
+    by read_catalog().
+
+    `output` it the name of the generated file.
+    """
+    s = [
+        '<?xml version="1.0" encoding="UTF-8" standalone="no"?>',
+        '<catalog prefer="public" '
+        'xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">',
+        '    <group id="Folder Repository, directory=, recursive=true, '
+        'Auto-Update=false, version=2" prefer="public" xml:base="">',
+        ]
+    for k, v in dict(mappings).items():
+        s.append(f'        <uri name="{k}" uri="{v}"/>')
+    s.append('    </group>')
+    s.append('</catalog>')
+    with open(output, 'wt') as f:
+        f.write('\n'.join(s) + '\n')
+
+
 def convert_imported(input, output, input_format=None, output_format='xml',
                      url_from_catalog=None, catalog_file='catalog-v001.xml'):
     """Convert imported ontologies.
