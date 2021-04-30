@@ -288,7 +288,7 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
 def write_catalog(mappings, output='catalog-v001.xml'):
     """Writes a catalog file.
 
-    `mappings` is a dict mapping ontology IRIs (name) to actial
+    `mappings` is a dict mapping ontology IRIs (name) to actual
     locations (uri).  It has the same format as the dict returned
     by read_catalog().
 
