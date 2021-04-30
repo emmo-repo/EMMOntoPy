@@ -1,4 +1,5 @@
 from emmo import World
+from emmo.utils import write_catalog
 import ase
 import types
 import owlready2
@@ -13,12 +14,15 @@ def en(s):
 
 # Load emmo
 world = World()  # to make it extensible for when an ontology gets very large
-emmo = world.get_ontology(
-        'https://raw.githubusercontent.com/emmo-repo/EMMO/periodic-table/'
-        'middle/middle.ttl').load()
+emmopath = ('https://raw.githubusercontent.com/emmo-repo/EMMO/periodic-table/'
+            'middle/middle.ttl')
+emmo = world.get_ontology(emmopath).load()
 emmo.sync_python_names()
 
+catalog_mappings = {emmo.base_iri.rstrip('#'): emmopath}
+
 # Create new ontology
+
 onto = world.get_ontology('http://emmo.info/emmo/domain/periodic-table#')
 onto.base_iri = 'http://emmo.info/emmo#'
 onto.imported_ontologies.append(emmo)
@@ -92,10 +96,11 @@ with onto:
 
 # Save new ontology as owl
 onto.sync_attributes(name_policy='uuid', name_prefix='EMMO_')
-onto.set_version(
-    version_iri="http://emmo.info/emmo/1.0.0-beta/domain/periodic-table")
+version_iri="http://emmo.info/emmo/1.0.0-beta/domain/periodic-table"
+onto.set_version(version_iri=version_iri)
 onto.dir_label = False
 thisdir = os.path.abspath(os.path.dirname(__file__))
+catalog_mappings[version_iri] = '.periodic-table.ttl'
 
 onto.metadata.abstract.append(en(
     'The periodic table domain ontology provide a simple reference '
@@ -131,3 +136,4 @@ onto.metadata.comment.append(en(
     'email: emanuele.ghedini@unibo.it'
     ))
 onto.save(os.path.join(thisdir, 'periodic-table.ttl'), overwrite=True)
+write_catalog(catalog_mappings)
