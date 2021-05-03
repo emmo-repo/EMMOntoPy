@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 import owlready2
 import graphviz
 
-from .utils import asstring
+from .utils import asstring, get_label
 from .ontology import get_ontology
 
 typenames = owlready2.class_construct._restriction_type_2_label
@@ -269,9 +269,9 @@ class OntoGraph:
             included_ontologies=included_ontologies)
 
         nodeattrs = {}
-        nodeattrs[asstring(root)] = self.style.get('root', {})
+        nodeattrs[get_label(root)] = self.style.get('root', {})
         for leaf in leafs:
-            nodeattrs[asstring(leaf)] = self.style.get('leaf', {})
+            nodeattrs[get_label(leaf)] = self.style.get('leaf', {})
 
         self.add_entities(
             entities=classes,
@@ -283,7 +283,8 @@ class OntoGraph:
                                               strict=True)
         if parents:
             for parent in parents:
-                nodeattrs[asstring(parent)] = self.style.get('parent_node', {})
+                nodeattrs[
+                        get_label(parent)] = self.style.get('parent_node', {})
             self.add_entities(
                 entities=parents,
                 relations=relations, edgelabels=edgelabels,
@@ -310,7 +311,7 @@ class OntoGraph:
     def add_node(self, name, nodeattrs=None, **attrs):
         """Add node with given name. `attrs` are graphviz node attributes."""
         e = self.ontology[name] if isinstance(name, str) else name
-        label = asstring(e)
+        label = get_label(e)
         if label not in self.nodes.union(self.excluded_nodes):
             kw = self.get_node_attrs(e, nodeattrs=nodeattrs, attrs=attrs)
             if hasattr(e, 'iri'):
@@ -326,10 +327,10 @@ class OntoGraph:
     def add_edge(self, subject, predicate, object, edgelabel=None, **attrs):
         """Add edge corresponding for ``(subject, predicate, object)``
         triplet."""
-        subject = subject if isinstance(subject, str) else asstring(subject)
-        predicate = predicate if isinstance(predicate, str) else asstring(
+        subject = subject if isinstance(subject, str) else get_label(subject)
+        predicate = predicate if isinstance(predicate, str) else get_label(
             predicate)
-        object = object if isinstance(object, str) else asstring(object)
+        object = object if isinstance(object, str) else get_label(object)
         if subject in self.excluded_nodes or object in self.excluded_nodes:
             return
         if not isinstance(subject, str) or not isinstance(object, str):
@@ -372,14 +373,14 @@ class OntoGraph:
             self.addconstructs if addconstructs is None else addconstructs)
 
         e = self.ontology[source] if isinstance(source, str) else source
-        label = asstring(e)
+        label = get_label(e)
         for r in e.is_a:
 
             # isA
             if isinstance(r, (owlready2.ThingClass,
                               owlready2.ObjectPropertyClass)):
                 if 'all' in relations or 'isA' in relations:
-                    rlabel = asstring(r)
+                    rlabel = get_label(r)
                     # FIXME - we actually want to include individuals...
                     if isinstance(e, owlready2.Thing):
                         continue
@@ -393,11 +394,11 @@ class OntoGraph:
 
             # restriction
             elif isinstance(r, owlready2.Restriction):
-                rname = asstring(r.property)
+                rname = get_label(r.property)
                 if 'all' in relations or rname in relations:
                     rlabel = '%s %s' % (rname, typenames[r.type])
                     if isinstance(r.value, owlready2.ThingClass):
-                        obj = asstring(r.value)
+                        obj = get_label(r.value)
                         if not self.add_missing_node(r.value, addnodes):
                             continue
                     elif (isinstance(r.value, owlready2.ClassConstruct) and
@@ -412,7 +413,7 @@ class OntoGraph:
             # inverse
             if isinstance(r, owlready2.Inverse):
                 if 'all' in relations or 'inverse' in relations:
-                    rlabel = asstring(r)
+                    rlabel = get_label(r)
                     if not self.add_missing_node(r, addnodes=addnodes):
                         continue
                     if r not in e.get_parents(strict=True):
@@ -440,7 +441,7 @@ class OntoGraph:
         Returns true if the node exists or is added, false otherwise."""
         addnodes = self.addnodes if addnodes is None else addnodes
         e = self.ontology[name] if isinstance(name, str) else name
-        label = asstring(e)
+        label = get_label(e)
         if label not in self.nodes:
             if addnodes:
                 self.add_node(e, **self.style.get('added_node', {}))
@@ -451,23 +452,23 @@ class OntoGraph:
     def add_class_construct(self, c):
         """Adds class construct `c` and return its label."""
         self.add_node(c, **self.style.get('class_construct', {}))
-        label = asstring(c)
+        label = get_label(c)
         if isinstance(c, owlready2.Or):
             for cls in c.Classes:
-                clslabel = asstring(cls)
+                clslabel = get_label(cls)
                 if clslabel not in self.nodes and self.addnodes:
                     self.add_node(cls)
                 if clslabel in self.nodes:
-                    self.add_edge(asstring(cls), 'isA', label)
+                    self.add_edge(get_label(cls), 'isA', label)
         elif isinstance(c, owlready2.And):
             for cls in c.Classes:
-                clslabel = asstring(cls)
+                clslabel = get_label(cls)
                 if clslabel not in self.nodes and self.addnodes:
                     self.add_node(cls)
                 if clslabel in self.nodes:
-                    self.add_edge(label, 'isA', asstring(cls))
+                    self.add_edge(label, 'isA', get_label(cls))
         elif isinstance(c, owlready2.Not):
-            clslabel = asstring(c.Class)
+            clslabel = get_label(c.Class)
             if clslabel not in self.nodes and self.addnodes:
                 self.add_node(c.Class)
             if clslabel in self.nodes:
@@ -479,7 +480,7 @@ class OntoGraph:
         """Returns attributes for node or edge `name`.  `attrs` overrides
         the default style."""
         e = self.ontology[name] if isinstance(name, str) else name
-        label = asstring(e)
+        label = get_label(e)
         # class
         if isinstance(e, owlready2.ThingClass):
             if self.ontology.is_defined(e):
@@ -534,7 +535,7 @@ class OntoGraph:
                 for r in e.mro():
                     if r in rels:
                         break
-                rattrs = relations[asstring(r)] if r in rels else {}
+                rattrs = relations[get_label(r)] if r in rels else {}
                 # object property
                 if isinstance(e, (owlready2.ObjectPropertyClass,
                                   owlready2.ObjectProperty)):

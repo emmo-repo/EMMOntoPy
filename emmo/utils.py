@@ -20,8 +20,8 @@ FMAP = {
     'n3': 'ntriples',
     'nt': 'ntriples',
     'ttl': 'turtle',
-    'rdfxml': 'xml',
     'owl': 'xml',
+    'rdfxml': 'xml',
 }
 
 # Format extension supported by owlready2
@@ -34,6 +34,22 @@ def isinteractive():
     return bool(hasattr(__builtins__, '__IPYTHON__') or
                 sys.flags.interactive or
                 hasattr(sys, 'ps1'))
+
+
+def get_label(e):
+    """Returns the label of entity `e`."""
+    if hasattr(e, 'prefLabel') and e.prefLabel:
+        return e.prefLabel.first()
+    if hasattr(e, 'label') and e.label:
+        return e.label.first()
+    elif hasattr(e, '__name__'):
+        return e.__name__
+    elif hasattr(e, 'name'):
+        return str(e.name)
+    elif isinstance(e, str):
+        return e
+    else:
+        return repr(e)
 
 
 def asstring(expr, link='{name}', n=0, exclude_object=False):
