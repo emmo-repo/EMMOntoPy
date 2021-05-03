@@ -19,7 +19,7 @@ emmopath = ('https://raw.githubusercontent.com/emmo-repo/emmo-repo.github.io/'
 emmo = world.get_ontology(emmopath).load()
 emmo.sync_python_names()
 
-emmo.base_iri = emmo.base_iri.rstrip('/#')#+'1.0.0-beta'
+emmo.base_iri = emmo.base_iri.rstrip('/#')
 catalog_mappings = {emmo.base_iri: emmopath}
 
 # Create new ontology
@@ -97,7 +97,7 @@ with onto:
 
 # Save new ontology as owl
 onto.sync_attributes(name_policy='uuid', name_prefix='EMMO_')
-version_iri="http://emmo.info/emmo/1.0.0-beta/domain/periodic-table"
+version_iri = "http://emmo.info/emmo/1.0.0-beta/domain/periodic-table"
 onto.set_version(version_iri=version_iri)
 onto.dir_label = False
 thisdir = os.path.abspath(os.path.dirname(__file__))
