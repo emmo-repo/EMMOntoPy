@@ -14,12 +14,13 @@ def en(s):
 
 # Load emmo
 world = World()  # to make it extensible for when an ontology gets very large
-emmopath = ('https://raw.githubusercontent.com/emmo-repo/EMMO/periodic-table/'
-            'middle/middle.ttl')
+emmopath = ('https://raw.githubusercontent.com/emmo-repo/emmo-repo.github.io/'
+            'master/versions/1.0.0-beta/emmo-inferred-chemistry2.ttl')
 emmo = world.get_ontology(emmopath).load()
 emmo.sync_python_names()
 
-catalog_mappings = {emmo.base_iri.rstrip('#'): emmopath}
+emmo.base_iri = emmo.base_iri.rstrip('/#')#+'1.0.0-beta'
+catalog_mappings = {emmo.base_iri: emmopath}
 
 # Create new ontology
 
@@ -31,8 +32,8 @@ onto.sync_python_names()
 # Make classes required that are not already in EMMO
 with onto:
 
-    class EMMOConventionalQuantityAssignment(
-            onto.ConventionalQuantitativePropertyAssignment):
+    class EMMOAgreedQuantativePropertyAssignment(
+            onto.AgreedQuantitativePropertyAssignment):
         """The class of conventional assignments performed by the EMMO
         Comittee."""
 
@@ -85,7 +86,7 @@ with onto:
         at = AtomClass(lname,
                        hasConventionalQuantity=[number, mass])
 
-        assignment = EMMOConventionalQuantityAssignment(
+        assignment = EMMOAgreedQuantativePropertyAssignment(
             lname + 'AtomicAtomicNumberAssignment')
         assignment.hasParticipant = [EMMOCommittee, at, number]
         print(
