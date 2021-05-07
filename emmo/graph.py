@@ -824,12 +824,12 @@ def check_module_dependencies(modules, verbose=True):
     return mods
 
 
-def cytoscapegraph(graph, onto=None):
+def cytoscapegraph(graph, onto=None, infobox=None):
     """Returns and instance of icytoscape-figure for an
     instance Graph of OntoGraph, the accomanying ontology
     is required for mouse actions"""
 
-    from ipywidgets import Output, VBox, HBox
+    from ipywidgets import Output, VBox, HBox, GridBox, Layout
     from IPython.display import display, Image
     from pathlib import Path
     import networkx as nx
@@ -950,6 +950,9 @@ def cytoscapegraph(graph, onto=None):
         cytofig.on('node', 'click', log_clicks)
         cytofig.on('node', 'mouseover', log_mouseovers)  # , remove=True)
         cytofig.on('node', 'mouseout', out.clear_output(wait=True))
+        if infobox == 'right':
+            return HBox([cytofig, out])
+        else:
+            return VBox([cytofig, out])
 
-
-    return [cytofig, out]
+    return cytofig
