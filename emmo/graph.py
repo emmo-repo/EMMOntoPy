@@ -829,7 +829,7 @@ def cytoscapegraph(graph, onto=None):
     instance Graph of OntoGraph, the accomanying ontology
     is required for mouse actions"""
 
-    from ipywidgets import Output
+    from ipywidgets import Output, VBox, HBox
     from IPython.display import display, Image
     from pathlib import Path
     import networkx as nx
@@ -915,12 +915,13 @@ def cytoscapegraph(graph, onto=None):
         },
     ])
 
-    out = Output()
+    out = Output(layout={'border': '1px solid black'})
 
     if onto is not None:
         # TODO: Fix elucidations/annotations, onlt print them if they exist
         def log_clicks(node):
             with out:
+                print(onto.get_by_label(node["data"]["label"]))
                 p = onto.get_by_label(node["data"]["label"]).get_parents()
                 print(f'parents: {p}')
                 try:
@@ -938,13 +939,17 @@ def cytoscapegraph(graph, onto=None):
                         display(Image(fig, width=100))
                 except Exception:  # FIXME: make this more specific
                     pass
+                out.clear_output(wait=True)
 
         def log_mouseovers(node):
             with out:
                 print(onto.get_by_label(node["data"]["label"]))
                 # print(f'mouseover: {pformat(node)}')
+            out.clear_output(wait=True)
 
         cytofig.on('node', 'click', log_clicks)
         cytofig.on('node', 'mouseover', log_mouseovers)  # , remove=True)
+        cytofig.on('node', 'mouseout', out.clear_output(wait=True))
+
 
     return [cytofig, out]
