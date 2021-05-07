@@ -861,10 +861,9 @@ def cytoscapegraph(graph, onto=None):
     #  for d in cytoscape_data(L)['elements']['edges']]
     data = cytoscape_data(G)['elements']
     for d in data['edges']:
-            d['data']['label'] = d['data']['label'].rsplit(
-                                    ' ', 1)[0].lstrip('"')
-            d['data']['colour'] = colours[d['data']['label']]
-            d['data']['style'] = styles[d['data']['label']]
+        d['data']['label'] = d['data']['label'].rsplit(' ', 1)[0].lstrip('"')
+        d['data']['colour'] = colours[d['data']['label']]
+        d['data']['style'] = styles[d['data']['label']]
 
     cytofig = ipycytoscape.CytoscapeWidget()
     cytofig.graph.add_graph_from_json(data, directed=True)
