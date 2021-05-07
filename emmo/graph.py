@@ -822,3 +822,116 @@ def check_module_dependencies(modules, verbose=True):
             print('%s -> %s' % (iri, dep))
 
     return mods
+
+def cytoscapegraph(graph, onto=None):
+    """Returns and instance of icytoscape-figure for an 
+    instance Graph of OntoGraph, the accomanying ontology
+    is required for mouse actions"""
+
+    from ipywidgets import Output
+    from IPython.display import display, Image
+    from pathlib import Path
+    import networkx as nx
+    import pydotplus
+    import ipycytoscape
+    from networkx.readwrite.json_graph import cytoscape_data
+    # Define the styles, this has to be aligned with the graphviz values
+    dotplus = pydotplus.graph_from_dot_data(graph.dot.source)
+    # if graph doesn't have multiedges, use dotplus.set_strict(true)
+    G = nx.nx_pydot.from_pydot(dotplus)
+
+    line_colours = {'black':['isA'],
+                    'blue':['hasSpatialPart', 'hasProperPart', 'hasMember'],
+                    'red': ['hasParticipant', 'Inverse(hasParticipant)',
+                            'hasProperParticipant',
+                            'Inverse(hasProperParticipant)']}
+
+    colours = {v: k for k in line_colours for v in line_colours[k]}
+
+    line_styles = {'solid':['isA', 'hasParticipant', 
+                            'Inverse(hasParticipant)'],
+                   'dashed': ['hasSpatialPart', 'hasProperParticipant', 
+                              'hasProperPart', 'hasMember',
+                              'Inverse(hasProperParticipant)']}
+
+    styles = {v: k for k in line_styles for v in line_styles[k]}
+
+    #[(print(type(d['data']))) for d in cytoscape_data(L)['elements']['edges']]
+    data = cytoscape_data(G)['elements']
+    for d in data['edges']:
+            d['data']['label'] = d['data']['label'].rsplit(
+                                    ' ', 1)[0].lstrip('"')
+            d['data']['colour'] = colours[d['data']['label']]
+            d['data']['style'] = styles[d['data']['label']]
+
+   
+    cytofig = ipycytoscape.CytoscapeWidget()
+    cytofig.graph.add_graph_from_json(data, directed=True)
+
+    cytofig.set_style([{'selector': 'node',
+                        'css': {'content': 'data(label)',
+                             #'text-valign': 'center',
+                             #'color': 'white',
+                             #'text-outline-width': 2,
+                             #'text-outline-color': 'red',
+                             'background-color': 'blue'
+                             }
+                    },
+                    {'selector': 'node:parent', 
+                     'css': {'background-opacity': 0.333}
+                    },
+                    {'selector': 'edge', 
+                     'style': {'width': 2, 
+                               'line-color': 'data(colour)',
+                               #'content': 'data(label)', 
+                               'line-style': 'data(style)'}
+                    },
+                    {'selector': 'edge.directed',
+                     'style': {'curve-style': 'bezier',
+                               'target-arrow-shape': 'triangle',
+                               'target-arrow-color': 'data(colour)'
+                              }
+                    },
+                    {'selector': 'edge.multiple_edges', 
+                     'style': {'curve-style': 'bezier'}
+                    },
+                    {'selector': ':selected',
+                        'css': {
+                            'background-color': 'black',
+                            'line-color': 'black',
+                            'target-arrow-color': 'black',
+                            'source-arrow-color': 'black',
+                            'text-outline-color': 'black'
+                        }}
+                    ])
+
+
+    out = Output()
+
+    if onto != None:
+        # TODO: Fix elucidations/annotations, onlt print them if they exist
+        def log_clicks(node):
+            with out:
+                print(f'parents: {onto.get_by_label(node["data"]["label"]).get_parents()}')
+                elucidations = onto.get_by_label(
+                    node["data"]["label"]).get_annotations()['elucidation'][0].split('\n\n')
+                for e in elucidations:
+                    print(f'elucidation: {e}')
+                # Try does not work...
+                try:
+                    fig = node["data"]["label"] + '.png'
+                    if Path(fig):
+                        display(Image(fig, width=100))
+                except:
+                   pass
+
+        def log_mouseovers(node):
+            with out:
+                print(onto.get_by_label(node["data"]["label"]))
+                #print(f'mouseover: {pformat(node)}')
+
+        cytofig.on('node', 'click', log_clicks)
+        cytofig.on('node', 'mouseover', log_mouseovers)#, remove=True)
+
+    return [cytofig, out]
+
