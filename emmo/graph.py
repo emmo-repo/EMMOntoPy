@@ -923,13 +923,15 @@ def cytoscapegraph(graph, onto=None):
             with out:
                 p = onto.get_by_label(node["data"]["label"]).get_parents()
                 print(f'parents: {p}')
-                # Add a try here
-                elucidations = onto.get_by_label(
-                    node["data"]["label"]).get_annotations()[
-                        'elucidation'][0].split('\n\n')
-                for e in elucidations:
-                    print(f'elucidation: {e}')
-                    # Try does not work...
+                try:
+                    elucidations = onto.get_by_label(
+                            node["data"]["label"]).get_annotations()[
+                                    'elucidation'][0].split('\n\n')
+                    for e in elucidations:
+                        print(f'elucidation: {e}')
+                except Exception:  # FIXME: make this more specific
+                    pass
+                # Try does not work...
                 try:
                     fig = node["data"]["label"] + '.png'
                     if os.path.exists(Path(fig)):
