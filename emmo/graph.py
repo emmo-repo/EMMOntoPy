@@ -829,8 +829,8 @@ def cytoscapegraph(graph, onto=None, infobox=None):
     instance Graph of OntoGraph, the accomanying ontology
     is required for mouse actions"""
 
-    from ipywidgets import Output, VBox, HBox, GridBox, Layout
-    from IPython.display import display, Image
+    from ipywidgets import Output, VBox, HBox, GridBox, Layout, GridspecLayout
+    from IPython.display import display, Image, HTML
     from pathlib import Path
     import networkx as nx
     import pydotplus
@@ -921,22 +921,29 @@ def cytoscapegraph(graph, onto=None, infobox=None):
         # TODO: Fix elucidations/annotations, onlt print them if they exist
         def log_clicks(node):
             with out:
-                print(onto.get_by_label(node["data"]["label"]))
+                print((onto.get_by_label(node["data"]["label"])))
                 p = onto.get_by_label(node["data"]["label"]).get_parents()
                 print(f'parents: {p}')
                 try:
-                    elucidations = onto.get_by_label(
-                            node["data"]["label"]).get_annotations()[
-                                    'elucidation'][0].split('\n\n')
-                    for e in elucidations:
-                        print(f'elucidation: {e}')
+                    elucidation = onto.get_by_label(
+                            node["data"]["label"]).elucidation[0]
+                    print(f'elucidation: {elucidation}')
                 except Exception:  # FIXME: make this more specific
+                    pass
+                try:
+                    annotations = onto.get_by_label(
+                            node["data"]["label"]).annotations
+                    for e in annotations:
+                            print(f'annotation: {e}')
+                except:
                     pass
                 # Try does not work...
                 try:
-                    fig = node["data"]["label"] + '.png'
-                    if os.path.exists(Path(fig)):
-                        display(Image(fig, width=100))
+                    fig = node["data"]["label"]
+                    if os.path.exists(Path(fig+'.png')):
+                        display(Image(fig+'.png', width=100))
+                    elif os.path.exists(Path(fig+'.jpg')):
+                        display(Image(fig+'.jpg', width=100))
                 except Exception:  # FIXME: make this more specific
                     pass
                 out.clear_output(wait=True)
@@ -950,9 +957,15 @@ def cytoscapegraph(graph, onto=None, infobox=None):
         cytofig.on('node', 'click', log_clicks)
         cytofig.on('node', 'mouseover', log_mouseovers)  # , remove=True)
         cytofig.on('node', 'mouseout', out.clear_output(wait=True))
-        if infobox == 'right':
-            return HBox([cytofig, out])
+        grid = GridspecLayout(1, 3, height='400px')
+        if infobox == 'left':
+            grid[0, 0] = out
+            grid[0, 1:] = cytofig
+        elif infobox == 'right':
+            grid[0, 0:-1] = cytofig
+            grid[0, 2] = out
         else:
             return VBox([cytofig, out])
+        return grid
 
     return cytofig
