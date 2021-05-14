@@ -1,9 +1,9 @@
-Cython
+Cython~=0.29.21
 Owlready2~=0.28
-graphviz
-PyYAML
-blessings
-Pygments
-rdflib
-semver
-pydot
+graphviz~=0.16
+PyYAML~=5.4.0
+blessings~=1.7
+Pygments~=2.8.0
+rdflib~=5.0.0
+semver~=2.13.0
+pydot~=1.4.2
