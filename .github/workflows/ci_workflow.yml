@@ -12,7 +12,7 @@ jobs:
     name: Lint with flake8
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2.3.4
 
     - name: Set up Python 3.7
       uses: actions/setup-python@v2.2.2
@@ -30,7 +30,7 @@ jobs:
     name: Pytest and demos
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2.3.4
 
     - name: Set up Python 3.7
       uses: actions/setup-python@v2.2.2
@@ -69,7 +69,7 @@ jobs:
     name: EMMO documentation
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2.3.4
 
     - name: Set up Python 3.7
       uses: actions/setup-python@v2.2.2
@@ -125,7 +125,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.3.4
 
     - name: Set up Python 3.7
       uses: actions/setup-python@v2.2.2
