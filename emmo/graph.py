@@ -829,8 +829,8 @@ def cytoscapegraph(graph, onto=None, infobox=None):
     instance Graph of OntoGraph, the accomanying ontology
     is required for mouse actions"""
 
-    from ipywidgets import Output, VBox, HBox, GridBox, Layout, GridspecLayout
-    from IPython.display import display, Image, HTML
+    from ipywidgets import Output, VBox, GridspecLayout
+    from IPython.display import display, Image
     from pathlib import Path
     import networkx as nx
     import pydotplus
@@ -934,8 +934,8 @@ def cytoscapegraph(graph, onto=None, infobox=None):
                     annotations = onto.get_by_label(
                             node["data"]["label"]).annotations
                     for e in annotations:
-                            print(f'annotation: {e}')
-                except:
+                        print(f'annotation: {e}')
+                except Exception:
                     pass
                 # Try does not work...
                 try:
