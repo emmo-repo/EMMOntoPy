@@ -19,6 +19,123 @@ typenames = owlready2.class_construct._restriction_type_2_label
 # Literal for `root` arguments
 ALL = 1
 
+_default_style = {
+    'graphtype': 'Digraph',
+    'graph': {
+        'rankdir': 'BT', 'fontsize': '8',
+        # 'fontname': 'Bitstream Vera Sans', 'splines': 'ortho',
+    },
+    'class': {
+        'style': 'filled',
+        'fillcolor': '#ffffcc',
+    },
+    'root': {'penwidth': '2'},
+    'leaf': {'penwidth': '2'},
+    'defined_class': {
+        'style': 'filled',
+        'fillcolor': '#ffc880',
+    },
+    'class_construct': {
+        'style': 'filled',
+        'fillcolor': 'gray',
+    },
+    'individual': {
+        'shape': 'diamond',
+        'style': 'filled',
+        'fillcolor': '#874b82',
+        'fontcolor': 'white',
+    },
+    'object_property': {
+        'shape': 'box',
+        'style': 'filled',
+        'fillcolor': '#0079ba',
+        'fontcolor': 'white',
+    },
+    'data_property': {
+        'shape': 'box',
+        'style': 'filled',
+        'fillcolor': 'green',
+    },
+    'annotation_property': {
+        'shape': 'box',
+        'style': 'filled',
+        'fillcolor': 'orange',
+    },
+    'parent_node': {
+        'style': 'filled',
+        'fillcolor': 'lightgray',
+    },
+    'added_node': {
+        'color': 'red',
+    },
+    'isA': {'arrowhead': 'empty'},
+    'not': {'color': 'gray', 'style': 'dotted'},
+    'equivalent_to': {'color': 'green3'},
+    'disjoint_with': {'color': 'red', 'constraint': 'false'},
+    'inverse_of': {'color': 'orange', },
+    'default_relation': {'color': 'olivedrab', 'constraint': 'false'},
+    'relations': {
+        'disconnected': {'color': 'red', 'style': 'dotted',
+                         'arrowhead': 'odot'},
+        'hasPart': {'color': 'blue'},
+        'hasProperPart': {'color': 'blue', 'style': 'dashed'},
+        'hasParticipant': {'color': 'red'},
+        'hasProperParticipant': {'color': 'red', 'style': 'dashed'},
+        'hasSpatialPart': {'color': 'darkgreen'},
+        'hasSpatialDirectPart': {'color': 'darkgreen', 'style': 'dashed'},
+        'hasTemporalPart': {'color': 'magenta'},
+        'hasTemporalDirectPart': {'color': 'magenta', 'style': 'dashed'},
+        'hasReferenceUnit': {'color': 'darkgreen', 'style': 'dashed'},
+        'hasSign': {'color': 'orange'},
+        'hasConvention': {'color': 'orange', 'style': 'dashed'},
+        'hasProperty': {'color': 'orange', 'style': 'dotted'},
+    },
+    'inverse': {'arrowhead': 'inv'},
+    'default_dataprop': {'color': 'green', 'constraint': 'false'},
+    'node': {},
+    'edge': {},
+}
+
+
+def cytoscape_style(style=None):
+    if not style:
+        style = _default_style
+    colours = {}
+    styles = {}
+    fill = {}
+    for d in style.keys():
+        if isinstance(style[d], dict):
+            if 'color' in style[d].keys():
+                colours[d] = style[d]['color']
+            else:
+                colours[d] = 'black'
+            if 'style' in style[d].keys():
+                styles[d] = style[d]['style']
+            else:
+                styles[d] = 'solid'
+            if 'arrowhead' in style[d].keys():
+                if style[d]['arrowhead'] == 'empty':
+                    fill[d] = 'hollow'
+            else:
+                fill[d] = 'filled'
+
+    for d in style['relations'].keys():
+        if isinstance(style['relations'][d], dict):
+            if 'color' in style['relations'][d].keys():
+                colours[d] = style['relations'][d]['color']
+            else:
+                colours[d] = 'black'
+            if 'style' in style['relations'][d].keys():
+                styles[d] = style['relations'][d]['style']
+            else:
+                styles[d] = 'solid'
+            if 'arrowhead' in style['relations'][d].keys():
+                if style['relations'][d]['arrowhead'] == 'empty':
+                    fill[d] = 'hollow'
+            else:
+                fill[d] = 'filled'
+    return [colours, styles, fill]
+
 
 class OntoGraph:
     """Class for visualising an ontology.
@@ -96,81 +213,6 @@ class OntoGraph:
     kwargs :
         Passed to graphviz.Digraph.
     """
-    _default_style = {
-        'graphtype': 'Digraph',
-        'graph': {
-            'rankdir': 'BT', 'fontsize': '8',
-            # 'fontname': 'Bitstream Vera Sans', 'splines': 'ortho',
-        },
-        'class': {
-            'style': 'filled',
-            'fillcolor': '#ffffcc',
-        },
-        'root': {'penwidth': '2'},
-        'leaf': {'penwidth': '2'},
-        'defined_class': {
-            'style': 'filled',
-            'fillcolor': '#ffc880',
-        },
-        'class_construct': {
-            'style': 'filled',
-            'fillcolor': 'gray',
-        },
-        'individual': {
-            'shape': 'diamond',
-            'style': 'filled',
-            'fillcolor': '#874b82',
-            'fontcolor': 'white',
-        },
-        'object_property': {
-            'shape': 'box',
-            'style': 'filled',
-            'fillcolor': '#0079ba',
-            'fontcolor': 'white',
-        },
-        'data_property': {
-            'shape': 'box',
-            'style': 'filled',
-            'fillcolor': 'green',
-        },
-        'annotation_property': {
-            'shape': 'box',
-            'style': 'filled',
-            'fillcolor': 'orange',
-        },
-        'parent_node': {
-            'style': 'filled',
-            'fillcolor': 'lightgray',
-        },
-        'added_node': {
-            'color': 'red',
-        },
-        'isA': {'arrowhead': 'empty'},
-        'not': {'color': 'gray', 'style': 'dotted'},
-        'equivalent_to': {'color': 'green3'},
-        'disjoint_with': {'color': 'red', 'constraint': 'false'},
-        'inverse_of': {'color': 'orange', },
-        'default_relation': {'color': 'olivedrab', 'constraint': 'false'},
-        'relations': {
-            'disconnected': {'color': 'red', 'style': 'dotted',
-                             'arrowhead': 'odot'},
-            'hasPart': {'color': 'blue'},
-            'hasProperPart': {'color': 'blue', 'style': 'dashed'},
-            'hasParticipant': {'color': 'red'},
-            'hasProperParticipant': {'color': 'red', 'style': 'dashed'},
-            'hasSpatialDirectPart': {'color': 'darkgreen'},
-            'hasTemporalPart': {'color': 'magenta'},
-            'hasTemporalDirectPart': {'color': 'magenta', 'style': 'dashed'},
-            'hasReferenceUnit': {'color': 'darkgreen', 'style': 'dashed'},
-            'hasSign': {'color': 'orange'},
-            'hasConvention': {'color': 'orange', 'style': 'dashed'},
-            'hasProperty': {'color': 'orange', 'style': 'dotted'},
-        },
-        'inverse': {'arrowhead': 'inv'},
-        'default_dataprop': {'color': 'green', 'constraint': 'false'},
-        'node': {},
-        'edge': {},
-    }
 
     def __init__(self, ontology, root=None, leafs=None, entities=None,
                  relations='isA', style=None, edgelabels=True,
@@ -179,7 +221,7 @@ class OntoGraph:
                  parents=0, excluded_nodes=None, graph=None,
                  imported=False, **kwargs):
         if style is None or style == 'default':
-            style = self._default_style
+            style = _default_style
 
         if graph is None:
             graphtype = style.get('graphtype', 'Digraph')
@@ -824,7 +866,7 @@ def check_module_dependencies(modules, verbose=True):
     return mods
 
 
-def cytoscapegraph(graph, onto=None, infobox=None):
+def cytoscapegraph(graph, onto=None, infobox=None, style=None):
     """Returns and instance of icytoscape-figure for an
     instance Graph of OntoGraph, the accomanying ontology
     is required for mouse actions"""
@@ -841,29 +883,30 @@ def cytoscapegraph(graph, onto=None, infobox=None):
     # if graph doesn't have multiedges, use dotplus.set_strict(true)
     G = nx.nx_pydot.from_pydot(dotplus)
 
-    line_colours = {'black': ['isA'],
-                    'blue': ['hasSpatialPart', 'hasProperPart', 'hasMember'],
-                    'red': ['hasParticipant', 'Inverse(hasParticipant)',
-                            'hasProperParticipant',
-                            'Inverse(hasProperParticipant)']}
+    colours, styles, fill = cytoscape_style()
 
-    colours = {v: k for k in line_colours for v in line_colours[k]}
-
-    line_styles = {'solid': ['isA', 'hasParticipant',
-                             'Inverse(hasParticipant)'],
-                   'dashed': ['hasSpatialPart', 'hasProperParticipant',
-                              'hasProperPart', 'hasMember',
-                              'Inverse(hasProperParticipant)']}
-
-    styles = {v: k for k in line_styles for v in line_styles[k]}
-
-    # [(print(type(d['data'])))
-    #  for d in cytoscape_data(L)['elements']['edges']]
     data = cytoscape_data(G)['elements']
     for d in data['edges']:
         d['data']['label'] = d['data']['label'].rsplit(' ', 1)[0].lstrip('"')
-        d['data']['colour'] = colours[d['data']['label']]
-        d['data']['style'] = styles[d['data']['label']]
+        lab = d['data']['label'].replace('Inverse(', '').rstrip(')')
+        try:
+            d['data']['colour'] = colours[lab]
+        except KeyError:
+            d['data']['colour'] = 'black'
+        try:
+            d['data']['style'] = styles[lab]
+        except KeyError:
+            d['data']['style'] = 'solid'
+        if d['data']['label'].startswith('Inverse('):
+            d['data']['targetarrow'] = 'diamond'
+            d['data']['sourcearrow'] = 'none'
+        else:
+            d['data']['targetarrow'] = 'triangle'
+            d['data']['sourcearrow'] = 'none'
+        try:
+            d['data']['fill'] = fill[lab]
+        except KeyError:
+            d['data']['fill'] = 'filled'
 
     cytofig = ipycytoscape.CytoscapeWidget()
     cytofig.graph.add_graph_from_json(data, directed=True)
@@ -895,8 +938,11 @@ def cytoscapegraph(graph, onto=None, infobox=None):
             'selector': 'edge.directed',
             'style': {
                 'curve-style': 'bezier',
-                'target-arrow-shape': 'triangle',
-                'target-arrow-color': 'data(colour)'
+                'target-arrow-shape': 'data(targetarrow)',
+                'target-arrow-color': 'data(colour)',
+                'target-arrow-fill': 'data(fill)',
+                'mid-source-arrow-shape': 'data(sourcearrow)',
+                'mid-source-arrow-color': 'data(colour)'
             },
         },
         {
@@ -938,6 +984,12 @@ def cytoscapegraph(graph, onto=None, infobox=None):
                 except Exception:
                     pass
                 # Try does not work...
+                try:
+                    iri = onto.get_by_label(
+                            node["data"]["label"]).iri
+                    print(f'iri: {iri}')
+                except Exception:
+                    pass
                 try:
                     fig = node["data"]["label"]
                     if os.path.exists(Path(fig+'.png')):
