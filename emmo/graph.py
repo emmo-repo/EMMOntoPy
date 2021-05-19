@@ -961,10 +961,9 @@ def cytoscapegraph(graph, onto=None, infobox=None, style=None):
         },
     ])
 
-    out = Output(layout={'border': '1px solid black'})
-
     if onto is not None:
-        # TODO: Fix elucidations/annotations, onlt print them if they exist
+        out = Output(layout={'border': '1px solid black'})
+
         def log_clicks(node):
             with out:
                 print((onto.get_by_label(node["data"]["label"])))
@@ -972,17 +971,19 @@ def cytoscapegraph(graph, onto=None, infobox=None, style=None):
                 print(f'parents: {p}')
                 try:
                     elucidation = onto.get_by_label(
-                            node["data"]["label"]).elucidation[0]
-                    print(f'elucidation: {elucidation}')
-                except Exception:  # FIXME: make this more specific
+                        node["data"]["label"]).elucidation
+                    print(f'elucidation: {elucidation[0]}')
+                except (AttributeError, IndexError):
                     pass
+
                 try:
                     annotations = onto.get_by_label(
-                            node["data"]["label"]).annotations
+                        node["data"]["label"]).annotations
                     for e in annotations:
                         print(f'annotation: {e}')
-                except Exception:
+                except AttributeError:
                     pass
+
                 # Try does not work...
                 try:
                     iri = onto.get_by_label(
