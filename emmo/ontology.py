@@ -231,9 +231,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
         if self._special_labels and label in self._special_labels:
             return self._special_labels[label]
 
-        e = self.world[self.base_iri + label]
-        if e:
-            return e
+        # Remove search in world, commented out for now
+        # e = self.world[self.base_iri + label]
+        # if e:
+        #    return e
 
         raise NoSuchLabelError('No label annotations matches %s' % label)
 
@@ -247,15 +248,21 @@ class Ontology(owlready2.Ontology, OntoGraph):
         else:
             annotations = (s.name if hasattr(s, 'storid') else s
                            for s in label_annotations)
-        e = self.world.search(**{annotations.__next__(): label})
+        # Remove search in world, commented out for now
+        # e = self.world.search(**{annotations.__next__(): label})
+        e = self.search(**{annotations.__next__(): label})
+        
         for key in annotations:
-            e.extend(self.world.search(**{key: label}))
+            # Remove search in world, commented out for now
+            # e.extend(self.world.search(**{key: label}))
+            e.extend(self.search(**{key: label}))
+        
         if self._special_labels and label in self._special_labels:
             e.append(self._special_labels[label])
 
         if namespace:
             return [ns for ns in e if ns.namespace.name == namespace]
-        return e 
+        return e
 
     def add_label_annotation(self, iri):
         """Adds label annotation used by get_by_label().
