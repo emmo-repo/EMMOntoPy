@@ -36,6 +36,16 @@ def isinteractive():
                 hasattr(sys, 'ps1'))
 
 
+def stripname(iri):
+    """Returns `iri` with its name-part stripped off."""
+    if '#' in iri:
+        return iri.rsplit('#', 1)[0] + '#'
+    elif '/' in iri:
+        return iri.rsplit('/', 1)[0] + '/'
+    else:
+        return iri + '#'
+
+
 def get_label(e):
     """Returns the label of entity `e`."""
     if hasattr(e, 'prefLabel') and e.prefLabel:
