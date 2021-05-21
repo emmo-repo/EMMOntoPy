@@ -251,12 +251,12 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Remove search in world, commented out for now
         # e = self.world.search(**{annotations.__next__(): label})
         e = self.search(**{annotations.__next__(): label})
-        
+
         for key in annotations:
             # Remove search in world, commented out for now
             # e.extend(self.world.search(**{key: label}))
             e.extend(self.search(**{key: label}))
-        
+
         if self._special_labels and label in self._special_labels:
             e.append(self._special_labels[label])
 
