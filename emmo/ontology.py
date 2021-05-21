@@ -153,7 +153,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         # updateing with namespace keys
         # Attention: What to do if a prefLabel coincides with a namespace key?
-        s.update(self.namespaces.keys())
+        if 'namespaces' in self.__dict__:
+            s.update(self.namespaces.keys())
 
         s.difference_update({None})  # get rid of possible None
         return sorted(s)
