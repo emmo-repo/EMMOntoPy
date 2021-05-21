@@ -255,7 +255,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         if namespace:
             return [ns for ns in e if ns.namespace.name == namespace]
-        return e 
+        return e
 
     def add_label_annotation(self, iri):
         """Adds label annotation used by get_by_label().
