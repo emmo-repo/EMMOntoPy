@@ -153,8 +153,15 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         # updateing with namespace keys
         # Attention: What to do if a prefLabel coincides with a namespace key?
-        if 'namespaces' in self.__dict__:
-            s.update(self.namespaces.keys())
+        if 'namespaces' not in self.__dict_:
+            self.namespaces = {}
+            for e in self.get_entities():
+                ns = e.namespace
+                if isinstance(ns, owlready2.Ontology):
+                    ns = Namespace(self, stripname(e.iri))
+                self.namespaces[ns.name] = ns
+        
+        s.update(self.namespaces.keys())
 
         s.difference_update({None})  # get rid of possible None
         return sorted(s)
@@ -208,16 +215,23 @@ class Ontology(owlready2.Ontology, OntoGraph):
         matching any number of characters.
         """
         if 'namespaces' in self.__dict__:
+            if label in self.namespaces:
+                return self.namespaces[label]     
             if namespace:
                 if namespace in self.namespaces:
                     for e in self.get_by_label_all(
-                            label, label_annotations=label_annotations):
-                        if e.namespace == self.namespaces[namespace]:
+                        label, label_annotations=label_annotations):
+                        if e.namespace.name == self.namespaces[
+                                namespace].name:
                             return e
+                else:
+                    raise NoSuchLabelError('Namespace "%s" '
+                                           'not in "namespaces"')
                 raise NoSuchLabelError('No label annotations matches "%s" in '
                                        'namespace "%s"' % (label, namespace))
-            elif label in self.namespaces:
-                return self.namespaces[label]
+        elif namespace and 'namespaces' not in self.__dict__:
+            raise NoSuchLabelError("'namespaces' not in dict,"
+                                   " try sync_attributes") 
 
         if label_annotations is None:
             annotations = (la.name for la in self.label_annotations)
