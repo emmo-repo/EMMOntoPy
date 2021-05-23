@@ -160,7 +160,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 if isinstance(ns, owlready2.Ontology):
                     ns = Namespace(self, stripname(e.iri))
                 self.namespaces[ns.name] = ns
-        
+
         s.update(self.namespaces.keys())
 
         s.difference_update({None})  # get rid of possible None
@@ -216,11 +216,11 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """
         if 'namespaces' in self.__dict__:
             if label in self.namespaces:
-                return self.namespaces[label]     
+                return self.namespaces[label]
             if namespace:
                 if namespace in self.namespaces:
                     for e in self.get_by_label_all(
-                        label, label_annotations=label_annotations):
+                            label, label_annotations=label_annotations):
                         if e.namespace.name == self.namespaces[
                                 namespace].name:
                             return e
@@ -231,7 +231,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                                        'namespace "%s"' % (label, namespace))
         elif namespace and 'namespaces' not in self.__dict__:
             raise NoSuchLabelError("'namespaces' not in dict,"
-                                   " try sync_attributes") 
+                                   " try sync_attributes")
 
         if label_annotations is None:
             annotations = (la.name for la in self.label_annotations)
