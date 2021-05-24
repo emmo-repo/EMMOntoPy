@@ -374,7 +374,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 'owl:topObjectProperty': t,
             }
 
-        #self.update_namespaces()
+        # self.update_namespaces()
 
         # self.namespaces = {}
         # for e in self.get_entities():
@@ -807,7 +807,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         #        ns = Namespace(self, stripname(e.iri))
         #    self.namespaces[ns.name] = ns
 
-        #self.update_namespaces()
+        # self.update_namespaces()
 
     def get_relations(self):
         """Returns a generator for all relations."""
@@ -1074,7 +1074,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
             self._namespaces = d
         return self._namespaces
 
-
     # @namespaces.setter
     # def namespaces(self):
     #    for e in self.get_entities():
@@ -1083,12 +1082,12 @@ class Ontology(owlready2.Ontology, OntoGraph):
     #            ns = Namespace(self, stripname(e.iri))
     #        self._namespaces[ns.name] = ns
 
-    #def update_namespaces(self):
-    #    for e in self.get_entities():
-    #        ns = e.namespace
-    #        if isinstance(ns, owlready2.Ontology):
-    #            ns = Namespace(self, stripname(e.iri))
-    #        self.namespaces[ns.name] = ns
+    # def update_namespaces(self):
+    #     for e in self.get_entities():
+    #         ns = e.namespace
+    #         if isinstance(ns, owlready2.Ontology):
+    #             ns = Namespace(self, stripname(e.iri))
+    #         self.namespaces[ns.name] = ns
 
     def get_wu_palmer_measure(self, cls1, cls2):
         '''
