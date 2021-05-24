@@ -140,8 +140,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
         doc='Whether to include imported ontologies in dir() '
         'listing.')
 
-    namespaces = {}
-
     def __dir__(self):
         s = set(super().__dir__())
         lst = list(self.get_entities(imported=self._dir_imported))
@@ -155,7 +153,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         # updateing with namespace keys
         # Attention: What to do if a prefLabel coincides with a namespace key?
-        # if 'namespaces' not in self.__dict_:
+        # if 'namespaces' not in self.__dict__:
         #    self.namespaces = {}
         #    for e in self.get_entities():
         #       ns = e.namespace
@@ -376,7 +374,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 'owl:topObjectProperty': t,
             }
 
-        self.update_namespaces()
+        #self.update_namespaces()
+
         # self.namespaces = {}
         # for e in self.get_entities():
         #    ns = e.namespace
@@ -807,7 +806,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
         #    if isinstance(ns, owlready2.Ontology):
         #        ns = Namespace(self, stripname(e.iri))
         #    self.namespaces[ns.name] = ns
-        self.update_namespaces()
+
+        #self.update_namespaces()
 
     def get_relations(self):
         """Returns a generator for all relations."""
@@ -1059,10 +1059,21 @@ class Ontology(owlready2.Ontology, OntoGraph):
         else:
             return ancestors
 
-    # @property
-    # def namespaces(self):
-    #    print('getting namespaces')
-    #    return self._namespaces
+    @property
+    def namespaces(self):
+        """Returns a dict with the namespaces."""
+        # Calculate and cache namespaces the first time this property is
+        # called.  For following calls we return the cache.
+        if '_namespaces' not in self.__dict__:
+            d = {}
+            for e in self.get_entities():
+                ns = e.namespace
+                if isinstance(ns, owlready2.Ontology):
+                    ns = Namespace(self, stripname(e.iri))
+                d[ns.name] = ns
+            self._namespaces = d
+        return self._namespaces
+
 
     # @namespaces.setter
     # def namespaces(self):
@@ -1072,12 +1083,12 @@ class Ontology(owlready2.Ontology, OntoGraph):
     #            ns = Namespace(self, stripname(e.iri))
     #        self._namespaces[ns.name] = ns
 
-    def update_namespaces(self):
-        for e in self.get_entities():
-            ns = e.namespace
-            if isinstance(ns, owlready2.Ontology):
-                ns = Namespace(self, stripname(e.iri))
-            self.namespaces[ns.name] = ns
+    #def update_namespaces(self):
+    #    for e in self.get_entities():
+    #        ns = e.namespace
+    #        if isinstance(ns, owlready2.Ontology):
+    #            ns = Namespace(self, stripname(e.iri))
+    #        self.namespaces[ns.name] = ns
 
     def get_wu_palmer_measure(self, cls1, cls2):
         '''
