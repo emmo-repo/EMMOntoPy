@@ -140,6 +140,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
         doc='Whether to include imported ontologies in dir() '
         'listing.')
 
+    namespaces = {}
+
     def __dir__(self):
         s = set(super().__dir__())
         lst = list(self.get_entities(imported=self._dir_imported))
@@ -153,13 +155,13 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         # updateing with namespace keys
         # Attention: What to do if a prefLabel coincides with a namespace key?
-        if 'namespaces' not in self.__dict_:
-            self.namespaces = {}
-            for e in self.get_entities():
-                ns = e.namespace
-                if isinstance(ns, owlready2.Ontology):
-                    ns = Namespace(self, stripname(e.iri))
-                self.namespaces[ns.name] = ns
+        # if 'namespaces' not in self.__dict_:
+        #    self.namespaces = {}
+        #    for e in self.get_entities():
+        #       ns = e.namespace
+        #       if isinstance(ns, owlready2.Ontology):
+        #    ns = Namespace(self, stripname(e.iri))
+        #        self.namespaces[ns.name] = ns
 
         s.update(self.namespaces.keys())
 
@@ -214,24 +216,38 @@ class Ontology(owlready2.Ontology, OntoGraph):
         The current implementation also supports "*" as a wildcard
         matching any number of characters.
         """
-        if 'namespaces' in self.__dict__:
-            if label in self.namespaces:
-                return self.namespaces[label]
-            if namespace:
-                if namespace in self.namespaces:
-                    for e in self.get_by_label_all(
-                            label, label_annotations=label_annotations):
-                        if e.namespace.name == self.namespaces[
-                                namespace].name:
-                            return e
-                else:
-                    raise NoSuchLabelError('Namespace "%s" '
-                                           'not in "namespaces"')
-                raise NoSuchLabelError('No label annotations matches "%s" in '
-                                       'namespace "%s"' % (label, namespace))
-        elif namespace and 'namespaces' not in self.__dict__:
-            raise NoSuchLabelError("'namespaces' not in dict,"
-                                   " try sync_attributes")
+        # if 'namespaces' in self.__dict__:
+        #    if label in self.namespaces:
+        #        return self.namespaces[label]
+        #    if namespace:
+        #        if namespace in self.namespaces:
+        #            for e in self.get_by_label_all(
+        #                    label, label_annotations=label_annotations):
+        #                if e.namespace.name == self.namespaces[
+        #                        namespace].name:
+        #                    return e
+        #        else:
+        #            raise NoSuchLabelError('Namespace "%s" '
+        #                                   'not in "namespaces"')
+        #        raise NoSuchLabelError('No label annotations matches "%s" in '
+        #                               'namespace "%s"' % (label, namespace))
+        # elif namespace and 'namespaces' not in self.__dict__:
+        #    raise NoSuchLabelError("'namespaces' not in dict,"
+        #                           " try sync_attributes")
+
+        # if label in self.namespaces:
+        # return self.namespaces[label]
+        if namespace:
+            if namespace in self.namespaces:
+                for e in self.get_by_label_all(
+                        label, label_annotations=label_annotations):
+                    if e.namespace.name == self.namespaces[namespace].name:
+                        return e
+            else:
+                raise NoSuchLabelError('Namespace "%s" '
+                                       'not in "namespaces"')
+            raise NoSuchLabelError('No label annotations matches "%s" in '
+                                   'namespace "%s"' % (label, namespace))
 
         if label_annotations is None:
             annotations = (la.name for la in self.label_annotations)
@@ -360,12 +376,13 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 'owl:topObjectProperty': t,
             }
 
-        self.namespaces = {}
-        for e in self.get_entities():
-            ns = e.namespace
-            if isinstance(ns, owlready2.Ontology):
-                ns = Namespace(self, stripname(e.iri))
-            self.namespaces[ns.name] = ns
+        self.update_namespaces()
+        # self.namespaces = {}
+        # for e in self.get_entities():
+        #    ns = e.namespace
+        #    if isinstance(ns, owlready2.Ontology):
+        #        ns = Namespace(self, stripname(e.iri))
+        #    self.namespaces[ns.name] = ns
 
         return self
 
@@ -783,13 +800,14 @@ class Ontology(owlready2.Ontology, OntoGraph):
             for onto in self.imported_ontologies:
                 onto.sync_attributes()
 
-        if 'namespaces' not in self.__dict__:
-            self.namespaces = {}
-        for e in self.get_entities():
-            ns = e.namespace
-            if isinstance(ns, owlready2.Ontology):
-                ns = Namespace(self, stripname(e.iri))
-            self.namespaces[ns.name] = ns
+        # if 'namespaces' not in self.__dict__:
+        #    self.namespaces = {}
+        # for e in self.get_entities():
+        #    ns = e.namespace
+        #    if isinstance(ns, owlready2.Ontology):
+        #        ns = Namespace(self, stripname(e.iri))
+        #    self.namespaces[ns.name] = ns
+        self.update_namespaces()
 
     def get_relations(self):
         """Returns a generator for all relations."""
@@ -1040,6 +1058,26 @@ class Ontology(owlready2.Ontology, OntoGraph):
             return ancestors.difference(classes)
         else:
             return ancestors
+
+    # @property
+    # def namespaces(self):
+    #    print('getting namespaces')
+    #    return self._namespaces
+
+    # @namespaces.setter
+    # def namespaces(self):
+    #    for e in self.get_entities():
+    #        ns = e.namespace
+    #        if isinstance(ns, owlready2.Ontology):
+    #            ns = Namespace(self, stripname(e.iri))
+    #        self._namespaces[ns.name] = ns
+
+    def update_namespaces(self):
+        for e in self.get_entities():
+            ns = e.namespace
+            if isinstance(ns, owlready2.Ontology):
+                ns = Namespace(self, stripname(e.iri))
+            self.namespaces[ns.name] = ns
 
     def get_wu_palmer_measure(self, cls1, cls2):
         '''
