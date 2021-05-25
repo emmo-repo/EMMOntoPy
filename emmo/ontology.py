@@ -1064,15 +1064,15 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """Returns a dict with the namespaces."""
         # Calculate and cache namespaces the first time this property is
         # called.  For following calls we return the cache.
-        if '_namespaces' not in self.__dict__:
+        if '_namespaces_cache' not in self.__dict__:
             d = {}
             for e in self.get_entities():
                 ns = e.namespace
                 if isinstance(ns, owlready2.Ontology):
                     ns = Namespace(self, stripname(e.iri))
                 d[ns.name] = ns
-            self._namespaces = d
-        return self._namespaces
+            self._namespaces_cache = d
+        return self._namespaces_cache
 
     # @namespaces.setter
     # def namespaces(self):
