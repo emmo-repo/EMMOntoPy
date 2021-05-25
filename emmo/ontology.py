@@ -214,27 +214,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
         The current implementation also supports "*" as a wildcard
         matching any number of characters.
         """
-        # if 'namespaces' in self.__dict__:
-        #    if label in self.namespaces:
-        #        return self.namespaces[label]
-        #    if namespace:
-        #        if namespace in self.namespaces:
-        #            for e in self.get_by_label_all(
-        #                    label, label_annotations=label_annotations):
-        #                if e.namespace.name == self.namespaces[
-        #                        namespace].name:
-        #                    return e
-        #        else:
-        #            raise NoSuchLabelError('Namespace "%s" '
-        #                                   'not in "namespaces"')
-        #        raise NoSuchLabelError('No label annotations matches "%s" in '
-        #                               'namespace "%s"' % (label, namespace))
-        # elif namespace and 'namespaces' not in self.__dict__:
-        #    raise NoSuchLabelError("'namespaces' not in dict,"
-        #                           " try sync_attributes")
-
-        # if label in self.namespaces:
-        # return self.namespaces[label]
         if namespace:
             if namespace in self.namespaces:
                 for e in self.get_by_label_all(
@@ -290,7 +269,11 @@ class Ontology(owlready2.Ontology, OntoGraph):
             e.append(self._special_labels[label])
 
         if namespace:
-            return [ns for ns in e if ns.namespace.name == namespace]
+            if namespace in self.namespaces:
+                return [ns for ns in e if ns.namespace.name == namespace]
+            else:
+                raise NoSuchLabelError('Namespace "%s" '
+                                       'not in "namespaces"')
         return e
 
     def add_label_annotation(self, iri):
@@ -373,16 +356,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 'owl:Nothing': owlready2.Nothing,
                 'owl:topObjectProperty': t,
             }
-
-        # self.update_namespaces()
-
-        # self.namespaces = {}
-        # for e in self.get_entities():
-        #    ns = e.namespace
-        #    if isinstance(ns, owlready2.Ontology):
-        #        ns = Namespace(self, stripname(e.iri))
-        #    self.namespaces[ns.name] = ns
-
         return self
 
     def _load(self, only_local=False, filename=None, format=None,
@@ -799,16 +772,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
             for onto in self.imported_ontologies:
                 onto.sync_attributes()
 
-        # if 'namespaces' not in self.__dict__:
-        #    self.namespaces = {}
-        # for e in self.get_entities():
-        #    ns = e.namespace
-        #    if isinstance(ns, owlready2.Ontology):
-        #        ns = Namespace(self, stripname(e.iri))
-        #    self.namespaces[ns.name] = ns
-
-        # self.update_namespaces()
-
     def get_relations(self):
         """Returns a generator for all relations."""
         warnings.warn('Ontology.get_relations() is deprecated.  '
@@ -1073,21 +1036,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 d[ns.name] = ns
             self._namespaces_cache = d
         return self._namespaces_cache
-
-    # @namespaces.setter
-    # def namespaces(self):
-    #    for e in self.get_entities():
-    #        ns = e.namespace
-    #        if isinstance(ns, owlready2.Ontology):
-    #            ns = Namespace(self, stripname(e.iri))
-    #        self._namespaces[ns.name] = ns
-
-    # def update_namespaces(self):
-    #     for e in self.get_entities():
-    #         ns = e.namespace
-    #         if isinstance(ns, owlready2.Ontology):
-    #             ns = Namespace(self, stripname(e.iri))
-    #         self.namespaces[ns.name] = ns
 
     def get_wu_palmer_measure(self, cls1, cls2):
         '''
