@@ -272,8 +272,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
             if namespace in self.namespaces:
                 return [ns for ns in e if ns.namespace.name == namespace]
             else:
-                raise NoSuchLabelError('Namespace "%s" '
-                                       'not in "namespaces"')
+                raise NoSuchLabelError(
+                    f'Namespace "{namespace}" not in "namespaces"')
         return e
 
     def add_label_annotation(self, iri):
