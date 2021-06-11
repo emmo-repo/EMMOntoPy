@@ -11,7 +11,7 @@ rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
 sys.path.insert(1, rootdir)
 
 from emmo import World, onto_path  # noqa: E402
-from emmo.graph import OntoGraph, plot_modules  # noqa: E402
+from emmo.graph import OntoGraph, plot_modules, _default_style  # noqa: E402
 from emmo.utils import get_label
 import owlready2  # noqa: E402
 
@@ -116,7 +116,7 @@ def main():
                 onto_path.append(path)
 
     # Customise style
-    style = OntoGraph._default_style
+    style = _default_style
     style['graph']['rankdir'] = args.rankdir
 
     # Update style from json file
