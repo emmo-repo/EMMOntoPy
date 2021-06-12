@@ -1,4 +1,4 @@
-Cython~=0.29.21
+Cython~=0.29.23
 Owlready2~=0.28,!=0.32
 graphviz~=0.16
 PyYAML~=5.4.1
