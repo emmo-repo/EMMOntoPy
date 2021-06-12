@@ -1,5 +1,5 @@
 Cython~=0.29.21
-Owlready2~=0.28
+Owlready2~=0.28,!=0.32
 graphviz~=0.16
 PyYAML~=5.4.0
 blessings~=1.7
