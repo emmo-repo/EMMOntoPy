@@ -1,10 +1,10 @@
-Cython~=0.29.21
-Owlready2~=0.28,!=0.32
-graphviz~=0.16
-PyYAML~=5.4.1
-blessings~=1.7
-Pygments~=2.7.4
-rdflib~=4.2.1
-semver~=2.8.1
-pydot~=1.4.1
+Cython>=0.29.21
+Owlready2>=0.28,!=0.32
+graphviz>=0.16
+PyYAML>=5.4.1
+blessings>=1.7
+Pygments>=2.7.4
+rdflib>=4.2.1
+semver>=2.8.1
+pydot>=1.4.1
 
