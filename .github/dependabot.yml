@@ -7,8 +7,10 @@ updates:
   # Should be bigger than or equal to the total number of dependencies (currently 9)
   open-pull-requests-limit: 15
   target-branch: master
+  versioning-strategy: widen
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
     interval: daily
   target-branch: master
+  versioning-strategy: widen
