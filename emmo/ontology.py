@@ -290,6 +290,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """
         # TODO: make sure that `only_local` argument is respected...
 
+        print('Running load', filename)
         if self.loaded:
             return self
         self._load(only_local=only_local, filename=filename, format=format,
@@ -355,6 +356,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
                         recursive=False,
                         return_paths=True,
                         catalog_file=catalog_file)
+                    print('iiiiiiiiiiiiiris', iris)
+                    print('dddddddddddddirs', dirs)
                 except ReadCatalogError:
                     if url_from_catalog is not None:
                         raise
