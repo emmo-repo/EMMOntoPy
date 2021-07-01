@@ -24,8 +24,9 @@ o = get_ontology(testonto).load()
 assert o.TestClass.prefLabel.first() == 'TestClass'
 
 
+# Error in redirecting links on emmo.info, temporarily removed 01.07.2021
 # Use catalog file when downloading from web
-o = get_ontology(
-    'https://raw.githubusercontent.com/BIG-MAP/BattINFO/master/'
-    'battinfo.ttl').load()
-assert o.Electrolyte.prefLabel.first() == 'Electrolyte'
+# o = get_ontology(
+#    'https://raw.githubusercontent.com/BIG-MAP/BattINFO/master/'
+#    'battinfo.ttl').load()
+# assert o.Electrolyte.prefLabel.first() == 'Electrolyte'
