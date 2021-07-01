@@ -199,7 +199,6 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
     """
     # Protocols supported by urllib.request
     web_protocols = 'http://', 'https://', 'ftp://'
-    print('******************', catalog_file)
     if uri.startswith(web_protocols):
         # Call read_catalog() recursively to ensure that the temporary
         # file is properly cleaned up
@@ -245,14 +244,12 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
         return e.tag.rsplit('}', 1)[-1]
 
     def load_catalog(filepath):
-        print('oooooooooooooo', filepath)
         if not os.path.exists(filepath):
             raise ReadCatalogError('No such catalog file: ' + filepath)
         dirname = os.path.normpath(os.path.dirname(filepath))
         dirs.add(baseuri if baseuri else dirname)
         xml = ET.parse(filepath)
         root = xml.getroot()
-        print('--------root-----', root)
         if gettag(root) != 'catalog':
             raise ReadCatalogError('expected root tag of catalog file %r to '
                                    'be "catalog"', filepath)
@@ -262,7 +259,6 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
             elif gettag(child) == 'group':
                 for uri in child:
                     load_uri(uri, dirname)
-        print('xxxxxx', xml)
 
     def load_uri(uri, dirname):
         assert gettag(uri) == 'uri'

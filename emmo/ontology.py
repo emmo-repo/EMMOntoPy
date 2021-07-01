@@ -290,7 +290,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """
         # TODO: make sure that `only_local` argument is respected...
 
-        print('Running load', filename)
         if self.loaded:
             return self
         self._load(only_local=only_local, filename=filename, format=format,
@@ -342,22 +341,25 @@ class Ontology(owlready2.Ontology, OntoGraph):
         iris = {}
         dirs = set()
         if url_from_catalog or url_from_catalog is None:
-            if (catalogurl in self.world._cached_catalogs and
-                not reload and
-                (not reload_if_newer or
-                 getmtime(catalogurl) > self.world._cached_catalogs[
-                     catalogurl][0])):
+            not_reload = (not reload and
+                          (not reload_if_newer or
+                           getmtime(catalogurl) > self.world._cached_catalogs[
+                               catalogurl][0]))
+            # get iris from catalog already in cached catalogs
+            if (catalogurl in self.world._cached_catalogs and not_reload):
                 mtime, iris, dirs = self.world._cached_catalogs[catalogurl]
+            # do not update cached_catalogs if url already in _iri_mappings
+            # and reload not forced
+            elif (url in self.world._iri_mappings and not_reload):
+                pass
+            # update iris from current catalogurl
             else:
-
                 try:
                     iris, dirs = read_catalog(
                         uri=catalogurl,
                         recursive=False,
                         return_paths=True,
                         catalog_file=catalog_file)
-                    print('iiiiiiiiiiiiiris', iris)
-                    print('dddddddddddddirs', dirs)
                 except ReadCatalogError:
                     if url_from_catalog is not None:
                         raise
