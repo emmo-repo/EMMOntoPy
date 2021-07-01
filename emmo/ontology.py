@@ -341,14 +341,19 @@ class Ontology(owlready2.Ontology, OntoGraph):
         iris = {}
         dirs = set()
         if url_from_catalog or url_from_catalog is None:
-            if (catalogurl in self.world._cached_catalogs and
-                not reload and
-                (not reload_if_newer or
-                 getmtime(catalogurl) > self.world._cached_catalogs[
-                     catalogurl][0])):
+            not_reload = (not reload and
+                          (not reload_if_newer or
+                           getmtime(catalogurl) > self.world._cached_catalogs[
+                               catalogurl][0]))
+            # get iris from catalog already in cached catalogs
+            if (catalogurl in self.world._cached_catalogs and not_reload):
                 mtime, iris, dirs = self.world._cached_catalogs[catalogurl]
+            # do not update cached_catalogs if url already in _iri_mappings
+            # and reload not forced
+            elif (url in self.world._iri_mappings and not_reload):
+                pass
+            # update iris from current catalogurl
             else:
-
                 try:
                     iris, dirs = read_catalog(
                         uri=catalogurl,

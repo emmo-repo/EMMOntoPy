@@ -199,7 +199,6 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
     """
     # Protocols supported by urllib.request
     web_protocols = 'http://', 'https://', 'ftp://'
-
     if uri.startswith(web_protocols):
         # Call read_catalog() recursively to ensure that the temporary
         # file is properly cleaned up
