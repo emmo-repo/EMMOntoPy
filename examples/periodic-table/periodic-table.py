@@ -101,7 +101,7 @@ version_iri = "http://emmo.info/emmo/1.0.0-beta/domain/periodic-table"
 onto.set_version(version_iri=version_iri)
 onto.dir_label = False
 thisdir = os.path.abspath(os.path.dirname(__file__))
-catalog_mappings[version_iri] = '.periodic-table.ttl'
+catalog_mappings[version_iri] = 'periodic-table.ttl'
 
 onto.metadata.abstract.append(en(
     'The periodic table domain ontology provide a simple reference '
