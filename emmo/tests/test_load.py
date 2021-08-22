@@ -9,7 +9,7 @@ from emmo import get_ontology  # noqa: E402, F401
 
 
 # Check that the defaults works
-emmo = get_ontology('emmo').load()  # owl format
+emmo = get_ontology('emmo').load()  # ttl format
 assert emmo.Atom.prefLabel.first() == 'Atom'
 
 emmo = get_ontology('emmo-inferred').load()
@@ -17,6 +17,11 @@ assert emmo.Atom.prefLabel.first() == 'Atom'
 
 emmo = get_ontology('emmo-development').load()  # ttl format
 assert emmo.Atom.prefLabel.first() == 'Atom'
+
+emmo = get_ontology('https://emmo-repo.github.io/latest-stable/'
+                    'emmo-inferred.owl').load()  # owl format
+assert emmo.Atom.prefLabel.first() == 'Atom'
+
 
 # Load a local ontology with catalog
 testonto = os.path.join(os.path.dirname(__file__), 'testonto', 'testonto.ttl')
