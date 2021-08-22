@@ -32,10 +32,10 @@ assert p == set([ontodir])
 
 d = read_catalog('https://raw.githubusercontent.com/emmo-repo/EMMO/master/'
                  'catalog-v001.xml')
-assert any(v.endswith('/emmo.owl') for v in d.values())
+assert any(v.endswith('/emmo.ttl') for v in d.values())
 
 d = read_catalog('https://raw.githubusercontent.com/emmo-repo/EMMO/master')
-assert any(v.endswith('/emmo.owl') for v in d.values())
+assert any(v.endswith('/emmo.ttl') for v in d.values())
 
 try:
     read_catalog(
@@ -54,7 +54,7 @@ else:
 
 d = read_catalog('https://raw.githubusercontent.com/emmo-repo/EMMO/master/'
                  'catalog-v001.xml', baseuri='/abc')
-assert '/abc/emmo.owl' in d.values()
+assert '/abc/emmo.ttl' in d.values()
 
 
 write_catalog(d, 'tmp-catalog.xml')
