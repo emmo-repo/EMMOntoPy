@@ -1024,4 +1024,3 @@ class Ontology(owlready2.Ontology, OntoGraph):
         with self:
             e = types.new_class(name, (parent, ))
         return e
-
