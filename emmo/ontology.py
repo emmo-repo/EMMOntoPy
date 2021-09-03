@@ -14,6 +14,7 @@ import inspect
 import warnings
 import uuid
 import tempfile
+import types
 from collections import defaultdict
 
 import rdflib
@@ -1014,3 +1015,13 @@ class Ontology(owlready2.Ontology, OntoGraph):
         n1 = self.number_of_generations(cls1, cca)
         n2 = self.number_of_generations(cls2, cca)
         return 2 * ccadepth / (n1 + n2 + 2 * ccadepth)
+
+    def new_entity(self, name, parent):
+        '''
+        Makes a new entity in the ontology with given parent.
+        Return the new entity
+        '''
+        with self:
+            e = types.new_class(name, (parent, ))
+        return e
+
