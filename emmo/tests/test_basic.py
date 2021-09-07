@@ -20,26 +20,26 @@ onto = get_ontology('onto.owl')
 onto.imported_ontologies.append(emmo)
 onto.base_iri = 'http://emmo.info/examples/test#'
 
+# Add entity directly
+onto.new_entity('Hydrogen', emmo.Atom)
+
 with onto:
 
-    class Hydrogen(emmo.Atom):
-        pass
-
+    # Add entity using python classes
     class Oxygen(emmo.Atom):
         pass
 
     class H2O(emmo.Molecule):
         """Water molecule."""
-        emmo.hasSpatialDirectPart.exactly(2, Hydrogen)
+        emmo.hasSpatialDirectPart.exactly(2, onto.Hydrogen)
         emmo.hasSpatialDirectPart.exactly(1, Oxygen)
 
     # Create some
-    H1 = Hydrogen()
-    H2 = Hydrogen()
+    H1 = onto.Hydrogen()
+    H2 = onto.Hydrogen()
     O = Oxygen()  # noqa: E741
     w = H2O()
     w.hasSpatialDirectPart = [H1, H2,  O]
-
 
 onto.sync_attributes(name_policy='sequential', name_prefix='myonto_')
 assert onto.base_iri + 'myonto_0' in onto
@@ -48,7 +48,6 @@ assert onto.base_iri + 'myonto_6' in onto
 onto.sync_attributes(name_policy='uuid', name_prefix='onto_')
 assert w.name.startswith('onto_')
 assert len(w.name) == 5 + 36
-
 
 # Remove all traces of onto such that they do not mess up other tests
 # when running pytest
