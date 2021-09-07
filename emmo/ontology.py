@@ -1004,12 +1004,13 @@ class Ontology(owlready2.Ontology, OntoGraph):
             return ancestors
 
     def get_wu_palmer_measure(self, cls1, cls2):
-        '''
-        Returns the Wu Palmer measure for semantic similarity between
+        """ Return Wu-Palmer measure for semantic similarity.
+
+        Returns Wu-Palmer measure for semantic similarity between
         two concepts.
         Wu, Palmer; ACL 94: Proceedings of the 32nd annual meeting on
         Association for Computational Linguistics, June 1994.
-        '''
+        """
         cca = self.closest_common_ancestor(cls1, cls2)
         ccadepth = self.number_of_generations(cca, self.Thing)
         n1 = self.number_of_generations(cls1, cca)
@@ -1017,10 +1018,11 @@ class Ontology(owlready2.Ontology, OntoGraph):
         return 2 * ccadepth / (n1 + n2 + 2 * ccadepth)
 
     def new_entity(self, name, parent):
-        '''
+        """Create and return new entity
+
         Makes a new entity in the ontology with given parent.
         Return the new entity
-        '''
+        """
         with self:
             e = types.new_class(name, (parent, ))
         return e
