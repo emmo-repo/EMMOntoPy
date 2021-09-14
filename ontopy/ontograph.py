@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-A module adding graphing functionality to emmo.ontology
+A module adding graphing functionality to ontopy.ontology
 """
 #
 # This module was written before I had a good understanding of DL.
@@ -25,11 +25,11 @@ import xml.etree.ElementTree as ET
 
 import owlready2
 
-from .utils import asstring
+from ontopy.utils import asstring
 
 
 class OntoGraph:
-    """A mixin class used by emmo.ontology.Ontology that adds
+    """A mixin class used by ontopy.ontology.Ontology that adds
     functionality for generating graph representations of the ontology.
     """
     _default_style = {
@@ -153,8 +153,8 @@ class OntoGraph:
         """
 
         warnings.warn(
-            """The emmo.ontology.get_dot_graph() method is deprecated.
-            Use emmo.ontology.get_graph() instead.
+            """The ontopy.ontology.get_dot_graph() method is deprecated.
+            Use ontopy.ontology.get_graph() instead.
 
             This requires that you install graphviz instead of the old
             pydot package.""", DeprecationWarning)
@@ -162,7 +162,7 @@ class OntoGraph:
         # FIXME - double inheritance leads to dublicated nodes. Make sure
         #         to only add a node once!
         import pydot
-        from .ontology import NoSuchLabelError
+        from ontopy.ontology import NoSuchLabelError
 
         if style is None or style == 'default':
             style = self._default_style

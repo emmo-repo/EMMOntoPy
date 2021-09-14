@@ -1,6 +1,6 @@
 from rdflib import URIRef, OWL, RDF, RDFS
 
-from .owlapi_interface import OwlApiInterface
+from ontopy.factpluspluswrapper.owlapi_interface import OwlApiInterface
 
 
 class FactPPError:

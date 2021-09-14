@@ -5,9 +5,9 @@ import os
 # Add emmo to sys path
 thisdir = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
-from emmo import get_ontology  # noqa: E402, F401
+from ontopy import get_ontology  # noqa: E402, F401
 
-from emmo.graph import (  # noqa: E402, F401
+from ontopy.graph import (  # noqa: E402, F401
     plot_modules,
     get_module_dependencies,
     check_module_dependencies,

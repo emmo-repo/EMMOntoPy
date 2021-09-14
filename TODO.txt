@@ -1,11 +1,11 @@
 TODO
 ----
-[x] Facture out graph stuff from emmo.ontology.py
-[x] Facture out controlled vocabulary stuff from emmo.ontology.py
+[x] Facture out graph stuff from ontopy.ontology.py
+[x] Facture out controlled vocabulary stuff from ontopy.ontology.py
 [ ] Make documentation
 [ ] Inject properties in Owlready2.entity.ThingClass
     [ ] annotations
-    [ ] ... <current methods in emmo.Ontology that takes an entity as argument>
+    [ ] ... <current methods in emmopy.Ontology that takes an entity as argument>
     [x] EMMO-relations
 [ ] Update the relation branch in EMMO - it does not correlate with the
     relations actually used...

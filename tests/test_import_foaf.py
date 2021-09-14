@@ -2,7 +2,7 @@
 #
 # This test serves more like an example
 
-from emmo import get_ontology
+from ontopy import get_ontology
 
 skos = get_ontology('http://www.w3.org/2004/02/skos/core#').load()
 foaf = get_ontology("http://xmlns.com/foaf/0.1/")

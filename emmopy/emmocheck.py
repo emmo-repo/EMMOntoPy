@@ -23,12 +23,12 @@ import itertools
 import argparse
 import fnmatch
 
-from .ontology import World
-from .patch import get_preferred_label as get_label
-from . import onto_path
+from ontopy.ontology import World
+from ontopy.patch import get_preferred_label as get_label
+from ontopy import onto_path
 
 try:
-    from .colortest import ColourTextTestRunner as TextTestRunner
+    from ontopy.colortest import ColourTextTestRunner as TextTestRunner
 except ImportError:
     from unittest import TextTestRunner
 

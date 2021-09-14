@@ -2,7 +2,7 @@ include README.md LICENSE.txt requirements.txt
 recursive-exclude .github *
 exclude .readthedocs.yml
 
-recursive-include demo emmo/owl *.owl
+recursive-include demo emmopy/owl ontopy/owl *.owl
 
 recursive-include examples/emmodoc *
 recursive-exclude examples/emmodoc old/** genfigs/** *.pdf *.html *~

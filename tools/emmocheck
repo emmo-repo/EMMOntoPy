@@ -9,7 +9,7 @@ rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
     os.path.dirname(__file__)))))
 sys.path.insert(1, rootdir)
 
-from emmo.emmocheck import main  # noqa: E402
+from emmopy.emmocheck import main  # noqa: E402
 
 
 if __name__ == '__main__':

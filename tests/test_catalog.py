@@ -5,8 +5,8 @@ import os
 # Add emmo to sys path
 thisdir = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
-from emmo.utils import read_catalog, ReadCatalogError  # noqa: E402, F401
-from emmo.utils import write_catalog  # noqa: E402, F401
+from ontopy.utils import read_catalog, ReadCatalogError  # noqa: E402, F401
+from ontopy.utils import write_catalog  # noqa: E402, F401
 
 
 ontodir = os.path.join(thisdir, 'testonto')

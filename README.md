@@ -56,7 +56,7 @@ Some examples of what you can do with EMMO-python includes:
     session where we check the relations of `Matter`:
 
     ```python
-    In [1]: from emmo import get_ontology
+    In [1]: from ontopy import get_ontology
 
     In [2]: emmo = get_ontology()
 

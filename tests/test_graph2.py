@@ -5,8 +5,8 @@ import os
 # Add emmo to sys path
 thisdir = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
-from emmo import get_ontology  # noqa: E402, F401
-from emmo.graph import OntoGraph  # noqa: E402, F401
+from ontopy import get_ontology  # noqa: E402, F401
+from ontopy.graph import OntoGraph  # noqa: E402, F401
 
 # Create output directory
 outdir = 'test_graph2'
