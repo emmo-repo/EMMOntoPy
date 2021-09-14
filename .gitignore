@@ -2,7 +2,7 @@
 
 __pycache__
 .pytest_cache
-EMMO.egg-info
+*.egg*
 MANIFEST
 dist
 build
