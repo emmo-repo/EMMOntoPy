@@ -82,6 +82,7 @@ setuptools.setup(
         'ontopy.factpluspluswrapper.java.lib.jars': ['*.jar'],
         'ontopy.factpluspluswrapper.java': ['pom.xml'],
     },
+    include_package_data=True,
     data_files=[
         ('share/EMMO-python', ['README.md', 'LICENSE.txt']),
         (
