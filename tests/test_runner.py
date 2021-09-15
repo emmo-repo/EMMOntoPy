@@ -32,7 +32,7 @@ class ScriptTestCase(unittest.TestCase):
 
 
 def test(verbosity=1, stream=sys.stdout):
-    tests = [test for test in glob(os.path.join(thisdir, '*.py'))
+    tests = [test for test in glob(os.path.join(thisdir, '../ontopy/*.py'))
              if not test.endswith('__.py') and
              not test.endswith(os.path.basename(__file__))]
     ts = unittest.TestSuite()

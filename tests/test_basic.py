@@ -5,7 +5,7 @@ import itertools
 
 # Add emmo to sys path
 thisdir = os.path.abspath(os.path.dirname(__file__))
-sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
+sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..')))
 from ontopy import get_ontology  # noqa: E402, F401
 
 import owlready2  # noqa: E402, F401

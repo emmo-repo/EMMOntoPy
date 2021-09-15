@@ -4,7 +4,7 @@ import os
 
 # Add emmo to sys path
 thisdir = os.path.abspath(os.path.dirname(__file__))
-sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..', '..')))
+sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..')))
 from ontopy import get_ontology  # noqa: E402, F401
 from ontopy.ontodoc import OntoDoc, DocPP  # noqa: E402, F401
 
@@ -21,9 +21,8 @@ for s in sorted(iris):
     print(s)
 
 
-inputdir = os.path.abspath(os.path.join(
-    thisdir, '..', '..', 'examples', 'emmodoc'))
 inputfile = os.path.join(thisdir, 'doc.md')
+assert os.path.exists(inputfile)
 
 ontodoc = OntoDoc(emmo)
 
