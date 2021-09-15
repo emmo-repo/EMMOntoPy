@@ -73,12 +73,6 @@ setuptools.setup(
     install_requires=requirements,
     packages=['emmo',
               'emmo.factpluspluswrapper',
-              'emmo.factpluspluswrapper.java',
-              'emmo.factpluspluswrapper.java.lib',
-              'emmo.factpluspluswrapper.java.lib.jars',
-              'emmo.factpluspluswrapper.java.lib.so',
-              'emmo.factpluspluswrapper',
-              'emmo.factpluspluswrapper',
               ],
     scripts=['tools/ontodoc',
              'tools/ontograph',
@@ -91,6 +85,7 @@ setuptools.setup(
         'emmo.factpluspluswrapper.java.lib.jars': ['*.jar'],
         'emmo.factpluspluswrapper.java': ['pom.xml'],
     },
+    include_package_data=True,
     data_files=[
         ('share/EMMO-python', ['README.md', 'LICENSE.txt']),
         (
