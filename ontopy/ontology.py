@@ -25,8 +25,12 @@ from owlready2 import locstr
 
 from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 
-from ontopy.utils import asstring, read_catalog, infer_version, convert_imported
-from ontopy.utils import FMAP, OWLREADY2_FORMATS, isinteractive, ReadCatalogError
+from ontopy.utils import (
+    asstring, read_catalog, infer_version, convert_imported
+)
+from ontopy.utils import (
+    FMAP, OWLREADY2_FORMATS, isinteractive, ReadCatalogError
+)
 from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
 
 
