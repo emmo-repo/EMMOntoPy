@@ -2,10 +2,18 @@
 """Converts file format of input ontology and write it to output file(s).
 """
 import argparse
+import os
+import sys
 
 from rdflib.util import Graph, guess_format
 
-from ontopy.utils import convert_imported, squash_imported
+from ontopy.utils import (
+    convert_imported,
+    FMAP,
+    IncompatibleVersion,
+    squash_imported,
+    _validate_installed_version,
+)
 from ontopy.factpluspluswrapper.factppgraph import FaCTPPGraph
 
 
@@ -64,28 +72,49 @@ def main():
         output_format = 'xml'
 
     # Perform conversion
-    if args.recursive:
-        convert_imported(args.input, args.output,
-                         input_format=input_format,
-                         output_format=output_format,
-                         url_from_catalog=args.url_from_catalog)
-    elif args.inferred:
-        g = squash_imported(args.input, None,
-                            input_format=input_format)
-        fg = FaCTPPGraph(g)
-        if args.base_iri:
-            fg.base_iri = args.base_iri
-        g2 = fg.inferred_graph()
-        g2.serialize(destination=args.output, format=output_format)
-    elif args.squash:
-        squash_imported(args.input, args.output,
-                        input_format=input_format,
-                        output_format=output_format,
-                        url_from_catalog=args.url_from_catalog)
-    else:
-        g = Graph()
-        g.parse(args.input, format=input_format)
-        g.serialize(destination=args.output, format=output_format)
+    try:
+        if args.recursive:
+            convert_imported(args.input, args.output,
+                            input_format=input_format,
+                            output_format=output_format,
+                            url_from_catalog=args.url_from_catalog)
+        elif args.inferred:
+            g = squash_imported(args.input, None,
+                                input_format=input_format)
+            fg = FaCTPPGraph(g)
+            if args.base_iri:
+                fg.base_iri = args.base_iri
+            g2 = fg.inferred_graph()
+            g2.serialize(destination=args.output, format=output_format)
+        elif args.squash:
+            squash_imported(args.input, args.output,
+                            input_format=input_format,
+                            output_format=output_format,
+                            url_from_catalog=args.url_from_catalog)
+        else:
+            if (
+                not _validate_installed_version(
+                    package="rdflib", min_version="6.0.0"
+                )
+                and (
+                    output_format == FMAP.get("ttl", "")
+                    or os.path.splitext(args.output)[1] == "ttl"
+                )
+            ):
+                from rdflib import __version__ as __rdflib_version__
+
+                raise IncompatibleVersion(
+                    "To correctly convert to Turtle format, rdflib must be version"
+                    " 6.0.0 or greater, however, the detected rdflib version used "
+                    f"by your Python interpreter is {__rdflib_version__!r}. For "
+                    "more information see the 'Known issues' section of the README."
+                )
+
+            g = Graph()
+            g.parse(args.input, format=input_format)
+            g.serialize(destination=args.output, format=output_format)
+    except IncompatibleVersion as exc:
+        sys.exit(f"\033[91mERROR\033[0m: {exc}")
 
 
 if __name__ == '__main__':
