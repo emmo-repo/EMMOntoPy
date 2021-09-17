@@ -43,7 +43,6 @@ class UnknownVersion(Exception):
     """Cannot retrieve version from a package."""
 
 
-
 def isinteractive():
     """Returns true if we are running from an interactive interpreater,
     false otherwise."""
@@ -362,7 +361,9 @@ def _validate_installed_version(
 
     """
     import importlib
-    from packaging.version import parse as parse_version, LegacyVersion, Version
+    from packaging.version import (
+        parse as parse_version, LegacyVersion, Version
+    )
 
     if isinstance(min_version, str):
         min_version = parse_version(min_version)
@@ -537,7 +538,9 @@ def squash_imported(input, output, input_format=None, output_format='xml',
     recur(graph)
     if output:
         if (
-            not _validate_installed_version(package="rdflib", min_version="6.0.0")
+            not _validate_installed_version(
+                package="rdflib", min_version="6.0.0"
+            )
             and (
                 output_format == FMAP.get("ttl", "")
                 or os.path.splitext(output)[1] == "ttl"
@@ -549,7 +552,8 @@ def squash_imported(input, output, input_format=None, output_format='xml',
                 "To correctly convert to Turtle format, rdflib must be version"
                 " 6.0.0 or greater, however, the detected rdflib version used "
                 f"by your Python interpreter is {__rdflib_version__!r}. For "
-                "more information see the 'Known issues' section of the README."
+                "more information see the 'Known issues' section of the "
+                "README."
             )
 
         graph.serialize(destination=output, format=output_format)
