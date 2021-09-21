@@ -9,7 +9,7 @@ For a standalone html documentation including all inferred relations, enter this
 ontodoc --template=emmo.md --format=html emmo-inferred emmo.html
 ```
 
-Pandoc options may be adjusted with the files [pandoc-args.yaml](pandoc-args.yaml) and [pandoc-html-args.yaml](pandoc-html-args.yaml).
+Pandoc options may be adjusted with the files [pandoc-options.yaml](pandoc-options.yaml) and [pandoc-html-options.yaml](pandoc-html-options.yaml).
 
 Similarly, for generating pdf documentation, enter this directory and run:
 
