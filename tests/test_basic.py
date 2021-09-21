@@ -13,7 +13,7 @@ def test_basic() -> None:
 
     emmo = get_ontology()
     emmo.load()
-    # emmo.sync_reasoner()
+    emmo.sync_reasoner()
 
 
     onto = get_ontology('onto.owl')
