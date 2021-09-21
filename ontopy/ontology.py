@@ -16,7 +16,6 @@ import uuid
 import tempfile
 import types
 from collections import defaultdict
-import warnings
 
 import rdflib
 from rdflib.util import guess_format
@@ -30,7 +29,12 @@ from ontopy.utils import (
     asstring, read_catalog, infer_version, convert_imported
 )
 from ontopy.utils import (
-    FMAP, OWLREADY2_FORMATS, isinteractive, IncompatibleVersion, ReadCatalogError, _validate_installed_version
+    FMAP,
+    IncompatibleVersion,
+    isinteractive,
+    OWLREADY2_FORMATS,
+    ReadCatalogError,
+    _validate_installed_version,
 )
 from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
 
@@ -492,7 +496,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
             format = guess_format(filename, fmap=FMAP)
 
         if (
-            not _validate_installed_version(package="rdflib", min_version="6.0.0")
+            not _validate_installed_version(
+                package="rdflib", min_version="6.0.0"
+            )
             and format == FMAP.get("ttl", "")
         ):
             from rdflib import __version__ as __rdflib_version__
