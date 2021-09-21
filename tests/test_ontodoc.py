@@ -1,7 +1,3 @@
-import pytest
-
-
-@pytest.mark.skip("Un-skip when issue #210 has been resolved.")
 def test_ontodoc() -> None:
     import sys
     import os
