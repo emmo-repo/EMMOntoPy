@@ -16,6 +16,7 @@ import uuid
 import tempfile
 import types
 from collections import defaultdict
+import warnings
 
 import rdflib
 from rdflib.util import guess_format
@@ -496,11 +497,14 @@ class Ontology(owlready2.Ontology, OntoGraph):
         ):
             from rdflib import __version__ as __rdflib_version__
 
-            raise IncompatibleVersion(
-                "To correctly convert to Turtle format, rdflib must be version "
-                "6.0.0 or greater, however, the detected rdflib version used "
-                f"by your Python interpreter is {__rdflib_version__!r}. For "
-                "more information see the 'Known issues' section of the README."
+            warnings.warn(
+                IncompatibleVersion(
+                    "To correctly convert to Turtle format, rdflib must be "
+                    "version 6.0.0 or greater, however, the detected rdflib "
+                    "version used by your Python interpreter is "
+                    f"{__rdflib_version__!r}. For more information see the "
+                    "'Known issues' section of the README."
+                )
             )
 
         if format in OWLREADY2_FORMATS:

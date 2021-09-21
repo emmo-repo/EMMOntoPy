@@ -8,6 +8,7 @@ import tempfile
 import types
 from typing import TYPE_CHECKING
 import urllib.request
+import warnings
 import xml.etree.ElementTree as ET
 
 from rdflib import Graph, URIRef
@@ -34,9 +35,10 @@ FMAP = {
 OWLREADY2_FORMATS = 'rdfxml', 'owl', 'xml', 'ntriples'
 
 
-class IncompatibleVersion(Exception):
-    """An installed dependency version is incompatible with a functionality of
-    this package."""
+class IncompatibleVersion(Warning):
+    """An installed dependency version may be incompatible with a functionality
+    of this package - or rather an outcome of a functionality.
+    This is not critical, hence this is only a warning."""
 
 
 class UnknownVersion(Exception):
@@ -400,10 +402,6 @@ def convert_imported(input, output, input_format=None, output_format='xml',
         `rdflib>=6.0.0`. See [Known issues](../README.md#Known-issues) in the
         README for more information.
 
-    Raises:
-        IncompatibleVersion: If `rdflib<6.0.0` and the desired output format is
-            Turtle.
-
     Args:
         input: input ontology file name
         output: output ontology file path.  The directory part of `output`
@@ -475,11 +473,14 @@ def convert_imported(input, output, input_format=None, output_format='xml',
     ):
         from rdflib import __version__ as __rdflib_version__
 
-        raise IncompatibleVersion(
-            "To correctly convert to Turtle format, rdflib must be version "
-            "6.0.0 or greater, however, the detected rdflib version used "
-            f"by your Python interpreter is {__rdflib_version__!r}. For "
-            "more information see the 'Known issues' section of the README."
+        warnings.warn(
+            IncompatibleVersion(
+                "To correctly convert to Turtle format, rdflib must be "
+                "version 6.0.0 or greater, however, the detected rdflib "
+                "version used by your Python interpreter is "
+                f"{__rdflib_version__!r}. For more information see the "
+                "'Known issues' section of the README."
+            )
         )
 
     g = Graph()
@@ -502,10 +503,6 @@ def squash_imported(input, output, input_format=None, output_format='xml',
         To convert to Turtle (`.ttl`) format, you must have installed
         `rdflib>=6.0.0`. See [Known issues](../README.md#Known-issues) in the
         README for more information.
-
-    Raises:
-        IncompatibleVersion: If `rdflib<6.0.0` and the desired output format is
-            Turtle.
 
     """
     inroot = os.path.dirname(os.path.abspath(input))
@@ -548,12 +545,14 @@ def squash_imported(input, output, input_format=None, output_format='xml',
         ):
             from rdflib import __version__ as __rdflib_version__
 
-            raise IncompatibleVersion(
-                "To correctly convert to Turtle format, rdflib must be version"
-                " 6.0.0 or greater, however, the detected rdflib version used "
-                f"by your Python interpreter is {__rdflib_version__!r}. For "
-                "more information see the 'Known issues' section of the "
-                "README."
+            warnings.warn(
+                IncompatibleVersion(
+                    "To correctly convert to Turtle format, rdflib must be "
+                    "version 6.0.0 or greater, however, the detected rdflib "
+                    "version used by your Python interpreter is "
+                    f"{__rdflib_version__!r}. For more information see the "
+                    "'Known issues' section of the README."
+                )
             )
 
         graph.serialize(destination=output, format=output_format)
