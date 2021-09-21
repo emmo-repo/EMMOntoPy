@@ -9,7 +9,5 @@ build
 old
 test_graph2
 
-*.svg
 *.pdf
-*.png
 *.xml

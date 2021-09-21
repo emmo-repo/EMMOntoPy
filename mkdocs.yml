@@ -1,0 +1,80 @@
+site_name: EMMOntoPy
+site_description: Documentation for the EMMOntoPy library
+site_url: https://emmo-repo.github.io/EMMO-python
+copyright: Copyright &copy; 2019-2021 SINTEF
+
+theme:
+  name: material
+  palette:
+    scheme: default
+    primary: green
+    accent: light green
+  icon:
+    repo: fontawesome/brands/github
+  logo: images/suspected_logo.svg
+  favicon: images/favicon.png
+  language: en
+  features:
+    - navigation.instant
+    - navigation.top
+
+repo_name: EMMO-python
+repo_url: https://github.com/emmo-repo/EMMO-python
+edit_uri: ""
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/emmo-repo
+      name: EMMO on GitHub
+
+extra_css:
+  - css/reference.css
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed
+  - pymdownx.caret
+  - pymdownx.tilde
+  - toc:
+      permalink: true
+
+plugins:
+  - search:
+      lang: en
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_root_heading: false
+            show_root_toc_entry: true
+            show_root_full_path: true
+            show_object_full_path: false
+            show_category_heading: false
+            show_if_no_docstring: false
+            show_source: true
+            group_by_category: true
+            heading_level: 2
+          selection:
+            filters:
+              - "!^_[^_]"
+              - "!__all__$"
+              - "!__str__$"
+              - "!__repr__$"
+              - "!ValidatorResults$"
+            members: true
+            inherited_members: false
+            docstring_style: google
+            docstring_options:
+              replace_admonitions: true
+          setup_commands:
+            - import os
+            - os.environ["MKDOCS_BUILD"] = "1"
+      watch:
+        - emmopy
+        - ontopy
+  - awesome-pages

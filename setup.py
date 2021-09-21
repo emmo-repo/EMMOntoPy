@@ -30,7 +30,18 @@ with open(os.path.join(rootdir, 'README.md'), 'rt') as f:
 
 # Read requirements from requirements.txt file
 with open(os.path.join(rootdir, 'requirements.txt'), 'rt') as f:
-    REQUIREMENTS = f.read().split()
+    REQUIREMENTS = [
+        f"{_.strip()}"
+        for _ in f.readlines()
+        if not _.startswith("#") and "git+" not in _
+    ]
+
+with open(os.path.join(rootdir, "requirements_docs.txt"), "r", encoding="utf8") as handle:
+    DOCS = [
+        f"{_.strip()}"
+        for _ in handle.readlines()
+        if not _.startswith("#") and "git+" not in _
+    ]
 
 # Retrieve emmo-package version
 with open(os.path.join(rootdir, 'ontopy/__init__.py')) as handle:
@@ -71,6 +82,7 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     install_requires=REQUIREMENTS,
+    extras_require={"docs": DOCS},
     packages=setuptools.find_packages(),
     scripts=['tools/ontodoc',
              'tools/ontograph',

@@ -5,7 +5,7 @@
 [![PyPI version](https://badge.fury.io/py/EMMO.svg)](https://badge.fury.io/py/EMMO)
 
 This package is based on [Owlready2] and provides an intuitive representation of [EMMO] in Python.
-It is available on [GitHub][EMMOntoPy] and on [PyPI][PyPI:EMMO] under the open source [BSD 3-Clause license](LICENSE.txt).
+It is available on [GitHub][EMMOntoPy] and on [PyPI][PyPI:EMMO] under the open source [BSD 3-Clause license](LICENSE.md).
 
 The European Materials & Modelling Ontology (EMMO) is an ongoing effort to create an ontology that takes into account fundamental concepts of physics, chemistry and materials science and is designed to pave the road for semantic interoperability.
 The aim of EMMO is to be generic and provide a common ground for describing materials, models and data that can be adapted by all domains.
@@ -20,15 +20,15 @@ On top of that EMMOntoPy provides:
 - Generation of graphs.
 - Generation of documentation.
 - Command-line tools:
-  - [`emmocheck`](docs/tools-instructions.md#emmocheck):
+  - [`emmocheck`](tools-instructions.md#emmocheck):
     Checks an ontology against EMMO conventions.
-  - [`ontoversion`](docs/tools-instructions.md#ontoversion):
+  - [`ontoversion`](tools-instructions.md#ontoversion):
     Prints ontology version number.
-  - [`ontograph`](docs/tools-instructions.md#ontograph):
+  - [`ontograph`](tools-instructions.md#ontograph):
     Vertasile tool for visualising (parts of) an ontology.
-  - [`ontodoc`](docs/tools-instructions.md#ontodoc):
+  - [`ontodoc`](tools-instructions.md#ontodoc):
     Documents an ontology.
-  - [`ontoconvert`](docs/tools-instructions.md#ontoconvert):
+  - [`ontoconvert`](tools-instructions.md#ontoconvert):
     Converts between ontology formats.
 
 Some examples of what you can do with EMMOntoPy includes:
@@ -38,7 +38,7 @@ Some examples of what you can do with EMMOntoPy includes:
   This can be done both statically with easy readable Python code or dynamically within your application.
 - Generate graphs and documentation of your ontologies.
   EMMOntoPy includes `ontodoc`, which is a dedicated command line tool for this.
-  You find it in the [tools/](tools) sub directory.
+  You find it in the [tools/](../tools) sub directory.
 - Check that a EMMO-based domain or application ontology ahead to the conventions of EMMO.
 - Interactively explore an ontology in e.g. [IPython].
   Tab completion makes exploration easy and fast.
@@ -114,7 +114,7 @@ pip install EMMO
   - [pydot]: Used for generating graphs.
     Will be deprecated.
 
-See [docs/docker-instructions.md](docs/docker-instructions.md) for how to build a docker image.
+See [docker-instructions.md](docker-instructions.md) for how to build a docker image.
 
 ### Known issues
 
