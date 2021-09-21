@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD024 -->
 # Instructions for tools available in EMMOntoPy
 
 **Content:**

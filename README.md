@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD033 -->
 # EMMO - Python API for the European Materials & Modelling Ontology
 
 ![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20Tests/badge.svg)
