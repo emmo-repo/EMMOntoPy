@@ -1,5 +1,5 @@
-Instructions for tools available in EMMO-python
-===============================================
+Instructions for tools available in EMMOntoPy
+=============================================
 
 **Content:**
 

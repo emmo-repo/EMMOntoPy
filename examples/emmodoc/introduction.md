@@ -247,7 +247,7 @@ use DL symbols and to be easy and quick to read and write.  Several
 other syntaxes exist for DL.  An interesting example is the pure
 Python syntax proposed by [Lamy (2017)][Lamy2017], which is used in
 the open source [Owlready2][Owlready2] Python package.  The [Python API
-for EMMO][EMMO-python] is also based on Owlready2.
+for EMMO][EMMOntoPy] is also based on Owlready2.
 
 
 ----------------------------------------------------------------------------------------------------------------------------------
@@ -615,7 +615,7 @@ to be added for all classes and relations.  Possible annotations are:
 [Manchester_OWL]: http://ceur-ws.org/Vol-216/submission_9.pdf
 [Owlready2]: https://pythonhosted.org/Owlready2/
 [Lamy2017]: http://www.lesfleursdunormal.fr/_downloads/article_owlready_aim_2017.pdf
-[EMMO-python]: https://github.com/emmo-repo/EMMO-python
+[EMMOntoPy]: https://github.com/emmo-repo/EMMO-python
 [Great_table_of_DL]: http://www.lesfleursdunormal.fr/static/_downloads/great_ontology_table.pdf
 [universal_restriction]: https://en.wikipedia.org/wiki/Universal_quantifier
 [existential_restriction]: https://en.wikipedia.org/wiki/Universal_quantifier

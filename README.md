@@ -7,7 +7,7 @@ EMMO - Python API for the European Materials & Modelling Ontology
 
 This package is based on [Owlready2] and provides an intuitive
 representation of [EMMO] in Python.
-It is available on [GitHub][EMMO-python] and on [PyPI][PyPI:EMMO]
+It is available on [GitHub][EMMOntoPy] and on [PyPI][PyPI:EMMO]
 under the open source [BSD 3-Clause license](LICENSE.txt).
 
 The European Materials & Modelling Ontology (EMMO) is an ongoing
@@ -17,10 +17,10 @@ to pave the road for semantic interoperability.  The aim of EMMO is to
 be generic and provide a common ground for describing materials,
 models and data that can be adapted by all domains.
 
-EMMO is formulated using OWL.  EMMO-python is a Python API for using
+EMMO is formulated using OWL.  EMMOntoPy is a Python API for using
 EMMO to solving real problems.  By using the excellent Python package
-[Owlready2], EMMO-python provides a natural representation of
-EMMO in Python.  On top of that EMMO-python provides:
+[Owlready2], EMMOntoPy provides a natural representation of
+EMMO in Python.  On top of that EMMOntoPy provides:
 
   - Access by label (as well as by names, important since class and
     property names in EMMO are based on UUIDs).
@@ -40,13 +40,13 @@ EMMO in Python.  On top of that EMMO-python provides:
         converts between ontology formats
 
 
-Some examples of what you can do with EMMO-python includes:
+Some examples of what you can do with EMMOntoPy includes:
 
   - Access and query EMMO-based ontologies from your application.
   - Extend EMMO with new domain or application ontologies.  This can
     be done both statically with easy readable Python code or
     dynamically within your application.
-  - Generate graphs and documentation of your ontologies.  EMMO-python
+  - Generate graphs and documentation of your ontologies.  EMMOntoPy
     includes `ontodoc`, which is a dedicated command line tool for this.
     You find it in the [tools/](tools) sub directory.
   - Check that a EMMO-based domain or application ontology ahead to the
@@ -79,7 +79,7 @@ Documentation and examples
 --------------------------
 The [Owlready2 documentation][Owlready2-doc] is a good starting point.
 
-In addition EMMO-python includes a few examples and demos:
+In addition EMMOntoPy includes a few examples and demos:
   - [demo/vertical](demo/vertical/README.md) shows an example of
     how EMMO may be used to achieve vertical interoperability.
     The file [define-ontology.py](demo/vertical/define-ontology.py)
@@ -89,7 +89,7 @@ In addition EMMO-python includes a few examples and demos:
   - [demo/horizontal](demo/horizontal/README.md) shows an example of
     shows an example of how EMMO may be used to achieve horizontal
     interoperability.  This demo also shows how you can use
-    EMMO-python to represent your ontology with the low-level metadata
+    EMMOntoPy to represent your ontology with the low-level metadata
     framework [DLite]. In addition to achieve interoperability, as
     shown in the demo, DLite also allow you to automatically generate
     C or Fortran code base on your ontology.
@@ -153,7 +153,7 @@ Known issues
 
 Attributions and credits
 ------------------------
-EMMO-python is maintained by [EMMC-ASBL](https://emmc.eu/).  So far it has mainly been developed by
+EMMOntoPy is maintained by [EMMC-ASBL](https://emmc.eu/).  So far it has mainly been developed by
 [SINTEF](https://www.sintef.no/).
 
 ### Contributing projects
@@ -172,12 +172,11 @@ EMMO-python is maintained by [EMMC-ASBL](https://emmc.eu/).  So far it has mainl
 
 
 
-[EMMO-python]: https://github.com/emmo-repo/EMMO-python/
+[EMMOntoPy]: https://github.com/emmo-repo/EMMO-python/
 [EMMO-pypi]: https://pypi.org/project/EMMO/
 [Owlready2]: https://pypi.org/project/Owlready2/
 [Owlready2-doc]: https://pythonhosted.org/Owlready2/
 [EMMO]: https://github.com/emmo-repo/EMMO/
-[EMMO-python]: https://github.com/emmo-repo/EMMO-python/
 [PyPI:EMMO]: https://pypi.org/project/EMMO/
 [Python]: https://www.python.org/
 [IPython]: https://ipython.org/
