@@ -77,4 +77,18 @@ plugins:
       watch:
         - emmopy
         - ontopy
-  - awesome-pages
+  - awesome-pages:
+      collapse_single_pages: true
+
+nav:
+  - Home: index.md
+  - Tools: tools-instructions.md
+  - Docker: docker-instructions.md
+  - License: LICENSE.md
+  - Examples and demonstrations:
+    - ... | demo/**
+    - ... | examples/**
+  - Developers:
+    - release-instructions.md
+  - ... | api_reference/**
+

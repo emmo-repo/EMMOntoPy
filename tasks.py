@@ -80,7 +80,7 @@ def create_api_reference_docs(_, pre_clean=False):
 
     unwanted_subdirs = ("__pycache__",)
 
-    pages_template = 'title: "{name}"\n'
+    pages_template = 'title: "{name}"\ncollapse_single_pages: false\n'
     md_template = "# {name}\n\n::: {py_path}\n"
     models_template = (
         md_template + f"{' ' * 4}rendering:\n{' ' * 6}show_if_no_docstring: true\n"
@@ -92,6 +92,10 @@ def create_api_reference_docs(_, pre_clean=False):
             sys.exit(f"{docs_api_ref_dir} should have been removed!")
     docs_api_ref_dir.mkdir(exist_ok=True)
 
+    write_file(
+        full_path=docs_api_ref_dir / ".pages",
+        content=pages_template.format(name="API Reference"),
+    )
     library_dir = TOP_DIR
 
     for package_dir in package_dirs:
@@ -110,12 +114,7 @@ def create_api_reference_docs(_, pre_clean=False):
             # Create `.pages`
             docs_sub_dir = docs_api_ref_dir / relpath
             docs_sub_dir.mkdir(exist_ok=True)
-            if str(relpath) == ".":
-                write_file(
-                    full_path=docs_api_ref_dir / ".pages",
-                    content=pages_template.format(name="API Reference"),
-                )
-            else:
+            if str(relpath) != ".":
                 write_file(
                     full_path=docs_sub_dir / ".pages",
                     content=pages_template.format(
