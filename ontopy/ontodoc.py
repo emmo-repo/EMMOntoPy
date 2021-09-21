@@ -15,8 +15,8 @@ from tempfile import NamedTemporaryFile, TemporaryDirectory
 import yaml
 import owlready2
 
-from .utils import asstring, camelsplit, get_label
-from .graph import OntoGraph, filter_classes
+from ontopy.utils import asstring, camelsplit, get_label
+from ontopy.graph import OntoGraph, filter_classes
 
 
 class OntoDoc:

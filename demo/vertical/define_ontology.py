@@ -33,7 +33,7 @@ References
 [1] Khalid et al. Proc. Manufact. 15 (2018) 1407
 
 """
-from emmo import World
+from ontopy import World
 
 
 # Load EMMO

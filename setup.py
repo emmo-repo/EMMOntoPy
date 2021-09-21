@@ -30,14 +30,14 @@ with open(os.path.join(rootdir, 'README.md'), 'rt') as f:
 
 # Read requirements from requirements.txt file
 with open(os.path.join(rootdir, 'requirements.txt'), 'rt') as f:
-    requirements = f.read().split()
+    REQUIREMENTS = f.read().split()
 
 # Retrieve emmo-package version
-with open(os.path.join(rootdir, 'emmo/__init__.py')) as handle:
+with open(os.path.join(rootdir, 'ontopy/__init__.py')) as handle:
     for line in handle:
-        match = re.match(r"__version__ = '(.*)'", line)
+        match = re.match(r"__version__ = '(?P<version>.*)'", line)
         if match is not None:
-            VERSION = match.group(1)
+            VERSION = match.group("version")
             break
     else:
         raise RuntimeError(
@@ -45,7 +45,7 @@ with open(os.path.join(rootdir, 'emmo/__init__.py')) as handle:
 
 
 setuptools.setup(
-    name='EMMO',
+    name='EMMOntoPy',
     version=VERSION,
     author='Jesper Friis, Francesca Lønstad Bleken, Bjørn Tore Løvfall',
     author_email='jesper.friis@sintef.no',
@@ -70,26 +70,17 @@ setuptools.setup(
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    install_requires=requirements,
-    packages=['emmo',
-              'emmo.factpluspluswrapper',
-              'emmo.factpluspluswrapper.java',
-              'emmo.factpluspluswrapper.java.lib',
-              'emmo.factpluspluswrapper.java.lib.jars',
-              'emmo.factpluspluswrapper.java.lib.so',
-              'emmo.factpluspluswrapper',
-              'emmo.factpluspluswrapper',
-              ],
+    install_requires=REQUIREMENTS,
+    packages=setuptools.find_packages(),
     scripts=['tools/ontodoc',
              'tools/ontograph',
              'tools/emmocheck',
              'tools/ontoconvert',
              'tools/ontoversion'],
     package_data={
-        'emmo': ['tests/*.py'],
-        'emmo.factpluspluswrapper.java.lib.so': ['*'],
-        'emmo.factpluspluswrapper.java.lib.jars': ['*.jar'],
-        'emmo.factpluspluswrapper.java': ['pom.xml'],
+        'ontopy.factpluspluswrapper.java.lib.so': ['*'],
+        'ontopy.factpluspluswrapper.java.lib.jars': ['*.jar'],
+        'ontopy.factpluspluswrapper.java': ['pom.xml'],
     },
     data_files=[
         ('share/EMMO-python', ['README.md', 'LICENSE.txt']),

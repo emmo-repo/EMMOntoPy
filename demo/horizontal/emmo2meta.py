@@ -19,8 +19,8 @@ import re
 
 import dlite
 from dlite import Instance, Dimension, Property
-from emmo import get_ontology
-from emmo.utils import asstring
+from ontopy import get_ontology
+from ontopy.utils import asstring
 import owlready2
 
 

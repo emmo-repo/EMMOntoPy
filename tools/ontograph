@@ -10,9 +10,9 @@ rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
     os.path.dirname(__file__)))))
 sys.path.insert(1, rootdir)
 
-from emmo import World, onto_path  # noqa: E402
-from emmo.graph import OntoGraph, plot_modules, _default_style  # noqa: E402
-from emmo.utils import get_label
+from ontopy import World, onto_path  # noqa: E402
+from ontopy.graph import OntoGraph, plot_modules, _default_style  # noqa: E402
+from ontopy.utils import get_label
 import owlready2  # noqa: E402
 
 

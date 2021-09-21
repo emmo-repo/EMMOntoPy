@@ -23,10 +23,15 @@ from rdflib.util import guess_format
 import owlready2
 from owlready2 import locstr
 
-from .utils import asstring, read_catalog, infer_version, convert_imported
-from .utils import FMAP, OWLREADY2_FORMATS, isinteractive, ReadCatalogError
-from .factpluspluswrapper.sync_factpp import sync_reasoner_factpp
-from .ontograph import OntoGraph  # FIXME: deprecate...
+from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
+
+from ontopy.utils import (
+    asstring, read_catalog, infer_version, convert_imported
+)
+from ontopy.utils import (
+    FMAP, OWLREADY2_FORMATS, isinteractive, ReadCatalogError
+)
+from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
 
 
 # Default annotations to look up
@@ -915,7 +920,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         Note that this method requires the Python graphviz package.
         """
-        from .graph import OntoGraph
+        from ontopy.graph import OntoGraph
         return OntoGraph(self, **kwargs)
 
     def common_ancestors(self, cls1, cls2):

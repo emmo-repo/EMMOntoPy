@@ -19,7 +19,7 @@ The generated  metadata is finally serialised into a JSON file.
 """
 import os
 
-from emmo import get_ontology
+from ontopy import get_ontology
 from emmo2meta import EMMO2Meta
 
 

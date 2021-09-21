@@ -1,5 +1,5 @@
-from emmo import World
-from emmo.utils import write_catalog
+from ontopy import World
+from ontopy.utils import write_catalog
 import ase
 import types
 import owlready2

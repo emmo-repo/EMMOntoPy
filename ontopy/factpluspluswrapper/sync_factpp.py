@@ -9,7 +9,7 @@ from owlready2.reasoning import (
     _apply_reasoning_results, _apply_inferred_obj_relations,
     _INFERRENCES_ONTOLOGY)
 
-from .factppgraph import FaCTPPGraph
+from ontopy.factpluspluswrapper.factppgraph import FaCTPPGraph
 
 
 OWL_2_TYPE = {

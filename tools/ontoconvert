@@ -5,8 +5,8 @@ import argparse
 
 from rdflib.util import Graph, guess_format
 
-from emmo.utils import convert_imported, squash_imported
-from emmo.factpluspluswrapper.factppgraph import FaCTPPGraph
+from ontopy.utils import convert_imported, squash_imported
+from ontopy.factpluspluswrapper.factppgraph import FaCTPPGraph
 
 
 def main():

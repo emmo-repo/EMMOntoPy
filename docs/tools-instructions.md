@@ -1,5 +1,5 @@
-Instructions for tools available in EMMO-python
-===============================================
+Instructions for tools available in EMMOntoPy
+=============================================
 
 **Content:**
 
@@ -319,7 +319,7 @@ positional arguments:
 
 Note that it is then required to add argument only_local=True when loading the locally converted ontology in emmopython, e.g.
     python
-    >from emmo import get_ontology
+    >from ontopy import get_ontology
     >o=get_ontology('emmo.owl').load(only_local=True)
 
 Since the catalog file will be overwritten in the above example writing output to a separate directory is useful.

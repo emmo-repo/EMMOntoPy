@@ -10,8 +10,8 @@ import xml.etree.ElementTree as ET
 import owlready2
 import graphviz
 
-from .utils import asstring, get_label
-from .ontology import get_ontology
+from ontopy.utils import asstring, get_label
+from ontopy.ontology import get_ontology
 
 typenames = owlready2.class_construct._restriction_type_2_label
 
@@ -142,7 +142,7 @@ class OntoGraph:
 
     Parameters
     ----------
-    ontology : emmo.Ontology instance
+    ontology : ontopy.Ontology instance
         Ontology to visualize.
     root : None | graph.ALL | string | owlready2.ThingClass instance
         Name or owlready2 entity of root node to plot subgraph

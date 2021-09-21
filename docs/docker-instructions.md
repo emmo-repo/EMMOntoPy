@@ -1,4 +1,4 @@
-# EMMO-python Docker
+# EMMOntoPy Docker
 
 ### Clone project
 
@@ -29,7 +29,7 @@ docker run -it emmo
   in python. 
 
 
-### Dockerfile for mounting EMMO-python as volume (mount.Dockerfile)
+### Dockerfile for mounting EMMOntoPy as volume (mount.Dockerfile)
 
 ### Build docker image
 
@@ -46,7 +46,7 @@ docker run --rm -it -v $(pwd):/home/user/EMMO-python emmomount (linux)
 docker run --rm -it -v ${PWD}:/home/user/EMMO-python emmomount (windows10, Powershell)
 ```
 
-To install EMMO-python package inside container:
+To install EMMOntoPy package inside container:
 ```bash
 cd EMMO-python
 pip install .

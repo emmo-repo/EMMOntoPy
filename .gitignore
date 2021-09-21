@@ -2,9 +2,14 @@
 
 __pycache__
 .pytest_cache
-EMMO.egg-info
+*.egg*
 MANIFEST
 dist
 build
 old
 test_graph2
+
+*.svg
+*.pdf
+*.png
+*.xml

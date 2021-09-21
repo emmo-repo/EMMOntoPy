@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Plots the user case ontology created with the script `define_ontology.py`.
 """
-from emmo import World
+from ontopy import World
 
 
 # Load usercase ontology from sqlite3 database
