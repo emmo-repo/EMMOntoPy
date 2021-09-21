@@ -84,7 +84,7 @@ class FaCTPPGraph:
         """
         inferred = self.inferred
         for k, v in self.namespaces.items():
-            inferred.bind(k, v, override=True, replace=True)
+            inferred.namespace_manager.bind(k, v, override=True, replace=True)
 
     def clean_base(self):
         """Remove all relations `s? a owl:Ontology` where `s?` is not
