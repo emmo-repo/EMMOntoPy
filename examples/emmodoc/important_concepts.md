@@ -1,5 +1,6 @@
-<!-- markdownlint-disable-next-line MD041 -->
 ## Important concepts
+
+<!-- markdownlint-disable-next-line MD041 -->
 
 ### Mereotopological composition
 

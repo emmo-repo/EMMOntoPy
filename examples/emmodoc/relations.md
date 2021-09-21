@@ -1,9 +1,10 @@
-<!-- markdownlint-disable-next-line MD041 -->
 %%
 %% This file
 %% This is Markdown file, except of lines starting with %% will
 %% be stripped off.
 %%
+
+<!-- markdownlint-disable-next-line MD041 -->
 
 %HEADER "EMMO Relations"    level=1
 

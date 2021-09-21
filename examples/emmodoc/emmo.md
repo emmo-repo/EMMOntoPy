@@ -1,9 +1,10 @@
-<!-- markdownlint-disable-next-line MD041 -->
 %%
 %% This is the main Markdown input file for the EMMO documentation.
 %%
 %% Lines starting with a % are pre-processor directives.
 %%
+
+<!-- markdownlint-disable-next-line MD041 -->
 
 %INCLUDE introduction.md
 
