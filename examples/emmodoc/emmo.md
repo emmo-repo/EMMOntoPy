@@ -1,3 +1,4 @@
+<!-- markdownlint-disable-next-line MD041 -->
 %%
 %% This is the main Markdown input file for the EMMO documentation.
 %%
@@ -10,10 +11,8 @@
 
 %INCLUDE classes.md
 
-
 %HEADER Individuals       level=1
 %ALL individuals
-
 
 %HEADER Appendix          level=1
 
