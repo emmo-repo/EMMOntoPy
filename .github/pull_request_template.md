@@ -22,4 +22,4 @@ This checklist can be used as a help for the reviewer.
 - [ ] Does the new feature provide new restrictions on dependencies, and if so is this documented?
 
 ## Comments:
-_Additional comments here, including clarifications on checklist if applicable._
+<!-- Additional comments here, including clarifications on checklist if applicable. -->
