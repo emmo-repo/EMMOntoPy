@@ -14,7 +14,7 @@ This checklist can be used as a help for the reviewer.
 
 - [ ] Is the code easy to read and understand?
 - [ ] Are comments for humans to read, not computers to disregard?
-- [ ] Does a new feature has an accompanying new test in the CI/CD?
+- [ ] Does a new feature has an accompanying new test (in the CI or unit testing schemes)?
 - [ ] Has the documentation been updated as necessary?
 - [ ] Does this close the issue?
 - [ ] Is the change limited to the issue?
