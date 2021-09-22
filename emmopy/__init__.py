@@ -11,3 +11,9 @@ if sys.version_info < (3, 6):
 # Ensure emmopy is imported before owlready2...
 if 'owlready2' in sys.modules.keys() and "ontopy" not in sys.modules.keys():
     raise RuntimeError('emmopy must be imported before owlready2')
+
+# Import functions from emmopy
+from .emmopy import emmo
+
+
+__all__ = ("emmo",)
