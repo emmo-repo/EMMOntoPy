@@ -6,13 +6,20 @@ import re
 import datetime
 import tempfile
 import types
+from typing import TYPE_CHECKING
 import urllib.request
+import warnings
 import xml.etree.ElementTree as ET
 
 from rdflib import Graph, URIRef
 from rdflib.util import guess_format
 
 import owlready2
+
+
+if TYPE_CHECKING:
+    from packaging.version import Version, LegacyVersion
+    from typing import Union
 
 
 # Format mappings: file extension -> rdflib format name
@@ -26,6 +33,16 @@ FMAP = {
 
 # Format extension supported by owlready2
 OWLREADY2_FORMATS = 'rdfxml', 'owl', 'xml', 'ntriples'
+
+
+class IncompatibleVersion(Warning):
+    """An installed dependency version may be incompatible with a functionality
+    of this package - or rather an outcome of a functionality.
+    This is not critical, hence this is only a warning."""
+
+
+class UnknownVersion(Exception):
+    """Cannot retrieve version from a package."""
 
 
 def isinteractive():
@@ -324,12 +341,66 @@ def write_catalog(mappings, output='catalog-v001.xml'):
         f.write('\n'.join(s) + '\n')
 
 
+def _validate_installed_version(
+    package: str, min_version: "Union[str, Version, LegacyVersion]"
+) -> bool:
+    """Validate an installed package.
+
+    Examine whether a minimum version is installed in the used Python
+    interpreter for a specific package.
+
+    Parameters:
+        package: The package to be investigated as a string, e.g., `"rdflib"`.
+        min_version: The minimum version expected to be installed.
+
+    Raises:
+        UnknownVersion: If the supplied package does not have a `__version__`
+            attribute.
+
+    Returns:
+        Whether or not the installed version is equal to or greater than the
+        `min_version`.
+
+    """
+    import importlib
+    from packaging.version import (
+        parse as parse_version, LegacyVersion, Version
+    )
+
+    if isinstance(min_version, str):
+        min_version = parse_version(min_version)
+    elif isinstance(min_version, (LegacyVersion, Version)):
+        # We have the format we want
+        pass
+    else:
+        raise TypeError(
+            "min_version should be either a str, LegacyVersion or Version. "
+            "The latter classes being from the packaging.version module."
+        )
+
+    installed_package = importlib.import_module(
+        name=".", package=package
+    )
+    installed_package_version = getattr(installed_package, "__version__", None)
+    if not installed_package_version:
+        raise UnknownVersion(
+            f"Cannot retrieve version information from package {package!r}."
+        )
+
+    return parse_version(installed_package_version) >= min_version
+
+
 def convert_imported(input, output, input_format=None, output_format='xml',
                      url_from_catalog=None, catalog_file='catalog-v001.xml'):
     """Convert imported ontologies.
 
     Store the output in a directory structure matching the source
     files.  This require catalog file(s) to be present.
+
+    Warning:
+        To convert to Turtle (`.ttl`) format, you must have installed
+        `rdflib>=6.0.0`. See [Known issues](../README.md#Known-issues) in the
+        README for more information.
 
     Args:
         input: input ontology file name
@@ -395,6 +466,23 @@ def convert_imported(input, output, input_format=None, output_format='xml',
 
     # Write output files
     fmt = input_format if input_format else guess_format(input, fmap=FMAP)
+
+    if (
+        not _validate_installed_version(package="rdflib", min_version="6.0.0")
+        and (output_format == FMAP.get("ttl", "") or outext == "ttl")
+    ):
+        from rdflib import __version__ as __rdflib_version__
+
+        warnings.warn(
+            IncompatibleVersion(
+                "To correctly convert to Turtle format, rdflib must be "
+                "version 6.0.0 or greater, however, the detected rdflib "
+                "version used by your Python interpreter is "
+                f"{__rdflib_version__!r}. For more information see the "
+                "'Known issues' section of the README."
+            )
+        )
+
     g = Graph()
     g.parse(input, format=fmt)
     g.serialize(destination=output, format=output_format)
@@ -410,6 +498,12 @@ def squash_imported(input, output, input_format=None, output_format='xml',
     only be used if it exists in the same directory as the input file.
 
     The the squash rdflib graph is returned.
+
+    Warning:
+        To convert to Turtle (`.ttl`) format, you must have installed
+        `rdflib>=6.0.0`. See [Known issues](../README.md#Known-issues) in the
+        README for more information.
+
     """
     inroot = os.path.dirname(os.path.abspath(input))
 
@@ -440,6 +534,27 @@ def squash_imported(input, output, input_format=None, output_format='xml',
     graph.parse(input, format=input_format)
     recur(graph)
     if output:
+        if (
+            not _validate_installed_version(
+                package="rdflib", min_version="6.0.0"
+            )
+            and (
+                output_format == FMAP.get("ttl", "")
+                or os.path.splitext(output)[1] == "ttl"
+            )
+        ):
+            from rdflib import __version__ as __rdflib_version__
+
+            warnings.warn(
+                IncompatibleVersion(
+                    "To correctly convert to Turtle format, rdflib must be "
+                    "version 6.0.0 or greater, however, the detected rdflib "
+                    "version used by your Python interpreter is "
+                    f"{__rdflib_version__!r}. For more information see the "
+                    "'Known issues' section of the README."
+                )
+            )
+
         graph.serialize(destination=output, format=output_format)
     return graph
 

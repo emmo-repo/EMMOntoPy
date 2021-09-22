@@ -29,7 +29,12 @@ from ontopy.utils import (
     asstring, read_catalog, infer_version, convert_imported
 )
 from ontopy.utils import (
-    FMAP, OWLREADY2_FORMATS, isinteractive, ReadCatalogError
+    FMAP,
+    IncompatibleVersion,
+    isinteractive,
+    OWLREADY2_FORMATS,
+    ReadCatalogError,
+    _validate_installed_version,
 )
 from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
 
@@ -489,6 +494,24 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         if not format:
             format = guess_format(filename, fmap=FMAP)
+
+        if (
+            not _validate_installed_version(
+                package="rdflib", min_version="6.0.0"
+            )
+            and format == FMAP.get("ttl", "")
+        ):
+            from rdflib import __version__ as __rdflib_version__
+
+            warnings.warn(
+                IncompatibleVersion(
+                    "To correctly convert to Turtle format, rdflib must be "
+                    "version 6.0.0 or greater, however, the detected rdflib "
+                    "version used by your Python interpreter is "
+                    f"{__rdflib_version__!r}. For more information see the "
+                    "'Known issues' section of the README."
+                )
+            )
 
         if format in OWLREADY2_FORMATS:
             revmap = {v: k for k, v in FMAP.items()}

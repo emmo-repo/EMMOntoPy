@@ -137,7 +137,6 @@ Install with
 See [docs/docker-instructions.md](#docs/docker-instructions.md)
 for how to build a docker image.
 
-
 Known issues
 ------------
 
@@ -150,13 +149,13 @@ Known issues
   master](https://github.com/RDFLib/rdflib) if you need to serialise
   to turtle.
 
-
 Attributions and credits
 ------------------------
 EMMOntoPy is maintained by [EMMC-ASBL](https://emmc.eu/).  So far it has mainly been developed by
 [SINTEF](https://www.sintef.no/).
 
 ### Contributing projects
+
 - [EMMC-CSA](https://emmc.info/about-emmc-csa/);
   Grant Agreement No: 723867
   <img src="https://i2.wp.com/emmc.info/wp-content/uploads/2018/10/emmc_logo-low.jpg?fit=1701%2C1701&ssl=1" height="50">
