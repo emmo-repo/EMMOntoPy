@@ -8,7 +8,7 @@ _Put an `x` in the box that applies._
 - [ ] Documentation update.
 
 ## Checklist:
-_Put an `x` in the boxes that apply. You can also fill these out after creating the PR._
+<!-- Put an `x` in the boxes that apply. You can also fill these out after creating the PR. -->
 
 This checklist can be used as a help for the reviewer.
 
