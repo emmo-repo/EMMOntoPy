@@ -2,7 +2,7 @@
 <!-- Summary of change, including the issue(s) to be addressed. -->
 
 ## Type of change:
-_Put an `x` in the box that applies._
+<!-- Put an `x` in the box that applies. -->
 - [ ] Bug fix.
 - [ ] New feature.
 - [ ] Documentation update.
