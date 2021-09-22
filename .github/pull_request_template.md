@@ -1,5 +1,5 @@
 # Description:
-_Summary of change, including the issue(s) to be adressed._
+<!-- Summary of change, including the issue(s) to be addressed. -->
 
 ## Type of change:
 _Put an `x` in the box that applies._
