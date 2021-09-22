@@ -27,6 +27,9 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/emmo-repo
       name: EMMO on GitHub
+  version:
+    provider: mike
+    default: latest
 
 extra_css:
   - css/reference.css

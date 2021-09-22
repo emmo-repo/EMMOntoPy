@@ -11,3 +11,6 @@ test_graph2
 
 *.pdf
 *.xml
+
+# Documentation
+site/
