@@ -36,7 +36,9 @@ with open(os.path.join(rootdir, 'requirements.txt'), 'rt') as f:
         if not _.startswith("#") and "git+" not in _
     ]
 
-with open(os.path.join(rootdir, "requirements_docs.txt"), "r", encoding="utf8") as handle:
+with open(
+    os.path.join(rootdir, "requirements_docs.txt"), "r", encoding="utf8"
+) as handle:
     DOCS = [
         f"{_.strip()}"
         for _ in handle.readlines()
