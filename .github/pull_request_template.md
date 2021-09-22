@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Description:
 _Summary of change, including the issue(s) to be adressed._
 
@@ -23,3 +24,9 @@ This checklist can be used as a help for the reviewer.
 
 ## Comments:
 _Additional comments here, including clarifications on checklist if applicable._
+=======
+List for reviewer
+
+[] Comments for humans to read, not computers to disregard  
+[] A new feature has an accompanying new test
+>>>>>>> 78cdd5a005aa300ef20a4247f47cc6cf9212d113
