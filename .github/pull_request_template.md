@@ -19,7 +19,7 @@ This checklist can be used as a help for the reviewer.
 - [ ] Does this close the issue?
 - [ ] Is the change limited to the issue?
 - [ ] Are errors handled for all outcomes?
-- [ ] Does the new feature provide new restrictions on dependecies, and if so is this documented?
+- [ ] Does the new feature provide new restrictions on dependencies, and if so is this documented?
 
 ## Comments:
 _Additional comments here, including clarifications on checklist if applicable._
