@@ -13,7 +13,7 @@ if 'owlready2' in sys.modules.keys() and "ontopy" not in sys.modules.keys():
     raise RuntimeError('emmopy must be imported before owlready2')
 
 # Import functions from emmopy
-from .emmopy import emmo
+from .emmopy import get_emmo
 
 
-__all__ = ("emmo",)
+__all__ = ("get_emmo",)
