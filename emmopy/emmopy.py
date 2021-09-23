@@ -1,8 +1,11 @@
 from ontopy import get_ontology
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ontopy.ontology import Ontology
 
 
-def emmo(inferred: Optional[bool] = True):
+def get_emmo(inferred: Optional[bool] = True) -> "Ontology":
     """Returns the current version of emmo.
 
     Args:
@@ -10,10 +13,7 @@ def emmo(inferred: Optional[bool] = True):
         Default is True.
 
     Returns:
-        the loaded emmo ontology.
+        The loaded emmo ontology.
     """
-    if inferred == True:
-        name = 'emmo-inferred'
-    else:
-        name = 'emmo'
+    name = 'emmo-inferred' if inferred else 'emmo'
     return get_ontology(name).load()
