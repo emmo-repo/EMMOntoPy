@@ -13,4 +13,5 @@ def test_load_emmo() -> None:
 
     EMMO_inferred = get_emmo()
     EMMO = get_emmo(inferred=False)
-    assert EMMO_inferred == get_emmo(None)
+    assert EMMO_inferred.base_iri == get_emmo(None).base_iri
+
