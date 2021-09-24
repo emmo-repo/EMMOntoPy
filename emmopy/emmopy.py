@@ -15,6 +15,5 @@ def get_emmo(inferred: Optional[bool] = True) -> "Ontology":
     Returns:
         The loaded emmo ontology.
     """
-    inferred = True if inferred is None else False
-    name = 'emmo-inferred' if inferred else 'emmo'
+    name = 'emmo-inferred' if inferred in [True, None] else 'emmo'
     return get_ontology(name).load()
