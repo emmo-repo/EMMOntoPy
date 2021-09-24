@@ -13,3 +13,4 @@ def test_load_emmo() -> None:
 
     EMMO_inferred = get_emmo()
     EMMO = get_emmo(inferred=False)
+    assert EMMO_inferred == get_emmo(None)
