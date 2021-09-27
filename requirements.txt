@@ -1,6 +1,6 @@
 Cython>=0.29.21,<0.30
 Owlready2>=0.28,<0.35,!=0.32,!=0.34
-graphviz>=0.16,<0.17
+graphviz>=0.16,<0.18
 PyYAML>=5.4.1,<6
 blessings>=1.7,<2
 Pygments>=2.7.4,<3
