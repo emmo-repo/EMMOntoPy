@@ -1,137 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/LICENSE/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/LICENSE/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/docker-instructions/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/docker-instructions/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/release-instructions/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/release-instructions/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/tools-instructions/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/tools-instructions/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/api_reference/emmopy/emmocheck/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/api_reference/emmopy/emmocheck/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/api_reference/ontopy/colortest/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/colortest/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/api_reference/ontopy/graph/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/graph/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/api_reference/ontopy/nadict/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/nadict/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/api_reference/ontopy/ontodoc/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/ontodoc/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/api_reference/ontopy/ontograph/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/ontograph/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/api_reference/ontopy/ontology/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/ontology/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/api_reference/ontopy/patch/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/patch/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/api_reference/ontopy/utils/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/utils/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/api_reference/ontopy/factpluspluswrapper/factppgraph/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/factpluspluswrapper/factppgraph/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/api_reference/ontopy/factpluspluswrapper/owlapi_interface/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/factpluspluswrapper/owlapi_interface/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/api_reference/ontopy/factpluspluswrapper/sync_factpp/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/factpluspluswrapper/sync_factpp/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/demo/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/demo/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/demo/horizontal/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/demo/horizontal/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/demo/vertical/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/demo/vertical/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/examples/emmodoc/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/examples/emmodoc/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/examples/emmodoc/classes/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/examples/emmodoc/classes/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/examples/emmodoc/emmo/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/examples/emmodoc/emmo/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/examples/emmodoc/important_concepts/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/examples/emmodoc/important_concepts/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/examples/emmodoc/introduction/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/examples/emmodoc/introduction/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/examples/emmodoc/relations/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/examples/emmodoc/relations/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://emmo-repo.github.io/EMMO-python/master/examples/jupyter-visualization/</loc>
+         <loc>https://emmo-repo.github.io/EMMO-python/latest/examples/jupyter-visualization/</loc>
          <lastmod>2021-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
