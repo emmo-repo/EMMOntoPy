@@ -6,11 +6,6 @@ __pycache__
 MANIFEST
 dist
 build
-old
-test_graph2
-
-*.pdf
-*.xml
 
 # Documentation
 site/

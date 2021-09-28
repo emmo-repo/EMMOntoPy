@@ -1,41 +1,37 @@
-def test_catalog() -> None:
-    import sys
-    import os
+from typing import TYPE_CHECKING
 
-    # Add emmo to sys path
-    thisdir = os.path.abspath(os.path.dirname(__file__))
-    sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..')))
-    from ontopy.utils import read_catalog, ReadCatalogError  # noqa: E402, F401
-    from ontopy.utils import write_catalog  # noqa: E402, F401
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
-    ontodir = os.path.join(thisdir, 'testonto')
-    d_expected = {
-        'http://emmo.info/testonto/0.1.0': os.path.join(
-            ontodir, 'testonto.ttl'),
-        'http://emmo.info/testonto/0.1.0/models': os.path.join(
-            ontodir, 'models.ttl'),
+def test_catalog(repo_dir: "Path", tmpdir: "Path") -> None:
+    from ontopy.utils import read_catalog, ReadCatalogError, write_catalog
+
+    ontodir = repo_dir / "tests" / 'testonto'
+    catalog_expected = {
+        'http://emmo.info/testonto/0.1.0': str(ontodir / 'testonto.ttl'),
+        'http://emmo.info/testonto/0.1.0/models': str(ontodir / 'models.ttl'),
     }
 
-    d = read_catalog(os.path.join(ontodir, 'catalog-v001.xml'))
-    assert d == d_expected
+    catalog = read_catalog(str(ontodir / 'catalog-v001.xml'))
+    assert catalog == catalog_expected
 
-    d = read_catalog(ontodir)
-    assert d == d_expected
+    catalog = read_catalog(str(ontodir))
+    assert catalog == catalog_expected
 
-    d = read_catalog(ontodir, recursive=True)
-    assert d == d_expected
+    catalog = read_catalog(str(ontodir), recursive=True)
+    assert catalog == catalog_expected
 
-    d, p = read_catalog(ontodir, return_paths=True)
-    assert d == d_expected
-    assert p == set([ontodir])
+    catalog, catalog_paths = read_catalog(str(ontodir), return_paths=True)
+    assert catalog == catalog_expected
+    assert catalog_paths == set([str(ontodir)])
 
-    d = read_catalog('https://raw.githubusercontent.com/emmo-repo/EMMO/master/'
+    catalog = read_catalog('https://raw.githubusercontent.com/emmo-repo/EMMO/master/'
                     'catalog-v001.xml')
-    assert any(v.endswith('/emmo.ttl') for v in d.values())
+    assert any(_.endswith('/emmo.ttl') for _ in catalog.values())
 
-    d = read_catalog('https://raw.githubusercontent.com/emmo-repo/EMMO/master')
-    assert any(v.endswith('/emmo.ttl') for v in d.values())
+    catalog = read_catalog('https://raw.githubusercontent.com/emmo-repo/EMMO/master')
+    assert any(_.endswith('/emmo.ttl') for _ in catalog.values())
 
     try:
         read_catalog(
@@ -46,17 +42,17 @@ def test_catalog() -> None:
         assert False, 'expected ReadCatalogError'
 
     try:
-        read_catalog(os.path.join(ontodir, 'does-not-exists'))
+        read_catalog(str(ontodir / 'does-not-exists'))
     except ReadCatalogError:
         pass
     else:
         assert False, 'expected ReadCatalogError'
 
-    d = read_catalog('https://raw.githubusercontent.com/emmo-repo/EMMO/master/'
+    catalog = read_catalog('https://raw.githubusercontent.com/emmo-repo/EMMO/master/'
                     'catalog-v001.xml', baseuri='/abc')
-    assert '/abc/emmo.ttl' in d.values()
+    assert '/abc/emmo.ttl' in catalog.values()
 
-
-    write_catalog(d, 'tmp-catalog.xml')
-    d2 = read_catalog('tmp-catalog.xml')
-    assert d2 == d
+    tmp_catalog_path = tmpdir / "tmp-catalog.xml"
+    write_catalog(catalog, output=tmp_catalog_path)
+    tmp_catalog = read_catalog(str(tmp_catalog_path))
+    assert tmp_catalog == catalog

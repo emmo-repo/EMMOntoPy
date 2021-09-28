@@ -1,23 +1,22 @@
-def test_modules() -> None:
-    import sys
-    import os
+from typing import TYPE_CHECKING
 
-    # Add emmo to sys path
-    thisdir = os.path.abspath(os.path.dirname(__file__))
-    sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..')))
-    from ontopy import get_ontology  # noqa: E402, F401
+if TYPE_CHECKING:
+    from pathlib import Path
 
-    from ontopy.graph import (  # noqa: E402, F401
+
+def test_modules(tmpdir: "Path") -> None:
+    from ontopy import get_ontology
+    from ontopy.graph import (
         plot_modules,
         get_module_dependencies,
         check_module_dependencies,
     )
-
 
     iri = 'http://emmo.info/emmo/1.0.0-alpha2'
     emmo = get_ontology(iri)
     emmo.load()
 
     modules = get_module_dependencies(emmo)
-    plot_modules(modules, filename='modules.png')
+
+    plot_modules(modules, filename=tmpdir / 'modules.png')
     check_module_dependencies(modules)
