@@ -132,16 +132,16 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/).
 
 - [EMMC-CSA](https://emmc.info/about-emmc-csa/);
   Grant Agreement No: 723867
-  <img src="https://i2.wp.com/emmc.info/wp-content/uploads/2018/10/emmc_logo-low.jpg?fit=1701%2C1701&ssl=1" height="50">
+  <img src="https://i2.wp.com/emmc.info/wp-content/uploads/2018/10/emmc_logo-low.jpg?fit=1701%2C1701&ssl=1" width="50">
 - [MarketPlace](https://www.the-marketplace-project.eu/);
   Grant Agreement No: 760173
   <img src="https://www.the-marketplace-project.eu/content/dam/iwm/the-marketplace-project/images/MARKETPLACE_LOGO_300dpi.png" width="120">
 - [OntoTrans](https://ontotrans.eu/project/);
   Grant Agreement No: 862136
-  <img src="https://ontotrans.eu/wp-content/uploads/2020/05/ot_logo_rosa_gro%C3%9F.svg" height="50">
+  <img src="https://ontotrans.eu/wp-content/uploads/2020/05/ot_logo_rosa_gro%C3%9F.svg" width="81.625">
 - [BIG-MAP](https://www.big-map.eu/);
   Grant Agreement No: 957189
-  <img src="https://avatars1.githubusercontent.com/u/72801303?s=200&v=4" height="50">
+  <img src="https://avatars1.githubusercontent.com/u/72801303?s=200&v=4" width="50">
 
 [EMMOntoPy]: https://github.com/emmo-repo/EMMO-python/
 [EMMO-pypi]: https://pypi.org/project/EMMO/
