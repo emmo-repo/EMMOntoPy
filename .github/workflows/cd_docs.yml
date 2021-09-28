@@ -1,0 +1,46 @@
+name: CD Documentation
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U setuptools wheel
+        pip install -U -e .[docs]
+
+    - name: Set up git user
+      run: |
+        git config --global user.name "EMMOntoPy Developers"
+        git config --global user.email "EMMOntoPy@emmo.info"
+
+    - name: Check API Reference and landing page
+      run: |
+        invoke create-api-reference-docs --pre-clean
+        invoke create-docs-index
+
+        if [ -n "$(git status --porcelain --untracked-files=no --ignored=no docs/api_reference docs/index.md)" ]; then
+          echo "The following files in the documentation has not been committed:"
+          git status --porcelain --untracked-files=no --ignored=no docs/api_reference docs/index.md
+          exit 1
+        fi
+
+    - name: Deploy documentation
+      run: mike deploy --push --remote origin --branch gh-pages --update-aliases --config-file mkdocs.yml latest master
