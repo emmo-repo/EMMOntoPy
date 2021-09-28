@@ -29,7 +29,7 @@ import owlready2
 if sys.version_info >= (3, 7):
     odict = dict
 else:
-    from collections.abc import OrderedDict as odict  # noqa: F401
+    from collections import OrderedDict as odict  # noqa: F401
 
 
 class EMMO2Meta:
