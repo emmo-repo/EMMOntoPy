@@ -12,7 +12,6 @@ def test_import_foaf(emmo: "Ontology") -> None:
     This test serves more like an example.
     TODO: Move to `examples/`
     """
-
     from ontopy import get_ontology
 
     skos = get_ontology('http://www.w3.org/2004/02/skos/core#').load()

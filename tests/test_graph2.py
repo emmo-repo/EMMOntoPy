@@ -7,33 +7,29 @@ if TYPE_CHECKING:
 
 
 def test_graph2(emmo: "Ontology", tmpdir: "Path") -> None:
-    import os
-
     from ontopy.graph import OntoGraph
-
-    os.chdir(tmpdir)
 
     graph = OntoGraph(emmo, emmo.hasPart, leafs=('mereotopological', 'semiotical',
                                             'connected'))
-    graph.save('hasPart.svg')
+    graph.save(tmpdir / 'hasPart.svg')
 
 
     graph = OntoGraph(emmo, emmo.Matter, relations='all', addnodes=True,
                 edgelabels=None)
-    graph.save('Matter.png')
+    graph.save(tmpdir / 'Matter.png')
 
     graph = OntoGraph(emmo, emmo.ElementaryParticle, relations='all', addnodes=True,
                 edgelabels=None)
-    graph.save('ElementaryParticle.png')
+    graph.save(tmpdir / 'ElementaryParticle.png')
 
     graph = OntoGraph(emmo, emmo.SIBaseUnit, relations='all', addnodes=True,
                 edgelabels=True,
                 addconstructs=False, graph_attr={'rankdir': 'RL'})
     graph.add_legend()
-    graph.save('SIBaseUnit.png')
+    graph.save(tmpdir / 'SIBaseUnit.png')
 
     graph = OntoGraph(emmo, emmo.EMMORelation, relations='all', edgelabels=None)
-    graph.save('EMMORelation.png')
+    graph.save(tmpdir / 'EMMORelation.png')
 
     graph = OntoGraph(emmo, emmo.Quantity,
                 leafs=[emmo.DerivedQuantity, emmo.BaseQuantity,
@@ -41,25 +37,25 @@ def test_graph2(emmo: "Ontology", tmpdir: "Path") -> None:
                 relations='all', edgelabels=None, addnodes=True,
                 addconstructs=True, graph_attr={'rankdir': 'RL'})
     graph.add_legend()
-    graph.save('Quantity.svg')
+    graph.save(tmpdir / 'Quantity.svg')
 
 
     # Used for figures
 
     graph = OntoGraph(emmo)
     graph.add_legend('all')
-    graph.save('legend.png')
+    graph.save(tmpdir / 'legend.png')
 
 
     graph = OntoGraph(emmo, emmo.EMMO, leafs=[emmo.Perspective, emmo.Elementary])
-    graph.save('top.png')
+    graph.save(tmpdir / 'top.png')
 
 
     leafs = set()
     for s in emmo.Perspective.subclasses():
         leafs.update(s.subclasses())
     graph = OntoGraph(emmo, emmo.Perspective, leafs=leafs, parents=1)
-    graph.save('Perspectives.png')
+    graph.save(tmpdir / 'Perspectives.png')
 
 
     leafs = {emmo.Interpreter, emmo.Conventional, emmo.Icon, emmo.Observation,
@@ -70,13 +66,13 @@ def test_graph2(emmo: "Ontology", tmpdir: "Path") -> None:
     semiotic.difference_update(hidden)
     graph = OntoGraph(emmo)
     graph.add_entities(semiotic, relations='all', edgelabels=False)
-    graph.save('Semiotic.png')
+    graph.save(tmpdir / 'Semiotic.png')
     graph.add_legend()
-    graph.save('Semiotic+legend.png')
+    graph.save(tmpdir / 'Semiotic+legend.png')
 
     legend = OntoGraph(emmo)
     legend.add_legend(graph.get_relations())
-    legend.save('Semiotic-legend.png')
+    legend.save(tmpdir / 'Semiotic-legend.png')
 
 
     # Measurement
@@ -95,7 +91,7 @@ def test_graph2(emmo: "Ontology", tmpdir: "Path") -> None:
     graph = OntoGraph(emmo)
     graph.add_entities(semiotic, relations='all', edgelabels=False)
     graph.add_legend()
-    graph.save('measurement.png')
+    graph.save(tmpdir / 'measurement.png')
 
 
     # Reductionistic perspective
@@ -105,4 +101,4 @@ def test_graph2(emmo: "Ontology", tmpdir: "Path") -> None:
                 parents=2,
                 edgelabels=None)
     graph.add_legend()
-    graph.save('Reductionistic.png')
+    graph.save(tmpdir / 'Reductionistic.png')
