@@ -4,12 +4,13 @@
 %% be stripped off.
 %%
 
+<!-- markdownlint-disable-next-line MD041 -->
+
 %HEADER "EMMO Classes"    level=1
 
 *emmo* is a class representing the collection of all the individuals
 (signs) that are used in the ontology. Individuals are declared by the
 EMMO users when they want to apply the EMMO to represent the world.
-
 
 %BRANCHHEAD EMMO
 The root of all classes used to represent the world.  It has two children;
@@ -31,10 +32,8 @@ branch of mereotopology.
 %% - a fusion can be partitioned in more than one way
 %BRANCH EMMO
 
-
 %BRANCHDOC Elementary
 %BRANCHDOC Perspective
-
 
 %BRANCHDOC Holistic
 %BRANCHDOC Semiotic
@@ -45,7 +44,6 @@ branch of mereotopology.
 %BRANCHDOC Property
 %BRANCHDOC Icon
 %BRANCHDOC Process
-
 
 %BRANCHDOC Perceptual
 %BRANCHDOC Graphical
@@ -69,7 +67,6 @@ branch of mereotopology.
 %BRANCHDOC BaseQuantity
 %BRANCHDOC DerivedQuantity      rankdir=RL
 %BRANCHDOC PhysicalConstant
-
 
 %BRANCHDOC Reductionistic
 %BRANCHDOC Expression

@@ -1,9 +1,8 @@
-Visualise an ontology using pyctoscape in Jupyter Notebook
-==========================================================
+# Visualise an ontology using pyctoscape in Jupyter Notebook
 
-Installation instructions
--------------------------
-In a terminal, run
+## Installation instructions
+
+In a terminal, run:
 
 ```shell
 cd /path/to/env/dirs
@@ -20,10 +19,9 @@ pip install --upgrade setuptools
 jupyter labextension install @jupyter-widgets/jupyterlab-manager
 ```
 
+## Test the notebook
 
-Test the notebook
------------------
-In a terminal, simply run
+In a terminal, run:
 
 ```shell
 jupyter-lab

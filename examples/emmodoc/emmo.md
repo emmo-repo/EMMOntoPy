@@ -4,16 +4,16 @@
 %% Lines starting with a % are pre-processor directives.
 %%
 
+<!-- markdownlint-disable-next-line MD041 -->
+
 %INCLUDE introduction.md
 
 %INCLUDE relations.md
 
 %INCLUDE classes.md
 
-
 %HEADER Individuals       level=1
 %ALL individuals
-
 
 %HEADER Appendix          level=1
 

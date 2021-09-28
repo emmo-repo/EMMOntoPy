@@ -1,65 +1,71 @@
 # EMMOntoPy Docker
 
-### Clone project
+## Clone project
 
 ```bash
 git clone git@github.com:emmo-repo/EMMO-python.git
 ```
 
-### Build Docker image
+## Build Docker image
 
 ```bash
 cd EMMO-python
 docker build -t emmo .
 ```
 
-### Run Docker container
+## Run Docker container
 
 ```bash
 docker run -it emmo
 ```
 
-### Notes
+## Notes
 
-* Your Docker container may run out of memory while executing HermiT
-  (``sync_reasoner``). Append ``--memory=2GB`` to ``docker run`` in
-  order to align the memory limit with the Java runtime environment.
+* Your Docker container may run out of memory while executing the HermiT reasoner (`sync_reasoner`).
+  Append `--memory=2GB` to `docker run` in order to align the memory limit with the Java runtime environment.
 
-* Uncomment the last line in Dockerfile if you wish to start directly
-  in python. 
+  It is recommended to instead use the FaCT++ reaonser (now default).
 
+* Uncomment the last line in the Dockerfile, if you wish to start directly in the Python interpreter.
 
-### Dockerfile for mounting EMMOntoPy as volume (mount.Dockerfile)
+## Dockerfile for mounting EMMOntoPy as volume (mount.Dockerfile)
 
-### Build docker image
+### Build Docker image (mount.DockerFile)
 
 ```bash
 docker build -t emmomount -f mount.Dockerfile .
 ```
 
-### Run Docker container
+### Run Docker container (mount.Dockerfile)
+
+In a unix terminal (Linux)
+
 ```bash
-docker run --rm -it -v $(pwd):/home/user/EMMO-python emmomount (linux)
+docker run --rm -it -v $(pwd):/home/user/EMMO-python emmomount
 ```
 
+In PowerShell (Windows 10):
+
 ```PowerShell
-docker run --rm -it -v ${PWD}:/home/user/EMMO-python emmomount (windows10, Powershell)
+docker run --rm -it -v ${PWD}:/home/user/EMMO-python emmomount
 ```
 
 To install EMMOntoPy package inside container:
+
 ```bash
 cd EMMO-python
 pip install .
 ```
 
-### Notes on mounting on windows
+### Notes on mounting on Windows
 
-* Allow for mounting of C: in Docker (as administrator)
-  Docker (rightclick in system tray)->Settings->Shared Drives->tick of C->Apply
+* Allow for mounting of C: in Docker (as administrator).
+  Docker (rightclick in system tray) -> Settings -> Shared Drives -> tick of C -> Apply.
 
-* Run the following command in Powershell: 
-```Powershell
-Set-NetConnectionProfile -interfacealias "vEthernet (DockerNAT)" -NetworkCategory Private
-```
+* Run the following command in PowerShell:
+
+  ```PowerShell
+  Set-NetConnectionProfile -interfacealias "vEthernet (DockerNAT)" -NetworkCategory Private
+  ```
+
 * If mounting does not succeed Reset Credentials (Docker -> Settings -> Shared Drives)  and repeat the steps above.
-

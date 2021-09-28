@@ -1,18 +1,16 @@
-EMMO use cases
-==============
-This demo contains two use cases on how EMMO can be used to achieve
-vertical and horizontal interpoerability, respectivily.
+# EMMO use cases
 
-> **WARNING**: This demonstration is still work in progress.  Especially documentation is lacking.
+This demo contains two use cases on how EMMO can be used to achieve vertical and horizontal interpoerability, respectivily.
 
+!!! warning
+    This demonstration is still work in progress.
+    Especially documentation is lacking.
 
-Content
--------
-  * [Vertical interoperability](vertical/README.md)
-  * [Horizontal interoperability](horizontal/README.md)
+## Content
 
+- [Vertical interoperability](vertical/README.md).
+- [Horizontal interoperability](horizontal/README.md).
 
-The user case - welding an aluminium plate to steel
-===================================================
+## The user case - welding an aluminium plate to steel
 
-FIXME - add an overall description of the user case here...
+<!-- FIXME - add an overall description of the user case here... -->
