@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Python reference API for the Europeean Materials & Modelling Ontology (EMMO).
+Python reference API for the
+Elementary Multiperspective Material Ontology (EMMO).
 """
 import os
 import re
@@ -62,8 +63,8 @@ setuptools.setup(
     version=VERSION,
     author='Jesper Friis, Francesca Lønstad Bleken, Bjørn Tore Løvfall',
     author_email='jesper.friis@sintef.no',
-    description=('Python reference API for the Europeean Materials & '
-                 'Modelling Ontology'),
+    description=('Python reference API for the Elementary Multiperspective'
+                 'Material Ontology'),
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/emmo-repo/EMMO-python',

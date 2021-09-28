@@ -1,4 +1,4 @@
-# EMMO - Python API for the European Materials & Modelling Ontology
+# EMMO - Python API for the Elemental Multiperspective Material Ontology
 
 <!-- markdownlint-disable MD033 -->
 
@@ -8,7 +8,7 @@
 This package is based on [Owlready2] and provides an intuitive representation of [EMMO] in Python.
 It is available on [GitHub][EMMOntoPy] and on [PyPI][PyPI:EMMO] under the open source [BSD 3-Clause license](LICENSE.md).
 
-The European Materials & Modelling Ontology (EMMO) is an ongoing effort to create an ontology that takes into account fundamental concepts of physics, chemistry and materials science and is designed to pave the road for semantic interoperability.
+The Elemental Multiperspective Material Ontology (EMMO) is an ongoing effort to create an ontology that takes into account fundamental concepts of physics, chemistry and materials science and is designed to pave the road for semantic interoperability.
 The aim of EMMO is to be generic and provide a common ground for describing materials, models and data that can be adapted by all domains.
 
 EMMO is formulated using OWL.
