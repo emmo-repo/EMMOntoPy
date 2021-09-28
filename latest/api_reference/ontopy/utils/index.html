@@ -1,16 +1,2084 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Redirecting</title>
-  <noscript>
-    <meta http-equiv="refresh" content="1; url=../../../../master/api_reference/ontopy/utils/" />
-  </noscript>
-  <script>
-    window.location.replace("../../../../master/api_reference/ontopy/utils/" + window.location.hash);
-  </script>
-</head>
-<body>
-  Redirecting to <a href="../../../../master/api_reference/ontopy/utils/">../../../../master/api_reference/ontopy/utils/</a>...
-</body>
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the EMMOntoPy library">
+      
+      
+      
+      
+        <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/master/api_reference/ontopy/utils/">
+      
+      <link rel="icon" href="../../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.8">
+    
+    
+      
+        <title>utils - EMMOntoPy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.92558b1b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4cae4f">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../css/reference.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="light-green">
+  
+    
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#utils" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="EMMOntoPy" class="md-header__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
+      
+  <img src="../../../images/suspected_logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            EMMOntoPy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              utils
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/emmo-repo/EMMO-python" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EMMO-python
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="EMMOntoPy" class="md-nav__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
+      
+  <img src="../../../images/suspected_logo.svg" alt="logo">
+
+    </a>
+    EMMOntoPy
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/emmo-repo/EMMO-python" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EMMO-python
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools-instructions/" class="md-nav__link">
+        Tools
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docker-instructions/" class="md-nav__link">
+        Docker
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../LICENSE/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Examples and demonstrations
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Examples and demonstrations" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Examples and demonstrations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      <label class="md-nav__link" for="__nav_5_1">
+        Demo
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Demo" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Demo
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../demo/" class="md-nav__link">
+        EMMO use cases
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../demo/horizontal/" class="md-nav__link">
+        EMMO use case for horizontal interoperability
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../demo/vertical/" class="md-nav__link">
+        EMMO use case for vertical interoperability
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      <label class="md-nav__link" for="__nav_5_2">
+        Examples
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2_1" type="checkbox" id="__nav_5_2_1" >
+      
+      <label class="md-nav__link" for="__nav_5_2_1">
+        Emmodoc
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Emmodoc" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Emmodoc
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/emmodoc/" class="md-nav__link">
+        Generate documentation for EMMO
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/emmodoc/classes/" class="md-nav__link">
+        Classes
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/emmodoc/emmo/" class="md-nav__link">
+        Emmo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/emmodoc/important_concepts/" class="md-nav__link">
+        Important concepts
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/emmodoc/introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/emmodoc/relations/" class="md-nav__link">
+        Relations
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/jupyter-visualization/" class="md-nav__link">
+        Visualise an ontology using pyctoscape in Jupyter Notebook
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Developers
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Developers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Developers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-instructions/" class="md-nav__link">
+        Steps for creating a new release
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" checked>
+      
+      <label class="md-nav__link" for="__nav_7">
+        API Reference
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_1" type="checkbox" id="__nav_7_1" >
+      
+      <label class="md-nav__link" for="__nav_7_1">
+        emmopy
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="emmopy" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_1">
+          <span class="md-nav__icon md-icon"></span>
+          emmopy
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../emmopy/emmocheck/" class="md-nav__link">
+        emmocheck
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" checked>
+      
+      <label class="md-nav__link" for="__nav_7_2">
+        ontopy
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="ontopy" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          ontopy
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../colortest/" class="md-nav__link">
+        colortest
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graph/" class="md-nav__link">
+        graph
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nadict/" class="md-nav__link">
+        nadict
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ontodoc/" class="md-nav__link">
+        ontodoc
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ontograph/" class="md-nav__link">
+        ontograph
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ontology/" class="md-nav__link">
+        ontology
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../patch/" class="md-nav__link">
+        patch
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          utils
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        utils
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils" class="md-nav__link">
+    ontopy.utils
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.IncompatibleVersion" class="md-nav__link">
+    IncompatibleVersion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.ReadCatalogError" class="md-nav__link">
+    ReadCatalogError
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.UnknownVersion" class="md-nav__link">
+    UnknownVersion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.annotate_with_ontology" class="md-nav__link">
+    annotate_with_ontology()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.asstring" class="md-nav__link">
+    asstring()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.camelsplit" class="md-nav__link">
+    camelsplit()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.convert_imported" class="md-nav__link">
+    convert_imported()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.get_label" class="md-nav__link">
+    get_label()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.infer_version" class="md-nav__link">
+    infer_version()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.isinteractive" class="md-nav__link">
+    isinteractive()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.read_catalog" class="md-nav__link">
+    read_catalog()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.squash_imported" class="md-nav__link">
+    squash_imported()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.write_catalog" class="md-nav__link">
+    write_catalog()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_2_9" type="checkbox" id="__nav_7_2_9" >
+      
+      <label class="md-nav__link" for="__nav_7_2_9">
+        factpluspluswrapper
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="factpluspluswrapper" data-md-level="3">
+        <label class="md-nav__title" for="__nav_7_2_9">
+          <span class="md-nav__icon md-icon"></span>
+          factpluspluswrapper
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../factpluspluswrapper/factppgraph/" class="md-nav__link">
+        factppgraph
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../factpluspluswrapper/owlapi_interface/" class="md-nav__link">
+        owlapi_interface
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../factpluspluswrapper/sync_factpp/" class="md-nav__link">
+        sync_factpp
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils" class="md-nav__link">
+    ontopy.utils
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.IncompatibleVersion" class="md-nav__link">
+    IncompatibleVersion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.ReadCatalogError" class="md-nav__link">
+    ReadCatalogError
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.UnknownVersion" class="md-nav__link">
+    UnknownVersion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.annotate_with_ontology" class="md-nav__link">
+    annotate_with_ontology()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.asstring" class="md-nav__link">
+    asstring()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.camelsplit" class="md-nav__link">
+    camelsplit()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.convert_imported" class="md-nav__link">
+    convert_imported()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.get_label" class="md-nav__link">
+    get_label()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.infer_version" class="md-nav__link">
+    infer_version()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.isinteractive" class="md-nav__link">
+    isinteractive()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.read_catalog" class="md-nav__link">
+    read_catalog()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.squash_imported" class="md-nav__link">
+    squash_imported()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.write_catalog" class="md-nav__link">
+    write_catalog()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="utils">utils<a class="headerlink" href="#utils" title="Permanent link">&para;</a></h1>
+
+
+  <div class="doc doc-object doc-module">
+
+<a id="ontopy.utils"></a>
+    <div class="doc doc-contents first">
+
+      <p>Some generic utility functions.</p>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="ontopy.utils.IncompatibleVersion" class="doc doc-heading">
+        <code>IncompatibleVersion</code>
+
+
+
+<a href="#ontopy.utils.IncompatibleVersion" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>An installed dependency version may be incompatible with a functionality
+of this package - or rather an outcome of a functionality.
+This is not critical, hence this is only a warning.</p>
+
+
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="ontopy.utils.ReadCatalogError" class="doc doc-heading">
+        <code>ReadCatalogError</code>
+
+
+
+<a href="#ontopy.utils.ReadCatalogError" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Error reading catalog file.</p>
+
+
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="ontopy.utils.UnknownVersion" class="doc doc-heading">
+        <code>UnknownVersion</code>
+
+
+
+<a href="#ontopy.utils.UnknownVersion" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Cannot retrieve version from a package.</p>
+
+
+
+    </div>
+
+  </div>
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.annotate_with_ontology" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">annotate_with_ontology</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.annotate_with_ontology" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Annotate all entities with the <code>ontology_name</code> and <code>ontology_iri</code>.</p>
+<p>If imported is true, imported ontologies will also be annotated.</p>
+<p>The ontology name and IRI are important contextual information
+that is lost when ontologies are inferred and/or squashed.  This
+function retain this information as annotations.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">annotate_with_ontology</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Annotate all entities with the `ontology_name` and `ontology_iri`.</span>
+
+<span class="sd">    If imported is true, imported ontologies will also be annotated.</span>
+
+<span class="sd">    The ontology name and IRI are important contextual information</span>
+<span class="sd">    that is lost when ontologies are inferred and/or squashed.  This</span>
+<span class="sd">    function retain this information as annotations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">onto</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;ontology_name&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span><span class="p">:</span>
+            <span class="n">types</span><span class="o">.</span><span class="n">new_class</span><span class="p">(</span><span class="s1">&#39;ontology_name&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">owlready2</span><span class="o">.</span><span class="n">AnnotationProperty</span><span class="p">,</span> <span class="p">))</span>
+        <span class="k">if</span> <span class="s1">&#39;ontology_iri&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span><span class="p">:</span>
+            <span class="n">types</span><span class="o">.</span><span class="n">new_class</span><span class="p">(</span><span class="s1">&#39;ontology_iri&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">owlready2</span><span class="o">.</span><span class="n">AnnotationProperty</span><span class="p">,</span> <span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_entities</span><span class="p">(</span><span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;ontology_name&#39;</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;ontology_name&#39;</span><span class="p">,</span> <span class="n">onto</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;ontology_iri&#39;</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;ontology_iri&#39;</span><span class="p">,</span> <span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.asstring" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_object</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.asstring" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns a string representation of <code>expr</code>, which may be an entity,
+restriction, or logical expression of these.  <code>link</code> is a format
+string for formatting references to entities or relations.  It may
+contain the keywords "name", "url" and "lowerurl".
+<code>n</code> is the recursion depth and only intended for internal use.
+If <code>exclude_object</code> is true, the object will be excluded in restrictions.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">asstring</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_object</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a string representation of `expr`, which may be an entity,</span>
+<span class="sd">    restriction, or logical expression of these.  `link` is a format</span>
+<span class="sd">    string for formatting references to entities or relations.  It may</span>
+<span class="sd">    contain the keywords &quot;name&quot;, &quot;url&quot; and &quot;lowerurl&quot;.</span>
+<span class="sd">    `n` is the recursion depth and only intended for internal use.</span>
+<span class="sd">    If `exclude_object` is true, the object will be excluded in restrictions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">fmt</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the formatted label of `e`.&quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;prefLabel&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="s1">&#39;__name__&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;__getitem__&#39;</span><span class="p">):</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">name</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[a-z]+://&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;#&#39;</span> <span class="o">+</span> <span class="n">name</span>
+        <span class="k">return</span> <span class="n">link</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">lowerurl</span><span class="o">=</span><span class="n">url</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1"># return link.format(name=expr)</span>
+        <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Restriction</span><span class="p">):</span>
+        <span class="n">rlabel</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">class_construct</span><span class="o">.</span><span class="n">_restriction_type_2_label</span><span class="p">[</span><span class="n">expr</span><span class="o">.</span><span class="n">type</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="p">,</span> <span class="p">(</span>
+                <span class="n">owlready2</span><span class="o">.</span><span class="n">ObjectPropertyClass</span><span class="p">,</span>
+                <span class="n">owlready2</span><span class="o">.</span><span class="n">DataPropertyClass</span><span class="p">)):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Inverse</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;Inverse(</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="o">.</span><span class="n">property</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*** WARNING: unknown restriction property: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span>
+                  <span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rlabel</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">expr</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">(</span><span class="n">owlready2</span><span class="o">.</span><span class="n">MIN</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">MAX</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">EXACTLY</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">%s</span><span class="s1"> </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rlabel</span><span class="p">,</span> <span class="n">expr</span><span class="o">.</span><span class="n">cardinality</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">expr</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">(</span><span class="n">owlready2</span><span class="o">.</span><span class="n">SOME</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ONLY</span><span class="p">,</span>
+                           <span class="n">owlready2</span><span class="o">.</span><span class="n">VALUE</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">HAS_SELF</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">rlabel</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*** WARNING: unknown relation&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">rlabel</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">rlabel</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">exclude_object</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39; &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Or</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;(</span><span class="si">%s</span><span class="s1">)&#39;</span>
+        <span class="k">return</span> <span class="n">s</span> <span class="o">%</span> <span class="s1">&#39; or &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">asstring</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">Classes</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">And</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;(</span><span class="si">%s</span><span class="s1">)&#39;</span>
+        <span class="k">return</span> <span class="n">s</span> <span class="o">%</span> <span class="s1">&#39; and &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">asstring</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                                 <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">Classes</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Not</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;not </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">Class</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">PropertyClass</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Thing</span><span class="p">):</span>  <span class="c1"># instance (individual)</span>
+        <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">class_construct</span><span class="o">.</span><span class="n">Inverse</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;inverse(</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">disjoint</span><span class="o">.</span><span class="n">AllDisjoint</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="c1"># Check for subclasses</span>
+    <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;date&#39;</span>
+    <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">time</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;datetime&#39;</span>
+    <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;datetime&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Unknown expression: </span><span class="si">%r</span><span class="s1"> (type: </span><span class="si">%r</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">expr</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">)))</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.camelsplit" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">camelsplit</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.camelsplit" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Splits CamelCase string <code>s</code> before upper case letters (except
+if there is a sequence of upper case letters).</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">camelsplit</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Splits CamelCase string `s` before upper case letters (except</span>
+<span class="sd">    if there is a sequence of upper case letters).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">s</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">prev_lower</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">prev_isspace</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="nb">next</span> <span class="ow">in</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="k">if</span> <span class="p">((</span><span class="ow">not</span> <span class="n">prev_isspace</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">isupper</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">next</span><span class="o">.</span><span class="n">islower</span><span class="p">())</span> <span class="ow">or</span>
+                <span class="n">prev_lower</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">isupper</span><span class="p">()):</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">prev_lower</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
+        <span class="n">prev_isspace</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">isspace</span><span class="p">()</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="nb">next</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">next</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.convert_imported" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">convert_imported</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">input_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s1">&#39;xml&#39;</span><span class="p">,</span> <span class="n">url_from_catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.convert_imported" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Convert imported ontologies.</p>
+<p>Store the output in a directory structure matching the source
+files.  This require catalog file(s) to be present.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>To convert to Turtle (<code>.ttl</code>) format, you must have installed
+<code>rdflib&gt;=6.0.0</code>. See <a href="../README.md#Known-issues">Known issues</a> in the
+README for more information.</p>
+</div>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>input</code></td>
+        <td><code></code></td>
+        <td><p>input ontology file name</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>output</code></td>
+        <td><code></code></td>
+        <td><p>output ontology file path.  The directory part of <code>output</code>
+will be the root of the generated directory structure</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>input_format</code></td>
+        <td><code></code></td>
+        <td><p>input format.  The default is to infer from <code>input</code></p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>output_format</code></td>
+        <td><code></code></td>
+        <td><p>output format.  The default is to infer from <code>output</code></p></td>
+        <td><code>&#39;xml&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>url_from_catalog</code></td>
+        <td><code></code></td>
+        <td><p>bool | None.  Whether to read urls form catalog file.
+If None, the catalog file will be used if it exists.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>catalog_file</code></td>
+        <td><code></code></td>
+        <td><p>name of catalog file, that maps ontology IRIs to
+local file names</p></td>
+        <td><code>&#39;catalog-v001.xml&#39;</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">convert_imported</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">input_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s1">&#39;xml&#39;</span><span class="p">,</span>
+                     <span class="n">url_from_catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert imported ontologies.</span>
+
+<span class="sd">    Store the output in a directory structure matching the source</span>
+<span class="sd">    files.  This require catalog file(s) to be present.</span>
+
+<span class="sd">    Warning:</span>
+<span class="sd">        To convert to Turtle (`.ttl`) format, you must have installed</span>
+<span class="sd">        `rdflib&gt;=6.0.0`. See [Known issues](../README.md#Known-issues) in the</span>
+<span class="sd">        README for more information.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input: input ontology file name</span>
+<span class="sd">        output: output ontology file path.  The directory part of `output`</span>
+<span class="sd">            will be the root of the generated directory structure</span>
+<span class="sd">        input_format: input format.  The default is to infer from `input`</span>
+<span class="sd">        output_format: output format.  The default is to infer from `output`</span>
+<span class="sd">        url_from_catalog: bool | None.  Whether to read urls form catalog file.</span>
+<span class="sd">            If None, the catalog file will be used if it exists.</span>
+<span class="sd">        catalog_file: name of catalog file, that maps ontology IRIs to</span>
+<span class="sd">            local file names</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">inroot</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="nb">input</span><span class="p">))</span>
+    <span class="n">outroot</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
+    <span class="n">outext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">output</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">url_from_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">url_from_catalog</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">inroot</span><span class="p">,</span> <span class="n">catalog_file</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">url_from_catalog</span><span class="p">:</span>
+        <span class="n">d</span><span class="p">,</span> <span class="n">dirs</span> <span class="o">=</span> <span class="n">read_catalog</span><span class="p">(</span><span class="n">inroot</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="n">catalog_file</span><span class="p">,</span>
+                               <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_paths</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Create output dirs and copy catalog files</span>
+        <span class="k">for</span> <span class="n">indir</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+            <span class="n">outdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outroot</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">indir</span><span class="p">,</span> <span class="n">inroot</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">outdir</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">outdir</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">indir</span><span class="p">,</span> <span class="n">catalog_file</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">newpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">outext</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">newpath</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outdir</span><span class="p">,</span> <span class="n">catalog_file</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">outpaths</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">recur</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">outext</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">imported</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span><span class="n">predicate</span><span class="o">=</span><span class="n">URIRef</span><span class="p">(</span>
+                <span class="s1">&#39;http://www.w3.org/2002/07/owl#imports&#39;</span><span class="p">)):</span>
+            <span class="n">inpath</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">imported</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">imported</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">inpath</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s1">&#39;http://&#39;</span><span class="p">,</span> <span class="s1">&#39;https://&#39;</span><span class="p">,</span> <span class="s1">&#39;ftp://&#39;</span><span class="p">)):</span>
+                <span class="n">outpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outroot</span><span class="p">,</span> <span class="n">inpath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">outpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outroot</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span>
+                        <span class="n">inpath</span><span class="p">,</span> <span class="n">inroot</span><span class="p">))</span>
+            <span class="n">outpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span>
+                <span class="n">outpath</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">outext</span>
+            <span class="k">if</span> <span class="n">outpath</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">outpaths</span><span class="p">:</span>
+                <span class="n">outpaths</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">outpath</span><span class="p">)</span>
+                <span class="n">fmt</span> <span class="o">=</span> <span class="n">input_format</span> <span class="k">if</span> <span class="n">input_format</span> <span class="k">else</span> <span class="n">guess_format</span><span class="p">(</span>
+                    <span class="n">inpath</span><span class="p">,</span> <span class="n">fmap</span><span class="o">=</span><span class="n">FMAP</span><span class="p">)</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">inpath</span><span class="p">,</span> <span class="n">inpath</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">outpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">output_format</span><span class="p">)</span>
+                <span class="n">recur</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">outext</span><span class="p">)</span>
+
+    <span class="c1"># Write output files</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">input_format</span> <span class="k">if</span> <span class="n">input_format</span> <span class="k">else</span> <span class="n">guess_format</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">fmap</span><span class="o">=</span><span class="n">FMAP</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="ow">not</span> <span class="n">_validate_installed_version</span><span class="p">(</span><span class="n">package</span><span class="o">=</span><span class="s2">&quot;rdflib&quot;</span><span class="p">,</span> <span class="n">min_version</span><span class="o">=</span><span class="s2">&quot;6.0.0&quot;</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">output_format</span> <span class="o">==</span> <span class="n">FMAP</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ttl&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">outext</span> <span class="o">==</span> <span class="s2">&quot;ttl&quot;</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">__version__</span> <span class="k">as</span> <span class="n">__rdflib_version__</span>
+
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="n">IncompatibleVersion</span><span class="p">(</span>
+                <span class="s2">&quot;To correctly convert to Turtle format, rdflib must be &quot;</span>
+                <span class="s2">&quot;version 6.0.0 or greater, however, the detected rdflib &quot;</span>
+                <span class="s2">&quot;version used by your Python interpreter is &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">__rdflib_version__</span><span class="si">!r}</span><span class="s2">. For more information see the &quot;</span>
+                <span class="s2">&quot;&#39;Known issues&#39; section of the README.&quot;</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="n">g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">output_format</span><span class="p">)</span>
+    <span class="n">recur</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">outext</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.get_label" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_label</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.get_label" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns the label of entity <code>e</code>.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_label</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns the label of entity `e`.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;prefLabel&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="n">prefLabel</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;__name__&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">e</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.infer_version" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">infer_version</span><span class="p">(</span><span class="n">iri</span><span class="p">,</span> <span class="n">version_iri</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.infer_version" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Infer version from IRI and versionIRI.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">infer_version</span><span class="p">(</span><span class="n">iri</span><span class="p">,</span> <span class="n">version_iri</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Infer version from IRI and versionIRI.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">version_iri</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">iri</span><span class="p">)])</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">iri</span><span class="p">):</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="n">version_iri</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">iri</span><span class="p">):]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">iri</span><span class="p">)):</span>
+            <span class="k">while</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">version_iri</span><span class="p">)</span> <span class="ow">and</span> <span class="n">iri</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">version_iri</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]:</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">version_iri</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">])</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;/#&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">&#39;/&#39;</span> <span class="ow">in</span> <span class="n">version</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;version IRI </span><span class="si">%r</span><span class="s1"> is not consistent with base IRI &#39;</span>
+                         <span class="s1">&#39;</span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">version_iri</span><span class="p">,</span> <span class="n">iri</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">version</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.isinteractive" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">isinteractive</span><span class="p">()</span></code>
+
+
+<a href="#ontopy.utils.isinteractive" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns true if we are running from an interactive interpreater,
+false otherwise.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">isinteractive</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Returns true if we are running from an interactive interpreater,</span>
+<span class="sd">    false otherwise.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">__builtins__</span><span class="p">,</span> <span class="s1">&#39;__IPYTHON__&#39;</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">interactive</span> <span class="ow">or</span>
+                <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s1">&#39;ps1&#39;</span><span class="p">))</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.read_catalog" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">read_catalog</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_paths</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.read_catalog" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Reads a Protègè catalog file and returns as a dict.</p>
+<p>The returned dict maps the ontology IRI (name) to its actual
+location (URI).  The location can be either an absolute file path
+or a HTTP, HTTPS or FTP web location.</p>
+<p><code>uri</code> is a string locating the catalog file. It may be a http or
+https web location or a file path.</p>
+<p>The <code>catalog_file</code> argument spesifies the catalog file name and is
+used if <code>path</code> is used when <code>recursive</code> is true or when <code>path</code> is a
+directory.</p>
+<p>If <code>baseuri</code> is not None, it will be used as the base URI for the
+mapped locations.  Otherwise it defaults to <code>uri</code> with its final
+component omitted.</p>
+<p>If <code>recursive</code> is true, catalog files in sub-folders are also read.</p>
+<p>If <code>return_paths</code> is true, a set of directory paths to source
+files is returned in addition to the default dict.</p>
+<p>A ReadCatalogError is raised if the catalog file cannot be found.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">read_catalog</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_paths</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Reads a Protègè catalog file and returns as a dict.</span>
+
+<span class="sd">    The returned dict maps the ontology IRI (name) to its actual</span>
+<span class="sd">    location (URI).  The location can be either an absolute file path</span>
+<span class="sd">    or a HTTP, HTTPS or FTP web location.</span>
+
+<span class="sd">    `uri` is a string locating the catalog file. It may be a http or</span>
+<span class="sd">    https web location or a file path.</span>
+
+<span class="sd">    The `catalog_file` argument spesifies the catalog file name and is</span>
+<span class="sd">    used if `path` is used when `recursive` is true or when `path` is a</span>
+<span class="sd">    directory.</span>
+
+<span class="sd">    If `baseuri` is not None, it will be used as the base URI for the</span>
+<span class="sd">    mapped locations.  Otherwise it defaults to `uri` with its final</span>
+<span class="sd">    component omitted.</span>
+
+<span class="sd">    If `recursive` is true, catalog files in sub-folders are also read.</span>
+
+<span class="sd">    If `return_paths` is true, a set of directory paths to source</span>
+<span class="sd">    files is returned in addition to the default dict.</span>
+
+<span class="sd">    A ReadCatalogError is raised if the catalog file cannot be found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Protocols supported by urllib.request</span>
+    <span class="n">web_protocols</span> <span class="o">=</span> <span class="s1">&#39;http://&#39;</span><span class="p">,</span> <span class="s1">&#39;https://&#39;</span><span class="p">,</span> <span class="s1">&#39;ftp://&#39;</span>
+    <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">web_protocols</span><span class="p">):</span>
+        <span class="c1"># Call read_catalog() recursively to ensure that the temporary</span>
+        <span class="c1"># file is properly cleaned up</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
+            <span class="n">destfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="n">catalog_file</span><span class="p">)</span>
+            <span class="n">uris</span> <span class="o">=</span> <span class="p">{</span>  <span class="c1"># maps uri to base</span>
+                <span class="n">uri</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="n">baseuri</span> <span class="k">if</span> <span class="n">baseuri</span> <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">uri</span><span class="p">)),</span>
+                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">uri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">catalog_file</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="n">baseuri</span> <span class="k">if</span> <span class="n">baseuri</span> <span class="k">else</span> <span class="n">uri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)),</span>
+                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">catalog_file</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">uri</span><span class="p">)),</span>
+                <span class="p">}</span>
+            <span class="k">for</span> <span class="n">url</span><span class="p">,</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">uris</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">f</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">destfile</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">URLError</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s1">&#39;Content-Length&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="k">return</span> <span class="n">read_catalog</span><span class="p">(</span><span class="n">destfile</span><span class="p">,</span>
+                                        <span class="n">catalog_file</span><span class="o">=</span><span class="n">catalog_file</span><span class="p">,</span>
+                                        <span class="n">baseuri</span><span class="o">=</span><span class="n">baseuri</span> <span class="k">if</span> <span class="n">baseuri</span> <span class="k">else</span> <span class="n">base</span><span class="p">,</span>
+                                        <span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span><span class="p">,</span>
+                                        <span class="n">return_paths</span><span class="o">=</span><span class="n">return_paths</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ReadCatalogError</span><span class="p">(</span><span class="s1">&#39;Cannot download catalog from URLs: &#39;</span> <span class="o">+</span>
+                                   <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">uris</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;file://&#39;</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">uri</span><span class="p">[</span><span class="mi">7</span><span class="p">:]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">uri</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">catalog_file</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">catalog_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">gettag</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;}&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">load_catalog</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ReadCatalogError</span><span class="p">(</span><span class="s1">&#39;No such catalog file: &#39;</span> <span class="o">+</span> <span class="n">filepath</span><span class="p">)</span>
+        <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
+        <span class="n">dirs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">baseuri</span> <span class="k">if</span> <span class="n">baseuri</span> <span class="k">else</span> <span class="n">dirname</span><span class="p">)</span>
+        <span class="n">xml</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">gettag</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;catalog&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ReadCatalogError</span><span class="p">(</span><span class="s1">&#39;expected root tag of catalog file </span><span class="si">%r</span><span class="s1"> to &#39;</span>
+                                   <span class="s1">&#39;be &quot;catalog&quot;&#39;</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">gettag</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;uri&#39;</span><span class="p">:</span>
+                <span class="n">load_uri</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">dirname</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">gettag</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">uri</span> <span class="ow">in</span> <span class="n">child</span><span class="p">:</span>
+                    <span class="n">load_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">dirname</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">load_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">dirname</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">gettag</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;uri&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">uri</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;uri&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">web_protocols</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">baseuri</span><span class="p">:</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="n">baseuri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;/#&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="n">s</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">baseuri</span> <span class="ow">and</span> <span class="n">baseuri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">web_protocols</span><span class="p">):</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">baseuri</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">baseuri</span> <span class="k">if</span> <span class="n">baseuri</span> <span class="k">else</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
+
+        <span class="n">iris</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">url</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
+            <span class="nb">dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">dir</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+                <span class="n">catalog</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">catalog_file</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">catalog</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">web_protocols</span><span class="p">):</span>
+                    <span class="n">iris_</span><span class="p">,</span> <span class="n">dirs_</span> <span class="o">=</span> <span class="n">read_catalog</span><span class="p">(</span>
+                        <span class="n">catalog</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="n">catalog_file</span><span class="p">,</span>
+                        <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span><span class="p">,</span>
+                        <span class="n">return_paths</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">iris</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">iris_</span><span class="p">)</span>
+                    <span class="n">dirs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dirs_</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">load_catalog</span><span class="p">(</span><span class="n">catalog</span><span class="p">)</span>
+
+    <span class="n">iris</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">dirs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">load_catalog</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">return_paths</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">iris</span><span class="p">,</span> <span class="n">dirs</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">iris</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.squash_imported" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">squash_imported</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">input_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s1">&#39;xml&#39;</span><span class="p">,</span> <span class="n">url_from_catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.squash_imported" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Convert imported ontologies and squash them into a single file.</p>
+<p>If <code>url_from_catalog</code> is true the catalog file will be used to
+load possible imported ontologies.  If <code>url_from_catalog</code> is None, it will
+only be used if it exists in the same directory as the input file.</p>
+<p>The the squash rdflib graph is returned.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>To convert to Turtle (<code>.ttl</code>) format, you must have installed
+<code>rdflib&gt;=6.0.0</code>. See <a href="../README.md#Known-issues">Known issues</a> in the
+README for more information.</p>
+</div>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">squash_imported</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">input_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s1">&#39;xml&#39;</span><span class="p">,</span>
+                    <span class="n">url_from_catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert imported ontologies and squash them into a single file.</span>
+
+<span class="sd">    If `url_from_catalog` is true the catalog file will be used to</span>
+<span class="sd">    load possible imported ontologies.  If `url_from_catalog` is None, it will</span>
+<span class="sd">    only be used if it exists in the same directory as the input file.</span>
+
+<span class="sd">    The the squash rdflib graph is returned.</span>
+
+<span class="sd">    Warning:</span>
+<span class="sd">        To convert to Turtle (`.ttl`) format, you must have installed</span>
+<span class="sd">        `rdflib&gt;=6.0.0`. See [Known issues](../README.md#Known-issues) in the</span>
+<span class="sd">        README for more information.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">inroot</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="nb">input</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">url_from_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">url_from_catalog</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">inroot</span><span class="p">,</span> <span class="n">catalog_file</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">url_from_catalog</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">read_catalog</span><span class="p">(</span><span class="n">inroot</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="n">catalog_file</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">imported</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">recur</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>
+                <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">URIRef</span><span class="p">(</span><span class="s1">&#39;http://www.w3.org/2002/07/owl#imports&#39;</span><span class="p">),</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
+            <span class="n">iri</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">o</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">o</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">iri</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">imported</span><span class="p">:</span>
+                <span class="n">imported</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span>
+                <span class="n">g2</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+                <span class="n">g2</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">iri</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">input_format</span><span class="p">)</span>
+                <span class="n">recur</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">g2</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+                    <span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">input_format</span><span class="p">)</span>
+    <span class="n">recur</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="ow">not</span> <span class="n">_validate_installed_version</span><span class="p">(</span>
+                <span class="n">package</span><span class="o">=</span><span class="s2">&quot;rdflib&quot;</span><span class="p">,</span> <span class="n">min_version</span><span class="o">=</span><span class="s2">&quot;6.0.0&quot;</span>
+            <span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span>
+                <span class="n">output_format</span> <span class="o">==</span> <span class="n">FMAP</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ttl&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">output</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ttl&quot;</span>
+            <span class="p">)</span>
+        <span class="p">):</span>
+            <span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">__version__</span> <span class="k">as</span> <span class="n">__rdflib_version__</span>
+
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="n">IncompatibleVersion</span><span class="p">(</span>
+                    <span class="s2">&quot;To correctly convert to Turtle format, rdflib must be &quot;</span>
+                    <span class="s2">&quot;version 6.0.0 or greater, however, the detected rdflib &quot;</span>
+                    <span class="s2">&quot;version used by your Python interpreter is &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">__rdflib_version__</span><span class="si">!r}</span><span class="s2">. For more information see the &quot;</span>
+                    <span class="s2">&quot;&#39;Known issues&#39; section of the README.&quot;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">output_format</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">graph</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.write_catalog" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">write_catalog</span><span class="p">(</span><span class="n">mappings</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.write_catalog" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Writes a catalog file.</p>
+<p><code>mappings</code> is a dict mapping ontology IRIs (name) to actual
+locations (uri).  It has the same format as the dict returned
+by read_catalog().</p>
+<p><code>output</code> it the name of the generated file.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">write_catalog</span><span class="p">(</span><span class="n">mappings</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Writes a catalog file.</span>
+
+<span class="sd">    `mappings` is a dict mapping ontology IRIs (name) to actual</span>
+<span class="sd">    locations (uri).  It has the same format as the dict returned</span>
+<span class="sd">    by read_catalog().</span>
+
+<span class="sd">    `output` it the name of the generated file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;&lt;catalog prefer=&quot;public&quot; &#39;</span>
+        <span class="s1">&#39;xmlns=&quot;urn:oasis:names:tc:entity:xmlns:xml:catalog&quot;&gt;&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;    &lt;group id=&quot;Folder Repository, directory=, recursive=true, &#39;</span>
+        <span class="s1">&#39;Auto-Update=false, version=2&quot; prefer=&quot;public&quot; xml:base=&quot;&quot;&gt;&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mappings</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;        &lt;uri name=&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&quot; uri=&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">&quot;/&gt;&#39;</span><span class="p">)</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;    &lt;/group&gt;&#39;</span><span class="p">)</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;/catalog&gt;&#39;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../patch/" class="md-footer__link md-footer__link--prev" aria-label="Previous: patch" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              patch
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../factpluspluswrapper/factppgraph/" class="md-footer__link md-footer__link--next" aria-label="Next: factppgraph" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              factppgraph
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2019-2021 SINTEF
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+      <a href="https://github.com/emmo-repo" target="_blank" rel="noopener" title="EMMO on GitHub" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.94ec81fe.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.48dfec6c.min.js"></script>
+      
+    
+  </body>
 </html>
