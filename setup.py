@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Python reference API for the Elementary Multiperspective Material Ontology (EMMO).
+Python reference API for the
+Elementary Multiperspective Material Ontology (EMMO).
 """
 import os
 import re
