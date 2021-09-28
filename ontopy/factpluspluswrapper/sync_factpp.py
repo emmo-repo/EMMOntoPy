@@ -1,4 +1,5 @@
-import collections
+from collections import defaultdict
+from collections.abc import Sequence
 
 import rdflib
 from rdflib import URIRef, RDF, RDFS, OWL
@@ -39,7 +40,7 @@ def sync_reasoner_factpp(ontology_or_world=None, infer_property_values=False,
         world = ontology_or_world
     elif isinstance(ontology_or_world, Ontology):
         world = ontology_or_world.world
-    elif isinstance(ontology_or_world, collections.Sequence):
+    elif isinstance(ontology_or_world, Sequence):
         world = ontology_or_world[0].world
     else:
         world = owlready2.default_world
@@ -70,8 +71,8 @@ def sync_reasoner_factpp(ontology_or_world=None, infer_property_values=False,
         print('*** Load inferred ontology')
         # Check all rdfs:subClassOf relations in the inferred graph and add
         # them to the world if they are missing
-        new_parents = collections.defaultdict(list)
-        new_equivs = collections.defaultdict(list)
+        new_parents = defaultdict(list)
+        new_equivs = defaultdict(list)
         entity_2_type = {}
 
         for s, p, o in g2.triples((None, None, None)):

@@ -4,7 +4,7 @@ A nested dict with both attribute and item access.
 
 NA stands for Nested and Attribute.
 """
-import collections
+from collections.abc import Mapping
 import copy
 
 
@@ -66,7 +66,7 @@ class NADict:
             else:
                 self._dict[key] = value
         else:
-            if isinstance(value, collections.abc.Mapping):
+            if isinstance(value, Mapping):
                 self._dict[key] = NADict(value)
             else:
                 self._dict[key] = value
