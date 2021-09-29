@@ -1,1 +1,2 @@
 pre-commit~=2.15
+pytest~=6.2

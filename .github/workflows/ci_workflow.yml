@@ -27,7 +27,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -U setuptools wheel
 
-        pip install -r requirements_dev.txt
+        while IFS="" read -r line || [ -n "${line}" ]; do
+          if [[ "${line}" =~ ^pre-commit.*$ ]]; then
+            pre_commit="${line}"
+          fi
+        done < requirements_dev.txt
 
         while IFS="" read -r line || [ -n "${line}" ]; do
           if [[ "${line}" =~ ^invoke.*$ ]]; then
@@ -35,7 +39,7 @@ jobs:
           fi
         done < requirements_docs.txt
 
-        pip install ${invoke}
+        pip install ${pre_commit} ${invoke}
 
     - name: Run pre-commit
       run: pre-commit run --all-files --show-diff-on-failure
