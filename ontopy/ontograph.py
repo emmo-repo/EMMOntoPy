@@ -437,7 +437,6 @@ class OntoGraph:
         return self.get_dot_graph(root=roots, graph=graph, relations=relations,
                                   style=style)
 
-
 def get_figsize(graph):
     """Returns figure size (width, height) in points of figures for the
     current pydot graph object `graph`."""

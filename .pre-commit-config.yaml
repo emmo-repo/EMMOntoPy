@@ -35,22 +35,26 @@ repos:
 #   - id: mypy
 #     exclude: ^tests/.*$
 
-# - repo: local
-#   hooks:
-#   - id: pylint
-#     name: pylint
-#     entry: pylint
-#     language: python
-#     types: [python]
-#     require_serial: true
-#     exclude: ^tests/.*$
-#   - id: pytest-plugins
-#     name: pytest required plugin versions
-#     entry: invoke
-#     args: [update-pytest-reqs]
-#     language: python
-#     always_run: true
-#     types: [text]
-#     pass_filenames: false
-#     files: ^requirements_dev.txt$
-#     description: Update the pytest plugins to be minimum the currently listed requirement versions.
+- repo: local
+  hooks:
+  - id: update-docs-api-reference
+    name: Update API Reference in Documentation
+    entry: invoke create-api-reference-docs --pre-clean
+    language: python
+    pass_filenames: false
+    files: ^(emmopy|ontopy)/.*\.py$
+    description: Update the API Reference documentation, whenever a Python file is touched in the code base.
+  - id: update-docs-index
+    name: Update landing page for documentation
+    entry: invoke create-docs-index
+    language: python
+    pass_filenames: false
+    files: ^README.md$
+    description: Update the landing page for the documentation if the source file (README.md) is changed.
+  # - id: pylint
+  #   name: pylint
+  #   entry: pylint
+  #   language: python
+  #   types: [python]
+  #   require_serial: true
+  #   exclude: ^tests/.*$
