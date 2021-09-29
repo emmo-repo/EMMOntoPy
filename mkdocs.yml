@@ -93,5 +93,6 @@ nav:
     - ... | examples/**
   - Developers:
     - release-instructions.md
+  - Changelog: CHANGELOG.md
   - ... | api_reference/**
 

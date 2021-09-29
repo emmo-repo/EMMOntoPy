@@ -3,3 +3,5 @@ TAG_NAME
 See the
 [versioned online documentation](https://emmo-repo.github.io/EMMO-python/TAG_NAME)
 for more information.
+The full changelog can be seen
+[here](https://emmo-repo.github.io/EMMO-python/TAG_NAME/CHANGELOG).
