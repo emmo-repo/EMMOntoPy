@@ -1,34 +1,28 @@
-def test_ontodoc() -> None:
-    import sys
-    import os
+from typing import TYPE_CHECKING
 
-    # Add emmo to sys path
-    thisdir = os.path.abspath(os.path.dirname(__file__))
-    sys.path.insert(1, os.path.abspath(os.path.join(thisdir, '..')))
-    from ontopy import get_ontology  # noqa: E402, F401
-    from ontopy.ontodoc import OntoDoc, DocPP  # noqa: E402, F401
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from ontopy.ontology import Ontology
 
 
-    emmo = get_ontology()
-    emmo.load()
+def test_ontodoc(emmo: "Ontology", repo_dir: "Path", tmpdir: "Path") -> None:
+    from ontopy.ontodoc import OntoDoc, DocPP
 
-    baseiri = 'http://emmo.info/'
-    iris = set(c.namespace.base_iri for c in emmo.classes())
-    iris.update(set(c.namespace.base_iri for c in emmo.object_properties()))
-    # iris.update(set(c.namespace.base_iri for c in emmo.annotation_properties()))
+    iris = set(_.namespace.base_iri for _ in emmo.classes())
+    iris.update(set(_.namespace.base_iri for _ in emmo.object_properties()))
 
-    for s in sorted(iris):
-        print(s)
-
-
-    inputfile = os.path.join(thisdir, 'doc.md')
-    assert os.path.exists(inputfile)
+    inputfile = repo_dir / "tests" / "doc.md"
+    assert inputfile.exists()
 
     ontodoc = OntoDoc(emmo)
 
-    with open(inputfile, 'rt') as f:
-        template = f.read()
-    docpp = DocPP(template, ontodoc, os.path.dirname(inputfile))
+    template = inputfile.read_text()
+    docpp = DocPP(
+        template,
+        ontodoc,
+        basedir=inputfile.parent,
+        figdir=tmpdir / "genfigs",
+    )
     docpp.process()
-    with open('doc-output.md', 'wt') as f:
-        f.write(docpp.get_buffer())
+    (tmpdir / "doc-output.md").write_text(docpp.get_buffer())

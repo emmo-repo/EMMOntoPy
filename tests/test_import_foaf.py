@@ -1,9 +1,17 @@
-def test_import_foaf() -> None:
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ontopy.ontology import Ontology
+
+
+def test_import_foaf(emmo: "Ontology") -> None:
     """Test importing foaf
 
-    This test serves more like an example
-    """
+    foaf is the Friend-of-a-Friend ontology.
 
+    This test serves more like an example.
+    TODO: Move to `examples/`
+    """
     from ontopy import get_ontology
 
     skos = get_ontology('http://www.w3.org/2004/02/skos/core#').load()
@@ -18,9 +26,6 @@ def test_import_foaf() -> None:
 
     # Now we can load foaf
     foaf.load()
-
-
-    emmo = get_ontology().load()
 
     with emmo:
 
