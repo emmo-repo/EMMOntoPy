@@ -9,23 +9,36 @@ on:
 
 jobs:
 
-  lint:
-    name: Lint with flake8
+  pre-commit:
+    name: Lint and format with pre-commit
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2.3.4
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
     - name: Set up Python 3.7
-      uses: actions/setup-python@v2.2.2
+      uses: actions/setup-python@v2
       with:
         python-version: 3.7
 
-    - name: Lint with flake8
+    - name: Install dependencies
       run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --extend-exclude "tests/*"
-        flake8 . --count --statistics --extend-exclude "tests/*"
+        python -m pip install --upgrade pip
+        pip install -U setuptools wheel
+
+        pip install -r requirements_dev.txt
+
+        while IFS="" read -r line || [ -n "${line}" ]; do
+          if [[ "${line}" =~ ^invoke.*$ ]]; then
+            invoke="${line}"
+          fi
+        done < requirements_docs.txt
+
+        pip install ${invoke}
+
+    - name: Run pre-commit
+      run: pre-commit run --all-files --show-diff-on-failure
 
   tests:
     name: Pytest and demos
