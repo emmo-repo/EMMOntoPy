@@ -36,9 +36,9 @@ jobs:
         invoke create-api-reference-docs --pre-clean
         invoke create-docs-index
 
-        if [ -n "$(git status --porcelain --untracked-files=no --ignored=no docs/api_reference docs/index.md)" ]; then
+        if [ -n "$(git status --porcelain docs/api_reference docs/index.md)" ]; then
           echo "The following files in the documentation has not been committed:"
-          git status --porcelain --untracked-files=no --ignored=no docs/api_reference docs/index.md
+          git status --porcelain docs/api_reference docs/index.md
           exit 1
         fi
 
