@@ -112,6 +112,9 @@ class World(owlready2.World):
 
         return onto
 
+    def __hash__(self):
+        return hash(self.filename)
+
 
 class Ontology(owlready2.Ontology, OntoGraph):
     """A generic class extending owlready2.Ontology.
@@ -191,7 +194,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         pass
 
     def __eq__(self, other):
-        return self.__hash__() == other.__hash__()
+        return hash(self) == hash(other)
 
     def __str__(self):
         """TODO"""
@@ -208,7 +211,15 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # emmo['HAtom'] = emmo.Atom
 
     def __hash__(self):
-        return hash((self.base_iri, self.get_entities()))
+        sorted_entities = sorted(
+            self.get_entities(imported=True,
+                              classes=True,
+                              individuals=False,
+                              object_properties=False,
+                              data_properties=False,
+                              annotation_properties=False,
+                             ), key=lambda e: e.name)
+        return hash((self.base_iri, tuple(sorted_entities)))
 
     def get_by_label(self, label, label_annotations=None, namespace=None):
         """Returns entity with label annotation `label`.
