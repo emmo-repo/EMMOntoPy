@@ -142,4 +142,4 @@ jobs:
         git config --global user.email "${GIT_USER_EMAIL"
 
     - name: Deploy documentation
-      run: mike deploy --push --remote origin --branch gh-pages --update-aliases --config-file mkdocs.yml ${GITHUB_REF#refs/tags/} stable
+      run: mike deploy --push --remote origin --branch gh-pages --update-aliases --config-file mkdocs.yml ${GITHUB_REF#refs/tags/v} stable
