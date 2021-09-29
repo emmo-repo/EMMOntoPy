@@ -5,17 +5,22 @@ More information on `invoke` can be found at http://www.pyinvoke.org/.
 # pylint: disable=import-outside-toplevel,too-many-locals
 import re
 import sys
-from typing import Tuple
+from typing import TYPE_CHECKING
 from pathlib import Path
 
 from invoke import task
+
+if TYPE_CHECKING:
+    from typing import Tuple
+
+    from invoke import Context, Result
 
 
 TOP_DIR = Path(__file__).parent.resolve()
 
 
 def update_file(
-    filename: str, sub_line: Tuple[str, str], strip: str = None
+    filename: str, sub_line: "Tuple[str, str]", strip: str = None
 ) -> None:
     """Utility function for tasks to read, update, and write files"""
     with open(filename, "r", encoding="utf8") as handle:
@@ -63,7 +68,7 @@ def setver(_, ver=""):
         )
     }
 )
-def create_api_reference_docs(_, pre_clean=False):
+def create_api_reference_docs(context, pre_clean=False, pre_commit=False):
     """Create the API Reference in the documentation"""
     import os
     import shutil
@@ -155,6 +160,27 @@ def create_api_reference_docs(_, pre_clean=False):
                     full_path=docs_sub_dir / md_filename,
                     content=template.format(name=basename, py_path=py_path),
                 )
+
+    if pre_commit:
+        # Check if there have been any changes.
+        # List changes if yes.
+        if TYPE_CHECKING:
+            context: "Context" = context
+
+        # NOTE: grep returns an exit code of 1 if it doesn't find anything
+        # (which will be good in this case).
+        # Concerning the weird last grep command see:
+        # http://manpages.ubuntu.com/manpages/precise/en/man1/git-status.1.html
+        result: "Result" = context.run(
+            "git status --porcelain | grep docs/api_reference | "
+            "grep -E '^[? MARC][?MD]' || exit 0",
+            hide=True,
+        )
+        if result.stdout:
+            sys.exit(
+                "The following files have been changed/added, please stage "
+                f"them:\n\n{result.stdout}"
+            )
 
 
 @task

@@ -39,14 +39,16 @@ repos:
   hooks:
   - id: update-docs-api-reference
     name: Update API Reference in Documentation
-    entry: invoke create-api-reference-docs --pre-clean
+    entry: invoke
+    args: [create-api-reference-docs, --pre-clean, --pre-commit]
     language: python
     pass_filenames: false
     files: ^(emmopy|ontopy)/.*\.py$
     description: Update the API Reference documentation, whenever a Python file is touched in the code base.
   - id: update-docs-index
-    name: Update landing page for documentation
-    entry: invoke create-docs-index
+    name: Update Landing Page for Documentation
+    entry: invoke
+    args: [create-docs-index]
     language: python
     pass_filenames: false
     files: ^README.md$
