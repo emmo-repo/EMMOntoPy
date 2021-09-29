@@ -10,7 +10,7 @@ on:
 jobs:
 
   pre-commit:
-    name: Pre-commit
+    name: pre-commit
     runs-on: ubuntu-latest
 
     steps:
@@ -46,7 +46,7 @@ jobs:
 
 
   safety:
-    name: Safety
+    name: safety
     runs-on: ubuntu-latest
 
     steps:
@@ -71,7 +71,7 @@ jobs:
 
 
   tests:
-    name: Pytest
+    name: pytest
     runs-on: ubuntu-latest
 
     steps:
