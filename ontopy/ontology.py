@@ -190,6 +190,26 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Play nice with inspect...
         pass
 
+    def __eq__(self, other):
+        return self.__hash__() == other.__hash__()
+
+    def __str__(self):
+        """TODO"""
+
+    def __iter__(self):
+        """TODO"""
+
+    def __delitem__(self):
+        """TODO"""
+
+    def __setitem__(self, key, value):
+        """ MAYBE TODO """
+        # self[key] = value
+        # emmo['HAtom'] = emmo.Atom
+
+    def __hash__(self):
+        return hash((self.base_iri, self.get_entities()))
+
     def get_by_label(self, label, label_annotations=None, namespace=None):
         """Returns entity with label annotation `label`.
 
