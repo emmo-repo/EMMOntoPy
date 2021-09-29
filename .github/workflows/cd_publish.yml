@@ -1,0 +1,120 @@
+name: Release new EMMOntoPy version
+
+on:
+  release:
+    types: [published]
+
+env:
+  GIT_USER_NAME: EMMOntoPy Developers
+  GIT_USER_EMAIL: EMMOntoPy@emmo.info
+  # IMPORTANT: The tag should *not* be prepended by `v`,
+  # i.e., it should be `1.0.1` and not `v1.0.1`.
+  NEW_VERSION: "${GITHUB_REF#refs/tags/}"
+
+jobs:
+  update-version:
+    name: Update `master` with new version
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel
+        pip install -U -e .[docs]
+
+    - name: Set up git user
+      run: |
+        git config --global user.name "${GIT_USER_NAME}"
+        git config --global user.email "${GIT_USER_EMAIL"
+
+    - name: Update version and tag
+      run: |
+        invoke setver --ver="${NEW_VERSION}"
+        git add ontopy/__init__.py
+        git commit -m "Release ${NEW_VERSION}"
+
+        TAG_MSG=.github/utils/release_tag_msg.txt
+        sed -i "s|TAG_NAME|${NEW_VERSION}|" "${TAG_MSG}"
+        git tag -af -F "${TAG_MSG}" ${NEW_VERSION}
+
+    - name: Push new commit and update tag
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: master
+        force: true
+        tags: true
+
+  publish-package:
+    name: Publish Python package to PyPI
+    runs-on: ubuntu-latest
+    needs: update-version
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+        ref: master
+
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel
+        pip install -U -e .[docs]
+
+    - name: Build source and built distributions
+      run: python setup.py sdist bdist_wheel
+
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@master
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_TOKEN }}
+
+  deploy-docs:
+    name: Deploy new documentation
+    runs-on: ubuntu-latest
+    needs: publish-package
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        ref: master
+
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel
+        pip install -U -e .[docs]
+
+    - name: Set up git user
+      run: |
+        git config --global user.name "${GIT_USER_NAME}"
+        git config --global user.email "${GIT_USER_EMAIL"
+
+    - name: Deploy documentation
+      run: mike deploy --push --remote origin --branch gh-pages --update-aliases --config-file mkdocs.yml ${NEW_VERSION} stable
