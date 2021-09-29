@@ -8,7 +8,7 @@ import time
 import warnings
 import shlex
 import shutil
-import subprocess
+import subprocess  # nosec
 from textwrap import dedent
 from tempfile import NamedTemporaryFile, TemporaryDirectory
 
@@ -1039,7 +1039,7 @@ def run_pandoc(genfile, outfile, format, pandoc_option_files=(),
             print()
             print('* Executing command:')
             print(' '.join(shlex.quote(s) for s in cmd))
-        subprocess.check_call(cmd)
+        subprocess.check_call(cmd)  # nosec
 
 
 def run_pandoc_pdf(latex_dir, pdf_engine, outfile, args, verbose=True):
@@ -1055,7 +1055,7 @@ def run_pandoc_pdf(latex_dir, pdf_engine, outfile, args, verbose=True):
         print()
         print('* Executing commands:')
         print(' '.join(shlex.quote(s) for s in cmd))
-    subprocess.check_call(cmd)
+    subprocess.check_call(cmd)  # nosec
 
     # Fixing tex output
     texfile2 = basename + '2.tex'
@@ -1071,8 +1071,8 @@ def run_pandoc_pdf(latex_dir, pdf_engine, outfile, args, verbose=True):
     if verbose:
         print()
         print(' '.join(shlex.quote(s) for s in cmd))
-    output = subprocess.check_output(cmd, timeout=60)
-    output = subprocess.check_output(cmd, timeout=60)
+    output = subprocess.check_output(cmd, timeout=60)  # nosec
+    output = subprocess.check_output(cmd, timeout=60)  # nosec
 
     # Workaround for non-working "-output-directory" latex option
     if not os.path.exists(pdffile):

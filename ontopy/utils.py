@@ -9,7 +9,7 @@ import types
 from typing import TYPE_CHECKING
 import urllib.request
 import warnings
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 
 from rdflib import Graph, URIRef
 from rdflib.util import guess_format
@@ -231,7 +231,8 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
                 }
             for url, base in uris.items():
                 try:
-                    f, msg = urllib.request.urlretrieve(url, destfile)
+                    # The URL can only contain the schemes from `web_protocols`.
+                    f, msg = urllib.request.urlretrieve(url, destfile)  # nosec
                 except urllib.request.URLError:
                     continue
                 else:
@@ -278,7 +279,8 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
                     load_uri(uri, dirname)
 
     def load_uri(uri, dirname):
-        assert gettag(uri) == 'uri'
+        if gettag(uri) != 'uri':
+            raise ValueError(f"{gettag(uri)!r} should be 'uri'.")
         s = uri.attrib['uri']
         if s.startswith(web_protocols):
             if baseuri:
@@ -378,9 +380,7 @@ def _validate_installed_version(
             "The latter classes being from the packaging.version module."
         )
 
-    installed_package = importlib.import_module(
-        name=".", package=package
-    )
+    installed_package = importlib.import_module(package)
     installed_package_version = getattr(installed_package, "__version__", None)
     if not installed_package_version:
         raise UnknownVersion(

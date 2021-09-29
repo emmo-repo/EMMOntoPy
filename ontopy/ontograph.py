@@ -21,7 +21,7 @@ import os
 import re
 import warnings
 import tempfile
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 
 import owlready2
 
@@ -448,7 +448,12 @@ def get_figsize(graph):
         svg = xml.getroot()
         width = svg.attrib['width']
         height = svg.attrib['height']
-        assert width.endswith('pt')  # ensure that units are in points
+        if not width.endswith('pt'):
+            # ensure that units are in points
+            raise ValueError(
+                "The width attribute should always be given in 'pt', "
+                f"but it is: {width}"
+            )
 
     def asfloat(s):
         return float(re.match(r'^[\d.]+', s).group())

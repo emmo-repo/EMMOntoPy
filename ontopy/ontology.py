@@ -1021,7 +1021,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                     return cur
                 if len(mro) == 0:
                     mros.remove(mro)
-        assert(0)  # should never be reached...
+        raise Exception("A closest common ancestor should always exist !")
 
     def get_ancestors(self, classes, include='all', strict=True):
         """Return ancestors of all classes in `classes`.

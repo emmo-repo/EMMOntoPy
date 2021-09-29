@@ -56,8 +56,7 @@ def get_parents(self, strict=False):
     elif isinstance(self, owlready2.ObjectPropertyClass):
         return {cls for cls in self.is_a
                 if isinstance(cls, owlready2.ObjectPropertyClass)}
-    else:
-        assert 0
+    raise Exception("self has no parents - this should not be possible!")
 
 
 def _dir(self):

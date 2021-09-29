@@ -5,7 +5,7 @@ A module for visualising ontologies using graphviz.
 import os
 import re
 import tempfile
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 
 import owlready2
 import graphviz
@@ -655,9 +655,10 @@ class OntoGraph:
         for s, p, o in self.edges:
             if p.startswith('Inverse'):
                 relations.add('inverse')
-                m = re.match(r'Inverse\((.+)\)', p)
-                assert m
-                relations.add(m.groups()[0])
+                match = re.match(r'Inverse\((.+)\)', p)
+                if match is None:
+                    raise ValueError(f"Could unexpectedly not find the inverse relation just added in: {p}")
+                relations.add(match.groups()[0])
             else:
                 relations.add(p.split(None, 1)[0])
 
@@ -702,7 +703,12 @@ class OntoGraph:
             svg = xml.getroot()
             width = svg.attrib['width']
             height = svg.attrib['height']
-            assert width.endswith('pt')  # ensure that units are in points
+            if not width.endswith('pt'):
+                # ensure that units are in points
+                raise ValueError(
+                    "The width attribute should always be given in 'pt', "
+                    f"but it is: {width}"
+                )
 
             def asfloat(s):
                 return float(re.match(r'^[\d.]+', s).group())
@@ -989,7 +995,7 @@ def cytoscapegraph(graph, onto=None, infobox=None, style=None):
                     iri = onto.get_by_label(
                             node["data"]["label"]).iri
                     print(f'iri: {iri}')
-                except Exception:
+                except (AttributeError, IndexError):
                     pass
                 try:
                     fig = node["data"]["label"]
@@ -997,7 +1003,7 @@ def cytoscapegraph(graph, onto=None, infobox=None, style=None):
                         display(Image(fig+'.png', width=100))
                     elif os.path.exists(Path(fig+'.jpg')):
                         display(Image(fig+'.jpg', width=100))
-                except Exception:  # FIXME: make this more specific
+                except (AttributeError, IndexError):
                     pass
                 out.clear_output(wait=True)
 

@@ -5,7 +5,7 @@ This module is copied from the SimPhoNy project.
 Original author: Matthias Urban
 """
 import os
-import subprocess
+import subprocess  # nosec
 import logging
 import rdflib
 import tempfile
@@ -74,7 +74,7 @@ class OwlApiInterface():
         ] + ["%s" % command] + list(owl_files)
         logger.info("Running Reasoner")
         logger.debug(f"Command {cmd}")
-        subprocess.run(cmd, check=True)
+        subprocess.run(cmd, check=True)  # nosec
 
         graph = None
         if return_graph:
