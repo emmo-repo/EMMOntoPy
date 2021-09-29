@@ -172,7 +172,7 @@ def create_api_reference_docs(context, pre_clean=False, pre_commit=False):
         # Concerning the weird last grep command see:
         # http://manpages.ubuntu.com/manpages/precise/en/man1/git-status.1.html
         result: "Result" = context.run(
-            "git status --porcelain | grep docs/api_reference | "
+            "git status --porcelain docs/api_reference | "
             "grep -E '^[? MARC][?MD]' || exit 0",
             hide=True,
         )
