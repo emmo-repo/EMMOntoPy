@@ -53,7 +53,7 @@ def main():
         help='Paths where imported ontologies can be found.  May be provided '
         'as a comma-separated string and/or with multiple --path options.')
     parser.add_argument(
-        '--reasoner', nargs='?', const='FaCT++', 
+        '--reasoner', nargs='?', const='FaCT++',
         choices=['FaCT++','HermiT', 'Pellet'],
         help='Run given reasoner on the ontology.  Valid reasoners are '
         '"FaCT++" (default), "HermiT" and "Pellet".Note: FaCT++ is preferred '
@@ -158,7 +158,7 @@ def main():
                      '\n  '.join(world.ontologies.keys()))
     onto = world.get_ontology(args.iri)
     try:
-        onto.load(only_local=args.local, 
+        onto.load(only_local=args.local,
                   url_from_catalog=args.url_from_catalog,
                   catalog_file=args.catalog_file)
     except owlready2.OwlReadyOntologyParsingError as e:
