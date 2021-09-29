@@ -3,7 +3,7 @@
 import types
 
 import owlready2
-from owlready2 import ThingClass, PropertyClass, Thing, Restriction, Namespace
+from owlready2 import ThingClass, PropertyClass, Thing, Restriction, Namespace, EntityClass
 from owlready2 import Metadata
 
 
@@ -67,6 +67,16 @@ def _dir(self):
     s.update(props)
     return sorted(s)
 
+def _hash(self):
+    """Define hash of ThingClass and PropertyClass."""
+    try:
+        return hash(self.iri)
+    except AttributeError:
+        return hash(self.name)
+
+def _eq(self, other):
+    """Define equality based on hash for ThingClass and PropertyClass."""
+    return hash(self) == hash(other)
 
 def _hash(self):
     """Define hash of ThingClass and PropertyClass."""
@@ -157,7 +167,6 @@ def get_property_annotations(self, all=False, imported=True):
         return d
     else:
         return {k: v for k, v in d.items() if v}
-
 
 setattr(PropertyClass, '__hash__', _hash)
 # setattr(PropertyClass, '__eq__', _eq)
