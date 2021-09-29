@@ -17,10 +17,9 @@ def repo_dir() -> Path:
 @pytest.fixture
 def emmo() -> "Ontology":
     """Load and return EMMO."""
-    from ontopy import get_ontology
+    from emmopy import get_emmo
 
-    emmo = get_ontology()
-    emmo.load()
+    emmo = get_emmo()
 
     return emmo
 
