@@ -119,7 +119,7 @@ sudo apt-get update && sudo apt-get install -y graphviz openjdk-11-jre-headless
 
 If you are on a non-Debian system (Debian, Ubuntu, ...), please check which package manager you are using and find packages for `graphviz` and `openjdk` minimum version 11.
 
-### Test the installation
+## Test the installation
 
 It is good practice to test the integrity of the installation and that all necessary dependencies are correctly installed.
 
