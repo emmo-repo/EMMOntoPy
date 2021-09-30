@@ -17,5 +17,5 @@ def test_load_emmo() -> None:
 
     EMMO_inferred.new_entity('HydrogenAtom', EMMO_inferred.Atom)
     EMMO_inferred.sync_attributes()
-    #assert EMMO_inferred != get_emmo(None)
+    assert EMMO_inferred != get_emmo(None)
 

@@ -211,6 +211,11 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # emmo['HAtom'] = emmo.Atom
 
     def __hash__(self):
+        """Returns hash.
+
+        Note that entities must have iris for this to work, since entities are
+        sorted by their iris before creating the hash.
+        """
         sorted_entities = sorted(
             self.get_entities(imported=True,
                               classes=True,
@@ -218,7 +223,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                               object_properties=False,
                               data_properties=False,
                               annotation_properties=False,
-                             ), key=lambda e: e.name)
+                             ), key=lambda e: e.iri)
         return hash((self.base_iri, tuple(sorted_entities)))
 
     def get_by_label(self, label, label_annotations=None, namespace=None):
