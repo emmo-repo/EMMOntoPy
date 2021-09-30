@@ -223,7 +223,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                               object_properties=False,
                               data_properties=False,
                               annotation_properties=False,
-                             ), key=lambda e: e.iri)
+                              ), key=lambda e: e.iri)
         return hash((self.base_iri, tuple(sorted_entities)))
 
     def get_by_label(self, label, label_annotations=None, namespace=None):
