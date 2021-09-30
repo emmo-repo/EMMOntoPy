@@ -12,5 +12,10 @@ def test_load_emmo() -> None:
     assert EMMO_inferred
     assert EMMO
 
-    assert EMMO_inferred.base_iri == get_emmo(None).base_iri
+    assert EMMO_inferred == get_emmo(None)
+    assert EMMO != EMMO_inferred
+
+    EMMO_inferred.new_entity('HydrogenAtom', EMMO_inferred.Atom)
+    EMMO_inferred.sync_attributes()
+    #assert EMMO_inferred != get_emmo(None)
 
