@@ -142,6 +142,9 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/).
 - [BIG-MAP](https://www.big-map.eu/);
   Grant Agreement No: 957189
   <img src="https://avatars1.githubusercontent.com/u/72801303?s=200&v=4" width="50">
+- [OpenModel](https://www.open-model.eu/);
+  Grant Agreement No: 953167
+  <img src="https://www.open-model.eu/en/jcr:content/stage/stageParsys/stage_slide_383467607/image.img.jpg/1630120770165/OpenModel-Logob.jpg" width="110">
 
 [EMMOntoPy]: https://github.com/emmo-repo/EMMO-python/
 [EMMO-pypi]: https://pypi.org/project/EMMO/
