@@ -65,8 +65,8 @@ jobs:
         #python step4_map_instance.py
         cd -
 
-  documentation:
-    name: EMMO documentation
+  ontodoc:
+    name: EMMO documentation (test using ontodoc)
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2.3.4
@@ -162,3 +162,48 @@ jobs:
         mkdir -p /tmp/installation_dir
         cd /tmp/installation_dir
         pip install ${ORIGINAL_PWD}/${BDIST_DIR}/${{ env.BDIST_FILE }}
+
+  documentation:
+    name: Check documentation
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U setuptools wheel
+        pip install -U -e .[docs]
+
+    - name: Set up git user
+      run: |
+        git config --global user.name "EMMOntoPy Developers"
+        git config --global user.email "EMMOntoPy@emmo.info"
+
+    - name: Check API Reference and landing page
+      run: |
+        invoke create-api-reference-docs --pre-clean
+        invoke create-docs-index
+
+        if [ -n "$(git status --porcelain docs/api_reference docs/index.md)" ]; then
+          echo -e "\u274c Discrepancies found !"
+          echo -e "The following files in the documentation must be committed:"
+          git status --porcelain docs/api_reference docs/index.md
+          echo -e "\nRun:\n"
+          echo "    invoke create-api-reference-docs --pre-clean"
+          echo -e "    invoke create-docs-index\n"
+          echo "And commit the changed files."
+          exit 1
+        else
+          echo -e "\u2705 All good !"
+        fi
+
+    - name: Build check
+      run: mkdocs build --strict --verbose

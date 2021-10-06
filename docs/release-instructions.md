@@ -1,11 +1,16 @@
 # Steps for creating a new release
 
-1. Create release branch (branch name can be the target version number).
-2. Update version number in `emmopy/__init__.py`.
-3. Commit and push to origin ([emmo-repo/EMMO-python](https://github.com/emmo-repo/EMMO-python.git)).
-4. Push the release branch to GitHub and create a pull request for merging to the master branch.
-5. Once accepted, merge to master.
-6. Create a release on GitHub with a short release description.
+1. Create a release on GitHub with a short release description.
 
-   Set the tag to the version number prefixed with `"v"` and title to the version number.
-7. The PyPI distribution package is created automatically upon creation of a new release on GitHub.
+   Ensure you add a `# <version number>` title to the description.
+
+   Set the tag to the version number prefixed with `"v"` and title to the version number as explained above.
+1. Ensure the GitHub Action CD workflows run as expected.
+
+!!! danger "The workflow failed"
+   If something is wrong and the workflow fails **before** publishing the package to PyPI, make sure to remove all traces of the release and tag, fix the bug, and try again.
+
+   If something is wrong and the workflow fails **after** publishing the package to PyPI: **DO NOT REMOVE THE RELEASE OR TAG !**
+
+   Deployment of the documentation should (in theory) be the only thing that has failed.
+   This can be deployed manually using similar steps as in the workflow.
