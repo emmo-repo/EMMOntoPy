@@ -5,6 +5,7 @@ on:
     types: [published]
 
 env:
+  PUBLISH_UPDATE_BRANCH: master
   GIT_USER_NAME: EMMOntoPy Developers
   GIT_USER_EMAIL: EMMOntoPy@emmo.info
   # IMPORTANT: The tag should *not* be prepended by `v`,
@@ -12,7 +13,8 @@ env:
 
 jobs:
   update-version:
-    name: Update `master` with new version
+    name: Update CHANGELOG and documentation
+    if: github.repository == 'emmo-repo/EMMO-python'
     runs-on: ubuntu-latest
 
     steps:
@@ -41,7 +43,7 @@ jobs:
       uses: CharMixer/auto-changelog-action@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        release_branch: master
+        release_branch: ${{ env.PUBLISH_UPDATE_BRANCH }}
 
     - name: Update version and tag
       run: |
@@ -49,7 +51,7 @@ jobs:
 
         invoke setver --ver="${NEW_VERSION}"
         git add ontopy/__init__.py CHANGELOG.md
-        git commit -m "Release ${NEW_VERSION}"
+        git commit -m "Release v${NEW_VERSION}"
 
         TAG_MSG=.github/utils/release_tag_msg.txt
         sed -i "s|TAG_NAME|${NEW_VERSION}|" "${TAG_MSG}"
@@ -59,7 +61,7 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: master
+        branch: ${{ env.PUBLISH_UPDATE_BRANCH }}
         force: true
         tags: true
 
@@ -70,14 +72,15 @@ jobs:
       uses: CharMixer/auto-changelog-action@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        release_branch: master
+        release_branch: ${{ env.PUBLISH_UPDATE_BRANCH }}
         since_tag: "${{ env.PREVIOUS_VERSION }}"
-        output: "release_msg.md"
+        output: "release_changelog.md"
 
-    - name: Update release description with changelog (append it)
-      uses: softprops/action-gh-release@v1
-      with:
-        body_path: "release_msg.md"
+    - name: Append changelog to release body
+      run: |
+        gh api /repos/${{ github.repository }}/releases/${{ github.event.release.id }} --jq '.body' > release_body.md
+        cat release_changelog.md >> release_body.md
+        gh api /repos/${{ github.repository }}/releases/${{ github.event.release.id }} -X PATCH -F body='@release_body.md'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -91,7 +94,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 2
-        ref: master
+        ref: ${{ env.PUBLISH_UPDATE_BRANCH }}
 
     - name: Set up Python 3.7
       uses: actions/setup-python@v2
@@ -123,7 +126,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
-        ref: master
+        ref: ${{ env.PUBLISH_UPDATE_BRANCH }}
 
     - name: Set up Python 3.7
       uses: actions/setup-python@v2
@@ -138,8 +141,10 @@ jobs:
 
     - name: Set up git user
       run: |
-        git config --global user.name "${GIT_USER_NAME}"
-        git config --global user.email "${GIT_USER_EMAIL"
+        git config --global user.name "${{ env.GIT_USER_NAME }}"
+        git config --global user.email "${{ env.GIT_USER_EMAIL }}"
 
     - name: Deploy documentation
-      run: mike deploy --push --remote origin --branch gh-pages --update-aliases --config-file mkdocs.yml ${GITHUB_REF#refs/tags/v} stable
+      run: |
+        mike deploy --push --remote origin --branch gh-pages --update-aliases --config-file mkdocs.yml ${GITHUB_REF#refs/tags/} stable
+        mike deploy --push --remote origin --branch gh-pages --update-aliases --config-file mkdocs.yml latest ${{ env.PUBLISH_UPDATE_BRANCH }}

@@ -180,14 +180,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -U setuptools wheel
-        
-        while IFS="" read -r line || [ -n "${line}" ]; do
-          if [[ "${line}" =~ ^invoke.*$ ]]; then
-            invoke="${line}"
-          fi
-        done < requirements_docs.txt
-
-        pip install ${invoke}
+        pip install -U -e .[docs]
 
     - name: Set up git user
       run: |
@@ -211,3 +204,6 @@ jobs:
         else
           echo -e "\u2705 All good !"
         fi
+
+    - name: Build check
+      run: mkdocs build --strict --verbose
