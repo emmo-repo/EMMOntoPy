@@ -684,22 +684,37 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="CHANGELOG/" class="md-nav__link">
+        Changelog
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
     
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7">
+        <label class="md-nav__link" for="__nav_8">
           API Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="API Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_7">
+        <label class="md-nav__title" for="__nav_8">
           <span class="md-nav__icon md-icon"></span>
           API Reference
         </label>
@@ -714,18 +729,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_1" type="checkbox" id="__nav_7_1" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_1" type="checkbox" id="__nav_8_1" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_1">
+        <label class="md-nav__link" for="__nav_8_1">
           emmopy
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="emmopy" data-md-level="2">
-        <label class="md-nav__title" for="__nav_7_1">
+        <label class="md-nav__title" for="__nav_8_1">
           <span class="md-nav__icon md-icon"></span>
           emmopy
         </label>
@@ -739,6 +754,20 @@
     <li class="md-nav__item">
       <a href="api_reference/emmopy/emmocheck/" class="md-nav__link">
         emmocheck
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api_reference/emmopy/emmopy/" class="md-nav__link">
+        emmopy
       </a>
     </li>
   
@@ -761,18 +790,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_2" type="checkbox" id="__nav_8_2" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_2">
+        <label class="md-nav__link" for="__nav_8_2">
           ontopy
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="ontopy" data-md-level="2">
-        <label class="md-nav__title" for="__nav_7_2">
+        <label class="md-nav__title" for="__nav_8_2">
           <span class="md-nav__icon md-icon"></span>
           ontopy
         </label>
@@ -899,18 +928,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_2_9" type="checkbox" id="__nav_7_2_9" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_2_9" type="checkbox" id="__nav_8_2_9" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_2_9">
+        <label class="md-nav__link" for="__nav_8_2_9">
           factpluspluswrapper
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="factpluspluswrapper" data-md-level="3">
-        <label class="md-nav__title" for="__nav_7_2_9">
+        <label class="md-nav__title" for="__nav_8_2_9">
           <span class="md-nav__icon md-icon"></span>
           factpluspluswrapper
         </label>
@@ -1114,22 +1143,22 @@ On top of that EMMOntoPy provides:</p>
   Tab completion makes exploration easy and fast.
   Below is an example of an IPython session where we check the relations of <code>Matter</code>:</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">emmo</span> <span class="kn">import</span> <span class="n">get_ontology</span>
+<div class="highlight"><pre><span></span><code>In [1]: from emmo import get_ontology
 
-<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">emmo</span> <span class="o">=</span> <span class="n">get_ontology</span><span class="p">()</span>
+In [2]: emmo = get_ontology()
 
-<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">emmo</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">get_ontology</span><span class="p">(</span><span class="s2">&quot;http://emmo.info/emmo/emmo-inferred#&quot;</span><span class="p">)</span>
+In [3]: emmo.load()
+Out[3]: get_ontology(&quot;http://emmo.info/emmo/emmo-inferred#&quot;)
 
-<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">emmo</span><span class="o">.</span><span class="n">Matter</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">physicalistic</span><span class="o">.</span><span class="n">Matter</span>
+In [4]: emmo.Matter
+Out[4]: physicalistic.Matter
 
-<span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">emmo</span><span class="o">.</span><span class="n">Matter</span><span class="o">.</span><span class="n">is_a</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span>
-<span class="p">[</span><span class="n">physicalistic</span><span class="o">.</span><span class="n">Physicalistic</span><span class="p">,</span>
-  <span class="n">physical</span><span class="o">.</span><span class="n">Physical</span><span class="p">,</span>
-  <span class="n">mereotopology</span><span class="o">.</span><span class="n">hasPart</span><span class="o">.</span><span class="n">some</span><span class="p">(</span><span class="n">physicalistic</span><span class="o">.</span><span class="n">Massive</span><span class="p">),</span>
-  <span class="n">physical</span><span class="o">.</span><span class="n">hasTemporalPart</span><span class="o">.</span><span class="n">only</span><span class="p">(</span><span class="n">physicalistic</span><span class="o">.</span><span class="n">Matter</span><span class="p">)]</span>
+In [5]: emmo.Matter.is_a
+Out[5]:
+[physicalistic.Physicalistic,
+  physical.Physical,
+  mereotopology.hasPart.some(physicalistic.Massive),
+  physical.hasTemporalPart.only(physicalistic.Matter)]
 </code></pre></div>
 <h2 id="documentation-and-examples">Documentation and examples<a class="headerlink" href="#documentation-and-examples" title="Permanent link">&para;</a></h2>
 <p>The <a href="https://pythonhosted.org/Owlready2/">Owlready2 documentation</a> is a good starting point.</p>

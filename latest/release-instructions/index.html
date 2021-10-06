@@ -608,22 +608,37 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../CHANGELOG/" class="md-nav__link">
+        Changelog
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
     
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7">
+        <label class="md-nav__link" for="__nav_8">
           API Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="API Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_7">
+        <label class="md-nav__title" for="__nav_8">
           <span class="md-nav__icon md-icon"></span>
           API Reference
         </label>
@@ -638,18 +653,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_1" type="checkbox" id="__nav_7_1" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_1" type="checkbox" id="__nav_8_1" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_1">
+        <label class="md-nav__link" for="__nav_8_1">
           emmopy
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="emmopy" data-md-level="2">
-        <label class="md-nav__title" for="__nav_7_1">
+        <label class="md-nav__title" for="__nav_8_1">
           <span class="md-nav__icon md-icon"></span>
           emmopy
         </label>
@@ -663,6 +678,20 @@
     <li class="md-nav__item">
       <a href="../api_reference/emmopy/emmocheck/" class="md-nav__link">
         emmocheck
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api_reference/emmopy/emmopy/" class="md-nav__link">
+        emmopy
       </a>
     </li>
   
@@ -685,18 +714,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_2" type="checkbox" id="__nav_8_2" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_2">
+        <label class="md-nav__link" for="__nav_8_2">
           ontopy
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="ontopy" data-md-level="2">
-        <label class="md-nav__title" for="__nav_7_2">
+        <label class="md-nav__title" for="__nav_8_2">
           <span class="md-nav__icon md-icon"></span>
           ontopy
         </label>
@@ -823,18 +852,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_2_9" type="checkbox" id="__nav_7_2_9" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_2_9" type="checkbox" id="__nav_8_2_9" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_2_9">
+        <label class="md-nav__link" for="__nav_8_2_9">
           factpluspluswrapper
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="factpluspluswrapper" data-md-level="3">
-        <label class="md-nav__title" for="__nav_7_2_9">
+        <label class="md-nav__title" for="__nav_8_2_9">
           <span class="md-nav__icon md-icon"></span>
           factpluspluswrapper
         </label>
@@ -934,15 +963,18 @@
                 
                 <h1 id="steps-for-creating-a-new-release">Steps for creating a new release<a class="headerlink" href="#steps-for-creating-a-new-release" title="Permanent link">&para;</a></h1>
 <ol>
-<li>Create release branch (branch name can be the target version number).</li>
-<li>Update version number in <code>emmopy/__init__.py</code>.</li>
-<li>Commit and push to origin (<a href="https://github.com/emmo-repo/EMMO-python.git">emmo-repo/EMMO-python</a>).</li>
-<li>Push the release branch to GitHub and create a pull request for merging to the master branch.</li>
-<li>Once accepted, merge to master.</li>
 <li>Create a release on GitHub with a short release description.</li>
 </ol>
-<p>Set the tag to the version number prefixed with <code>"v"</code> and title to the version number.
-7. The PyPI distribution package is created automatically upon creation of a new release on GitHub.</p>
+<p>Ensure you add a <code># &lt;version number&gt;</code> title to the description.</p>
+<p>Set the tag to the version number prefixed with <code>"v"</code> and title to the version number as explained above.
+1. Ensure the GitHub Action CD workflows run as expected.</p>
+<div class="admonition danger">
+<p class="admonition-title">The workflow failed</p>
+</div>
+<p>If something is wrong and the workflow fails <strong>before</strong> publishing the package to PyPI, make sure to remove all traces of the release and tag, fix the bug, and try again.</p>
+<p>If something is wrong and the workflow fails <strong>after</strong> publishing the package to PyPI: <strong>DO NOT REMOVE THE RELEASE OR TAG !</strong></p>
+<p>Deployment of the documentation should (in theory) be the only thing that has failed.
+   This can be deployed manually using similar steps as in the workflow.</p>
                 
               
               
@@ -983,13 +1015,13 @@
       
       
         
-        <a href="../api_reference/emmopy/emmocheck/" class="md-footer__link md-footer__link--next" aria-label="Next: emmocheck" rel="next">
+        <a href="../CHANGELOG/" class="md-footer__link md-footer__link--next" aria-label="Next: Changelog" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              emmocheck
+              Changelog
             </div>
           </div>
           <div class="md-footer__button md-icon">
