@@ -1,13 +1,20 @@
-# Adapted from https://github.com/meshy/colour-runner by Charlie Denton
-# License: MIT
-#
+"""# `ontopy.colortest`
+
+Print tests in colors.
+
+Adapted from https://github.com/meshy/colour-runner by Charlie Denton
+License: MIT
+"""
+# pylint: disable=invalid-name,missing-function-docstring,protected-access
 from unittest.result import TestResult
 from unittest.runner import TextTestRunner
 from unittest.util import strclass
 
 from blessings import Terminal
 from pygments import formatters, highlight
-from pygments.lexers import Python3TracebackLexer as Lexer
+from pygments.lexers import (
+    Python3TracebackLexer as Lexer,
+)  # pylint: disable=no-name-in-module
 
 
 class ColourTextTestResult(TestResult):
@@ -17,7 +24,7 @@ class ColourTextTestResult(TestResult):
     Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py
     """
 
-    formatter = formatters.Terminal256Formatter()
+    formatter = formatters.Terminal256Formatter()  # pylint: disable=no-member
     lexer = Lexer()
     separator1 = "=" * 70
     separator2 = "-" * 70
@@ -41,11 +48,9 @@ class ColourTextTestResult(TestResult):
     _test_class = None
 
     def __init__(self, stream, descriptions, verbosity):
-        super(ColourTextTestResult, self).__init__(
-            stream, descriptions, verbosity
-        )
+        super().__init__(stream, descriptions, verbosity)
         self.stream = stream
-        self.showAll = verbosity > 1
+        self.show_all = verbosity > 1
         self.dots = verbosity == 1
         self.descriptions = descriptions
 
@@ -69,9 +74,9 @@ class ColourTextTestResult(TestResult):
         return strclass(test_class)
 
     def startTest(self, test):
-        super(ColourTextTestResult, self).startTest(test)
+        super().startTest(test)
         pos = 0
-        if self.showAll:
+        if self.show_all:
             if self._test_class != test.__class__:
                 self._test_class = test.__class__
                 title = self.getClassDescription(test)
@@ -86,41 +91,41 @@ class ColourTextTestResult(TestResult):
 
     def printResult(self, short, extended, colour_key=None):
         colour = self.colours[colour_key]
-        if self.showAll:
+        if self.show_all:
             self.stream.writeln(colour(extended))
         elif self.dots:
             self.stream.write(colour(short))
             self.stream.flush()
 
     def addSuccess(self, test):
-        super(ColourTextTestResult, self).addSuccess(test)
+        super().addSuccess(test)
         self.printResult(".", "ok", "success")
 
     def addError(self, test, err):
-        super(ColourTextTestResult, self).addError(test, err)
+        super().addError(test, err)
         self.printResult("E", "ERROR", "error")
 
     def addFailure(self, test, err):
-        super(ColourTextTestResult, self).addFailure(test, err)
+        super().addFailure(test, err)
         self.printResult("F", "FAIL", "fail")
 
     def addSkip(self, test, reason):
-        super(ColourTextTestResult, self).addSkip(test, reason)
+        super().addSkip(test, reason)
         if self.checkmode:
             self.printResult("s", "skipped", "skip")
         else:
-            self.printResult("s", "skipped {0!r}".format(reason), "skip")
+            self.printResult("s", f"skipped {reason!r}", "skip")
 
     def addExpectedFailure(self, test, err):
-        super(ColourTextTestResult, self).addExpectedFailure(test, err)
+        super().addExpectedFailure(test, err)
         self.printResult("x", "expected failure", "expected")
 
     def addUnexpectedSuccess(self, test):
-        super(ColourTextTestResult, self).addUnexpectedSuccess(test)
+        super().addUnexpectedSuccess(test)
         self.printResult("u", "unexpected success", "unexpected")
 
     def printErrors(self):
-        if self.dots or self.showAll:
+        if self.dots or self.show_all:
             self.stream.writeln()
         self.printErrorList("ERROR", self.errors)
         self.printErrorList("FAIL", self.failures)
@@ -131,10 +136,10 @@ class ColourTextTestResult(TestResult):
         for test, err in errors:
             if self.checkmode and flavour == "FAIL":
                 self.stream.writeln(self.separator1)
-                title = "%s: %s" % (flavour, test.shortDescription())
+                title = f"{flavour}: {test.shortDescription()}"
                 self.stream.writeln(colour(title))
                 self.stream.writeln(str(test))
-                if self.showAll:
+                if self.show_all:
                     self.stream.writeln(self.separator2)
                     lines = str(err).split("\n")
                     i = 1
@@ -150,13 +155,15 @@ class ColourTextTestResult(TestResult):
                     )
             else:
                 self.stream.writeln(self.separator1)
-                title = "%s: %s" % (flavour, self.getLongDescription(test))
+                title = f"{flavour}: {self.getLongDescription(test)}"
                 self.stream.writeln(colour(title))
                 self.stream.writeln(self.separator2)
                 self.stream.writeln(highlight(err, self.lexer, self.formatter))
 
 
-class ColourTextTestRunner(TextTestRunner):
-    """A test runner that uses colour in its output"""
+class ColourTextTestRunner(
+    TextTestRunner
+):  # pylint: disable=too-few-public-methods
+    """A test runner that uses colour in its output."""
 
     resultclass = ColourTextTestResult

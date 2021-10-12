@@ -8,6 +8,7 @@ The class extension is defined within.
 
 If desirable some of this may be moved back into owlready2.
 """
+# pylint: disable=too-many-lines,fixme,arguments-differ
 import os
 import itertools
 import inspect
@@ -47,8 +48,6 @@ DEFAULT_LABEL_ANNOTATIONS = [
 
 class NoSuchLabelError(LookupError, AttributeError):
     """Error raised when a label cannot be found."""
-
-    pass
 
 
 def get_ontology(*args, **kwargs):
@@ -158,19 +157,19 @@ class Ontology(owlready2.Ontology, OntoGraph):
     )
 
     def __dir__(self):
-        s = set(super().__dir__())
+        set_dir = set(super().__dir__())
         lst = list(self.get_entities(imported=self._dir_imported))
         if self._dir_preflabel:
-            s.update(
-                e.prefLabel.first() for e in lst if hasattr(e, "prefLabel")
+            set_dir.update(
+                _.prefLabel.first() for _ in lst if hasattr(_, "prefLabel")
             )
         if self._dir_label:
-            s.update(e.label.first() for e in lst if hasattr(e, "label"))
+            set_dir.update(_.label.first() for _ in lst if hasattr(_, "label"))
         if self._dir_name:
-            s.update(e.name for e in lst if hasattr(e, "name"))
+            set_dir.update(_.name for _ in lst if hasattr(_, "name"))
 
-        s.difference_update({None})  # get rid of possible None
-        return sorted(s)
+        set_dir.difference_update({None})  # get rid of possible None
+        return sorted(set_dir)
 
     def __getitem__(self, name):
         item = super().__getitem__(name)
@@ -260,31 +259,31 @@ class Ontology(owlready2.Ontology, OntoGraph):
                         if e.namespace == self.namespaces[namespace]:
                             return e
                 raise NoSuchLabelError(
-                    'No label annotations matches "%s" in namespace '
-                    '"%s"' % (label, namespace)
+                    f"No label annotations matches {label!r} in namespace "
+                    f"{namespace!r}"
                 )
-            elif label in self.namespaces:
+            if label in self.namespaces:
                 return self.namespaces[label]
 
         if label_annotations is None:
             annotations = (la.name for la in self.label_annotations)
         else:
             annotations = (
-                s.name if hasattr(s, "storid") else s for s in label_annotations
+                _.name if hasattr(_, "storid") else _ for _ in label_annotations
             )
         for key in annotations:
-            e = self.search_one(**{key: label})
-            if e:
-                return e
+            entity = self.search_one(**{key: label})
+            if entity:
+                return entity
 
         if self._special_labels and label in self._special_labels:
             return self._special_labels[label]
 
-        e = self.world[self.base_iri + label]
-        if e:
-            return e
+        entity = self.world[self.base_iri + label]
+        if entity:
+            return entity
 
-        raise NoSuchLabelError("No label annotations matches %s" % label)
+        raise NoSuchLabelError(f"No label annotations matches {label}")
 
     def get_by_label_all(self, label, label_annotations=None, namespace=None):
         """Like get_by_label(), but returns a list with all matching labels.
@@ -292,51 +291,50 @@ class Ontology(owlready2.Ontology, OntoGraph):
         Returns an empty list if no matches could be found.
         """
         if label_annotations is None:
-            annotations = (la.name for la in self.label_annotations)
+            annotations = (_.name for _ in self.label_annotations)
         else:
             annotations = (
-                s.name if hasattr(s, "storid") else s for s in label_annotations
+                _.name if hasattr(_, "storid") else _ for _ in label_annotations
             )
-        e = self.world.search(**{annotations.__next__(): label})
+        entity = self.world.search(**{annotations.__next__(): label})
         for key in annotations:
-            e.extend(self.world.search(**{key: label}))
+            entity.extend(self.world.search(**{key: label}))
         if self._special_labels and label in self._special_labels:
-            e.append(self._special_labels[label])
+            entity.append(self._special_labels[label])
         if namespace:
-            return [ns for ns in e if ns.namespace.name == namespace]
-        return e
+            return [_ for _ in entity if _.namespace.name == namespace]
+        return entity
 
     def add_label_annotation(self, iri):
         """Adds label annotation used by get_by_label().
 
         May be provided either as an IRI or as its owlready2 representation.
         """
-        la = iri if hasattr(iri, "storid") else self.world[iri]
-        if not la:
-            raise ValueError("IRI not in ontology: %s" % iri)
-        if la not in self._label_annotations:
-            self._label_annotations.append(la)
+        label_annotation = iri if hasattr(iri, "storid") else self.world[iri]
+        if not label_annotation:
+            raise ValueError(f"IRI not in ontology: {iri}")
+        if label_annotation not in self._label_annotations:
+            self._label_annotations.append(label_annotation)
 
     def remove_label_annotation(self, iri):
         """Removes label annotation used by get_by_label().
 
         May be provided either as an IRI or as its owlready2 representation.
         """
-        la = iri if hasattr(iri, "storid") else self.world[iri]
-        if not la:
-            raise ValueError("IRI not in ontology: %s" % iri)
-        self._label_annotations.remove(la)
+        label_annotation = iri if hasattr(iri, "storid") else self.world[iri]
+        if not label_annotation:
+            raise ValueError(f"IRI not in ontology: {iri}")
+        self._label_annotations.remove(label_annotation)
 
-    def load(
+    def load(  # pylint: disable=too-many-arguments
         self,
         only_local=False,
         filename=None,
-        format=None,
+        format=None,  # pylint: disable=redefined-builtin
         reload=None,
         reload_if_newer=False,
         url_from_catalog=None,
         catalog_file="catalog-v001.xml",
-        tmpdir=None,
         EMMObased=True,
         **kwargs,
     ):
@@ -366,8 +364,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
             Name of Protègè catalog file in the same folder as the
             ontology.  This option is used together with `only_local` and
             defaults to "catalog-v001.xml".
-        tmpdir : str
-            Path to temporary directory.
         EMMObased : bool
             Whether this is an EMMO-based ontology or not, default `True`.
         kwargs
@@ -386,7 +382,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
             reload_if_newer=reload_if_newer,
             url_from_catalog=url_from_catalog,
             catalog_file=catalog_file,
-            tmpdir=tmpdir,
             **kwargs,
         )
 
@@ -394,23 +389,23 @@ class Ontology(owlready2.Ontology, OntoGraph):
         if self._special_labels is None and EMMObased:
             for iri in DEFAULT_LABEL_ANNOTATIONS:
                 self.add_label_annotation(iri)
-            t = self.world["http://www.w3.org/2002/07/owl#topObjectProperty"]
+            top = self.world["http://www.w3.org/2002/07/owl#topObjectProperty"]
             self._special_labels = {
                 "Thing": owlready2.Thing,
                 "Nothing": owlready2.Nothing,
-                "topObjectProperty": t,
+                "topObjectProperty": top,
                 "owl:Thing": owlready2.Thing,
                 "owl:Nothing": owlready2.Nothing,
-                "owl:topObjectProperty": t,
+                "owl:topObjectProperty": top,
             }
 
         return self
 
-    def _load(
+    def _load(  # pylint: disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements
         self,
         only_local=False,
         filename=None,
-        format=None,
+        format=None,  # pylint: disable=redefined-builtin
         reload=None,
         reload_if_newer=False,
         url_from_catalog=None,
@@ -420,6 +415,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         **kwargs,
     ):
         """Help function for _load()."""
+        # pylint: disable=protected-access
         web_protocol = "http://", "https://", "ftp://"
 
         url = filename if filename else self.base_iri.rstrip("/#")
@@ -449,7 +445,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
             )
             # get iris from catalog already in cached catalogs
             if catalogurl in self.world._cached_catalogs and not_reload:
-                mtime, iris, dirs = self.world._cached_catalogs[catalogurl]
+                _, iris, dirs = self.world._cached_catalogs[catalogurl]
             # do not update cached_catalogs if url already in _iri_mappings
             # and reload not forced
             elif url in self.world._iri_mappings and not_reload:
@@ -477,9 +473,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
         resolved_url = self.world._iri_mappings.get(url, url)
 
         # Append paths from catalog file to onto_path
-        for d in sorted(dirs, reverse=True):
-            if d not in owlready2.onto_path:
-                owlready2.onto_path.append(d)
+        for _ in sorted(dirs, reverse=True):
+            if _ not in owlready2.onto_path:
+                owlready2.onto_path.append(_)
 
         # Use catalog file to update IRIs of imported ontologies
         # in internal store and try to load again...
@@ -504,14 +500,14 @@ class Ontology(owlready2.Ontology, OntoGraph):
             fmt = format if format else guess_format(resolved_url, fmap=FMAP)
             if fmt and fmt not in OWLREADY2_FORMATS:
                 # Convert filename to rdfxml before passing it to owlready2
-                g = rdflib.Graph()
-                g.parse(resolved_url, format=fmt)
-                with tempfile.NamedTemporaryFile() as f:
-                    g.serialize(destination=f, format="xml")
-                    f.seek(0)
+                graph = rdflib.Graph()
+                graph.parse(resolved_url, format=fmt)
+                with tempfile.NamedTemporaryFile() as handle:
+                    graph.serialize(destination=handle, format="xml")
+                    handle.seek(0)
                     return super().load(
                         only_local=True,
-                        fileobj=f,
+                        fileobj=handle,
                         reload=reload,
                         reload_if_newer=reload_if_newer,
                         format="rdfxml",
@@ -526,10 +522,10 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 )
 
             else:
-                with open(resolved_url, "rb") as f:
+                with open(resolved_url, "rb") as handle:
                     return super().load(
                         only_local=only_local,
-                        fileobj=f,
+                        fileobj=handle,
                         reload=reload,
                         reload_if_newer=reload_if_newer,
                         **kwargs,
@@ -548,8 +544,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
             )
 
             # Copy the ontology into a local folder and try again
-            with tempfile.TemporaryDirectory() as tmpdir:
-                output = os.path.join(tmpdir, os.path.basename(resolved_url))
+            with tempfile.TemporaryDirectory() as handle:
+                output = os.path.join(handle, os.path.basename(resolved_url))
                 convert_imported(
                     input=resolved_url,
                     output=output,
@@ -560,20 +556,22 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 )
 
                 self.loaded = False
-                with open(output, "rb") as f:
+                with open(output, "rb") as handle:
                     return super().load(
                         only_local=True,
-                        fileobj=f,
+                        fileobj=handle,
                         reload=reload,
                         reload_if_newer=reload_if_newer,
                         format="rdfxml",
                         **kwargs,
                     )
 
-    def save(self, filename=None, format=None, overwrite=False, **kwargs):
+    def save(
+        self, filename=None, format=None, overwrite=False, **kwargs
+    ):  # pylint: disable=redefined-builtin
         """Writes the ontology to file.
 
-        If `overwrite` is true and filename exists, it will be removed
+        If `overwrite` is `True` and filename exists, it will be removed
         before saving.  The default is to append an existing ontology.
         """
         if overwrite and filename and os.path.exists(filename):
@@ -585,7 +583,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
         if not _validate_installed_version(
             package="rdflib", min_version="6.0.0"
         ) and format == FMAP.get("ttl", ""):
-            from rdflib import __version__ as __rdflib_version__
+            from rdflib import (
+                __version__ as __rdflib_version__,
+            )  # pylint: disable=import-outside-toplevel
 
             warnings.warn(
                 IncompatibleVersion(
@@ -598,36 +598,36 @@ class Ontology(owlready2.Ontology, OntoGraph):
             )
 
         if format in OWLREADY2_FORMATS:
-            revmap = {v: k for k, v in FMAP.items()}
+            revmap = {value: key for key, value in FMAP.items()}
             super().save(file=filename, format=revmap[format], **kwargs)
         else:
-            with tempfile.NamedTemporaryFile(suffix=".owl") as f:
-                super().save(file=f.name, format="rdfxml", **kwargs)
-                g = rdflib.Graph()
-                g.parse(f.name, format="xml")
-                g.serialize(destination=filename, format=format)
+            with tempfile.NamedTemporaryFile(suffix=".owl") as handle:
+                super().save(file=handle.name, format="rdfxml", **kwargs)
+                graph = rdflib.Graph()
+                graph.parse(handle.name, format="xml")
+                graph.serialize(destination=filename, format=format)
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
 
-        If `recursive` is true, ontologies imported by imported ontologies
+        If `recursive` is `True`, ontologies imported by imported ontologies
         are also returned.
         """
 
         def rec_imported(onto):
-            for o in onto.imported_ontologies:
-                if o not in imported:
-                    imported.add(o)
-                    rec_imported(o)
+            for ontology in onto.imported_ontologies:
+                if ontology not in imported:
+                    imported.add(ontology)
+                    rec_imported(ontology)
 
         if recursive:
             imported = set()
             rec_imported(self)
             return list(imported)
-        else:
-            return self.imported_ontologies
 
-    def get_entities(
+        return self.imported_ontologies
+
+    def get_entities(  # pylint: disable=too-many-arguments
         self,
         imported=True,
         classes=True,
@@ -639,42 +639,40 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """Return a generator over (optionally) all classes, individuals,
         object_properties, data_properties and annotation_properties.
 
-        If `imported` is true, entities in imported ontologies will also
+        If `imported` is `True`, entities in imported ontologies will also
         be included.
         """
-        g = []
+        generator = []
         if classes:
-            g.append(self.classes(imported))
+            generator.append(self.classes(imported))
         if individuals:
-            g.append(self.individuals(imported))
+            generator.append(self.individuals(imported))
         if object_properties:
-            g.append(self.object_properties(imported))
+            generator.append(self.object_properties(imported))
         if data_properties:
-            g.append(self.data_properties(imported))
+            generator.append(self.data_properties(imported))
         if annotation_properties:
-            g.append(self.annotation_properties(imported))
-        for e in itertools.chain(*g):
-            yield e
+            generator.append(self.annotation_properties(imported))
+        for entity in itertools.chain(*generator):
+            yield entity
 
     def classes(self, imported=False):
         """Returns an generator over all classes.
 
-        If `imported` is true, will imported classes are also returned.
+        If `imported` is `True`, will imported classes are also returned.
         """
         if imported:
             return self.world.classes()
-        else:
-            return super().classes()
+        return super().classes()
 
     def individuals(self, imported=False):
         """Returns an generator over all individuals.
 
-        If `imported` is true, will imported individuals are also returned.
+        If `imported` is `True`, will imported individuals are also returned.
         """
         if imported:
             return self.world.individuals()
-        else:
-            return super().individuals()
+        return super().individuals()
 
     def object_properties(self, imported=False):
         """Returns an generator over all object properties.
@@ -695,8 +693,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """
         if imported:
             return self.world.data_properties()
-        else:
-            return super().data_properties()
+        return super().data_properties()
 
     def annotation_properties(self, imported=False):
         """Returns a generator iterating over all annotation properties
@@ -707,8 +704,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """
         if imported:
             return self.world.annotation_properties()
-        else:
-            return super().annotation_properties()
+        return super().annotation_properties()
 
     def get_root_classes(self, imported=False):
         """Returns a list or root classes."""
@@ -745,9 +741,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         def update(gen):
             for prop in gen:
-                for a in annotations:
-                    if hasattr(prop, a) and getattr(prop, a):
-                        prop.python_name = getattr(prop, a).first()
+                for annotation in annotations:
+                    if hasattr(prop, annotation) and getattr(prop, annotation):
+                        prop.python_name = getattr(prop, annotation).first()
                         break
 
         update(
@@ -775,12 +771,12 @@ class Ontology(owlready2.Ontology, OntoGraph):
         it may be useful to make the ontology more readable and to work
         with it together with a triple store.
         """
-        for e in self.get_entities():
-            for a in annotations:
-                if hasattr(e, a):
-                    name = getattr(e, a).first()
+        for entity in self.get_entities():
+            for annotation in annotations:
+                if hasattr(entity, annotation):
+                    name = getattr(entity, annotation).first()
                     if name:
-                        e.name = name
+                        entity.name = name
                         break
 
     def sync_reasoner(

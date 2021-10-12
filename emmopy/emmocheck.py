@@ -46,19 +46,19 @@ class TestEMMOConventions(unittest.TestCase):
     def get_config(self, string, default=None):
         """Returns the configuration specified by `string`.
 
-        If configuration is not found in the configuration file, `default`
-        is returned.
+        If configuration is not found in the configuration file, `default` is
+        returned.
 
         Sub-configurations can be accessed by separating the components with
         dots, like "test_namespace.exceptions".
         """
-        c = self.config
+        result = self.config
         try:
             for token in string.split("."):
-                c = c[token]
+                result = result[token]
         except KeyError:
             return default
-        return c
+        return result
 
 
 class TestSyntacticEMMOConventions(TestEMMOConventions):
@@ -89,15 +89,19 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
             self.get_config("test_number_of_labels.exceptions", ())
         )
 
-        if "prefLabel" in self.onto.world._props:
-            for e in self.onto.get_entities():
-                if repr(e) not in exceptions:
+        if (
+            "prefLabel" in self.onto.world._props
+        ):  # pylint: disable=protected-access
+            for entity in self.onto.get_entities():
+                if repr(entity) not in exceptions:
                     with self.subTest(
-                        entity=e, label=get_label(e), prefLabels=e.prefLabel
+                        entity=entity,
+                        label=get_label(entity),
+                        prefLabels=entity.prefLabel,
                     ):
-                        if not repr(e).startswith("owl."):
-                            self.assertTrue(hasattr(e, "prefLabel"))
-                            self.assertEqual(1, len(e.prefLabel))
+                        if not repr(entity).startswith("owl."):
+                            self.assertTrue(hasattr(entity, "prefLabel"))
+                            self.assertEqual(1, len(entity.prefLabel))
         else:
             self.fail("ontology has no prefLabel")
 
@@ -140,10 +144,10 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
             self.get_config("test_object_property_label.exceptions", ())
         )
 
-        for op in self.onto.object_properties():
-            if repr(op) not in exceptions:
-                for label in op.label:
-                    with self.subTest(entity=op, label=label):
+        for obj_prop in self.onto.object_properties():
+            if repr(obj_prop) not in exceptions:
+                for label in obj_prop.label:
+                    with self.subTest(entity=obj_prop, label=label):
                         self.assertTrue(
                             label[0].islower(), "label start with lowercase"
                         )
@@ -413,7 +417,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 )
                 != []
             ):
-                print("Skipping namespace: " + onto.base_iri)
+                print(f"Skipping namespace: {onto.base_iri}")
                 return
             entities = itertools.chain(
                 onto.classes(),
@@ -422,25 +426,27 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 onto.individuals(),
                 onto.annotation_properties(),
             )
-            for e in entities:
-                if e not in visited and repr(e) not in exceptions:
-                    visited.add(e)
+            for entity in entities:
+                if entity not in visited and repr(entity) not in exceptions:
+                    visited.add(entity)
                     with self.subTest(
-                        iri=e.iri, base_iri=onto.base_iri, entity=repr(e)
+                        iri=entity.iri,
+                        base_iri=onto.base_iri,
+                        entity=repr(entity),
                     ):
                         self.assertTrue(
-                            e.iri.endswith(e.name),
+                            entity.iri.endswith(entity.name),
                             msg=(
                                 "the final part of entity IRIs must be their "
                                 "name"
                             ),
                         )
                         self.assertEqual(
-                            e.iri,
-                            onto.base_iri + e.name,
+                            entity.iri,
+                            onto.base_iri + entity.name,
                             msg=(
-                                "IRI %r does not correspond to module "
-                                "namespace: %r" % (e.iri, onto.base_iri)
+                                f"IRI {entity.iri!r} does not correspond to "
+                                f"module namespace: {onto.base_iri!r}"
                             ),
                         )
 
@@ -455,7 +461,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         checker(self.onto, self.ignore_namespace)
 
 
-def main():
+def main():  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     """Run all checks on ontology `iri`.  Default is 'http://emmo.info/emmo'."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("iri", help="File name or URI to the ontology to test.")
@@ -593,8 +599,8 @@ def main():
         sys.argv[1:] = args.unittest if args.unittest else []
         if args.verbose:
             sys.argv.append("-v")
-    except SystemExit as e:
-        os._exit(e.code)  # Exit without traceback on invalid arguments
+    except SystemExit as exc:
+        sys.exit(exc.code)  # Exit without traceback on invalid arguments
 
     # Append to onto_path
     for paths in args.path:
@@ -625,16 +631,18 @@ def main():
     # Configure tests
     verbosity = 2 if args.verbose else 1
     if args.configfile:
-        import yaml
+        import yaml  # pylint: disable=import-outside-toplevel
 
-        with open(args.configfile, "rt") as f:
+        with open(args.configfile, "rt", encoding="utf8") as handle:
             TestEMMOConventions.config.update(
-                yaml.load(f, Loader=yaml.SafeLoader)
+                yaml.load(handle, Loader=yaml.SafeLoader)
             )
 
     # Run all subclasses of TestEMMOConventions as test suites
     status = 0
     for cls in TestEMMOConventions.__subclasses__():
+        # pylint: disable=cell-var-from-loop,undefined-loop-variable
+
         suite = unittest.TestLoader().loadTestsFromTestCase(cls)
 
         # Mark tests to be skipped
@@ -679,5 +687,4 @@ def main():
 
 
 if __name__ == "__main__":
-    status = main()
-    sys.exit(status)
+    sys.exit(main())
