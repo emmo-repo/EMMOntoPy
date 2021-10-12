@@ -16,6 +16,7 @@ class FaCTPPGraph:
     graph : owlapi.Graph instance
         The graph to be inferred.
     """
+
     def __init__(self, graph):
         self.graph = graph
         self._inferred = None
@@ -33,7 +34,7 @@ class FaCTPPGraph:
     def base_iri(self):
         """Base iri of inferred ontology."""
         if self._base_iri is None:
-            self._base_iri = URIRef(self.asserted_base_iri() + '-inferred')
+            self._base_iri = URIRef(self.asserted_base_iri() + "-inferred")
         return self._base_iri
 
     @base_iri.setter
@@ -46,12 +47,12 @@ class FaCTPPGraph:
         """Namespaces defined in the original graph."""
         if self._namespaces is None:
             self._namespaces = dict(self.graph.namespaces()).copy()
-            self._namespaces[''] = self.base_iri
+            self._namespaces[""] = self.base_iri
         return self._namespaces
 
     def asserted_base_iri(self):
         """Returns the base iri or the original graph."""
-        return URIRef(dict(self.graph.namespaces()).get('', '').rstrip('#/'))
+        return URIRef(dict(self.graph.namespaces()).get("", "").rstrip("#/"))
 
     def raw_inferred_graph(self):
         """Returns the raw non-postprocessed inferred ontology as a rdflib
@@ -72,10 +73,11 @@ class FaCTPPGraph:
         base = self.base_iri
         inferred = self.inferred
         for s, p, o in self.graph.triples(
-                (self.asserted_base_iri(), None, None)):
+            (self.asserted_base_iri(), None, None)
+        ):
             if p == OWL.versionIRI:
-                version = o.rsplit('/', 1)[-1]
-                o = URIRef('%s/%s' % (base, version))
+                version = o.rsplit("/", 1)[-1]
+                o = URIRef("%s/%s" % (base, version))
             inferred.add((base, p, o))
 
     def set_namespace(self):
@@ -98,7 +100,7 @@ class FaCTPPGraph:
     def remove_nothing_is_nothing(self):
         """Remove superfluid relation in inferred graph:
 
-            owl:Nothing rdfs:subClassOf owl:Nothing
+        owl:Nothing rdfs:subClassOf owl:Nothing
         """
         t = OWL.Nothing, RDFS.subClassOf, OWL.Nothing
         inferred = self.inferred
@@ -110,12 +112,16 @@ class FaCTPPGraph:
         inferred = self.inferred
         for s in inferred.subjects(RDF.type, OWL.Class):
             if isinstance(s, URIRef):
-                parents = set(p for p in inferred.objects(s, RDFS.subClassOf)
-                              if isinstance(p, URIRef))
+                parents = set(
+                    p
+                    for p in inferred.objects(s, RDFS.subClassOf)
+                    if isinstance(p, URIRef)
+                )
                 if len(parents) > 1:
                     for parent in parents:
-                        ancestors = set(inferred.transitive_objects(
-                            parent, RDFS.subClassOf))
+                        ancestors = set(
+                            inferred.transitive_objects(parent, RDFS.subClassOf)
+                        )
                         for p in parents:
                             if p != parent and p in ancestors:
                                 t = s, RDFS.subClassOf, p

@@ -27,14 +27,14 @@ from step2_define_metadata import DLiteAtoms
 
 
 # Load atom structure from cif file
-at = ase.io.read('../vertical/Al-Fe4Al13.cif')
+at = ase.io.read("../vertical/Al-Fe4Al13.cif")
 
 # convert atom structure to a DLiteAtoms object
-atoms = dlite.objectfactory(at, cls=DLiteAtoms, instanceid='atoms_Al-Fe4Al13')
+atoms = dlite.objectfactory(at, cls=DLiteAtoms, instanceid="atoms_Al-Fe4Al13")
 
 
 # Create a new collection for data instances
-coll = dlite.Collection('usercase_appdata')
-coll.add('Atoms', atoms.dlite_meta)
-coll.add('atoms', atoms.dlite_inst)
-coll.save('json', 'usercase_appdata.json', 'mode=w')
+coll = dlite.Collection("usercase_appdata")
+coll.add("Atoms", atoms.dlite_meta)
+coll.add("atoms", atoms.dlite_inst)
+coll.save("json", "usercase_appdata.json", "mode=w")

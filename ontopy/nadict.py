@@ -39,24 +39,38 @@ class NADict:
     _dict : dict
         Dictionary holding the actial items.
     """
+
     def __init__(self, *args, **kw):
-        object.__setattr__(self, '_dict', {})
+        object.__setattr__(self, "_dict", {})
         self.update(*args, **kw)
 
     def __getitem__(self, key):
-        if '.' in key:
-            k1, k2 = key.split('.', 1)
+        if "." in key:
+            k1, k2 = key.split(".", 1)
             return self._dict[k1][k2]
         else:
             return self._dict[key]
 
     def __setitem__(self, key, value):
-        if key in ('clear', 'copy', 'fromkeys', 'get', 'items', 'keys',
-                   'pop', 'popitem', 'setdefault', 'update', 'values'):
-            raise ValueError('invalid key "%s": must not override supported '
-                             'dict method names' % key)
-        elif '.' in key:
-            k1, k2 = key.split('.', 1)
+        if key in (
+            "clear",
+            "copy",
+            "fromkeys",
+            "get",
+            "items",
+            "keys",
+            "pop",
+            "popitem",
+            "setdefault",
+            "update",
+            "values",
+        ):
+            raise ValueError(
+                'invalid key "%s": must not override supported '
+                "dict method names" % key
+            )
+        elif "." in key:
+            k1, k2 = key.split(".", 1)
             if k1 not in self._dict:
                 self._dict[k1] = NADict()
             self._dict[k1][k2] = value
@@ -72,15 +86,15 @@ class NADict:
                 self._dict[key] = value
 
     def __delitem__(self, key):
-        if '.' in key:
-            k1, k2 = key.split('.', 1)
+        if "." in key:
+            k1, k2 = key.split(".", 1)
             del self._dict[k1][k2]
         else:
             del self._dict[key]
 
     def __getattr__(self, key):
         if key not in self._dict:
-            raise AttributeError('No such key: %s' % (key, ))
+            raise AttributeError("No such key: %s" % (key,))
         return self._dict[key]
 
     def __setattr__(self, key, value):
@@ -99,24 +113,25 @@ class NADict:
         return len(self._dict)
 
     def __contains__(self, key):
-        if '.' in key:
-            k1, k2 = key.split('.', 1)
+        if "." in key:
+            k1, k2 = key.split(".", 1)
             return k2 in self._dict[k1]
         else:
             return key in self._dict
 
-    def __iter__(self, prefix=''):
+    def __iter__(self, prefix=""):
         for k, v in self._dict.items():
-            key = '%s.%s' % (prefix, k) if prefix else k
+            key = "%s.%s" % (prefix, k) if prefix else k
             if isinstance(v, NADict):
                 yield from v.__iter__(key)
             else:
                 yield key
 
     def __repr__(self):
-        return '%s(%s)' % (
+        return "%s(%s)" % (
             self.__class__.__name__,
-            ', '.join('%s=%s' % (k, repr(v)) for k, v in self._dict.items()))
+            ", ".join("%s=%s" % (k, repr(v)) for k, v in self._dict.items()),
+        )
 
     def clear(self):
         """Clear all keys."""
@@ -138,25 +153,25 @@ class NADict:
     def get(self, key, default=None):
         """Returns the value for `key` if `key` is in self, else return
         `default`."""
-        if '.' in key:
-            k1, k2 = key.split('.', 1)
+        if "." in key:
+            k1, k2 = key.split(".", 1)
             return self._dict[k1].get(k2, default)
         else:
             return self._dict.get(key, default)
 
-    def items(self, prefix=''):
+    def items(self, prefix=""):
         """Returns an iterator over all items as (key, value) pairs."""
         for k, v in self._dict.items():
-            key = '%s.%s' % (prefix, k) if prefix else k
+            key = "%s.%s" % (prefix, k) if prefix else k
             if isinstance(v, NADict):
                 yield from v.items(key)
             else:
                 yield (key, v)
 
-    def keys(self, prefix=''):
+    def keys(self, prefix=""):
         """Returns an iterator over all keys."""
         for k, v in self._dict.items():
-            key = '%s.%s' % (prefix, k) if prefix else k
+            key = "%s.%s" % (prefix, k) if prefix else k
             if isinstance(v, NADict):
                 yield from v.keys(key)
             else:
@@ -166,13 +181,13 @@ class NADict:
         """Removed `key` and returns corresponding value.  If `key` is not
         found, `default` is returned if given, otherwise KeyError is
         raised."""
-        if '.' in key:
-            k1, k2 = key.split('.', 1)
+        if "." in key:
+            k1, k2 = key.split(".", 1)
             return self._dict[k1].pop(k2, default)
         else:
             return self._dict.pop(key, default)
 
-    def popitem(self, prefix=''):
+    def popitem(self, prefix=""):
         """Removes and returns some (key, value). Raises KeyError if empty."""
         item = self._dict.popitem()
         if isinstance(item, NADict):
@@ -182,15 +197,15 @@ class NADict:
             return item2
         else:
             k, v = self._dict.popitem()
-            key = '%s.%s' % (prefix, k) if prefix else k
+            key = "%s.%s" % (prefix, k) if prefix else k
             return (key, v)
 
     def setdefault(self, key, value=None):
         """Inserts `key` and `value` pair if key is not found.
 
         Returns the new value for `key`."""
-        if '.' in key:
-            k1, k2 = key.split('.', 1)
+        if "." in key:
+            k1, k2 = key.split(".", 1)
             return self._dict[k1].setdefault(k2, value)
         else:
             return self._dict.setdefault(key, value)
@@ -199,7 +214,7 @@ class NADict:
         """Updates self with dict/iterable from `args` and keyword arguments
         from `kw`."""
         for arg in args:
-            if hasattr(arg, 'keys'):
+            if hasattr(arg, "keys"):
                 for k in arg:
                     self[k] = arg[k]
             else:

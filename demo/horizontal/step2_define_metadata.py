@@ -20,7 +20,7 @@ import dlite
 
 
 # Create an ASE Atoms subclass that also inherits from dlite atoms.json
-BaseAtoms = dlite.classfactory(ase.Atoms, url='json://atoms.json?mode=r#')
+BaseAtoms = dlite.classfactory(ase.Atoms, url="json://atoms.json?mode=r#")
 
 
 class DLiteAtoms(BaseAtoms):
@@ -28,13 +28,13 @@ class DLiteAtoms(BaseAtoms):
 
     def _dlite_get_info(self):
         d = self.info.copy()
-        sg = Spacegroup(d.get('spacegroup', 'P 1'))
-        d['spacegroup'] = sg.symbol
+        sg = Spacegroup(d.get("spacegroup", "P 1"))
+        d["spacegroup"] = sg.symbol
         return [(k, str(v)) for k, v in d.items()]
 
     def _dlite_set_info(self, value):
         self.info.update(value)
-        self.info['spacegroup'] = Spacegroup(self.info['spacegroup'])
+        self.info["spacegroup"] = Spacegroup(self.info["spacegroup"])
 
     def _dlite_get_celldisp(self):
         return self.get_celldisp()[:, 0]

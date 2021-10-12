@@ -37,13 +37,13 @@ from ontopy import World
 
 
 # Load EMMO
-world = World(filename='demo.sqlite3')
-emmo = world.get_ontology('http://emmo.info/emmo/1.0.0-alpha2')
+world = World(filename="demo.sqlite3")
+emmo = world.get_ontology("http://emmo.info/emmo/1.0.0-alpha2")
 emmo.load()
 # emmo.sync_reasoner()
 
 # Create a new ontology with out extensions that imports EMMO
-onto = world.get_ontology('http://www.emmc.info/emmc-csa/demo#')
+onto = world.get_ontology("http://www.emmc.info/emmc-csa/demo#")
 onto.imported_ontologies.append(emmo)
 
 
@@ -55,10 +55,12 @@ with onto:
     # =========
     class hasType(emmo.hasConvention):
         """Associates a type (string, number...) to a property."""
+
         pass
 
     class isTypeOf(emmo.hasConvention):
         """Associates a property to a type (string, number...)."""
+
         inverse_property = hasType
 
     #
@@ -67,11 +69,11 @@ with onto:
 
     # TODO: remove
     class SquareLengthDimension(emmo.PhysicalDimension):
-        is_a = [emmo.hasSymbolData.value('T0 L2 M0 I0 Θ0 N0 J0')]
+        is_a = [emmo.hasSymbolData.value("T0 L2 M0 I0 Θ0 N0 J0")]
 
     # TODO: remove
     class SquareMetre(emmo.SICoherentDerivedUnit):
-        emmo.altLabel = ['m²']
+        emmo.altLabel = ["m²"]
         is_a = [emmo.hasPhysicalDimension.only(SquareLengthDimension)]
 
     #
@@ -81,16 +83,22 @@ with onto:
     # TODO: update instead of redefine Position
     class Position(emmo.Length):
         """Spatial position of an physical entity."""
-        is_a = [emmo.hasReferenceUnit.only(emmo.hasPhysicalDimension.only(
-                 emmo.LengthDimension)),
-                hasType.exactly(3, emmo.Real)]
+
+        is_a = [
+            emmo.hasReferenceUnit.only(
+                emmo.hasPhysicalDimension.only(emmo.LengthDimension)
+            ),
+            hasType.exactly(3, emmo.Real),
+        ]
 
     # TODO: remove
     class Area(emmo.ISQDerivedQuantity):
         """Extent of a surface."""
+
         is_a = [
-            emmo.hasReferenceUnit.only(emmo.hasPhysicalDimension.only(
-                SquareLengthDimension)),
+            emmo.hasReferenceUnit.only(
+                emmo.hasPhysicalDimension.only(SquareLengthDimension)
+            ),
             hasType.exactly(1, emmo.Real),
         ]
 
@@ -132,7 +140,7 @@ with onto:
     #     is_a = [hasUnit.exactly(1, Pascal),
     #             hasType.min(2, emmo.Real)]
 
-    ''' Will be included when dimensionality is inplace in EMMO'''
+    # Will be included when dimensionality is in place in EMMO.
 
     # class TractionSeparation(Pressure):
     #     """The force required to separate two materials a certain distance
@@ -153,6 +161,7 @@ with onto:
     # -------------------------------
     class LatticeVector(emmo.Length):
         """A vector that participitates defining the unit cell."""
+
         is_a = [hasType.exactly(3, emmo.Real)]
 
     # FIXME - CrystalUnitCell is not a matter, but a model or a symbolic
@@ -160,15 +169,19 @@ with onto:
     class CrystalUnitCell(emmo.Material):
         """A volume defined by the 3 unit cell vectors.  It contains the atoms
         constituting the unit cell of a crystal."""
-        is_a = [emmo.hasSpatialDirectPart.some(emmo.BondedAtom),
-                emmo.hasProperty.exactly(3, LatticeVector),
-                emmo.hasProperty.exactly(1, StiffnessTensor)]
+
+        is_a = [
+            emmo.hasSpatialDirectPart.some(emmo.BondedAtom),
+            emmo.hasProperty.exactly(3, LatticeVector),
+            emmo.hasProperty.exactly(1, StiffnessTensor),
+        ]
 
     class InterfaceModel(CrystalUnitCell):
         is_a = [emmo.hasProperty.some(Area)]
 
     class Crystal(emmo.Solid):
         """A periodic crystal structure."""
+
         is_a = [emmo.hasSpatialDirectPart.only(CrystalUnitCell)]
 
     # Add some properties to our atoms
@@ -179,23 +192,27 @@ with onto:
     class Boundary(emmo.Continuum):
         """A boundary is a 4D region of spacetime shared by two material
         entities."""
+
         equivalent_to = [emmo.hasSpatialDirectPart.exactly(2, emmo.Continuum)]
         is_a = [emmo.hasProperty.exactly(1, Area)]
 
     class Phase(emmo.Continuum):
         """A phase is a continuum in which properties are homogeneous and can
         have different state of matter."""
+
         is_a = [emmo.hasProperty.exactly(1, StiffnessTensor)]
 
     class RVE(emmo.Continuum):
         """Representative volume element.  The minimum volume that is
         representative for the system in question."""
+
         is_a = [emmo.hasSpatialDirectPart.only(Phase | Boundary)]
 
     class WeldedComponent(emmo.EngineeredMaterial):
         """A welded component consisting of two materials welded together
         using a third welding material.  Hence it has spatial direct
         parts 3 materials and two boundaries."""
+
         is_a = [
             emmo.hasSpatialDirectPart.exactly(3, emmo.Material),
             emmo.hasSpatialDirectPart.exactly(2, Boundary),
@@ -205,7 +222,7 @@ with onto:
 
 # Sync attributes to make sure that all classes get a `label` and to
 # include the docstrings in the comments
-onto.sync_attributes(name_policy='uuid', name_prefix='DEMO_')
+onto.sync_attributes(name_policy="uuid", name_prefix="DEMO_")
 
 
 # Run the reasoner
@@ -215,7 +232,7 @@ onto.sync_attributes(name_policy='uuid', name_prefix='DEMO_')
 onto.set_version("0.9")
 
 # Save our new EMMO-based ontology to demo.owl
-onto.save('demo.owl', overwrite=True)
+onto.save("demo.owl", overwrite=True)
 
 # ...and to the sqlite3 database.
 world.save()

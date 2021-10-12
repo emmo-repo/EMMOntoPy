@@ -56,8 +56,8 @@ class EMMO2Meta:
     it easier to later retrieve it from a storage (without having
     to remember its UUID).
     """
-    def __init__(self, ontology=None, classes=None, version='0.1',
-                 collid=None):
+
+    def __init__(self, ontology=None, classes=None, version="0.1", collid=None):
         if ontology is None:
             self.onto = get_ontology()
             self.onto.load()
@@ -68,7 +68,7 @@ class EMMO2Meta:
             self.onto = ontology
         self.version = version
         self.iri = self.onto.base_iri
-        self.namespace = self.onto.base_iri.rstrip('#')
+        self.namespace = self.onto.base_iri.rstrip("#")
         self.coll = dlite.Collection(collid)
 
         if classes is None:
@@ -89,7 +89,7 @@ class EMMO2Meta:
         """Returns uri (namespace/version/name)."""
         if version is None:
             version = self.version
-        return '%s/%s/%s' % (self.namespace, version, name)
+        return "%s/%s/%s" % (self.namespace, version, name)
 
     def get_uuid(self, uri=None):
         """Returns a UUID corresponding to `uri`.  If `uri` is None,
@@ -98,22 +98,22 @@ class EMMO2Meta:
 
     def get_label(self, entity):
         """Returns a label for entity."""
-        if hasattr(entity, 'label'):
+        if hasattr(entity, "label"):
             return entity.label.first()
         name = repr(entity)
-        label, n = re.subn(r'emmo(-[a-z]+)?\.', '', name)
+        label, n = re.subn(r"emmo(-[a-z]+)?\.", "", name)
         return label
 
     def find_label(self, inst):
         """Returns label for class instance `inst` already added to the
         collection."""
-        if hasattr(inst, 'uuid'):
+        if hasattr(inst, "uuid"):
             uuid = inst.uuid
         else:
             uuid = dlite.get_uuid(inst)
-        rel = self.coll.find_first(p='_has-uuid', o=uuid)
+        rel = self.coll.find_first(p="_has-uuid", o=uuid)
         if not rel:
-            raise ValueError('no class instance with UUID: %s' % uuid)
+            raise ValueError("no class instance with UUID: %s" % uuid)
         return rel.s
 
     def add(self, entity):
@@ -147,16 +147,18 @@ class EMMO2Meta:
                     self.add_class(r)
                 elif isinstance(r, owlready2.Restriction):
                     # Correct this test if EMMO reintroduce isPropertyOf
-                    if (isinstance(r.value, owlready2.ThingClass) and
-                            isinstance(r.value, self.onto.Property) and
-                            issubclass(r.property, self.onto.hasProperty)):
+                    if (
+                        isinstance(r.value, owlready2.ThingClass)
+                        and isinstance(r.value, self.onto.Property)
+                        and issubclass(r.property, self.onto.hasProperty)
+                    ):
                         self.add_class(r.value)
                     else:
                         self.add_restriction(r)
                 elif isinstance(r, owlready2.ClassConstruct):
                     self.add_class_construct(r)
                 else:
-                    raise TypeError('Unexpected is_a member: %s' % type(r))
+                    raise TypeError("Unexpected is_a member: %s" % type(r))
         return self.coll.get(label)
 
     def get_properties(self, cls):
@@ -166,14 +168,15 @@ class EMMO2Meta:
         props = []
         dimindices = {}
         propnames = set()
-        types = dict(Integer='int', Real='double', String='string')
+        types = dict(Integer="int", Real="double", String="string")
 
         def get_dim(r, name, descr=None):
             """Returns dimension index corresponding to dimension name `name`
             for property `r.value`."""
             t = owlready2.class_construct._restriction_type_2_label[r.type]
-            if (t in ('some', 'only', 'min') or
-                    (t in ('max', 'exactly') and r.cardinality > 1)):
+            if t in ("some", "only", "min") or (
+                t in ("max", "exactly") and r.cardinality > 1
+            ):
                 if name not in dimindices:
                     dimindices[name] = len(dims)
                     dims.append(Dimension(name, descr))
@@ -197,26 +200,32 @@ class EMMO2Meta:
                 #       issubclass(Inverse(r.property), onto.isPropertyFor)) or
                 #      issubclass(r.property, self.onto.hasProperty))
                 #
-                if (isinstance(r, owlready2.Restriction) and
-                        not isinstance(r.property, owlready2.Inverse) and
-                        issubclass(r.property, self.onto.hasProperty) and
-                        isinstance(r.value, owlready2.ThingClass) and
-                        isinstance(r.value, self.onto.Property)):
+                if (
+                    isinstance(r, owlready2.Restriction)
+                    and not isinstance(r.property, owlready2.Inverse)
+                    and issubclass(r.property, self.onto.hasProperty)
+                    and isinstance(r.value, owlready2.ThingClass)
+                    and isinstance(r.value, self.onto.Property)
+                ):
                     name = self.get_label(r.value)
                     if name in propnames:
                         continue
                     propnames.add(name)
 
                     # Default type, ndims and unit
-                    if isinstance(r.value, (self.onto.DescriptiveProperty,
-                                            self.onto.QualitativeProperty,
-                                            self.onto.SubjectiveProperty)):
-                        ptype = 'string'
+                    if isinstance(
+                        r.value,
+                        (
+                            self.onto.DescriptiveProperty,
+                            self.onto.QualitativeProperty,
+                            self.onto.SubjectiveProperty,
+                        ),
+                    ):
+                        ptype = "string"
                     else:
-                        ptype = 'double'
+                        ptype = "double"
                     d = []
-                    d.extend(get_dim(r, 'n_%ss' % name, 'Number of %s.' %
-                                     name))
+                    d.extend(get_dim(r, "n_%ss" % name, "Number of %s." % name))
                     unit = None
 
                     # Update type, ndims and unit from relations
@@ -225,14 +234,26 @@ class EMMO2Meta:
                             if issubclass(r2.property, self.onto.hasType):
                                 typelabel = self.get_label(r2.value)
                                 ptype = types[typelabel]
-                                d.extend(get_dim(r2, '%s_length' % name,
-                                                 'Length of %s' % name))
+                                d.extend(
+                                    get_dim(
+                                        r2,
+                                        "%s_length" % name,
+                                        "Length of %s" % name,
+                                    )
+                                )
                             elif issubclass(r2.property, self.onto.hasUnit):
                                 unit = self.get_label(r2.value)
 
                     descr = self.get_description(r.value)
-                    props.append(Property(name, type=ptype, dims=d,
-                                          unit=unit, description=descr))
+                    props.append(
+                        Property(
+                            name,
+                            type=ptype,
+                            dims=d,
+                            unit=unit,
+                            description=descr,
+                        )
+                    )
         return dims, props
 
     def add_restriction(self, r):
@@ -256,27 +277,41 @@ class EMMO2Meta:
         """Adds restriction metadata to collection and returns a reference
         to it."""
         uri = self.get_uri("Restriction")
-        if not self.coll.has('Restriction'):
+        if not self.coll.has("Restriction"):
             props = [
-                Property('type', type='string', description='Type of '
-                         'restriction.  Valid values for `type` are: '
-                         '"only", "some", "exact", "min" and "max".'),
-                Property('cardinality', type='int', description='The '
-                         'cardinality.  Unused for "only" and '
-                         '"some" restrictions.'),
+                Property(
+                    "type",
+                    type="string",
+                    description=(
+                        "Type of restriction. Valid values for `type` are: "
+                        '"only", "some", "exact", "min" and "max".'
+                    ),
+                ),
+                Property(
+                    "cardinality",
+                    type="int",
+                    description=(
+                        'The cardinality. Unused for "only" and "some" '
+                        "restrictions."
+                    ),
+                ),
             ]
-            e = Instance(uri, [], props,
-                         "Class restriction.  For each instance of a class "
-                         "restriction there should be a relation\n"
-                         "\n"
-                         "    (r.label, r.property, r.value.label)\n"
-                         "\n"
-                         "where `r.label` is the label associated with the "
-                         "restriction, `r.property` is a relation and "
-                         "`r.value.label` is the label of the value of the "
-                         "restriction.")
-            self.coll.add('Restriction', e)
-        return self.coll.get('Restriction')
+            e = Instance(
+                uri,
+                [],
+                props,
+                "Class restriction.  For each instance of a class "
+                "restriction there should be a relation\n"
+                "\n"
+                "    (r.label, r.property, r.value.label)\n"
+                "\n"
+                "where `r.label` is the label associated with the "
+                "restriction, `r.property` is a relation and "
+                "`r.value.label` is the label of the value of the "
+                "restriction.",
+            )
+            self.coll.add("Restriction", e)
+        return self.coll.get("Restriction")
 
     def add_class_construct(self, c):
         """Adds owl class construct `c` to collection and returns a reference
@@ -291,7 +326,7 @@ class EMMO2Meta:
         else:
             args = [c.Class]
         for arg in args:
-            self.coll.add_relation(label, 'has_argument', self.get_label(arg))
+            self.coll.add_relation(label, "has_argument", self.get_label(arg))
         self.coll.add(label, inst)
         return inst
 
@@ -299,24 +334,33 @@ class EMMO2Meta:
         """Adds class construct metadata to collection and returns a reference
         to it."""
         uri = self.get_uri("ClassConstruct")
-        if not self.coll.has('ClassConstruct'):
+        if not self.coll.has("ClassConstruct"):
             props = [
-                Property('type', type='string', description='Type of '
-                         'class construct.  Valid values for `type` are: '
-                         '"not", "inverse", "and" or "or".'),
+                Property(
+                    "type",
+                    type="string",
+                    description=(
+                        "Type of class construct. Valid values for `type` are:"
+                        ' "not", "inverse", "and" or "or".'
+                    ),
+                ),
             ]
-            e = Instance(uri, [], props,
-                         "Class construct.  For each instance of a class "
-                         "construct there should be one or more relations "
-                         "of type\n"
-                         "\n"
-                         "    (c.label, \"has_argument\", c.value.label)\n"
-                         "\n"
-                         "where `c.label` is the label associated with the "
-                         "class construct, `c.value.label` is the label of "
-                         "an argument.")
-            self.coll.add('ClassConstruct', e)
-        return self.coll.get('ClassConstruct')
+            e = Instance(
+                uri,
+                [],
+                props,
+                "Class construct.  For each instance of a class "
+                "construct there should be one or more relations "
+                "of type\n"
+                "\n"
+                '    (c.label, "has_argument", c.value.label)\n'
+                "\n"
+                "where `c.label` is the label associated with the "
+                "class construct, `c.value.label` is the label of "
+                "an argument.",
+            )
+            self.coll.add("ClassConstruct", e)
+        return self.coll.get("ClassConstruct")
 
     def get_description(self, cls):
         """Returns description for OWL class `cls` by combining its
@@ -325,21 +369,21 @@ class EMMO2Meta:
             cls = onto[cls]
         descr = []
         annotations = self.onto.get_annotations(cls)
-        if 'definition' in annotations:
-            descr.extend(annotations['definition'])
-        if 'elucication' in annotations and annotations['elucidation']:
-            for e in annotations['elucidation']:
-                descr.extend(['', 'ELUCIDATION:', e])
-        if 'axiom' in annotations and annotations['axiom']:
-            for e in annotations['axiom']:
-                descr.extend(['', 'AXIOM:', e])
-        if 'comment' in annotations and annotations['comment']:
-            for e in annotations['comment']:
-                descr.extend(['', 'COMMENT:', e])
-        if 'example' in annotations and annotations['example']:
-            for e in annotations['example']:
-                descr.extend(['', 'EXAMPLE:', e])
-        return '\n'.join(descr).strip()
+        if "definition" in annotations:
+            descr.extend(annotations["definition"])
+        if "elucication" in annotations and annotations["elucidation"]:
+            for e in annotations["elucidation"]:
+                descr.extend(["", "ELUCIDATION:", e])
+        if "axiom" in annotations and annotations["axiom"]:
+            for e in annotations["axiom"]:
+                descr.extend(["", "AXIOM:", e])
+        if "comment" in annotations and annotations["comment"]:
+            for e in annotations["comment"]:
+                descr.extend(["", "COMMENT:", e])
+        if "example" in annotations and annotations["example"]:
+            for e in annotations["example"]:
+                descr.extend(["", "EXAMPLE:", e])
+        return "\n".join(descr).strip()
 
     def save(self, *args, **kw):
         """Saves collection to storage."""
@@ -348,11 +392,11 @@ class EMMO2Meta:
 
 def main():
     e = EMMO2Meta()
-    e.save('json', 'emmo2meta.json', 'mode=w')
+    e.save("json", "emmo2meta.json", "mode=w")
     return e
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     e = main()
     coll = e.coll
     onto = e.onto

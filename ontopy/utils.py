@@ -24,15 +24,15 @@ if TYPE_CHECKING:
 
 # Format mappings: file extension -> rdflib format name
 FMAP = {
-    'n3': 'ntriples',
-    'nt': 'ntriples',
-    'ttl': 'turtle',
-    'owl': 'xml',
-    'rdfxml': 'xml',
+    "n3": "ntriples",
+    "nt": "ntriples",
+    "ttl": "turtle",
+    "owl": "xml",
+    "rdfxml": "xml",
 }
 
 # Format extension supported by owlready2
-OWLREADY2_FORMATS = 'rdfxml', 'owl', 'xml', 'ntriples'
+OWLREADY2_FORMATS = "rdfxml", "owl", "xml", "ntriples"
 
 
 class IncompatibleVersion(Warning):
@@ -48,20 +48,22 @@ class UnknownVersion(Exception):
 def isinteractive():
     """Returns true if we are running from an interactive interpreater,
     false otherwise."""
-    return bool(hasattr(__builtins__, '__IPYTHON__') or
-                sys.flags.interactive or
-                hasattr(sys, 'ps1'))
+    return bool(
+        hasattr(__builtins__, "__IPYTHON__")
+        or sys.flags.interactive
+        or hasattr(sys, "ps1")
+    )
 
 
 def get_label(e):
     """Returns the label of entity `e`."""
-    if hasattr(e, 'prefLabel') and e.prefLabel:
+    if hasattr(e, "prefLabel") and e.prefLabel:
         return e.prefLabel.first()
-    if hasattr(e, 'label') and e.label:
+    if hasattr(e, "label") and e.label:
         return e.label.first()
-    elif hasattr(e, '__name__'):
+    elif hasattr(e, "__name__"):
         return e.__name__
-    elif hasattr(e, 'name'):
+    elif hasattr(e, "name"):
         return str(e.name)
     elif isinstance(e, str):
         return e
@@ -69,7 +71,7 @@ def get_label(e):
         return repr(e)
 
 
-def asstring(expr, link='{name}', n=0, exclude_object=False):
+def asstring(expr, link="{name}", n=0, exclude_object=False):
     """Returns a string representation of `expr`, which may be an entity,
     restriction, or logical expression of these.  `link` is a format
     string for formatting references to entities or relations.  It may
@@ -77,18 +79,19 @@ def asstring(expr, link='{name}', n=0, exclude_object=False):
     `n` is the recursion depth and only intended for internal use.
     If `exclude_object` is true, the object will be excluded in restrictions.
     """
+
     def fmt(e):
         """Returns the formatted label of `e`."""
         name = None
-        for attr in ('prefLabel', 'label', '__name__', 'name'):
+        for attr in ("prefLabel", "label", "__name__", "name"):
             if hasattr(e, attr) and getattr(e, attr):
                 name = getattr(e, attr)
-                if not isinstance(name, str) and hasattr(name, '__getitem__'):
+                if not isinstance(name, str) and hasattr(name, "__getitem__"):
                     name = name[0]
                 break
         if not name:
-            name = str(e).replace('.', ':')
-        url = name if re.match(r'^[a-z]+://', name) else '#' + name
+            name = str(e).replace(".", ":")
+        url = name if re.match(r"^[a-z]+://", name) else "#" + name
         return link.format(name=name, url=url, lowerurl=url.lower())
 
     if isinstance(expr, str):
@@ -97,45 +100,51 @@ def asstring(expr, link='{name}', n=0, exclude_object=False):
     elif isinstance(expr, owlready2.Restriction):
         rlabel = owlready2.class_construct._restriction_type_2_label[expr.type]
 
-        if isinstance(expr.property, (
-                owlready2.ObjectPropertyClass,
-                owlready2.DataPropertyClass)):
+        if isinstance(
+            expr.property,
+            (owlready2.ObjectPropertyClass, owlready2.DataPropertyClass),
+        ):
             s = fmt(expr.property)
         elif isinstance(expr.property, owlready2.Inverse):
-            s = 'Inverse(%s)' % asstring(expr.property.property, link, n + 1)
+            s = "Inverse(%s)" % asstring(expr.property.property, link, n + 1)
         else:
-            print('*** WARNING: unknown restriction property: %r' %
-                  expr.property)
+            print(
+                "*** WARNING: unknown restriction property: %r" % expr.property
+            )
             s = fmt(expr.property)
 
         if not rlabel:
             pass
         elif expr.type in (owlready2.MIN, owlready2.MAX, owlready2.EXACTLY):
-            s += ' %s %d' % (rlabel, expr.cardinality)
-        elif expr.type in (owlready2.SOME, owlready2.ONLY,
-                           owlready2.VALUE, owlready2.HAS_SELF):
-            s += ' %s' % rlabel
+            s += " %s %d" % (rlabel, expr.cardinality)
+        elif expr.type in (
+            owlready2.SOME,
+            owlready2.ONLY,
+            owlready2.VALUE,
+            owlready2.HAS_SELF,
+        ):
+            s += " %s" % rlabel
         else:
-            print('*** WARNING: unknown relation', expr, rlabel)
-            s += ' %s' % rlabel
+            print("*** WARNING: unknown relation", expr, rlabel)
+            s += " %s" % rlabel
 
         if not exclude_object:
             if isinstance(expr.value, str):
                 s += ' "%s"' % asstring(expr.value, link, n + 1)
             else:
-                s += ' %s' % asstring(expr.value, link, n + 1)
+                s += " %s" % asstring(expr.value, link, n + 1)
         return s
 
     elif isinstance(expr, owlready2.Or):
-        s = '%s' if n == 0 else '(%s)'
-        return s % ' or '.join([asstring(c, link, n + 1)
-                                for c in expr.Classes])
+        s = "%s" if n == 0 else "(%s)"
+        return s % " or ".join([asstring(c, link, n + 1) for c in expr.Classes])
     elif isinstance(expr, owlready2.And):
-        s = '%s' if n == 0 else '(%s)'
-        return s % ' and '.join([asstring(c, link, n + 1)
-                                 for c in expr.Classes])
+        s = "%s" if n == 0 else "(%s)"
+        return s % " and ".join(
+            [asstring(c, link, n + 1) for c in expr.Classes]
+        )
     elif isinstance(expr, owlready2.Not):
-        return 'not %s' % asstring(expr.Class, link, n + 1)
+        return "not %s" % asstring(expr.Class, link, n + 1)
     elif isinstance(expr, owlready2.ThingClass):
         return fmt(expr)
     elif isinstance(expr, owlready2.PropertyClass):
@@ -143,7 +152,7 @@ def asstring(expr, link='{name}', n=0, exclude_object=False):
     elif isinstance(expr, owlready2.Thing):  # instance (individual)
         return fmt(expr)
     elif isinstance(expr, owlready2.class_construct.Inverse):
-        return 'inverse(%s)' % fmt(expr.property)
+        return "inverse(%s)" % fmt(expr.property)
     elif isinstance(expr, owlready2.disjoint.AllDisjoint):
         return fmt(expr)
     elif isinstance(expr, (bool, int, float)):
@@ -152,14 +161,15 @@ def asstring(expr, link='{name}', n=0, exclude_object=False):
     elif issubclass(expr, (bool, int, float, str)):
         return fmt(expr.__class__.__name__)
     elif issubclass(expr, datetime.date):
-        return 'date'
+        return "date"
     elif issubclass(expr, datetime.time):
-        return 'datetime'
+        return "datetime"
     elif issubclass(expr, datetime.datetime):
-        return 'datetime'
+        return "datetime"
     else:
-        raise RuntimeError('Unknown expression: %r (type: %r)' % (
-            expr, type(expr)))
+        raise RuntimeError(
+            "Unknown expression: %r (type: %r)" % (expr, type(expr))
+        )
 
 
 def camelsplit(s):
@@ -172,24 +182,33 @@ def camelsplit(s):
     prev_isspace = True
     c = s[0]
     for next in s[1:]:
-        if ((not prev_isspace and c.isupper() and next.islower()) or
-                prev_lower and c.isupper()):
-            result.append(' ')
+        if (
+            (not prev_isspace and c.isupper() and next.islower())
+            or prev_lower
+            and c.isupper()
+        ):
+            result.append(" ")
         result.append(c)
         prev_lower = c.islower()
         prev_isspace = c.isspace()
         c = next
     result.append(next)
-    return ''.join(result)
+    return "".join(result)
 
 
 class ReadCatalogError(IOError):
     """Error reading catalog file."""
+
     pass
 
 
-def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
-                 recursive=False, return_paths=False):
+def read_catalog(
+    uri,
+    catalog_file="catalog-v001.xml",
+    baseuri=None,
+    recursive=False,
+    return_paths=False,
+):
     """Reads a Protègè catalog file and returns as a dict.
 
     The returned dict maps the ontology IRI (name) to its actual
@@ -215,20 +234,21 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
     A ReadCatalogError is raised if the catalog file cannot be found.
     """
     # Protocols supported by urllib.request
-    web_protocols = 'http://', 'https://', 'ftp://'
+    web_protocols = "http://", "https://", "ftp://"
     if uri.startswith(web_protocols):
         # Call read_catalog() recursively to ensure that the temporary
         # file is properly cleaned up
         with tempfile.TemporaryDirectory() as tmpdir:
             destfile = os.path.join(tmpdir, catalog_file)
             uris = {  # maps uri to base
-                uri: (
-                    baseuri if baseuri else os.path.dirname(uri)),
+                uri: (baseuri if baseuri else os.path.dirname(uri)),
                 f'{uri.rstrip("/")}/{catalog_file}': (
-                    baseuri if baseuri else uri.rstrip('/')),
-                f'{os.path.dirname(uri)}/{catalog_file}': (
-                    os.path.dirname(uri)),
-                }
+                    baseuri if baseuri else uri.rstrip("/")
+                ),
+                f"{os.path.dirname(uri)}/{catalog_file}": (
+                    os.path.dirname(uri)
+                ),
+            }
             for url, base in uris.items():
                 try:
                     # The URL can only contain the schemes from `web_protocols`.
@@ -236,16 +256,19 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
                 except urllib.request.URLError:
                     continue
                 else:
-                    if 'Content-Length' not in msg:
+                    if "Content-Length" not in msg:
                         continue
-                    return read_catalog(destfile,
-                                        catalog_file=catalog_file,
-                                        baseuri=baseuri if baseuri else base,
-                                        recursive=recursive,
-                                        return_paths=return_paths)
-            raise ReadCatalogError('Cannot download catalog from URLs: ' +
-                                   ", ".join(uris))
-    elif uri.startswith('file://'):
+                    return read_catalog(
+                        destfile,
+                        catalog_file=catalog_file,
+                        baseuri=baseuri if baseuri else base,
+                        recursive=recursive,
+                        return_paths=return_paths,
+                    )
+            raise ReadCatalogError(
+                "Cannot download catalog from URLs: " + ", ".join(uris)
+            )
+    elif uri.startswith("file://"):
         path = uri[7:]
     else:
         path = uri
@@ -259,52 +282,58 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
         dirname = os.path.dirname(filepath)
 
     def gettag(e):
-        return e.tag.rsplit('}', 1)[-1]
+        return e.tag.rsplit("}", 1)[-1]
 
     def load_catalog(filepath):
         if not os.path.exists(filepath):
-            raise ReadCatalogError('No such catalog file: ' + filepath)
+            raise ReadCatalogError("No such catalog file: " + filepath)
         dirname = os.path.normpath(os.path.dirname(filepath))
         dirs.add(baseuri if baseuri else dirname)
         xml = ET.parse(filepath)
         root = xml.getroot()
-        if gettag(root) != 'catalog':
-            raise ReadCatalogError('expected root tag of catalog file %r to '
-                                   'be "catalog"', filepath)
+        if gettag(root) != "catalog":
+            raise ReadCatalogError(
+                'expected root tag of catalog file %r to be "catalog"',
+                filepath,
+            )
         for child in root:
-            if gettag(child) == 'uri':
+            if gettag(child) == "uri":
                 load_uri(child, dirname)
-            elif gettag(child) == 'group':
+            elif gettag(child) == "group":
                 for uri in child:
                     load_uri(uri, dirname)
 
     def load_uri(uri, dirname):
-        if gettag(uri) != 'uri':
+        if gettag(uri) != "uri":
             raise ValueError(f"{gettag(uri)!r} should be 'uri'.")
-        s = uri.attrib['uri']
+        s = uri.attrib["uri"]
         if s.startswith(web_protocols):
             if baseuri:
-                url = baseuri.rstrip('/#') + '/' + os.path.basename(s)
+                url = baseuri.rstrip("/#") + "/" + os.path.basename(s)
             else:
                 url = s
         else:
             s = os.path.normpath(s)
             if baseuri and baseuri.startswith(web_protocols):
-                url = f'{baseuri}/{s}'
+                url = f"{baseuri}/{s}"
             else:
-                url = os.path.normpath(os.path.join(
-                    baseuri if baseuri else dirname, s))
+                url = os.path.normpath(
+                    os.path.join(baseuri if baseuri else dirname, s)
+                )
 
-        iris.setdefault(uri.attrib['name'], url)
+        iris.setdefault(uri.attrib["name"], url)
         if recursive:
             dir = os.path.dirname(url)
             if dir not in dirs:
                 catalog = os.path.join(dir, catalog_file)
                 if catalog.startswith(web_protocols):
                     iris_, dirs_ = read_catalog(
-                        catalog, catalog_file=catalog_file,
-                        baseuri=None, recursive=recursive,
-                        return_paths=True)
+                        catalog,
+                        catalog_file=catalog_file,
+                        baseuri=None,
+                        recursive=recursive,
+                        return_paths=True,
+                    )
                     iris.update(iris_)
                     dirs.update(dirs_)
                 else:
@@ -319,7 +348,7 @@ def read_catalog(uri, catalog_file='catalog-v001.xml', baseuri=None,
         return iris
 
 
-def write_catalog(mappings, output='catalog-v001.xml'):
+def write_catalog(mappings, output="catalog-v001.xml"):
     """Writes a catalog file.
 
     `mappings` is a dict mapping ontology IRIs (name) to actual
@@ -334,13 +363,13 @@ def write_catalog(mappings, output='catalog-v001.xml'):
         'xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">',
         '    <group id="Folder Repository, directory=, recursive=true, '
         'Auto-Update=false, version=2" prefer="public" xml:base="">',
-        ]
+    ]
     for k, v in dict(mappings).items():
         s.append(f'        <uri name="{k}" uri="{v}"/>')
-    s.append('    </group>')
-    s.append('</catalog>')
-    with open(output, 'wt') as f:
-        f.write('\n'.join(s) + '\n')
+    s.append("    </group>")
+    s.append("</catalog>")
+    with open(output, "wt") as f:
+        f.write("\n".join(s) + "\n")
 
 
 def _validate_installed_version(
@@ -365,9 +394,7 @@ def _validate_installed_version(
 
     """
     import importlib
-    from packaging.version import (
-        parse as parse_version, LegacyVersion, Version
-    )
+    from packaging.version import parse as parse_version, LegacyVersion, Version
 
     if isinstance(min_version, str):
         min_version = parse_version(min_version)
@@ -390,8 +417,14 @@ def _validate_installed_version(
     return parse_version(installed_package_version) >= min_version
 
 
-def convert_imported(input, output, input_format=None, output_format='xml',
-                     url_from_catalog=None, catalog_file='catalog-v001.xml'):
+def convert_imported(
+    input,
+    output,
+    input_format=None,
+    output_format="xml",
+    url_from_catalog=None,
+    catalog_file="catalog-v001.xml",
+):
     """Convert imported ontologies.
 
     Store the output in a directory structure matching the source
@@ -421,23 +454,23 @@ def convert_imported(input, output, input_format=None, output_format='xml',
         url_from_catalog = os.path.exists(os.path.join(inroot, catalog_file))
 
     if url_from_catalog:
-        d, dirs = read_catalog(inroot, catalog_file=catalog_file,
-                               recursive=True, return_paths=True)
+        d, dirs = read_catalog(
+            inroot, catalog_file=catalog_file, recursive=True, return_paths=True
+        )
 
         # Create output dirs and copy catalog files
         for indir in dirs:
             outdir = os.path.normpath(
-                os.path.join(outroot, os.path.relpath(indir, inroot)))
+                os.path.join(outroot, os.path.relpath(indir, inroot))
+            )
             if not os.path.exists(outdir):
                 os.makedirs(outdir)
-            with open(os.path.join(indir, catalog_file), mode='rt') as f:
+            with open(os.path.join(indir, catalog_file), mode="rt") as f:
                 s = f.read()
             for path in d.values():
                 newpath = os.path.splitext(path)[0] + outext
-                s = s.replace(
-                    os.path.basename(path), os.path.basename(newpath)
-                )
-            with open(os.path.join(outdir, catalog_file), mode='wt') as f:
+                s = s.replace(os.path.basename(path), os.path.basename(newpath))
+            with open(os.path.join(outdir, catalog_file), mode="wt") as f:
                 f.write(s)
     else:
         d = {}
@@ -445,20 +478,22 @@ def convert_imported(input, output, input_format=None, output_format='xml',
     outpaths = set()
 
     def recur(graph, outext):
-        for imported in graph.objects(predicate=URIRef(
-                'http://www.w3.org/2002/07/owl#imports')):
+        for imported in graph.objects(
+            predicate=URIRef("http://www.w3.org/2002/07/owl#imports")
+        ):
             inpath = d.get(str(imported), str(imported))
-            if inpath.startswith(('http://', 'https://', 'ftp://')):
-                outpath = os.path.join(outroot, inpath.split('/')[-1])
+            if inpath.startswith(("http://", "https://", "ftp://")):
+                outpath = os.path.join(outroot, inpath.split("/")[-1])
             else:
-                outpath = os.path.join(outroot, os.path.relpath(
-                        inpath, inroot))
-            outpath = os.path.splitext(os.path.normpath(
-                outpath))[0] + outext
+                outpath = os.path.join(outroot, os.path.relpath(inpath, inroot))
+            outpath = os.path.splitext(os.path.normpath(outpath))[0] + outext
             if outpath not in outpaths:
                 outpaths.add(outpath)
-                fmt = input_format if input_format else guess_format(
-                    inpath, fmap=FMAP)
+                fmt = (
+                    input_format
+                    if input_format
+                    else guess_format(inpath, fmap=FMAP)
+                )
                 g = Graph()
                 g.parse(d.get(inpath, inpath), format=fmt)
                 g.serialize(destination=outpath, format=output_format)
@@ -467,10 +502,9 @@ def convert_imported(input, output, input_format=None, output_format='xml',
     # Write output files
     fmt = input_format if input_format else guess_format(input, fmap=FMAP)
 
-    if (
-        not _validate_installed_version(package="rdflib", min_version="6.0.0")
-        and (output_format == FMAP.get("ttl", "") or outext == "ttl")
-    ):
+    if not _validate_installed_version(
+        package="rdflib", min_version="6.0.0"
+    ) and (output_format == FMAP.get("ttl", "") or outext == "ttl"):
         from rdflib import __version__ as __rdflib_version__
 
         warnings.warn(
@@ -489,8 +523,14 @@ def convert_imported(input, output, input_format=None, output_format='xml',
     recur(g, outext)
 
 
-def squash_imported(input, output, input_format=None, output_format='xml',
-                    url_from_catalog=None, catalog_file='catalog-v001.xml'):
+def squash_imported(
+    input,
+    output,
+    input_format=None,
+    output_format="xml",
+    url_from_catalog=None,
+    catalog_file="catalog-v001.xml",
+):
     """Convert imported ontologies and squash them into a single file.
 
     If `url_from_catalog` is true the catalog file will be used to
@@ -519,7 +559,8 @@ def squash_imported(input, output, input_format=None, output_format='xml',
 
     def recur(g):
         for s, p, o in g.triples(
-                (None, URIRef('http://www.w3.org/2002/07/owl#imports'), None)):
+            (None, URIRef("http://www.w3.org/2002/07/owl#imports"), None)
+        ):
             g.remove((s, p, o))
             iri = d.get(str(o), str(o))
             if iri not in imported:
@@ -534,14 +575,11 @@ def squash_imported(input, output, input_format=None, output_format='xml',
     graph.parse(input, format=input_format)
     recur(graph)
     if output:
-        if (
-            not _validate_installed_version(
-                package="rdflib", min_version="6.0.0"
-            )
-            and (
-                output_format == FMAP.get("ttl", "")
-                or os.path.splitext(output)[1] == "ttl"
-            )
+        if not _validate_installed_version(
+            package="rdflib", min_version="6.0.0"
+        ) and (
+            output_format == FMAP.get("ttl", "")
+            or os.path.splitext(output)[1] == "ttl"
         ):
             from rdflib import __version__ as __rdflib_version__
 
@@ -561,8 +599,8 @@ def squash_imported(input, output, input_format=None, output_format='xml',
 
 def infer_version(iri, version_iri):
     """Infer version from IRI and versionIRI."""
-    if str(version_iri[:len(iri)]) == str(iri):
-        version = version_iri[len(iri):].lstrip('/')
+    if str(version_iri[: len(iri)]) == str(iri):
+        version = version_iri[len(iri) :].lstrip("/")
     else:
         j = 0
         v = []
@@ -570,11 +608,13 @@ def infer_version(iri, version_iri):
             while i + j < len(version_iri) and iri[i] != version_iri[i + j]:
                 v.append(version_iri[i + j])
                 j += 1
-        version = ''.join(v).lstrip('/').rstrip('/#')
+        version = "".join(v).lstrip("/").rstrip("/#")
 
-    if '/' in version:
-        raise ValueError('version IRI %r is not consistent with base IRI '
-                         '%r' % (version_iri, iri))
+    if "/" in version:
+        raise ValueError(
+            "version IRI %r is not consistent with base IRI "
+            "%r" % (version_iri, iri)
+        )
     return version
 
 
@@ -588,13 +628,13 @@ def annotate_with_ontology(onto, imported=True):
     function retain this information as annotations.
     """
     with onto:
-        if 'ontology_name' not in onto.world._props:
-            types.new_class('ontology_name', (owlready2.AnnotationProperty, ))
-        if 'ontology_iri' not in onto.world._props:
-            types.new_class('ontology_iri', (owlready2.AnnotationProperty, ))
+        if "ontology_name" not in onto.world._props:
+            types.new_class("ontology_name", (owlready2.AnnotationProperty,))
+        if "ontology_iri" not in onto.world._props:
+            types.new_class("ontology_iri", (owlready2.AnnotationProperty,))
 
     for e in onto.get_entities(imported=imported):
-        if onto.name not in getattr(e, 'ontology_name'):
-            setattr(e, 'ontology_name', onto.name)
-        if onto.base_iri not in getattr(e, 'ontology_iri'):
-            setattr(e, 'ontology_iri', onto.base_iri)
+        if onto.name not in getattr(e, "ontology_name"):
+            setattr(e, "ontology_name", onto.name)
+        if onto.base_iri not in getattr(e, "ontology_iri"):
+            setattr(e, "ontology_iri", onto.base_iri)

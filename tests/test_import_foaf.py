@@ -17,7 +17,7 @@ def test_import_foaf(emmo: "Ontology") -> None:
     """
     from ontopy import get_ontology
 
-    skos = get_ontology('http://www.w3.org/2004/02/skos/core#').load()
+    skos = get_ontology("http://www.w3.org/2004/02/skos/core#").load()
     foaf = get_ontology("http://xmlns.com/foaf/0.1/")
 
     # Needed since foaf refer to skos without importing it

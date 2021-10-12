@@ -44,43 +44,45 @@ def map_app2common(inst, metacoll, out_id=None):
     atcoll = dlite.Collection(out_id)
 
     # Get metadata from metacoll
-    Crystal = metacoll['Crystal']
-    UnitCell = metacoll['CrystalUnitCell']
-    EBondedAtom = metacoll['BondedAtom']
+    Crystal = metacoll["Crystal"]
+    UnitCell = metacoll["CrystalUnitCell"]
+    EBondedAtom = metacoll["BondedAtom"]
 
     # Instanciate the structure
     crystal = Crystal([])
-    crystal.spacegroup = infodict['spacegroup']
-    atcoll.add('crystal', crystal)
+    crystal.spacegroup = infodict["spacegroup"]
+    atcoll.add("crystal", crystal)
 
     unit_cell = UnitCell([3, 3, 36])
     unit_cell.lattice_vector = inst.cell
-    atcoll.add('unit_cell', unit_cell)
-    atcoll.add_relation('crystal', 'hasSpatialDirectPart', 'unit_cell')
+    atcoll.add("unit_cell", unit_cell)
+    atcoll.add_relation("crystal", "hasSpatialDirectPart", "unit_cell")
 
     for i in range(inst.natoms):
-        label = 'atom%d' % i
+        label = "atom%d" % i
         a = EBondedAtom([3])
         a.AtomicNumber = inst.numbers[i]
         a.Position = inst.positions[i]
         atcoll.add(label, a)
-        atcoll.add_relation('unit_cell', 'hasSpatialDirectPart', label)
+        atcoll.add_relation("unit_cell", "hasSpatialDirectPart", label)
 
     return atcoll
 
 
 # Load metadata collection from step 1
 metacoll = dlite.Collection(
-    'json://usercase_metadata.json?mode=r#usercase_ontology', True)
+    "json://usercase_metadata.json?mode=r#usercase_ontology", True
+)
 
 # Load dlite-representation of atoms structure from step 3
 coll = dlite.Collection(
-    'json://usercase_appdata.json?mode=r#usercase_appdata', False)
-inst = coll.get('atoms')
+    "json://usercase_appdata.json?mode=r#usercase_appdata", False
+)
+inst = coll.get("atoms")
 
 # Do the mapping
 new = map_app2common(inst, metacoll)
 
 
 # Append the new atoms collection to the storage
-new.save('json://usercase_data.json?mode=w')
+new.save("json://usercase_data.json?mode=w")
