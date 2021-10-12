@@ -49,7 +49,7 @@ In EMMO, the taxonomy is a rooted directed acyclic graph (DAG).
 This is important since many classification methods relies on this property, see e.g. [Valentini (2014)][Valentini2014] and [Robison et al (2015)][Robison2015].
 Note, that EMMO is a DAG does not prevent some classes from having more than one parent.
 A `Variable` is for instance both a `Mathematical` and a `Symbol`.
-See [appendix][Appendix] for the full EMMO taxonomy.
+See appendix for the full EMMO taxonomy.
 
 ## Primitive elements in EMMO
 
@@ -357,7 +357,7 @@ The EMMO ontology is structured in shells, expressed by specific ontology fragme
 
 ### Top Level
 
-The [EMMO top level](top.owl) is the group of fundamental axioms that constitute the philosophical foundation of the EMMO.
+The EMMO top level is the group of fundamental axioms that constitute the philosophical foundation of the EMMO.
 Adopting a physicalistic/nominalistic perspective, the EMMO defines real world objects as 4D objects that are always extended in space and time (i.e. real world objects cannot be spaceless nor timeless).
 For this reason abstract objects, i.e. objects that does not extend in space and time, are forbidden in the EMMO.
 
@@ -368,14 +368,14 @@ These symbols appear in actions (semiotic processes) meant to communicate meanin
 Another important building block of from analytical philosophy is atomistic mereology applied to 4D objects.
 The EMMO calls it 'quantum mereology', since the there is a epistemological limit to how fine we can resolve space and time due to the uncertanity principles.
 
-The [mereotopology](top/mereotopology.owl) module introduces the fundamental mereotopological concepts and their relations with the real world objects that they represent.
+The mereotopology module introduces the fundamental mereotopological concepts and their relations with the real world objects that they represent.
 The EMMO uses mereotopology as the ground for all the subsequent ontology modules.
 The concept of topological connection is used to define the first distinction between ontology entities namely the *Item* and *Collection* classes.
 Items are causally self-connected objects, while collections are causally disconnected.
 Quantum mereology is represented by the *Quantum* class.
 This module introduces also the fundamental mereotopological relations used to distinguish between space and time dimensions.
 
-The [physical](top/physical.owl) module, defines the *Physical* objects and the concept of *Void* that plays a fundamental role in the description of multiscale objects and quantum systems.
+The physical module, defines the *Physical* objects and the concept of *Void* that plays a fundamental role in the description of multiscale objects and quantum systems.
 It also define the *Elementary* class, that restricts mereological atomism in space.
 
 ![The EMMO top level.](figs/top.png){ width=440px }
@@ -403,7 +403,7 @@ Phenomenic objects can be used in a semiotic process as signs.
 The *Physicalistic* perspective class introduces the concept of real world objects that have a meaning for the under applied physics perspective.
 
 The *Holistic* perspective class introduces the concept of real world objects that unfold in time in a way that has a meaning for the EMMO user, through the definition of the classes *Process* and *Participant*.
-The [semiotics](top/semiotics.owl) module introduces the concepts of semiotics and the *Semiosis* process that has a *Sign*, an *Object* and an *Interpreter* as participants.
+The semiotics module introduces the concepts of semiotics and the *Semiosis* process that has a *Sign*, an *Object* and an *Interpreter* as participants.
 This forms the basis in EMMO to represent e.g. models, formal languages, theories, information and properties.
 
 ![The semiotic level, showing both the taxonomy (open black arrows) and other relations as listed in the caption. The inverted arrows corresponds to inverse relations.](figs/Semiotic.png){ width=540px }

@@ -84,13 +84,10 @@ def create_api_reference_docs(_, pre_clean=False):
     docs_api_ref_dir = TOP_DIR / "docs/api_reference"
 
     unwanted_subdirs = ("__pycache__",)
+    unwanted_files = ("__init__.py",)
 
     pages_template = 'title: "{name}"\ncollapse_single_pages: false\n'
     md_template = "# {name}\n\n::: {py_path}\n"
-    models_template = (
-        md_template
-        + f"{' ' * 4}rendering:\n{' ' * 6}show_if_no_docstring: true\n"
-    )
 
     if docs_api_ref_dir.exists() and pre_clean:
         shutil.rmtree(docs_api_ref_dir, ignore_errors=True)
@@ -130,12 +127,10 @@ def create_api_reference_docs(_, pre_clean=False):
 
             # Create markdown files
             for filename in filenames:
-                if re.match(r".*\.py$", filename) is None or filename in (
-                    "__init__.py",
-                    "run.py",
-                ):
+                if re.match(r".*\.py$", filename) is None or filename in unwanted_files:
                     # Not a Python file: We don't care about it!
-                    # Or filename is `__init__.py`: We don't want it!
+                    # Or filename is in the tuple of unwanted files:
+                    # We don't want it!
                     continue
 
                 basename = filename[: -len(".py")]
@@ -146,12 +141,10 @@ def create_api_reference_docs(_, pre_clean=False):
                 )
                 md_filename = filename.replace(".py", ".md")
 
-                # For models we want to include EVERYTHING, even if it doesn't
-                # have a doc-string
-                template = (
-                    models_template
-                    if str(relpath) == "models" else md_template
-                )
+                # For emmopy.emmocheck we want to exclude base clases
+                template = md_template
+                if str(relpath) == "emmopy" and basename == "emmocheck":
+                    template += f"{' ' * 4}rendering:\n{' ' * 6}show_bases: false\n"
 
                 write_file(
                     full_path=docs_sub_dir / md_filename,

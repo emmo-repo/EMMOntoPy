@@ -202,7 +202,7 @@ The figure below is generated with the following command:
 ontograph --root=Material --relations=all --legend emmo-inferred material.png
 ```
 
-![Graph generated with the ontograph tool.](materialstate.png)
+![Graph generated with the ontograph tool.](images/material.png)
 
 ---
 
