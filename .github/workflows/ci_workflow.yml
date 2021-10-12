@@ -42,11 +42,11 @@ jobs:
         pip install ${pre_commit} ${invoke}
 
     - name: Run pre-commit
-      run: pre-commit run --all-files --show-diff-on-failure
+      run: SKIP=pylint pre-commit run --all-files --show-diff-on-failure
 
 
-  safety:
-    name: safety
+  pylint-safety:
+    name: PyLint and safety
     runs-on: ubuntu-latest
 
     steps:
@@ -65,6 +65,9 @@ jobs:
 
         pip install -U -r requirements.txt -r requirements_dev.txt -r requirements_docs.txt
         pip install safety
+
+    - name: Run PyLint
+      run: pylint --rcfile=pyproject.toml *.py emmopy ontopy
 
     - name: Run safety
       run: pip freeze | safety check --stdin

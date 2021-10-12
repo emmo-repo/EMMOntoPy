@@ -53,10 +53,10 @@ repos:
     pass_filenames: false
     files: ^README.md$
     description: Update the landing page for the documentation if the source file (README.md) is changed.
-  # - id: pylint
-  #   name: pylint
-  #   entry: pylint
-  #   language: python
-  #   types: [python]
-  #   require_serial: true
-  #   exclude: ^tests/.*$
+  - id: pylint
+    name: pylint
+    entry: pylint
+    language: python
+    types: [python]
+    require_serial: true
+    exclude: ^tests/.*$
