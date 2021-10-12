@@ -127,7 +127,10 @@ def create_api_reference_docs(_, pre_clean=False):
 
             # Create markdown files
             for filename in filenames:
-                if re.match(r".*\.py$", filename) is None or filename in unwanted_files:
+                if (
+                    re.match(r".*\.py$", filename) is None
+                    or filename in unwanted_files
+                ):
                     # Not a Python file: We don't care about it!
                     # Or filename is in the tuple of unwanted files:
                     # We don't want it!
@@ -144,7 +147,9 @@ def create_api_reference_docs(_, pre_clean=False):
                 # For emmopy.emmocheck we want to exclude base clases
                 template = md_template
                 if str(relpath) == "emmopy" and basename == "emmocheck":
-                    template += f"{' ' * 4}rendering:\n{' ' * 6}show_bases: false\n"
+                    template += (
+                        f"{' ' * 4}rendering:\n{' ' * 6}show_bases: false\n"
+                    )
 
                 write_file(
                     full_path=docs_sub_dir / md_filename,
