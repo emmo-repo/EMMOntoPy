@@ -12,9 +12,9 @@ from unittest.util import strclass
 
 from blessings import Terminal
 from pygments import formatters, highlight
-from pygments.lexers import (
+from pygments.lexers import (  # pylint: disable=no-name-in-module
     Python3TracebackLexer as Lexer,
-)  # pylint: disable=no-name-in-module
+)
 
 
 class ColourTextTestResult(TestResult):

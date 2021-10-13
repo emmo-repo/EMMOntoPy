@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""`ontodoc` CLI tool."""
+# pylint: disable=wrong-import-position,wrong-import-order
 import os
 import sys
 import argparse
@@ -10,7 +12,7 @@ rootdir = os.path.abspath(
 )
 sys.path.insert(1, rootdir)
 
-from ontopy import World, onto_path  # noqa: E402
+from ontopy import World, onto_path
 from ontopy.ontodoc import (
     OntoDoc,
     get_format,
@@ -18,12 +20,13 @@ from ontopy.ontodoc import (
     get_figformat,
     get_maxwidth,
     get_docpp,
-)  # noqa: E402
+)
 
-import owlready2  # noqa: E402
+import owlready2
 
 
 def main():
+    """Main run function."""
     parser = argparse.ArgumentParser(
         description="Tool for documenting ontologies.",
         epilog=(
@@ -211,20 +214,20 @@ def main():
             url_from_catalog=args.url_from_catalog,
             catalog_file=args.catalog_file,
         )
-    except owlready2.OwlReadyOntologyParsingError as e:
-        parser.error("error parsing %r: %s" % (args.iri, e))
+    except owlready2.OwlReadyOntologyParsingError as exc:
+        parser.error(f"error parsing {args.iri!r}: {exc}")
 
     # Sync reasoner
     if args.reasoner:
         onto.sync_reasoner(reasoner=args.reasoner)
 
     # Instantiate ontodoc instance
-    format = get_format(args.outfile, args.format)
-    style = get_style(format)
-    figformat = args.figformat if args.figformat else get_figformat(format)
-    maxwidth = args.max_figwidth if args.max_figwidth else get_maxwidth(format)
+    fmt = get_format(args.outfile, args.format)
+    style = get_style(fmt)
+    figformat = args.figformat if args.figformat else get_figformat(fmt)
+    maxwidth = args.max_figwidth if args.max_figwidth else get_maxwidth(fmt)
     ontodoc = OntoDoc(onto, style=style)
-    docpp = get_docpp(
+    res = get_docpp(
         ontodoc,
         args.template,
         figdir=args.figdir,
@@ -232,20 +235,20 @@ def main():
         maxwidth=maxwidth,
         imported=args.imported,
     )
-    docpp.process()
+    res.process()
 
     try:
-        docpp.write(
+        res.write(
             args.outfile,
             format=args.format,
             pandoc_option_files=args.pandoc_option_files,
             pandoc_options=args.pandoc_options,
             genfile=args.genfile,
         )
-    except subprocess.CalledProcessError as e:
-        os._exit(e.returncode)  # Exit without traceback on pandoc errors
+    except subprocess.CalledProcessError as exc:
+        sys.exit(exc.returncode)  # Exit without traceback on pandoc errors
 
-    return docpp
+    return res
 
 
 if __name__ == "__main__":

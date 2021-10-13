@@ -1,3 +1,5 @@
+"""# `ontopy.factpluspluswrapper.syncfatpp`"""
+# pylint: disable=protected-access
 from collections import defaultdict
 from collections.abc import Sequence
 
@@ -24,7 +26,7 @@ OWL_2_TYPE = {
 }
 
 
-def sync_reasoner_factpp(
+def sync_reasoner_factpp(  # pylint: disable=too-many-locals,too-many-branches
     ontology_or_world=None, infer_property_values=False, debug=1
 ):
     """Run FaCT++ reasoner and load the inferred relations back into
@@ -63,13 +65,15 @@ def sync_reasoner_factpp(
         print("*** Prepare graph")
         # Exclude owl:imports because they are not needed and can
         # cause trouble when loading the inferred ontology
-        g1 = rdflib.Graph()
-        for s, p, o in world.as_rdflib_graph().triples((None, None, None)):
-            if p != OWL.imports:
-                g1.add((s, p, o))
+        graph1 = rdflib.Graph()
+        for subject, predicate, obj in world.as_rdflib_graph().triples(
+            (None, None, None)
+        ):
+            if predicate != OWL.imports:
+                graph1.add((subject, predicate, obj))
 
         print("*** Run FaCT++ reasoner (and postprocess)")
-        g2 = FaCTPPGraph(g1).inferred_graph()
+        graph2 = FaCTPPGraph(graph1).inferred_graph()
 
         print("*** Load inferred ontology")
         # Check all rdfs:subClassOf relations in the inferred graph and add
@@ -78,26 +82,30 @@ def sync_reasoner_factpp(
         new_equivs = defaultdict(list)
         entity_2_type = {}
 
-        for s, p, o in g2.triples((None, None, None)):
+        for subject, predicate, obj in graph2.triples((None, None, None)):
             if (
-                isinstance(s, URIRef)
-                and p in OWL_2_TYPE
-                and isinstance(o, URIRef)
+                isinstance(subject, URIRef)
+                and predicate in OWL_2_TYPE
+                and isinstance(obj, URIRef)
             ):
-                s_storid = ontology._abbreviate(str(s), False)
-                p_storid = ontology._abbreviate(str(p), False)
-                o_storid = ontology._abbreviate(str(o), False)
+                s_storid = ontology._abbreviate(str(subject), False)
+                p_storid = ontology._abbreviate(str(predicate), False)
+                o_storid = ontology._abbreviate(str(obj), False)
                 if (
                     s_storid is not None
                     and p_storid is not None
                     and o_storid is not None
                 ):
-                    if p in (RDFS.subClassOf, RDFS.subPropertyOf, RDF.type):
+                    if predicate in (
+                        RDFS.subClassOf,
+                        RDFS.subPropertyOf,
+                        RDF.type,
+                    ):
                         new_parents[s_storid].append(o_storid)
-                        entity_2_type[s_storid] = OWL_2_TYPE[p]
+                        entity_2_type[s_storid] = OWL_2_TYPE[predicate]
                     else:
                         new_equivs[s_storid].append(o_storid)
-                        entity_2_type[s_storid] = OWL_2_TYPE[p]
+                        entity_2_type[s_storid] = OWL_2_TYPE[predicate]
 
         if infer_property_values:
             inferred_obj_relations = []

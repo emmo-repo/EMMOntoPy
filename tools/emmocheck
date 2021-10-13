@@ -10,7 +10,7 @@ rootdir = os.path.abspath(
 )
 sys.path.insert(1, rootdir)
 
-from emmopy.emmocheck import main  # noqa: E402
+from emmopy.emmocheck import main  # pylint: disable=wrong-import-position
 
 
 if __name__ == "__main__":

@@ -3,10 +3,11 @@
 Python reference API for the
 Elementary Multiperspective Material Ontology (EMMO).
 """
+from glob import glob
 import os
 import re
+
 import setuptools
-from glob import glob
 
 
 rootdir = os.path.dirname(__file__)
@@ -14,27 +15,29 @@ rootdir = os.path.dirname(__file__)
 
 def rglob(patt):
     """Recursive glob function that only returns ordinary files."""
-    return [f for f in glob(patt, recursive=True) if os.path.isfile(f)]
+    return [_ for _ in glob(patt, recursive=True) if os.path.isfile(_)]
 
 
 def fglob(patt):
     """Glob function that only returns ordinary files."""
-    return [f for f in glob(patt) if os.path.isfile(f) and not f.endswith("~")]
+    return [_ for _ in glob(patt) if os.path.isfile(_) and not _.endswith("~")]
 
 
 # Read long description from README.md file replacing references to local
 # files to github urls
-baseurl = "https://raw.githubusercontent.com/emmo-repo/EMMO-python/master/"
-with open(os.path.join(rootdir, "README.md"), "rt") as f:
+BASE_URL = "https://raw.githubusercontent.com/emmo-repo/EMMO-python/master/"
+with open(os.path.join(rootdir, "README.md"), "rt", encoding="utf8") as handle:
     long_description = re.sub(
-        r"(\[[^]]+\])\(([^:)]+)\)", r"\1(%s\2)" % baseurl, f.read()
+        r"(\[[^]]+\])\(([^:)]+)\)", fr"\1({BASE_URL}\2)", handle.read()
     )
 
 # Read requirements from requirements.txt file
-with open(os.path.join(rootdir, "requirements.txt"), "rt") as f:
+with open(
+    os.path.join(rootdir, "requirements.txt"), "rt", encoding="utf8"
+) as handle:
     REQUIREMENTS = [
         f"{_.strip()}"
-        for _ in f.readlines()
+        for _ in handle.readlines()
         if not _.startswith("#") and "git+" not in _
     ]
 
@@ -57,7 +60,9 @@ with open(
     ] + DOCS
 
 # Retrieve emmo-package version
-with open(os.path.join(rootdir, "ontopy/__init__.py")) as handle:
+with open(
+    os.path.join(rootdir, "ontopy/__init__.py"), encoding="utf8"
+) as handle:
     for line in handle:
         match = re.match(r"__version__ = ('|\")(?P<version>.*)('|\")", line)
         if match is not None:

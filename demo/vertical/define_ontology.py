@@ -33,6 +33,7 @@ References
 [1] Khalid et al. Proc. Manufact. 15 (2018) 1407
 
 """
+# pylint: disable=fixme,invalid-name,too-few-public-methods
 from ontopy import World
 
 
@@ -56,8 +57,6 @@ with onto:
     class hasType(emmo.hasConvention):
         """Associates a type (string, number...) to a property."""
 
-        pass
-
     class isTypeOf(emmo.hasConvention):
         """Associates a property to a type (string, number...)."""
 
@@ -69,10 +68,14 @@ with onto:
 
     # TODO: remove
     class SquareLengthDimension(emmo.PhysicalDimension):
+        """Squared length dimension."""
+
         is_a = [emmo.hasSymbolData.value("T0 L2 M0 I0 Θ0 N0 J0")]
 
     # TODO: remove
     class SquareMetre(emmo.SICoherentDerivedUnit):
+        """A square metre unit."""
+
         emmo.altLabel = ["m²"]
         is_a = [emmo.hasPhysicalDimension.only(SquareLengthDimension)]
 
@@ -177,6 +180,8 @@ with onto:
         ]
 
     class InterfaceModel(CrystalUnitCell):
+        """A crystal interface."""
+
         is_a = [emmo.hasProperty.some(Area)]
 
     class Crystal(emmo.Solid):

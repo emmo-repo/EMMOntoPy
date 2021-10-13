@@ -4,12 +4,13 @@ This module is copied from the SimPhoNy project.
 
 Original author: Matthias Urban
 """
+import argparse
+import logging
 import os
 import subprocess  # nosec
-import logging
-import rdflib
 import tempfile
-import argparse
+
+import rdflib
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,6 @@ class OwlApiInterface:
 
     def __init__(self):
         """Initialize the interface."""
-        pass
 
     def reason(self, graph):
         """Generate the inferred axioms for a given Graph.
@@ -29,9 +29,9 @@ class OwlApiInterface:
         Args:
             graph (Graph): An rdflib graph to execute the reasoner on.
         """
-        with tempfile.NamedTemporaryFile("wt") as f:
-            graph.serialize(f.name, format="xml")
-            return self._run(f.name, command="--run-reasoner")
+        with tempfile.NamedTemporaryFile("wt") as tmpdir:
+            graph.serialize(tmpdir.name, format="xml")
+            return self._run(tmpdir.name, command="--run-reasoner")
 
     def reason_files(self, *owl_files):
         """Merge the given owl and generate the inferred axioms.
@@ -49,7 +49,8 @@ class OwlApiInterface:
         """
         return self._run(*owl_files, command="--merge-only")
 
-    def _run(self, *owl_files, command, output_file=None, return_graph=True):
+    @staticmethod
+    def _run(*owl_files, command, output_file=None, return_graph=True):
         """Run the FaCT++ reasoner using a java command.
 
         Args:
@@ -74,11 +75,11 @@ class OwlApiInterface:
                 "-Djava.library.path=" + java_base + "/lib/so",
                 "org.simphony.OntologyLoader",
             ]
-            + ["%s" % command]
+            + [command]
             + list(owl_files)
         )
         logger.info("Running Reasoner")
-        logger.debug(f"Command {cmd}")
+        logger.debug("Command %s", cmd)
         subprocess.run(cmd, check=True)  # nosec
 
         graph = None
@@ -107,7 +108,7 @@ def reason_from_terminal():
     parser.add_argument("output_file", help="Path to store inferred axioms to.")
 
     args = parser.parse_args()
-    OwlApiInterface()._run(
+    OwlApiInterface()._run(  # pylint: disable=protected-access
         *args.owl_file,
         command="--run-reasoner",
         return_graph=False,

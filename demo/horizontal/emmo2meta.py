@@ -174,12 +174,13 @@ class EMMO2Meta:
         def get_dim(restriction, name, descr=None):
             """Returns dimension index corresponding to dimension name `name`
             for property `restriction.value`."""
+            # pylint: disable=protected-access
             result = []
             restriction_type = (
                 owlready2.class_construct._restriction_type_2_label[
                     restriction.type
                 ]
-            )  # pylint: disable=protected-access
+            )
             if restriction_type in ("some", "only", "min") or (
                 restriction_type in ("max", "exactly")
                 and restriction.cardinality > 1
@@ -272,9 +273,9 @@ class EMMO2Meta:
 
     def add_restriction(self, restriction):
         """Adds owl restriction to collection and returns a reference to it."""
-        restriction_type = owlready2.class_construct._restriction_type_2_label[
+        restriction_type = owlready2.class_construct._restriction_type_2_label[  # pylint: disable=protected-access
             restriction.type
-        ]  # pylint: disable=protected-access
+        ]
         cardinality = restriction.cardinality if restriction.cardinality else 0
         entity = self.add_restriction_entity()
         inst = entity()

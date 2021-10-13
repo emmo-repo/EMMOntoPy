@@ -18,6 +18,7 @@ from ontopy.factpluspluswrapper.factppgraph import FaCTPPGraph
 
 
 def main():
+    """Main run function."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", help="IRI/file to OWL source.")
     parser.add_argument("output", help="Output file name.")
@@ -111,12 +112,12 @@ def main():
                 url_from_catalog=args.url_from_catalog,
             )
         elif args.inferred:
-            g = squash_imported(args.input, None, input_format=input_format)
-            fg = FaCTPPGraph(g)
+            graph = squash_imported(args.input, None, input_format=input_format)
+            factpp_graph = FaCTPPGraph(graph)
             if args.base_iri:
-                fg.base_iri = args.base_iri
-            g2 = fg.inferred_graph()
-            g2.serialize(destination=args.output, format=output_format)
+                factpp_graph.base_iri = args.base_iri
+            graph2 = factpp_graph.inferred_graph()
+            graph2.serialize(destination=args.output, format=output_format)
         elif args.squash:
             squash_imported(
                 args.input,
@@ -132,7 +133,9 @@ def main():
                 output_format == FMAP.get("ttl", "")
                 or os.path.splitext(args.output)[1] == "ttl"
             ):
-                from rdflib import __version__ as __rdflib_version__
+                from rdflib import (  # pylint: disable=import-outside-toplevel
+                    __version__ as __rdflib_version__,
+                )
 
                 warnings.warn(
                     IncompatibleVersion(
@@ -144,9 +147,9 @@ def main():
                     )
                 )
 
-            g = Graph()
-            g.parse(args.input, format=input_format)
-            g.serialize(destination=args.output, format=output_format)
+            graph = Graph()
+            graph.parse(args.input, format=input_format)
+            graph.serialize(destination=args.output, format=output_format)
 
         for warning in warnings_handle:
             print(

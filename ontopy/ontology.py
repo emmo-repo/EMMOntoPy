@@ -8,7 +8,7 @@ The class extension is defined within.
 
 If desirable some of this may be moved back into owlready2.
 """
-# pylint: disable=too-many-lines,fixme,arguments-differ
+# pylint: disable=too-many-lines,fixme,arguments-differ,protected-access
 import os
 import itertools
 import inspect
@@ -115,7 +115,9 @@ class World(owlready2.World):
         return onto
 
 
-class Ontology(owlready2.Ontology, OntoGraph):
+class Ontology(  # pylint: disable=too-many-public-methods
+    owlready2.Ontology, OntoGraph
+):
     """A generic class extending owlready2.Ontology."""
 
     # Properties controlling what annotations that are considered by
@@ -253,11 +255,11 @@ class Ontology(owlready2.Ontology, OntoGraph):
         if "namespaces" in self.__dict__:
             if namespace:
                 if namespace in self.namespaces:
-                    for e in self.get_by_label_all(
+                    for entity in self.get_by_label_all(
                         label, label_annotations=label_annotations
                     ):
-                        if e.namespace == self.namespaces[namespace]:
-                            return e
+                        if entity.namespace == self.namespaces[namespace]:
+                            return entity
                 raise NoSuchLabelError(
                     f"No label annotations matches {label!r} in namespace "
                     f"{namespace!r}"
@@ -266,7 +268,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 return self.namespaces[label]
 
         if label_annotations is None:
-            annotations = (la.name for la in self.label_annotations)
+            annotations = (_.name for _ in self.label_annotations)
         else:
             annotations = (
                 _.name if hasattr(_, "storid") else _ for _ in label_annotations
@@ -415,7 +417,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
         **kwargs,
     ):
         """Help function for _load()."""
-        # pylint: disable=protected-access
         web_protocol = "http://", "https://", "ftp://"
 
         url = filename if filename else self.base_iri.rstrip("/#")
@@ -583,9 +584,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
         if not _validate_installed_version(
             package="rdflib", min_version="6.0.0"
         ) and format == FMAP.get("ttl", ""):
-            from rdflib import (
+            from rdflib import (  # pylint: disable=import-outside-toplevel
                 __version__ as __rdflib_version__,
-            )  # pylint: disable=import-outside-toplevel
+            )
 
             warnings.warn(
                 IncompatibleVersion(
@@ -682,8 +683,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """
         if imported:
             return self.world.object_properties()
-        else:
-            return super().object_properties()
+        return super().object_properties()
 
     def data_properties(self, imported=False):
         """Returns an generator over all data properties.
@@ -800,9 +800,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
             sync = sync_reasoner_factpp
         else:
             raise ValueError(
-                'unknown reasoner %r. Supported reasoners are "Pellet", '
-                '"HermiT" and "FaCT++".',
-                reasoner,
+                f"unknown reasoner {reasoner!r}. Supported reasoners are "
+                '"Pellet", "HermiT" and "FaCT++".'
             )
 
         if include_imported:
@@ -811,7 +810,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         else:
             sync([self], **kwargs)
 
-    def sync_attributes(
+    def sync_attributes(  # pylint: disable=too-many-branches
         self,
         name_policy=None,
         name_prefix="",
@@ -853,6 +852,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 # no prefLabel - create new annotation property..
                 with self:
 
+                    # pylint: disable=invalid-name,missing-class-docstring
+                    # pylint: disable=unused-variable
                     class prefLabel(owlready2.label):
                         pass
 
@@ -869,7 +870,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 # no prefLabel - create new annotation property..
                 with self:
 
-                    class prefLabel(owlready2.label):  # noqa: F811
+                    # pylint: disable=invalid-name,missing-class-docstring
+                    # pylint: disable=function-redefined
+                    class prefLabel(owlready2.label):
                         pass
 
                 ind.prefLabel = [locstr(ind.name, lang="en")]
@@ -890,12 +893,12 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 )
         elif name_policy == "sequential":
             for obj in chain:
-                n = 0
-                while f"{self.base_iri}{name_prefix}{n}" in self:
-                    n += 1
-                obj.name = name_prefix + str(n)
+                counter = 0
+                while f"{self.base_iri}{name_prefix}{counter}" in self:
+                    counter += 1
+                obj.name = name_prefix + str(counter)
         elif name_policy is not None:
-            raise TypeError("invalid name_policy: %r" % (name_policy,))
+            raise TypeError(f"invalid name_policy: {name_policy!r}")
 
         if sync_imported:
             for onto in self.imported_ontologies:
@@ -921,15 +924,17 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         if isinstance(entity, str):
             entity = self.get_by_label(entity)
-        d = {"comment": getattr(entity, "comment", "")}
-        for a in self.annotation_properties():
-            d[a.label.first()] = [
-                o.strip('"')
-                for s, p, o in self.get_triples(entity.storid, a.storid, None)
+        res = {"comment": getattr(entity, "comment", "")}
+        for annotation in self.annotation_properties():
+            res[annotation.label.first()] = [
+                obj.strip('"')
+                for _, _, obj in self.get_triples(
+                    entity.storid, annotation.storid, None
+                )
             ]
-        return d
+        return res
 
-    def get_branch(
+    def get_branch(  # pylint: disable=too-many-arguments
         self,
         root,
         leafs=(),
@@ -965,7 +970,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 branch = {
                     root,
                 }
-                for c in root.subclasses():
+                for cls in root.subclasses():
                     # Defining a branch is actually quite tricky.  Consider
                     # the case:
                     #
@@ -979,8 +984,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
                     # mentation will see that A is a child of the root and
                     # include it.  Requireing that the R should be a strict
                     # parent of A solves this.
-                    if root in c.get_parents(strict=True):
-                        branch.update(_branch(c, leafs))
+                    if root in cls.get_parents(strict=True):
+                        branch.update(_branch(cls, leafs))
             else:
                 branch = (
                     {
@@ -1024,7 +1029,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Sort according to depth, then by label
         if sort:
             branch = sorted(
-                sorted(branch, key=lambda x: asstring(x)),
+                sorted(branch, key=asstring),
                 key=lambda x: len(x.mro()),
             )
 
@@ -1050,18 +1055,17 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         If `as_iri` is True, the full versionIRI is returned.
         """
-        versionIRI_storid = self.world._abbreviate(
+        version_iri_storid = self.world._abbreviate(
             "http://www.w3.org/2002/07/owl#versionIRI"
         )
-        tokens = self.get_triples(s=self.storid, p=versionIRI_storid)
+        tokens = self.get_triples(s=self.storid, p=version_iri_storid)
         if not tokens:
-            raise TypeError("No versionIRI in Ontology %r" % self.base_iri)
-        s, p, o = tokens[0]
-        versionIRI = self.world._unabbreviate(o)
+            raise TypeError(f"No versionIRI in Ontology {self.base_iri!r}")
+        _, _, obj = tokens[0]
+        version_iri = self.world._unabbreviate(obj)
         if as_iri:
-            return versionIRI
-        else:
-            return infer_version(self.base_iri, versionIRI)
+            return version_iri
+        return infer_version(self.base_iri, version_iri)
 
     def set_version(self, version=None, version_iri=None):
         """Assign version to ontology by asigning owl:versionIRI.
@@ -1069,10 +1073,12 @@ class Ontology(owlready2.Ontology, OntoGraph):
         If `version` but not `version_iri` is provided, the version
         IRI will be the combination of `base_iri` and `version`.
         """
-        versionIRI = "http://www.w3.org/2002/07/owl#versionIRI"
-        versionIRI_storid = self.world._abbreviate(versionIRI)
-        if self._has_obj_triple_spo(s=self.storid, p=versionIRI_storid):
-            self._del_obj_triple_spo(s=self.storid, p=versionIRI_storid)
+        _version_iri = "http://www.w3.org/2002/07/owl#versionIRI"
+        version_iri_storid = self.world._abbreviate(_version_iri)
+        if self._has_obj_triple_spo(
+            subject=self.storid, predicate=version_iri_storid
+        ):
+            self._del_obj_triple_spo(s=self.storid, p=version_iri_storid)
 
         if not version_iri:
             if not version:
@@ -1084,7 +1090,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         self._add_obj_triple_spo(
             s=self.storid,
-            p=self.world._abbreviate(versionIRI),
+            p=self.world._abbreviate(_version_iri),
             o=self.world._abbreviate(version_iri),
         )
 
@@ -1093,11 +1099,13 @@ class Ontology(owlready2.Ontology, OntoGraph):
 
         Note that this method requires the Python graphviz package.
         """
-        from ontopy.graph import OntoGraph
+        # pylint: disable=import-outside-toplevel
+        from ontopy.graph import OntoGraph as NewOntoGraph
 
-        return OntoGraph(self, **kwargs)
+        return NewOntoGraph(self, **kwargs)
 
-    def common_ancestors(self, cls1, cls2):
+    @staticmethod
+    def common_ancestors(cls1, cls2):
         """Return a list of common ancestors for `cls1` and `cls2`."""
         return set(cls1.ancestors()).intersection(cls2.ancestors())
 
@@ -1107,13 +1115,13 @@ class Ontology(owlready2.Ontology, OntoGraph):
             raise ValueError("Descendant is not a descendant of ancestor")
         return self._number_of_generations(descendant, ancestor, 0)
 
-    def _number_of_generations(self, descendant, ancestor, n):
+    def _number_of_generations(self, descendant, ancestor, counter):
         """Recursive help function to number_of_generations(), return
-        distance between a ancestor-descendant pair (n+1)."""
+        distance between a ancestor-descendant pair (counter+1)."""
         if descendant.name == ancestor.name:
-            return n
+            return counter
         return min(
-            self._number_of_generations(parent, ancestor, n + 1)
+            self._number_of_generations(parent, ancestor, counter + 1)
             for parent in descendant.get_parents()
             if ancestor in parent.ancestors()
         )
@@ -1131,7 +1139,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
             if distance == min(distances.values())
         ]
 
-    def closest_common_ancestor(self, *classes):
+    @staticmethod
+    def closest_common_ancestor(*classes):
         """Returns closest_common_ancestor for the given classes."""
         mros = [cls.mro() for cls in classes]
         track = defaultdict(int)
@@ -1161,33 +1170,32 @@ class Ontology(owlready2.Ontology, OntoGraph):
         if not classes:
             return ancestors
 
-        def addancestors(e, n, s):
-            if n > 0:
-                for p in e.get_parents(strict=True):
-                    s.add(p)
-                    addancestors(p, n - 1, s)
+        def addancestors(entity, counter, subject):
+            if counter > 0:
+                for parent in entity.get_parents(strict=True):
+                    subject.add(parent)
+                    addancestors(parent, counter - 1, subject)
 
         if isinstance(include, str) and include.isdigit():
             include = int(include)
 
         if include == "all":
-            ancestors.update(*(c.ancestors() for c in classes))
+            ancestors.update(*(_.ancestors() for _ in classes))
         elif include == "closest":
             closest = self.closest_common_ancestor(*classes)
-            for c in classes:
+            for cls in classes:
                 ancestors.update(
-                    a for a in c.ancestors() if closest in a.ancestors()
+                    _ for _ in cls.ancestors() if closest in _.ancestors()
                 )
         elif isinstance(include, int):
-            for e in classes:
-                addancestors(e, int(include), ancestors)
+            for entity in classes:
+                addancestors(entity, int(include), ancestors)
         elif include not in (None, "None", "none", ""):
             raise ValueError('include must be "all", "closest" or None')
 
         if strict:
             return ancestors.difference(classes)
-        else:
-            return ancestors
+        return ancestors
 
     def get_wu_palmer_measure(self, cls1, cls2):
         """Return Wu-Palmer measure for semantic similarity.
@@ -1199,9 +1207,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """
         cca = self.closest_common_ancestor(cls1, cls2)
         ccadepth = self.number_of_generations(cca, self.Thing)
-        n1 = self.number_of_generations(cls1, cca)
-        n2 = self.number_of_generations(cls2, cca)
-        return 2 * ccadepth / (n1 + n2 + 2 * ccadepth)
+        generations1 = self.number_of_generations(cls1, cca)
+        generations2 = self.number_of_generations(cls2, cca)
+        return 2 * ccadepth / (generations1 + generations2 + 2 * ccadepth)
 
     def new_entity(self, name, parent):
         """Create and return new entity
@@ -1210,5 +1218,5 @@ class Ontology(owlready2.Ontology, OntoGraph):
         Return the new entity
         """
         with self:
-            e = types.new_class(name, (parent,))
-        return e
+            entity = types.new_class(name, (parent,))
+        return entity

@@ -18,7 +18,6 @@ Example configuration file:
       - name_of_test_to_enable
 
 """
-import os
 import sys
 import re
 import unittest
@@ -90,8 +89,9 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         )
 
         if (
-            "prefLabel" in self.onto.world._props
-        ):  # pylint: disable=protected-access
+            "prefLabel"
+            in self.onto.world._props  # pylint: disable=protected-access
+        ):
             for entity in self.onto.get_entities():
                 if repr(entity) not in exceptions:
                     with self.subTest(

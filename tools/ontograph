@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Tool for visualising ontologies."""
+# pylint: disable=wrong-import-position,wrong-import-order
 import sys
 import os
 import argparse
@@ -11,13 +12,14 @@ rootdir = os.path.abspath(
 )
 sys.path.insert(1, rootdir)
 
-from ontopy import World, onto_path  # noqa: E402
-from ontopy.graph import OntoGraph, plot_modules, _default_style  # noqa: E402
+from ontopy import World, onto_path
+from ontopy.graph import OntoGraph, plot_modules, _default_style
 from ontopy.utils import get_label
-import owlready2  # noqa: E402
+import owlready2
 
 
-def main():
+def main():  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
+    """Main run function."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "iri",
@@ -205,13 +207,13 @@ def main():
 
     # Update style from json file
     if args.style_file:
-        with open(args.style_file, "rt") as f:
-            style.update(json.load(f))
+        with open(args.style_file, "rt", encoding="utf8") as handle:
+            style.update(json.load(handle))
 
     # Write style to json file
     if args.generate_style_file:
-        with open(args.generate_style_file, "wt") as f:
-            json.dump(style, f, indent=4)
+        with open(args.generate_style_file, "wt", encoding="utf8") as handle:
+            json.dump(style, handle, indent=4)
 
     # Join all --leafs options
     leafs = set()
@@ -223,11 +225,11 @@ def main():
 
     # Join all --exclude options
     exclude = set()
-    for e in args.exclude:
-        if "," in e:
-            exclude.update(e.split(","))
+    for exclude_option in args.exclude:
+        if "," in exclude_option:
+            exclude.update(exclude_option.split(","))
         else:
-            exclude.add(e)
+            exclude.add(exclude_option)
 
     # Split relations
     relations = None
@@ -248,8 +250,8 @@ def main():
             url_from_catalog=args.url_from_catalog,
             catalog_file=args.catalog_file,
         )
-    except owlready2.OwlReadyOntologyParsingError as e:
-        parser.error("error parsing %r: %s" % (args.iri, e))
+    except owlready2.OwlReadyOntologyParsingError as exc:
+        parser.error(f"error parsing {args.iri!r}: {exc}")
 
     # Sync reasoner
     if args.reasoner:

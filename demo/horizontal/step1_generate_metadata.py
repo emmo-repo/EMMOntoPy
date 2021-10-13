@@ -19,8 +19,8 @@ The generated  metadata is finally serialised into a JSON file.
 """
 import os
 
-from ontopy import get_ontology
 from emmo2meta import EMMO2Meta
+from ontopy import get_ontology
 
 
 # Load our ontology from the vertical case
@@ -51,5 +51,5 @@ e = EMMO2Meta(ontology=onto, classes=classes, collid="usercase_ontology")
 e.save("json", "usercase_metadata.json", "mode=w")
 
 print("Generated metadata for the usercase ontology:")
-print("  %d instances" % e.coll.count())
-print("  %d relations" % len(list(e.coll.relations())))
+print(f"  {e.coll.count()} instances")
+print(f"  {len(list(e.coll.relations()))} relations")
