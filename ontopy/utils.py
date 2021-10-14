@@ -55,121 +55,120 @@ def isinteractive():
     )
 
 
-def get_label(e):
-    """Returns the label of entity `e`."""
-    if hasattr(e, "prefLabel") and e.prefLabel:
-        return e.prefLabel.first()
-    if hasattr(e, "label") and e.label:
-        return e.label.first()
-    elif hasattr(e, "__name__"):
-        return e.__name__
-    elif hasattr(e, "name"):
-        return str(e.name)
-    elif isinstance(e, str):
-        return e
-    else:
-        return repr(e)
+def get_label(entity):
+    """Returns the label of an entity."""
+    if hasattr(entity, "prefLabel") and entity.prefLabel:
+        return entity.prefLabel.first()
+    if hasattr(entity, "label") and entity.label:
+        return entity.label.first()
+    if hasattr(entity, "__name__"):
+        return entity.__name__
+    if hasattr(entity, "name"):
+        return str(entity.name)
+    if isinstance(entity, str):
+        return entity
+    return repr(entity)
 
 
-def asstring(expr, link="{name}", n=0, exclude_object=False):
+def asstring(expr, link="{name}", recursion_depth=0, exclude_object=False):
     """Returns a string representation of `expr`, which may be an entity,
     restriction, or logical expression of these.  `link` is a format
     string for formatting references to entities or relations.  It may
     contain the keywords "name", "url" and "lowerurl".
-    `n` is the recursion depth and only intended for internal use.
-    If `exclude_object` is true, the object will be excluded in restrictions.
+    `recursion_depth` is the recursion depth and only intended for internal
+    use. If `exclude_object` is true, the object will be excluded in
+    restrictions.
     """
 
-    def fmt(e):
-        """Returns the formatted label of `e`."""
+    def fmt(entity):
+        """Returns the formatted label of an entity."""
         name = None
         for attr in ("prefLabel", "label", "__name__", "name"):
-            if hasattr(e, attr) and getattr(e, attr):
-                name = getattr(e, attr)
+            if hasattr(entity, attr) and getattr(entity, attr):
+                name = getattr(entity, attr)
                 if not isinstance(name, str) and hasattr(name, "__getitem__"):
                     name = name[0]
                 break
         if not name:
-            name = str(e).replace(".", ":")
+            name = str(entity).replace(".", ":")
         url = name if re.match(r"^[a-z]+://", name) else "#" + name
         return link.format(name=name, url=url, lowerurl=url.lower())
 
     if isinstance(expr, str):
         # return link.format(name=expr)
         return fmt(expr)
-    elif isinstance(expr, owlready2.Restriction):
+    if isinstance(expr, owlready2.Restriction):
         rlabel = owlready2.class_construct._restriction_type_2_label[expr.type]
 
         if isinstance(
             expr.property,
             (owlready2.ObjectPropertyClass, owlready2.DataPropertyClass),
         ):
-            s = fmt(expr.property)
+            res = fmt(expr.property)
         elif isinstance(expr.property, owlready2.Inverse):
-            s = "Inverse(%s)" % asstring(expr.property.property, link, n + 1)
+            res = f"Inverse({asstring(expr.property.property, link, recursion_depth + 1)})"
         else:
             print(
-                "*** WARNING: unknown restriction property: %r" % expr.property
+                f"*** WARNING: unknown restriction property: {expr.property!r}"
             )
-            s = fmt(expr.property)
+            res = fmt(expr.property)
 
         if not rlabel:
             pass
         elif expr.type in (owlready2.MIN, owlready2.MAX, owlready2.EXACTLY):
-            s += " %s %d" % (rlabel, expr.cardinality)
+            res += f" {rlabel} {expr.cardinality}"
         elif expr.type in (
             owlready2.SOME,
             owlready2.ONLY,
             owlready2.VALUE,
             owlready2.HAS_SELF,
         ):
-            s += " %s" % rlabel
+            res += f" {rlabel}"
         else:
             print("*** WARNING: unknown relation", expr, rlabel)
-            s += " %s" % rlabel
+            res += f" {rlabel}"
 
         if not exclude_object:
             if isinstance(expr.value, str):
-                s += ' "%s"' % asstring(expr.value, link, n + 1)
+                res += f" {asstring(expr.value, link, recursion_depth + 1)!r}"
             else:
-                s += " %s" % asstring(expr.value, link, n + 1)
-        return s
-
-    elif isinstance(expr, owlready2.Or):
-        s = "%s" if n == 0 else "(%s)"
-        return s % " or ".join([asstring(c, link, n + 1) for c in expr.Classes])
-    elif isinstance(expr, owlready2.And):
-        s = "%s" if n == 0 else "(%s)"
-        return s % " and ".join(
-            [asstring(c, link, n + 1) for c in expr.Classes]
+                res += f" {asstring(expr.value, link, recursion_depth + 1)}"
+        return res
+    if isinstance(expr, owlready2.Or):
+        res = " or ".join([asstring(c, link, recursion_depth + 1) for c in expr.Classes])
+        return res if recursion_depth == 0 else f"({res})"
+    if isinstance(expr, owlready2.And):
+        res = " and ".join(
+            [asstring(c, link, recursion_depth + 1) for c in expr.Classes]
         )
-    elif isinstance(expr, owlready2.Not):
-        return "not %s" % asstring(expr.Class, link, n + 1)
-    elif isinstance(expr, owlready2.ThingClass):
+        return res if recursion_depth == 0 else f"({res})"
+    if isinstance(expr, owlready2.Not):
+        return f"not {asstring(expr.Class, link, recursion_depth + 1)}"
+    if isinstance(expr, owlready2.ThingClass):
         return fmt(expr)
-    elif isinstance(expr, owlready2.PropertyClass):
+    if isinstance(expr, owlready2.PropertyClass):
         return fmt(expr)
-    elif isinstance(expr, owlready2.Thing):  # instance (individual)
+    if isinstance(expr, owlready2.Thing):  # instance (individual)
         return fmt(expr)
-    elif isinstance(expr, owlready2.class_construct.Inverse):
+    if isinstance(expr, owlready2.class_construct.Inverse):
         return "inverse(%s)" % fmt(expr.property)
-    elif isinstance(expr, owlready2.disjoint.AllDisjoint):
+    if isinstance(expr, owlready2.disjoint.AllDisjoint):
         return fmt(expr)
-    elif isinstance(expr, (bool, int, float)):
+    if isinstance(expr, (bool, int, float)):
         return repr(expr)
     # Check for subclasses
-    elif issubclass(expr, (bool, int, float, str)):
+    if issubclass(expr, (bool, int, float, str)):
         return fmt(expr.__class__.__name__)
-    elif issubclass(expr, datetime.date):
+    if issubclass(expr, datetime.date):
         return "date"
-    elif issubclass(expr, datetime.time):
+    if issubclass(expr, datetime.time):
         return "datetime"
-    elif issubclass(expr, datetime.datetime):
+    if issubclass(expr, datetime.datetime):
         return "datetime"
-    else:
-        raise RuntimeError(
-            "Unknown expression: %r (type: %r)" % (expr, type(expr))
-        )
+
+    raise RuntimeError(
+        "Unknown expression: %r (type: %r)" % (expr, type(expr))
+    )
 
 
 def camelsplit(s):
