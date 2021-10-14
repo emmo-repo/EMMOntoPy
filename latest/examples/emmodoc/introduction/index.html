@@ -14,7 +14,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/examples/emmodoc/introduction/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.3.2">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.3">
     
     
       
@@ -22,7 +22,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.24c991ad.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.5143246d.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -1438,7 +1438,7 @@
 <p>EMMO is a multidisciplinary effort to develop a standard representational framework (the ontology) based on current materials modelling knowledge, including physical sciences, analytical philosophy and information and communication technologies.
 This multidisciplinarity is illustrated by the figure on the title page.
 It provides the connection between the physical world, materials characterisation world and materials modelling world.</p>
-<p><img alt="EMMO provides the connection between the physical world, materials characterisation world and materials modelling world." src="../figs/emmo-three_worlds.png" />{ width=620px }</p>
+<p><img alt="EMMO provides the connection between the physical world, materials characterisation world and materials modelling world." src="../figs/emmo-three_worlds.png" width="620px" /></p>
 <p>EMMO is based on and is consistent with the <a href="https://publications.europa.eu/en/publication-detail/-/publication/ec1455c3-d7ca-11e6-ad7c-01aa75ed71a1">Review of Materials Modelling</a>, <a href="https://www.cen.eu/news/workshops/Pages/WS_2016-013.aspx">CEN Workshop Agreement</a> and <a href="https://emmc.info/moda-workflow-templates/">MODA template</a>.
 However, while these efforts are written for humans, EMMO is defined using the <a href="https://en.wikipedia.org/wiki/Web_Ontology_Language">Web Ontology Language (OWL)</a>, which is machine readable and allows for machine reasoning.
 In terms of semantic representation, EMMO brings everything to a much higher level than these foundations.</p>
@@ -1453,7 +1453,7 @@ In terms of semantic representation, EMMO brings everything to a much higher lev
 <li>the <strong>numerical solver</strong> that performs the calculations; and</li>
 <li>the <strong>post processing</strong> of experimental or simulated data.</li>
 </ul>
-<p><img alt="The aspects of materials modelling and characterisation covered by EMMO." src="../figs/emmo-scope.png" />{ width=360px }</p>
+<p><img alt="The aspects of materials modelling and characterisation covered by EMMO." src="../figs/emmo-scope.png" width="360px" /></p>
 <p>EMMO is released under the <a href="http://emmo.info/blob/v1.0.0/LICENSE.md">Creative Commons license</a> and is available at <a href="https://github.com/emmo-repo/EMMO/">emmo.info/</a>.
 The OWL2-DL sources are available in RDF/XML format.</p>
 <h2 id="what-is-an-ontology">What is an ontology<a class="headerlink" href="#what-is-an-ontology" title="Permanent link">&para;</a></h2>
@@ -1469,14 +1469,14 @@ Another useful introduction to ontologies is the paper <a href="http://www.ksl.s
 Hence, it is a subset of the ontology excluding all but the <code>is_a</code> relations.
 The main use of taxonomies is for the organisation of classifications.
 The figure shows a simple example of a taxonomy illustrating a categorisation of four classes into a hierarchy of more higher of levels of generality.</p>
-<p><img alt="Example of a taxonomy." src="../figs/animal.png" />{ width=300px }</p>
+<p><img alt="Example of a taxonomy." src="../figs/animal.png" width="300px" /></p>
 <p>In EMMO, the taxonomy is a rooted directed acyclic graph (DAG).
 This is important since many classification methods relies on this property, see e.g. <a href="https://arxiv.org/abs/1406.4472">Valentini (2014)</a> and <a href="https://www.google.no/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;ved=0ahUKEwi_2vv-8tXbAhUFiiwKHVRdD4EQFgg1MAE&amp;url=https%3A%2F%2Fwww.springer.com%2Fcda%2Fcontent%2Fdocument%2Fcda_downloaddocument%2F9783319202471-c2.pdf%3FSGWID%3D0-0-45-1510685-p177420182&amp;usg=AOvVaw39c3v4a5PfVMEYDulWpF3w">Robison et al (2015)</a>.
 Note, that EMMO is a DAG does not prevent some classes from having more than one parent.
 A <code>Variable</code> is for instance both a <code>Mathematical</code> and a <code>Symbol</code>.
-See [appendix][Appendix] for the full EMMO taxonomy.</p>
+See appendix for the full EMMO taxonomy.</p>
 <h2 id="primitive-elements-in-emmo">Primitive elements in EMMO<a class="headerlink" href="#primitive-elements-in-emmo" title="Permanent link">&para;</a></h2>
-<p><img alt="The primitive building blocks of EMMO." src="../figs/emmo-primitives.png" />{ width=620px }</p>
+<p><img alt="The primitive building blocks of EMMO." src="../figs/emmo-primitives.png" width="620px" /></p>
 <h3 id="individuals">Individuals<a class="headerlink" href="#individuals" title="Permanent link">&para;</a></h3>
 <p>Individuals are the basic, "ground level" components of EMMO.
 They may include concrete objects such as cars, flowers, stars, persons and molecules, as well as abstract individuals such as a measured height, a specific equation and software programs.</p>
@@ -1550,7 +1550,7 @@ EMMO is compatible with both the De Broglie - Bohm and the Copenhagen interpreta
 <p><a href="#existent"><code>Existent</code></a> is a succession of states.</p>
 </li>
 </ul>
-<p><img alt="Parthood hierachy under Physical." src="../figs/physical.png" />{ width=600px }</p>
+<p><img alt="Parthood hierachy under Physical." src="../figs/physical.png" width="600px" /></p>
 <h3 id="metrology">Metrology<a class="headerlink" href="#metrology" title="Permanent link">&para;</a></h3>
 <p>Metrology is the science of measurements.
 It introduces units and links them to properties.
@@ -1680,7 +1680,7 @@ There must be at least one matching property value.</p>
 <h2 id="the-structure-of-emmo">The structure of EMMO<a class="headerlink" href="#the-structure-of-emmo" title="Permanent link">&para;</a></h2>
 <p>The EMMO ontology is structured in shells, expressed by specific ontology fragments, that extends from fundamental concepts to the application domains, following the dependency flow.</p>
 <h3 id="top-level">Top Level<a class="headerlink" href="#top-level" title="Permanent link">&para;</a></h3>
-<p>The <a href="top.owl">EMMO top level</a> is the group of fundamental axioms that constitute the philosophical foundation of the EMMO.
+<p>The EMMO top level is the group of fundamental axioms that constitute the philosophical foundation of the EMMO.
 Adopting a physicalistic/nominalistic perspective, the EMMO defines real world objects as 4D objects that are always extended in space and time (i.e. real world objects cannot be spaceless nor timeless).
 For this reason abstract objects, i.e. objects that does not extend in space and time, are forbidden in the EMMO.</p>
 <p>EMMO is strongly based on the analytical philosophy dicipline semiotic.
@@ -1688,15 +1688,15 @@ The role of abstract objects are in EMMO fulfilled by semiotic objects, i.e. rea
 These symbols appear in actions (semiotic processes) meant to communicate meaning by establishing relationships between symbols (signs).</p>
 <p>Another important building block of from analytical philosophy is atomistic mereology applied to 4D objects.
 The EMMO calls it 'quantum mereology', since the there is a epistemological limit to how fine we can resolve space and time due to the uncertanity principles.</p>
-<p>The <a href="top/mereotopology.owl">mereotopology</a> module introduces the fundamental mereotopological concepts and their relations with the real world objects that they represent.
+<p>The mereotopology module introduces the fundamental mereotopological concepts and their relations with the real world objects that they represent.
 The EMMO uses mereotopology as the ground for all the subsequent ontology modules.
 The concept of topological connection is used to define the first distinction between ontology entities namely the <em>Item</em> and <em>Collection</em> classes.
 Items are causally self-connected objects, while collections are causally disconnected.
 Quantum mereology is represented by the <em>Quantum</em> class.
 This module introduces also the fundamental mereotopological relations used to distinguish between space and time dimensions.</p>
-<p>The <a href="top/physical.owl">physical</a> module, defines the <em>Physical</em> objects and the concept of <em>Void</em> that plays a fundamental role in the description of multiscale objects and quantum systems.
+<p>The physical module, defines the <em>Physical</em> objects and the concept of <em>Void</em> that plays a fundamental role in the description of multiscale objects and quantum systems.
 It also define the <em>Elementary</em> class, that restricts mereological atomism in space.</p>
-<p><img alt="The EMMO top level." src="../figs/top.png" />{ width=440px }</p>
+<p><img alt="The EMMO top level." src="../figs/top.png" width="440px" /></p>
 <p>In EMMO, the only univocally defined real world object is the <em>Item</em> individual called <strong>Universe</strong> that stands for the universe.
 Every other real world object is a composition of elementaries up to the most comprehensive object; the <strong>Universe</strong>.
 Intermediate objects are not univocally defined, but their definition is provided according to some specific philosophical perspectives.
@@ -1712,9 +1712,9 @@ Under this class the EMMO categorises e.g. formal languages, pictures, geometry,
 Phenomenic objects can be used in a semiotic process as signs.</p>
 <p>The <em>Physicalistic</em> perspective class introduces the concept of real world objects that have a meaning for the under applied physics perspective.</p>
 <p>The <em>Holistic</em> perspective class introduces the concept of real world objects that unfold in time in a way that has a meaning for the EMMO user, through the definition of the classes <em>Process</em> and <em>Participant</em>.
-The <a href="top/semiotics.owl">semiotics</a> module introduces the concepts of semiotics and the <em>Semiosis</em> process that has a <em>Sign</em>, an <em>Object</em> and an <em>Interpreter</em> as participants.
+The semiotics module introduces the concepts of semiotics and the <em>Semiosis</em> process that has a <em>Sign</em>, an <em>Object</em> and an <em>Interpreter</em> as participants.
 This forms the basis in EMMO to represent e.g. models, formal languages, theories, information and properties.</p>
-<p><img alt="The semiotic level, showing both the taxonomy (open black arrows) and other relations as listed in the caption. The inverted arrows corresponds to inverse relations." src="../figs/Semiotic.png" />{ width=540px }</p>
+<p><img alt="The semiotic level, showing both the taxonomy (open black arrows) and other relations as listed in the caption. The inverted arrows corresponds to inverse relations." src="../figs/Semiotic.png" width="540px" /></p>
 <h3 id="emmo-relations">EMMO relations<a class="headerlink" href="#emmo-relations" title="Permanent link">&para;</a></h3>
 <p>All EMMO relations are subrelations of the relations found in the two roots: <em>mereotopological</em> and <em>semiotical</em>.
 The relation hierarchy extends more vertically (i.e. more subrelations) than horizontally (i.e. less sibling relations), facilitating the categorisation and inferencing of individuals.
@@ -1726,7 +1726,7 @@ As illustrated in the figure below, it is a mereological relation that lacks tra
 This makes it possible to entities made of parts at different levels of granularity and to go between granularity levels in a well-defined manner.
 This is paramount for cross scale interoperability.
 Every material in EMMO is placed on a granularity level and the ontology gives information about the direct upper and direct lower level classes using the non-transitive direct parthood relations.</p>
-<p><img alt="Direct parthood." src="../figs/emmo-direct_part.png" />{ width=220px }</p>
+<p><img alt="Direct parthood." src="../figs/emmo-direct_part.png" width="220px" /></p>
 <h3 id="annotations">Annotations<a class="headerlink" href="#annotations" title="Permanent link">&para;</a></h3>
 <p>All entities and relations in EMMO have some attributes, called <em>annotations</em>.
 In some cases, only the required <em>International Resource Identifier</em> (IRI) and <em>relations</em> are provided.
@@ -1911,10 +1911,10 @@ Possible annotations are:</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.e99e714c.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.8397ff9e.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.bc35569b.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.f89c2efe.min.js"></script>
       
     
   </body>
