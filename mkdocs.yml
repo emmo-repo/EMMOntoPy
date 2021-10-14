@@ -36,6 +36,7 @@ extra_css:
 
 markdown_extensions:
   - admonition
+  - attr_list
   - pymdownx.highlight
   - pymdownx.superfences
   - pymdownx.inlinehilite
@@ -60,15 +61,13 @@ plugins:
             show_category_heading: false
             show_if_no_docstring: false
             show_source: true
+            show_bases: true
             group_by_category: true
             heading_level: 2
           selection:
             filters:
-              - "!^_[^_]"
-              - "!__all__$"
-              - "!__str__$"
-              - "!__repr__$"
-              - "!ValidatorResults$"
+              - "!^_"
+              - "^__init__$"
             members: true
             inherited_members: false
             docstring_style: google

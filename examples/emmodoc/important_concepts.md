@@ -38,7 +38,7 @@ A `spacetime` is valid for all reference systems (as required by the theory of r
 `matter` is used to represent a group of `elementary` in an enclosing `spacetime`.
 As illustrated in the figure, a `matter` is an `elementary` or a composition of other `matter` and `vacuum`.
 
-![Matter.](html_files/emmo-matter.png){ width=540px }
+![Matter.](figs/emmo-matter.png){ width=540px }
 
 In EMMO `matter` is always a 4D spacetime.
 This is a fundamental difference between EMMO and most other ontologies.
@@ -61,7 +61,7 @@ A `state` is matter in a particular configurational state.
 It is defined as having spatial direct parts that persist (do not change) throughout the lifetime of the `state`.
 Hence, a `state` is like a snapshot of a physical in a finite time interval.
 
-![A physical can always be decomposed into a sequence of finite `state`s.](html_files/emmo-state.png){ width=440px }
+![A physical can always be decomposed into a sequence of finite `state`s.](figs/emmo-state.png){ width=440px }
 
 The use of spatial direct parthood in the definition of `state` means that a `state` cannot overlap in space with another `state`.
 
@@ -77,18 +77,18 @@ An `elementary` can still be decomposed in temporal parts, that are themselves `
 
 Example of elementaries are electrons, photons and quarks.
 
-![Elementary.](html_files/emmo-elementary.png){ width=320px }
+![Elementary.](figs/emmo-elementary.png){ width=320px }
 
 ### Granularity - direct parthood
 
 Granularity is a central concept of EMMO, which allows the user to percieve the world at different levels of detail (granularity) that follow physics and materials science perspectives.
 
-![Different levels of granularity.](html_files/emmo-granularity2.png){ width=660px }
+![Different levels of granularity.](figs/emmo-granularity2.png){ width=660px }
 
 Every material in EMMO is placed on a granularity level and the ontology gives information about the direct upper and direct lower level classes.
 This is done with the non-transitive `is_direct_part_of` relation.
 
-![Direct parthood.](html_files/emmo-direct_part.png){ width=220px }
+![Direct parthood.](figs/emmo-direct_part.png){ width=220px }
 
 Granularity is a defined class and is useful sine a reasoner automatically can put the individuals defined by the user under a
 generic class that clearly expresses the types of its compositional parts.
@@ -118,3 +118,6 @@ Properties are abstracts that are related to a specific material entity with the
 **specific observation process**, participated by a **specific observer**, who catch the physical entity behaviour that is abstracted as a property.
 
 Properties enable us to connect a measured property to the measurement process and the measurement instrument.
+
+[RoMM]: https://publications.europa.eu/en/publication-detail/-/publication/ec1455c3-d7ca-11e6-ad7c-01aa75ed71a1
+[CWA]: https://www.cen.eu/news/workshops/Pages/WS_2016-013.aspx

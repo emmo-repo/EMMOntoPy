@@ -10,7 +10,7 @@ def get_emmo(inferred: Optional[bool] = True) -> "Ontology":
 
     Args:
         inferred: Whether to import the inferred version of emmo or not.
-        Default is True.
+            Default is True.
 
     Returns:
         The loaded emmo ontology.

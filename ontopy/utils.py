@@ -399,8 +399,8 @@ def convert_imported(input, output, input_format=None, output_format='xml',
 
     Warning:
         To convert to Turtle (`.ttl`) format, you must have installed
-        `rdflib>=6.0.0`. See [Known issues](../README.md#Known-issues) in the
-        README for more information.
+        `rdflib>=6.0.0`. See [Known issues](../../../#known-issues) for
+        more information.
 
     Args:
         input: input ontology file name
@@ -501,8 +501,8 @@ def squash_imported(input, output, input_format=None, output_format='xml',
 
     Warning:
         To convert to Turtle (`.ttl`) format, you must have installed
-        `rdflib>=6.0.0`. See [Known issues](../README.md#Known-issues) in the
-        README for more information.
+        `rdflib>=6.0.0`. See [Known issues](../../../#known-issues) for
+        more information.
 
     """
     inroot = os.path.dirname(os.path.abspath(input))
