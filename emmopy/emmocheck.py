@@ -348,13 +348,15 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                     try:
                         class_props = cls.INDIRECT_get_class_properties()
                     except AttributeError:
-                        # The INDIRECT_get_class_properties() method does not support inverse properties.
-                        # Build class_props manually...
+                        # The INDIRECT_get_class_properties() method
+                        # does not support inverse properties.  Build
+                        # class_props manually...
                         class_props = set()
                         for c in cls.mro():
                             if hasattr(c, 'is_a'):
-                                class_props.update([r.property for r in c.is_a
-                                                    if isinstance(r, owlready2.Restriction)])
+                                class_props.update(
+                                    [r.property for r in c.is_a
+                                     if isinstance(r, owlready2.Restriction)])
 
                     self.assertIn(self.onto.hasPhysicalDimension,
                                   class_props, msg=cls)
