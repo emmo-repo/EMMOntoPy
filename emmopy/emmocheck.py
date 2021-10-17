@@ -12,7 +12,10 @@ Example configuration file:
         - myunits.MyUnitCategory2
 
     skip:
-        - name_of_test_to_skip
+      - name_of_test_to_skip
+
+    enable:
+      - name_of_test_to_enable
 
 """
 import os
@@ -22,6 +25,8 @@ import unittest
 import itertools
 import argparse
 import fnmatch
+
+import owlready2
 
 from ontopy.ontology import World
 from ontopy.patch import get_preferred_label as get_label
@@ -213,6 +218,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
     def test_quantity_dimension(self):
         """Check that all quantities have a physicalDimension annotation.
 
+        Note: this test will be deprecated when isq is moved to emmo/domain.
+
         Configurations:
             exceptions - full class names of classes to ignore.
         """
@@ -282,6 +289,75 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                     self.assertIn('physicalDimension', anno, msg=cls)
                     physdim = anno['physicalDimension'].first()
                     self.assertRegex(physdim, regex, msg=cls)
+
+    def test_physical_quantity_dimension(self):
+        """Check that all physical quantities have `hasPhysicalDimension`.
+
+        Note: this test will fail before isq is moved to emmo/domain.
+
+        Configurations:
+            exceptions - full class names of classes to ignore.
+
+        """
+        exceptions = set((
+            'emmo.ModelledQuantitativeProperty',
+            'emmo.MeasuredQuantitativeProperty',
+            'emmo.ConventionalQuantitativeProperty',
+
+            'emmo.QuantitativeProperty',
+            'emmo.BaseQuantity',
+            'emmo.PhysicalConstant',
+            'emmo.PhysicalQuantity',
+            'emmo.ExactConstant',
+            'emmo.MeasuredConstant',
+            'emmo.DerivedQuantity',
+
+            'emmo.ISQBaseQuantity',
+            'emmo.InternationalSystemOfQuantity',
+            'emmo.ISQDerivedQuantity',
+            'emmo.SIExactConstant',
+
+            'emmo.NonSIUnits',
+            'emmo.StandardizedPhysicalQuantity',
+            'emmo.CategorizedPhysicalQuantity',
+
+            'emmo.AtomicAndNuclearPhysicsQuantity',
+            'emmo.ThermodynamicalQuantity',
+            'emmo.LightAndRadiationQuantity',
+            'emmo.SpaceAndTimeQuantity',
+            'emmo.AcousticQuantity',
+            'emmo.PhysioChememicalQuantity',
+            'emmo.ElectromagneticQuantity',
+            'emmo.MechanicalQuantity',
+            'emmo.CondensedMatterPhysicsQuantity',
+            'emmo.ChemicalCompositionQuantity',
+
+            'emmo.Extensive',
+            'emmo.Intensive',
+        ))
+        if not hasattr(self.onto, 'PhysicalQuantity'):
+            return
+        exceptions.update(
+            self.get_config('test_physical_quantity_dimension.exceptions', ()))
+        classes = set(self.onto.classes(self.check_imported))
+        for cls in self.onto.PhysicalQuantity.descendants():
+            if not self.check_imported and cls not in classes:
+                continue
+            if repr(cls) not in exceptions:
+                with self.subTest(cls=cls, label=get_label(cls)):
+                    try:
+                        class_props = cls.INDIRECT_get_class_properties()
+                    except AttributeError:
+                        # The INDIRECT_get_class_properties() method does not support inverse properties.
+                        # Build class_props manually...
+                        class_props = set()
+                        for c in cls.mro():
+                            if hasattr(c, 'is_a'):
+                                class_props.update([r.property for r in c.is_a
+                                                    if isinstance(r, owlready2.Restriction)])
+
+                    self.assertIn(self.onto.hasPhysicalDimension,
+                                  class_props, msg=cls)
 
     def test_namespace(self):
         """Check that all IRIs are namespaced after their (sub)ontology.
@@ -380,6 +456,11 @@ def main():
         '--skip', '-s', action='append', default=[],
         help=('Shell pattern matching tests to skip.  This option may be '
               'provided multiple times.'))
+    parser.add_argument(
+        '--enable', '-e', action='append', default=[],
+        help=('Shell pattern matching tests to enable that have been '
+              'skipped by default or in the config file.  This option may '
+              'be provided multiple times.'))
     parser.add_argument(  # deprecated, replaced by --no-catalog
         '--url-from-catalog', '-u', default=None, action='store_true',
         help=('Get url from catalog file'))
@@ -454,21 +535,36 @@ def main():
     for cls in TestEMMOConventions.__subclasses__():
         suite = unittest.TestLoader().loadTestsFromTestCase(cls)
 
-        # Skip tests from command line
-        for pattern in args.skip:
-            for test in suite:
-                name = test.id().split('.')[-1]
-                if fnmatch.fnmatchcase(name, pattern):
-                    setattr(test, 'setUp',
-                            lambda: test.skipTest('skipped from command line'))
-
-        # Skip tests from config file
+        # Mark tests to be skipped
         for test in suite:
-            for pattern in test.get_config('skip', ()):
-                name = test.id().split('.')[-1]
+            name = test.id().split('.')[-1]
+            skipped = set([  # skipped by default
+                'test_namespace',
+                'test_physical_quantity_dimension',
+            ])
+            msg = {name: 'skipped by default' for name in skipped}
+
+            # enable/skip tests from config file
+            for pattern in test.get_config('enable', ()):
                 if fnmatch.fnmatchcase(name, pattern):
-                    setattr(test, 'setUp',
-                            lambda: test.skipTest('skipped from config file'))
+                    skipped.remove(name)
+            for pattern in test.get_config('skip', ()):
+                if fnmatch.fnmatchcase(name, pattern):
+                    skipped.add(name)
+                    msg[name] = 'skipped from config file'
+
+            # enable/skip from command line
+            for pattern in args.enable:
+                if fnmatch.fnmatchcase(name, pattern):
+                    skipped.remove(name)
+            for pattern in args.skip:
+                if fnmatch.fnmatchcase(name, pattern):
+                    skipped.add(name)
+                    msg[name] = 'skipped from command line'
+
+            if name in skipped:
+                setattr(test, 'setUp',
+                        lambda: test.skipTest(msg.get(name, '')))
 
         runner = TextTestRunner(verbosity=verbosity)
         runner.resultclass.checkmode = True
