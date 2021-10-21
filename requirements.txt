@@ -1,7 +1,7 @@
 Cython>=0.29.21,<0.30
 Owlready2>=0.28,!=0.32,!=0.34,<0.36
 graphviz>=0.16,<0.18
-PyYAML>=5.4.1,<6
+PyYAML>=5.4.1,<7
 blessings>=1.7,<2
 Pygments>=2.7.4,<3
 rdflib>=4.2.1,<7
