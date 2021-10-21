@@ -331,7 +331,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                    tmpdir=tmpdir, **kwargs)
 
         # Enable optimised search by get_by_label()
-        if (self._special_labels is None and EMMObased is True):
+        if self._special_labels is None and EMMO_based:
             for iri in DEFAULT_LABEL_ANNOTATIONS:
                 self.add_label_annotation(iri)
             t = self.world['http://www.w3.org/2002/07/owl#topObjectProperty']
