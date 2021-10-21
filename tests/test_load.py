@@ -32,6 +32,8 @@ def test_load(repo_dir: "Path") -> None:
         'battinfo.ttl').load()
     assert onto.Electrolyte.prefLabel.first() == 'Electrolyte'
 
-    # Test loading of non-emmobased ontology
+    # Test loading of non-EMMObased ontology
     rdf_onto = get_ontologg(
-        'https://www.w3.org/2000/01/rdf-schema.ttl').load(EMMObased=False)
+        'https://www.w3.org/1999/02/22-rdf-syntax-ns.ttl').load(
+            EMMObased=False)
+    assert type(o.PlainLiteral) == type(o.HTML)
