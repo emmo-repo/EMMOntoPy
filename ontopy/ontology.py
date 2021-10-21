@@ -315,7 +315,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
         tmpdir : str
             Path to temporary directory.
         EMMObased : bool
-            Whether this is an EMMObased ontology or not, default True
+            Whether this is an EMMO-based ontology or not, default `True`.
         kwargs
             Additional keyword arguments are passed on to
             owlready2.Ontology.load().
