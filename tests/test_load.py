@@ -31,3 +31,7 @@ def test_load(repo_dir: "Path") -> None:
         'https://raw.githubusercontent.com/BIG-MAP/BattINFO/master/'
         'battinfo.ttl').load()
     assert onto.Electrolyte.prefLabel.first() == 'Electrolyte'
+
+    # Test loading of non-emmobased ontology
+    rdf_onto = get_ontologg(
+        'https://www.w3.org/2000/01/rdf-schema.ttl').load(EMMObased=False)
