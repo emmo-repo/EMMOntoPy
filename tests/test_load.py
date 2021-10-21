@@ -39,3 +39,5 @@ def test_load(repo_dir: "Path") -> None:
     rdfs_onto = get_ontology(
         'https://www.w3.org/2000/01/rdf-schema.ttl').load(
             EMMObased=False)
+    rdfs_onto.Class #  Needed to initialize rdfs_onto
+    assert type(rdf_onto.HTML).iri == rdfs_onto.Datatype.iri
