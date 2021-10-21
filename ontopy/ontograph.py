@@ -2,6 +2,7 @@
 """
 A module adding graphing functionality to ontopy.ontology
 """
+# pylint: disable=fixme
 #
 # This module was written before I had a good understanding of DL.
 # Should be simplified and improved:
@@ -24,7 +25,9 @@ import tempfile
 import defusedxml.ElementTree as ET
 
 import owlready2
+import pydot
 
+from ontopy.ontology import NoSuchLabelError
 from ontopy.utils import asstring
 
 
@@ -128,7 +131,7 @@ class OntoGraph:
         "other": {"color": "blue"},
     }
 
-    def get_dot_graph(
+    def get_dot_graph(  # pylint: disable=too-many-arguments,too-many-locals,too-many-branches
         self,
         root=None,
         graph=None,
@@ -196,8 +199,6 @@ class OntoGraph:
 
         # FIXME - double inheritance leads to dublicated nodes. Make sure
         #         to only add a node once!
-        import pydot
-        from ontopy.ontology import NoSuchLabelError
 
         if style is None or style == "default":
             style = self._default_style
@@ -212,13 +213,15 @@ class OntoGraph:
             edgelabels=edgelabels,
         )
         # Add parents
-        # FIXME - facture out into an recursive function to support
+        # FIXME - factor out into a recursive function to support
         #         multiple inheritance
 
         if parents and root:
-            r = self.get_by_label(root) if isinstance(root, str) else root
+            root_entity = (
+                self.get_by_label(root) if isinstance(root, str) else root
+            )
             while True:
-                parent = r.is_a.first()
+                parent = root_entity.is_a.first()
                 if parent is None or parent is owlready2.Thing:
                     break
                 label = asstring(parent)
@@ -233,18 +236,18 @@ class OntoGraph:
                     node.set_name(label)
                 graph.add_node(node)
                 if relations is True or "is_a" in relations:
-                    kw = style.get("is_a", {}).copy()
+                    kwargs = style.get("is_a", {}).copy()
                     if isinstance(edgelabels, dict):
-                        kw["label"] = edgelabels.get("is_a", "is_a")
+                        kwargs["label"] = edgelabels.get("is_a", "is_a")
                     elif edgelabels:
-                        kw["label"] = "is_a"
+                        kwargs["label"] = "is_a"
 
-                    rootnode = graph.get_node(asstring(r))[0]
-                    edge = pydot.Edge(rootnode, node, **kw)
+                    rootnode = graph.get_node(asstring(root_entity))[0]
+                    edge = pydot.Edge(rootnode, node, **kwargs)
                     graph.add_edge(edge)
                 if isinstance(parents, str) and label == parents:
                     break
-                r = parent
+                root_entity = parent
         # Add edges
         for node in graph.get_nodes():
             try:
@@ -324,7 +327,7 @@ class OntoGraph:
 
         return graph
 
-    def _get_dot_add_edges(
+    def _get_dot_add_edges(  # pylint: disable=too-many-arguments,too-many-locals,too-many-branches
         self,
         graph,
         entity,
@@ -338,40 +341,38 @@ class OntoGraph:
         """Adds edges to `graph` for relations between `entity` and all
         members in `targets`.  `style` is a dict with options to pydot.Edge().
         """
-        import pydot
-
         nodes = graph.get_node(asstring(entity))
         if not nodes:
             return
         node = nodes[0]
 
-        for e in targets:
-            s = asstring(e)
-            if isinstance(e, owlready2.ThingClass):
+        for entity in targets:
+            entity_string = asstring(entity)
+            if isinstance(entity, owlready2.ThingClass):
                 pass
             elif isinstance(
-                e, (owlready2.ObjectPropertyClass, owlready2.PropertyClass)
+                entity, (owlready2.ObjectPropertyClass, owlready2.PropertyClass)
             ):
-                label = asstring(e)
+                label = asstring(entity)
                 nodes = graph.get_node(label)
                 if nodes:
-                    kw = style.copy()
+                    kwargs = style.copy()
                     if isinstance(edgelabels, dict):
-                        kw["label"] = edgelabels.get(label, label)
+                        kwargs["label"] = edgelabels.get(label, label)
                     elif edgelabels:
-                        kw["label"] = label
-                    edge = pydot.Edge(node, nodes[0], **kw)
+                        kwargs["label"] = label
+                    edge = pydot.Edge(node, nodes[0], **kwargs)
                     if constraint is not None:
                         edge.set_constraint(constraint)
                     graph.add_edge(edge)
-            elif isinstance(e, owlready2.Restriction):
-                rname = asstring(e.property)
-                rtype = owlready2.class_construct._restriction_type_2_label[
-                    e.type
+            elif isinstance(entity, owlready2.Restriction):
+                rname = asstring(entity.property)
+                rtype = owlready2.class_construct._restriction_type_2_label[  # pylint: disable=protected-access
+                    entity.type
                 ]
 
                 if relations is True or rname in relations:
-                    vname = asstring(e.value)
+                    vname = asstring(entity.value)
                     others = graph.get_node(vname)
 
                     # Only proceede if there is only one node named `vname`
@@ -386,29 +387,29 @@ class OntoGraph:
                         continue
 
                     if rtype in ("min", "max", "exactly"):
-                        label = "%s %s %d" % (rname, rtype, e.cardinality)
+                        label = f"{rname} {rtype} {entity.cardinality}"
                     else:
-                        label = "%s %s" % (rname, rtype)
+                        label = f"{rname} {rtype}"
 
-                    kw = style.copy()
+                    kwargs = style.copy()
                     if isinstance(edgelabels, dict):
-                        slabel = "%s %s" % (rname, rtype)
-                        kw["label"] = edgelabels.get(slabel, label) + "   "
+                        slabel = f"{rname} {rtype}"
+                        kwargs["label"] = edgelabels.get(slabel, label) + "   "
                     elif edgelabels:
-                        kw["label"] = label + "   "  # Add some extra space
+                        kwargs["label"] = label + "   "  # Add some extra space
 
-                    edge = pydot.Edge(node, other, **kw)
+                    edge = pydot.Edge(node, other, **kwargs)
                     if constraint is not None:
                         edge.set_constraint(constraint)
                     graph.add_edge(edge)
 
             elif hasattr(self, "_verbose") and self._verbose:
                 print(
-                    "* get_dot_graph() * Ignoring: "
-                    "%s %s %s" % (node.get_name(), relation, s)
+                    f"* get_dot_graph() * Ignoring: {node.get_name()} "
+                    f"{relation} {entity_string}"
                 )
 
-    def _get_dot_graph(
+    def _get_dot_graph(  # pylint: disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements
         self,
         root=None,
         graph=None,
@@ -421,8 +422,6 @@ class OntoGraph:
         """Help method. See get_dot_graph(). `visited` is used to filter
         out circular dependencies.
         """
-        import pydot
-
         if graph is None:
             kwargs = style.get("graph", {})
             kwargs.setdefault("newrank", True)
@@ -445,9 +444,9 @@ class OntoGraph:
             visited = set()
 
         if root is None:
-            for root in self.get_root_classes():
+            for root_cls in self.get_root_classes():
                 self._get_dot_graph(
-                    root=root,
+                    root=root_cls,
                     graph=graph,
                     relations=relations,
                     leafs=leafs,
@@ -456,10 +455,10 @@ class OntoGraph:
                     edgelabels=edgelabels,
                 )
             return graph
-        elif isinstance(root, (list, tuple, set)):
-            for r in root:
+        if isinstance(root, (list, tuple, set)):
+            for _ in root:
                 self._get_dot_graph(
-                    root=r,
+                    root=_,
                     graph=graph,
                     relations=relations,
                     leafs=leafs,
@@ -468,13 +467,13 @@ class OntoGraph:
                     edgelabels=edgelabels,
                 )
             return graph
-        elif isinstance(root, str):
+        if isinstance(root, str):
             root = self.get_by_label(root)
 
         if root in visited:
             if hasattr(self, "_verbose") and self._verbose:
                 warnings.warn(
-                    "Circular dependency of class %r" % asstring(root)
+                    f"Circular dependency of class {asstring(root)!r}"
                 )
             return graph
         visited.add(root)
@@ -484,7 +483,7 @@ class OntoGraph:
         if nodes:
             if len(nodes) > 1:
                 warnings.warn(
-                    "More than one node corresponding to label: %s" % label
+                    f"More than one node corresponding to label: {label}"
                 )
             node = nodes[0]
         else:
@@ -502,8 +501,8 @@ class OntoGraph:
         if leafs and label in leafs:
             return graph
 
-        for sc in root.subclasses():
-            label = asstring(sc)
+        for sub_cls in root.subclasses():
+            label = asstring(sub_cls)
             if self.is_individual(label):
                 subnode = pydot.Node(label, **style.get("individual", {}))
                 subnode.set_name(label)
@@ -515,15 +514,15 @@ class OntoGraph:
                 subnode.set_name(label)
             graph.add_node(subnode)
             if relations is True or "is_a" in relations:
-                kw = style.get("is_a", {}).copy()
+                kwargs = style.get("is_a", {}).copy()
                 if isinstance(edgelabels, dict):
-                    kw["label"] = edgelabels.get("is_a", "is_a")
+                    kwargs["label"] = edgelabels.get("is_a", "is_a")
                 elif edgelabels:
-                    kw["label"] = "is_a"
-                edge = pydot.Edge(subnode, node, **kw)
+                    kwargs["label"] = "is_a"
+                edge = pydot.Edge(subnode, node, **kwargs)
                 graph.add_edge(edge)
             self._get_dot_graph(
-                root=sc,
+                root=sub_cls,
                 graph=graph,
                 relations=relations,
                 leafs=leafs,
@@ -544,7 +543,7 @@ class OntoGraph:
         roots = [
             relation
             for relation in rels
-            if not any([r in rels for r in relation.is_a])
+            if not any(_ in rels for _ in relation.is_a)
         ]
         return self.get_dot_graph(
             root=roots, graph=graph, relations=relations, style=style
@@ -568,7 +567,7 @@ def get_figsize(graph):
                 f"but it is: {width}"
             )
 
-    def asfloat(s):
-        return float(re.match(r"^[\d.]+", s).group())
+    def asfloat(string):
+        return float(re.match(r"^[\d.]+", string).group())
 
     return asfloat(width), asfloat(height)

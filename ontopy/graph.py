@@ -2,6 +2,7 @@
 """
 A module for visualising ontologies using graphviz.
 """
+# pylint: disable=fixme,too-many-lines
 import os
 import re
 import tempfile
@@ -13,7 +14,9 @@ import graphviz
 from ontopy.utils import asstring, get_label
 from ontopy.ontology import get_ontology
 
-typenames = owlready2.class_construct._restriction_type_2_label
+typenames = (  # pylint: disable=protected-access
+    owlready2.class_construct._restriction_type_2_label
+)
 
 
 # Literal for `root` arguments
@@ -103,47 +106,48 @@ _default_style = {
 }
 
 
-def cytoscape_style(style=None):
+def cytoscape_style(style=None):  # pylint: disable=too-many-branches
+    """Get list of color, style and fills."""
     if not style:
         style = _default_style
     colours = {}
     styles = {}
     fill = {}
-    for d in style.keys():
-        if isinstance(style[d], dict):
-            if "color" in style[d].keys():
-                colours[d] = style[d]["color"]
+    for key, value in style.items():
+        if isinstance(value, dict):
+            if "color" in value:
+                colours[key] = value["color"]
             else:
-                colours[d] = "black"
-            if "style" in style[d].keys():
-                styles[d] = style[d]["style"]
+                colours[key] = "black"
+            if "style" in value:
+                styles[key] = value["style"]
             else:
-                styles[d] = "solid"
-            if "arrowhead" in style[d].keys():
-                if style[d]["arrowhead"] == "empty":
-                    fill[d] = "hollow"
+                styles[key] = "solid"
+            if "arrowhead" in value:
+                if value["arrowhead"] == "empty":
+                    fill[key] = "hollow"
             else:
-                fill[d] = "filled"
+                fill[key] = "filled"
 
-    for d in style["relations"].keys():
-        if isinstance(style["relations"][d], dict):
-            if "color" in style["relations"][d].keys():
-                colours[d] = style["relations"][d]["color"]
+    for key, value in style.get("relations", {}).items():
+        if isinstance(value, dict):
+            if "color" in value:
+                colours[key] = value["color"]
             else:
-                colours[d] = "black"
-            if "style" in style["relations"][d].keys():
-                styles[d] = style["relations"][d]["style"]
+                colours[key] = "black"
+            if "style" in value:
+                styles[key] = value["style"]
             else:
-                styles[d] = "solid"
-            if "arrowhead" in style["relations"][d].keys():
-                if style["relations"][d]["arrowhead"] == "empty":
-                    fill[d] = "hollow"
+                styles[key] = "solid"
+            if "arrowhead" in value:
+                if value["arrowhead"] == "empty":
+                    fill[key] = "hollow"
             else:
-                fill[d] = "filled"
+                fill[key] = "filled"
     return [colours, styles, fill]
 
 
-class OntoGraph:
+class OntoGraph:  # pylint: disable=too-many-instance-attributes
     """Class for visualising an ontology.
 
     Parameters
@@ -220,7 +224,7 @@ class OntoGraph:
         Passed to graphviz.Digraph.
     """
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments,too-many-locals
         self,
         ontology,
         root=None,
@@ -246,8 +250,8 @@ class OntoGraph:
             graphtype = style.get("graphtype", "Digraph")
             dotcls = getattr(graphviz, graphtype)
             graph_attr = kwargs.pop("graph_attr", {})
-            for k, v in style.get("graph", {}).items():
-                graph_attr.setdefault(k, v)
+            for key, value in style.get("graph", {}).items():
+                graph_attr.setdefault(key, value)
             self.dot = dotcls(graph_attr=graph_attr, **kwargs)
             self.nodes = set()
             self.edges = set()
@@ -308,7 +312,7 @@ class OntoGraph:
                 addconstructs=addconstructs,
             )
 
-    def add_entities(
+    def add_entities(  # pylint: disable=too-many-arguments
         self,
         entities=None,
         relations="isA",
@@ -335,7 +339,7 @@ class OntoGraph:
             **attrs,
         )
 
-    def add_branch(
+    def add_branch(  # pylint: disable=too-many-arguments,too-many-locals
         self,
         root,
         leafs=None,
@@ -402,7 +406,7 @@ class OntoGraph:
                 **attrs,
             )
 
-    def add_parents(
+    def add_parents(  # pylint: disable=too-many-arguments
         self,
         name,
         levels=1,
@@ -414,15 +418,15 @@ class OntoGraph:
     ):
         """Add `levels` levels of strict parents of entity `name`."""
 
-        def addparents(e, n, s):
-            if n > 0:
-                for p in e.get_parents(strict=True):
-                    s.add(p)
-                    addparents(p, n - 1, s)
+        def addparents(entity, nodes, parents):
+            if nodes > 0:
+                for parent in entity.get_parents(strict=True):
+                    parents.add(parent)
+                    addparents(parent, nodes - 1, parents)
 
-        e = self.ontology[name] if isinstance(name, str) else name
+        entity = self.ontology[name] if isinstance(name, str) else name
         parents = set()
-        addparents(e, levels, parents)
+        addparents(entity, levels, parents)
         self.add_entities(
             entities=parents,
             relations=relations,
