@@ -285,7 +285,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
     def load(self, only_local=False, filename=None, format=None,
              reload=None, reload_if_newer=False, url_from_catalog=None,
              catalog_file='catalog-v001.xml', tmpdir=None,
-             **kwargs):
+             EMMObased=True, **kwargs):
         """Load the ontology.
 
         Parameters
@@ -314,6 +314,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
             defaults to "catalog-v001.xml".
         tmpdir : str
             Path to temporary directory.
+        EMMObased : bool
+            Whether this is an EMMO-based ontology or not, default `True`.
         kwargs
             Additional keyword arguments are passed on to
             owlready2.Ontology.load().
@@ -329,7 +331,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                    tmpdir=tmpdir, **kwargs)
 
         # Enable optimised search by get_by_label()
-        if self._special_labels is None:
+        if self._special_labels is None and EMMObased:
             for iri in DEFAULT_LABEL_ANNOTATIONS:
                 self.add_label_annotation(iri)
             t = self.world['http://www.w3.org/2002/07/owl#topObjectProperty']
@@ -347,6 +349,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
     def _load(self, only_local=False, filename=None, format=None,
               reload=None, reload_if_newer=False, url_from_catalog=None,
               catalog_file='catalog-v001.xml', tmpdir=None,
+              EMMObased=True,
               **kwargs):
         """Help function for _load()."""
         web_protocol = 'http://', 'https://', 'ftp://'
