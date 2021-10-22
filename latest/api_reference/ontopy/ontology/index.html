@@ -2972,7 +2972,7 @@ Association for Computational Linguistics, June 1994.</p>
 
 
 <h3 class="doc doc-heading" id="ontopy.ontology.Ontology.load">
-<code class="highlight language-python"><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">only_local</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reload</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reload_if_newer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">url_from_catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">tmpdir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">only_local</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reload</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reload_if_newer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">url_from_catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">tmpdir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">EMMObased</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.ontology.Ontology.load" title="Permanent link">&para;</a></h3>
@@ -3005,6 +3005,8 @@ catalog_file : str
     defaults to "catalog-v001.xml".
 tmpdir : str
     Path to temporary directory.
+EMMObased : bool
+    Whether this is an EMMO-based ontology or not, default <code>True</code>.
 kwargs
     Additional keyword arguments are passed on to
     owlready2.Ontology.load().</p>
@@ -3014,7 +3016,7 @@ kwargs
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">only_local</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
          <span class="n">reload</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reload_if_newer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">url_from_catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
          <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">tmpdir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-         <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+         <span class="n">EMMObased</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Load the ontology.</span>
 
 <span class="sd">    Parameters</span>
@@ -3043,6 +3045,8 @@ kwargs
 <span class="sd">        defaults to &quot;catalog-v001.xml&quot;.</span>
 <span class="sd">    tmpdir : str</span>
 <span class="sd">        Path to temporary directory.</span>
+<span class="sd">    EMMObased : bool</span>
+<span class="sd">        Whether this is an EMMO-based ontology or not, default `True`.</span>
 <span class="sd">    kwargs</span>
 <span class="sd">        Additional keyword arguments are passed on to</span>
 <span class="sd">        owlready2.Ontology.load().</span>
@@ -3058,7 +3062,7 @@ kwargs
                <span class="n">tmpdir</span><span class="o">=</span><span class="n">tmpdir</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># Enable optimised search by get_by_label()</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">EMMObased</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">iri</span> <span class="ow">in</span> <span class="n">DEFAULT_LABEL_ANNOTATIONS</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_label_annotation</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;http://www.w3.org/2002/07/owl#topObjectProperty&#39;</span><span class="p">]</span>
