@@ -73,7 +73,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#emmo-python-api-for-the-elemental-multiperspective-material-ontology" class="md-skip">
+        <a href="#emmontopy" class="md-skip">
           Skip to content
         </a>
       
@@ -1100,13 +1100,18 @@
               
                 
                 
-                <h1 id="emmo-python-api-for-the-elemental-multiperspective-material-ontology">EMMO - Python API for the Elemental Multiperspective Material Ontology<a class="headerlink" href="#emmo-python-api-for-the-elemental-multiperspective-material-ontology" title="Permanent link">&para;</a></h1>
+                <h1 id="emmontopy">EMMOntoPy<a class="headerlink" href="#emmontopy" title="Permanent link">&para;</a></h1>
+<p><em>Python API for the Elemental Multiperspective Material Ontology (<a href="https://emmo-repo.github.io">EMMO</a>).</em></p>
 <!-- markdownlint-disable MD033 -->
 
 <p><img alt="CI tests" src="https://github.com/emmo-repo/EMMO-python/workflows/CI%20Tests/badge.svg" />
-<a href="https://badge.fury.io/py/EMMO"><img alt="PyPI version" src="https://badge.fury.io/py/EMMO.svg" /></a></p>
-<p>This package is based on <a href="https://pypi.org/project/Owlready2/">Owlready2</a> and provides an intuitive representation of <a href="https://github.com/emmo-repo/EMMO/">EMMO</a> in Python.
-It is available on <a href="https://github.com/emmo-repo/EMMO-python/">GitHub</a> and on <a href="https://pypi.org/project/EMMO/">PyPI</a> under the open source <a href="LICENSE/">BSD 3-Clause license</a>.</p>
+<a href="https://badge.fury.io/py/EMMOntoPy"><img alt="PyPI version" src="https://badge.fury.io/py/EMMOntoPy.svg" /></a></p>
+<blockquote>
+<p><em><strong>Note</strong>: EMMOntoPy is a continuation of the EMMO-python project and the associated <code>emmo</code> Python package.
+To see the legacy versions go to <a href="https://pypi.org/project/EMMO/">PyPI</a>.</em></p>
+</blockquote>
+<p>This package is based on <a href="https://pypi.org/project/Owlready2/">Owlready2</a> and provides an intuitive representation of <a href="https://emmo-repo.github.io">EMMO</a> in Python.
+It is available on <a href="https://github.com/emmo-repo/EMMO-python/">GitHub</a> and on <a href="https://pypi.org/project/EMMOntoPy/">PyPI</a> under the open source <a href="LICENSE/">BSD 3-Clause license</a>.</p>
 <p>The Elemental Multiperspective Material Ontology (EMMO) is an ongoing effort to create an ontology that takes into account fundamental concepts of physics, chemistry and materials science and is designed to pave the road for semantic interoperability.
 The aim of EMMO is to be generic and provide a common ground for describing materials, models and data that can be adapted by all domains.</p>
 <p>EMMO is formulated using OWL.
@@ -1132,37 +1137,37 @@ On top of that EMMOntoPy provides:</p>
 </ul>
 <p>Some examples of what you can do with EMMOntoPy includes:</p>
 <ul>
+<li>Access and query RDF-based ontologies from your application.
+  This includes several different flavors of RDF (OWL, <strong>Turtle (<code>ttl</code>)</strong>, and more).</li>
 <li>Access and query EMMO-based ontologies from your application.</li>
 <li>Extend EMMO with new domain or application ontologies.
   This can be done both statically with easy readable Python code or dynamically within your application.</li>
 <li>Generate graphs and documentation of your ontologies.
-  EMMOntoPy includes <code>ontodoc</code>, which is a dedicated command line tool for this.
+  EMMOntoPy includes <code>ontodoc</code>: A dedicated command line tool for this.
   You find it in the <a href="../tools">tools/</a> sub directory.</li>
-<li>Check that a EMMO-based domain or application ontology ahead to the conventions of EMMO.</li>
-<li>Interactively explore an ontology in e.g. <a href="https://ipython.org/">IPython</a>.
-  Tab completion makes exploration easy and fast.
-  Below is an example of an IPython session where we check the relations of <code>Matter</code>:</li>
+<li>Check that an EMMO-based domain or application ontology adhere to the conventions of EMMO.</li>
+<li>Interactively explore an ontology in any Python interpreter, e.g., <a href="https://ipython.org/">IPython</a>.
+  Tab-completion makes exploration easy and fast.
+  Below is an example of an IPython session where we check the relations of <code>Matter</code> in EMMO utilizing the <code>emmopy.get_emmo</code> function:</li>
 </ul>
-<div class="highlight"><pre><span></span><code>In [1]: from emmo import get_ontology
+<div class="highlight"><pre><span></span><code>In [1]: from emmopy import get_emmo
 
-In [2]: emmo = get_ontology()
+In [2]: emmo = get_emmo()
 
-In [3]: emmo.load()
-Out[3]: get_ontology(&quot;http://emmo.info/emmo/emmo-inferred#&quot;)
+In [3]: emmo.Matter
+Out[3]: physicalistic.Matter
 
-In [4]: emmo.Matter
-Out[4]: physicalistic.Matter
-
-In [5]: emmo.Matter.is_a
-Out[5]:
+In [4]: emmo.Matter.is_a
+Out[4]:
 [physicalistic.Physicalistic,
   physical.Physical,
   mereotopology.hasPart.some(physicalistic.Massive),
   physical.hasTemporalPart.only(physicalistic.Matter)]
 </code></pre></div>
 <h2 id="documentation-and-examples">Documentation and examples<a class="headerlink" href="#documentation-and-examples" title="Permanent link">&para;</a></h2>
-<p>The <a href="https://pythonhosted.org/Owlready2/">Owlready2 documentation</a> is a good starting point.</p>
-<p>In addition EMMOntoPy includes a few examples and demos:</p>
+<p>The <a href="https://owlready2.readthedocs.io/">Owlready2 documentation</a> is a good starting point.
+The EMMOntoPy package also has its own <a href="https://emmo-repo.github.io/EMMO-python">dedicated documentation</a>.</p>
+<p>This includes a few examples and demos:</p>
 <ul>
 <li>
 <p><a href="demo/vertical/">demo/vertical</a> shows an example of how EMMO may be used to achieve vertical interoperability.
@@ -1179,7 +1184,7 @@ Out[5]:
 </ul>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <p>Install with</p>
-<div class="highlight"><pre><span></span><code><span class="go">pip install EMMO</span>
+<div class="highlight"><pre><span></span><code><span class="go">pip install EMMOntoPy</span>
 </code></pre></div>
 <h3 id="required-dependencies">Required Dependencies<a class="headerlink" href="#required-dependencies" title="Permanent link">&para;</a></h3>
 <ul>
@@ -1188,15 +1193,13 @@ Out[5]:
 </ul>
 <h3 id="optional-dependencies">Optional Dependencies<a class="headerlink" href="#optional-dependencies" title="Permanent link">&para;</a></h3>
 <ul>
-<li><a href="https://pypi.org/project/">Graphviz</a>: Needed for graph generation.
+<li><a href="https://pypi.org/project/graphviz">Graphviz</a>: Needed for graph generation.
   With support for generation pdf, png and svg figures for tests and generation of documentation automatically (<code>ontodoc</code>).</li>
-<li>
-<p><a href="http://pandoc.org/">pandoc</a>: Only used for generated documentation from markdown to nicely formatted html or pdf.
-  Tested with v2.1.2.</p>
-</li>
+<li><a href="http://pandoc.org/">pandoc</a>: Only used for generated documentation from markdown to nicely formatted html or pdf.
+  Tested with v2.1.2.</li>
 <li>
 <p><a href="https://www.latex-project.org/">pdfLaTeX</a> or <a href="https://www.overleaf.com/learn/latex/XeLaTeX/">XeLaTeX</a> and the <code>upgreek</code> LaTeX package (included in <code>texlive-was</code> on RetHat-based distributions and <code>texlive-latex-extra</code> on Ubuntu) for generation of pdf documentation.
-  If your ontology contain exotic unicode characters, we recommend XeLaTeX.</p>
+  If your ontology contains exotic unicode characters, we recommend XeLaTeX.</p>
 </li>
 <li>
 <p>Java.
@@ -1205,7 +1208,7 @@ Out[5]:
 <li>
 <p>Optional Python packages:</p>
 </li>
-<li><a href="https://pypi.org/project/">graphviz</a>: Generation of documentation and graphs.</li>
+<li><a href="https://pypi.org/project/graphviz">graphviz</a>: Generation of documentation and graphs.</li>
 <li><a href="https://pypi.org/project/PyYAML/">PyYAML</a>: Required for generating documentation with pandoc.</li>
 <li><a href="https://pypi.org/project/blessings/">blessings</a>: Clean output for <code>emmocheck</code>.</li>
 <li><a href="https://pypi.org/project/Pygments/">Pygments</a>: Coloured output for <code>emmocheck</code>.</li>
@@ -1223,7 +1226,13 @@ Out[5]:
 </ul>
 <h3 id="attributions-and-credits">Attributions and credits<a class="headerlink" href="#attributions-and-credits" title="Permanent link">&para;</a></h3>
 <p>EMMOntoPy is maintained by <a href="https://emmc.eu/">EMMC-ASBL</a>.
-It has mainly been developed by <a href="https://www.sintef.no/">SINTEF</a>.</p>
+It has mainly been developed by <a href="https://www.sintef.no/">SINTEF</a>, specifically:</p>
+<ul>
+<li>Jesper Friis (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
+<li>Francesca L. Bleken (<a href="https://github.com/francescalb">francescalb</a>)</li>
+<li>Casper W. Andersen (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Bjørn Tore Løvfall (<a href="https://github.com/lovfall">lovfall</a>)</li>
+</ul>
 <h3 id="contributing-projects">Contributing projects<a class="headerlink" href="#contributing-projects" title="Permanent link">&para;</a></h3>
 <ul>
 <li><a href="https://emmc.info/about-emmc-csa/">EMMC-CSA</a>;
