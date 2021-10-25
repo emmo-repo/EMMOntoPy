@@ -220,8 +220,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
             self.get_entities(imported=True,
                               classes=True,
                               individuals=False,
-                              object_properties=False,
-                              data_properties=False,
+                              object_properties=True,
+                              data_properties=True,
                               annotation_properties=False,
                               ), key=lambda e: e.iri)
         return hash((self.base_iri, tuple(sorted_entities)))

@@ -70,17 +70,7 @@ def _dir(self):
 
 def _hash(self):
     """Define hash of ThingClass and PropertyClass."""
-    try:
-        return hash(self.iri)
-    except AttributeError:
-        try:
-            return hash(self.prefLabel)
-        except AttributeError:
-            try:
-                return hash(self.name)
-            except AttributeError:
-                return hash(self.label)
-
+    return hash(self.iri)
 
 def _eq(self, other):
     """Define equality based on hash for ThingClass and PropertyClass."""
