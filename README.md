@@ -1,9 +1,14 @@
-# EMMO - Python API for the Elemental Multiperspective Material Ontology
+# EMMOntoPy
+
+*Python API for the Elemental Multiperspective Material Ontology ([EMMO]).*
 
 <!-- markdownlint-disable MD033 -->
 
 ![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20Tests/badge.svg)
 [![PyPI version](https://badge.fury.io/py/EMMO.svg)](https://badge.fury.io/py/EMMO)
+
+> ***Note**: EMMOntoPy is a continuation of the EMMO-python project and the associated `emmo` Python package.
+> To see the legacy versions go to [PyPI](https://pypi.org/project/EMMO/).*
 
 This package is based on [Owlready2] and provides an intuitive representation of [EMMO] in Python.
 It is available on [GitHub][EMMOntoPy] and on [PyPI][PyPI:EMMO] under the open source [BSD 3-Clause license](LICENSE.txt).
