@@ -61,7 +61,10 @@ with open(os.path.join(rootdir, 'ontopy/__init__.py')) as handle:
 setuptools.setup(
     name='EMMOntoPy',
     version=VERSION,
-    author='Jesper Friis, Francesca Lønstad Bleken, Casper Welzel Andersen, Bjørn Tore Løvfall',
+    author=(
+        'Jesper Friis, Francesca Lønstad Bleken, Casper Welzel Andersen, '
+        'Bjørn Tore Løvfall'
+    ),
     author_email='jesper.friis@sintef.no',
     description=('Python reference API for the Elementary Multiperspective'
                  'Material Ontology.'),
