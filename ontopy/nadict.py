@@ -129,7 +129,7 @@ class NADict:
     def __repr__(self):
         return (
             f"{self.__class__.__name__}("
-            f"{', '.join(f'{key}={value!r}' for key, value in self._dict.items())})"
+            f"{', '.join(f'{key}={value!r}' for key, value in self._dict.items())})"  # pylint: disable=line-too-long
         )
 
     def clear(self):
@@ -155,8 +155,7 @@ class NADict:
         if "." in key:
             key1, key2 = key.split(".", 1)
             return self._dict[key1].get(key2, default)
-        else:
-            return self._dict.get(key, default)
+        return self._dict.get(key, default)
 
     def items(self, prefix=""):
         """Returns an iterator over all items as (key, value) pairs."""

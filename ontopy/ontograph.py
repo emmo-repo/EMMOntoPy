@@ -27,7 +27,7 @@ import defusedxml.ElementTree as ET
 import owlready2
 import pydot
 
-from ontopy.utils import asstring
+from ontopy.utils import asstring, NoSuchLabelError
 
 
 class OntoGraph:
@@ -186,10 +186,6 @@ class OntoGraph:
 
         Note: This method requires pydot.
         """
-        from ontopy.ontology import (  # pylint: disable=import-outside-toplevel
-            NoSuchLabelError,
-        )
-
         warnings.warn(
             """The ontopy.ontology.get_dot_graph() method is deprecated.
             Use ontopy.ontology.get_graph() instead.

@@ -31,6 +31,7 @@ from ontopy.utils import (
     FMAP,
     IncompatibleVersion,
     isinteractive,
+    NoSuchLabelError,
     OWLREADY2_FORMATS,
     ReadCatalogError,
     _validate_installed_version,
@@ -44,10 +45,6 @@ DEFAULT_LABEL_ANNOTATIONS = [
     "http://www.w3.org/2000/01/rdf-schema#label",
     "http://www.w3.org/2004/02/skos/core#altLabel",
 ]
-
-
-class NoSuchLabelError(LookupError, AttributeError):
-    """Error raised when a label cannot be found."""
 
 
 def get_ontology(*args, **kwargs):

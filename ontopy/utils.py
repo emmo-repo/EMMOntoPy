@@ -46,6 +46,10 @@ class UnknownVersion(Exception):
     """Cannot retrieve version from a package."""
 
 
+class NoSuchLabelError(LookupError, AttributeError):
+    """Error raised when a label cannot be found."""
+
+
 def isinteractive():
     """Returns true if we are running from an interactive interpreater,
     false otherwise."""
