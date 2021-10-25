@@ -109,7 +109,7 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches
         ):
             res = fmt(expr.property)
         elif isinstance(expr.property, owlready2.Inverse):
-            res = f"Inverse({asstring(expr.property.property, link, recursion_depth + 1)})"
+            res = f"Inverse({asstring(expr.property.property, link, recursion_depth + 1)})"  # pylint: disable=line-too-long
         else:
             print(
                 f"*** WARNING: unknown restriction property: {expr.property!r}"
@@ -291,7 +291,8 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements
         root = xml.getroot()
         if gettag(root) != "catalog":
             raise ReadCatalogError(
-                f'expected root tag of catalog file {filepath!r} to be "catalog"'
+                f"expected root tag of catalog file {filepath!r} to be "
+                '"catalog"'
             )
         for child in root:
             if gettag(child) == "uri":
@@ -569,11 +570,11 @@ def squash_imported(  # pylint: disable=too-many-arguments
     imported = set()
 
     def recur(graph):
-        for subject, predicate, object in graph.triples(
+        for subject, predicate, obj in graph.triples(
             (None, URIRef("http://www.w3.org/2002/07/owl#imports"), None)
         ):
-            graph.remove((subject, predicate, object))
-            iri = iris.get(str(object), str(object))
+            graph.remove((subject, predicate, obj))
+            iri = iris.get(str(obj), str(obj))
             if iri not in imported:
                 imported.add(iri)
                 new_graph = Graph()

@@ -14,8 +14,8 @@ import graphviz
 from ontopy.utils import asstring, get_label
 from ontopy.ontology import get_ontology
 
-typenames = (  # pylint: disable=protected-access
-    owlready2.class_construct._restriction_type_2_label
+typenames = (
+    owlready2.class_construct._restriction_type_2_label  # pylint: disable=protected-access
 )
 
 
@@ -438,13 +438,15 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
 
     def add_node(self, name, nodeattrs=None, **attrs):
         """Add node with given name. `attrs` are graphviz node attributes."""
-        e = self.ontology[name] if isinstance(name, str) else name
-        label = get_label(e)
+        entity = self.ontology[name] if isinstance(name, str) else name
+        label = get_label(entity)
         if label not in self.nodes.union(self.excluded_nodes):
-            kw = self.get_node_attrs(e, nodeattrs=nodeattrs, attrs=attrs)
-            if hasattr(e, "iri"):
-                kw.setdefault("URL", e.iri)
-            self.dot.node(label, label=label, **kw)
+            kwargs = self.get_node_attrs(
+                entity, nodeattrs=nodeattrs, attrs=attrs
+            )
+            if hasattr(entity, "iri"):
+                kwargs.setdefault("URL", entity.iri)
+            self.dot.node(label, label=label, **kwargs)
             self.nodes.add(label)
 
     def add_nodes(self, names, nodeattrs, **attrs):
@@ -452,23 +454,23 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         for name in names:
             self.add_node(name, nodeattrs=nodeattrs, **attrs)
 
-    def add_edge(self, subject, predicate, object, edgelabel=None, **attrs):
+    def add_edge(self, subject, predicate, obj, edgelabel=None, **attrs):
         """Add edge corresponding for ``(subject, predicate, object)``
         triplet."""
         subject = subject if isinstance(subject, str) else get_label(subject)
         predicate = (
             predicate if isinstance(predicate, str) else get_label(predicate)
         )
-        object = object if isinstance(object, str) else get_label(object)
-        if subject in self.excluded_nodes or object in self.excluded_nodes:
+        obj = obj if isinstance(obj, str) else get_label(obj)
+        if subject in self.excluded_nodes or obj in self.excluded_nodes:
             return
-        if not isinstance(subject, str) or not isinstance(object, str):
+        if not isinstance(subject, str) or not isinstance(obj, str):
             raise TypeError("`subject` and `object` must be strings")
         if subject not in self.nodes:
-            raise RuntimeError('`subject` "%s" must have been added' % subject)
-        if object not in self.nodes:
-            raise RuntimeError('`object` "%s" must have been added' % object)
-        key = (subject, predicate, object)
+            raise RuntimeError(f'`subject` "{subject}" must have been added')
+        if obj not in self.nodes:
+            raise RuntimeError(f'`object` "{obj}" must have been added')
+        key = (subject, predicate, obj)
         if key not in self.edges:
             if edgelabel is None:
                 edgelabel = self.edgelabels
@@ -482,11 +484,11 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             else:
                 label = None
 
-            kw = self.get_edge_attrs(predicate, attrs=attrs)
-            self.dot.edge(subject, object, label=label, **kw)
+            kwargs = self.get_edge_attrs(predicate, attrs=attrs)
+            self.dot.edge(subject, obj, label=label, **kwargs)
             self.edges.add(key)
 
-    def add_source_edges(
+    def add_source_edges(  # pylint: disable=too-many-arguments,too-many-branches
         self,
         source,
         relations=None,
@@ -509,22 +511,22 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             self.addconstructs if addconstructs is None else addconstructs
         )
 
-        e = self.ontology[source] if isinstance(source, str) else source
-        label = get_label(e)
-        for r in e.is_a:
+        entity = self.ontology[source] if isinstance(source, str) else source
+        label = get_label(entity)
+        for relation in entity.is_a:
 
             # isA
             if isinstance(
-                r, (owlready2.ThingClass, owlready2.ObjectPropertyClass)
+                relation, (owlready2.ThingClass, owlready2.ObjectPropertyClass)
             ):
                 if "all" in relations or "isA" in relations:
-                    rlabel = get_label(r)
+                    rlabel = get_label(relation)
                     # FIXME - we actually want to include individuals...
-                    if isinstance(e, owlready2.Thing):
+                    if isinstance(entity, owlready2.Thing):
                         continue
-                    if r not in e.get_parents(strict=True):
+                    if relation not in entity.get_parents(strict=True):
                         continue
-                    if not self.add_missing_node(r, addnodes=addnodes):
+                    if not self.add_missing_node(relation, addnodes=addnodes):
                         continue
                     self.add_edge(
                         subject=label,
@@ -535,33 +537,33 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                     )
 
             # restriction
-            elif isinstance(r, owlready2.Restriction):
-                rname = get_label(r.property)
+            elif isinstance(relation, owlready2.Restriction):
+                rname = get_label(relation.property)
                 if "all" in relations or rname in relations:
-                    rlabel = "%s %s" % (rname, typenames[r.type])
-                    if isinstance(r.value, owlready2.ThingClass):
-                        obj = get_label(r.value)
-                        if not self.add_missing_node(r.value, addnodes):
+                    rlabel = f"{rname} {typenames[relation.type]}"
+                    if isinstance(relation.value, owlready2.ThingClass):
+                        obj = get_label(relation.value)
+                        if not self.add_missing_node(relation.value, addnodes):
                             continue
                     elif (
-                        isinstance(r.value, owlready2.ClassConstruct)
+                        isinstance(relation.value, owlready2.ClassConstruct)
                         and self.addconstructs
                     ):
-                        obj = self.add_class_construct(r.value)
+                        obj = self.add_class_construct(relation.value)
                     else:
                         continue
-                    pred = asstring(r, exclude_object=True)
+                    pred = asstring(relation, exclude_object=True)
                     self.add_edge(
                         label, pred, obj, edgelabel=edgelabels, **attrs
                     )
 
             # inverse
-            if isinstance(r, owlready2.Inverse):
+            if isinstance(relation, owlready2.Inverse):
                 if "all" in relations or "inverse" in relations:
-                    rlabel = get_label(r)
-                    if not self.add_missing_node(r, addnodes=addnodes):
+                    rlabel = get_label(relation)
+                    if not self.add_missing_node(relation, addnodes=addnodes):
                         continue
-                    if r not in e.get_parents(strict=True):
+                    if relation not in entity.get_parents(strict=True):
                         continue
                     self.add_edge(
                         subject=label,
@@ -571,7 +573,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                         **attrs,
                     )
 
-    def add_edges(
+    def add_edges(  # pylint: disable=too-many-arguments
         self,
         sources=None,
         relations=None,
@@ -601,37 +603,37 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
 
         Returns true if the node exists or is added, false otherwise."""
         addnodes = self.addnodes if addnodes is None else addnodes
-        e = self.ontology[name] if isinstance(name, str) else name
-        label = get_label(e)
+        entity = self.ontology[name] if isinstance(name, str) else name
+        label = get_label(entity)
         if label not in self.nodes:
             if addnodes:
-                self.add_node(e, **self.style.get("added_node", {}))
+                self.add_node(entity, **self.style.get("added_node", {}))
             else:
                 return False
         return True
 
-    def add_class_construct(self, c):
-        """Adds class construct `c` and return its label."""
-        self.add_node(c, **self.style.get("class_construct", {}))
-        label = get_label(c)
-        if isinstance(c, owlready2.Or):
-            for cls in c.Classes:
+    def add_class_construct(self, construct):
+        """Adds class construct and return its label."""
+        self.add_node(construct, **self.style.get("class_construct", {}))
+        label = get_label(construct)
+        if isinstance(construct, owlready2.Or):
+            for cls in construct.Classes:
                 clslabel = get_label(cls)
                 if clslabel not in self.nodes and self.addnodes:
                     self.add_node(cls)
                 if clslabel in self.nodes:
                     self.add_edge(get_label(cls), "isA", label)
-        elif isinstance(c, owlready2.And):
-            for cls in c.Classes:
+        elif isinstance(construct, owlready2.And):
+            for cls in construct.Classes:
                 clslabel = get_label(cls)
                 if clslabel not in self.nodes and self.addnodes:
                     self.add_node(cls)
                 if clslabel in self.nodes:
                     self.add_edge(label, "isA", get_label(cls))
-        elif isinstance(c, owlready2.Not):
-            clslabel = get_label(c.Class)
+        elif isinstance(construct, owlready2.Not):
+            clslabel = get_label(construct.Class)
             if clslabel not in self.nodes and self.addnodes:
-                self.add_node(c.Class)
+                self.add_node(construct.Class)
             if clslabel in self.nodes:
                 self.add_edge(clslabel, "not", label)
         # Neither and nor inverse constructs are
@@ -640,37 +642,37 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
     def get_node_attrs(self, name, nodeattrs, attrs):
         """Returns attributes for node or edge `name`.  `attrs` overrides
         the default style."""
-        e = self.ontology[name] if isinstance(name, str) else name
-        label = get_label(e)
+        entity = self.ontology[name] if isinstance(name, str) else name
+        label = get_label(entity)
         # class
-        if isinstance(e, owlready2.ThingClass):
-            if self.ontology.is_defined(e):
-                kw = self.style.get("defined_class", {})
+        if isinstance(entity, owlready2.ThingClass):
+            if self.ontology.is_defined(entity):
+                kwargs = self.style.get("defined_class", {})
             else:
-                kw = self.style.get("class", {})
+                kwargs = self.style.get("class", {})
         # class construct
-        elif isinstance(e, owlready2.ClassConstruct):
-            kw = self.style.get("class_construct", {})
+        elif isinstance(entity, owlready2.ClassConstruct):
+            kwargs = self.style.get("class_construct", {})
         # individual
-        elif isinstance(e, owlready2.Thing):
-            kw = self.style.get("individual", {})
+        elif isinstance(entity, owlready2.Thing):
+            kwargs = self.style.get("individual", {})
         # object property
-        elif isinstance(e, owlready2.ObjectPropertyClass):
-            kw = self.style.get("object_property", {})
+        elif isinstance(entity, owlready2.ObjectPropertyClass):
+            kwargs = self.style.get("object_property", {})
         # data property
-        elif isinstance(e, owlready2.DataPropertyClass):
-            kw = self.style.get("data_property", {})
+        elif isinstance(entity, owlready2.DataPropertyClass):
+            kwargs = self.style.get("data_property", {})
         # annotation property
-        elif isinstance(e, owlready2.AnnotationPropertyClass):
-            kw = self.style.get("annotation_property", {})
+        elif isinstance(entity, owlready2.AnnotationPropertyClass):
+            kwargs = self.style.get("annotation_property", {})
         else:
-            raise TypeError("Unknown entity type: %r" % e)
-        kw = kw.copy()
-        kw.update(self.style.get("nodes", {}).get(label, {}))
+            raise TypeError(f"Unknown entity type: {entity!r}")
+        kwargs = kwargs.copy()
+        kwargs.update(self.style.get("nodes", {}).get(label, {}))
         if nodeattrs:
-            kw.update(nodeattrs.get(label, {}))
-        kw.update(attrs)
-        return kw
+            kwargs.update(nodeattrs.get(label, {}))
+        kwargs.update(attrs)
+        return kwargs
 
     def get_edge_attrs(self, predicate, attrs):
         """Returns attributes for node or edge `name`.  `attrs` overrides
@@ -678,45 +680,53 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         # given type
         types = ("isA", "equivalent_to", "disjoint_with", "inverse_of")
         if predicate in types:
-            kw = self.style.get(predicate, {}).copy()
+            kwargs = self.style.get(predicate, {}).copy()
         else:
-            kw = {}
+            kwargs = {}
             name = predicate.split(None, 1)[0]
-            m = re.match(r"Inverse\((.*)\)", name)
-            if m:
-                (name,) = m.groups()
+            match = re.match(r"Inverse\((.*)\)", name)
+            if match:
+                (name,) = match.groups()
                 attrs = attrs.copy()
-                for k, v in self.style.get("inverse", {}).items():
-                    attrs.setdefault(k, v)
+                for key, value in self.style.get("inverse", {}).items():
+                    attrs.setdefault(key, value)
             if not isinstance(name, str) or name in self.ontology:
-                e = self.ontology[name] if isinstance(name, str) else name
+                entity = self.ontology[name] if isinstance(name, str) else name
                 relations = self.style.get("relations", {})
                 rels = set(
-                    self.ontology[r]
-                    for r in relations.keys()
-                    if r in self.ontology
+                    self.ontology[_] for _ in relations if _ in self.ontology
                 )
-                for r in e.mro():
-                    if r in rels:
+                for relation in entity.mro():
+                    if relation in rels:
+                        rattrs = (
+                            relations[get_label(relation)]
+                            if relation in rels
+                            else {}
+                        )
                         break
-                rattrs = relations[get_label(r)] if r in rels else {}
+                else:
+                    raise ValueError(
+                        f"Relation {relation} not found in entity.mro()."
+                    )
                 # object property
                 if isinstance(
-                    e, (owlready2.ObjectPropertyClass, owlready2.ObjectProperty)
+                    entity,
+                    (owlready2.ObjectPropertyClass, owlready2.ObjectProperty),
                 ):
-                    kw = self.style.get("default_relation", {}).copy()
-                    kw.update(rattrs)
+                    kwargs = self.style.get("default_relation", {}).copy()
+                    kwargs.update(rattrs)
                 # data property
                 elif isinstance(
-                    e, (owlready2.DataPropertyClass, owlready2.DataProperty)
+                    entity,
+                    (owlready2.DataPropertyClass, owlready2.DataProperty),
                 ):
-                    kw = self.style.get("default_dataprop", {}).copy()
-                    kw.update(rattrs)
+                    kwargs = self.style.get("default_dataprop", {}).copy()
+                    kwargs.update(rattrs)
                 else:
-                    raise TypeError("Unknown entity type: %r" % e)
-        kw.update(self.style.get("edges", {}).get(predicate, {}))
-        kw.update(attrs)
-        return kw
+                    raise TypeError(f"Unknown entity type: {entity!r}")
+        kwargs.update(self.style.get("edges", {}).get(predicate, {}))
+        kwargs.update(attrs)
+        return kwargs
 
     def add_legend(self, relations=None):
         """Adds legend for specified relations to the graph.
@@ -737,18 +747,20 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         elif isinstance(relations, str):
             relations = relations.split(",")
 
-        n = len(relations)
-        if n == 0:
+        nrelations = len(relations)
+        if nrelations == 0:
             return
 
-        t = '<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">'
-        label1 = [t]
-        label2 = [t]
-        for i, r in enumerate(relations):
+        table = (
+            '<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">'
+        )
+        label1 = [table]
+        label2 = [table]
+        for index, relation in enumerate(relations):
             label1.append(
-                '<tr><td align="right" port="i%d">%s</td></tr>' % (i, r)
+                f'<tr><td align="right" port="i{index}">{relation}</td></tr>'
             )
-            label2.append('<tr><td port="i%d">&nbsp;</td></tr>' % i)
+            label2.append(f'<tr><td port="i{index}">&nbsp;</td></tr>')
         label1.append("</table>>")
         label2.append("</table>>")
         self.dot.node("key1", label="\n".join(label1), shape="plaintext")
@@ -756,38 +768,44 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
 
         rankdir = self.dot.graph_attr.get("rankdir", "TB")
         constraint = "false" if rankdir in ("TB", "BT") else "true"
-        inv = True if rankdir in ("BT",) else False
+        inv = rankdir in ("BT",)
 
-        for i in range(n):
-            r = relations[n - 1 - i] if inv else relations[i]
-            if r == "inverse":
-                kw = self.style.get("inverse", {}).copy()
+        for index in range(nrelations):
+            relation = (
+                relations[nrelations - 1 - index] if inv else relations[index]
+            )
+            if relation == "inverse":
+                kwargs = self.style.get("inverse", {}).copy()
             else:
-                kw = self.get_edge_attrs(r, {}).copy()
-            kw["constraint"] = constraint
-            with self.dot.subgraph(name="sub%d" % i) as s:
-                s.attr(rank="same")
+                kwargs = self.get_edge_attrs(relation, {}).copy()
+            kwargs["constraint"] = constraint
+            with self.dot.subgraph(name=f"sub{index}") as subgraph:
+                subgraph.attr(rank="same")
                 if rankdir in ("BT", "LR"):
-                    self.dot.edge("key1:i%d:e" % i, "key2:i%d:w" % i, **kw)
+                    self.dot.edge(
+                        f"key1:i{index}:e", f"key2:i{index}:w", **kwargs
+                    )
                 else:
-                    self.dot.edge("key2:i%d:w" % i, "key1:i%d:e" % i, **kw)
+                    self.dot.edge(
+                        f"key2:i{index}:w", f"key1:i{index}:e", **kwargs
+                    )
 
     def get_relations(self, sort=True):
         """Returns a set of relations in current graph.  If `sort` is true,
         a sorted list is returned."""
         relations = set()
-        for s, p, o in self.edges:
-            if p.startswith("Inverse"):
+        for _, predicate, _ in self.edges:
+            if predicate.startswith("Inverse"):
                 relations.add("inverse")
-                match = re.match(r"Inverse\((.+)\)", p)
+                match = re.match(r"Inverse\((.+)\)", predicate)
                 if match is None:
                     raise ValueError(
                         "Could unexpectedly not find the inverse relation "
-                        f"just added in: {p}"
+                        f"just added in: {predicate}"
                     )
                 relations.add(match.groups()[0])
             else:
-                relations.add(p.split(None, 1)[0])
+                relations.add(predicate.split(None, 1)[0])
 
         # Sort, but place 'isA' first and 'inverse' last
         if sort:
@@ -802,20 +820,20 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
 
         return relations
 
-    def save(self, filename, format=None, **kwargs):
+    def save(self, filename, fmt=None, **kwargs):
         """Saves graph to `filename`.  If format is not given, it is
         inferred from `filename`."""
         base, ext = os.path.splitext(filename)
-        if format is None:
-            format = ext.lstrip(".")
+        if fmt is None:
+            fmt = ext.lstrip(".")
         kwargs.setdefault("cleanup", True)
-        if format in ("graphviz", "gv"):
+        if fmt in ("graphviz", "gv"):
             if "dictionary" in kwargs:
                 self.dot.save(filename, dictionary=kwargs["dictionary"])
             else:
                 self.dot.save(filename)
         else:
-            self.dot.render(base, format=format, **kwargs)
+            self.dot.render(base, format=fmt, **kwargs)
 
     def view(self):
         """Shows the graph in a viewer."""
@@ -837,8 +855,8 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                     f"but it is: {width}"
                 )
 
-            def asfloat(s):
-                return float(re.match(r"^[\d.]+", s).group())
+            def asfloat(string):
+                return float(re.match(r"^[\d.]+", string).group())
 
         return asfloat(width), asfloat(height)
 
@@ -882,33 +900,34 @@ def get_module_dependencies(iri_or_onto, strip_base=None):
     def strip(base_iri):
         if isinstance(strip_base, str):
             return base_iri.lstrip(strip_base)
-        elif strip_base:
+        if strip_base:
             return base_iri.strip(onto.base_iri)
-        else:
-            return base_iri
+        return base_iri
 
     visited = set()
 
     def setmodules(onto):
-        for o in onto.imported_ontologies:
+        for imported_onto in onto.imported_ontologies:
             if onto.base_iri in modules:
-                modules[strip(onto.base_iri)].add(strip(o.base_iri))
+                modules[strip(onto.base_iri)].add(strip(imported_onto.base_iri))
             else:
-                modules[strip(onto.base_iri)] = set([strip(o.base_iri)])
-            if o.base_iri not in modules:
-                modules[strip(o.base_iri)] = set()
-            if o not in visited:
-                visited.add(o)
-                setmodules(o)
+                modules[strip(onto.base_iri)] = set(
+                    [strip(imported_onto.base_iri)]
+                )
+            if imported_onto.base_iri not in modules:
+                modules[strip(imported_onto.base_iri)] = set()
+            if imported_onto not in visited:
+                visited.add(imported_onto)
+                setmodules(imported_onto)
 
     setmodules(onto)
     return modules
 
 
-def plot_modules(
+def plot_modules(  # pylint: disable=too-many-arguments
     src,
     filename=None,
-    format=None,
+    fmt=None,
     show=False,
     strip_base=None,
     ignore_redundant=True,
@@ -920,7 +939,7 @@ def plot_modules(
 
     If `filename` is given, write the graph to this file.
 
-    If `format` is None, the output format is inferred from `filename`.
+    If `fmt` is None, the output format is inferred from `filename`.
 
     If `show` is true, the graph is displayed.
 
@@ -956,9 +975,9 @@ def plot_modules(
 
     if filename:
         base, ext = os.path.splitext(filename)
-        if format is None:
-            format = ext.lstrip(".")
-        dot.render(base, format=format, view=False, cleanup=True)
+        if fmt is None:
+            fmt = ext.lstrip(".")
+        dot.render(base, format=fmt, view=False, cleanup=True)
 
     if show:
         dot.view(cleanup=True)
@@ -984,10 +1003,10 @@ def check_module_dependencies(modules, verbose=True):
             return set()
         visited.add(iri)
         deps = set()
-        for d in modules[iri]:
-            if d != excl:
-                deps.add(d)
-                deps.update(get_deps(d))
+        for dependency in modules[iri]:
+            if dependency != excl:
+                deps.add(dependency)
+                deps.update(get_deps(dependency))
         return deps
 
     mods = {}
@@ -1006,16 +1025,18 @@ def check_module_dependencies(modules, verbose=True):
     if redundant and verbose:
         print("** Warning: Redundant module dependency:")
         for iri, dep in redundant:
-            print("%s -> %s" % (iri, dep))
+            print(f"{iri} -> {dep}")
 
     return mods
 
 
-def cytoscapegraph(graph, onto=None, infobox=None, style=None):
+def cytoscapegraph(
+    graph, onto=None, infobox=None
+):  # pylint: disable=too-many-locals,too-many-statements
     """Returns and instance of icytoscape-figure for an
     instance Graph of OntoGraph, the accomanying ontology
     is required for mouse actions"""
-
+    # pylint: disable=import-error,import-outside-toplevel
     from ipywidgets import Output, VBox, GridspecLayout
     from IPython.display import display, Image
     from pathlib import Path
@@ -1027,32 +1048,34 @@ def cytoscapegraph(graph, onto=None, infobox=None, style=None):
     # Define the styles, this has to be aligned with the graphviz values
     dotplus = pydotplus.graph_from_dot_data(graph.dot.source)
     # if graph doesn't have multiedges, use dotplus.set_strict(true)
-    G = nx.nx_pydot.from_pydot(dotplus)
+    pydot_graph = nx.nx_pydot.from_pydot(dotplus)
 
     colours, styles, fill = cytoscape_style()
 
-    data = cytoscape_data(G)["elements"]
-    for d in data["edges"]:
-        d["data"]["label"] = d["data"]["label"].rsplit(" ", 1)[0].lstrip('"')
-        lab = d["data"]["label"].replace("Inverse(", "").rstrip(")")
+    data = cytoscape_data(pydot_graph)["elements"]
+    for datum in data["edges"]:
+        datum["data"]["label"] = (
+            datum["data"]["label"].rsplit(" ", 1)[0].lstrip('"')
+        )
+        lab = datum["data"]["label"].replace("Inverse(", "").rstrip(")")
         try:
-            d["data"]["colour"] = colours[lab]
+            datum["data"]["colour"] = colours[lab]
         except KeyError:
-            d["data"]["colour"] = "black"
+            datum["data"]["colour"] = "black"
         try:
-            d["data"]["style"] = styles[lab]
+            datum["data"]["style"] = styles[lab]
         except KeyError:
-            d["data"]["style"] = "solid"
-        if d["data"]["label"].startswith("Inverse("):
-            d["data"]["targetarrow"] = "diamond"
-            d["data"]["sourcearrow"] = "none"
+            datum["data"]["style"] = "solid"
+        if datum["data"]["label"].startswith("Inverse("):
+            datum["data"]["targetarrow"] = "diamond"
+            datum["data"]["sourcearrow"] = "none"
         else:
-            d["data"]["targetarrow"] = "triangle"
-            d["data"]["sourcearrow"] = "none"
+            datum["data"]["targetarrow"] = "triangle"
+            datum["data"]["sourcearrow"] = "none"
         try:
-            d["data"]["fill"] = fill[lab]
+            datum["data"]["fill"] = fill[lab]
         except KeyError:
-            d["data"]["fill"] = "filled"
+            datum["data"]["fill"] = "filled"
 
     cytofig = ipycytoscape.CytoscapeWidget()
     cytofig.graph.add_graph_from_json(data, directed=True)
@@ -1114,8 +1137,8 @@ def cytoscapegraph(graph, onto=None, infobox=None, style=None):
         def log_clicks(node):
             with out:
                 print((onto.get_by_label(node["data"]["label"])))
-                p = onto.get_by_label(node["data"]["label"]).get_parents()
-                print(f"parents: {p}")
+                parent = onto.get_by_label(node["data"]["label"]).get_parents()
+                print(f"parents: {parent}")
                 try:
                     elucidation = onto.get_by_label(
                         node["data"]["label"]
@@ -1128,8 +1151,8 @@ def cytoscapegraph(graph, onto=None, infobox=None, style=None):
                     annotations = onto.get_by_label(
                         node["data"]["label"]
                     ).annotations
-                    for e in annotations:
-                        print(f"annotation: {e}")
+                    for _ in annotations:
+                        print(f"annotation: {_}")
                 except AttributeError:
                     pass
 

@@ -337,7 +337,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         reload_if_newer=False,
         url_from_catalog=None,
         catalog_file="catalog-v001.xml",
-        EMMObased=True,
+        emmo_based=True,
         **kwargs,
     ):
         """Load the ontology.
@@ -366,7 +366,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
             Name of Protègè catalog file in the same folder as the
             ontology.  This option is used together with `only_local` and
             defaults to "catalog-v001.xml".
-        EMMObased : bool
+        emmo_based : bool
             Whether this is an EMMO-based ontology or not, default `True`.
         kwargs
             Additional keyword arguments are passed on to
@@ -388,7 +388,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         )
 
         # Enable optimised search by get_by_label()
-        if self._special_labels is None and EMMObased:
+        if self._special_labels is None and emmo_based:
             for iri in DEFAULT_LABEL_ANNOTATIONS:
                 self.add_label_annotation(iri)
             top = self.world["http://www.w3.org/2002/07/owl#topObjectProperty"]
@@ -412,8 +412,6 @@ class Ontology(  # pylint: disable=too-many-public-methods
         reload_if_newer=False,
         url_from_catalog=None,
         catalog_file="catalog-v001.xml",
-        tmpdir=None,
-        EMMObased=True,
         **kwargs,
     ):
         """Help function for _load()."""
@@ -548,8 +546,8 @@ class Ontology(  # pylint: disable=too-many-public-methods
             with tempfile.TemporaryDirectory() as handle:
                 output = os.path.join(handle, os.path.basename(resolved_url))
                 convert_imported(
-                    input=resolved_url,
-                    output=output,
+                    input_ontology=resolved_url,
+                    output_ontology=output,
                     input_format=fmt,
                     output_format="xml",
                     url_from_catalog=url_from_catalog,

@@ -27,7 +27,6 @@ import defusedxml.ElementTree as ET
 import owlready2
 import pydot
 
-from ontopy.ontology import NoSuchLabelError
 from ontopy.utils import asstring
 
 
@@ -187,6 +186,9 @@ class OntoGraph:
 
         Note: This method requires pydot.
         """
+        from ontopy.ontology import (  # pylint: disable=import-outside-toplevel
+            NoSuchLabelError,
+        )
 
         warnings.warn(
             """The ontopy.ontology.get_dot_graph() method is deprecated.
@@ -346,14 +348,14 @@ class OntoGraph:
             return
         node = nodes[0]
 
-        for entity in targets:
-            entity_string = asstring(entity)
-            if isinstance(entity, owlready2.ThingClass):
+        for target in targets:
+            entity_string = asstring(target)
+            if isinstance(target, owlready2.ThingClass):
                 pass
             elif isinstance(
-                entity, (owlready2.ObjectPropertyClass, owlready2.PropertyClass)
+                target, (owlready2.ObjectPropertyClass, owlready2.PropertyClass)
             ):
-                label = asstring(entity)
+                label = asstring(target)
                 nodes = graph.get_node(label)
                 if nodes:
                     kwargs = style.copy()
@@ -365,14 +367,14 @@ class OntoGraph:
                     if constraint is not None:
                         edge.set_constraint(constraint)
                     graph.add_edge(edge)
-            elif isinstance(entity, owlready2.Restriction):
-                rname = asstring(entity.property)
+            elif isinstance(target, owlready2.Restriction):
+                rname = asstring(target.property)
                 rtype = owlready2.class_construct._restriction_type_2_label[  # pylint: disable=protected-access
-                    entity.type
+                    target.type
                 ]
 
-                if relations is True or rname in relations:
-                    vname = asstring(entity.value)
+                if relations or rname in relations:
+                    vname = asstring(target.value)
                     others = graph.get_node(vname)
 
                     # Only proceede if there is only one node named `vname`
@@ -387,7 +389,7 @@ class OntoGraph:
                         continue
 
                     if rtype in ("min", "max", "exactly"):
-                        label = f"{rname} {rtype} {entity.cardinality}"
+                        label = f"{rname} {rtype} {target.cardinality}"
                     else:
                         label = f"{rname} {rtype}"
 
