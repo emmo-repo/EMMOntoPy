@@ -112,9 +112,6 @@ class World(owlready2.World):
 
         return onto
 
-    def __hash__(self):
-        return hash(self.filename)
-
 
 class Ontology(owlready2.Ontology, OntoGraph):
     """A generic class extending owlready2.Ontology.
@@ -193,38 +190,45 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Play nice with inspect...
         pass
 
-    def __eq__(self, other):
-        return hash(self) == hash(other)
-
-    def __str__(self):
-        """TODO"""
-
-    def __iter__(self):
-        """TODO"""
-
-    def __delitem__(self):
-        """TODO"""
-
-    def __setitem__(self, key, value):
-        """ MAYBE TODO """
-        # self[key] = value
-        # emmo['HAtom'] = emmo.Atom
-
     def __hash__(self):
-        """Returns hash.
-
-        Note that entities must have iris for this to work, since entities are
-        sorted by their iris before creating the hash.
+        """ Returns hash based on base_iri
+        This is done to keep Ontology hashable when defining __eq__.
         """
-        sorted_entities = sorted(
-            self.get_entities(imported=True,
-                              classes=True,
-                              individuals=False,
-                              object_properties=True,
-                              data_properties=True,
-                              annotation_properties=False,
-                              ), key=lambda e: e.iri)
-        return hash((self.base_iri, tuple(sorted_entities)))
+        return hash(self.base_iri)
+
+    def __eq__(self, other):
+        """Checks if this ontology is equal to other.
+
+        Equality of all triples obtained from self.get_triples(),
+        i.e. all triples except blank nodes.
+        """
+        return set(self.get_triples()) == set(other.get_triples())
+
+    def _sorted_entities(self):
+        """Return sorted entities
+        """
+        return sorted(e.iri for e in self.get_entities(
+                imported=True, classes=True,
+                individuals=True, object_properties=True,
+                data_properties=True, annotation_properties=True))
+
+    def get_triples(self):
+        """ Returns all triples unabbreviated
+        """
+        def _unabbreviate(i):
+            if isinstance(i, int):
+                if i >= 0:
+                    return self._unabbreviate(i)
+                else:
+                    return "_:"  # blank nodes are given random neg. storid
+            else:
+                return i
+
+        for s, p, o in self.world.get_triples():
+            s = _unabbreviate(s)
+            p = _unabbreviate(p)
+            o = _unabbreviate(o)
+            yield s, p, o
 
     def get_by_label(self, label, label_annotations=None, namespace=None):
         """Returns entity with label annotation `label`.
