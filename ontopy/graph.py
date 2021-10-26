@@ -12,7 +12,6 @@ import owlready2
 import graphviz
 
 from ontopy.utils import asstring, get_label
-from ontopy.ontology import get_ontology
 
 typenames = (
     owlready2.class_construct._restriction_type_2_label  # pylint: disable=protected-access
@@ -889,6 +888,10 @@ def get_module_dependencies(iri_or_onto, strip_base=None):
     If `strip_base` is true, the base IRI is stripped from ontology
     names.  If it is a string, it lstrip'ped from the base iri.
     """
+    from ontopy.ontology import (  # pylint: disable=import-outside-toplevel
+        get_ontology,
+    )
+
     if isinstance(iri_or_onto, str):
         onto = get_ontology(iri_or_onto)
         onto.load()

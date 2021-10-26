@@ -2,7 +2,7 @@
 """
 A module for documenting ontologies.
 """
-# pylint: disable=fixme,too-many-lines
+# pylint: disable=fixme,too-many-lines,no-member
 import os
 import re
 import time
@@ -956,15 +956,15 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                 tokens = shlex.split(line)
                 token = tokens[1]
                 opts = get_options(tokens[2:], header_level=3)
-                if token == "classes":
+                if token == "classes":  # nosec
                     items = onto.classes(imported=self.imported)
                 elif token in ("object_properties", "relations"):
                     items = onto.object_properties(imported=self.imported)
-                elif token == "data_properties":
+                elif token == "data_properties":  # nosec
                     items = onto.data_properties(imported=self.imported)
-                elif token == "annotation_properties":
+                elif token == "annotation_properties":  # nosec
                     items = onto.annotation_properties(imported=self.imported)
-                elif token == "individuals":
+                elif token == "individuals":  # nosec
                     items = onto.individuals(imported=self.imported)
                 else:
                     raise InvalidTemplateError(
@@ -999,13 +999,13 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     namespaces="",
                     ontologies="",
                 )
-                if token == "classes":
+                if token == "classes":  # nosec
                     roots = onto.get_root_classes(imported=self.imported)
                 elif token in ("object_properties", "relations"):
                     roots = onto.get_root_object_properties(
                         imported=self.imported
                     )
-                elif token == "data_properties":
+                elif token == "data_properties":  # nosec
                     roots = onto.get_root_data_properties(
                         imported=self.imported
                     )

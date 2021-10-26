@@ -369,13 +369,15 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                         # does not support inverse properties.  Build
                         # class_props manually...
                         class_props = set()
-                        for c in cls.mro():
-                            if hasattr(c, "is_a"):
+                        for _ in cls.mro():
+                            if hasattr(_, "is_a"):
                                 class_props.update(
                                     [
-                                        r.property
-                                        for r in c.is_a
-                                        if isinstance(r, owlready2.Restriction)
+                                        restriction.property
+                                        for restriction in _.is_a
+                                        if isinstance(
+                                            restriction, owlready2.Restriction
+                                        )
                                     ]
                                 )
 

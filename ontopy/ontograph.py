@@ -2,7 +2,7 @@
 """
 A module adding graphing functionality to ontopy.ontology
 """
-# pylint: disable=fixme
+# pylint: disable=fixme,no-member
 #
 # This module was written before I had a good understanding of DL.
 # Should be simplified and improved:

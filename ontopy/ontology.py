@@ -1094,7 +1094,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
 
         Note that this method requires the Python graphviz package.
         """
-        # pylint: disable=import-outside-toplevel
+        # pylint: disable=import-outside-toplevel,cyclic-import
         from ontopy.graph import OntoGraph as NewOntoGraph
 
         return NewOntoGraph(self, **kwargs)
