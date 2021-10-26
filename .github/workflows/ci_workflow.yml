@@ -67,7 +67,7 @@ jobs:
         pip install safety
 
     - name: Run PyLint
-      run: pylint --rcfile=pyproject.toml *.py emmopy ontopy
+      run: pylint --rcfile=pyproject.toml *.py tools
 
     - name: Run safety
       run: pip freeze | safety check --stdin
