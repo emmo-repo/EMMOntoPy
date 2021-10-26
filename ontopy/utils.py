@@ -369,7 +369,7 @@ def write_catalog(mappings, output="catalog-v001.xml"):
         res.append(f'        <uri name="{key}" uri="{value}"/>')
     res.append("    </group>")
     res.append("</catalog>")
-    with open(output, "wt", encoding="utf8") as handle:
+    with open(output, "wt") as handle:
         handle.write("\n".join(res) + "\n")
 
 

@@ -635,7 +635,7 @@ def main():  # pylint: disable=too-many-locals,too-many-branches,too-many-statem
     if args.configfile:
         import yaml  # pylint: disable=import-outside-toplevel
 
-        with open(args.configfile, "rt", encoding="utf8") as handle:
+        with open(args.configfile, "rt") as handle:
             TestEMMOConventions.config.update(
                 yaml.load(handle, Loader=yaml.SafeLoader)
             )

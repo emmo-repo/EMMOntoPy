@@ -6,8 +6,8 @@ target-version = ['py36', 'py37']
 disable = [
     "wrong-hanging-indentation",  # C0330
     "bad-whitespace",  # C0326
-    "duplicate-code"  # R0801
-    # "no-name-in-module"
+    "duplicate-code",  # R0801
+    "unspecified-encoding"  # W1514
 ]
 
 [tool.pylint.format]

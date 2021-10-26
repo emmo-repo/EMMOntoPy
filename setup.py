@@ -26,33 +26,27 @@ def fglob(patt):
 # Read long description from README.md file replacing references to local
 # files to github urls
 BASE_URL = "https://raw.githubusercontent.com/emmo-repo/EMMO-python/master/"
-with open(os.path.join(rootdir, "README.md"), "rt", encoding="utf8") as handle:
+with open(os.path.join(rootdir, "README.md"), "rt") as handle:
     long_description = re.sub(
         r"(\[[^]]+\])\(([^:)]+)\)", fr"\1({BASE_URL}\2)", handle.read()
     )
 
 # Read requirements from requirements.txt file
-with open(
-    os.path.join(rootdir, "requirements.txt"), "rt", encoding="utf8"
-) as handle:
+with open(os.path.join(rootdir, "requirements.txt"), "rt") as handle:
     REQUIREMENTS = [
         f"{_.strip()}"
         for _ in handle.readlines()
         if not _.startswith("#") and "git+" not in _
     ]
 
-with open(
-    os.path.join(rootdir, "requirements_docs.txt"), "r", encoding="utf8"
-) as handle:
+with open(os.path.join(rootdir, "requirements_docs.txt"), "r") as handle:
     DOCS = [
         f"{_.strip()}"
         for _ in handle.readlines()
         if not _.startswith("#") and "git+" not in _
     ]
 
-with open(
-    os.path.join(rootdir, "requirements_dev.txt"), "r", encoding="utf8"
-) as handle:
+with open(os.path.join(rootdir, "requirements_dev.txt"), "r") as handle:
     DEV = [
         f"{_.strip()}"
         for _ in handle.readlines()
@@ -60,9 +54,7 @@ with open(
     ] + DOCS
 
 # Retrieve emmo-package version
-with open(
-    os.path.join(rootdir, "ontopy/__init__.py"), encoding="utf8"
-) as handle:
+with open(os.path.join(rootdir, "ontopy/__init__.py")) as handle:
     for line in handle:
         match = re.match(r"__version__ = ('|\")(?P<version>.*)('|\")", line)
         if match is not None:

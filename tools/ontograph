@@ -207,12 +207,12 @@ def main():  # pylint: disable=too-many-locals,too-many-branches,too-many-statem
 
     # Update style from json file
     if args.style_file:
-        with open(args.style_file, "rt", encoding="utf8") as handle:
+        with open(args.style_file, "rt") as handle:
             style.update(json.load(handle))
 
     # Write style to json file
     if args.generate_style_file:
-        with open(args.generate_style_file, "wt", encoding="utf8") as handle:
+        with open(args.generate_style_file, "wt") as handle:
             json.dump(style, handle, indent=4)
 
     # Join all --leafs options

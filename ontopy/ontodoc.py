@@ -1144,7 +1144,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     temp_file.flush()
                     genfile = temp_file.name
             else:
-                with open(genfile, "wt", encoding="utf8") as handle:
+                with open(genfile, "wt") as handle:
                     handle.write(content)
             run_pandoc(
                 genfile,
@@ -1157,14 +1157,14 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         else:
             if verbose:
                 print("Writing:", outfile)
-            with open(outfile, "wt", encoding="utf8") as handle:
+            with open(outfile, "wt") as handle:
                 handle.write(content)
 
 
 def load_pandoc_option_file(yamlfile):
     """Loads pandoc options from `yamlfile` and return a list with
     corresponding pandoc command line arguments."""
-    with open(yamlfile, encoding="utf8") as handle:
+    with open(yamlfile) as handle:
         pandoc_options = yaml.safe_load(handle)
     options = pandoc_options.pop("input-files", [])
     variables = pandoc_options.pop("variables", {})
@@ -1318,9 +1318,9 @@ def run_pandoc_pdf(latex_dir, pdf_engine, outfile, args, verbose=True):
 
     # Fixing tex output
     texfile2 = basename + "2.tex"
-    with open(texfile, "rt", encoding="utf8") as handle:
+    with open(texfile, "rt") as handle:
         content = handle.read().replace(r"\$\Uptheta\$", r"$\Uptheta$")
-    with open(texfile2, "wt", encoding="utf8") as handle:
+    with open(texfile2, "wt") as handle:
         handle.write(content)
 
     # Run latex
@@ -1411,7 +1411,7 @@ def get_docpp(  # pylint: disable=too-many-arguments
 ):
     """Read `infile` and return a new docpp instance."""
     if infile:
-        with open(infile, "rt", encoding="utf8") as handle:
+        with open(infile, "rt") as handle:
             template = handle.read()
         basedir = os.path.dirname(infile)
     else:

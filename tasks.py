@@ -23,13 +23,13 @@ def update_file(
     filename: str, sub_line: "Tuple[str, str]", strip: str = None
 ) -> None:
     """Utility function for tasks to read, update, and write files"""
-    with open(filename, "r", encoding="utf8") as handle:
+    with open(filename, "r") as handle:
         lines = [
             re.sub(sub_line[0], sub_line[1], line.rstrip(strip))
             for line in handle
         ]
 
-    with open(filename, "w", encoding="utf8") as handle:
+    with open(filename, "w") as handle:
         handle.write("\n".join(lines))
         handle.write("\n")
 
@@ -76,13 +76,13 @@ def create_api_reference_docs(context, pre_clean=False, pre_commit=False):
     def write_file(full_path: Path, content: str) -> None:
         """Write file with `content` to `full_path`"""
         if full_path.exists():
-            with open(full_path, "r", encoding="utf8") as handle:
+            with open(full_path, "r") as handle:
                 cached_content = handle.read()
             if content == cached_content:
                 del cached_content
                 return
             del cached_content
-        with open(full_path, "w", encoding="utf8") as handle:
+        with open(full_path, "w") as handle:
             handle.write(content)
 
     package_dirs = (TOP_DIR / "emmopy", TOP_DIR / "ontopy")
@@ -189,7 +189,7 @@ def create_docs_index(_):
     readme = TOP_DIR / "README.md"
     docs_index = TOP_DIR / "docs/index.md"
 
-    with open(readme, encoding="utf8") as handle:
+    with open(readme) as handle:
         content = handle.read()
 
     replacement_mapping = [
@@ -201,5 +201,5 @@ def create_docs_index(_):
     for old, new in replacement_mapping:
         content = content.replace(old, new)
 
-    with open(docs_index, "w", encoding="utf8") as handle:
+    with open(docs_index, "w") as handle:
         handle.write(content)
