@@ -1143,17 +1143,27 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     temp_file.write(content)
                     temp_file.flush()
                     genfile = temp_file.name
+
+                    run_pandoc(
+                        genfile,
+                        outfile,
+                        fmt,
+                        pandoc_option_files=pandoc_option_files,
+                        pandoc_options=pandoc_options,
+                        verbose=verbose,
+                    )
             else:
                 with open(genfile, "wt") as handle:
                     handle.write(content)
-            run_pandoc(
-                genfile,
-                outfile,
-                fmt,
-                pandoc_option_files=pandoc_option_files,
-                pandoc_options=pandoc_options,
-                verbose=verbose,
-            )
+
+                run_pandoc(
+                    genfile,
+                    outfile,
+                    fmt,
+                    pandoc_option_files=pandoc_option_files,
+                    pandoc_options=pandoc_options,
+                    verbose=verbose,
+                )
         else:
             if verbose:
                 print("Writing:", outfile)
