@@ -61,17 +61,20 @@ with open(os.path.join(rootdir, 'ontopy/__init__.py')) as handle:
 setuptools.setup(
     name='EMMOntoPy',
     version=VERSION,
-    author='Jesper Friis, Francesca Lønstad Bleken, Bjørn Tore Løvfall',
+    author=(
+        'Jesper Friis, Francesca Lønstad Bleken, Casper Welzel Andersen, '
+        'Bjørn Tore Løvfall'
+    ),
     author_email='jesper.friis@sintef.no',
     description=('Python reference API for the Elementary Multiperspective'
-                 'Material Ontology'),
+                 'Material Ontology.'),
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/emmo-repo/EMMO-python',
     license='BSD',
-    python_requires='>=3.6.0',
+    python_requires='>=3.6',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         "Intended Audience :: Information Technology",
         "Intended Audience :: Science/Research",
@@ -80,8 +83,10 @@ setuptools.setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
-        "Topic :: Scientific/Engineering :: Physics",
-        "Topic :: Scientific/Engineering :: Artificial Intelligence",
+        "Topic :: Scientific/Engineering",
+        "Topic :: Scientific/Engineering :: Information Analysis",
+        "Topic :: Scientific/Engineering :: Visualization",
+        "Topic :: Software Development :: Documentation",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     install_requires=REQUIREMENTS,
