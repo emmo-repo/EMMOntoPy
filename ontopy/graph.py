@@ -530,7 +530,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                     self.add_edge(
                         subject=label,
                         predicate="isA",
-                        object=rlabel,
+                        obj=rlabel,
                         edgelabel=edgelabels,
                         **attrs,
                     )
@@ -567,7 +567,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                     self.add_edge(
                         subject=label,
                         predicate="inverse",
-                        object=rlabel,
+                        obj=rlabel,
                         edgelabel=edgelabels,
                         **attrs,
                     )
@@ -832,6 +832,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             else:
                 self.dot.save(filename)
         else:
+            fmt = kwargs.pop("format", fmt)
             self.dot.render(base, format=fmt, **kwargs)
 
     def view(self):

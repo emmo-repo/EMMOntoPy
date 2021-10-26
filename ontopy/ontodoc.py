@@ -803,7 +803,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         destdir = os.path.dirname(filepath)
         if not os.path.exists(destdir):
             os.makedirs(destdir)
-        graph.save(filepath, format=format)
+        graph.save(filepath, fmt=fmt)
         return filepath, leafs, width
 
     def process_branchfigs(self):
