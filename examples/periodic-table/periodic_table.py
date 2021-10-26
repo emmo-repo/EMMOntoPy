@@ -1,28 +1,33 @@
+"""Periodic table example."""
+# pylint: disable=import-error,too-few-public-methods,invalid-name
+import os
+import types
+
+import ase
+
 from ontopy import World
 from ontopy.utils import write_catalog
-import ase
-import types
-import owlready2
-import os
+
+import owlready2  # pylint: disable=wrong-import-order
 
 
 # define function that returns a string in English in owlready2
-def en(s):
+def english(string):
     """Returns `s` as an English location string."""
-    return owlready2.locstr(s, lang="en")
+    return owlready2.locstr(string, lang="en")
 
 
 # Load emmo
 world = World()  # to make it extensible for when an ontology gets very large
-emmopath = (
+EMMO_PATH = (
     "https://raw.githubusercontent.com/emmo-repo/emmo-repo.github.io/"
     "master/versions/1.0.0-beta/emmo-inferred-chemistry2.ttl"
 )
-emmo = world.get_ontology(emmopath).load()
+emmo = world.get_ontology(EMMO_PATH).load()
 emmo.sync_python_names()
 
 emmo.base_iri = emmo.base_iri.rstrip("/#")
-catalog_mappings = {emmo.base_iri: emmopath}
+catalog_mappings = {emmo.base_iri: EMMO_PATH}
 
 # Create new ontology
 
@@ -60,7 +65,7 @@ with onto:
     # Define the interpreter (viewpoint)
     EMMOCommittee = onto.Interpreter("EMMOCommittee")
 
-    for Z, (s, name, m) in enumerate(
+    for Z, (symbol, name, atomic_mass) in enumerate(
         zip(
             ase.data.chemical_symbols,
             ase.data.atomic_names,
@@ -73,47 +78,55 @@ with onto:
 
         # Make a new class of this atom type
         AtomClass = types.new_class(name + "Atom", (onto.Atom,))
-        AtomClass.elucidation.append(en("Atom subclass for %s." % lname))
-        AtomClass.is_a.append(hasChemicalSymbol.value(s))
+        AtomClass.elucidation.append(english(f"Atom subclass for {lname}."))
+        AtomClass.is_a.append(hasChemicalSymbol.value(symbol))
 
         # Set atomic number
-        z = onto.Integer(lname + "AtomicNumberValue", hasNumericalData=int(Z))
+        atomic_number = onto.Integer(
+            lname + "AtomicNumberValue", hasNumericalData=int(Z)
+        )
         number = EMMOAtomicNumber(
             lname + "AtomicNumber",
             hasReferenceUnit=[onto.UnitOne],
-            hasQuantityValue=[z],
+            hasQuantityValue=[atomic_number],
         )
 
         # Set mass
-        mval = onto.Real(lname + "AtomicMassValue", hasNumericalData=float(m))
+        mval = onto.Real(
+            lname + "AtomicMassValue", hasNumericalData=float(atomic_mass)
+        )
         mass = EMMOAtomicMass(lname + "AtomicMass")
         mass.hasReferenceUnit = [onto.Dalton]
         mass.hasQuantityValue = [mval]
 
         # make individual of this atom type and assign conventional quantities
-        at = AtomClass(lname, hasConventionalQuantity=[number, mass])
+        atom = AtomClass(lname, hasConventionalQuantity=[number, mass])
 
         assignment = EMMOAgreedQuantativePropertyAssignment(
             lname + "AtomicAtomicNumberAssignment"
         )
-        assignment.hasParticipant = [EMMOCommittee, at, number]
+        assignment.hasParticipant = [EMMOCommittee, atom, number]
         print(
-            at.hasConventionalQuantity[0].hasQuantityValue[0].hasNumericalData,
-            at.is_a[0].hasChemicalSymbol,
-            at.name,
-            at.hasConventionalQuantity[1].hasQuantityValue[0].hasNumericalData,
+            atom.hasConventionalQuantity[0]
+            .hasQuantityValue[0]
+            .hasNumericalData,
+            atom.is_a[0].hasChemicalSymbol,
+            atom.name,
+            atom.hasConventionalQuantity[1]
+            .hasQuantityValue[0]
+            .hasNumericalData,
         )
 
 # Save new ontology as owl
 onto.sync_attributes(name_policy="uuid", name_prefix="EMMO_")
-version_iri = "http://emmo.info/emmo/1.0.0-beta/domain/periodic-table"
-onto.set_version(version_iri=version_iri)
+VERSION_IRI = "http://emmo.info/emmo/1.0.0-beta/domain/periodic-table"
+onto.set_version(version_iri=VERSION_IRI)
 onto.dir_label = False
 thisdir = os.path.abspath(os.path.dirname(__file__))
-catalog_mappings[version_iri] = "periodic-table.ttl"
+catalog_mappings[VERSION_IRI] = "periodic-table.ttl"
 
 onto.metadata.abstract.append(
-    en(
+    english(
         "The periodic table domain ontology provide a simple reference "
         "implementation of all atoms in the periodic table with a few "
         "selected conventional properties.  It is ment as both an example "
@@ -123,28 +136,28 @@ onto.metadata.abstract.append(
     )
 )
 
-onto.metadata.title.append(en("Periodic table"))
-onto.metadata.creator.append(en("Jesper Friis"))
-onto.metadata.contributor.append(en("SINTEF"))
-onto.metadata.creator.append(en("Emanuele Ghedini"))
-onto.metadata.contributor.append(en("University of Bologna"))
-onto.metadata.publisher.append(en("EMMC ASBL"))
+onto.metadata.title.append(english("Periodic table"))
+onto.metadata.creator.append(english("Jesper Friis"))
+onto.metadata.contributor.append(english("SINTEF"))
+onto.metadata.creator.append(english("Emanuele Ghedini"))
+onto.metadata.contributor.append(english("University of Bologna"))
+onto.metadata.publisher.append(english("EMMC ASBL"))
 onto.metadata.license.append(
-    en("https://creativecommons.org/licenses/by/4.0/legalcode")
+    english("https://creativecommons.org/licenses/by/4.0/legalcode")
 )
-version = "1.0.0-beta"
-onto.metadata.versionInfo.append(en(version))
+VERSION = "1.0.0-beta"
+onto.metadata.versionInfo.append(english(VERSION))
 onto.metadata.comment.append(
-    en(
+    english(
         "The EMMO requires FacT++ reasoner plugin in order to visualize all"
         "inferences and class hierarchy (ctrl+R hotkey in Protege)."
     )
 )
 onto.metadata.comment.append(
-    en("This ontology is generated with data from the ASE Python package.")
+    english("This ontology is generated with data from the ASE Python package.")
 )
 onto.metadata.comment.append(
-    en(
+    english(
         "Contacts:\n"
         "Gerhard Goldbeck\n"
         "Goldbeck Consulting Ltd (UK)\n"

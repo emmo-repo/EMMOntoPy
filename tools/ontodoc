@@ -240,7 +240,7 @@ def main():
     try:
         res.write(
             args.outfile,
-            format=args.format,
+            fmt=args.format,
             pandoc_option_files=args.pandoc_option_files,
             pandoc_options=args.pandoc_options,
             genfile=args.genfile,

@@ -262,7 +262,7 @@ def main():  # pylint: disable=too-many-locals,too-many-branches,too-many-statem
         plot_modules(
             onto,
             filename=args.output,
-            format=args.format,
+            fmt=args.format,
             show=args.display,
             ignore_redundant=True,
         )

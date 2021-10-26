@@ -211,7 +211,11 @@ with onto:
         """Representative volume element.  The minimum volume that is
         representative for the system in question."""
 
-        is_a = [emmo.hasSpatialDirectPart.only(Phase | Boundary)]
+        is_a = [
+            emmo.hasSpatialDirectPart.only(
+                Phase | Boundary  # pylint: disable=unsupported-binary-operation
+            )
+        ]
 
     class WeldedComponent(emmo.EngineeredMaterial):
         """A welded component consisting of two materials welded together
