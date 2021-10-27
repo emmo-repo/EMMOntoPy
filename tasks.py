@@ -50,7 +50,7 @@ def setver(_, ver=""):
 
     update_file(
         TOP_DIR / "ontopy/__init__.py",
-        (r'__version__ = ".*"', f'__version__ = "{ver}"'),
+        (r"__version__ = ('|\").*('|\")", f'__version__ = "{ver}"'),
     )
 
     print(f"Bumped version to {ver}")
