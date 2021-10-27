@@ -1022,3 +1022,67 @@ def cytoscapegraph(graph, onto=None, infobox=None, style=None):
         return grid
 
     return cytofig
+
+# Read the jinja2-template from file
+with open("card.html.j2", "r") as f:
+    template = f.read()
+    jtemplate = Template(template)
+
+# Declare the output window for the concept documentation
+documentation = Output(layout=Layout(min_width='50%'))
+
+# Helper-map that maps ipytree node-uuids to concept-URI
+nodemap = {}
+
+
+def _match_to_string(concept, predicate):
+    """ Concatenate and wash matching object strings """
+    return "".join([(html.unescape(text))
+                    .replace('@en', '\n')
+                    .replace('\\n', '<br/>\n') 
+                    for (_,_,text) in match(concept, predicate)])
+
+
+def _handle_click(event):
+    """ Event to be called when a node is clicked """
+    concept = nodemap[event['owner']._id]
+    documentation.clear_output()
+    with documentation:        
+        display(HTML(value=jtemplate.render(
+            label=event['owner'].name, 
+            concept=html.escape(concept), 
+            elucidation=match_to_string(concept, EMMO.elucidation),
+            comments=match_to_string(concept, RDFS.comment), 
+            etymology=match_to_string(concept, EMMO.etymology))))
+
+
+def generate_node_tree(root):
+    """ Recursively generate the ipytree nodes """
+    # Read the jinja2-template from file
+    with open("card.html.j2", "r") as f:
+    template = f.read()
+    jtemplate = Template(template)
+
+    # Declare the output window for the concept documentation
+
+    # Helper-map that maps ipytree node-uuids to concept-URI
+    nodemap = {}
+
+    sub_nodes = []
+
+    # Recursively generate and append sub-nodes
+    for (sub_node,_,_) in match(None, RDFS.subClassOf, root):
+        sub_nodes.append(generate_node_tree(sub_node))
+
+    # Find the prefLabel (node name)
+    (_,_,lbl) = match_first(root, SKOS.prefLabel, None)
+    lbl = lbl.replace('@en','')
+    if sub_nodes:
+        node = Node(lbl, sub_nodes, opened=False, icon_style="success")
+    else:
+        node = Node(lbl, sub_nodes, opened=False, icon="leaf", icon_style="success")
+
+    # Add observer to handle interactions
+    node.observe(handle_click, 'selected')
+    nodemap[node._id] = root
+    return node
