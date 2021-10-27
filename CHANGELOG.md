@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.1.1](https://github.com/emmo-repo/EMMO-python/tree/v0.1.1) (2021-10-27)
+
+[Full Changelog](https://github.com/emmo-repo/EMMO-python/compare/v0.1.0...v0.1.1)
+
 ## [v0.1.0](https://github.com/emmo-repo/EMMO-python/tree/v0.1.0) (2021-10-27)
 
 [Full Changelog](https://github.com/emmo-repo/EMMO-python/compare/v1.0.1b...v0.1.0)
