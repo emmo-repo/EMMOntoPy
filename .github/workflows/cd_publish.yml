@@ -8,8 +8,6 @@ env:
   PUBLISH_UPDATE_BRANCH: master
   GIT_USER_NAME: EMMOntoPy Developers
   GIT_USER_EMAIL: EMMOntoPy@emmo.info
-  # IMPORTANT: The tag should *not* be prepended by `v`,
-  # i.e., it should be `1.0.1` and not `v1.0.1`.
 
 jobs:
   update-version:
@@ -47,23 +45,13 @@ jobs:
 
     - name: Update version and tag
       run: |
-        NEW_VERSION="${GITHUB_REF#refs/tags/}"
-
-        invoke setver --ver="${NEW_VERSION}"
+        invoke setver --ver="${GITHUB_REF#refs/tags/}"
         git add ontopy/__init__.py CHANGELOG.md
-        git commit -m "Release v${NEW_VERSION}"
+        git commit -m "Release ${GITHUB_REF#refs/tags/}"
 
         TAG_MSG=.github/utils/release_tag_msg.txt
-        sed -i "s|TAG_NAME|${NEW_VERSION}|" "${TAG_MSG}"
-        git tag -af -F "${TAG_MSG}" ${NEW_VERSION}
-
-    # - name: Push new commit and update tag
-    #   uses: ad-m/github-push-action@master
-    #   with:
-    #     github_token: ${{ secrets.RELEASE_TOKEN_FLB }}
-    #     branch: ${{ env.PUBLISH_UPDATE_BRANCH }}
-    #     force: true
-    #     tags: true
+        sed -i "s|TAG_NAME|${GITHUB_REF#refs/tags/}|" "${TAG_MSG}"
+        git tag -af -F "${TAG_MSG}" ${GITHUB_REF#refs/tags/}
 
     - name: Push new commit and update tag
       uses: CasperWA/push-protected@v2
@@ -155,5 +143,5 @@ jobs:
 
     - name: Deploy documentation
       run: |
-        mike deploy --push --remote origin --branch gh-pages --update-aliases --config-file mkdocs.yml ${GITHUB_REF#refs/tags/} stable
+        mike deploy --push --remote origin --branch gh-pages --update-aliases --config-file mkdocs.yml ${GITHUB_REF#refs/tags/v} stable
         mike deploy --push --remote origin --branch gh-pages --update-aliases --config-file mkdocs.yml latest ${{ env.PUBLISH_UPDATE_BRANCH }}
