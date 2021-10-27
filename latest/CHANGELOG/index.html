@@ -630,8 +630,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unreleased" class="md-nav__link">
-    Unreleased
+  <a href="#v010-2021-10-27" class="md-nav__link">
+    v0.1.0 (2021-10-27)
   </a>
   
 </li>
@@ -1209,8 +1209,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unreleased" class="md-nav__link">
-    Unreleased
+  <a href="#v010-2021-10-27" class="md-nav__link">
+    v0.1.0 (2021-10-27)
   </a>
   
 </li>
@@ -1453,20 +1453,28 @@
                 
                 
                 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
-<h2 id="unreleased"><a href="https://github.com/emmo-repo/EMMO-python/tree/HEAD">Unreleased</a><a class="headerlink" href="#unreleased" title="Permanent link">&para;</a></h2>
-<p><a href="https://github.com/emmo-repo/EMMO-python/compare/v1.0.1b...HEAD">Full Changelog</a></p>
+<h2 id="v010-2021-10-27"><a href="https://github.com/emmo-repo/EMMO-python/tree/v0.1.0">v0.1.0</a> (2021-10-27)<a class="headerlink" href="#v010-2021-10-27" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/emmo-repo/EMMO-python/compare/v1.0.1b...v0.1.0">Full Changelog</a></p>
 <p><strong>Implemented enhancements:</strong></p>
 <ul>
 <li>"Warning" Importing from <code>collections</code> <a href="https://github.com/emmo-repo/EMMO-python/issues/236">#236</a></li>
 </ul>
 <p><strong>Fixed bugs:</strong></p>
 <ul>
+<li>Loading ontologies that do not import skos fails <a href="https://github.com/emmo-repo/EMMO-python/issues/261">#261</a></li>
+<li>Fix documentation build warnings <a href="https://github.com/emmo-repo/EMMO-python/issues/250">#250</a></li>
 <li>Fix images in documentation <a href="https://github.com/emmo-repo/EMMO-python/issues/233">#233</a></li>
 <li>Circular reference from Owlready2 <a href="https://github.com/emmo-repo/EMMO-python/issues/210">#210</a></li>
 </ul>
 <p><strong>Closed issues:</strong></p>
 <ul>
+<li>Write up transfer from EMMOpython to EMMOntoPy i README.md <a href="https://github.com/emmo-repo/EMMO-python/issues/267">#267</a></li>
+<li>Add test to emmocheck for upcoming EMMO <a href="https://github.com/emmo-repo/EMMO-python/issues/257">#257</a></li>
+<li>Add packaging as dependency in requirements <a href="https://github.com/emmo-repo/EMMO-python/issues/255">#255</a></li>
+<li>Add CI check for building documentation <a href="https://github.com/emmo-repo/EMMO-python/issues/244">#244</a></li>
+<li>Add OpenModel as contributing project <a href="https://github.com/emmo-repo/EMMO-python/issues/237">#237</a></li>
 <li>Update public documentation to new framework <a href="https://github.com/emmo-repo/EMMO-python/issues/234">#234</a></li>
+<li>Automate documentation releases <a href="https://github.com/emmo-repo/EMMO-python/issues/232">#232</a></li>
 <li>Update name of EMMO to Elemental Multiperspective Material Ontology <a href="https://github.com/emmo-repo/EMMO-python/issues/230">#230</a></li>
 <li>Tidy up unittests <a href="https://github.com/emmo-repo/EMMO-python/issues/220">#220</a></li>
 <li>Remove importability of sub-<code>factpluspluswrapper</code> folders <a href="https://github.com/emmo-repo/EMMO-python/issues/213">#213</a></li>
@@ -1475,10 +1483,43 @@
 <li>change package name <a href="https://github.com/emmo-repo/EMMO-python/issues/205">#205</a></li>
 <li>test_catalog fails because seraching for .owl in emmo/master <a href="https://github.com/emmo-repo/EMMO-python/issues/203">#203</a></li>
 <li>Consider using <code>mike</code> for versioned documentation <a href="https://github.com/emmo-repo/EMMO-python/issues/197">#197</a></li>
+<li>Add a test that checks that loading of non-EMMO based ontologies work - e.g. do not require skos:prefLabel <a href="https://github.com/emmo-repo/EMMO-python/issues/196">#196</a></li>
 <li>Setup Materials for MkDocs framework <a href="https://github.com/emmo-repo/EMMO-python/issues/195">#195</a></li>
 <li>Clean up demo, examples and docs <a href="https://github.com/emmo-repo/EMMO-python/issues/193">#193</a></li>
 <li>Formalize review process with checklists <a href="https://github.com/emmo-repo/EMMO-python/issues/190">#190</a></li>
 <li>funksjon ontology.add_class(label, parent)  <a href="https://github.com/emmo-repo/EMMO-python/issues/183">#183</a></li>
+</ul>
+<p><strong>Merged pull requests:</strong></p>
+<ul>
+<li>Reset version to 0.1.0 <a href="https://github.com/emmo-repo/EMMO-python/pull/271">#271</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Update README with PyPI and deprecation msgs <a href="https://github.com/emmo-repo/EMMO-python/pull/270">#270</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Added option: EMMObased = False in ontology.load() <a href="https://github.com/emmo-repo/EMMO-python/pull/262">#262</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
+<li>Update pyyaml requirement from \&lt;6,>=5.4.1 to >=5.4.1,\&lt;7 <a href="https://github.com/emmo-repo/EMMO-python/pull/260">#260</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
+<li>Update owlready2 requirement from !=0.32,!=0.34,\&lt;0.35,>=0.28 to >=0.28,!=0.32,!=0.34,\&lt;0.36 <a href="https://github.com/emmo-repo/EMMO-python/pull/259">#259</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
+<li>Added new test "test_physical_quantity_dimension" <a href="https://github.com/emmo-repo/EMMO-python/pull/258">#258</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
+<li>Add <code>packaging</code> to list of requirements <a href="https://github.com/emmo-repo/EMMO-python/pull/256">#256</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Fix MkDocs build warnings and CI job <a href="https://github.com/emmo-repo/EMMO-python/pull/254">#254</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Update mkdocstrings requirement from ~=0.16.1 to ~=0.16.2 <a href="https://github.com/emmo-repo/EMMO-python/pull/253">#253</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
+<li>Update dependencies <a href="https://github.com/emmo-repo/EMMO-python/pull/252">#252</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Add OpenModel contributing project <a href="https://github.com/emmo-repo/EMMO-python/pull/247">#247</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
+<li>Automate documentation releases <a href="https://github.com/emmo-repo/EMMO-python/pull/242">#242</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Import from <code>collections.abc</code> when possible <a href="https://github.com/emmo-repo/EMMO-python/pull/240">#240</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Ensure all produced files from tests are in a temp dir <a href="https://github.com/emmo-repo/EMMO-python/pull/239">#239</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Changed EMMO to be acronym for Elemental Multiperspective Material Ontology <a href="https://github.com/emmo-repo/EMMO-python/pull/238">#238</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
+<li>Use width in img HTML <a href="https://github.com/emmo-repo/EMMO-python/pull/235">#235</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Update graphviz requirement from \&lt;0.17,>=0.16 to >=0.16,\&lt;0.18 <a href="https://github.com/emmo-repo/EMMO-python/pull/229">#229</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
+<li>Added function to load the emmo (the ontology) directly <a href="https://github.com/emmo-repo/EMMO-python/pull/226">#226</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
+<li>Created pull request template <a href="https://github.com/emmo-repo/EMMO-python/pull/225">#225</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
+<li>Setup new documentation framework <a href="https://github.com/emmo-repo/EMMO-python/pull/222">#222</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Remove <code>__init__.py</code> files for FaCT++ wrapper (again) <a href="https://github.com/emmo-repo/EMMO-python/pull/221">#221</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Unskip test as #210 has been resolved <a href="https://github.com/emmo-repo/EMMO-python/pull/218">#218</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Remove sub-fact++ modules importability <a href="https://github.com/emmo-repo/EMMO-python/pull/217">#217</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Update requirements <a href="https://github.com/emmo-repo/EMMO-python/pull/216">#216</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Avoid using Owlready2 v0.34 <a href="https://github.com/emmo-repo/EMMO-python/pull/211">#211</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Update package names <a href="https://github.com/emmo-repo/EMMO-python/pull/208">#208</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>Added function new_entitiy to ontology <a href="https://github.com/emmo-repo/EMMO-python/pull/207">#207</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
+<li>ttl standard for emmo <a href="https://github.com/emmo-repo/EMMO-python/pull/204">#204</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
+<li>Added choice for specifying namespace in get_by_label <a href="https://github.com/emmo-repo/EMMO-python/pull/202">#202</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 </ul>
 <h2 id="v101b-2021-07-01"><a href="https://github.com/emmo-repo/EMMO-python/tree/v1.0.1b">v1.0.1b</a> (2021-07-01)<a class="headerlink" href="#v101b-2021-07-01" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/emmo-repo/EMMO-python/compare/v1.0.1...v1.0.1b">Full Changelog</a></p>
