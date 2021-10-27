@@ -5,6 +5,8 @@ EMMO - Python API for the European Materials & Modelling Ontology
 
 > This package is deprecated in favor of the [`EMMOntoPy`](https://pypi.org/project/EMMOntoPy) package.
 
+> `pip install emmo` will install latest release of [`EMMOntoPy`](https://pypi.org/project/EMMOntoPy).
+
 This package is based on [Owlready2] and provides an intuitive
 representation of [EMMO] in Python.
 It is available on [GitHub][EMMO-python] and on [PyPI][PyPI:EMMO]
