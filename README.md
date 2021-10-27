@@ -1,9 +1,9 @@
 EMMO - Python API for the European Materials & Modelling Ontology
 =================================================================
 
-![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20Tests/badge.svg)
-[![PyPI version](https://badge.fury.io/py/EMMO.svg)](https://badge.fury.io/py/EMMO)
+!!! DEPRECATED !!!
 
+> This package is deprecated in favor of the [`EMMOntoPy`](https://pypi.org/project/EMMOntoPy) package.
 
 This package is based on [Owlready2] and provides an intuitive
 representation of [EMMO] in Python.

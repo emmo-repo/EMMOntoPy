@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 import sys
+import warnings
 
 __version__ = '2.0.0'
+
+warnings.warn(
+    message="The EMMO package is deprecated. Use EMMOntoPy instead.",
+    category=DeprecationWarning,
+)
 
 # Ensure correct Python version
 if sys.version_info < (3, 6):
