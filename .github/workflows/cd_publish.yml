@@ -60,7 +60,7 @@ jobs:
     - name: Push new commit and update tag
       uses: ad-m/github-push-action@master
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.RELEASE_TOKEN_FLB }}
         branch: ${{ env.PUBLISH_UPDATE_BRANCH }}
         force: true
         tags: true
@@ -82,7 +82,7 @@ jobs:
         cat release_changelog.md >> release_body.md
         gh api /repos/${{ github.repository }}/releases/${{ github.event.release.id }} -X PATCH -F body='@release_body.md'
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_FLB }}
 
   publish-package:
     name: Publish Python package to PyPI
