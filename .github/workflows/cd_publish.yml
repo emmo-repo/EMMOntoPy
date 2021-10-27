@@ -40,7 +40,7 @@ jobs:
     - name: Update changelog
       uses: CharMixer/auto-changelog-action@v1
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.RELEASE_TOKEN_FLB }}
         release_branch: ${{ env.PUBLISH_UPDATE_BRANCH }}
 
     - name: Update version and tag
@@ -68,7 +68,7 @@ jobs:
     - name: Create release-specific changelog
       uses: CharMixer/auto-changelog-action@v1
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.RELEASE_TOKEN_FLB }}
         release_branch: ${{ env.PUBLISH_UPDATE_BRANCH }}
         since_tag: "${{ env.PREVIOUS_VERSION }}"
         output: "release_changelog.md"
