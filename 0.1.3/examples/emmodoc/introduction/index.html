@@ -1,0 +1,1921 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the EMMOntoPy library">
+      
+      
+      
+      
+        <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/0.1.3/examples/emmodoc/introduction/">
+      
+      <link rel="icon" href="../../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+    
+    
+      
+        <title>Introduction - EMMOntoPy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.db9e7362.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4cae4f">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../css/reference.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="light-green">
+  
+    
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="EMMOntoPy" class="md-header__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
+      
+  <img src="../../../images/suspected_logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            EMMOntoPy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Introduction
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/emmo-repo/EMMO-python" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EMMO-python
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="EMMOntoPy" class="md-nav__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
+      
+  <img src="../../../images/suspected_logo.svg" alt="logo">
+
+    </a>
+    EMMOntoPy
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/emmo-repo/EMMO-python" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EMMO-python
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools-instructions/" class="md-nav__link">
+        Tools
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docker-instructions/" class="md-nav__link">
+        Docker
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../LICENSE/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Examples and demonstrations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Examples and demonstrations" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Examples and demonstrations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Demo
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Demo" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Demo
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../demo/" class="md-nav__link">
+        EMMO use cases
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../demo/horizontal/" class="md-nav__link">
+        EMMO use case for horizontal interoperability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../demo/vertical/" class="md-nav__link">
+        EMMO use case for vertical interoperability
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2_1" type="checkbox" id="__nav_5_2_1" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2_1">
+          Emmodoc
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Emmodoc" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Emmodoc
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        Generate documentation for EMMO
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classes/" class="md-nav__link">
+        Classes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../emmo/" class="md-nav__link">
+        Emmo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../important_concepts/" class="md-nav__link">
+        Important concepts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Introduction
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Introduction
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-an-ontology" class="md-nav__link">
+    What is an ontology
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#primitive-elements-in-emmo" class="md-nav__link">
+    Primitive elements in EMMO
+  </a>
+  
+    <nav class="md-nav" aria-label="Primitive elements in EMMO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#individuals" class="md-nav__link">
+    Individuals
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    Classes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axioms" class="md-nav__link">
+    Axioms
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#theoretical-foundations" class="md-nav__link">
+    Theoretical foundations
+  </a>
+  
+    <nav class="md-nav" aria-label="Theoretical foundations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#semiotics" class="md-nav__link">
+    Semiotics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mereotopology" class="md-nav__link">
+    Mereotopology
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#physics" class="md-nav__link">
+    Physics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metrology" class="md-nav__link">
+    Metrology
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description-logic" class="md-nav__link">
+    Description logic
+  </a>
+  
+    <nav class="md-nav" aria-label="Description logic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#equivalence-owlequivalentto" class="md-nav__link">
+    Equivalence (owl:equivalentTo)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inclusion-rdfsubclassof" class="md-nav__link">
+    Inclusion (rdf:subclassOf)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enumeration-owloneof" class="md-nav__link">
+    Enumeration (owl:oneOf)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#existential-restriction-owlsomevaluesfrom" class="md-nav__link">
+    Existential restriction (owl:someValuesFrom)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#universal-restriction-owlallvaluesfrom" class="md-nav__link">
+    Universal restriction (owl:allValuesFrom)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#value-restriction-owlhasvalue" class="md-nav__link">
+    Value restriction (owl:hasValue)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#property-cardinality-owlcardinality" class="md-nav__link">
+    Property cardinality (owl:cardinality)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intersection-owlintersectionof" class="md-nav__link">
+    Intersection (owl:intersectionOf)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#union-owlunionof" class="md-nav__link">
+    Union (owl:unionOf)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#complement-owlcomplementof" class="md-nav__link">
+    Complement (owl:complementOf)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-structure-of-emmo" class="md-nav__link">
+    The structure of EMMO
+  </a>
+  
+    <nav class="md-nav" aria-label="The structure of EMMO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#top-level" class="md-nav__link">
+    Top Level
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#middle-level" class="md-nav__link">
+    Middle Level
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmo-relations" class="md-nav__link">
+    EMMO relations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#annotations" class="md-nav__link">
+    Annotations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../relations/" class="md-nav__link">
+        Relations
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jupyter-visualization/" class="md-nav__link">
+        Visualise an ontology using pyctoscape in Jupyter Notebook
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Developers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Developers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Developers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-instructions/" class="md-nav__link">
+        Steps for creating a new release
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CHANGELOG/" class="md-nav__link">
+        Changelog
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_1" type="checkbox" id="__nav_8_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_1">
+          emmopy
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="emmopy" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_1">
+          <span class="md-nav__icon md-icon"></span>
+          emmopy
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_reference/emmopy/emmocheck/" class="md-nav__link">
+        emmocheck
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_reference/emmopy/emmopy/" class="md-nav__link">
+        emmopy
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_2" type="checkbox" id="__nav_8_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_2">
+          ontopy
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="ontopy" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_2">
+          <span class="md-nav__icon md-icon"></span>
+          ontopy
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_reference/ontopy/colortest/" class="md-nav__link">
+        colortest
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_reference/ontopy/graph/" class="md-nav__link">
+        graph
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_reference/ontopy/nadict/" class="md-nav__link">
+        nadict
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_reference/ontopy/ontodoc/" class="md-nav__link">
+        ontodoc
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_reference/ontopy/ontograph/" class="md-nav__link">
+        ontograph
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_reference/ontopy/ontology/" class="md-nav__link">
+        ontology
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_reference/ontopy/patch/" class="md-nav__link">
+        patch
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_reference/ontopy/utils/" class="md-nav__link">
+        utils
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_2_9" type="checkbox" id="__nav_8_2_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_2_9">
+          factpluspluswrapper
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="factpluspluswrapper" data-md-level="3">
+        <label class="md-nav__title" for="__nav_8_2_9">
+          <span class="md-nav__icon md-icon"></span>
+          factpluspluswrapper
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_reference/ontopy/factpluspluswrapper/factppgraph/" class="md-nav__link">
+        factppgraph
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_reference/ontopy/factpluspluswrapper/owlapi_interface/" class="md-nav__link">
+        owlapi_interface
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_reference/ontopy/factpluspluswrapper/sync_factpp/" class="md-nav__link">
+        sync_factpp
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-an-ontology" class="md-nav__link">
+    What is an ontology
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#primitive-elements-in-emmo" class="md-nav__link">
+    Primitive elements in EMMO
+  </a>
+  
+    <nav class="md-nav" aria-label="Primitive elements in EMMO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#individuals" class="md-nav__link">
+    Individuals
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    Classes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axioms" class="md-nav__link">
+    Axioms
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#theoretical-foundations" class="md-nav__link">
+    Theoretical foundations
+  </a>
+  
+    <nav class="md-nav" aria-label="Theoretical foundations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#semiotics" class="md-nav__link">
+    Semiotics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mereotopology" class="md-nav__link">
+    Mereotopology
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#physics" class="md-nav__link">
+    Physics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metrology" class="md-nav__link">
+    Metrology
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description-logic" class="md-nav__link">
+    Description logic
+  </a>
+  
+    <nav class="md-nav" aria-label="Description logic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#equivalence-owlequivalentto" class="md-nav__link">
+    Equivalence (owl:equivalentTo)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inclusion-rdfsubclassof" class="md-nav__link">
+    Inclusion (rdf:subclassOf)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enumeration-owloneof" class="md-nav__link">
+    Enumeration (owl:oneOf)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#existential-restriction-owlsomevaluesfrom" class="md-nav__link">
+    Existential restriction (owl:someValuesFrom)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#universal-restriction-owlallvaluesfrom" class="md-nav__link">
+    Universal restriction (owl:allValuesFrom)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#value-restriction-owlhasvalue" class="md-nav__link">
+    Value restriction (owl:hasValue)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#property-cardinality-owlcardinality" class="md-nav__link">
+    Property cardinality (owl:cardinality)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intersection-owlintersectionof" class="md-nav__link">
+    Intersection (owl:intersectionOf)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#union-owlunionof" class="md-nav__link">
+    Union (owl:unionOf)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#complement-owlcomplementof" class="md-nav__link">
+    Complement (owl:complementOf)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-structure-of-emmo" class="md-nav__link">
+    The structure of EMMO
+  </a>
+  
+    <nav class="md-nav" aria-label="The structure of EMMO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#top-level" class="md-nav__link">
+    Top Level
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#middle-level" class="md-nav__link">
+    Middle Level
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmo-relations" class="md-nav__link">
+    EMMO relations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#annotations" class="md-nav__link">
+    Annotations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h1>
+<p>EMMO is a multidisciplinary effort to develop a standard representational framework (the ontology) based on current materials modelling knowledge, including physical sciences, analytical philosophy and information and communication technologies.
+This multidisciplinarity is illustrated by the figure on the title page.
+It provides the connection between the physical world, materials characterisation world and materials modelling world.</p>
+<p><img alt="EMMO provides the connection between the physical world, materials characterisation world and materials modelling world." src="../figs/emmo-three_worlds.png" width="620px" /></p>
+<p>EMMO is based on and is consistent with the <a href="https://publications.europa.eu/en/publication-detail/-/publication/ec1455c3-d7ca-11e6-ad7c-01aa75ed71a1">Review of Materials Modelling</a>, <a href="https://www.cen.eu/news/workshops/Pages/WS_2016-013.aspx">CEN Workshop Agreement</a> and <a href="https://emmc.info/moda-workflow-templates/">MODA template</a>.
+However, while these efforts are written for humans, EMMO is defined using the <a href="https://en.wikipedia.org/wiki/Web_Ontology_Language">Web Ontology Language (OWL)</a>, which is machine readable and allows for machine reasoning.
+In terms of semantic representation, EMMO brings everything to a much higher level than these foundations.</p>
+<p>As illustrated in the figure below, EMMO covers all aspects of materials modelling and characterisation, including:</p>
+<ul>
+<li>the <strong>material</strong> itself, which must be described in a rigorous way;</li>
+<li>the <strong>observation process</strong> involving an observer that percieves the real world (characterisation);</li>
+<li>the <strong>properties</strong> that are measured or modelled;</li>
+<li>the <strong>physics laws</strong> that describe the material behaviour;</li>
+<li>the <strong>physical models</strong> that approximate the physics laws;</li>
+<li>the <strong>solver</strong> including the numerical discretisation method that leads to a solvable mathematical representation under certain simplifying assumptions;</li>
+<li>the <strong>numerical solver</strong> that performs the calculations; and</li>
+<li>the <strong>post processing</strong> of experimental or simulated data.</li>
+</ul>
+<p><img alt="The aspects of materials modelling and characterisation covered by EMMO." src="../figs/emmo-scope.png" width="360px" /></p>
+<p>EMMO is released under the <a href="http://emmo.info/blob/v1.0.0/LICENSE.md">Creative Commons license</a> and is available at <a href="https://github.com/emmo-repo/EMMO/">emmo.info/</a>.
+The OWL2-DL sources are available in RDF/XML format.</p>
+<h2 id="what-is-an-ontology">What is an ontology<a class="headerlink" href="#what-is-an-ontology" title="Permanent link">&para;</a></h2>
+<p>In short, an ontology is a specification of a conceptualization.
+The word <em>ontology</em> has a long history in philosophy, in which it refers to the subject of existence.
+The so-called <a href="https://en.wikipedia.org/wiki/Ontological_argument">ontological argument</a> for the existence of God was proposed by Anselm of Canterbury in 1078.
+He defined God as <em>"that than which nothing greater can be thought"</em>, and argued that <em>"if the greatest possible being exists in the mind, it must also exist in reality.
+If it only exists in the mind, then an even greater being must be possible -- one which exists both in the mind and in reality"</em>.
+Even though this example has little to do with todays use of ontologies in e.g. computer science, it illustrates the basic idea; the ontology defines some basic premises (concepts and relations between them) from which it is possible reason to gain new knowledge.</p>
+<p>For a more elaborated and modern definition of the ontology we refer the reader to the one provided by <a href="http://tomgruber.org/writing/ontology-definition-2007.htm">Tom Gruber (2009)</a>.
+Another useful introduction to ontologies is the paper <a href="http://www.ksl.stanford.edu/people/dlm/papers/ontology-tutorial-noy-mcguinness-abstract.html">Ontology Development 101: A Guide to Creating Your First Ontology</a> by Noy and McGuinness (2001), which is based on the <a href="https://protege.stanford.edu/">Protege</a> sortware, with which EMMO has been developed.</p>
+<p>A taxonomy is a hierarchical representation of classes and subclasses connected via <code>is_a</code> relations.
+Hence, it is a subset of the ontology excluding all but the <code>is_a</code> relations.
+The main use of taxonomies is for the organisation of classifications.
+The figure shows a simple example of a taxonomy illustrating a categorisation of four classes into a hierarchy of more higher of levels of generality.</p>
+<p><img alt="Example of a taxonomy." src="../figs/animal.png" width="300px" /></p>
+<p>In EMMO, the taxonomy is a rooted directed acyclic graph (DAG).
+This is important since many classification methods relies on this property, see e.g. <a href="https://arxiv.org/abs/1406.4472">Valentini (2014)</a> and <a href="https://www.google.no/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;ved=0ahUKEwi_2vv-8tXbAhUFiiwKHVRdD4EQFgg1MAE&amp;url=https%3A%2F%2Fwww.springer.com%2Fcda%2Fcontent%2Fdocument%2Fcda_downloaddocument%2F9783319202471-c2.pdf%3FSGWID%3D0-0-45-1510685-p177420182&amp;usg=AOvVaw39c3v4a5PfVMEYDulWpF3w">Robison et al (2015)</a>.
+Note, that EMMO is a DAG does not prevent some classes from having more than one parent.
+A <code>Variable</code> is for instance both a <code>Mathematical</code> and a <code>Symbol</code>.
+See appendix for the full EMMO taxonomy.</p>
+<h2 id="primitive-elements-in-emmo">Primitive elements in EMMO<a class="headerlink" href="#primitive-elements-in-emmo" title="Permanent link">&para;</a></h2>
+<p><img alt="The primitive building blocks of EMMO." src="../figs/emmo-primitives.png" width="620px" /></p>
+<h3 id="individuals">Individuals<a class="headerlink" href="#individuals" title="Permanent link">&para;</a></h3>
+<p>Individuals are the basic, "ground level" components of EMMO.
+They may include concrete objects such as cars, flowers, stars, persons and molecules, as well as abstract individuals such as a measured height, a specific equation and software programs.</p>
+<p>Individuals possess attributes in form of axioms that are defined by the user (interpreter) upon declaration.</p>
+<h3 id="classes">Classes<a class="headerlink" href="#classes" title="Permanent link">&para;</a></h3>
+<p>Classes represent concepts.
+They are the building blocks that we use to create an ontology as a representation of knowledge.
+We distinguish between <em>defined</em> and <em>non-defined</em> classes.</p>
+<p>Defined classes are defined by the requirements for being a member of the class.
+In the graphical representations of EMMO, defined classes are orange.
+For instance, in the graph of the top-level entity branch below, The root <code>EMMO</code> and a defined class (defined to be the disjoint union of <code>Item</code> and <code>Collection</code>).</p>
+<p>Non-defined classes are defined as an abstract group of objects, whose members are defined as belonging to the class.
+They are yellow in the graphical representations.</p>
+<p>%BRANCHFIG EMMO leafs=Perspective,Elementary caption='Example of the top-level branch of EMMO showing some classes and relationships between them.' width=460</p>
+<h3 id="axioms">Axioms<a class="headerlink" href="#axioms" title="Permanent link">&para;</a></h3>
+<p>Axioms are propositions in a logical framework that define the relations between the individuals and classes.
+They are used to categorise individuals in classes and to define the <em>defined</em> classes.</p>
+<p>The simplest form of a class axiom is a class description that just states the existence of the class and gives it an unique identifier.
+In order to provide more knowledge about the class, class axioms typically contain additional components that state necessary and/or sufficient characteristics of the class.
+OWL contains three language constructs for combining class descriptions into class axioms:</p>
+<ul>
+<li>
+<p><em>Subclass</em> (<code>rdfs:subClassOf</code>) allows one to say that the class extension of a class description is a subset of the class extension of another class description.</p>
+</li>
+<li>
+<p><em>Equivalence</em> (<code>owl:equivalentClass</code>) allows one to say that a class description has exactly the same class extension (i.e. the individuals associated with the class) as another class description.</p>
+</li>
+<li>
+<p><em>Distjointness</em> (<code>owl:disjointWith</code>) allows one to say that the class extension of a class description has no members in common with the class extension of another class description.</p>
+</li>
+</ul>
+<p>See the section about <a href="#description-logic">Description logic</a> for more information about these language constructs.
+Axioms are also used to define relations between relations.
+These are further detailed in the chapter on <a href="#emmo-relations">Relations</a>.</p>
+<h2 id="theoretical-foundations">Theoretical foundations<a class="headerlink" href="#theoretical-foundations" title="Permanent link">&para;</a></h2>
+<p>EMMO build upon several theoretical frameworks.</p>
+<h3 id="semiotics">Semiotics<a class="headerlink" href="#semiotics" title="Permanent link">&para;</a></h3>
+<p>Semiotics is the study of meaning-making.
+It is the dicipline of formulating something that possibly can exist in a defined space and time in the real world.</p>
+<p>%%It is introdused in EMMO via the
+%%<code>semion</code> class and used as a way to reduce the complexity of a
+%%physical to a simple sign (symbol).  A <code>Sign</code> is a physical
+%%entity that can represent another object.
+%%
+%%### Set theory
+%%Set theory is the theory of membership. This is introduced via
+%%the <code>set</code> class, representing the collection of all individuals
+%%(signs) that represent a collection of items.  Sets are defined
+%%via the <code>hasMember</code> relations.</p>
+<h3 id="mereotopology">Mereotopology<a class="headerlink" href="#mereotopology" title="Permanent link">&para;</a></h3>
+<p>Mereotopology is the combination of <strong>mereology</strong> (science of parthood) and <strong>topology</strong> (mathematical study of the geometrical properties and conservation through deformations).
+It is introdused via the <a href="#item"><code>Item</code></a> class and based on the <a href="#mereotopological"><code>mereotopological</code></a> relations.
+Items in EMMO are always topologically connected in space and time.
+EMMO makes a strong distinction between membership and parthood relations.
+In contrast to collections, items can only have parts that are themselves items.
+For further information, see <a href="https://mitpress.mit.edu/books/parts-and-places">Casati and Varzi "Parts and Places" (1999)</a>.</p>
+<h3 id="physics">Physics<a class="headerlink" href="#physics" title="Permanent link">&para;</a></h3>
+<p>EMMO is strongly based on physics, with the aim of being able to describe all aspects and all domains of physics, from quantum mechanics to continuum, engeneering, chemistry, etc.
+EMMO is compatible with both the De Broglie - Bohm and the Copenhagen interpretation of quantum mecanics (see <a href="#physical"><code>Physical</code></a> for more comments).</p>
+<p>EMMO defines a physics-based parthood hierachy under <code>Physical</code> by introducing the following concepts (illustrated in the figure below):</p>
+<ul>
+<li>
+<p><a href="#elementary"><code>Elementary</code></a> is the fundamental, non-divisible constituent of entities.
+  In EMMO, elementaries are based on the standard model of physics.</p>
+</li>
+<li>
+<p><a href="#state"><code>State</code></a> is a <code>Physical</code> whose parts does not change during its life time (at the chosen level of granularity).
+  This is consistent with a state within e.g. thermodynamics.</p>
+</li>
+<li>
+<p><a href="#existent"><code>Existent</code></a> is a succession of states.</p>
+</li>
+</ul>
+<p><img alt="Parthood hierachy under Physical." src="../figs/physical.png" width="600px" /></p>
+<h3 id="metrology">Metrology<a class="headerlink" href="#metrology" title="Permanent link">&para;</a></h3>
+<p>Metrology is the science of measurements.
+It introduces units and links them to properties.
+The description of metrology in EMMO is based on the standards of <a href="https://en.wikipedia.org/wiki/International_System_of_Quantities">International System of Quantities (ISQ)</a> and <a href="https://en.wikipedia.org/wiki/International_System_of_Units">International System of Units (SI)</a>.</p>
+<h3 id="description-logic">Description logic<a class="headerlink" href="#description-logic" title="Permanent link">&para;</a></h3>
+<p><a href="https://en.wikipedia.org/wiki/Description_logic">Description logic (DL)</a> is a formal knowledge representation language in which the <em>axioms</em> are expressed.
+It is less expressive than <a href="https://en.wikipedia.org/wiki/First-order_logic">first-order logic (FOL)</a>, but commonly used for providing the logical formalism for ontologies and semantic web.
+EMMO is expressed in the <a href="https://en.wikipedia.org/wiki/Web_Ontology_Language">Web Ontology Language (OWL)</a>, which in turn is based on DL.
+This brings along features like reasoning.</p>
+<p>Since it is essential to have a basic notion of OWL and DL, we include here a very brief overview.
+For a proper introduction to OWL and DL, we refer the reader to sources like <a href="http://www.cs.ox.ac.uk/boris.motik/pubs/ghmppss08next-steps.pdf">Grau et.al. (2008)</a>, <a href="https://www.w3.org/TR/owl2-primer/">OWL2 Primer</a> and <a href="https://www.w3.org/TR/owl-ref/">OWL Reference</a>.</p>
+<p>OWL distinguishes between six types of class descriptions:</p>
+<ol>
+<li>a class identifier (a IRI reference);</li>
+<li>an exhaustive enumeration of individuals that together form the instances of a class (<code>owl:oneOf</code>);</li>
+<li>a property restriction (<code>owl:someValuesFrom</code>, <code>owl:allValuesFrom</code>, <code>owl:hasValue</code>, <code>owl:cardinality</code>, <code>owl:minCardinality</code>, <code>owl:maxCardinality</code>);</li>
+<li>the intersection of two or more class descriptions (<code>owl:intersectionOf</code>);</li>
+<li>the union of two or more class descriptions (<code>owl:unionOf</code>); and</li>
+<li>the complement of a class description (<code>owl:complementOf</code>).</li>
+</ol>
+<p>Except for the first, all of these refer to <em>defined classes</em>.
+The table below shows the notation in OWL, DL and the <a href="http://ceur-ws.org/Vol-216/submission_9.pdf">Manchester OWL syntax</a>, all commonly used for the definitions.
+The Manchester syntax is used by <a href="https://protege.stanford.edu/">Protege</a> and is designed to not use DL symbols and to be easy and quick to read and write.
+Several other syntaxes exist for DL.
+An interesting example is the pure Python syntax proposed by <a href="http://www.lesfleursdunormal.fr/_downloads/article_owlready_aim_2017.pdf">Lamy (2017)</a>, which is used in the open source <a href="https://pythonhosted.org/Owlready2/">Owlready2</a> Python package.
+The <a href="https://github.com/emmo-repo/EMMO-python">Python API for EMMO</a> is also based on Owlready2.</p>
+<hr />
+<p>DL                 Manchester         <a href="https://pythonhosted.org/Owlready2/">Python + Owlready2        Read                  Meaning
+                                      </a>
+---------------    -----------------  -------------------        -------------------   --------------------
+<strong>Constants</strong></p>
+<p>$\top$                                Thing                      top                   A special class with every individual as an instance</p>
+<p>$\bot$                                Nothing                    bottom                The empty class</p>
+<p><strong>Axioms</strong></p>
+<p>$A\doteq B$                                                      A is defined to be    Class <em>definition</em>
+                                                                 equal to B</p>
+<p>$A\sqsubseteq B$   A subclass_of B    class A(B): ...            all A are B           Class <em>inclusion</em></p>
+<div class="highlight"><pre><span></span><code>                                  issubclass(A, B)                                 Test for *inclusion*
+</code></pre></div>
+<p>$A\equiv B$        A equivalent_to B  A.equivalent_to.append(B)  A is equivalent to B  Class <em>equivalence</em></p>
+<div class="highlight"><pre><span></span><code>                                  B in A.equivalent_to                             Test for equivalence
+</code></pre></div>
+<p>$a:A$              a is_a A           a = A()                    a is a A              Class <em>assertion</em> (<em>instantiation</em>)</p>
+<div class="highlight"><pre><span></span><code>                                  isinstance(a, A)                                 Test for instance of
+</code></pre></div>
+<p>$(a,b):R$          a object property  a.R.append(b)              a is R-related to b   Property <em>assertion</em>
+                   assertion b</p>
+<p>$(a,n):R$          a data property    a.R.append(n)              a is R-related to n   Data <em>assertion</em>
+                   assertion n</p>
+<p><strong>Constructions</strong></p>
+<p>$A\sqcap B$        A and B            A &amp; B                      A and B               Class <em>intersection</em> (<em>conjunction</em>)</p>
+<p>$A\sqcup B$        A or B             A | B                      A or B                Class <em>union</em> (<em>disjunction</em>)</p>
+<p>$\lnot A$          not A              Not(A)                     not A                 Class <em>complement</em> (<em>negation</em>)</p>
+<p>${a, b, ...}$    {a, b, ...}        OneOf([a, b, ...])         one of a, b, ...      Class <em>enumeration</em></p>
+<p>$S\equiv R^-$      S inverse_of R     Inverse(R)                 S is inverse of R     Property <em>inverse</em></p>
+<div class="highlight"><pre><span></span><code>                                  S.inverse == R                                   Test for *inverse*
+</code></pre></div>
+<p>$\forall R.A$      R only A           R.only(A)                  all A with R          <a href="https://en.wikipedia.org/wiki/Universal_quantifier"><em>Universal restriction</em></a></p>
+<p>$\exists R.A$      R some A           R.some(A)                  some A with R         <a href="https://en.wikipedia.org/wiki/Universal_quantifier"><em>Existential restriction</em></a></p>
+<p>$=n R.A$           R exactly n A      R.exactly(n, A)                                  <em>Cardinality restriction</em></p>
+<p>$\leq n R.A$       R min n A          R.min(n, A)                                      <em>Minimum cardinality restriction</em></p>
+<p>$\geq n R.A$       R max n A          R.max(n, A)                                      <em>Minimum cardinality restriction</em></p>
+<p>$\exists R{a}$   R value a          R.value(a)                                       <em>Value restriction</em></p>
+<p><strong>Decompositions</strong></p>
+<p>$A\sqcup B         A disjoint with B  AllDisjoint([A, B])        A disjoint with B     Disjoint
+\sqsubseteq\bot$</p>
+<div class="highlight"><pre><span></span><code>                                  B in A.disjoints()                               Test for disjointness
+</code></pre></div>
+<p>$\exists R.\top    R domain A         R.domain = [A]                                   Classes that the restriction applies to
+\sqsubseteq A$</p>
+<p>$\top\sqsubseteq   R range B          R.range = [B]                                    All classes that can be the value of the restriction
+\forall R.B$</p>
+<hr />
+<p>Table: Notation for DL and Protege.
+<em>A</em> and <em>B</em> are classes, <em>R</em> is an active relation, <em>S</em> is an passive relation, <em>a</em> and <em>b</em> are individuals and <em>n</em> is a literal.
+Inspired by the <a href="http://www.lesfleursdunormal.fr/static/_downloads/great_ontology_table.pdf">Great table of Description Logics</a>.</p>
+<h4 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h4>
+<p>Here are some examples of different class descriptions using both the DL and Manchester notation.</p>
+<h5 id="equivalence-owlequivalentto">Equivalence (<code>owl:equivalentTo</code>)<a class="headerlink" href="#equivalence-owlequivalentto" title="Permanent link">&para;</a></h5>
+<p>Equivalence ($\equiv$) defines necessary and sufficient conditions.</p>
+<p>Parent is equivalent to mother or father</p>
+<p><strong>DL:</strong> <code>parent</code> $\equiv$ <code>mother</code> $\lor$ <code>father</code></p>
+<p><strong>Manchester:</strong> <code>parent equivalent_to mother or father</code></p>
+<h5 id="inclusion-rdfsubclassof">Inclusion (<code>rdf:subclassOf</code>)<a class="headerlink" href="#inclusion-rdfsubclassof" title="Permanent link">&para;</a></h5>
+<p>Inclusion ($\sqsubseteq$) defines necessary conditions.</p>
+<p>An employee is a person.</p>
+<p><strong>DL:</strong> <code>employee</code> $\sqsubseteq$ <code>person</code></p>
+<p><strong>Manchester:</strong> <code>employee is_a person</code></p>
+<h5 id="enumeration-owloneof">Enumeration (<code>owl:oneOf</code>)<a class="headerlink" href="#enumeration-owloneof" title="Permanent link">&para;</a></h5>
+<p>The color of a wine is either white, rose or red:</p>
+<p><strong>DL:</strong> <code>wine_color</code> $\equiv$ {<code>white</code>, <code>rose</code>, <code>red</code>}</p>
+<p><strong>Manchester:</strong> <code>wine_color equivalent_to {white, rose, red}</code></p>
+<h5 id="existential-restriction-owlsomevaluesfrom">Existential restriction (<code>owl:someValuesFrom</code>)<a class="headerlink" href="#existential-restriction-owlsomevaluesfrom" title="Permanent link">&para;</a></h5>
+<p>A mother is a woman that has a child (some person):</p>
+<p><strong>DL:</strong> <code>mother</code> $\equiv$ <code>woman</code> $\sqcap$ $\exists$<code>has_child</code>.<code>person</code></p>
+<p><strong>Manchester:</strong> <code>mother equivalent_to woman and has_child some person</code></p>
+<h5 id="universal-restriction-owlallvaluesfrom">Universal restriction (<code>owl:allValuesFrom</code>)<a class="headerlink" href="#universal-restriction-owlallvaluesfrom" title="Permanent link">&para;</a></h5>
+<p>All parents that only have daughters:</p>
+<p><strong>DL:</strong> <code>parents_with_only_daughters</code> $\equiv$ <code>person</code> $\sqcap$ $\forall$<code>has_child</code>.<code>woman</code></p>
+<p><strong>Manchester:</strong> <code>parents_with_only_daughters equivalent_to person and has_child only woman</code></p>
+<h5 id="value-restriction-owlhasvalue">Value restriction (<code>owl:hasValue</code>)<a class="headerlink" href="#value-restriction-owlhasvalue" title="Permanent link">&para;</a></h5>
+<p>The owl:hasValue restriction allows to define classes based on the existence of particular property values.
+There must be at least one matching property value.</p>
+<p>All children of Mary:</p>
+<p><strong>DL:</strong> <code>Marys_children</code> $\equiv$ <code>person</code> $\sqcap$ $\exists$<code>has_parent</code>.{<code>Mary</code>}</p>
+<p><strong>Manchester:</strong> <code>Marys_children equivalent_to person and has_parent value Mary</code></p>
+<h5 id="property-cardinality-owlcardinality">Property cardinality (<code>owl:cardinality</code>)<a class="headerlink" href="#property-cardinality-owlcardinality" title="Permanent link">&para;</a></h5>
+<p>The owl:cardinality restrictions ($\geq$, $\leq$ or $\equiv$) allow to define classes based on the maximum (owl:maxCardinality), minimum (owl:minCardinality) or exact (owl:cardinality) number of occurences.</p>
+<p>A person with one parent:</p>
+<p><strong>DL:</strong> <code>half_orphant</code> $\equiv$ <code>person</code> and =1<code>has_parent</code>.<code>person</code></p>
+<p><strong>Manchester:</strong> <code>half_orphant equivalent_to person and has_parent exactly 1 person</code></p>
+<h5 id="intersection-owlintersectionof">Intersection (<code>owl:intersectionOf</code>)<a class="headerlink" href="#intersection-owlintersectionof" title="Permanent link">&para;</a></h5>
+<p>Individuals of the intersection ($\sqcap$) of two classes, are simultaneously instances of both classes.</p>
+<p>A man is a person that is male:</p>
+<p><strong>DL:</strong> <code>man</code> $\equiv$ <code>person</code> $\sqcap$ <code>male</code></p>
+<p><strong>Manchester:</strong> <code>man equivalent_to person and male</code></p>
+<h5 id="union-owlunionof">Union (<code>owl:unionOf</code>)<a class="headerlink" href="#union-owlunionof" title="Permanent link">&para;</a></h5>
+<p>Individuals of the union ($\sqcup$) of two classes, are either instances of one or both classes.</p>
+<p>A person is a man or woman:</p>
+<p><strong>DL:</strong> <code>person</code> $\equiv$ <code>man</code> $\sqcup$ <code>woman</code></p>
+<p><strong>Manchester:</strong> <code>person equivalent_to man or woman</code></p>
+<h5 id="complement-owlcomplementof">Complement (<code>owl:complementOf</code>)<a class="headerlink" href="#complement-owlcomplementof" title="Permanent link">&para;</a></h5>
+<p>Individuals of the complement ($\lnot$) of a class, are all individuals that are not member of the class.</p>
+<p>Not a man:</p>
+<p><strong>DL:</strong> <code>female</code> $\equiv$ $\lnot$ <code>male</code></p>
+<p><strong>Manchester:</strong> <code>female equivalent_to not male</code></p>
+<h2 id="the-structure-of-emmo">The structure of EMMO<a class="headerlink" href="#the-structure-of-emmo" title="Permanent link">&para;</a></h2>
+<p>The EMMO ontology is structured in shells, expressed by specific ontology fragments, that extends from fundamental concepts to the application domains, following the dependency flow.</p>
+<h3 id="top-level">Top Level<a class="headerlink" href="#top-level" title="Permanent link">&para;</a></h3>
+<p>The EMMO top level is the group of fundamental axioms that constitute the philosophical foundation of the EMMO.
+Adopting a physicalistic/nominalistic perspective, the EMMO defines real world objects as 4D objects that are always extended in space and time (i.e. real world objects cannot be spaceless nor timeless).
+For this reason abstract objects, i.e. objects that does not extend in space and time, are forbidden in the EMMO.</p>
+<p>EMMO is strongly based on the analytical philosophy dicipline semiotic.
+The role of abstract objects are in EMMO fulfilled by semiotic objects, i.e. real world objects (e.g. symbol or sign) that stand for other real world objects that are to be interpreted by an agent.
+These symbols appear in actions (semiotic processes) meant to communicate meaning by establishing relationships between symbols (signs).</p>
+<p>Another important building block of from analytical philosophy is atomistic mereology applied to 4D objects.
+The EMMO calls it 'quantum mereology', since the there is a epistemological limit to how fine we can resolve space and time due to the uncertanity principles.</p>
+<p>The mereotopology module introduces the fundamental mereotopological concepts and their relations with the real world objects that they represent.
+The EMMO uses mereotopology as the ground for all the subsequent ontology modules.
+The concept of topological connection is used to define the first distinction between ontology entities namely the <em>Item</em> and <em>Collection</em> classes.
+Items are causally self-connected objects, while collections are causally disconnected.
+Quantum mereology is represented by the <em>Quantum</em> class.
+This module introduces also the fundamental mereotopological relations used to distinguish between space and time dimensions.</p>
+<p>The physical module, defines the <em>Physical</em> objects and the concept of <em>Void</em> that plays a fundamental role in the description of multiscale objects and quantum systems.
+It also define the <em>Elementary</em> class, that restricts mereological atomism in space.</p>
+<p><img alt="The EMMO top level." src="../figs/top.png" width="440px" /></p>
+<p>In EMMO, the only univocally defined real world object is the <em>Item</em> individual called <strong>Universe</strong> that stands for the universe.
+Every other real world object is a composition of elementaries up to the most comprehensive object; the <strong>Universe</strong>.
+Intermediate objects are not univocally defined, but their definition is provided according to some specific philosophical perspectives.
+This is an expression of reductionism (i.e. objects are made of sub-objects) and epistemological pluralism (i.e. objects are always defined according to the perspective of an interpreter, or a class of interpreters).</p>
+<p>The <em>Perspective</em> class collects the different ways to represent the objects that populate the conceptual region between the elementary and universe levels.</p>
+<h3 id="middle-level">Middle Level<a class="headerlink" href="#middle-level" title="Permanent link">&para;</a></h3>
+<p>The middle level ontologies act as roots for extending the EMMO towards specific application domains.</p>
+<p><img alt="The EMMO perspectives." src="../figs/Perspectives.png" /></p>
+<p>The <em>Reductionistic</em> perspective class uses the fundamental non-transitive parthood relation, called direct parthood, to provide a powerful granularity description of multiscale real world objects.
+The EMMO can in principle represents the <strong>Universe</strong> with direct parthood relations as a direct rooted tree up to its elementary constituents.</p>
+<p>The <em>Phenomenic</em> perspective class introduces the concept of real world objects that express of a recognisable pattern in space or time that impress the user.
+Under this class the EMMO categorises e.g. formal languages, pictures, geometry, mathematics and sounds.
+Phenomenic objects can be used in a semiotic process as signs.</p>
+<p>The <em>Physicalistic</em> perspective class introduces the concept of real world objects that have a meaning for the under applied physics perspective.</p>
+<p>The <em>Holistic</em> perspective class introduces the concept of real world objects that unfold in time in a way that has a meaning for the EMMO user, through the definition of the classes <em>Process</em> and <em>Participant</em>.
+The semiotics module introduces the concepts of semiotics and the <em>Semiosis</em> process that has a <em>Sign</em>, an <em>Object</em> and an <em>Interpreter</em> as participants.
+This forms the basis in EMMO to represent e.g. models, formal languages, theories, information and properties.</p>
+<p><img alt="The semiotic level, showing both the taxonomy (open black arrows) and other relations as listed in the caption. The inverted arrows corresponds to inverse relations." src="../figs/Semiotic.png" width="540px" /></p>
+<h3 id="emmo-relations">EMMO relations<a class="headerlink" href="#emmo-relations" title="Permanent link">&para;</a></h3>
+<p>All EMMO relations are subrelations of the relations found in the two roots: <em>mereotopological</em> and <em>semiotical</em>.
+The relation hierarchy extends more vertically (i.e. more subrelations) than horizontally (i.e. less sibling relations), facilitating the categorisation and inferencing of individuals.
+See also the chapter <a href="#emmo-relations">EMMO Relations</a>.</p>
+<p>Imposing all relations to fall under mereotopology or semiotics is how the EMMO force the developers to respect its perspectives.
+Two entities are related only by contact or parthood (mereotopology) or by standing one for another (semiosis): no other types of relation are possible within the EMMO.</p>
+<p>A unique feature in EMMO, is the introduction of <em>direct parthood</em>.
+As illustrated in the figure below, it is a mereological relation that lacks transitivity.
+This makes it possible to entities made of parts at different levels of granularity and to go between granularity levels in a well-defined manner.
+This is paramount for cross scale interoperability.
+Every material in EMMO is placed on a granularity level and the ontology gives information about the direct upper and direct lower level classes using the non-transitive direct parthood relations.</p>
+<p><img alt="Direct parthood." src="../figs/emmo-direct_part.png" width="220px" /></p>
+<h3 id="annotations">Annotations<a class="headerlink" href="#annotations" title="Permanent link">&para;</a></h3>
+<p>All entities and relations in EMMO have some attributes, called <em>annotations</em>.
+In some cases, only the required <em>International Resource Identifier</em> (IRI) and <em>relations</em> are provided.
+However, descriptive annotations, like <em>elucidation</em> and <em>comment</em>, are planned to be added for all classes and relations.
+Possible annotations are:</p>
+<ul>
+<li><strong>Elucidation</strong> is a human readable explanation and clearification of the documented class or relation.</li>
+<li><strong>Example</strong> clearifies the elucidation through an example.
+  A class may have several examples, each addressing different aspects.</li>
+<li><strong>Comment</strong> is a clearifying note complementing the definition and elucidation.
+  A class may have several comments, each clearifying different aspects.</li>
+<li><strong>IRI</strong> stands for <em>international resource identifier</em>.
+  It is an identifier that uniquely identifies the class or relation.
+  IRIs are similar to URIs, but are not restricted to the ASCII character set.
+  In EMMO, the IRIs are now valid URLs pointing to the stable version of EMMO.</li>
+<li><strong>Relations</strong> is a list of relations applying to the current class or relation.
+  The relations for relations are special and will be elaborated on in the introduction to chapter [Relations].
+  Some of the listed relations are defined in the OWL sources, while other are inferred by the reasoner.
+  The relations are expressed using the Manchester OWL syntax introduced in section <a href="#description-logic">Description logic</a>.</li>
+</ul>
+<p>%%### Graphs
+%%The generated graphs borrow some syntax from the <a href="http://www.uml.org/">Unified Modelling
+%%Language (UML)</a>, which is a general purpose language for software
+%%design and modelling.  The table below shows the style used for the
+%%different types of relations and the concept they correspond to in
+%%UML.
+%%
+%%Relation           UML arrow     UML concept
+%%-------------      -----------   -----------
+%%is-a               ![img][isa]   inheritance
+%%disjoint_with      ![img][djw]   association
+%%equivalent_to      ![img][eqt]   association
+%%encloses           ![img][rel]   aggregation
+%%has_abstract_part  ![img][rel]   aggregation
+%%has_abstraction    ![img][rel]   aggregation
+%%has_representation ![img][rel]   aggregation
+%%has_member         ![img][rel]   aggregation
+%%has_property       ![img][rel]   aggregation
+%%
+%%Table: Notation for arrow styles used in the graphs.  Only active
+%%relations are listed. Corresponding passive relations use the same
+%%style.
+%%
+%%[isa]: figs/arrow-is_a.png "inheritance"
+%%[djw]: figs/arrow-disjoint_with.png "association"
+%%[eqt]: figs/arrow-equivalent_to.png "association"
+%%[rel]: figs/arrow-relation.png "aggregation"</p>
+<p>%%All relationships have a direction.  In the graphical visualisations,
+%%the relationships are represented with an arrow pointing from the
+%%subject to the object.  In order to reduce clutter and limit the size
+%%of the graphs, the relations are abbreviated according to the
+%%following table:
+%%
+%%Relation                        Abbreviation
+%%--------                        ------------
+%%has_part only                   hp-o
+%%is_part_of only                 ipo-o
+%%has_member some                 hm-s
+%%is_member_of some               imo-s
+%%has_abstraction some            ha-s
+%%is_abstraction_of some          iao-s
+%%has_abstract_part only          pap-o
+%%is_abstract_part_of only        iapo-o
+%%has_space_slice some            hss-s
+%%is_space_slice_of some          isso-s
+%%has_time_slice some             hts-s
+%%is_time_slice_of some           itso-s
+%%has_projection some             hp-s
+%%is_projection_of some           ipo-s
+%%has_proper_part some            hpp-s
+%%is_proper_part_of some          ippo-s
+%%has_proper_part_of some         hppo-s
+%%has_spatial_direct_part min     hsdp-m
+%%has_spatial_direct_part some    hsdp-s
+%%has_spatial_direct_part exactly hsdp-e
+%%
+%%Table: Abbriviations of relations used in the graphical representation
+%%of the different subbranches.
+%%
+%%
+%%UML represents classes as a box with three compartments; names, attributes
+%%and operators.  However, since the classes in EMMO have no operators and
+%%since it gives little meaning to include the OWL annotations as attributes,
+%%we simply represent the classes as boxes by a name.
+%%
+%%As already mentioned, defined classes are colored orange, while
+%%undefined classes are yellow.
+%%
+%%
+%%<!--
+%%## Further work
+%%
+%%--></p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../important_concepts/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Important concepts" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Important concepts
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../relations/" class="md-footer__link md-footer__link--next" aria-label="Next: Relations" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Relations
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2019-2021 SINTEF
+          </div>
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+      <a href="https://github.com/emmo-repo" target="_blank" rel="noopener" title="EMMO on GitHub" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.8397ff9e.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.1e84347e.min.js"></script>
+      
+    
+  </body>
+</html>
