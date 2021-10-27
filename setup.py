@@ -49,7 +49,7 @@ with open(
 # Retrieve emmo-package version
 with open(os.path.join(rootdir, 'ontopy/__init__.py')) as handle:
     for line in handle:
-        match = re.match(r"__version__ = '(?P<version>.*)'", line)
+        match = re.match(r"__version__ = ('|\")(?P<version>.*)('|\")", line)
         if match is not None:
             VERSION = match.group("version")
             break
