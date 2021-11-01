@@ -215,11 +215,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 return "_:"  # blank nodes are given random neg. storid
             return i
 
-        for s, p, o in self.world.get_triples():
-            s = _unabbreviate(s)
-            p = _unabbreviate(p)
-            o = _unabbreviate(o)
-            yield s, p, o
+        for subject, predicate, obj in self.world.get_triples():
+            yield _unabbreviate(subject), _unabbreviate(predicate), _unabbreviate(obj)
 
     def get_by_label(self, label, label_annotations=None, namespace=None):
         """Returns entity with label annotation `label`.
