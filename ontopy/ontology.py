@@ -211,10 +211,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
             if isinstance(i, int):
                 if i >= 0:
                     return self._unabbreviate(i)
-                else:
-                    return "_:"  # blank nodes are given random neg. storid
-            else:
-                return i
+                return "_:"  # blank nodes are given random neg. storid
+            return i
 
         for s, p, o in self.world.get_triples():
             s = _unabbreviate(s)
