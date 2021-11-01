@@ -1,9 +1,12 @@
 from typing import TYPE_CHECKING
 
+import pytest
+
 if TYPE_CHECKING:
     from ontopy.ontology import Ontology
 
 
+@pytest.mark.skip("FOAF is currently unavailable.")
 def test_import_foaf(emmo: "Ontology") -> None:
     """Test importing foaf
 
