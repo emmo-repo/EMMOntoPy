@@ -200,7 +200,8 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """Checks if this ontology is equal to other.
 
         Equality of all triples obtained from self.get_triples(),
-        i.e. all triples except blank nodes.
+        i.e. blank nodes are not distinguished, but relations
+        to blank nodes are included.
         """
         return set(self.get_triples()) == set(other.get_triples())
 
