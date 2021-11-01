@@ -204,14 +204,6 @@ class Ontology(owlready2.Ontology, OntoGraph):
         """
         return set(self.get_triples()) == set(other.get_triples())
 
-    def _sorted_entities(self):
-        """Return sorted entities
-        """
-        return sorted(e.iri for e in self.get_entities(
-                imported=True, classes=True,
-                individuals=True, object_properties=True,
-                data_properties=True, annotation_properties=True))
-
     def get_triples(self):
         """ Returns all triples unabbreviated
         """
