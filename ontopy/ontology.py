@@ -197,7 +197,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         pass
 
     def __hash__(self):
-        """ Returns hash based on base_iri
+        """Returns hash based on base_iri
         This is done to keep Ontology hashable when defining __eq__.
         """
         return hash(self.base_iri)
@@ -214,8 +214,8 @@ class Ontology(  # pylint: disable=too-many-public-methods
         )
 
     def get_unabbreviated_triples(self):
-        """ Returns all triples unabbreviated
-        """
+        """Returns all triples unabbreviated"""
+
         def _unabbreviate(i):
             if isinstance(i, int):
                 if i >= 0:
@@ -224,9 +224,11 @@ class Ontology(  # pylint: disable=too-many-public-methods
             return i
 
         for subject, predicate, obj in self.get_triples():
-            yield (_unabbreviate(subject),
-                   _unabbreviate(predicate),
-                   _unabbreviate(obj))
+            yield (
+                _unabbreviate(subject),
+                _unabbreviate(predicate),
+                _unabbreviate(obj),
+            )
 
     def get_by_label(self, label, label_annotations=None, namespace=None):
         """Returns entity with label annotation `label`.
