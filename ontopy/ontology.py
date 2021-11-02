@@ -216,7 +216,9 @@ class Ontology(owlready2.Ontology, OntoGraph):
             return i
 
         for subject, predicate, obj in self.world.get_triples():
-            yield _unabbreviate(subject), _unabbreviate(predicate), _unabbreviate(obj)
+            yield (_unabbreviate(subject),
+                   _unabbreviate(predicate),
+                   _unabbreviate(obj))
 
     def get_by_label(self, label, label_annotations=None, namespace=None):
         """Returns entity with label annotation `label`.
