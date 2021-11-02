@@ -215,7 +215,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 return "_:"  # blank nodes are given random neg. storid
             return i
 
-        for subject, predicate, obj in self.world.get_triples():
+        for subject, predicate, obj in self.get_triples():
             yield (_unabbreviate(subject),
                    _unabbreviate(predicate),
                    _unabbreviate(obj))
