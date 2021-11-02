@@ -190,6 +190,36 @@ class Ontology(owlready2.Ontology, OntoGraph):
         # Play nice with inspect...
         pass
 
+    def __hash__(self):
+        """ Returns hash based on base_iri
+        This is done to keep Ontology hashable when defining __eq__.
+        """
+        return hash(self.base_iri)
+
+    def __eq__(self, other):
+        """Checks if this ontology is equal to other.
+
+        Equality of all triples obtained from self.get_triples(),
+        i.e. blank nodes are not distinguished, but relations
+        to blank nodes are included.
+        """
+        return set(self.get_triples()) == set(other.get_triples())
+
+    def get_triples(self):
+        """ Returns all triples unabbreviated
+        """
+        def _unabbreviate(i):
+            if isinstance(i, int):
+                if i >= 0:
+                    return self._unabbreviate(i)
+                return "_:"  # blank nodes are given random neg. storid
+            return i
+
+        for subject, predicate, obj in self.world.get_triples():
+            yield (_unabbreviate(subject),
+                   _unabbreviate(predicate),
+                   _unabbreviate(obj))
+
     def get_by_label(self, label, label_annotations=None, namespace=None):
         """Returns entity with label annotation `label`.
 
