@@ -1044,8 +1044,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ontopy.ontology.Ontology.get_triples" class="md-nav__link">
-    get_triples()
+  <a href="#ontopy.ontology.Ontology.get_unabbreviated_triples" class="md-nav__link">
+    get_unabbreviated_triples()
   </a>
   
 </li>
@@ -1570,8 +1570,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ontopy.ontology.Ontology.get_triples" class="md-nav__link">
-    get_triples()
+  <a href="#ontopy.ontology.Ontology.get_unabbreviated_triples" class="md-nav__link">
+    get_unabbreviated_triples()
   </a>
   
 </li>
@@ -2813,11 +2813,11 @@ are also returned.</p>
 
 
 
-<h3 class="doc doc-heading" id="ontopy.ontology.Ontology.get_triples">
-<code class="highlight language-python"><span class="n">get_triples</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+<h3 class="doc doc-heading" id="ontopy.ontology.Ontology.get_unabbreviated_triples">
+<code class="highlight language-python"><span class="n">get_unabbreviated_triples</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
 
 
-<a class="headerlink" href="#ontopy.ontology.Ontology.get_triples" title="Permanent link">&para;</a></h3>
+<a class="headerlink" href="#ontopy.ontology.Ontology.get_unabbreviated_triples" title="Permanent link">&para;</a></h3>
 
     <div class="doc doc-contents ">
 
@@ -2825,7 +2825,7 @@ are also returned.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_triples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_unabbreviated_triples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Returns all triples unabbreviated</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">_unabbreviate</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
@@ -2835,7 +2835,7 @@ are also returned.</p>
             <span class="k">return</span> <span class="s2">&quot;_:&quot;</span>  <span class="c1"># blank nodes are given random neg. storid</span>
         <span class="k">return</span> <span class="n">i</span>
 
-    <span class="k">for</span> <span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">get_triples</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_triples</span><span class="p">():</span>
         <span class="k">yield</span> <span class="p">(</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">subject</span><span class="p">),</span>
                <span class="n">_unabbreviate</span><span class="p">(</span><span class="n">predicate</span><span class="p">),</span>
                <span class="n">_unabbreviate</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
