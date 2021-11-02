@@ -153,7 +153,7 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/), specifically:
   <img src="https://avatars1.githubusercontent.com/u/72801303?s=200&v=4" width="50">
 - [OpenModel](https://www.open-model.eu/);
   Grant Agreement No: 953167
-  <img src="https://www.open-model.eu/en/jcr:content/stage/stageParsys/stage_slide_383467607/image.img.jpg/1630120770165/OpenModel-Logob.jpg" width="110">
+  <img src="https://openmodel.ifam.fraunhofer.de/app/uploads/sites/2/2021/07/open-model-logo.png" width="90">
 
 [EMMOntoPy]: https://github.com/emmo-repo/EMMO-python/
 [Owlready2]: https://pypi.org/project/Owlready2/
