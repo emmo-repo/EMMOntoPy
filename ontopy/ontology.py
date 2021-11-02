@@ -199,13 +199,15 @@ class Ontology(owlready2.Ontology, OntoGraph):
     def __eq__(self, other):
         """Checks if this ontology is equal to other.
 
-        Equality of all triples obtained from self.get_triples(),
+        Equality of all triples obtained from self.get_unabbreviated_triples(),
         i.e. blank nodes are not distinguished, but relations
         to blank nodes are included.
         """
-        return set(self.get_triples()) == set(other.get_triples())
+        return set(self.get_unabbreviated_triples()) == set(
+            other.get_unabbreviated_triples()
+        )
 
-    def get_triples(self):
+    def get_unabbreviated_triples(self):
         """ Returns all triples unabbreviated
         """
         def _unabbreviate(i):
@@ -215,7 +217,7 @@ class Ontology(owlready2.Ontology, OntoGraph):
                 return "_:"  # blank nodes are given random neg. storid
             return i
 
-        for subject, predicate, obj in self.world.get_triples():
+        for subject, predicate, obj in self.get_triples():
             yield (_unabbreviate(subject),
                    _unabbreviate(predicate),
                    _unabbreviate(obj))
