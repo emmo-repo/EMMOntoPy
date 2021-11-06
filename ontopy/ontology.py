@@ -52,6 +52,27 @@ DEFAULT_LABEL_ANNOTATIONS = [
 ]
 
 
+class BNode:
+    """Represents a blank node."""
+    def __init__(self, base_iri, storid):
+        if (storid >= 0):
+            raise ValueError(
+                f'bnode is supposed to have a negative storid: {storid}')
+        self.base_iri = base_iri
+        self.storid = storid
+
+    def __repr__(self):
+        return repr(f'_:b{-self.storid}')
+
+    def __hash__(self):
+        return hash((self.base_iri, self.storid))
+
+    def __eq__(self, other):
+        """For now blank nodes always compare true with each other."""
+        print('***', self, other, isinstance(other, BNode))
+        return isinstance(other, BNode)
+
+
 def get_ontology(*args, **kwargs):
     """Returns a new Ontology from `base_iri`.
 
@@ -202,13 +223,13 @@ class Ontology(  # pylint: disable=too-many-public-methods
         pass
 
     def __hash__(self):
-        """Returns hash based on base_iri
+        """Returns a hash based on base_iri.
         This is done to keep Ontology hashable when defining __eq__.
         """
         return hash(self.base_iri)
 
     def __eq__(self, other):
-        """Checks if this ontology is equal to other.
+        """Checks if this ontology is equal to `other`.
 
         Equality of all triples obtained from self.get_unabbreviated_triples(),
         i.e. blank nodes are not distinguished, but relations
@@ -219,13 +240,15 @@ class Ontology(  # pylint: disable=too-many-public-methods
         )
 
     def get_unabbreviated_triples(self):
-        """Returns all triples unabbreviated"""
+        """Returns all triples unabbreviated."""
 
         def _unabbreviate(i):
             if isinstance(i, int):
                 if i >= 0:
                     return self._unabbreviate(i)
-                return "_:"  # blank nodes are given random neg. storid
+                # negative storid corresponds to blank nodes
+                #return '_:b'
+                return BNode(self.base_iri, i)
             return i
 
         for subject, predicate, obj in self.get_triples():
