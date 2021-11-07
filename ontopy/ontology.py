@@ -1274,15 +1274,16 @@ class Ontology(  # pylint: disable=too-many-public-methods
 
 
 class BNode:
-    """Represents a blank node.
-
-    Args:
-        onto: Ontology or World instance.
-        storid: The storage id of the blank node.
-    """
+    """Represents a blank node."""
     def __init__(self,
                  onto: Union[World, Ontology],
                  storid: int):
+        """Initiate a blank node.
+
+        Args:
+            onto: Ontology or World instance.
+            storid: The storage id of the blank node.
+        """
         if (storid >= 0):
             raise ValueError(
                 f'bnode is supposed to have a negative storid: {storid}')
