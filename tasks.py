@@ -54,7 +54,7 @@ def setver(_, ver=""):
     ver = match.group("version")
 
     update_file(
-        TOP_DIR / "ontopy/__init__.py",
+        TOP_DIR / "ontopy" / "__init__.py",
         (r"__version__ = ('|\").*('|\")", f'__version__ = "{ver}"'),
     )
 
@@ -86,7 +86,7 @@ def create_api_reference_docs(context, pre_clean=False, pre_commit=False):
             handle.write(content)
 
     package_dirs = (TOP_DIR / "emmopy", TOP_DIR / "ontopy")
-    docs_api_ref_dir = TOP_DIR / "docs/api_reference"
+    docs_api_ref_dir = TOP_DIR / "docs" / "api_reference"
 
     unwanted_subdirs = ("__pycache__",)
     unwanted_files = ("__init__.py",)
@@ -187,7 +187,7 @@ def create_api_reference_docs(context, pre_clean=False, pre_commit=False):
 def create_docs_index(_):
     """Create the documentation index page from README.md"""
     readme = TOP_DIR / "README.md"
-    docs_index = TOP_DIR / "docs/index.md"
+    docs_index = TOP_DIR / "docs" / "index.md"
 
     with open(readme) as handle:
         content = handle.read()
