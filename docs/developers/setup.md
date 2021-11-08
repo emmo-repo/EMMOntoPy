@@ -14,7 +14,7 @@ This section outlines some suggestions as well as conventions used by the EMMOnt
 Since development can be messy, it is good to separate the development environment from the rest of your system's environment.
 
 To do this, you can use a virtual environment.
-There are a several different ways to create a virtual environment, but we recommend using either `conda` or `virtualenv`.
+There are a several different ways to create a virtual environment, but we recommend using either `virtualenv`, the python native `venv` or `conda`.
 
 === "`virtualenv` (recommended)"
 
@@ -48,7 +48,18 @@ There are a several different ways to create a virtual environment, but we recom
     ```console
     deactivate
     ```
-
+=== "`venv`"
+    First go to the directory where you desire to keep you virtual environment and choosing
+    the python interpreter you already have installed and wish to use run
+    ```console
+    python3.? -m venv emmo-python
+    ```
+    A subfolder with the name emmo-python containing the environment is created.
+    To activate the environment
+    ```console
+    path/to/python-environments/emmo-python/activate
+    ```
+    Deactivate in the same manner as for virtualenv
 === "`conda`"
 
     If you are using `conda` already, simply run:
