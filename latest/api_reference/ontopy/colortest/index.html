@@ -575,8 +575,22 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../release-instructions/" class="md-nav__link">
+      <a href="../../../developers/release-instructions/" class="md-nav__link">
         Steps for creating a new release
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/setup/" class="md-nav__link">
+        Development environment
       </a>
     </li>
   
@@ -766,6 +780,663 @@
         <li class="md-nav__item">
   <a href="#ontopy.colortest" class="md-nav__link">
     ontopy.colortest
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.colortest--ontopycolortest" class="md-nav__link">
+    
+
+  
+
+
+    
+
+      ontopy.colortest&para;
+Print tests in colors.
+Adapted from https://github.com/meshy/colour-runner by Charlie Denton
+License: MIT
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+        
+ColourTextTestResult            (TestResult)
+        
+
+
+
+amppara;
+
+    
+
+      A test result class that prints colour formatted text results to a stream.
+Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+addError(self, test, err)
+
+
+amppara;
+
+    
+
+      Called when an error has occurred. 'err' is a tuple of values as
+returned by sys.exc_info().
+
+        
+          Source code in ontopy/colortest.py
+          def addError(self, test, err):
+    super().addError(test, err)
+    self.printResult(&quot;E&quot;, &quot;ERROR&quot;, &quot;error&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addExpectedFailure(self, test, err)
+
+
+amppara;
+
+    
+
+      Called when an expected failure/error occurred.
+
+        
+          Source code in ontopy/colortest.py
+          def addExpectedFailure(self, test, err):
+    super().addExpectedFailure(test, err)
+    self.printResult(&quot;x&quot;, &quot;expected failure&quot;, &quot;expected&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addFailure(self, test, err)
+
+
+amppara;
+
+    
+
+      Called when an error has occurred. 'err' is a tuple of values as
+returned by sys.exc_info().
+
+        
+          Source code in ontopy/colortest.py
+          def addFailure(self, test, err):
+    super().addFailure(test, err)
+    self.printResult(&quot;F&quot;, &quot;FAIL&quot;, &quot;fail&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addSkip(self, test, reason)
+
+
+amppara;
+
+    
+
+      Called when a test is skipped.
+
+        
+          Source code in ontopy/colortest.py
+          def addSkip(self, test, reason):
+    super().addSkip(test, reason)
+    if self.checkmode:
+        self.printResult(&quot;s&quot;, &quot;skipped&quot;, &quot;skip&quot;)
+    else:
+        self.printResult(&quot;s&quot;, f&quot;skipped {reason!r}&quot;, &quot;skip&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addSuccess(self, test)
+
+
+amppara;
+
+    
+
+      Called when a test has completed successfully
+
+        
+          Source code in ontopy/colortest.py
+          def addSuccess(self, test):
+    super().addSuccess(test)
+    self.printResult(&quot;.&quot;, &quot;ok&quot;, &quot;success&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addUnexpectedSuccess(self, test)
+
+
+amppara;
+
+    
+
+      Called when a test was expected to fail, but succeed.
+
+        
+          Source code in ontopy/colortest.py
+          def addUnexpectedSuccess(self, test):
+    super().addUnexpectedSuccess(test)
+    self.printResult(&quot;u&quot;, &quot;unexpected success&quot;, &quot;unexpected&quot;)
+
+        
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+printErrors(self)
+
+
+amppara;
+
+    
+
+      Called by TestRunner after test run
+
+        
+          Source code in ontopy/colortest.py
+          def printErrors(self):
+    if self.dots or self.show_all:
+        self.stream.writeln()
+    self.printErrorList(&quot;ERROR&quot;, self.errors)
+    self.printErrorList(&quot;FAIL&quot;, self.failures)
+
+        
+    
+
+  
+
+
+
+
+  
+
+
+
+
+startTest(self, test)
+
+
+amppara;
+
+    
+
+      Called when the given test is about to be run
+
+        
+          Source code in ontopy/colortest.py
+          def startTest(self, test):
+    super().startTest(test)
+    pos = 0
+    if self.show_all:
+        if self._test_class != test.__class__:
+            self._test_class = test.__class__
+            title = self.getClassDescription(test)
+            self.stream.writeln(self.colours[&quot;title&quot;](title))
+        descr = self.getShortDescription(test)
+        self.stream.write(descr)
+        pos += len(descr)
+        self.stream.write(&quot; &quot; * (70 - pos))
+        # self.stream.write(&#39; &#39; * (self._terminal.width - 10 - pos))
+        # self.stream.write(&#39; ... &#39;)
+        self.stream.flush()
+
+        
+    
+
+  
+
+
+
+
+
+  
+
+    
+
+  
+
+
+
+  
+
+
+
+
+        
+ColourTextTestRunner            (TextTestRunner)
+        
+
+
+
+amppara;
+
+    
+
+      A test runner that uses colour in its output.
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+        
+resultclass            (TestResult)
+        
+
+
+
+amppara;
+
+    
+
+      A test result class that prints colour formatted text results to a stream.
+Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+addError(self, test, err)
+
+
+amppara;
+
+    
+
+      Called when an error has occurred. 'err' is a tuple of values as
+returned by sys.exc_info().
+
+        
+          Source code in ontopy/colortest.py
+          def addError(self, test, err):
+    super().addError(test, err)
+    self.printResult(&quot;E&quot;, &quot;ERROR&quot;, &quot;error&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addExpectedFailure(self, test, err)
+
+
+amppara;
+
+    
+
+      Called when an expected failure/error occurred.
+
+        
+          Source code in ontopy/colortest.py
+          def addExpectedFailure(self, test, err):
+    super().addExpectedFailure(test, err)
+    self.printResult(&quot;x&quot;, &quot;expected failure&quot;, &quot;expected&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addFailure(self, test, err)
+
+
+amppara;
+
+    
+
+      Called when an error has occurred. 'err' is a tuple of values as
+returned by sys.exc_info().
+
+        
+          Source code in ontopy/colortest.py
+          def addFailure(self, test, err):
+    super().addFailure(test, err)
+    self.printResult(&quot;F&quot;, &quot;FAIL&quot;, &quot;fail&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addSkip(self, test, reason)
+
+
+amppara;
+
+    
+
+      Called when a test is skipped.
+
+        
+          Source code in ontopy/colortest.py
+          def addSkip(self, test, reason):
+    super().addSkip(test, reason)
+    if self.checkmode:
+        self.printResult(&quot;s&quot;, &quot;skipped&quot;, &quot;skip&quot;)
+    else:
+        self.printResult(&quot;s&quot;, f&quot;skipped {reason!r}&quot;, &quot;skip&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addSuccess(self, test)
+
+
+amppara;
+
+    
+
+      Called when a test has completed successfully
+
+        
+          Source code in ontopy/colortest.py
+          def addSuccess(self, test):
+    super().addSuccess(test)
+    self.printResult(&quot;.&quot;, &quot;ok&quot;, &quot;success&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addUnexpectedSuccess(self, test)
+
+
+amppara;
+
+    
+
+      Called when a test was expected to fail, but succeed.
+
+        
+          Source code in ontopy/colortest.py
+          def addUnexpectedSuccess(self, test):
+    super().addUnexpectedSuccess(test)
+    self.printResult(&quot;u&quot;, &quot;unexpected success&quot;, &quot;unexpected&quot;)
+
+        
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+printErrors(self)
+
+
+amppara;
+
+    
+
+      Called by TestRunner after test run
+
+        
+          Source code in ontopy/colortest.py
+          def printErrors(self):
+    if self.dots or self.show_all:
+        self.stream.writeln()
+    self.printErrorList(&quot;ERROR&quot;, self.errors)
+    self.printErrorList(&quot;FAIL&quot;, self.failures)
+
+        
+    
+
+  
+
+
+
+
+  
+
+
+
+
+startTest(self, test)
+
+
+amppara;
+
+    
+
+      Called when the given test is about to be run
+
+        
+          Source code in ontopy/colortest.py
+          def startTest(self, test):
+    super().startTest(test)
+    pos = 0
+    if self.show_all:
+        if self._test_class != test.__class__:
+            self._test_class = test.__class__
+            title = self.getClassDescription(test)
+            self.stream.writeln(self.colours[&quot;title&quot;](title))
+        descr = self.getShortDescription(test)
+        self.stream.write(descr)
+        pos += len(descr)
+        self.stream.write(&quot; &quot; * (70 - pos))
+        # self.stream.write(&#39; &#39; * (self._terminal.width - 10 - pos))
+        # self.stream.write(&#39; ... &#39;)
+        self.stream.flush()
+
+        
+    
+
+  
+
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+    
+
+  
+
+
   </a>
   
 </li>
@@ -1151,6 +1822,663 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.colortest--ontopycolortest" class="md-nav__link">
+    
+
+  
+
+
+    
+
+      ontopy.colortest&para;
+Print tests in colors.
+Adapted from https://github.com/meshy/colour-runner by Charlie Denton
+License: MIT
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+        
+ColourTextTestResult            (TestResult)
+        
+
+
+
+amppara;
+
+    
+
+      A test result class that prints colour formatted text results to a stream.
+Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+addError(self, test, err)
+
+
+amppara;
+
+    
+
+      Called when an error has occurred. 'err' is a tuple of values as
+returned by sys.exc_info().
+
+        
+          Source code in ontopy/colortest.py
+          def addError(self, test, err):
+    super().addError(test, err)
+    self.printResult(&quot;E&quot;, &quot;ERROR&quot;, &quot;error&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addExpectedFailure(self, test, err)
+
+
+amppara;
+
+    
+
+      Called when an expected failure/error occurred.
+
+        
+          Source code in ontopy/colortest.py
+          def addExpectedFailure(self, test, err):
+    super().addExpectedFailure(test, err)
+    self.printResult(&quot;x&quot;, &quot;expected failure&quot;, &quot;expected&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addFailure(self, test, err)
+
+
+amppara;
+
+    
+
+      Called when an error has occurred. 'err' is a tuple of values as
+returned by sys.exc_info().
+
+        
+          Source code in ontopy/colortest.py
+          def addFailure(self, test, err):
+    super().addFailure(test, err)
+    self.printResult(&quot;F&quot;, &quot;FAIL&quot;, &quot;fail&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addSkip(self, test, reason)
+
+
+amppara;
+
+    
+
+      Called when a test is skipped.
+
+        
+          Source code in ontopy/colortest.py
+          def addSkip(self, test, reason):
+    super().addSkip(test, reason)
+    if self.checkmode:
+        self.printResult(&quot;s&quot;, &quot;skipped&quot;, &quot;skip&quot;)
+    else:
+        self.printResult(&quot;s&quot;, f&quot;skipped {reason!r}&quot;, &quot;skip&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addSuccess(self, test)
+
+
+amppara;
+
+    
+
+      Called when a test has completed successfully
+
+        
+          Source code in ontopy/colortest.py
+          def addSuccess(self, test):
+    super().addSuccess(test)
+    self.printResult(&quot;.&quot;, &quot;ok&quot;, &quot;success&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addUnexpectedSuccess(self, test)
+
+
+amppara;
+
+    
+
+      Called when a test was expected to fail, but succeed.
+
+        
+          Source code in ontopy/colortest.py
+          def addUnexpectedSuccess(self, test):
+    super().addUnexpectedSuccess(test)
+    self.printResult(&quot;u&quot;, &quot;unexpected success&quot;, &quot;unexpected&quot;)
+
+        
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+printErrors(self)
+
+
+amppara;
+
+    
+
+      Called by TestRunner after test run
+
+        
+          Source code in ontopy/colortest.py
+          def printErrors(self):
+    if self.dots or self.show_all:
+        self.stream.writeln()
+    self.printErrorList(&quot;ERROR&quot;, self.errors)
+    self.printErrorList(&quot;FAIL&quot;, self.failures)
+
+        
+    
+
+  
+
+
+
+
+  
+
+
+
+
+startTest(self, test)
+
+
+amppara;
+
+    
+
+      Called when the given test is about to be run
+
+        
+          Source code in ontopy/colortest.py
+          def startTest(self, test):
+    super().startTest(test)
+    pos = 0
+    if self.show_all:
+        if self._test_class != test.__class__:
+            self._test_class = test.__class__
+            title = self.getClassDescription(test)
+            self.stream.writeln(self.colours[&quot;title&quot;](title))
+        descr = self.getShortDescription(test)
+        self.stream.write(descr)
+        pos += len(descr)
+        self.stream.write(&quot; &quot; * (70 - pos))
+        # self.stream.write(&#39; &#39; * (self._terminal.width - 10 - pos))
+        # self.stream.write(&#39; ... &#39;)
+        self.stream.flush()
+
+        
+    
+
+  
+
+
+
+
+
+  
+
+    
+
+  
+
+
+
+  
+
+
+
+
+        
+ColourTextTestRunner            (TextTestRunner)
+        
+
+
+
+amppara;
+
+    
+
+      A test runner that uses colour in its output.
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+        
+resultclass            (TestResult)
+        
+
+
+
+amppara;
+
+    
+
+      A test result class that prints colour formatted text results to a stream.
+Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+addError(self, test, err)
+
+
+amppara;
+
+    
+
+      Called when an error has occurred. 'err' is a tuple of values as
+returned by sys.exc_info().
+
+        
+          Source code in ontopy/colortest.py
+          def addError(self, test, err):
+    super().addError(test, err)
+    self.printResult(&quot;E&quot;, &quot;ERROR&quot;, &quot;error&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addExpectedFailure(self, test, err)
+
+
+amppara;
+
+    
+
+      Called when an expected failure/error occurred.
+
+        
+          Source code in ontopy/colortest.py
+          def addExpectedFailure(self, test, err):
+    super().addExpectedFailure(test, err)
+    self.printResult(&quot;x&quot;, &quot;expected failure&quot;, &quot;expected&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addFailure(self, test, err)
+
+
+amppara;
+
+    
+
+      Called when an error has occurred. 'err' is a tuple of values as
+returned by sys.exc_info().
+
+        
+          Source code in ontopy/colortest.py
+          def addFailure(self, test, err):
+    super().addFailure(test, err)
+    self.printResult(&quot;F&quot;, &quot;FAIL&quot;, &quot;fail&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addSkip(self, test, reason)
+
+
+amppara;
+
+    
+
+      Called when a test is skipped.
+
+        
+          Source code in ontopy/colortest.py
+          def addSkip(self, test, reason):
+    super().addSkip(test, reason)
+    if self.checkmode:
+        self.printResult(&quot;s&quot;, &quot;skipped&quot;, &quot;skip&quot;)
+    else:
+        self.printResult(&quot;s&quot;, f&quot;skipped {reason!r}&quot;, &quot;skip&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addSuccess(self, test)
+
+
+amppara;
+
+    
+
+      Called when a test has completed successfully
+
+        
+          Source code in ontopy/colortest.py
+          def addSuccess(self, test):
+    super().addSuccess(test)
+    self.printResult(&quot;.&quot;, &quot;ok&quot;, &quot;success&quot;)
+
+        
+    
+
+  
+
+
+
+  
+
+
+
+
+addUnexpectedSuccess(self, test)
+
+
+amppara;
+
+    
+
+      Called when a test was expected to fail, but succeed.
+
+        
+          Source code in ontopy/colortest.py
+          def addUnexpectedSuccess(self, test):
+    super().addUnexpectedSuccess(test)
+    self.printResult(&quot;u&quot;, &quot;unexpected success&quot;, &quot;unexpected&quot;)
+
+        
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+printErrors(self)
+
+
+amppara;
+
+    
+
+      Called by TestRunner after test run
+
+        
+          Source code in ontopy/colortest.py
+          def printErrors(self):
+    if self.dots or self.show_all:
+        self.stream.writeln()
+    self.printErrorList(&quot;ERROR&quot;, self.errors)
+    self.printErrorList(&quot;FAIL&quot;, self.failures)
+
+        
+    
+
+  
+
+
+
+
+  
+
+
+
+
+startTest(self, test)
+
+
+amppara;
+
+    
+
+      Called when the given test is about to be run
+
+        
+          Source code in ontopy/colortest.py
+          def startTest(self, test):
+    super().startTest(test)
+    pos = 0
+    if self.show_all:
+        if self._test_class != test.__class__:
+            self._test_class = test.__class__
+            title = self.getClassDescription(test)
+            self.stream.writeln(self.colours[&quot;title&quot;](title))
+        descr = self.getShortDescription(test)
+        self.stream.write(descr)
+        pos += len(descr)
+        self.stream.write(&quot; &quot; * (70 - pos))
+        # self.stream.write(&#39; &#39; * (self._terminal.width - 10 - pos))
+        # self.stream.write(&#39; ... &#39;)
+        self.stream.flush()
+
+        
+    
+
+  
+
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+    
+
+  
+
+
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.colortest.ColourTextTestResult" class="md-nav__link">
     ColourTextTestResult
   </a>
@@ -1322,6 +2650,10 @@
 <a id="ontopy.colortest"></a>
     <div class="doc doc-contents first">
 
+      <h2 id="ontopy.colortest--ontopycolortest"><code>ontopy.colortest</code><a class="headerlink" href="#ontopy.colortest--ontopycolortest" title="Permanent link">&para;</a></h2>
+<p>Print tests in colors.</p>
+<p>Adapted from https://github.com/meshy/colour-runner by Charlie Denton
+License: MIT</p>
 
 
 
@@ -1390,8 +2722,8 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">addError</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">addError</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addError</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1417,8 +2749,8 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">addExpectedFailure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">addExpectedFailure</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;expected failure&#39;</span><span class="p">,</span> <span class="s1">&#39;expected&#39;</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addExpectedFailure</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;expected failure&quot;</span><span class="p">,</span> <span class="s2">&quot;expected&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1445,8 +2777,8 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">addFailure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">addFailure</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;FAIL&#39;</span><span class="p">,</span> <span class="s1">&#39;fail&#39;</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addFailure</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="s2">&quot;fail&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1472,11 +2804,11 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">addSkip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">reason</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">addSkip</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addSkip</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkmode</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;skipped&#39;</span><span class="p">,</span> <span class="s1">&#39;skip&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;skipped&quot;</span><span class="p">,</span> <span class="s2">&quot;skip&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;skipped </span><span class="si">{0!r}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reason</span><span class="p">),</span> <span class="s1">&#39;skip&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;skipped </span><span class="si">{</span><span class="n">reason</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;skip&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1502,8 +2834,8 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">addSuccess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">addSuccess</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;ok&#39;</span><span class="p">,</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addSuccess</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;ok&quot;</span><span class="p">,</span> <span class="s2">&quot;success&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1529,8 +2861,8 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">addUnexpectedSuccess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">addUnexpectedSuccess</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="s1">&#39;unexpected success&#39;</span><span class="p">,</span> <span class="s1">&#39;unexpected&#39;</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addUnexpectedSuccess</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="s2">&quot;unexpected success&quot;</span><span class="p">,</span> <span class="s2">&quot;unexpected&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1560,10 +2892,10 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">printErrors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dots</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">showAll</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dots</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printErrorList</span><span class="p">(</span><span class="s1">&#39;ERROR&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printErrorList</span><span class="p">(</span><span class="s1">&#39;FAIL&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failures</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printErrorList</span><span class="p">(</span><span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printErrorList</span><span class="p">(</span><span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failures</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1590,17 +2922,17 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">startTest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">startTest</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">startTest</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
     <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">showAll</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_test_class</span> <span class="o">!=</span> <span class="n">test</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_test_class</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="vm">__class__</span>
             <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassDescription</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colours</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">](</span><span class="n">title</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colours</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">](</span><span class="n">title</span><span class="p">))</span>
         <span class="n">descr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getShortDescription</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">descr</span><span class="p">)</span>
         <span class="n">pos</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">descr</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">70</span> <span class="o">-</span> <span class="n">pos</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">70</span> <span class="o">-</span> <span class="n">pos</span><span class="p">))</span>
         <span class="c1"># self.stream.write(&#39; &#39; * (self._terminal.width - 10 - pos))</span>
         <span class="c1"># self.stream.write(&#39; ... &#39;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
@@ -1637,7 +2969,7 @@ ColourTextTestRunner            (<span title="unittest.runner.TextTestRunner">Te
 
     <div class="doc doc-contents ">
 
-      <p>A test runner that uses colour in its output</p>
+      <p>A test runner that uses colour in its output.</p>
 
 
 
@@ -1707,8 +3039,8 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">addError</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">addError</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addError</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1734,8 +3066,8 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">addExpectedFailure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">addExpectedFailure</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;expected failure&#39;</span><span class="p">,</span> <span class="s1">&#39;expected&#39;</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addExpectedFailure</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;expected failure&quot;</span><span class="p">,</span> <span class="s2">&quot;expected&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1762,8 +3094,8 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">addFailure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">addFailure</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;FAIL&#39;</span><span class="p">,</span> <span class="s1">&#39;fail&#39;</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addFailure</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="s2">&quot;fail&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1789,11 +3121,11 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">addSkip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">reason</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">addSkip</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addSkip</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkmode</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;skipped&#39;</span><span class="p">,</span> <span class="s1">&#39;skip&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;skipped&quot;</span><span class="p">,</span> <span class="s2">&quot;skip&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;skipped </span><span class="si">{0!r}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reason</span><span class="p">),</span> <span class="s1">&#39;skip&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;skipped </span><span class="si">{</span><span class="n">reason</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;skip&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1819,8 +3151,8 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">addSuccess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">addSuccess</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;ok&#39;</span><span class="p">,</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addSuccess</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;ok&quot;</span><span class="p">,</span> <span class="s2">&quot;success&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1846,8 +3178,8 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">addUnexpectedSuccess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">addUnexpectedSuccess</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="s1">&#39;unexpected success&#39;</span><span class="p">,</span> <span class="s1">&#39;unexpected&#39;</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addUnexpectedSuccess</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="s2">&quot;unexpected success&quot;</span><span class="p">,</span> <span class="s2">&quot;unexpected&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1877,10 +3209,10 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">printErrors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dots</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">showAll</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dots</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printErrorList</span><span class="p">(</span><span class="s1">&#39;ERROR&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">printErrorList</span><span class="p">(</span><span class="s1">&#39;FAIL&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failures</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printErrorList</span><span class="p">(</span><span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">printErrorList</span><span class="p">(</span><span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failures</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1907,17 +3239,17 @@ returned by sys.exc_info().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/colortest.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">startTest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">ColourTextTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">startTest</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">startTest</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
     <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">showAll</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_test_class</span> <span class="o">!=</span> <span class="n">test</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_test_class</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="vm">__class__</span>
             <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassDescription</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colours</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">](</span><span class="n">title</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colours</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">](</span><span class="n">title</span><span class="p">))</span>
         <span class="n">descr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getShortDescription</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">descr</span><span class="p">)</span>
         <span class="n">pos</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">descr</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">70</span> <span class="o">-</span> <span class="n">pos</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">70</span> <span class="o">-</span> <span class="n">pos</span><span class="p">))</span>
         <span class="c1"># self.stream.write(&#39; &#39; * (self._terminal.width - 10 - pos))</span>
         <span class="c1"># self.stream.write(&#39; ... &#39;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>

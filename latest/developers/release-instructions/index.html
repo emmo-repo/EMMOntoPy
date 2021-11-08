@@ -11,21 +11,21 @@
       
       
       
-        <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/examples/emmodoc/classes/">
+        <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/developers/release-instructions/">
       
-      <link rel="icon" href="../../../images/favicon.png">
+      <link rel="icon" href="../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
     
     
       
-        <title>Classes - EMMOntoPy</title>
+        <title>Steps for creating a new release - EMMOntoPy</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.a57b2b03.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a57b2b03.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
         
           
           
@@ -44,9 +44,9 @@
     
     
     
-      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="../../../css/reference.css">
+      <link rel="stylesheet" href="../../css/reference.css">
     
     
       
@@ -65,12 +65,17 @@
     <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="light-green">
   
     
-    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#steps-for-creating-a-new-release" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -81,9 +86,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="EMMOntoPy" class="md-header__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
+    <a href="../.." title="EMMOntoPy" class="md-header__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
       
-  <img src="../../../images/suspected_logo.svg" alt="logo">
+  <img src="../../images/suspected_logo.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -99,7 +104,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Classes
+              Steps for creating a new release
             
           </span>
         </div>
@@ -180,9 +185,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="EMMOntoPy" class="md-nav__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
+    <a href="../.." title="EMMOntoPy" class="md-nav__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
       
-  <img src="../../../images/suspected_logo.svg" alt="logo">
+  <img src="../../images/suspected_logo.svg" alt="logo">
 
     </a>
     EMMOntoPy
@@ -211,7 +216,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         Home
       </a>
     </li>
@@ -226,7 +231,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools-instructions/" class="md-nav__link">
+      <a href="../../tools-instructions/" class="md-nav__link">
         Tools
       </a>
     </li>
@@ -241,7 +246,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docker-instructions/" class="md-nav__link">
+      <a href="../../docker-instructions/" class="md-nav__link">
         Docker
       </a>
     </li>
@@ -256,7 +261,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../LICENSE/" class="md-nav__link">
+      <a href="../../LICENSE/" class="md-nav__link">
         License
       </a>
     </li>
@@ -269,14 +274,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
       
       
       
@@ -325,7 +328,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../demo/" class="md-nav__link">
+      <a href="../../demo/" class="md-nav__link">
         EMMO use cases
       </a>
     </li>
@@ -339,7 +342,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../demo/horizontal/" class="md-nav__link">
+      <a href="../../demo/horizontal/" class="md-nav__link">
         EMMO use case for horizontal interoperability
       </a>
     </li>
@@ -353,7 +356,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../demo/vertical/" class="md-nav__link">
+      <a href="../../demo/vertical/" class="md-nav__link">
         EMMO use case for vertical interoperability
       </a>
     </li>
@@ -372,14 +375,12 @@
               
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
       
       
       
@@ -400,14 +401,12 @@
               
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2_1" type="checkbox" id="__nav_5_2_1" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2_1" type="checkbox" id="__nav_5_2_1" >
       
       
       
@@ -430,7 +429,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../../examples/emmodoc/" class="md-nav__link">
         Generate documentation for EMMO
       </a>
     </li>
@@ -442,19 +441,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../examples/emmodoc/classes/" class="md-nav__link">
         Classes
       </a>
-      
     </li>
   
 
@@ -466,7 +457,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../emmo/" class="md-nav__link">
+      <a href="../../examples/emmodoc/emmo/" class="md-nav__link">
         Emmo
       </a>
     </li>
@@ -480,7 +471,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../important_concepts/" class="md-nav__link">
+      <a href="../../examples/emmodoc/important_concepts/" class="md-nav__link">
         Important concepts
       </a>
     </li>
@@ -494,7 +485,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../introduction/" class="md-nav__link">
+      <a href="../../examples/emmodoc/introduction/" class="md-nav__link">
         Introduction
       </a>
     </li>
@@ -508,7 +499,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../relations/" class="md-nav__link">
+      <a href="../../examples/emmodoc/relations/" class="md-nav__link">
         Relations
       </a>
     </li>
@@ -529,7 +520,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../jupyter-visualization/" class="md-nav__link">
+      <a href="../../examples/jupyter-visualization/" class="md-nav__link">
         Visualise an ontology using pyctoscape in Jupyter Notebook
       </a>
     </li>
@@ -556,12 +547,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
       
       
       
@@ -582,11 +575,21 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../../developers/release-instructions/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Steps for creating a new release
       </a>
+      
     </li>
   
 
@@ -598,7 +601,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../developers/setup/" class="md-nav__link">
+      <a href="../setup/" class="md-nav__link">
         Development environment
       </a>
     </li>
@@ -620,7 +623,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../CHANGELOG/" class="md-nav__link">
+      <a href="../../CHANGELOG/" class="md-nav__link">
         Changelog
       </a>
     </li>
@@ -687,7 +690,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_reference/emmopy/emmocheck/" class="md-nav__link">
+      <a href="../../api_reference/emmopy/emmocheck/" class="md-nav__link">
         emmocheck
       </a>
     </li>
@@ -701,7 +704,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_reference/emmopy/emmopy/" class="md-nav__link">
+      <a href="../../api_reference/emmopy/emmopy/" class="md-nav__link">
         emmopy
       </a>
     </li>
@@ -748,7 +751,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_reference/ontopy/colortest/" class="md-nav__link">
+      <a href="../../api_reference/ontopy/colortest/" class="md-nav__link">
         colortest
       </a>
     </li>
@@ -762,7 +765,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_reference/ontopy/graph/" class="md-nav__link">
+      <a href="../../api_reference/ontopy/graph/" class="md-nav__link">
         graph
       </a>
     </li>
@@ -776,7 +779,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_reference/ontopy/nadict/" class="md-nav__link">
+      <a href="../../api_reference/ontopy/nadict/" class="md-nav__link">
         nadict
       </a>
     </li>
@@ -790,7 +793,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_reference/ontopy/ontodoc/" class="md-nav__link">
+      <a href="../../api_reference/ontopy/ontodoc/" class="md-nav__link">
         ontodoc
       </a>
     </li>
@@ -804,7 +807,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_reference/ontopy/ontograph/" class="md-nav__link">
+      <a href="../../api_reference/ontopy/ontograph/" class="md-nav__link">
         ontograph
       </a>
     </li>
@@ -818,7 +821,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_reference/ontopy/ontology/" class="md-nav__link">
+      <a href="../../api_reference/ontopy/ontology/" class="md-nav__link">
         ontology
       </a>
     </li>
@@ -832,7 +835,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_reference/ontopy/patch/" class="md-nav__link">
+      <a href="../../api_reference/ontopy/patch/" class="md-nav__link">
         patch
       </a>
     </li>
@@ -846,7 +849,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_reference/ontopy/utils/" class="md-nav__link">
+      <a href="../../api_reference/ontopy/utils/" class="md-nav__link">
         utils
       </a>
     </li>
@@ -886,7 +889,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_reference/ontopy/factpluspluswrapper/factppgraph/" class="md-nav__link">
+      <a href="../../api_reference/ontopy/factpluspluswrapper/factppgraph/" class="md-nav__link">
         factppgraph
       </a>
     </li>
@@ -900,7 +903,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_reference/ontopy/factpluspluswrapper/owlapi_interface/" class="md-nav__link">
+      <a href="../../api_reference/ontopy/factpluspluswrapper/owlapi_interface/" class="md-nav__link">
         owlapi_interface
       </a>
     </li>
@@ -914,7 +917,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_reference/ontopy/factpluspluswrapper/sync_factpp/" class="md-nav__link">
+      <a href="../../api_reference/ontopy/factpluspluswrapper/sync_factpp/" class="md-nav__link">
         sync_factpp
       </a>
     </li>
@@ -949,83 +952,45 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
                 
                 
-                  <h1>Classes</h1>
-                
-                <p>%%
-%% This file
-%% This is Markdown file, except of lines starting with %% will
-%% be stripped off.
-%%</p>
-<!-- markdownlint-disable-next-line MD041 -->
-
-<p>%HEADER "EMMO Classes"    level=1</p>
-<p><em>emmo</em> is a class representing the collection of all the individuals
-(signs) that are used in the ontology. Individuals are declared by the
-EMMO users when they want to apply the EMMO to represent the world.</p>
-<p>%BRANCHHEAD EMMO
-The root of all classes used to represent the world.  It has two children;
-<em>collection</em> and <em>item</em>.</p>
-<p><em>collection</em> is the class representing the collection of all the
-individuals (signs) that represents a collection of non-connected real world
-objects.</p>
-<p><em>item</em> Is the class that collects all the individuals that are members
-of a set (it's the most comprehensive set individual).  It is the
-branch of mereotopology.</p>
-<p>%% - based on <em>has_part</em> mereological relation that can be axiomatically defined
-%% - a fusion is the sum of its parts (e.g. a car is made of several
-%%   mechanical parts, an molecule is made of nuclei and electrons)
-%% - a fusion is of the same entity type as its parts (e.g. a physical
-%%   entity is made of physical entities parts)
-%% - a fusion can be partitioned in more than one way
-%BRANCH EMMO</p>
-<p>%BRANCHDOC Elementary
-%BRANCHDOC Perspective</p>
-<p>%BRANCHDOC Holistic
-%BRANCHDOC Semiotic
-%BRANCHDOC Sign
-%BRANCHDOC Interpreter
-%BRANCHDOC Object
-%BRANCHDOC Conventional
-%BRANCHDOC Property
-%BRANCHDOC Icon
-%BRANCHDOC Process</p>
-<p>%BRANCHDOC Perceptual
-%BRANCHDOC Graphical
-%BRANCHDOC Geometrical
-%BRANCHDOC Symbol
-%BRANCHDOC Mathematical
-%BRANCHDOC MathematicalSymbol
-%BRANCHDOC MathematicalModel
-%BRANCHDOC MathematicalOperator
-%BRANCHDOC Metrological
-%BRANCHDOC PhysicalDimension     rankdir=RL
-%BRANCHDOC PhysicalQuantity
-%BRANCHDOC Number
-%BRANCHDOC MeasurementUnit
-%BRANCHDOC UTF8
-%BRANCHDOC SIBaseUnit
-%BRANCHDOC SISpecialUnit        rankdir=RL
-%BRANCHDOC PrefixedUnit
-%BRANCHDOC MetricPrefix         rankdir=RL
-%BRANCHDOC Quantity
-%BRANCHDOC BaseQuantity
-%BRANCHDOC DerivedQuantity      rankdir=RL
-%BRANCHDOC PhysicalConstant</p>
-<p>%BRANCHDOC Reductionistic
-%BRANCHDOC Expression</p>
-<p>%BRANCHDOC Physicalistic
-%BRANCHDOC ElementaryParticle
-%BRANCHDOC Subatomic
-%BRANCHDOC Matter
-%BRANCHDOC Fluid
-%BRANCHDOC Mixture
-%BRANCHDOC StateOfMatter</p>
+                <h1 id="steps-for-creating-a-new-release">Steps for creating a new release<a class="headerlink" href="#steps-for-creating-a-new-release" title="Permanent link">&para;</a></h1>
+<ol>
+<li>Create a release on GitHub with a short release description.</li>
+</ol>
+<p>Ensure you add a <code># &lt;version number&gt;</code> title to the description.</p>
+<p>Set the tag to the version number prefixed with <code>"v"</code> and title to the version number as explained above.
+1. Ensure the GitHub Action CD workflows run as expected.</p>
+<div class="admonition danger">
+<p class="admonition-title">The workflow failed</p>
+</div>
+<p>If something is wrong and the workflow fails <strong>before</strong> publishing the package to PyPI, make sure to remove all traces of the release and tag, fix the bug, and try again.</p>
+<p>If something is wrong and the workflow fails <strong>after</strong> publishing the package to PyPI: <strong>DO NOT REMOVE THE RELEASE OR TAG !</strong></p>
+<p>Deployment of the documentation should (in theory) be the only thing that has failed.
+   This can be deployed manually using similar steps as in the workflow.</p>
                 
               
               
@@ -1050,7 +1015,7 @@ branch of mereotopology.</p>
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: Generate documentation for EMMO" rel="prev">
+        <a href="../../examples/jupyter-visualization/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Visualise an ontology using pyctoscape in Jupyter Notebook" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1059,20 +1024,20 @@ branch of mereotopology.</p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              Generate documentation for EMMO
+              Visualise an ontology using pyctoscape in Jupyter Notebook
             </div>
           </div>
         </a>
       
       
         
-        <a href="../emmo/" class="md-footer__link md-footer__link--next" aria-label="Next: Emmo" rel="next">
+        <a href="../setup/" class="md-footer__link md-footer__link--next" aria-label="Next: Development environment" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Emmo
+              Development environment
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -1117,10 +1082,10 @@ branch of mereotopology.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.b1047164.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b1047164.min.js"></script>
       
     
   </body>

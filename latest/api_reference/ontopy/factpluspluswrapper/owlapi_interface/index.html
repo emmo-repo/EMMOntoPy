@@ -575,8 +575,22 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../release-instructions/" class="md-nav__link">
+      <a href="../../../../developers/release-instructions/" class="md-nav__link">
         Steps for creating a new release
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../developers/setup/" class="md-nav__link">
+        Development environment
       </a>
     </li>
   
@@ -1184,7 +1198,6 @@ OwlApiInterface        </code>
           <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Initialize the interface.&quot;&quot;&quot;</span>
-    <span class="k">pass</span>
 </code></pre></div>
         </details>
     </div>
@@ -1284,9 +1297,9 @@ OwlApiInterface        </code>
 <span class="sd">    Args:</span>
 <span class="sd">        graph (Graph): An rdflib graph to execute the reasoner on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="s2">&quot;wt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xml&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;--run-reasoner&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="s2">&quot;wt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xml&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;--run-reasoner&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1381,14 +1394,18 @@ OwlApiInterface        </code>
         <span class="s2">&quot;with the asserted ones. If multiple OWL files are given, they are &quot;</span>
         <span class="s2">&quot;merged beforehand&quot;</span>
     <span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;owl_file&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;OWL file(s) to run the reasoner on.&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;output_file&quot;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to store inferred axioms to.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;owl_file&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;OWL file(s) to run the reasoner on.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;output_file&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to store inferred axioms to.&quot;</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
-    <span class="n">OwlApiInterface</span><span class="p">()</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="o">.</span><span class="n">owl_file</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;--run-reasoner&quot;</span><span class="p">,</span>
-                           <span class="n">return_graph</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="p">)</span>
+    <span class="n">OwlApiInterface</span><span class="p">()</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span>  <span class="c1"># pylint: disable=protected-access</span>
+        <span class="o">*</span><span class="n">args</span><span class="o">.</span><span class="n">owl_file</span><span class="p">,</span>
+        <span class="n">command</span><span class="o">=</span><span class="s2">&quot;--run-reasoner&quot;</span><span class="p">,</span>
+        <span class="n">return_graph</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">output_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="p">,</span>
+    <span class="p">)</span>
 </code></pre></div>
         </details>
     </div>

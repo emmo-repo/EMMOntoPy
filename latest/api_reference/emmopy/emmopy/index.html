@@ -575,8 +575,22 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../release-instructions/" class="md-nav__link">
+      <a href="../../../developers/release-instructions/" class="md-nav__link">
         Steps for creating a new release
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/setup/" class="md-nav__link">
+        Development environment
       </a>
     </li>
   
@@ -719,6 +733,115 @@
         <li class="md-nav__item">
   <a href="#emmopy.emmopy" class="md-nav__link">
     emmopy.emmopy
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emmopy.emmopy--emmopyemmopy" class="md-nav__link">
+    
+
+  
+
+
+    
+
+      emmopy.emmopy&para;
+Automagically retrieve the EMMO utilizing
+ontopy.get_ontology.
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+get_emmo(inferred=True)
+
+
+amppara;
+
+    
+
+      Returns the current version of emmo.
+
+Parameters:
+
+  
+    
+      Name
+      Type
+      Description
+      Default
+    
+  
+  
+      
+        inferred
+        Optional[bool]
+        Whether to import the inferred version of emmo or not.
+Default is True.
+        True
+      
+  
+
+Returns:
+
+  
+    
+      Type
+      Description
+    
+  
+  
+    
+      Ontology
+      The loaded emmo ontology.
+    
+  
+
+        
+          Source code in emmopy/emmopy.py
+          def get_emmo(inferred: Optional[bool] = True) -&gt; &quot;Ontology&quot;:
+    &quot;&quot;&quot;Returns the current version of emmo.
+
+    Args:
+        inferred: Whether to import the inferred version of emmo or not.
+            Default is True.
+
+    Returns:
+        The loaded emmo ontology.
+    &quot;&quot;&quot;
+    name = &quot;emmo-inferred&quot; if inferred in [True, None] else &quot;emmo&quot;
+    return get_ontology(name).load()
+
+        
+    
+
+  
+
+
+
+
+
+
+  
+
+    
+
+  
+
+
   </a>
   
 </li>
@@ -1007,6 +1130,115 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#emmopy.emmopy--emmopyemmopy" class="md-nav__link">
+    
+
+  
+
+
+    
+
+      emmopy.emmopy&para;
+Automagically retrieve the EMMO utilizing
+ontopy.get_ontology.
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+get_emmo(inferred=True)
+
+
+amppara;
+
+    
+
+      Returns the current version of emmo.
+
+Parameters:
+
+  
+    
+      Name
+      Type
+      Description
+      Default
+    
+  
+  
+      
+        inferred
+        Optional[bool]
+        Whether to import the inferred version of emmo or not.
+Default is True.
+        True
+      
+  
+
+Returns:
+
+  
+    
+      Type
+      Description
+    
+  
+  
+    
+      Ontology
+      The loaded emmo ontology.
+    
+  
+
+        
+          Source code in emmopy/emmopy.py
+          def get_emmo(inferred: Optional[bool] = True) -&gt; &quot;Ontology&quot;:
+    &quot;&quot;&quot;Returns the current version of emmo.
+
+    Args:
+        inferred: Whether to import the inferred version of emmo or not.
+            Default is True.
+
+    Returns:
+        The loaded emmo ontology.
+    &quot;&quot;&quot;
+    name = &quot;emmo-inferred&quot; if inferred in [True, None] else &quot;emmo&quot;
+    return get_ontology(name).load()
+
+        
+    
+
+  
+
+
+
+
+
+
+  
+
+    
+
+  
+
+
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#emmopy.emmopy.get_emmo" class="md-nav__link">
     get_emmo()
   </a>
@@ -1034,6 +1266,9 @@
 <a id="emmopy.emmopy"></a>
     <div class="doc doc-contents first">
 
+      <h2 id="emmopy.emmopy--emmopyemmopy"><code>emmopy.emmopy</code><a class="headerlink" href="#emmopy.emmopy--emmopyemmopy" title="Permanent link">&para;</a></h2>
+<p>Automagically retrieve the EMMO utilizing
+<a href="../../ontopy/ontology/#ontopy.ontology.get_ontology"><code>ontopy.get_ontology</code></a>.</p>
 
 
 
@@ -1107,7 +1342,7 @@ Default is True.</p></td>
 <span class="sd">    Returns:</span>
 <span class="sd">        The loaded emmo ontology.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;emmo-inferred&#39;</span> <span class="k">if</span> <span class="n">inferred</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;emmo&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;emmo-inferred&quot;</span> <span class="k">if</span> <span class="n">inferred</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;emmo&quot;</span>
     <span class="k">return</span> <span class="n">get_ontology</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 </code></pre></div>
         </details>

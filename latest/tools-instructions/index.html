@@ -815,8 +815,22 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-instructions/" class="md-nav__link">
+      <a href="../developers/release-instructions/" class="md-nav__link">
         Steps for creating a new release
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/setup/" class="md-nav__link">
+        Development environment
       </a>
     </li>
   
@@ -1448,7 +1462,7 @@
 <span class="go">  --skip, -s ShellPattern</span>
 <span class="go">            Shell pattern matching tests to skip.  This option may be</span>
 <span class="go">                        provided multiple times.</span>
-<span class="go">  --url-from-catalog, -u </span>
+<span class="go">  --url-from-catalog, -u</span>
 <span class="go">      Get url from catalog file.</span>
 <span class="go">  --ignore-namespace, -n</span>
 <span class="go">                        Namespace to be ignored. Can be given multiple times</span>
@@ -1456,9 +1470,9 @@
 <h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="go">    emmocheck http://emmo.info/emmo/1.0.0-alpha2</span>
 <span class="go">    emmocheck --database demo.sqlite3 http://www.emmc.info/emmc-csa/demo#</span>
-<span class="go">    emmocheck -l emmo.owl (in folder to which emmo was downloaded locally) </span>
+<span class="go">    emmocheck -l emmo.owl (in folder to which emmo was downloaded locally)</span>
 <span class="go">    emmocheck --check-imported --ignore-namespace=physicalistic --verbose --url-from-catalog emmo.owl (in folder with downloaded EMMO)</span>
-<span class="go">    emmocheck --check-imported --local --url-from-catalog --skip test_namespace emmo.owl </span>
+<span class="go">    emmocheck --check-imported --local --url-from-catalog --skip test_namespace emmo.owl</span>
 </code></pre></div>
 <!-- (Missing example with local and path) -->
 
@@ -1532,7 +1546,7 @@
 <span class="go">                        multiple --path options.</span>
 <span class="go">  --reasoner [{FaCT++,HermiT,Pellet}]</span>
 <span class="go">                        Run given reasoner on the ontology. Valid reasoners</span>
-<span class="go">                        are &quot;FaCT++&quot; (default), &quot;HermiT&quot; and &quot;Pellet&quot;. </span>
+<span class="go">                        are &quot;FaCT++&quot; (default), &quot;HermiT&quot; and &quot;Pellet&quot;.</span>
 <span class="go">                        Note: FaCT++ is preferred with EMMO.</span>
 <span class="go">  --root ROOT, -r ROOT  Name of root node in the graph. Defaults to all</span>
 <span class="go">                        classes.</span>
@@ -1663,13 +1677,13 @@
 
 <span class="go">    optional arguments:</span>
 <span class="go">      -h, --help            show this help message and exit</span>
-<span class="go">      --input-format, -f INPUT_FORMAT </span>
+<span class="go">      --input-format, -f INPUT_FORMAT</span>
 <span class="go">                            Inputformat. Default is to infer from input.</span>
-<span class="go">      --output-format, -F OUTPUT_FORMAT </span>
+<span class="go">      --output-format, -F OUTPUT_FORMAT</span>
 <span class="go">                            Default is to infer from output.</span>
 <span class="go">      --no-catalog, -n      Do not read catalog even if it exists.</span>
 <span class="go">      --inferred, -i        Add additional relations inferred by the FaCT++ reasoner to the converted ontology. Implies --squash.</span>
-<span class="go">      --base-iri BASE_IRI, -b BASE_IRI </span>
+<span class="go">      --base-iri BASE_IRI, -b BASE_IRI</span>
 <span class="go">                            Base iri of inferred ontology. The default is the base</span>
 <span class="go">                            iri of the input ontology with &quot;-inferred&quot; appended to</span>
 <span class="go">                            it. Used together with --inferred.</span>

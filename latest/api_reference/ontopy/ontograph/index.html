@@ -575,8 +575,22 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../release-instructions/" class="md-nav__link">
+      <a href="../../../developers/release-instructions/" class="md-nav__link">
         Steps for creating a new release
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/setup/" class="md-nav__link">
+        Development environment
       </a>
     </li>
   
@@ -1212,9 +1226,17 @@ constraint : None | bool</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/ontograph.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_dot_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="s1">&#39;is_a&#39;</span><span class="p">,</span>
-                  <span class="n">leafs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                  <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">constraint</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_dot_graph</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments,too-many-locals,too-many-branches</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;is_a&quot;</span><span class="p">,</span>
+    <span class="n">leafs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">parents</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">constraint</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns a pydot graph object for visualising the ontology.</span>
 
 <span class="sd">    Parameters</span>
@@ -1260,60 +1282,66 @@ constraint : None | bool</p>
 
 <span class="sd">    Note: This method requires pydot.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
         <span class="sd">&quot;&quot;&quot;The ontopy.ontology.get_dot_graph() method is deprecated.</span>
 <span class="sd">        Use ontopy.ontology.get_graph() instead.</span>
 
 <span class="sd">        This requires that you install graphviz instead of the old</span>
-<span class="sd">        pydot package.&quot;&quot;&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+<span class="sd">        pydot package.&quot;&quot;&quot;</span><span class="p">,</span>
+        <span class="ne">DeprecationWarning</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># FIXME - double inheritance leads to dublicated nodes. Make sure</span>
     <span class="c1">#         to only add a node once!</span>
-    <span class="kn">import</span> <span class="nn">pydot</span>
-    <span class="kn">from</span> <span class="nn">ontopy.ontology</span> <span class="kn">import</span> <span class="n">NoSuchLabelError</span>
 
-    <span class="k">if</span> <span class="n">style</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">style</span> <span class="o">==</span> <span class="s1">&#39;default&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">style</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">style</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
         <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_style</span>
-    <span class="k">elif</span> <span class="n">style</span> <span class="o">==</span> <span class="s1">&#39;uml&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">style</span> <span class="o">==</span> <span class="s2">&quot;uml&quot;</span><span class="p">:</span>
         <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uml_style</span>
-    <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dot_graph</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
-                                <span class="n">relations</span><span class="o">=</span><span class="n">relations</span><span class="p">,</span> <span class="n">leafs</span><span class="o">=</span><span class="n">leafs</span><span class="p">,</span>
-                                <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="p">,</span> <span class="n">edgelabels</span><span class="o">=</span><span class="n">edgelabels</span><span class="p">)</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dot_graph</span><span class="p">(</span>
+        <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
+        <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
+        <span class="n">relations</span><span class="o">=</span><span class="n">relations</span><span class="p">,</span>
+        <span class="n">leafs</span><span class="o">=</span><span class="n">leafs</span><span class="p">,</span>
+        <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="p">,</span>
+        <span class="n">edgelabels</span><span class="o">=</span><span class="n">edgelabels</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="c1"># Add parents</span>
-    <span class="c1"># FIXME - facture out into an recursive function to support</span>
+    <span class="c1"># FIXME - factor out into a recursive function to support</span>
     <span class="c1">#         multiple inheritance</span>
 
     <span class="k">if</span> <span class="n">parents</span> <span class="ow">and</span> <span class="n">root</span><span class="p">:</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">root</span>
+        <span class="n">root_entity</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">root</span>
+        <span class="p">)</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">parent</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">is_a</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">parent</span> <span class="ow">is</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Thing</span><span class="p">):</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">root_entity</span><span class="o">.</span><span class="n">is_a</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">parent</span> <span class="ow">is</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Thing</span><span class="p">:</span>
                 <span class="k">break</span>
             <span class="n">label</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_defined</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
-                <span class="n">node</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;defined_class&#39;</span><span class="p">,</span> <span class="p">{}))</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;defined_class&quot;</span><span class="p">,</span> <span class="p">{}))</span>
                 <span class="c1"># If label contains a hyphen, the node name will</span>
                 <span class="c1"># be quoted (bug in pydot?).  To work around, set</span>
                 <span class="c1"># the name explicitly...</span>
                 <span class="n">node</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">node</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="p">{}))</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="p">{}))</span>
                 <span class="n">node</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
             <span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">relations</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="s1">&#39;is_a&#39;</span> <span class="ow">in</span> <span class="n">relations</span><span class="p">:</span>
-                <span class="n">kw</span> <span class="o">=</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;is_a&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">relations</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="s2">&quot;is_a&quot;</span> <span class="ow">in</span> <span class="n">relations</span><span class="p">:</span>
+                <span class="n">kwargs</span> <span class="o">=</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_a&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edgelabels</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                    <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">edgelabels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;is_a&#39;</span><span class="p">,</span> <span class="s1">&#39;is_a&#39;</span><span class="p">)</span>
+                    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">edgelabels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_a&quot;</span><span class="p">,</span> <span class="s2">&quot;is_a&quot;</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="n">edgelabels</span><span class="p">:</span>
-                    <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;is_a&#39;</span>
+                    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;is_a&quot;</span>
 
-                <span class="n">rootnode</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">asstring</span><span class="p">(</span><span class="n">r</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">edge</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">rootnode</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+                <span class="n">rootnode</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">asstring</span><span class="p">(</span><span class="n">root_entity</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">edge</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">rootnode</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
                 <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">parents</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">label</span> <span class="o">==</span> <span class="n">parents</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parents</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">label</span> <span class="o">==</span> <span class="n">parents</span><span class="p">:</span>
                 <span class="k">break</span>
-            <span class="n">r</span> <span class="o">=</span> <span class="n">parent</span>
+            <span class="n">root_entity</span> <span class="o">=</span> <span class="n">parent</span>
     <span class="c1"># Add edges</span>
     <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">():</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1321,45 +1349,72 @@ constraint : None | bool</p>
         <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="n">NoSuchLabelError</span><span class="p">):</span>
             <span class="k">continue</span>
         <span class="c1"># Add is_a edges</span>
-        <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">is_a</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="p">(</span>
-            <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ObjectPropertyClass</span><span class="p">,</span>
-            <span class="n">owlready2</span><span class="o">.</span><span class="n">PropertyClass</span><span class="p">))]</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">e</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">is_a</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+                <span class="n">e</span><span class="p">,</span>
+                <span class="p">(</span>
+                    <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">,</span>
+                    <span class="n">owlready2</span><span class="o">.</span><span class="n">ObjectPropertyClass</span><span class="p">,</span>
+                    <span class="n">owlready2</span><span class="o">.</span><span class="n">PropertyClass</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_get_dot_add_edges</span><span class="p">(</span>
-            <span class="n">graph</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="s1">&#39;relations&#39;</span><span class="p">,</span>
+            <span class="n">graph</span><span class="p">,</span>
+            <span class="n">entity</span><span class="p">,</span>
+            <span class="n">targets</span><span class="p">,</span>
+            <span class="s2">&quot;relations&quot;</span><span class="p">,</span>
             <span class="n">relations</span><span class="p">,</span>
             <span class="c1"># style=style.get(&#39;relations&#39;, style.get(&#39;other&#39;, {})),</span>
-            <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;other&#39;</span><span class="p">,</span> <span class="p">{}),</span>
+            <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;other&quot;</span><span class="p">,</span> <span class="p">{}),</span>
             <span class="n">edgelabels</span><span class="o">=</span><span class="n">edgelabels</span><span class="p">,</span>
             <span class="n">constraint</span><span class="o">=</span><span class="n">constraint</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Add equivalent_to edges</span>
-        <span class="k">if</span> <span class="n">relations</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="s1">&#39;equivalent_to&#39;</span> <span class="ow">in</span> <span class="n">relations</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">relations</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="s2">&quot;equivalent_to&quot;</span> <span class="ow">in</span> <span class="n">relations</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_get_dot_add_edges</span><span class="p">(</span>
-                <span class="n">graph</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">,</span> <span class="s1">&#39;equivalent_to&#39;</span><span class="p">,</span>
-                <span class="n">relations</span><span class="p">,</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;equivalent_to&#39;</span><span class="p">,</span> <span class="p">{}),</span>
+                <span class="n">graph</span><span class="p">,</span>
+                <span class="n">entity</span><span class="p">,</span>
+                <span class="n">entity</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">,</span>
+                <span class="s2">&quot;equivalent_to&quot;</span><span class="p">,</span>
+                <span class="n">relations</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;equivalent_to&quot;</span><span class="p">,</span> <span class="p">{}),</span>
                 <span class="n">edgelabels</span><span class="o">=</span><span class="n">edgelabels</span><span class="p">,</span>
                 <span class="n">constraint</span><span class="o">=</span><span class="n">constraint</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="c1"># disjoint_with</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s1">&#39;disjoints&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
-                <span class="n">relations</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="s1">&#39;disjoint_with&#39;</span> <span class="ow">in</span> <span class="n">relations</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;disjoints&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">relations</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="s2">&quot;disjoint_with&quot;</span> <span class="ow">in</span> <span class="n">relations</span>
+        <span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_get_dot_add_edges</span><span class="p">(</span>
-                <span class="n">graph</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">disjoints</span><span class="p">(),</span> <span class="s1">&#39;disjoint_with&#39;</span><span class="p">,</span>
-                <span class="n">relations</span><span class="p">,</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;disjoint_with&#39;</span><span class="p">,</span> <span class="p">{}),</span>
+                <span class="n">graph</span><span class="p">,</span>
+                <span class="n">entity</span><span class="p">,</span>
+                <span class="n">entity</span><span class="o">.</span><span class="n">disjoints</span><span class="p">(),</span>
+                <span class="s2">&quot;disjoint_with&quot;</span><span class="p">,</span>
+                <span class="n">relations</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;disjoint_with&quot;</span><span class="p">,</span> <span class="p">{}),</span>
                 <span class="n">edgelabels</span><span class="o">=</span><span class="n">edgelabels</span><span class="p">,</span>
                 <span class="n">constraint</span><span class="o">=</span><span class="n">constraint</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="c1"># Add inverse_of</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s1">&#39;inverse_property&#39;</span><span class="p">)</span> <span class="ow">and</span>
-                <span class="p">(</span><span class="n">relations</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="s1">&#39;inverse_of&#39;</span> <span class="ow">in</span> <span class="n">relations</span><span class="p">)</span> <span class="ow">and</span>
-                <span class="n">entity</span><span class="o">.</span><span class="n">inverse_property</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">entity</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;inverse_property&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="n">relations</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="s2">&quot;inverse_of&quot;</span> <span class="ow">in</span> <span class="n">relations</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">inverse_property</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span>
+        <span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_get_dot_add_edges</span><span class="p">(</span>
-                <span class="n">graph</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">inverse_property</span><span class="p">],</span> <span class="s1">&#39;inverse_of&#39;</span><span class="p">,</span>
-                <span class="n">relations</span><span class="p">,</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inverse_of&#39;</span><span class="p">,</span> <span class="p">{}),</span>
+                <span class="n">graph</span><span class="p">,</span>
+                <span class="n">entity</span><span class="p">,</span>
+                <span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">inverse_property</span><span class="p">],</span>
+                <span class="s2">&quot;inverse_of&quot;</span><span class="p">,</span>
+                <span class="n">relations</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;inverse_of&quot;</span><span class="p">,</span> <span class="p">{}),</span>
                 <span class="n">edgelabels</span><span class="o">=</span><span class="n">edgelabels</span><span class="p">,</span>
                 <span class="n">constraint</span><span class="o">=</span><span class="n">constraint</span><span class="p">,</span>
             <span class="p">)</span>
@@ -1391,18 +1446,21 @@ All arguments are passed on.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/ontograph.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_dot_relations_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="s1">&#39;is_a&#39;</span><span class="p">,</span>
-                            <span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_dot_relations_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;is_a&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns a disjoined graph of all relations.</span>
 
 <span class="sd">    This method simply calls get_dot_graph() with all root relations.</span>
 <span class="sd">    All arguments are passed on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rels</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_relations</span><span class="p">())</span>
-    <span class="n">roots</span> <span class="o">=</span> <span class="p">[</span><span class="n">relation</span> <span class="k">for</span> <span class="n">relation</span> <span class="ow">in</span> <span class="n">rels</span>
-             <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="n">r</span> <span class="ow">in</span> <span class="n">rels</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">relation</span><span class="o">.</span><span class="n">is_a</span><span class="p">])]</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dot_graph</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">roots</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="n">relations</span><span class="p">,</span>
-                              <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="p">)</span>
+    <span class="n">roots</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">relation</span>
+        <span class="k">for</span> <span class="n">relation</span> <span class="ow">in</span> <span class="n">rels</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">_</span> <span class="ow">in</span> <span class="n">rels</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">relation</span><span class="o">.</span><span class="n">is_a</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dot_graph</span><span class="p">(</span>
+        <span class="n">root</span><span class="o">=</span><span class="n">roots</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="n">relations</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">style</span>
+    <span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1443,16 +1501,21 @@ current pydot graph object <code>graph</code>.</p>
     <span class="sd">&quot;&quot;&quot;Returns figure size (width, height) in points of figures for the</span>
 <span class="sd">    current pydot graph object `graph`.&quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
-        <span class="n">tmpfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s1">&#39;graph.svg&#39;</span><span class="p">)</span>
+        <span class="n">tmpfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s2">&quot;graph.svg&quot;</span><span class="p">)</span>
         <span class="n">graph</span><span class="o">.</span><span class="n">write_svg</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">)</span>
         <span class="n">xml</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">)</span>
         <span class="n">svg</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
-        <span class="n">width</span> <span class="o">=</span> <span class="n">svg</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="n">svg</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span>
-        <span class="k">assert</span> <span class="n">width</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pt&#39;</span><span class="p">)</span>  <span class="c1"># ensure that units are in points</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">svg</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">]</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">svg</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">width</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;pt&quot;</span><span class="p">):</span>
+            <span class="c1"># ensure that units are in points</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The width attribute should always be given in &#39;pt&#39;, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;but it is: </span><span class="si">{</span><span class="n">width</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">asfloat</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[\d.]+&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">())</span>
+    <span class="k">def</span> <span class="nf">asfloat</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[\d.]+&quot;</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">())</span>
 
     <span class="k">return</span> <span class="n">asfloat</span><span class="p">(</span><span class="n">width</span><span class="p">),</span> <span class="n">asfloat</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
 </code></pre></div>
