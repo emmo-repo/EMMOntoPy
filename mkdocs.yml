@@ -43,6 +43,7 @@ markdown_extensions:
   - pymdownx.tabbed
   - pymdownx.caret
   - pymdownx.tilde
+  - pymdownx.keys
   - toc:
       permalink: true
 
