@@ -17,10 +17,10 @@ def test_load_emmo() -> None:
     assert EMMO_inferred == EMMO_inferred_again
     assert EMMO != EMMO_inferred
 
-    EMMO_inferred.new_entity('HydrogenAtom', EMMO_inferred.Atom)
+    EMMO_inferred.new_entity("HydrogenAtom", EMMO_inferred.Atom)
     EMMO_inferred.sync_attributes()
     assert EMMO_inferred != EMMO_inferred_again
 
     EMMO_inferred2 = get_emmo()
-    EMMO_inferred2.Atom.comment.append('New triple')
+    EMMO_inferred2.Atom.comment.append("New triple")
     assert EMMO_inferred2 != EMMO_inferred_again

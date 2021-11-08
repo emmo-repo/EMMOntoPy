@@ -19,19 +19,22 @@ The generated  metadata is finally serialised into a JSON file.
 """
 import os
 
-from ontopy import get_ontology
 from emmo2meta import EMMO2Meta
+from ontopy import get_ontology
 
 
 # Load our ontology from the vertical case
-ontopath = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), '..', 'vertical', 'usercase_ontology.owl'))
+ontopath = os.path.abspath(
+    os.path.join(
+        os.path.dirname(__file__), "..", "vertical", "usercase_ontology.owl"
+    )
+)
 onto = get_ontology(ontopath)
 onto.load()
 
 
 # hmm, the base iri has cnanged... - bug in owlready2?
-onto.base_iri = 'http://www.emmc.info/emmc-csa/demo#'
+onto.base_iri = "http://www.emmc.info/emmc-csa/demo#"
 
 
 # Generate metadata and store it in a JSON file
@@ -39,10 +42,14 @@ onto.base_iri = 'http://www.emmc.info/emmc-csa/demo#'
 # This does not include all of EMMO, but only the new classes,
 # bonded_atom and all classes that these relates to.
 classes = list(onto.classes()) + [
-    onto.BondedAtom, onto.Integer, onto.Real, onto.String]
-e = EMMO2Meta(ontology=onto, classes=classes, collid='usercase_ontology')
-e.save('json', 'usercase_metadata.json', 'mode=w')
+    onto.BondedAtom,
+    onto.Integer,
+    onto.Real,
+    onto.String,
+]
+e = EMMO2Meta(ontology=onto, classes=classes, collid="usercase_ontology")
+e.save("json", "usercase_metadata.json", "mode=w")
 
-print('Generated metadata for the usercase ontology:')
-print('  %d instances' % e.coll.count())
-print('  %d relations' % len(list(e.coll.relations())))
+print("Generated metadata for the usercase ontology:")
+print(f"  {e.coll.count()} instances")
+print(f"  {len(list(e.coll.relations()))} relations")

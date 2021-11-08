@@ -4,24 +4,24 @@ This module is copied from the SimPhoNy project.
 
 Original author: Matthias Urban
 """
-import os
-import subprocess
-import logging
-import rdflib
-import tempfile
 import argparse
+import logging
+import os
+import subprocess  # nosec
+import tempfile
+
+import rdflib
 
 logger = logging.getLogger(__name__)
 
 RESULT_FILE = "_result_ontology.owl"
 
 
-class OwlApiInterface():
+class OwlApiInterface:
     """Interface to the FaCT++ reasoner via OWLAPI."""
 
     def __init__(self):
         """Initialize the interface."""
-        pass
 
     def reason(self, graph):
         """Generate the inferred axioms for a given Graph.
@@ -29,9 +29,9 @@ class OwlApiInterface():
         Args:
             graph (Graph): An rdflib graph to execute the reasoner on.
         """
-        with tempfile.NamedTemporaryFile("wt") as f:
-            graph.serialize(f.name, format="xml")
-            return self._run(f.name, command="--run-reasoner")
+        with tempfile.NamedTemporaryFile("wt") as tmpdir:
+            graph.serialize(tmpdir.name, format="xml")
+            return self._run(tmpdir.name, command="--run-reasoner")
 
     def reason_files(self, *owl_files):
         """Merge the given owl and generate the inferred axioms.
@@ -49,7 +49,8 @@ class OwlApiInterface():
         """
         return self._run(*owl_files, command="--merge-only")
 
-    def _run(self, *owl_files, command, output_file=None, return_graph=True):
+    @staticmethod
+    def _run(*owl_files, command, output_file=None, return_graph=True):
         """Run the FaCT++ reasoner using a java command.
 
         Args:
@@ -66,15 +67,20 @@ class OwlApiInterface():
         java_base = os.path.abspath(
             os.path.join(os.path.dirname(__file__), "java")
         )
-        cmd = [
-            "java", "-cp",
-            java_base + "/lib/jars/*",
-            "-Djava.library.path="
-            + java_base + "/lib/so", "org.simphony.OntologyLoader"
-        ] + ["%s" % command] + list(owl_files)
+        cmd = (
+            [
+                "java",
+                "-cp",
+                java_base + "/lib/jars/*",
+                "-Djava.library.path=" + java_base + "/lib/so",
+                "org.simphony.OntologyLoader",
+            ]
+            + [command]
+            + list(owl_files)
+        )
         logger.info("Running Reasoner")
-        logger.debug(f"Command {cmd}")
-        subprocess.run(cmd, check=True)
+        logger.debug("Command %s", cmd)
+        subprocess.run(cmd, check=True)  # nosec
 
         graph = None
         if return_graph:
@@ -96,14 +102,18 @@ def reason_from_terminal():
         "with the asserted ones. If multiple OWL files are given, they are "
         "merged beforehand"
     )
-    parser.add_argument("owl_file", nargs="+",
-                        help="OWL file(s) to run the reasoner on.")
-    parser.add_argument("output_file",
-                        help="Path to store inferred axioms to.")
+    parser.add_argument(
+        "owl_file", nargs="+", help="OWL file(s) to run the reasoner on."
+    )
+    parser.add_argument("output_file", help="Path to store inferred axioms to.")
 
     args = parser.parse_args()
-    OwlApiInterface()._run(*args.owl_file, command="--run-reasoner",
-                           return_graph=False, output_file=args.output_file)
+    OwlApiInterface()._run(  # pylint: disable=protected-access
+        *args.owl_file,
+        command="--run-reasoner",
+        return_graph=False,
+        output_file=args.output_file,
+    )
 
 
 if __name__ == "__main__":

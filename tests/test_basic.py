@@ -9,12 +9,12 @@ def test_basic(emmo: "Ontology") -> None:
 
     emmo.sync_reasoner()
 
-    onto = get_ontology('onto.owl')
+    onto = get_ontology("onto.owl")
     onto.imported_ontologies.append(emmo)
-    onto.base_iri = 'http://emmo.info/examples/test#'
+    onto.base_iri = "http://emmo.info/examples/test#"
 
     # Add entity directly
-    onto.new_entity('Hydrogen', emmo.Atom)
+    onto.new_entity("Hydrogen", emmo.Atom)
 
     with onto:
 
@@ -24,6 +24,7 @@ def test_basic(emmo: "Ontology") -> None:
 
         class H2O(emmo.Molecule):
             """Water molecule."""
+
             emmo.hasSpatialDirectPart.exactly(2, onto.Hydrogen)
             emmo.hasSpatialDirectPart.exactly(1, Oxygen)
 
@@ -35,12 +36,12 @@ def test_basic(emmo: "Ontology") -> None:
         water.hasSpatialDirectPart = [H1, H2, O]
 
     name_prefix = "myonto_"
-    onto.sync_attributes(name_policy='sequential', name_prefix=name_prefix)
+    onto.sync_attributes(name_policy="sequential", name_prefix=name_prefix)
     assert f"{onto.base_iri}{name_prefix}0" in onto
     assert f"{onto.base_iri}{name_prefix}6" in onto
 
     name_prefix = "onto_"
-    onto.sync_attributes(name_policy='uuid', name_prefix=name_prefix)
-    assert water.name.startswith('onto_')
+    onto.sync_attributes(name_policy="uuid", name_prefix=name_prefix)
+    assert water.name.startswith("onto_")
     # A UUID is 32 chars long + 4 `-` chars = 36 chars
     assert len(water.name) == len(name_prefix) + 36
