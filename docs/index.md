@@ -2,9 +2,7 @@
 
 *Python API for the Elemental Multiperspective Material Ontology ([EMMO]).*
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/emmo-repo/EMMO-python/master/docs/images/suspected_logo.png" width="40%">
-</p>
+  <img src="images/suspected_logo.png" width="40%" align="right">
 
 <!-- markdownlint-disable MD033 -->
 
