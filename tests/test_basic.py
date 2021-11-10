@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+import pytest
 
 if TYPE_CHECKING:
     from ontopy.ontology import Ontology
@@ -6,6 +7,7 @@ if TYPE_CHECKING:
 
 def test_basic(emmo: "Ontology") -> None:
     from ontopy import get_ontology
+    from ontopy.utils import LabelDefinitionError
 
     emmo.sync_reasoner()
 
@@ -15,6 +17,9 @@ def test_basic(emmo: "Ontology") -> None:
 
     # Add entity directly
     onto.new_entity("Hydrogen", emmo.Atom)
+
+    with pytest.raises(LabelDefinitionError):
+        onto.new_entity("Hydr ogen", emmo.Atom)
 
     with onto:
 
