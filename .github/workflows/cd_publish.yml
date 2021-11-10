@@ -7,7 +7,7 @@ on:
 env:
   PUBLISH_UPDATE_BRANCH: master
   GIT_USER_NAME: EMMOntoPy Developers
-  GIT_USER_EMAIL: EMMOntoPy@emmo.info
+  GIT_USER_EMAIL: "EMMOntoPy@emmo.info"
 
 jobs:
   update-and-publish:
@@ -30,7 +30,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install setuptools wheel
-        pip install -U -e .[docs]
+        pip install -U -e .[dev]
 
     - name: Set up git user
       run: |
