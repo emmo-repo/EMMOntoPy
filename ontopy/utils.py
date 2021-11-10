@@ -51,7 +51,7 @@ class NoSuchLabelError(LookupError, AttributeError):
 
 
 class LabelDefinitionError(Exception):
-    """Error in label definition"""
+    """Error in label definition."""
 
 
 def isinteractive():

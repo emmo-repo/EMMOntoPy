@@ -1220,7 +1220,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         """
         if len(name.split(" ")) > 1:
             raise LabelDefinitionError(
-                f"Error in label name definition {name}"
+                f"Error in label name definition {name}: "
                 "Label consists of more than one word."
             )
         with self:
