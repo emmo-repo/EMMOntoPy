@@ -1,8 +1,9 @@
 # EMMOntoPy
 
+<img src="images/suspected_logo.png" width="40%" align="right">
+
 *Python API for the Elemental Multiperspective Material Ontology ([EMMO]).*
 
-  <img src="images/suspected_logo.png" width="40%" align="right">
 
 <!-- markdownlint-disable MD033 -->
 
