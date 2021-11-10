@@ -50,6 +50,10 @@ class NoSuchLabelError(LookupError, AttributeError):
     """Error raised when a label cannot be found."""
 
 
+class LabelDefinitionError(Exception):
+    """Error in label definition"""
+
+
 def isinteractive():
     """Returns true if we are running from an interactive interpreater,
     false otherwise."""
