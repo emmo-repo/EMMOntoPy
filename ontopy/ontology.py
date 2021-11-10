@@ -23,6 +23,7 @@ from rdflib.util import guess_format
 
 import owlready2
 from owlready2 import locstr
+from owlready2.entity import ThingClass
 
 from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 
@@ -35,6 +36,7 @@ from ontopy.utils import (
     OWLREADY2_FORMATS,
     ReadCatalogError,
     _validate_installed_version,
+    LabelDefinitionError,
 )
 from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
 
@@ -1208,12 +1210,19 @@ class Ontology(  # pylint: disable=too-many-public-methods
         generations2 = self.number_of_generations(cls2, cca)
         return 2 * ccadepth / (generations1 + generations2 + 2 * ccadepth)
 
-    def new_entity(self, name, parent):
+    def new_entity(self, name: str, parent: ThingClass) -> ThingClass:
         """Create and return new entity
 
         Makes a new entity in the ontology with given parent.
-        Return the new entity
+        Return the new entity.
+
+        Throws exception if name consists of more than one word.
         """
+        if len(name.split(" ")) > 1:
+            raise LabelDefinitionError(
+                f"Error in label name definition {name}: "
+                "Label consists of more than one word."
+            )
         with self:
             entity = types.new_class(name, (parent,))
         return entity
