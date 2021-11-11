@@ -2,7 +2,6 @@
 
 # EMMOntoPy
 
- 
 *Python API for the Elemental Multiperspective Material Ontology ([EMMO]).*
 
 
