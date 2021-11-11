@@ -4,7 +4,6 @@
 
 *Python API for the Elemental Multiperspective Material Ontology ([EMMO]).*
 
-
 <!-- markdownlint-disable MD033 -->
 
 ![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20Tests/badge.svg)
