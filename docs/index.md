@@ -1,4 +1,4 @@
-<img src="docs/images/suspected_logo.png" width="40%" align="right">
+<img src="images/suspected_logo.png" width="40%" align="right">
 
 # EMMOntoPy
 
