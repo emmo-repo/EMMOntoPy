@@ -16,8 +16,9 @@ import warnings
 import uuid
 import tempfile
 import types
-from typing import Union, List
+from typing import Union
 from collections import defaultdict
+from collections.abc import Iterable
 
 import rdflib
 from rdflib.util import guess_format
@@ -38,6 +39,7 @@ from ontopy.utils import (
     ReadCatalogError,
     _validate_installed_version,
     LabelDefinitionError,
+    ThingClassDefinitionError,
 )
 from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
 
@@ -1212,7 +1214,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         return 2 * ccadepth / (generations1 + generations2 + 2 * ccadepth)
 
     def new_entity(
-        self, name: str, parent: Union[ThingClass, List[ThingClass]]
+        self, name: str, parent: Union[ThingClass, Iterable]
     ) -> ThingClass:
         """Create and return new entity
 
@@ -1223,11 +1225,17 @@ class Ontology(  # pylint: disable=too-many-public-methods
         """
         if len(name.split(" ")) > 1:
             raise LabelDefinitionError(
-                f"Error in label name definition {name}: "
-                "Label consists of more than one word."
+                f"Error in label name definition '{name}': "
+                f"Label consists of more than one word."
             )
-        parent = parent if isinstance(parent, list) else [parent]
-        for thing in parent:
+        parents = parent if isinstance(parent, Iterable) else [parent]
+        for thing in parents:
+            if not isinstance(thing, owlready2.ThingClass):
+                raise ThingClassDefinitionError(
+                    f"Error in parent definition: "
+                    f"'{thing}' is not an owlready2.ThingClass."
+                )
+
             with self:
                 entity = types.new_class(name, (thing,))
         return entity

@@ -54,6 +54,10 @@ class LabelDefinitionError(Exception):
     """Error in label definition."""
 
 
+class ThingClassDefinitionError(Exception):
+    """Error in ThingClass definition."""
+
+
 def isinteractive():
     """Returns true if we are running from an interactive interpreater,
     false otherwise."""
