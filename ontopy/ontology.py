@@ -16,6 +16,7 @@ import warnings
 import uuid
 import tempfile
 import types
+from typing import Union, List
 from collections import defaultdict
 
 import rdflib
@@ -1210,7 +1211,9 @@ class Ontology(  # pylint: disable=too-many-public-methods
         generations2 = self.number_of_generations(cls2, cca)
         return 2 * ccadepth / (generations1 + generations2 + 2 * ccadepth)
 
-    def new_entity(self, name: str, parent: ThingClass) -> ThingClass:
+    def new_entity(
+        self, name: str, parent: Union[ThingClass, List[ThingClass]]
+    ) -> ThingClass:
         """Create and return new entity
 
         Makes a new entity in the ontology with given parent.
@@ -1223,6 +1226,8 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 f"Error in label name definition {name}: "
                 "Label consists of more than one word."
             )
-        with self:
-            entity = types.new_class(name, (parent,))
+        parent = parent if isinstance(parent, list) else [parent]
+        for thing in parent:
+            with self:
+                entity = types.new_class(name, (thing,))
         return entity
