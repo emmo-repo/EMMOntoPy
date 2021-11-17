@@ -1228,7 +1228,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 f"Error in label name definition '{name}': "
                 f"Label consists of more than one word."
             )
-        parents = parent if isinstance(parent, Iterable) else [parent]
+        parents = tuple(parent) if isinstance(parent, Iterable) else (parent,)
         for thing in parents:
             if not isinstance(thing, owlready2.ThingClass):
                 raise ThingClassDefinitionError(
@@ -1237,5 +1237,5 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 )
 
         with self:
-            entity = types.new_class(name, tuple(parents))
+            entity = types.new_class(name, parents)
         return entity
