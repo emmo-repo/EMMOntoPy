@@ -16,7 +16,9 @@ import warnings
 import uuid
 import tempfile
 import types
+from typing import Union
 from collections import defaultdict
+from collections.abc import Iterable
 
 import rdflib
 from rdflib.util import guess_format
@@ -37,6 +39,7 @@ from ontopy.utils import (
     ReadCatalogError,
     _validate_installed_version,
     LabelDefinitionError,
+    ThingClassDefinitionError,
 )
 from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
 
@@ -1210,19 +1213,29 @@ class Ontology(  # pylint: disable=too-many-public-methods
         generations2 = self.number_of_generations(cls2, cca)
         return 2 * ccadepth / (generations1 + generations2 + 2 * ccadepth)
 
-    def new_entity(self, name: str, parent: ThingClass) -> ThingClass:
+    def new_entity(
+        self, name: str, parent: Union[ThingClass, Iterable]
+    ) -> ThingClass:
         """Create and return new entity
 
-        Makes a new entity in the ontology with given parent.
+        Makes a new entity in the ontology with given parent(s).
         Return the new entity.
 
         Throws exception if name consists of more than one word.
         """
         if len(name.split(" ")) > 1:
             raise LabelDefinitionError(
-                f"Error in label name definition {name}: "
-                "Label consists of more than one word."
+                f"Error in label name definition '{name}': "
+                f"Label consists of more than one word."
             )
+        parents = tuple(parent) if isinstance(parent, Iterable) else (parent,)
+        for thing in parents:
+            if not isinstance(thing, owlready2.ThingClass):
+                raise ThingClassDefinitionError(
+                    f"Error in parent definition: "
+                    f"'{thing}' is not an owlready2.ThingClass."
+                )
+
         with self:
-            entity = types.new_class(name, (parent,))
+            entity = types.new_class(name, parents)
         return entity
