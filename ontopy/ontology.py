@@ -1216,7 +1216,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
     ) -> ThingClass:
         """Create and return new entity
 
-        Makes a new entity in the ontology with given parent.
+        Makes a new entity in the ontology with given parent(s).
         Return the new entity.
 
         Throws exception if name consists of more than one word.
