@@ -3194,27 +3194,37 @@ kwargs
     <div class="doc doc-contents ">
 
       <p>Create and return new entity</p>
-<p>Makes a new entity in the ontology with given parent.
+<p>Makes a new entity in the ontology with given parent(s).
 Return the new entity.</p>
 <p>Throws exception if name consists of more than one word.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">new_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">ThingClass</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThingClass</span><span class="p">:</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">new_entity</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ThingClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThingClass</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Create and return new entity</span>
 
-<span class="sd">    Makes a new entity in the ontology with given parent.</span>
+<span class="sd">    Makes a new entity in the ontology with given parent(s).</span>
 <span class="sd">    Return the new entity.</span>
 
 <span class="sd">    Throws exception if name consists of more than one word.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">LabelDefinitionError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Error in label name definition </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: &quot;</span>
-            <span class="s2">&quot;Label consists of more than one word.&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Error in label name definition &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;: &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Label consists of more than one word.&quot;</span>
         <span class="p">)</span>
+    <span class="n">parents</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="n">parent</span><span class="p">,)</span>
+    <span class="k">for</span> <span class="n">thing</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ThingClassDefinitionError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Error in parent definition: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">thing</span><span class="si">}</span><span class="s2">&#39; is not an owlready2.ThingClass.&quot;</span>
+            <span class="p">)</span>
+
     <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">new_class</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">parent</span><span class="p">,))</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">new_class</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">entity</span>
 </code></pre></div>
         </details>
