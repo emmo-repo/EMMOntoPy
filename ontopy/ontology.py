@@ -1236,6 +1236,6 @@ class Ontology(  # pylint: disable=too-many-public-methods
                     f"'{thing}' is not an owlready2.ThingClass."
                 )
 
-            with self:
-                entity = types.new_class(name, (thing,))
+        with self:
+            entity = types.new_class(name, tuple(parents))
         return entity
