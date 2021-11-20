@@ -28,9 +28,11 @@ from owlready2 import locstr
 from owlready2.entity import ThingClass
 
 from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
-
-from ontopy.utils import asstring, read_catalog, infer_version, convert_imported
 from ontopy.utils import (
+    asstring,
+    read_catalog,
+    infer_version,
+    convert_imported,
     FMAP,
     IncompatibleVersion,
     isinteractive,
@@ -116,26 +118,26 @@ class World(owlready2.World):
 
         return onto
 
-    def get_unabbreviated_triples(self, bnode=None):
-        """ Returns all triples unabbreviated.
+    def get_unabbreviated_triples(self, label=None):
+        """Returns all triples unabbreviated.
 
-        If `bnode` is given, it will be used to represent blank nodes.
+        If `label` is given, it will be used to represent blank nodes.
         """
+
         def _unabbreviate(i):
             if isinstance(i, int):
                 # negative storid corresponds to blank nodes
                 if i >= 0:
                     return self._unabbreviate(i)
-                elif bnode is None:
-                    return BNode(self, i)
-                else:
-                    return bnode
+                return BlankNode(self, i) if label is None else label
             return i
 
         for subject, predicate, obj in self.get_triples():
-            yield (_unabbreviate(subject),
-                   _unabbreviate(predicate),
-                   _unabbreviate(obj))
+            yield (
+                _unabbreviate(subject),
+                _unabbreviate(predicate),
+                _unabbreviate(obj),
+            )
 
 
 class Ontology(  # pylint: disable=too-many-public-methods
@@ -232,20 +234,20 @@ class Ontology(  # pylint: disable=too-many-public-methods
         """Checks if this ontology is equal to `other`.
 
         This function compares the result of
-        ``set(self.get_unabbreviated_triples(bnode='_:b'))``,
+        ``set(self.get_unabbreviated_triples(label='_:b'))``,
         i.e. blank nodes are not distinguished, but relations to blank
         nodes are included.
         """
-        return set(self.get_unabbreviated_triples(bnode='_:b')) == set(
-            other.get_unabbreviated_triples(bnode='_:b')
+        return set(self.get_unabbreviated_triples(label="_:b")) == set(
+            other.get_unabbreviated_triples(label="_:b")
         )
 
-    def get_unabbreviated_triples(self, bnode=None):
-        """ Returns all triples unabbreviated.
+    def get_unabbreviated_triples(self, label=None):
+        """Returns all triples unabbreviated.
 
-        If `bnode` is given, it will be used to represent blank nodes.
+        If `label` is given, it will be used to represent blank nodes.
         """
-        return World.get_unabbreviated_triples(self, bnode)
+        return World.get_unabbreviated_triples(self, label)
 
     def get_by_label(
         self, label, label_annotations=None, namespace=None
@@ -1273,29 +1275,34 @@ class Ontology(  # pylint: disable=too-many-public-methods
         return entity
 
 
-class BNode:
-    """Represents a blank node."""
-    def __init__(self,
-                 onto: Union[World, Ontology],
-                 storid: int):
+class BlankNode:
+    """Represents a blank node.
+
+    A blank node is a node that is not a literal and has no IRI.
+    Resources represented by blank nodes are also called anonumous resources.
+    Only the subject or object in an RDF triple can be a blank node.
+    """
+
+    def __init__(self, onto: Union[World, Ontology], storid: int):
         """Initiate a blank node.
 
         Args:
             onto: Ontology or World instance.
             storid: The storage id of the blank node.
         """
-        if (storid >= 0):
+        if storid >= 0:
             raise ValueError(
-                f'bnode is supposed to have a negative storid: {storid}')
+                f"A BlankNode is supposed to have a negative storid: {storid}"
+            )
         self.onto = onto
         self.storid = storid
 
     def __repr__(self):
-        return repr(f'_:b{-self.storid}')
+        return repr(f"_:b{-self.storid}")
 
     def __hash__(self):
         return hash((self.onto, self.storid))
 
     def __eq__(self, other):
         """For now blank nodes always compare true against each other."""
-        return isinstance(other, BNode)
+        return isinstance(other, BlankNode)
