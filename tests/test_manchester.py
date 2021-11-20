@@ -14,6 +14,7 @@ emmo = get_ontology().load()
 check('Item', emmo.Item)
 check('not Item', Not(emmo.Item))
 check('not not Item', emmo.Item)
+check('not (not Item)', Not(Not(emmo.Item)))
 check('hasPart some Atom', emmo.hasPart.some(emmo.Atom))
 check('Atom and not Molecule', emmo.Atom & Not(emmo.Molecule))
 check('Atom and (not Molecule)', emmo.Atom & Not(emmo.Molecule))
@@ -27,6 +28,12 @@ check('hasPart some (not Atom)', emmo.hasPart.some(Not(emmo.Atom)))
 check('hasPart some not Atom', emmo.hasPart.some(Not(emmo.Atom)))
 check('not hasPart some not Atom', Not(emmo.hasPart.some(Not(emmo.Atom))))
 check('hasPart only (inverse hasPart some not Atom)',
-     emmo.hasPart.only(Inverse(emmo.hasPart).some(Not(emmo.Atom))))
+      emmo.hasPart.only(Inverse(emmo.hasPart).some(Not(emmo.Atom))))
 check('hasPart only inverse hasPart some not Atom',
-     emmo.hasPart.only(Inverse(emmo.hasPart).some(Not(emmo.Atom))))
+      emmo.hasPart.only(Inverse(emmo.hasPart).some(Not(emmo.Atom))))
+check('Atom and Molecule and Proton',
+      emmo.Atom & (emmo.Molecule & emmo.Proton))
+check('Atom and (Molecule and Proton)',
+      emmo.Atom & (emmo.Molecule & emmo.Proton))
+check('(Atom and Molecule) or Proton',
+      (emmo.Atom & emmo.Molecule) | emmo.Proton)
