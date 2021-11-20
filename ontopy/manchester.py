@@ -45,8 +45,25 @@ class ManchesterError(Exception):
     """Raised on invalid Manchester notation."""
 
 
-def evaluate(ontology, expr):
-    """
+def evaluate(ontology : owlready2.Ontology, expr : str):
+    """Evaluate expression in Manchester syntax.
+
+    Args:
+        ontology: The ontology within which the expression will be evaluated.
+        expr: Manchester expression to be evaluated.
+
+    Returns:
+        An Owlready2 construct that corresponds to the expression.
+
+    Example:
+    >>> from ontopy.manchester import evaluate
+    >>> from ontopy import get_ontology
+    >>> emmo = get_ontology.load()
+
+    >>> restriction = evaluate(emmo, 'hasPart some Atom')
+    >>> cls = evaluate(emmo, 'Atom')
+    >>> expr = evaluate(emmo, 'Atom or Molecule')
+
     """
     def _eval(r):
         """Evaluate parsed expression."""
