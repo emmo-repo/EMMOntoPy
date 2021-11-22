@@ -16,13 +16,13 @@ GRAMMAR = None  # Global cache
 
 
 def manchester_expression():
-    """Returns pyparsing grammer for a Manchester expression.
+    """Returns pyparsing grammar for a Manchester expression.
 
     This function is mostly for internal use.
 
     See also: https://www.w3.org/TR/owl2-manchester-syntax/
     """
-    # pylint: disable=global-statement,invalid-name,expression-not-assigned
+    # pylint: disable=global-statement,invalid-name
     global GRAMMAR
     if GRAMMAR:
         return GRAMMAR
@@ -46,7 +46,7 @@ def manchester_expression():
         | pp.Literal("inverse") + ident("objProp")
         | ident("objProp")
     )
-    restriction << (
+    restriction <<= (
         objPropExpr + pp.Keyword("some") + expr
         | objPropExpr + pp.Keyword("only") + expr
         | objPropExpr + pp.Keyword("Self")
@@ -55,7 +55,7 @@ def manchester_expression():
         | objPropExpr + pp.Keyword("max") + uint + expr
         | objPropExpr + pp.Keyword("exactly") + uint + expr
     )
-    expr << primary + (logOp("op") + expr)[...]
+    expr <<= primary + (logOp("op") + expr)[...]
 
     GRAMMAR = expr
     return expr
