@@ -65,7 +65,7 @@ class ManchesterError(Exception):
     """Raised on invalid Manchester notation."""
 
 
-def evaluate(ontology: owlready2.Ontology, expr: str):
+def evaluate(ontology: owlready2.Ontology, expr: str) -> owlready2.Construct:
     """Evaluate expression in Manchester syntax.
 
     Args:
