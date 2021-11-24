@@ -144,4 +144,4 @@ def evaluate(ontology: owlready2.Ontology, expr: str) -> owlready2.Construct:
             raise ManchesterError(f"invalid expression: {r}")
 
     grammar = manchester_expression()
-    return _eval(grammar.parseString(expr))
+    return _eval(grammar.parseString(expr, parseAll=True))
