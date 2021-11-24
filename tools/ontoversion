@@ -8,21 +8,9 @@ import argparse
 import sys
 
 import rdflib
+from rdflib.exceptions import ParserError
 
-
-def infer_version(iri, version_iri):
-    """Infer version from IRI and versionIRI."""
-    if str(version_iri[: len(iri)]) == str(iri):
-        version = version_iri[len(iri) :]
-    else:
-        counter = 0
-        version_parts = []
-        for index, _ in enumerate(iri):
-            while iri[index] != version_iri[index + counter]:
-                version_parts.append(version_iri[index + counter])
-                counter += 1
-        version = "".join(version_parts)
-    return version.lstrip("/").rstrip("/#")
+from ontopy.utils import infer_version
 
 
 def main():
@@ -34,7 +22,7 @@ def main():
         help="IRI/file to OWL source to extract the version from.",
     )
     parser.add_argument(
-        "--format", "-f", default="xml", help='OWL format. Default is "xml".'
+        "--format", "-f", default="ttl", help='OWL format. Default is "ttl".'
     )
     try:
         args = parser.parse_args()
@@ -44,6 +32,15 @@ def main():
     # Extract base IRI and versionIRI
     graph = rdflib.Graph()
     graph.parse(args.iri.rstrip("/#"), format=args.format)
+    try:
+        graph.parse(args.iri.rstrip("/#"), format=args.format)
+    except ParserError as err:
+        print(
+            "rdflib could not parse the ontology, check format. "
+            "Default format is ´ttl´."
+        )
+        print(err)
+        sys.exit()
     iri, version_iri = list(
         graph.subject_objects(
             rdflib.URIRef("http://www.w3.org/2002/07/owl#versionIRI")
