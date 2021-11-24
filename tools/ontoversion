@@ -9,6 +9,8 @@ import sys
 
 import rdflib
 from rdflib.exceptions import ParserError
+from xml.parsers.expat import ExpatError
+from xml.sax._exceptions import SAXParseException
 
 from ontopy.utils import infer_version
 
@@ -31,10 +33,9 @@ def main():
 
     # Extract base IRI and versionIRI
     graph = rdflib.Graph()
-    graph.parse(args.iri.rstrip("/#"), format=args.format)
     try:
         graph.parse(args.iri.rstrip("/#"), format=args.format)
-    except ParserError as err:
+    except [ExpatError, SAXParseException] as err:
         print(
             "rdflib could not parse the ontology, check format. "
             "Default format is ´ttl´."
