@@ -101,8 +101,8 @@ def evaluate(ontology: owlready2.Ontology, expr: str) -> owlready2.Construct:
 
     Note:
         Logical expressions (with `not`, `and` and `or`) are supported as
-        well as object property restrictions as well as data property value
-        restrictions.  Other data property restrictions are not yet supported.
+        well as object property restrictions.  For data properterties are
+        only value restrictions supported so far.
     """
 
     # pylint: disable=invalid-name
