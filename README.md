@@ -120,6 +120,7 @@ pip install EMMOntoPy
   - [semver]: Required for `ontoversion`-tool.
   - [pydot]: Used for generating graphs.
     Will be deprecated.
+  - [pyparsing](https://github.com/pyparsing/pyparsing): Used for parsing Manchester syntax
 
 See [docs/docker-instructions.md](docs/docker-instructions.md) for how to build a docker image.
 
