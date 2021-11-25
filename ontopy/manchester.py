@@ -22,7 +22,7 @@ def manchester_expression():
 
     See also: https://www.w3.org/TR/owl2-manchester-syntax/
     """
-    # pylint: disable=global-statement,invalid-name
+    # pylint: disable=global-statement,invalid-name,too-many-locals
     global GRAMMAR
     if GRAMMAR:
         return GRAMMAR
@@ -32,6 +32,17 @@ def manchester_expression():
     # but allows logical constructs within restrictions (like Protege)
     ident = pp.Word(pp.alphas + "_", pp.alphanums + "_", asKeyword=True)
     uint = pp.Word(pp.nums)
+    string = pp.Word(pp.alphanums + ":")
+    quotedString = (
+        pp.QuotedString('"""', multiline=True) | pp.QuotedString('"')
+    )("string")
+    typedLiteral = pp.Combine(quotedString + "^^" + string("datatype"))
+    stringLiteral = quotedString
+    stringLanguageLiteral = pp.Combine(quotedString + "@" + string("language"))
+    numberLiteral = pp.pyparsing_common.number("number")
+    literal = (
+        typedLiteral | stringLiteral | stringLanguageLiteral | numberLiteral
+    )
     logOp = pp.oneOf(["and", "or"], asKeyword=True)
     expr = pp.Forward()
     restriction = pp.Forward()
@@ -46,6 +57,7 @@ def manchester_expression():
         | pp.Literal("inverse") + ident("objProp")
         | ident("objProp")
     )
+    dataPropExpr = ident("dataProp")
     restriction <<= (
         objPropExpr + pp.Keyword("some") + expr
         | objPropExpr + pp.Keyword("only") + expr
@@ -54,6 +66,7 @@ def manchester_expression():
         | objPropExpr + pp.Keyword("min") + uint + expr
         | objPropExpr + pp.Keyword("max") + uint + expr
         | objPropExpr + pp.Keyword("exactly") + uint + expr
+        | dataPropExpr + pp.Keyword("value") + literal
     )
     expr <<= primary + (logOp("op") + expr)[...]
 
@@ -65,6 +78,7 @@ class ManchesterError(Exception):
     """Raised on invalid Manchester notation."""
 
 
+# pylint: disable=too-many-statements
 def evaluate(ontology: owlready2.Ontology, expr: str) -> owlready2.Construct:
     """Evaluate expression in Manchester syntax.
 
@@ -85,6 +99,23 @@ def evaluate(ontology: owlready2.Ontology, expr: str) -> owlready2.Construct:
     >>> expr = evaluate(emmo, 'Atom or Molecule')
 
     """
+
+    # pylint: disable=invalid-name
+    def _parse_literal(r):
+        """Compiles literal to Owlready2 type."""
+        print("*** repr:", repr(r))
+        if r.language:
+            print("    language:", r.language)
+            v = owlready2.locstr(r.string, r.language)
+        elif r.number:
+            print("    number:", repr(r.number), type(r.number))
+            v = r.number
+        else:
+            print("    string:", r.string)
+            v = r.string
+        print("    v:", repr(v))
+        return v
+
     # pylint: disable=invalid-name,no-else-return,too-many-return-statements
     # pylint: disable=too-many-branches
     def _eval(r):
@@ -111,8 +142,6 @@ def evaluate(ontology: owlready2.Ontology, expr: str) -> owlready2.Construct:
                 return fneg(_eval(r[0]))
         elif r.op:  # r contains a logical operator: and/or
             ops = {"and": owlready2.And, "or": owlready2.Or}
-            if r.op not in ops:
-                raise ManchesterError(f"unexpected logical operator: {r.op}")
             op = ops[r.op]
             if len(r) == 3:
                 return op([fneg(_eval(r[0])), _eval(r[2])])
@@ -133,13 +162,29 @@ def evaluate(ontology: owlready2.Ontology, expr: str) -> owlready2.Construct:
             r.pop(0)
             r.pop(0)
             f = getattr(prop, rtype)
-            if rtype in ("some", "only"):
+            if rtype == "value":
+                return fneg(f(_eval(r)))
+            elif rtype in ("some", "only"):
                 return fneg(f(_eval(r)))
             elif rtype in ("min", "max", "exactly"):
                 cardinality = r.pop()
                 return fneg(f(cardinality, _eval(r)))
             else:
                 raise ManchesterError(f"invalid restriction type: {rtype}")
+        elif r.dataProp:  # r is a data property restriction
+            prop = ontology[r[0]]
+            rtype = r[1]
+            r.pop(0)
+            r.pop(0)
+            f = getattr(prop, rtype)
+            if rtype == "value":
+                print("===", _parse_literal(r))
+                return f(_parse_literal(r))
+            else:
+                raise ManchesterError(
+                    f"unimplemented data property restriction: "
+                    f"{prop} {rtype} {r}"
+                )
         else:
             raise ManchesterError(f"invalid expression: {r}")
 

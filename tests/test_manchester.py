@@ -1,6 +1,6 @@
 from ontopy import get_ontology
 from ontopy.manchester import evaluate
-from owlready2 import And, Or, Not, Inverse
+from owlready2 import And, Or, Not, Inverse, locstr
 
 
 emmo = get_ontology().load()
@@ -49,3 +49,27 @@ def test_manchester():
         "(Atom and Molecule) or Proton",
         (emmo.Atom & emmo.Molecule) | emmo.Proton,
     )
+    check(
+        "(Atom and Molecule) or Proton",
+        (emmo.Atom & emmo.Molecule) | emmo.Proton,
+    )
+    check(
+        "inverse(hasPart) value Universe",
+        Inverse(emmo.hasPart).value(emmo.Universe),
+    )
+    # literal data restriction
+    check('hasSymbolData value "hello"', emmo.hasSymbolData.value("hello"))
+    check("hasSymbolData value 42", emmo.hasSymbolData.value(42))
+    check("hasSymbolData value 3.14", emmo.hasSymbolData.value(3.14))
+    check(
+        'hasSymbolData value "abc"^^xsd:string',
+        emmo.hasSymbolData.value("abc"),
+    )
+    # check(
+    #    'hasSymbolData value "hello"@en',
+    #    emmo.hasSymbolData.value(locstr("hello", "en")),
+    # )
+
+
+if __name__ == "__main__":
+    test_manchester()
