@@ -32,16 +32,17 @@ def manchester_expression():
     # but allows logical constructs within restrictions (like Protege)
     ident = pp.Word(pp.alphas + "_", pp.alphanums + "_", asKeyword=True)
     uint = pp.Word(pp.nums)
+    alphas = pp.Word(pp.alphas)
     string = pp.Word(pp.alphanums + ":")
     quotedString = (
         pp.QuotedString('"""', multiline=True) | pp.QuotedString('"')
     )("string")
     typedLiteral = pp.Combine(quotedString + "^^" + string("datatype"))
+    stringLanguageLiteral = pp.Combine(quotedString + "@" + alphas("language"))
     stringLiteral = quotedString
-    stringLanguageLiteral = pp.Combine(quotedString + "@" + string("language"))
     numberLiteral = pp.pyparsing_common.number("number")
     literal = (
-        typedLiteral | stringLiteral | stringLanguageLiteral | numberLiteral
+        typedLiteral | stringLanguageLiteral | stringLiteral | numberLiteral
     )
     logOp = pp.oneOf(["and", "or"], asKeyword=True)
     expr = pp.Forward()
@@ -98,22 +99,21 @@ def evaluate(ontology: owlready2.Ontology, expr: str) -> owlready2.Construct:
     >>> cls = evaluate(emmo, 'Atom')
     >>> expr = evaluate(emmo, 'Atom or Molecule')
 
+    Note:
+        Logical expressions (with `not`, `and` and `or`) are supported as
+        well as object property restrictions as well as data property value
+        restrictions.  Other data property restrictions are not yet supported.
     """
 
     # pylint: disable=invalid-name
     def _parse_literal(r):
         """Compiles literal to Owlready2 type."""
-        print("*** repr:", repr(r))
         if r.language:
-            print("    language:", r.language)
             v = owlready2.locstr(r.string, r.language)
         elif r.number:
-            print("    number:", repr(r.number), type(r.number))
             v = r.number
         else:
-            print("    string:", r.string)
             v = r.string
-        print("    v:", repr(v))
         return v
 
     # pylint: disable=invalid-name,no-else-return,too-many-return-statements

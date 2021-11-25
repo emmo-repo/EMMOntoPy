@@ -65,10 +65,10 @@ def test_manchester():
         'hasSymbolData value "abc"^^xsd:string',
         emmo.hasSymbolData.value("abc"),
     )
-    # check(
-    #    'hasSymbolData value "hello"@en',
-    #    emmo.hasSymbolData.value(locstr("hello", "en")),
-    # )
+    check(
+        'hasSymbolData value "hello"@en',
+        emmo.hasSymbolData.value(locstr("hello", "en")),
+    )
 
 
 if __name__ == "__main__":
