@@ -1051,7 +1051,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
             entity = self.get_by_label(entity)
         return hasattr(entity, "equivalent_to") and bool(entity.equivalent_to)
 
-    def get_version(self, as_iri=False):
+    def get_version(self, as_iri=False) -> str:
         """Returns the version number of the ontology as inferred from the
         owl:versionINFO tag or owl:versionIRI tag.
 
@@ -1061,24 +1061,26 @@ class Ontology(  # pylint: disable=too-many-public-methods
             "http://www.w3.org/2002/07/owl#versionInfo"
         )
         tokens = self.get_triples(s=self.storid, p=version_info_storid)
-        print('verisionifo', tokens)
+        version_iri_storid = None
         if not tokens:
             version_iri_storid = self.world._abbreviate(
                 "http://www.w3.org/2002/07/owl#versionIRI"
             )
             tokens = self.get_triples(s=self.storid, p=version_iri_storid)
-            print('versioniri', tokens)
             if not tokens:
-                raise TypeError("No versionIRI or versionInfo"
-                                f"in Ontology {self.base_iri!r}")
+                raise TypeError(
+                    "No versionIRI or versionInfo "
+                    f"in Ontology {self.base_iri!r}"
+                )
         _, _, obj = tokens[0]
-        print('obj', obj)
-        version_iri = self.world._unabbreviate(obj)
-        if as_iri and version_iri_storid:
-            return version_iri
-        elif as_iri:
-            return version_iri
-        elif not as_iri and version_iri_storid:
+        if isinstance(obj, int):
+            version_iri = self.world._unabbreviate(obj)
+        else:
+            version_iri = obj.strip('"').strip("'")
+
+        if as_iri and not version_iri_storid:
+            return self.base_iri + version_iri
+        if not as_iri and version_iri_storid:
             return infer_version(self.base_iri, version_iri)
         return version_iri
 
