@@ -1053,21 +1053,34 @@ class Ontology(  # pylint: disable=too-many-public-methods
 
     def get_version(self, as_iri=False):
         """Returns the version number of the ontology as inferred from the
-        owl:versionIRI tag.
+        owl:versionINFO tag or owl:versionIRI tag.
 
         If `as_iri` is True, the full versionIRI is returned.
         """
-        version_iri_storid = self.world._abbreviate(
-            "http://www.w3.org/2002/07/owl#versionIRI"
+        version_info_storid = self.world._abbreviate(
+            "http://www.w3.org/2002/07/owl#versionInfo"
         )
-        tokens = self.get_triples(s=self.storid, p=version_iri_storid)
+        tokens = self.get_triples(s=self.storid, p=version_info_storid)
+        print('verisionifo', tokens)
         if not tokens:
-            raise TypeError(f"No versionIRI in Ontology {self.base_iri!r}")
+            version_iri_storid = self.world._abbreviate(
+                "http://www.w3.org/2002/07/owl#versionIRI"
+            )
+            tokens = self.get_triples(s=self.storid, p=version_iri_storid)
+            print('versioniri', tokens)
+            if not tokens:
+                raise TypeError("No versionIRI or versionInfo"
+                                f"in Ontology {self.base_iri!r}")
         _, _, obj = tokens[0]
+        print('obj', obj)
         version_iri = self.world._unabbreviate(obj)
-        if as_iri:
+        if as_iri and version_iri_storid:
             return version_iri
-        return infer_version(self.base_iri, version_iri)
+        elif as_iri:
+            return version_iri
+        elif not as_iri and version_iri_storid:
+            return infer_version(self.base_iri, version_iri)
+        return version_iri
 
     def set_version(self, version=None, version_iri=None):
         """Assign version to ontology by asigning owl:versionIRI.

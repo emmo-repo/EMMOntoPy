@@ -8,11 +8,12 @@ import argparse
 import sys
 
 import rdflib
+from rdflib.util import guess_format
 from rdflib.exceptions import ParserError
 from xml.parsers.expat import ExpatError
 from xml.sax._exceptions import SAXParseException
 
-from ontopy.utils import infer_version
+from ontopy.utils import infer_version, FMAP
 
 
 def main():
@@ -24,8 +25,9 @@ def main():
         help="IRI/file to OWL source to extract the version from.",
     )
     parser.add_argument(
-        "--format", "-f", default="ttl", help='OWL format. Default is "ttl".'
-    )
+        "--format", "-f", choices=set(list(FMAP.keys()) + list(FMAP.values())),
+        help='Ontology format. Default: Guess format with rdflib.guess_format.'
+    )  # add accepted formats
     try:
         args = parser.parse_args()
     except SystemExit as exc:
@@ -33,12 +35,19 @@ def main():
 
     # Extract base IRI and versionIRI
     graph = rdflib.Graph()
+
+    # Guess format if format not given
+    fmt = (
+        args.format
+        if args.format
+        else guess_format(args.iri, fmap=FMAP)
+    )
+    print(fmt)
     try:
-        graph.parse(args.iri.rstrip("/#"), format=args.format)
-    except [ExpatError, SAXParseException] as err:
+        graph.parse(args.iri, format=fmt)
+    except Exception as err:
         print(
-            "rdflib could not parse the ontology, check format. "
-            "Default format is ´ttl´."
+            "rdflib could not parse the ontology."
         )
         print(err)
         sys.exit()
