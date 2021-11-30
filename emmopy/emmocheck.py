@@ -463,8 +463,19 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         checker(self.onto, self.ignore_namespace)
 
 
-def main():  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
-    """Run all checks on ontology `iri`.  Default is 'http://emmo.info/emmo'."""
+def main(
+    argv: list = None,
+):  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
+    """Run all checks on ontology `iri`.
+
+    Default is 'http://emmo.info/emmo'.
+
+    Parameters:
+        argv: List of arguments, similar to `sys.argv[1:]`.
+            Mainly for testing purposes, since it allows one to invoke the tool
+            manually / through Python.
+
+    """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("iri", help="File name or URI to the ontology to test.")
     parser.add_argument(
@@ -597,7 +608,7 @@ def main():  # pylint: disable=too-many-locals,too-many-branches,too-many-statem
         help="Stop the test run on the first error or failure.",
     )
     try:
-        args = parser.parse_args()
+        args = parser.parse_args(args=argv)
         sys.argv[1:] = args.unittest if args.unittest else []
         if args.verbose:
             sys.argv.append("-v")

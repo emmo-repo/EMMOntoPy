@@ -19,7 +19,14 @@ from ontopy.factpluspluswrapper.factppgraph import FaCTPPGraph
 
 
 def main(argv: list = None):
-    """Main run function."""
+    """Main run function.
+
+    Parameters:
+        argv: List of arguments, similar to `sys.argv[1:]`.
+            Mainly for testing purposes, since it allows one to invoke the tool
+            manually / through Python.
+
+    """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", help="IRI/file to OWL source.")
     parser.add_argument("output", help="Output file name.")
