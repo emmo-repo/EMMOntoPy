@@ -5,7 +5,8 @@ import argparse
 import os
 import warnings
 
-from rdflib.util import Graph, guess_format
+from rdflib.graph import Graph
+from rdflib.util import guess_format
 
 from ontopy.utils import (
     convert_imported,
@@ -17,7 +18,7 @@ from ontopy.utils import (
 from ontopy.factpluspluswrapper.factppgraph import FaCTPPGraph
 
 
-def main():
+def main(argv: list = None):
     """Main run function."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", help="IRI/file to OWL source.")
@@ -85,7 +86,7 @@ def main():
         ),
     )
 
-    args = parser.parse_args()
+    args = parser.parse_args(args=argv)
 
     # Inferred default input and output file formats
     if args.input_format:
