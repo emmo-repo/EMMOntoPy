@@ -607,7 +607,6 @@ class Ontology(  # pylint: disable=too-many-public-methods
             fileTemp = os.path.join(tempfile.gettempdir(), os.urandom(24).hex())
             super().save(fileTemp, format="rdfxml", **kwargs)
             graph = rdflib.Graph()
-            print(fileTemp)
             graph.parse(fileTemp, format="xml")
             graph.serialize(destination=filename, format=format)
 
