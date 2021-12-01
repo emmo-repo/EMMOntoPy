@@ -604,11 +604,12 @@ class Ontology(  # pylint: disable=too-many-public-methods
             revmap = {value: key for key, value in FMAP.items()}
             super().save(file=filename, format=revmap[format], **kwargs)
         else:
-            with tempfile.NamedTemporaryFile(suffix=".owl") as handle:
-                super().save(file=handle.name, format="rdfxml", **kwargs)
-                graph = rdflib.Graph()
-                graph.parse(handle.name, format="xml")
-                graph.serialize(destination=filename, format=format)
+            fileTemp = os.path.join(tempfile.gettempdir(), os.urandom(24).hex())
+            super().save(fileTemp, format="rdfxml", **kwargs)
+            graph = rdflib.Graph()
+            print(fileTemp)
+            graph.parse(fileTemp, format="xml")
+            graph.serialize(destination=filename, format=format)
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
