@@ -7,6 +7,7 @@ The excelfile is read by pandas and the pandas
 dataframe should have column names:
 [
 """
+import warnings
 import pyparsing
 import pandas as pd
 from ontopy import World
@@ -20,21 +21,27 @@ def english(string):
     return owlready2.locstr(string, lang="en")
 
 
-def create_ontology_from_excel(
+def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     excelpath: str,
     concept_sheet_name: str = "Concepts",
     metadata_sheet_name: str = "Metadata",
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
+    base_iri_from_metadata: bool = True,
+    catalog: dict = None,
 ) -> (owlready2.Ontology, dict):
     """
     Creates an ontology from an excelfile.
+
+    catalog is dict of imported ontologies with key name and value path
     """
     # Read datafile TODO: Some magic to identify the header row
     conceptdata = pd.read_excel(
         excelpath, sheet_name=concept_sheet_name, skiprows=[0, 2]
     )
     metadata = pd.read_excel(excelpath, sheet_name=metadata_sheet_name)
-    return create_ontology_from_pandas(conceptdata, metadata, base_iri)
+    return create_ontology_from_pandas(
+        conceptdata, metadata, base_iri, base_iri_from_metadata, catalog
+    )
 
 
 def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
@@ -42,6 +49,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
     metadata: pd.DataFrame,
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
+    catalog: dict = None,
 ) -> (owlready2.Ontology, dict):
     """
     Create an ontology from a pandas DataFrame
@@ -50,6 +58,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
     # Remove Concepts without prefLabel and make all to string
     data = data[data["prefLabel"].notna()]
     data = data.astype({"prefLabel": "str"})
+
     # base_iri from metadata if it exists and base_iri_from_metadata
     if base_iri_from_metadata:
         try:
@@ -67,20 +76,22 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
 
     # have to decide how to add metadata and imports etc.
     # base_iri to be added from excel (maybe also possibly argument?)
-    onto = world.get_ontology("http://emmo.info/emmo/domain/onto#")
+    onto = world.get_ontology(base_iri)
     onto.base_iri = base_iri
 
-    # imported ontologies to be added from excel
-    catalog = {}
-    imported_ontology_paths = [
-        (
-            "https://raw.githubusercontent.com/emmo-repo/"
-            "emmo-repo.github.io/master/versions/"
-            "1.0.0-beta/emmo-inferred-chemistry2.ttl"
+    # Get imported ontologies from metadata
+    try:
+        imported_ontology_paths = (
+            metadata.loc[metadata["Metadata name"] == "Imported ontologies"][
+                "Value"
+            ]
+            .item()
+            .split(";")
         )
-    ]
-
+    except (TypeError, ValueError, AttributeError):
+        imported_ontology_paths = []
     # Add imported ontologies
+    catalog = {} if catalog is None else catalog
     for path in imported_ontology_paths:
         imported = world.get_ontology(path).load()
         onto.imported_ontologies.append(imported)
@@ -111,15 +122,10 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                     if final_loop is True:
                         parents = onto.EMMO
 
-                        # make warning!
-                        print("--------------------------------")
-                        print(
-                            "At least one of the defined parents do not exist"
+                        warnings.warn(
+                            "At least one of the defined parents do not exist. "
+                            f"Concept: {name}; Defined parents: {parent_names}"
                         )
-                        print(
-                            "Concept:", name, "; Defined parents", parent_names
-                        )
-                        print("--------------------------------")
                         new_loop = False
                     else:
                         continue
@@ -160,11 +166,9 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                 try:
                     concept.is_a.append(evaluate(onto, prop))
                 except pyparsing.ParseException as err:
-                    # make warning!
-                    print("*******************************************")
-                    print("Error in Property assignment for:", concept)
-                    print("Property to be Evaluated: ", prop)
-                    print(err)
-                    print("*******************************************")
-
+                    warnings.warn(
+                        f"Error in Property assignment for: {concept}. "
+                        f"Property to be Evaluated: {prop}. "
+                        f"Error is {err}."
+                    )
     return onto, catalog
