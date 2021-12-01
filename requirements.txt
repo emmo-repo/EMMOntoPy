@@ -1,7 +1,7 @@
 blessings>=1.7,<2
 Cython>=0.29.21,<0.30
 defusedxml>=0.7.1,<1
-graphviz>=0.16,<0.19
+graphviz>=0.16,<0.20
 Owlready2>=0.28,<0.36,!=0.32,!=0.34
 packaging>=21.0<22
 pydot>=1.4.1,<2
