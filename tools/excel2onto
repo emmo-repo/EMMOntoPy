@@ -6,11 +6,7 @@ ontology_template.xlsx
 """
 import argparse
 import sys
-import pyparsing
-import pandas as pd
-from ontopy import World
-from ontopy.utils import NoSuchLabelError
-from ontopy.manchester import evaluate
+import os
 from ontopy.excelparser import create_ontology_from_excel
 import owlready2  # pylint: disable=C0411
 
@@ -38,13 +34,11 @@ def main():
     except SystemExit as exc:
         sys.exit(exc.code)  # Exit without traceback on invalid arguments
 
-
-    onto = create_ontology_from_excel(args.excelpath) 
+    onto = create_ontology_from_excel(args.excelpath)
 
     # Save new ontology as turtle
-    onto.save(
-            os.path.join(arg.name), format="turtle", overwrite=True
-    )
+    onto.save(os.path.join(args.name), format="turtle", overwrite=True)
+
 
 if __name__ == "__main__":
     main()

@@ -7,8 +7,6 @@ The excelfile is read by pandas and the pandas
 dataframe should have column names:
 [
 """
-import argparse
-import sys
 import pyparsing
 import pandas as pd
 from ontopy import World
@@ -21,24 +19,39 @@ def english(string):
     """Returns `string` as an English location string."""
     return owlready2.locstr(string, lang="en")
 
-def create_ontology_from_excel(excelpath: str, sheet_name: str = "Concepts", base_iri: str =
-                               "http://emmo.info/emmo/domain/onto#" ) -> pd.DataFrame:
+
+def create_ontology_from_excel(
+    excelpath: str,
+    sheet_name: str = "Concepts",
+    base_iri: str = "http://emmo.info/emmo/domain/onto#",
+) -> pd.DataFrame:
+    """
+    Creates an ontology from an excelfile.
+    """
     # Read datafile
     dataframe = pd.read_excel(excelpath, sheet_name=sheet_name, skiprows=[0, 2])
+    dataframe = dataframe[dataframe["prefLabel"].notna()]
     # Some magic to identify the header row
     return create_ontology_from_pandas(dataframe, base_iri)
 
 
-def create_ontology_from_pandas(data: pd.DataFrame, base_iri: str =
-                                "http://emmo.info/emmo/domain/onto#" ) -> owlready2.Ontology:
+def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
+    data: pd.DataFrame, base_iri: str = "http://emmo.info/emmo/domain/onto#"
+) -> owlready2.Ontology:
+    """
+    Create an ontology from a pandas DataFrame
+    """
 
+    # Remove Concepts without prefLabel and make all to string
+    data = data[data["prefLabel"].notna()]
+    data = data.astype({"prefLabel": "str"})
     # Make new ontology and import ontologies
     world = World()
 
     # have to decide how to add metadata and imports etc.
     # base_iri to be added from excel (maybe also possibly argument?)
     onto = world.get_ontology("http://emmo.info/emmo/domain/onto#")
-    onto.base_iri = "http://emmo.info/emmo/domain/onto#"
+    onto.base_iri = base_iri
 
     # imported ontologies to be added from excel
     catalog = {}
@@ -119,9 +132,12 @@ def create_ontology_from_pandas(data: pd.DataFrame, base_iri: str =
 
     # Add properties in a second loop
     for _, row in data.iterrows():
-        properties = row["Properties"]
+        properties = row["Relations"]
         if isinstance(properties, str):
-            concept = onto.get_by_label(row["Concept (prefLabel)"])
+            try:
+                concept = onto.get_by_label(row["prefLabel"])
+            except NoSuchLabelError:
+                pass
             props = properties.split(";")
             for prop in props:
                 try:
