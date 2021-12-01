@@ -21,10 +21,10 @@ def english(string):
     """Returns `string` as an English location string."""
     return owlready2.locstr(string, lang="en")
 
-def create_ontology_from_excel(excelpath: str, base_iri: str =
+def create_ontology_from_excel(excelpath: str, sheet_name: str = "Concepts", base_iri: str =
                                "http://emmo.info/emmo/domain/onto#" ) -> pd.DataFrame:
     # Read datafile
-    dataframe = pd.read_excel(excelpath, skiprows=[0, 2])
+    dataframe = pd.read_excel(excelpath, sheet_name=sheet_name, skiprows=[0, 2])
     # Some magic to identify the header row
     return create_ontology_from_pandas(dataframe, base_iri)
 
@@ -57,7 +57,6 @@ def create_ontology_from_pandas(data: pd.DataFrame, base_iri: str =
         catalog[imported.base_iri.rstrip("/")] = path
 
     onto.sync_python_names()
-
     with onto:
         # loop through the rows until no more are added
         new_loop = True
