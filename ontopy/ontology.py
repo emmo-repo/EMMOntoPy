@@ -260,7 +260,11 @@ class Ontology(  # pylint: disable=too-many-public-methods
         """
         if not isinstance(label, str):
             raise TypeError(
-                f"Invalid label definition, " f"must be a string: {label!r}"
+                f"Invalid label definition, must be a string: {label!r}"
+            )
+        if " " in label:
+            raise ValueError(
+                f"Invalid label definition, {label!r} contains spaces."
             )
 
         if "namespaces" in self.__dict__:
@@ -306,6 +310,10 @@ class Ontology(  # pylint: disable=too-many-public-methods
         if not isinstance(label, str):
             raise TypeError(
                 f"Invalid label definition, " f"must be a string: {label!r}"
+            )
+        if " " in label:
+            raise ValueError(
+                f"Invalid label definition, {label!r} contains spaces."
             )
 
         if label_annotations is None:
