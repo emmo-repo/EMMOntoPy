@@ -22,22 +22,27 @@ def english(string):
 
 def create_ontology_from_excel(
     excelpath: str,
-    sheet_name: str = "Concepts",
+    concept_sheet_name: str = "Concepts",
+    metadata_sheet_name: str = "Metadata",
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
-) -> pd.DataFrame:
+) -> (owlready2.Ontology, dict):
     """
     Creates an ontology from an excelfile.
     """
-    # Read datafile
-    dataframe = pd.read_excel(excelpath, sheet_name=sheet_name, skiprows=[0, 2])
-    dataframe = dataframe[dataframe["prefLabel"].notna()]
-    # Some magic to identify the header row
-    return create_ontology_from_pandas(dataframe, base_iri)
+    # Read datafile TODO: Some magic to identify the header row
+    conceptdata = pd.read_excel(
+        excelpath, sheet_name=concept_sheet_name, skiprows=[0, 2]
+    )
+    metadata = pd.read_excel(excelpath, sheet_name=metadata_sheet_name)
+    return create_ontology_from_pandas(conceptdata, metadata, base_iri)
 
 
 def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
-    data: pd.DataFrame, base_iri: str = "http://emmo.info/emmo/domain/onto#"
-) -> owlready2.Ontology:
+    data: pd.DataFrame,
+    metadata: pd.DataFrame,
+    base_iri: str = "http://emmo.info/emmo/domain/onto#",
+    base_iri_from_metadata: bool = True,
+) -> (owlready2.Ontology, dict):
     """
     Create an ontology from a pandas DataFrame
     """
@@ -45,6 +50,18 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
     # Remove Concepts without prefLabel and make all to string
     data = data[data["prefLabel"].notna()]
     data = data.astype({"prefLabel": "str"})
+    # base_iri from metadata if it exists and base_iri_from_metadata
+    if base_iri_from_metadata:
+        try:
+            base_iri = (
+                metadata.loc[metadata["Metadata name"] == "Ontology IRI"][
+                    "Value"
+                ].item()
+                + "#"
+            )
+        except (TypeError, ValueError):
+            pass
+
     # Make new ontology and import ontologies
     world = World()
 
@@ -150,4 +167,4 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                     print(err)
                     print("*******************************************")
 
-    return onto
+    return onto, catalog
