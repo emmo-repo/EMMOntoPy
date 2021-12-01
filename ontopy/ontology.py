@@ -235,7 +235,9 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 _unabbreviate(obj),
             )
 
-    def get_by_label(self, label, label_annotations=None, namespace=None):
+    def get_by_label(
+        self, label, label_annotations=None, namespace=None
+    ):  # pylint: disable=too-many-arguments,too-many-branches
         """Returns entity with label annotation `label`.
 
         `label_annotations` is a sequence of label annotation names to look up.
@@ -256,6 +258,11 @@ class Ontology(  # pylint: disable=too-many-public-methods
         The current implementation also supports "*" as a wildcard
         matching any number of characters. This may change in the future.
         """
+        if not isinstance(label, str):
+            raise TypeError(
+                f"Invalid label definition, " f"must be a string: {label!r}"
+            )
+
         if "namespaces" in self.__dict__:
             if namespace:
                 if namespace in self.namespaces:
@@ -296,6 +303,11 @@ class Ontology(  # pylint: disable=too-many-public-methods
 
         Returns an empty list if no matches could be found.
         """
+        if not isinstance(label, str):
+            raise TypeError(
+                f"Invalid label definition, " f"must be a string: {label!r}"
+            )
+
         if label_annotations is None:
             annotations = (_.name for _ in self.label_annotations)
         else:
