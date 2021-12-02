@@ -411,13 +411,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         exceptions.update(self.get_config("test_namespace.exceptions", ()))
 
         def checker(onto, ignore_namespace):
-            if (
-                list(
-                    filter(
-                        onto.base_iri.strip("#").endswith, self.ignore_namespace
-                    )
-                )
-                != []
+            if list(
+                filter(onto.base_iri.strip("#").endswith, self.ignore_namespace)
             ):
                 print(f"Skipping namespace: {onto.base_iri}")
                 return
