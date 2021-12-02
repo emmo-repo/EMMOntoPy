@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/emmopy/emmocheck/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.2">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.3">
     
     
       
@@ -21,7 +21,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.816931ca.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.62128196.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.9204c3b2.min.css">
@@ -49,7 +49,6 @@
     <script>function __md_scope(e,t,_){return new URL(_||(t===localStorage?"../../..":"../../.."),location).pathname+"."+e}function __md_get(e,t=localStorage,_){return JSON.parse(t.getItem(__md_scope(e,t,_)))}function __md_set(e,t,_=localStorage,o){try{_.setItem(__md_scope(e,_,o),JSON.stringify(t))}catch(e){}}</script>
     
       
-
 
     
     
@@ -593,6 +592,20 @@
     <li class="md-nav__item">
       <a href="../../../developers/setup/" class="md-nav__link">
         Development environment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/testing/" class="md-nav__link">
+        Testing and tooling
       </a>
     </li>
   
@@ -1436,13 +1449,8 @@ TestFunctionalEMMOConventions        </code>
     <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_namespace.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
 
     <span class="k">def</span> <span class="nf">checker</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">ignore_namespace</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="nb">list</span><span class="p">(</span>
-                <span class="nb">filter</span><span class="p">(</span>
-                    <span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_namespace</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-            <span class="o">!=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">filter</span><span class="p">(</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_namespace</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping namespace: </span><span class="si">{</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">return</span>
@@ -2028,19 +2036,52 @@ upper case letter.</p>
 
 
 <h2 class="doc doc-heading" id="emmopy.emmocheck.main">
-<code class="highlight language-python"><span class="n">main</span><span class="p">()</span></code>
+<code class="highlight language-python"><span class="n">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#emmopy.emmocheck.main" title="Permanent link">&para;</a></h2>
 
     <div class="doc doc-contents ">
 
-      <p>Run all checks on ontology <code>iri</code>.  Default is 'http://emmo.info/emmo'.</p>
+      <p>Run all checks on ontology <code>iri</code>.</p>
+<p>Default is 'http://emmo.info/emmo'.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>argv</code></td>
+        <td><code>list</code></td>
+        <td><p>List of arguments, similar to <code>sys.argv[1:]</code>.
+Mainly for testing purposes, since it allows one to invoke the tool
+manually / through Python.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-branches,too-many-statements</span>
-    <span class="sd">&quot;&quot;&quot;Run all checks on ontology `iri`.  Default is &#39;http://emmo.info/emmo&#39;.&quot;&quot;&quot;</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">(</span>
+    <span class="n">argv</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-branches,too-many-statements</span>
+    <span class="sd">&quot;&quot;&quot;Run all checks on ontology `iri`.</span>
+
+<span class="sd">    Default is &#39;http://emmo.info/emmo&#39;.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        argv: List of arguments, similar to `sys.argv[1:]`.</span>
+<span class="sd">            Mainly for testing purposes, since it allows one to invoke the tool</span>
+<span class="sd">            manually / through Python.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="vm">__doc__</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;iri&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;File name or URI to the ontology to test.&quot;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
@@ -2173,7 +2214,7 @@ upper case letter.</p>
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Stop the test run on the first error or failure.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">argv</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">unittest</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">unittest</span> <span class="k">else</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">)</span>
@@ -2365,7 +2406,7 @@ upper case letter.</p>
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.01824240.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.ff0eccb3.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.e0abf5b0.min.js"></script>
       
     
   </body>
