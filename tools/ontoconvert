@@ -5,7 +5,8 @@ import argparse
 import os
 import warnings
 
-from rdflib.util import Graph, guess_format
+from rdflib import Graph
+from rdflib.util import guess_format
 
 from ontopy.utils import (
     convert_imported,
