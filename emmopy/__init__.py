@@ -10,7 +10,7 @@ if sys.version_info < (3, 6):
     raise RuntimeError("emmopy requires Python 3.6 or later")
 
 # Ensure emmopy is imported before owlready2...
-if "owlready2" in sys.modules and "ontopy" not in sys.modules:
+if "owlready2" in sys.modules and "emmopy" not in sys.modules:
     raise RuntimeError("emmopy must be imported before owlready2")
 
 # Import functions from emmopy
