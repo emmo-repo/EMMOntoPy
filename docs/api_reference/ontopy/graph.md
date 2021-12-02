@@ -1,3 +1,0 @@
-# graph
-
-::: ontopy.graph

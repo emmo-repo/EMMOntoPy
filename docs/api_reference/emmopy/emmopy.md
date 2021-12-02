@@ -1,3 +1,0 @@
-# emmopy
-
-::: emmopy.emmopy

@@ -1,3 +1,0 @@
-# excelparser
-
-::: ontopy.excelparser

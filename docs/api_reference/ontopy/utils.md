@@ -1,3 +1,0 @@
-# utils
-
-::: ontopy.utils

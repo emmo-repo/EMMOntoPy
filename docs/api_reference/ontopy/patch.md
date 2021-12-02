@@ -1,3 +1,0 @@
-# patch
-
-::: ontopy.patch

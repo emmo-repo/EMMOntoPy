@@ -1,3 +1,0 @@
-# factppgraph
-
-::: ontopy.factpluspluswrapper.factppgraph

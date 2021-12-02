@@ -1,3 +1,0 @@
-# colortest
-
-::: ontopy.colortest

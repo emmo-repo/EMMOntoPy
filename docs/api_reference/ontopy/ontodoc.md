@@ -1,3 +1,0 @@
-# ontodoc
-
-::: ontopy.ontodoc

@@ -1,3 +1,0 @@
-# nadict
-
-::: ontopy.nadict

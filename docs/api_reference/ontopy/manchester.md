@@ -1,3 +1,0 @@
-# manchester
-
-::: ontopy.manchester
