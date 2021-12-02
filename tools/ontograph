@@ -18,8 +18,17 @@ from ontopy.utils import get_label
 import owlready2
 
 
-def main():  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
-    """Main run function."""
+def main(
+    argv: list = None,
+):  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
+    """Main run function.
+
+    Parameters:
+        argv: List of arguments, similar to `sys.argv[1:]`.
+            Mainly for testing purposes, since it allows one to invoke the tool
+            manually / through Python.
+
+    """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "iri",
@@ -193,7 +202,7 @@ def main():  # pylint: disable=too-many-locals,too-many-branches,too-many-statem
     parser.add_argument(
         "--display", "-D", action="store_true", help="Whether to display graph."
     )
-    args = parser.parse_args()
+    args = parser.parse_args(args=argv)
 
     # Append to onto_path
     for paths in args.path:
