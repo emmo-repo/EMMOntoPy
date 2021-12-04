@@ -1053,36 +1053,38 @@ class Ontology(  # pylint: disable=too-many-public-methods
 
     def get_version(self, as_iri=False) -> str:
         """Returns the version number of the ontology as inferred from the
-        owl:versionINFO tag or owl:versionIRI tag.
+        owl:versionIRI tag or, if owl:versionIRI is not found, from
+        owl:versionINFO.
 
         If `as_iri` is True, the full versionIRI is returned.
         """
+        version_iri_storid = self.world._abbreviate(
+            "http://www.w3.org/2002/07/owl#versionIRI"
+        )
+        tokens = self.get_triples(s=self.storid, p=version_iri_storid)
+        if (not tokens) and (as_iri is True):
+            raise TypeError(
+                "No owl:versionIRI "
+                f"in Ontology {self.base_iri!r}. "
+                "Search for owl:versionInfo with as_iri=False"
+            )
+        if tokens:
+            _, _, obj = tokens[0]
+            version_iri = self.world._unabbreviate(obj)
+            if as_iri:
+                return version_iri
+            return infer_version(self.base_iri, version_iri)
+
         version_info_storid = self.world._abbreviate(
             "http://www.w3.org/2002/07/owl#versionInfo"
         )
         tokens = self.get_triples(s=self.storid, p=version_info_storid)
-        version_iri_storid = None
         if not tokens:
-            version_iri_storid = self.world._abbreviate(
-                "http://www.w3.org/2002/07/owl#versionIRI"
+            raise TypeError(
+                "No versionIRI or versionInfo " f"in Ontology {self.base_iri!r}"
             )
-            tokens = self.get_triples(s=self.storid, p=version_iri_storid)
-            if not tokens:
-                raise TypeError(
-                    "No versionIRI or versionInfo "
-                    f"in Ontology {self.base_iri!r}"
-                )
-        _, _, obj = tokens[0]
-        if isinstance(obj, int):
-            version_iri = self.world._unabbreviate(obj)
-        else:
-            version_iri = obj.strip('"').strip("'")
-
-        if as_iri and not version_iri_storid:
-            return self.base_iri + version_iri
-        if not as_iri and version_iri_storid:
-            return infer_version(self.base_iri, version_iri)
-        return version_iri
+        _, _, version_info = tokens[0]
+        return version_info.strip('"').strip("'")
 
     def set_version(self, version=None, version_iri=None):
         """Assign version to ontology by asigning owl:versionIRI.
