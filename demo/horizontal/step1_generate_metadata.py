@@ -52,4 +52,4 @@ e.save("json", "usercase_metadata.json", "mode=w")
 
 print("Generated metadata for the usercase ontology:")
 print(f"  {e.coll.count()} instances")
-print(f"  {len(list(e.coll.relations()))} relations")
+print(f"  {len(list(e.coll.get_relations()))} relations")

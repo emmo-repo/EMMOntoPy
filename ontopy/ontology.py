@@ -28,9 +28,11 @@ from owlready2 import locstr
 from owlready2.entity import ThingClass
 
 from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
-
-from ontopy.utils import asstring, read_catalog, infer_version, convert_imported
 from ontopy.utils import (
+    asstring,
+    read_catalog,
+    infer_version,
+    convert_imported,
     FMAP,
     IncompatibleVersion,
     isinteractive,
@@ -115,6 +117,27 @@ class World(owlready2.World):
             onto = Ontology(self, iri)
 
         return onto
+
+    def get_unabbreviated_triples(self, label=None):
+        """Returns all triples unabbreviated.
+
+        If `label` is given, it will be used to represent blank nodes.
+        """
+
+        def _unabbreviate(i):
+            if isinstance(i, int):
+                # negative storid corresponds to blank nodes
+                if i >= 0:
+                    return self._unabbreviate(i)
+                return BlankNode(self, i) if label is None else label
+            return i
+
+        for subject, predicate, obj in self.get_triples():
+            yield (
+                _unabbreviate(subject),
+                _unabbreviate(predicate),
+                _unabbreviate(obj),
+            )
 
 
 class Ontology(  # pylint: disable=too-many-public-methods
@@ -202,40 +225,33 @@ class Ontology(  # pylint: disable=too-many-public-methods
         pass
 
     def __hash__(self):
-        """Returns hash based on base_iri
+        """Returns a hash based on base_iri.
         This is done to keep Ontology hashable when defining __eq__.
         """
         return hash(self.base_iri)
 
     def __eq__(self, other):
-        """Checks if this ontology is equal to other.
+        """Checks if this ontology is equal to `other`.
 
-        Equality of all triples obtained from self.get_unabbreviated_triples(),
-        i.e. blank nodes are not distinguished, but relations
-        to blank nodes are included.
+        This function compares the result of
+        ``set(self.get_unabbreviated_triples(label='_:b'))``,
+        i.e. blank nodes are not distinguished, but relations to blank
+        nodes are included.
         """
-        return set(self.get_unabbreviated_triples()) == set(
-            other.get_unabbreviated_triples()
+        return set(self.get_unabbreviated_triples(label="_:b")) == set(
+            other.get_unabbreviated_triples(label="_:b")
         )
 
-    def get_unabbreviated_triples(self):
-        """Returns all triples unabbreviated"""
+    def get_unabbreviated_triples(self, label=None):
+        """Returns all triples unabbreviated.
 
-        def _unabbreviate(i):
-            if isinstance(i, int):
-                if i >= 0:
-                    return self._unabbreviate(i)
-                return "_:"  # blank nodes are given random neg. storid
-            return i
+        If `label` is given, it will be used to represent blank nodes.
+        """
+        return World.get_unabbreviated_triples(self, label)
 
-        for subject, predicate, obj in self.get_triples():
-            yield (
-                _unabbreviate(subject),
-                _unabbreviate(predicate),
-                _unabbreviate(obj),
-            )
-
-    def get_by_label(self, label, label_annotations=None, namespace=None):
+    def get_by_label(
+        self, label, label_annotations=None, namespace=None
+    ):  # pylint: disable=too-many-arguments,too-many-branches
         """Returns entity with label annotation `label`.
 
         `label_annotations` is a sequence of label annotation names to look up.
@@ -256,6 +272,15 @@ class Ontology(  # pylint: disable=too-many-public-methods
         The current implementation also supports "*" as a wildcard
         matching any number of characters. This may change in the future.
         """
+        if not isinstance(label, str):
+            raise TypeError(
+                f"Invalid label definition, must be a string: {label!r}"
+            )
+        if " " in label:
+            raise ValueError(
+                f"Invalid label definition, {label!r} contains spaces."
+            )
+
         if "namespaces" in self.__dict__:
             if namespace:
                 if namespace in self.namespaces:
@@ -296,6 +321,15 @@ class Ontology(  # pylint: disable=too-many-public-methods
 
         Returns an empty list if no matches could be found.
         """
+        if not isinstance(label, str):
+            raise TypeError(
+                f"Invalid label definition, " f"must be a string: {label!r}"
+            )
+        if " " in label:
+            raise ValueError(
+                f"Invalid label definition, {label!r} contains spaces."
+            )
+
         if label_annotations is None:
             annotations = (_.name for _ in self.label_annotations)
         else:
@@ -1256,3 +1290,36 @@ class Ontology(  # pylint: disable=too-many-public-methods
         with self:
             entity = types.new_class(name, parents)
         return entity
+
+
+class BlankNode:
+    """Represents a blank node.
+
+    A blank node is a node that is not a literal and has no IRI.
+    Resources represented by blank nodes are also called anonumous resources.
+    Only the subject or object in an RDF triple can be a blank node.
+    """
+
+    def __init__(self, onto: Union[World, Ontology], storid: int):
+        """Initiate a blank node.
+
+        Args:
+            onto: Ontology or World instance.
+            storid: The storage id of the blank node.
+        """
+        if storid >= 0:
+            raise ValueError(
+                f"A BlankNode is supposed to have a negative storid: {storid}"
+            )
+        self.onto = onto
+        self.storid = storid
+
+    def __repr__(self):
+        return repr(f"_:b{-self.storid}")
+
+    def __hash__(self):
+        return hash((self.onto, self.storid))
+
+    def __eq__(self, other):
+        """For now blank nodes always compare true against each other."""
+        return isinstance(other, BlankNode)

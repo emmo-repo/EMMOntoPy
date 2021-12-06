@@ -13,8 +13,15 @@ from rdflib.util import guess_format
 from ontopy.utils import infer_version, FMAP
 
 
-def main():
-    """Main run function."""
+def main(argv: list = None):
+    """Main run function.
+
+    Parameters:
+        argv: List of arguments, similar to `sys.argv[1:]`.
+            Mainly for testing purposes, since it allows one to invoke the tool
+            manually / through Python.
+
+    """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "iri",
@@ -28,7 +35,7 @@ def main():
         help="Ontology format. Default: Guess format with rdflib.guess_format.",
     )  # add accepted formats
     try:
-        args = parser.parse_args()
+        args = parser.parse_args(args=argv)
     except SystemExit as exc:
         sys.exit(exc.code)  # Exit without traceback on invalid arguments
 
