@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/ontology/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.3">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.5">
     
     
       
@@ -21,7 +21,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.62128196.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.a617204b.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.9204c3b2.min.css">
@@ -46,7 +46,7 @@
     
       <link rel="stylesheet" href="../../../css/reference.css">
     
-    <script>function __md_scope(e,t,_){return new URL(_||(t===localStorage?"../../..":"../../.."),location).pathname+"."+e}function __md_get(e,t=localStorage,_){return JSON.parse(t.getItem(__md_scope(e,t,_)))}function __md_set(e,t,_=localStorage,o){try{_.setItem(__md_scope(e,_,o),JSON.stringify(t))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -3092,14 +3092,16 @@ are also returned.</p>
     <div class="doc doc-contents ">
 
       <p>Returns the version number of the ontology as inferred from the
-owl:versionIRI tag.</p>
+owl:versionIRI tag or, if owl:versionIRI is not found, from
+owl:versionINFO.</p>
 <p>If <code>as_iri</code> is True, the full versionIRI is returned.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_iri</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_iri</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Returns the version number of the ontology as inferred from the</span>
-<span class="sd">    owl:versionIRI tag.</span>
+<span class="sd">    owl:versionIRI tag or, if owl:versionIRI is not found, from</span>
+<span class="sd">    owl:versionINFO.</span>
 
 <span class="sd">    If `as_iri` is True, the full versionIRI is returned.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3107,13 +3109,29 @@ owl:versionIRI tag.</p>
         <span class="s2">&quot;http://www.w3.org/2002/07/owl#versionIRI&quot;</span>
     <span class="p">)</span>
     <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_triples</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">version_iri_storid</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">tokens</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">as_iri</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;No owl:versionIRI &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;in Ontology </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="si">!r}</span><span class="s2">. &quot;</span>
+            <span class="s2">&quot;Search for owl:versionInfo with as_iri=False&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">tokens</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">version_iri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">as_iri</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">version_iri</span>
+        <span class="k">return</span> <span class="n">infer_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span> <span class="n">version_iri</span><span class="p">)</span>
+
+    <span class="n">version_info_storid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>
+        <span class="s2">&quot;http://www.w3.org/2002/07/owl#versionInfo&quot;</span>
+    <span class="p">)</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_triples</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">version_info_storid</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">tokens</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No versionIRI in Ontology </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">version_iri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">as_iri</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">version_iri</span>
-    <span class="k">return</span> <span class="n">infer_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span> <span class="n">version_iri</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;No versionIRI or versionInfo &quot;</span> <span class="sa">f</span><span class="s2">&quot;in Ontology </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="si">!r}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">version_info</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">version_info</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -4242,10 +4260,10 @@ World            (<span title="owlready2.namespace.World">World</span>)
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.01824240.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.cefbb252.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.e0abf5b0.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a5f8ea78.min.js"></script>
       
     
   </body>
