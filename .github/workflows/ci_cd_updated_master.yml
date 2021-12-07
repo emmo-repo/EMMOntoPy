@@ -33,7 +33,8 @@ jobs:
         git fetch origin
 
         LATEST_PR_BODY="$(gh api /repos/${{ github.repository}}/pulls -X GET -f state=closed -f per_page=1 -f sort=updated -f direction=desc --jq '.[].body')"
-        if [ "$(printf '%s\n' "${LATEST_PR_BODY}" | head -8)" == "$(cat .github/utils/single_dependency_pr_body.txt | head -8)" ]; then
+        cat .github/utils/single_dependency_pr_body.txt | head -8 > .tmp_file.txt
+        if [ -z "$(printf '%s\n' "${LATEST_PR_BODY}" | head -8 | diff - .tmp_file.txt --strip-trailing-cr)" ]; then
           # The dependency branch has just been merged into `${{ env.DEFAULT_REPO_BRANCH }}`
           # The dependency branch should be reset to `${{ env.DEFAULT_REPO_BRANCH }}`
           echo "The dependencies have just been updated! Reset to ${{ env.DEFAULT_REPO_BRANCH }}."
@@ -65,7 +66,7 @@ jobs:
     - name: Release check
       run: |
         COMMIT_MSG="$(gh api /repos/${{ github.repository}}/commits/${{ env.DEFAULT_REPO_BRANCH }} --jq '.commit.message')"
-        if [[ "${COMMIT_MSG}" =~ ^Release\ v.*\ -\ Changelog$ ]]; then
+        if [[ "${COMMIT_MSG}" =~ ^Release\ v.*$ ]]; then
           echo "In a release - do not run this job !"
           echo "RELEASE_RUN=true" >> $GITHUB_ENV
         else
@@ -107,9 +108,16 @@ jobs:
         invoke create-docs-index
 
         if [ -n "$(git status --porcelain docs/api_reference docs/index.md)" ]; then
-          echo "The following files in the documentation have not been committed:"
+          echo -e "\u274c Discrepancies found !"
+          echo -e "The following files in the documentation must be committed:"
           git status --porcelain docs/api_reference docs/index.md
+          echo -e "\nRun:\n"
+          echo "    invoke create-api-reference-docs --pre-clean"
+          echo -e "    invoke create-docs-index\n"
+          echo "And commit the changed files."
           exit 1
+        else
+          echo -e "\u2705 All good !"
         fi
 
     - name: Deploy documentation
