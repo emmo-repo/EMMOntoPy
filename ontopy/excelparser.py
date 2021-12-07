@@ -8,6 +8,7 @@ dataframe should have column names:
 [
 """
 import warnings
+from typing import Tuple
 import pyparsing
 import pandas as pd
 from ontopy import World
@@ -50,7 +51,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
     catalog: dict = None,
-) -> (owlready2.Ontology, dict):
+) -> Tuple[owlready2.Ontology, dict]:
     """
     Create an ontology from a pandas DataFrame
     """
@@ -171,4 +172,4 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                         f"Property to be Evaluated: {prop}. "
                         f"Error is {err}."
                     )
-    return onto, catalog
+    return Tuple[onto, catalog]
