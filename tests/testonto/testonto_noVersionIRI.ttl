@@ -9,4 +9,4 @@
 
 <http://emmo.info/testonto> rdf:type owl:Ontology ;
                              owl:imports <http://emmo.info/testonto/0.1.0/models> ;
-			     owl:versionInfo "v0.1.0" .
+			     owl:versionInfo "0.1.0" .
