@@ -1,0 +1,3 @@
+# ontology
+
+::: ontopy.ontology
