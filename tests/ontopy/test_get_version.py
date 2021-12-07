@@ -19,7 +19,7 @@ def test_get_version(repo_dir: "Path") -> None:
     testonto_noVersionIRI = get_ontology(
         str(ontopath) + "/testonto_noVersionIRI.ttl"
     ).load()
-    assert testonto_noVersionIRI.get_version() == "v0.1.0"
+    assert testonto_noVersionIRI.get_version() == "0.1.0"
     with pytest.raises(TypeError):
         testonto_noVersionIRI.get_version(as_iri=True)
     testonto_noVersionIRI_noVersionInfo = get_ontology(
