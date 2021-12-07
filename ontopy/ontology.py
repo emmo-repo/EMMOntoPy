@@ -1085,9 +1085,10 @@ class Ontology(  # pylint: disable=too-many-public-methods
             entity = self.get_by_label(entity)
         return hasattr(entity, "equivalent_to") and bool(entity.equivalent_to)
 
-    def get_version(self, as_iri=False):
+    def get_version(self, as_iri=False) -> str:
         """Returns the version number of the ontology as inferred from the
-        owl:versionIRI tag.
+        owl:versionIRI tag or, if owl:versionIRI is not found, from
+        owl:versionINFO.
 
         If `as_iri` is True, the full versionIRI is returned.
         """
@@ -1095,13 +1096,29 @@ class Ontology(  # pylint: disable=too-many-public-methods
             "http://www.w3.org/2002/07/owl#versionIRI"
         )
         tokens = self.get_triples(s=self.storid, p=version_iri_storid)
+        if (not tokens) and (as_iri is True):
+            raise TypeError(
+                "No owl:versionIRI "
+                f"in Ontology {self.base_iri!r}. "
+                "Search for owl:versionInfo with as_iri=False"
+            )
+        if tokens:
+            _, _, obj = tokens[0]
+            version_iri = self.world._unabbreviate(obj)
+            if as_iri:
+                return version_iri
+            return infer_version(self.base_iri, version_iri)
+
+        version_info_storid = self.world._abbreviate(
+            "http://www.w3.org/2002/07/owl#versionInfo"
+        )
+        tokens = self.get_triples(s=self.storid, p=version_info_storid)
         if not tokens:
-            raise TypeError(f"No versionIRI in Ontology {self.base_iri!r}")
-        _, _, obj = tokens[0]
-        version_iri = self.world._unabbreviate(obj)
-        if as_iri:
-            return version_iri
-        return infer_version(self.base_iri, version_iri)
+            raise TypeError(
+                "No versionIRI or versionInfo " f"in Ontology {self.base_iri!r}"
+            )
+        _, _, version_info = tokens[0]
+        return version_info.strip('"').strip("'")
 
     def set_version(self, version=None, version_iri=None):
         """Assign version to ontology by asigning owl:versionIRI.

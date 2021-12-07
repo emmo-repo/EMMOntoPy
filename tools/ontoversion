@@ -8,21 +8,9 @@ import argparse
 import sys
 
 import rdflib
+from rdflib.util import guess_format
 
-
-def infer_version(iri, version_iri):
-    """Infer version from IRI and versionIRI."""
-    if str(version_iri[: len(iri)]) == str(iri):
-        version = version_iri[len(iri) :]
-    else:
-        counter = 0
-        version_parts = []
-        for index, _ in enumerate(iri):
-            while iri[index] != version_iri[index + counter]:
-                version_parts.append(version_iri[index + counter])
-                counter += 1
-        version = "".join(version_parts)
-    return version.lstrip("/").rstrip("/#")
+from ontopy.utils import infer_version, FMAP
 
 
 def main(argv: list = None):
@@ -41,8 +29,11 @@ def main(argv: list = None):
         help="IRI/file to OWL source to extract the version from.",
     )
     parser.add_argument(
-        "--format", "-f", default="xml", help='OWL format. Default is "xml".'
-    )
+        "--format",
+        "-f",
+        choices=set(list(FMAP.keys()) + list(FMAP.values())),
+        help="Ontology format. Default: Guess format with rdflib.guess_format.",
+    )  # add accepted formats
     try:
         args = parser.parse_args(args=argv)
     except SystemExit as exc:
@@ -50,7 +41,16 @@ def main(argv: list = None):
 
     # Extract base IRI and versionIRI
     graph = rdflib.Graph()
-    graph.parse(args.iri.rstrip("/#"), format=args.format)
+
+    # Guess format if format not given
+    fmt = args.format if args.format else guess_format(args.iri, fmap=FMAP)
+    try:
+        graph.parse(args.iri, format=fmt)
+    except Exception as err:
+        print("rdflib could not parse the ontology.")
+        print(err)
+        sys.exit()
+
     iri, version_iri = list(
         graph.subject_objects(
             rdflib.URIRef("http://www.w3.org/2002/07/owl#versionIRI")
