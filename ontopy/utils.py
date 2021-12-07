@@ -36,6 +36,14 @@ FMAP = {
 OWLREADY2_FORMATS = "rdfxml", "owl", "xml", "ntriples"
 
 
+class EMMOntoPyException(Exception):
+    """A BaseException class for EMMOntoPy"""
+
+
+class EMMOntoPyWarning(Warning):
+    """A BaseWarning class for EMMOntoPy"""
+
+
 class IncompatibleVersion(Warning):
     """An installed dependency version may be incompatible with a functionality
     of this package - or rather an outcome of a functionality.
