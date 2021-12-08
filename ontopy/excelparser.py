@@ -124,7 +124,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                         parents = onto.EMMO
 
                         warnings.warn(
-                            "At least one of the defined parents do not exist. "
+                            "Missing at least one of the defined parents. "
                             f"Concept: {name}; Defined parents: {parent_names}"
                         )
                         new_loop = False
@@ -172,4 +172,35 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                         f"Property to be Evaluated: {prop}. "
                         f"Error is {err}."
                     )
+
+    # Add metadata
+    try:
+        authors = (
+            metadata.loc[metadata["Metadata name"] == "Author"]["Value"]
+            .item()
+            .split(";")
+        )
+        for author in authors:
+            onto.metadata.creator.append(english(author))
+
+    except (TypeError, ValueError):
+        warnings.warn("No authors or creators added.")
+
+    try:
+        contributors = (
+            metadata.loc[metadata["Metadata name"] == "Contributor"]["Value"]
+            .item()
+            .split(";")
+        )
+        for contributor in contributors:
+            onto.metadata.contributor.append(english(contributor))
+    except (TypeError, ValueError, AttributeError):
+        warnings.warn("No contributors added.")
+
+    # Synchronise Python attributes to ontology
+    onto.sync_attributes(
+        name_policy="uuid", name_prefix="EMMO_", class_docstring="elucidation"
+    )
+    onto.dir_label = False
+
     return onto, catalog
