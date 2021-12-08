@@ -29,7 +29,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
     catalog: dict = None,
-) -> (owlready2.Ontology, dict):
+) -> Tuple[owlready2.Ontology, dict]:
     """
     Creates an ontology from an excelfile.
 
@@ -172,4 +172,4 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                         f"Property to be Evaluated: {prop}. "
                         f"Error is {err}."
                     )
-    return Tuple[onto, catalog]
+    return onto, catalog
