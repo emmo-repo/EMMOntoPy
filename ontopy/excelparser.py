@@ -125,6 +125,12 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                     for comment in comment_list:
                         concept.comment.append(english(comment))
 
+                altlabels = row["altLabel"]
+                if isinstance(altlabels, str):
+                    altlabel_list = altlabels.split(";")
+                    for altlabel in altlabel_list:
+                        concept.altlabel.append(english(altlabel))
+
                 number_of_added_classes += 1
 
             if number_of_added_classes == 0:
@@ -160,7 +166,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
 
 
 # To test: with and without ontology as input
-def get_metadata_from_dataframe(
+def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     metadata: pd.DataFrame,
     onto: owlready2.Ontology = None,
     base_iri_from_metadata: bool = True,
@@ -176,24 +182,20 @@ def get_metadata_from_dataframe(
     # base_iri from metadata if it exists and base_iri_from_metadata
     if base_iri_from_metadata:
         try:
-            base_iri = (
-                metadata.loc[metadata["Metadata name"] == "Ontology IRI"][
-                    "Value"
-                ].item()
-                + "#"
-            )
+            base_iris = _parse_metadata_string(metadata, "Ontology IRI")
+            if len(base_iris) > 1:
+                warnings.warn(
+                    "More than one Ontology IRI given. " "The first was chosen."
+                )
+            base_iri = base_iris[0] + "#"
             onto.base_iri = base_iri
         except (TypeError, ValueError):
             pass
 
     # Get imported ontologies from metadata
     try:
-        imported_ontology_paths = (
-            metadata.loc[metadata["Metadata name"] == "Imported ontologies"][
-                "Value"
-            ]
-            .item()
-            .split(";")
+        imported_ontology_paths = _parse_metadata_string(
+            metadata, "Imported ontologies"
         )
     except (TypeError, ValueError, AttributeError):
         imported_ontology_paths = []
@@ -204,29 +206,64 @@ def get_metadata_from_dataframe(
         onto.imported_ontologies.append(imported)
         catalog[imported.base_iri.rstrip("/")] = path
 
+    # Add title
+    try:
+        titles = _parse_metadata_string(metadata, "Title")
+        if len(titles) > 1:
+            warnings.warn(
+                "More than one title is given. " "The first was chosen."
+            )
+        onto.metadata.title.append(english(titles[0]))
+    except (TypeError, ValueError):
+        pass
+
+    # Add versionINFO
+    try:
+        version_infos = _parse_metadata_string(
+            metadata, "Ontology version Info"
+        )
+        if len(titles) > 1:
+            warnings.warn(
+                "More than one versionINFO is given. " "The first was chosen."
+            )
+        onto.metadata.versionInfo.append(english(version_infos[0]))
+    except (TypeError, ValueError):
+        pass
+
+    # Add versionINFO
+    try:
+        licenses = _parse_metadata_string(metadata, "License")
+        if len(licenses) > 1:
+            warnings.warn(
+                "More than one license is given. " "The first was chosen."
+            )
+        onto.metadata.license.append(english(licenses[0]))
+    except (TypeError, ValueError):
+        pass
+
     # Add authors
     try:
-        authors = (
-            metadata.loc[metadata["Metadata name"] == "Author"]["Value"]
-            .item()
-            .split(";")
-        )
+        authors = _parse_metadata_string(metadata, "Author")
         for author in authors:
             onto.metadata.creator.append(english(author))
-
     except (TypeError, ValueError):
         warnings.warn("No authors or creators added.")
 
     # Add contributors
     try:
-        contributors = (
-            metadata.loc[metadata["Metadata name"] == "Contributor"]["Value"]
-            .item()
-            .split(";")
-        )
+        contributors = _parse_metadata_string(metadata, "Contributor")
         for contributor in contributors:
             onto.metadata.contributor.append(english(contributor))
     except (TypeError, ValueError, AttributeError):
         warnings.warn("No contributors added.")
 
     return onto, catalog
+
+
+def _parse_metadata_string(metadata: pd.DataFrame, name: str) -> list:
+    """Helper function to make list ouf strings from ';'-delimited
+    strings in one string.
+    """
+    return str(
+        metadata.loc[metadata["Metadata name"] == name]["Value"].item()
+    ).split(";")
