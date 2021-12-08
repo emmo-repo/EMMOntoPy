@@ -189,7 +189,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
                 )
             base_iri = base_iris[0] + "#"
             onto.base_iri = base_iri
-        except (TypeError, ValueError):
+        except (TypeError, ValueError, AttributeError):
             pass
 
     # Get imported ontologies from metadata
@@ -214,7 +214,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
                 "More than one title is given. " "The first was chosen."
             )
         onto.metadata.title.append(english(titles[0]))
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, AttributeError):
         pass
 
     # Add versionINFO
@@ -227,7 +227,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
                 "More than one versionINFO is given. " "The first was chosen."
             )
         onto.metadata.versionInfo.append(english(version_infos[0]))
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, AttributeError):
         pass
 
     # Add versionINFO
@@ -238,7 +238,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
                 "More than one license is given. " "The first was chosen."
             )
         onto.metadata.license.append(english(licenses[0]))
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, AttributeError):
         pass
 
     # Add authors
@@ -246,7 +246,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
         authors = _parse_metadata_string(metadata, "Author")
         for author in authors:
             onto.metadata.creator.append(english(author))
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, AttributeError):
         warnings.warn("No authors or creators added.")
 
     # Add contributors
@@ -264,6 +264,4 @@ def _parse_metadata_string(metadata: pd.DataFrame, name: str) -> list:
     """Helper function to make list ouf strings from ';'-delimited
     strings in one string.
     """
-    return str(
-        metadata.loc[metadata["Metadata name"] == name]["Value"].item()
-    ).split(";")
+    return metadata.loc[metadata["Metadata name"] == name]["Value"].item().split(";")
