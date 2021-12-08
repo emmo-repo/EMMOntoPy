@@ -11,7 +11,7 @@ import warnings
 from typing import Tuple
 import pyparsing
 import pandas as pd
-from ontopy import World
+from ontopy import World, get_ontology
 from ontopy.utils import NoSuchLabelError
 from ontopy.manchester import evaluate
 import owlready2  # pylint: disable=C0411
@@ -60,43 +60,19 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
     data = data[data["prefLabel"].notna()]
     data = data.astype({"prefLabel": "str"})
 
-    # base_iri from metadata if it exists and base_iri_from_metadata
-    if base_iri_from_metadata:
-        try:
-            base_iri = (
-                metadata.loc[metadata["Metadata name"] == "Ontology IRI"][
-                    "Value"
-                ].item()
-                + "#"
-            )
-        except (TypeError, ValueError):
-            pass
-
-    # Make new ontology and import ontologies
+    # Make new ontology
     world = World()
+    onto = world.get_ontology(base_iri)
+
+    onto, catalog = get_metadata_from_dataframe(metadata, onto)
+
+    # base_iri from metadata if it exists and base_iri_from_metadata
+    if not base_iri_from_metadata:
+        onto.base_iri = base_iri
 
     # have to decide how to add metadata and imports etc.
     # base_iri to be added from excel (maybe also possibly argument?)
-    onto = world.get_ontology(base_iri)
-    onto.base_iri = base_iri
-
-    # Get imported ontologies from metadata
-    try:
-        imported_ontology_paths = (
-            metadata.loc[metadata["Metadata name"] == "Imported ontologies"][
-                "Value"
-            ]
-            .item()
-            .split(";")
-        )
-    except (TypeError, ValueError, AttributeError):
-        imported_ontology_paths = []
-    # Add imported ontologies
-    catalog = {} if catalog is None else catalog
-    for path in imported_ontology_paths:
-        imported = world.get_ontology(path).load()
-        onto.imported_ontologies.append(imported)
-        catalog[imported.base_iri.rstrip("/")] = path
+    # onto = world.get_ontology(base_iri)
 
     onto.sync_python_names()
     with onto:
@@ -173,7 +149,62 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                         f"Error is {err}."
                     )
 
-    # Add metadata
+    onto, catalog = get_metadata_from_dataframe(metadata, onto)
+    # Synchronise Python attributes to ontology
+    onto.sync_attributes(
+        name_policy="uuid", name_prefix="EMMO_", class_docstring="elucidation"
+    )
+    onto.dir_label = False
+
+    return onto, catalog
+
+
+# To test: with and without ontology as input
+def get_metadata_from_dataframe(
+    metadata: pd.DataFrame,
+    onto: owlready2.Ontology = None,
+    base_iri_from_metadata: bool = True,
+    catalog: dict = None,
+) -> Tuple[owlready2.Ontology, dict]:
+    """
+    Populate ontology with metada from pd.DataFrame
+    """
+
+    if onto is None:
+        onto = get_ontology()
+
+    # base_iri from metadata if it exists and base_iri_from_metadata
+    if base_iri_from_metadata:
+        try:
+            base_iri = (
+                metadata.loc[metadata["Metadata name"] == "Ontology IRI"][
+                    "Value"
+                ].item()
+                + "#"
+            )
+            onto.base_iri = base_iri
+        except (TypeError, ValueError):
+            pass
+
+    # Get imported ontologies from metadata
+    try:
+        imported_ontology_paths = (
+            metadata.loc[metadata["Metadata name"] == "Imported ontologies"][
+                "Value"
+            ]
+            .item()
+            .split(";")
+        )
+    except (TypeError, ValueError, AttributeError):
+        imported_ontology_paths = []
+    # Add imported ontologies
+    catalog = {} if catalog is None else catalog
+    for path in imported_ontology_paths:
+        imported = onto.world.get_ontology(path).load()
+        onto.imported_ontologies.append(imported)
+        catalog[imported.base_iri.rstrip("/")] = path
+
+    # Add authors
     try:
         authors = (
             metadata.loc[metadata["Metadata name"] == "Author"]["Value"]
@@ -186,6 +217,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
     except (TypeError, ValueError):
         warnings.warn("No authors or creators added.")
 
+    # Add contributors
     try:
         contributors = (
             metadata.loc[metadata["Metadata name"] == "Contributor"]["Value"]
@@ -196,11 +228,5 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
             onto.metadata.contributor.append(english(contributor))
     except (TypeError, ValueError, AttributeError):
         warnings.warn("No contributors added.")
-
-    # Synchronise Python attributes to ontology
-    onto.sync_attributes(
-        name_policy="uuid", name_prefix="EMMO_", class_docstring="elucidation"
-    )
-    onto.dir_label = False
 
     return onto, catalog
