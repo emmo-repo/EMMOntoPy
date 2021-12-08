@@ -129,7 +129,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                 if isinstance(altlabels, str):
                     altlabel_list = altlabels.split(";")
                     for altlabel in altlabel_list:
-                        concept.altlabel.append(english(altlabel))
+                        concept.altLabel.append(english(altlabel))
 
                 number_of_added_classes += 1
 
