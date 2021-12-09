@@ -29,7 +29,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
     catalog: dict = None,
-) -> Tuple[owlready2.Ontology, dict]:
+) -> Tuple[ontopy.Ontology, dict]:
     """
     Creates an ontology from an excelfile.
 
