@@ -1,16 +1,19 @@
-#!/usr/bin/env python3
 """
 Module from parsing an excelfile and creating an
 ontology from it.
 
 The excelfile is read by pandas and the pandas
 dataframe should have column names:
-[
+prefLabel, altLabel, Elucidation, Comments, Examples,
+subClassOf, Relations.
+
+Note that correct case is mandatory.
 """
 import warnings
 from typing import Tuple
 import pyparsing
 import pandas as pd
+import ontopy
 from ontopy import World, get_ontology
 from ontopy.utils import NoSuchLabelError
 from ontopy.manchester import evaluate
@@ -29,7 +32,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
     catalog: dict = None,
-) -> Tuple[ontopy.Ontology, dict]:
+) -> Tuple[ontopy.ontology.Ontology, dict]:
     """
     Creates an ontology from an excelfile.
 
@@ -51,7 +54,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
     catalog: dict = None,
-) -> Tuple[owlready2.Ontology, dict]:
+) -> Tuple[ontopy.ontology.Ontology, dict]:
     """
     Create an ontology from a pandas DataFrame
     """
@@ -171,7 +174,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
     onto: owlready2.Ontology = None,
     base_iri_from_metadata: bool = True,
     catalog: dict = None,
-) -> Tuple[owlready2.Ontology, dict]:
+) -> Tuple[ontopy.ontology.Ontology, dict]:
     """
     Populate ontology with metada from pd.DataFrame
     """
@@ -233,11 +236,8 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
     # Add versionINFO
     try:
         licenses = _parse_metadata_string(metadata, "License")
-        if len(licenses) > 1:
-            warnings.warn(
-                "More than one license is given. " "The first was chosen."
-            )
-        onto.metadata.license.append(english(licenses[0]))
+        for lic in licenses:
+            onto.metadata.license.append(english(lic))
     except (TypeError, ValueError, AttributeError):
         pass
 
@@ -264,4 +264,8 @@ def _parse_metadata_string(metadata: pd.DataFrame, name: str) -> list:
     """Helper function to make list ouf strings from ';'-delimited
     strings in one string.
     """
-    return metadata.loc[metadata["Metadata name"] == name]["Value"].item().split(";")
+    return (
+        metadata.loc[metadata["Metadata name"] == name]["Value"]
+        .item()
+        .split(";")
+    )
