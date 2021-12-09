@@ -97,7 +97,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                     parents = [onto.get_by_label(pn) for pn in parent_names]
                 except NoSuchLabelError:
                     if final_loop is True:
-                        parents = onto.EMMO
+                        parents = owlready2.ThingClass
 
                         warnings.warn(
                             "Missing at least one of the defined parents. "
