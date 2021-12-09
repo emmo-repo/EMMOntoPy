@@ -222,7 +222,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
         version_infos = _parse_metadata_string(
             metadata, "Ontology version Info"
         )
-        if len(titles) > 1:
+        if len(version_infos) > 1:
             warnings.warn(
                 "More than one versionINFO is given. " "The first was chosen."
             )
