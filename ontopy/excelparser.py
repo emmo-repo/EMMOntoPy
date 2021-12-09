@@ -100,7 +100,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                     parents = [onto.get_by_label(pn) for pn in parent_names]
                 except NoSuchLabelError:
                     if final_loop is True:
-                        parents = owlready2.ThingClass
+                        parents = owlready2.Thing
 
                         warnings.warn(
                             "Missing at least one of the defined parents. "
@@ -158,13 +158,11 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                         f"Error is {err}."
                     )
 
-    onto, catalog = get_metadata_from_dataframe(metadata, onto)
     # Synchronise Python attributes to ontology
     onto.sync_attributes(
         name_policy="uuid", name_prefix="EMMO_", class_docstring="elucidation"
     )
     onto.dir_label = False
-
     return onto, catalog
 
 
@@ -185,10 +183,12 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
     # base_iri from metadata if it exists and base_iri_from_metadata
     if base_iri_from_metadata:
         try:
-            base_iris = _parse_metadata_string(metadata, "Ontology IRI")
+            base_iris = _parse_data_string(
+                metadata, "Ontology IRI", metadata=True
+            )
             if len(base_iris) > 1:
                 warnings.warn(
-                    "More than one Ontology IRI given. " "The first was chosen."
+                    "More than one Ontology IRI given. The first was chosen."
                 )
             base_iri = base_iris[0] + "#"
             onto.base_iri = base_iri
@@ -197,8 +197,10 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
 
     # Get imported ontologies from metadata
     try:
-        imported_ontology_paths = _parse_metadata_string(
-            metadata, "Imported ontologies"
+        imported_ontology_paths = _parse_data_string(
+            metadata,
+            "Imported ontologies",
+            metadata=True,
         )
     except (TypeError, ValueError, AttributeError):
         imported_ontology_paths = []
@@ -209,63 +211,64 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
         onto.imported_ontologies.append(imported)
         catalog[imported.base_iri.rstrip("/")] = path
 
-    # Add title
-    try:
-        titles = _parse_metadata_string(metadata, "Title")
-        if len(titles) > 1:
-            warnings.warn(
-                "More than one title is given. " "The first was chosen."
-            )
-        onto.metadata.title.append(english(titles[0]))
-    except (TypeError, ValueError, AttributeError):
-        pass
-
-    # Add versionINFO
-    try:
-        version_infos = _parse_metadata_string(
-            metadata, "Ontology version Info"
+    with onto:
+        # Add title
+        _add_data(
+            metadata, onto.metadata.title, "Title", metadata=True, only_one=True
         )
-        if len(version_infos) > 1:
-            warnings.warn(
-                "More than one versionINFO is given. " "The first was chosen."
-            )
-        onto.metadata.versionInfo.append(english(version_infos[0]))
-    except (TypeError, ValueError, AttributeError):
-        pass
 
-    # Add versionINFO
-    try:
-        licenses = _parse_metadata_string(metadata, "License")
-        for lic in licenses:
-            onto.metadata.license.append(english(lic))
-    except (TypeError, ValueError, AttributeError):
-        pass
+        # Add license
+        _add_data(metadata, onto.metadata.license, "License", metadata=True)
 
-    # Add authors
-    try:
-        authors = _parse_metadata_string(metadata, "Author")
-        for author in authors:
-            onto.metadata.creator.append(english(author))
-    except (TypeError, ValueError, AttributeError):
-        warnings.warn("No authors or creators added.")
+        # Add authors onto.metadata.author does not work!
+        _add_data(metadata, onto.metadata.contributor, "Author", metadata=True)
 
-    # Add contributors
-    try:
-        contributors = _parse_metadata_string(metadata, "Contributor")
-        for contributor in contributors:
-            onto.metadata.contributor.append(english(contributor))
-    except (TypeError, ValueError, AttributeError):
-        warnings.warn("No contributors added.")
+        # Add contributors
+        _add_data(
+            metadata, onto.metadata.contributor, "Contributor", metadata=True
+        )
+
+        # Add versionInfo
+        _add_data(
+            metadata,
+            onto.metadata.versionInfo,
+            "Ontology version Info",
+            metadata=True,
+            only_one=True,
+        )
 
     return onto, catalog
 
 
-def _parse_metadata_string(metadata: pd.DataFrame, name: str) -> list:
+def _parse_data_string(
+    data: pd.DataFrame, name: str, metadata: bool = False
+) -> list:
     """Helper function to make list ouf strings from ';'-delimited
     strings in one string.
     """
-    return (
-        metadata.loc[metadata["Metadata name"] == name]["Value"]
-        .item()
-        .split(";")
-    )
+
+    if metadata is True:
+        values = data.loc[data["Metadata name"] == name]["Value"].item()
+        if not pd.isna(values):
+            return str(values).split(";")
+    return values.split(";")
+
+
+def _add_data(  # onto: ontopy.ontology.Ontology,
+    data: pd.DataFrame,
+    destination: owlready2.prop.IndividualValueList,  # Check this for metadata
+    name: str,
+    metadata: bool = False,
+    only_one: bool = False,
+) -> None:
+    try:
+        name_list = _parse_data_string(data, name, metadata=metadata)
+        if only_one is True and len(name_list) > 1:
+            warnings.warn(
+                f"More than one {name} is given. The first was chosen."
+            )
+            destination.append(english(name_list[0]))
+        else:
+            destination.extend([english(nm) for nm in name_list])
+    except (TypeError, ValueError, AttributeError):
+        warnings.warn(f"No {name} added.")
