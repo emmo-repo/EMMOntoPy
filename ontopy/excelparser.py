@@ -10,7 +10,7 @@ subClassOf, Relations.
 Note that correct case is mandatory.
 """
 import warnings
-from typing import Tuple
+from typing import Tuple, Union
 import pyparsing
 import pandas as pd
 import ontopy
@@ -36,7 +36,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     """
     Creates an ontology from an excelfile.
 
-    catalog is dict of imported ontologies with key name and value path
+    Catalog is dict of imported ontologies with key name and value path.
     """
     # Read datafile TODO: Some magic to identify the header row
     conceptdata = pd.read_excel(
@@ -56,7 +56,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
     catalog: dict = None,
 ) -> Tuple[ontopy.ontology.Ontology, dict]:
     """
-    Create an ontology from a pandas DataFrame
+    Create an ontology from a pandas DataFrame.
     """
 
     # Remove Concepts without prefLabel and make all to string
@@ -72,10 +72,6 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
     # base_iri from metadata if it exists and base_iri_from_metadata
     if not base_iri_from_metadata:
         onto.base_iri = base_iri
-
-    # have to decide how to add metadata and imports etc.
-    # base_iri to be added from excel (maybe also possibly argument?)
-    # onto = world.get_ontology(base_iri)
 
     onto.sync_python_names()
     with onto:
@@ -157,7 +153,6 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
     return onto, catalog
 
 
-# To test: with and without ontology as input
 def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     metadata: pd.DataFrame,
     onto: owlready2.Ontology = None,
@@ -232,7 +227,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
 
 
 def _parse_literal(
-    data: pd.DataFrame,
+    data: Union[pd.DataFrame, pd.Series],
     name: str,
     metadata: bool = False,
     sep: str = ";",
@@ -251,8 +246,8 @@ def _parse_literal(
 
 
 def _add_literal(  # pylint: disable=too-many-arguments
-    data: pd.DataFrame,
-    destination: owlready2.prop.IndividualValueList,  # Check this for metadata
+    data: Union[pd.DataFrame, pd.Series],
+    destination: owlready2.prop.IndividualValueList,  #
     name: str,
     metadata: bool = False,
     only_one: bool = False,
