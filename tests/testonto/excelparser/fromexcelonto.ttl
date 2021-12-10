@@ -1,0 +1,116 @@
+@prefix : <http://emmo.info/emmo/domain/onto#> .
+@prefix core: <http://www.w3.org/2004/02/skos/core#> .
+@prefix emmo: <http://emmo.info/emmo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix term: <http://purl.org/dc/terms/> .
+
+<http://emmo.info/emmo/domain/onto> a owl:Ontology ;
+    term:contributor "Astrid Marthinsen"@en,
+        "Georg Schmidt"@en,
+        "Jesper Friis"@en,
+        "Sylvain Gouttebroze"@en,
+        "Tomas Manik"@en,
+        "Ulrike Cihak-Bayr"@en ;
+    term:title "Microstructure ontology based on EMMO - Top concepts"@en ;
+    owl:imports <https://raw.githubusercontent.com/emmo-repo/emmo-repo.github.io/master/versions/1.0.0-beta/emmo-inferred-chemistry> ;
+    owl:versionInfo "0.01"@en .
+
+:EMMO_0264be35-e8ad-5b35-a1a3-84b37bde22d1 a owl:Class ;
+    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "Temporal pattern occurring in a time interval"@en ;
+    emmo:EMMO_b432d2d5_25f4_4165_99c5_5935a7763c1a "Light house during one night"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty emmo:EMMO_e1097637_70d2_4895_973f_2396f04fa204 ;
+            owl:someValuesFrom emmo:EMMO_d4f7d378_5e3b_468a_baa1_a7e98358cda7 ],
+        [ a owl:Restriction ;
+            owl:onProperty emmo:EMMO_17e27c22_37e1_468c_9dd7_95e137f73e7f ;
+            owl:someValuesFrom :EMMO_b41c9cb3-3b2d-509f-9c93-aa04da134307 ],
+        :EMMO_138590b8-3333-515d-87ab-717aac8434e6,
+        :EMMO_4b32833e-0833-56a7-903c-28a6a8191fe8 ;
+    core:prefLabel "FiniteTemporalPattern"@en .
+
+:EMMO_70269d17-fbaa-54a6-8905-ce4dee45e0dd a owl:Class ;
+    rdfs:subClassOf owl:Thing ;
+    core:prefLabel "Particle"@en .
+
+:EMMO_76b2eb15-3ab7-52b3-ade2-755aa390d63e a owl:Class ;
+    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "Spatial pattern localized in a volume of space"@en ;
+    emmo:EMMO_b432d2d5_25f4_4165_99c5_5935a7763c1a "Textured surface after etching"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty emmo:EMMO_17e27c22_37e1_468c_9dd7_95e137f73e7f ;
+            owl:someValuesFrom :EMMO_472ed27e-ce08-53cb-8453-56ab363275c4 ],
+        [ a owl:Restriction ;
+            owl:onProperty emmo:EMMO_e1097637_70d2_4895_973f_2396f04fa204 ;
+            owl:someValuesFrom emmo:EMMO_f1a51559_aa3d_43a0_9327_918039f0dfed ],
+        :EMMO_4b32833e-0833-56a7-903c-28a6a8191fe8,
+        :EMMO_5f50f77e-f321-53e3-af76-fe5b0a347479 ;
+    core:prefLabel "FiniteSpatialPattern"@en .
+
+:EMMO_903bf818-c0b4-56ef-9673-799ba204795d a owl:Class ;
+    rdfs:subClassOf owl:Thing ;
+    core:prefLabel "Precipitate"@en .
+
+:EMMO_b0f0e57e-464d-562f-80ec-b216c92d5e88 a owl:Class ;
+    rdfs:subClassOf owl:Thing ;
+    core:prefLabel "Grain"@en .
+
+:EMMO_d35b8f2a-64c0-5f57-a569-308bc8f8a1c5 a owl:Class ;
+    rdfs:subClassOf owl:Thing ;
+    core:prefLabel "Phase"@en .
+
+:EMMO_e0b20a22-7e6f-5c81-beca-35bc5358e11b a owl:Class ;
+    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "NEED elucidation"@en ;
+    rdfs:subClassOf :EMMO_4b32833e-0833-56a7-903c-28a6a8191fe8,
+        :EMMO_9fa9ca88-2891-538a-a8dd-ccb8a08b9890 ;
+    core:prefLabel "FiniteSpatioTemporalPattern"@en .
+
+:EMMO_138590b8-3333-515d-87ab-717aac8434e6 a owl:Class ;
+    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "Pattern with only temporal aspect"@en ;
+    emmo:EMMO_b432d2d5_25f4_4165_99c5_5935a7763c1a "Voltage in AC plug"@en ;
+    rdfs:subClassOf :EMMO_9fa9ca88-2891-538a-a8dd-ccb8a08b9890 ;
+    core:prefLabel "TemporalPattern"@en .
+
+:EMMO_472ed27e-ce08-53cb-8453-56ab363275c4 a owl:Class ;
+    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "NEED elucidation"@en ;
+    rdfs:subClassOf :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ;
+    core:prefLabel "SpatialBoundary"@en .
+
+:EMMO_5f50f77e-f321-53e3-af76-fe5b0a347479 a owl:Class ;
+    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "Spatial pattern without regular temporal variations"@en ;
+    emmo:EMMO_b432d2d5_25f4_4165_99c5_5935a7763c1a "Infinite grid"@en ;
+    rdfs:subClassOf :EMMO_9fa9ca88-2891-538a-a8dd-ccb8a08b9890 ;
+    core:prefLabel "SpatialPattern"@en .
+
+:EMMO_b41c9cb3-3b2d-509f-9c93-aa04da134307 a owl:Class ;
+    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "NEED elucidation"@en ;
+    rdfs:subClassOf :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ;
+    core:prefLabel "TemporalBoundary"@en .
+
+:EMMO_cd254842-c697-55f6-917d-9805c77b9187 a owl:Class ;
+    emmo:EMMO_21ae69b4_235e_479d_8dd8_4f756f694c1b "A"@en,
+        "Just"@en,
+        "Test"@en ;
+    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "everything that can be perceived or measured"@en ;
+    rdfs:comment " this definition is much broader than definition of pattern such as \"the regular and repeated way in which something happens or is\""@en,
+        "a pattern is defined from a contrast"@en ;
+    rdfs:subClassOf emmo:EMMO_649bf97b_4397_4005_90d9_219755d92e34 ;
+    core:prefLabel "Pattern"@en .
+
+:EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 a owl:Class ;
+    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "NEED elucidation"@en ;
+    rdfs:subClassOf emmo:EMMO_649bf97b_4397_4005_90d9_219755d92e34 ;
+    core:prefLabel "Boundary"@en .
+
+:EMMO_4b32833e-0833-56a7-903c-28a6a8191fe8 a owl:Class ;
+    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "Pattern occuring within a boundary in the 4D space"@en ;
+    rdfs:comment "Every physical patterns are FinitePattern"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty emmo:EMMO_17e27c22_37e1_468c_9dd7_95e137f73e7f ;
+            owl:someValuesFrom :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ],
+        :EMMO_cd254842-c697-55f6-917d-9805c77b9187 ;
+    core:prefLabel "FinitePattern"@en .
+
+:EMMO_9fa9ca88-2891-538a-a8dd-ccb8a08b9890 a owl:Class ;
+    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "NEED elucidation"@en ;
+    rdfs:subClassOf :EMMO_cd254842-c697-55f6-917d-9805c77b9187 ;
+    core:prefLabel "SpatioTemporalPattern"@en .
