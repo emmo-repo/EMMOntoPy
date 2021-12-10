@@ -36,25 +36,33 @@ FMAP = {
 OWLREADY2_FORMATS = "rdfxml", "owl", "xml", "ntriples"
 
 
-class IncompatibleVersion(Warning):
+class EMMOntoPyException(Exception):
+    """A BaseException class for EMMOntoPy"""
+
+
+class EMMOntoPyWarning(Warning):
+    """A BaseWarning class for EMMOntoPy"""
+
+
+class IncompatibleVersion(EMMOntoPyWarning):
     """An installed dependency version may be incompatible with a functionality
     of this package - or rather an outcome of a functionality.
     This is not critical, hence this is only a warning."""
 
 
-class UnknownVersion(Exception):
+class UnknownVersion(EMMOntoPyException):
     """Cannot retrieve version from a package."""
 
 
-class NoSuchLabelError(LookupError, AttributeError):
+class NoSuchLabelError(LookupError, AttributeError, EMMOntoPyException):
     """Error raised when a label cannot be found."""
 
 
-class LabelDefinitionError(Exception):
+class LabelDefinitionError(EMMOntoPyException):
     """Error in label definition."""
 
 
-class ThingClassDefinitionError(Exception):
+class ThingClassDefinitionError(EMMOntoPyException):
     """Error in ThingClass definition."""
 
 
