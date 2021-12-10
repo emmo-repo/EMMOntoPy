@@ -111,28 +111,19 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                         continue
 
                 concept = onto.new_entity(name, parents)
+                # Add elucidation
+                _add_literal(
+                    row, concept.elucidation, "Elucidation", only_one=True
+                )
 
-                elucidation = row["Elucidation"]
-                if isinstance(elucidation, str):
-                    concept.elucidation.append(english(elucidation))
+                # Add examples
+                _add_literal(row, concept.example, "Examples")
 
-                examples = row["Examples"]
-                if isinstance(examples, str):
-                    example_list = examples.split(";")
-                    for example in example_list:
-                        concept.example.append(english(example))
+                # Add comments
+                _add_literal(row, concept.comment, "Comments")
 
-                comments = row["Comments"]
-                if isinstance(comments, str):
-                    comment_list = comments.split(";")
-                    for comment in comment_list:
-                        concept.comment.append(english(comment))
-
-                altlabels = row["altLabel"]
-                if isinstance(altlabels, str):
-                    altlabel_list = altlabels.split(";")
-                    for altlabel in altlabel_list:
-                        concept.altLabel.append(english(altlabel))
+                # Add altLAbels
+                _add_literal(row, concept.altLabel, "altLabel")
 
                 number_of_added_classes += 1
 
@@ -183,9 +174,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
     # base_iri from metadata if it exists and base_iri_from_metadata
     if base_iri_from_metadata:
         try:
-            base_iris = _parse_data_string(
-                metadata, "Ontology IRI", metadata=True
-            )
+            base_iris = _parse_literal(metadata, "Ontology IRI", metadata=True)
             if len(base_iris) > 1:
                 warnings.warn(
                     "More than one Ontology IRI given. The first was chosen."
@@ -197,7 +186,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
 
     # Get imported ontologies from metadata
     try:
-        imported_ontology_paths = _parse_data_string(
+        imported_ontology_paths = _parse_literal(
             metadata,
             "Imported ontologies",
             metadata=True,
@@ -213,23 +202,25 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
 
     with onto:
         # Add title
-        _add_data(
+        _add_literal(
             metadata, onto.metadata.title, "Title", metadata=True, only_one=True
         )
 
         # Add license
-        _add_data(metadata, onto.metadata.license, "License", metadata=True)
+        _add_literal(metadata, onto.metadata.license, "License", metadata=True)
 
         # Add authors onto.metadata.author does not work!
-        _add_data(metadata, onto.metadata.contributor, "Author", metadata=True)
+        _add_literal(
+            metadata, onto.metadata.contributor, "Author", metadata=True
+        )
 
         # Add contributors
-        _add_data(
+        _add_literal(
             metadata, onto.metadata.contributor, "Contributor", metadata=True
         )
 
         # Add versionInfo
-        _add_data(
+        _add_literal(
             metadata,
             onto.metadata.versionInfo,
             "Ontology version Info",
@@ -240,8 +231,11 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
     return onto, catalog
 
 
-def _parse_data_string(
-    data: pd.DataFrame, name: str, metadata: bool = False
+def _parse_literal(
+    data: pd.DataFrame,
+    name: str,
+    metadata: bool = False,
+    sep: str = ";",
 ) -> list:
     """Helper function to make list ouf strings from ';'-delimited
     strings in one string.
@@ -249,20 +243,23 @@ def _parse_data_string(
 
     if metadata is True:
         values = data.loc[data["Metadata name"] == name]["Value"].item()
-        if not pd.isna(values):
-            return str(values).split(";")
-    return values.split(";")
+    else:
+        values = data[name]
+    if not pd.isna(values):
+        return str(values).split(sep)
+    return values.split(sep)
 
 
-def _add_data(  # onto: ontopy.ontology.Ontology,
+def _add_literal(  # pylint: disable=too-many-arguments
     data: pd.DataFrame,
     destination: owlready2.prop.IndividualValueList,  # Check this for metadata
     name: str,
     metadata: bool = False,
     only_one: bool = False,
+    sep: str = ";",
 ) -> None:
     try:
-        name_list = _parse_data_string(data, name, metadata=metadata)
+        name_list = _parse_literal(data, name, metadata=metadata, sep=sep)
         if only_one is True and len(name_list) > 1:
             warnings.warn(
                 f"More than one {name} is given. The first was chosen."
