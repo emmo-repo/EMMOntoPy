@@ -16,6 +16,7 @@ import warnings
 import uuid
 import tempfile
 import types
+import pathlib
 from typing import Union
 from collections import defaultdict
 from collections.abc import Iterable
@@ -82,6 +83,12 @@ class World(owlready2.World):
           - "emmo-development": load latest inferred development version
             of EMMO
         """
+        base_iri = (
+            base_iri.as_uri()
+            if isinstance(base_iri, pathlib.Path)
+            else base_iri
+        )
+
         if base_iri == "emmo":
             base_iri = (
                 "https://raw.githubusercontent.com/emmo-repo/"
