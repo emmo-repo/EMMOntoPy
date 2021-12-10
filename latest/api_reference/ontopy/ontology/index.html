@@ -4039,6 +4039,12 @@ World            (<span title="owlready2.namespace.World">World</span>)
 <span class="sd">      - &quot;emmo-development&quot;: load latest inferred development version</span>
 <span class="sd">        of EMMO</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">base_iri</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">base_iri</span><span class="o">.</span><span class="n">as_uri</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base_iri</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span>
+        <span class="k">else</span> <span class="n">base_iri</span>
+    <span class="p">)</span>
+
     <span class="k">if</span> <span class="n">base_iri</span> <span class="o">==</span> <span class="s2">&quot;emmo&quot;</span><span class="p">:</span>
         <span class="n">base_iri</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;https://raw.githubusercontent.com/emmo-repo/&quot;</span>
