@@ -25,10 +25,10 @@ def main():
         help="path to excel book",
     )
     parser.add_argument(
-        "--name",
-        "-n",
+        "--output",
+        "-o",
         default="ontology.ttl",
-        help="Name of ontology, ´ontology.ttl´ is default",
+        help="Name of output ontology, ´ontology.ttl´ is default",
     )
     try:
         args = parser.parse_args()
@@ -38,7 +38,7 @@ def main():
     ontology, catalog = create_ontology_from_excel(args.excelpath)
 
     # Save new ontology as turtle
-    ontology.save(os.path.join(args.name), format="turtle", overwrite=True)
+    ontology.save(os.path.join(args.output), format="turtle", overwrite=True)
     write_catalog(catalog)
 
 

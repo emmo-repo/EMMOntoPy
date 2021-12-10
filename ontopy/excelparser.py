@@ -205,9 +205,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
         _add_literal(metadata, onto.metadata.license, "License", metadata=True)
 
         # Add authors onto.metadata.author does not work!
-        _add_literal(
-            metadata, onto.metadata.contributor, "Author", metadata=True
-        )
+        _add_literal(metadata, onto.metadata.creator, "Author", metadata=True)
 
         # Add contributors
         _add_literal(
