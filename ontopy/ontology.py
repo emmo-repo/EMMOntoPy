@@ -1288,10 +1288,10 @@ class Ontology(  # pylint: disable=too-many-public-methods
             )
         parents = tuple(parent) if isinstance(parent, Iterable) else (parent,)
         for thing in parents:
-            if not isinstance(thing, owlready2.entity.ThingClass):
+            if not isinstance(thing, owlready2.ThingClass):
                 raise ThingClassDefinitionError(
                     f"Error in parent definition: "
-                    f"'{thing}' is not an owlready2.entity.ThingClass."
+                    f"'{thing}' is not an owlready2.ThingClass."
                 )
 
         with self:
