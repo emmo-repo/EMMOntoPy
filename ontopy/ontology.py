@@ -84,8 +84,8 @@ class World(owlready2.World):
             of EMMO
         """
         base_iri = (
-            str(base_iri)
-            if isinstance(base_iri, pathlib.PosixPath)
+            base_iri.as_uri()
+            if isinstance(base_iri, pathlib.Path)
             else base_iri
         )
 
