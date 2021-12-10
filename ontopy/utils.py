@@ -54,7 +54,7 @@ class UnknownVersion(EMMOntoPyException):
     """Cannot retrieve version from a package."""
 
 
-class NoSuchLabelError(LookupError, AttributeError):
+class NoSuchLabelError(LookupError, AttributeError, EMMOntoPyException):
     """Error raised when a label cannot be found."""
 
 
