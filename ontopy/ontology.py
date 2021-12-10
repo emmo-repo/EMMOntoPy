@@ -16,6 +16,7 @@ import warnings
 import uuid
 import tempfile
 import types
+import pathlib
 from typing import Union
 from collections import defaultdict
 from collections.abc import Iterable
@@ -82,6 +83,12 @@ class World(owlready2.World):
           - "emmo-development": load latest inferred development version
             of EMMO
         """
+        base_iri = (
+            str(base_iri)
+            if isinstance(base_iri, pathlib.PosixPath)
+            else base_iri
+        )
+
         if base_iri == "emmo":
             base_iri = (
                 "https://raw.githubusercontent.com/emmo-repo/"
@@ -1281,10 +1288,10 @@ class Ontology(  # pylint: disable=too-many-public-methods
             )
         parents = tuple(parent) if isinstance(parent, Iterable) else (parent,)
         for thing in parents:
-            if not isinstance(thing, owlready2.ThingClass):
+            if not isinstance(thing, owlready2.entity.ThingClass):
                 raise ThingClassDefinitionError(
                     f"Error in parent definition: "
-                    f"'{thing}' is not an owlready2.ThingClass."
+                    f"'{thing}' is not an owlready2.entity.ThingClass."
                 )
 
         with self:

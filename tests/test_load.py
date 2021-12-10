@@ -24,7 +24,8 @@ def test_load(repo_dir: "Path") -> None:
 
     # Load a local ontology with catalog
     testonto = repo_dir / "tests" / "testonto" / "testonto.ttl"
-    onto = get_ontology(str(testonto)).load()
+    print(type(testonto))
+    onto = get_ontology(testonto).load()
     assert onto.TestClass.prefLabel.first() == "TestClass"
 
     # Use catalog file when downloading from web
