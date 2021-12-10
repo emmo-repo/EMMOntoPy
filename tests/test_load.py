@@ -24,7 +24,6 @@ def test_load(repo_dir: "Path") -> None:
 
     # Load a local ontology with catalog
     testonto = repo_dir / "tests" / "testonto" / "testonto.ttl"
-    print(type(testonto))
     onto = get_ontology(testonto).load()
     assert onto.TestClass.prefLabel.first() == "TestClass"
 
