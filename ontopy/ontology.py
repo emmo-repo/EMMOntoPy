@@ -624,11 +624,21 @@ class Ontology(  # pylint: disable=too-many-public-methods
             revmap = {value: key for key, value in FMAP.items()}
             super().save(file=filename, format=revmap[format], **kwargs)
         else:
-            fileTemp = os.path.join(tempfile.gettempdir(), os.urandom(24).hex())
-            super().save(fileTemp, format="rdfxml", **kwargs)
-            graph = rdflib.Graph()
-            graph.parse(fileTemp, format="xml")
-            graph.serialize(destination=filename, format=format)
+            # The try-finally clause is needed for cleanup and because
+            # we have to provide delete=False to NamedTemporaryFile
+            # since Windows does not allow to reopen an already open
+            # file.
+            try:
+                with tempfile.NamedTemporaryFile(
+                    suffix=".owl", delete=False
+                ) as handle:
+                    tmpfile = handle.name
+                super().save(tmpfile, format="rdfxml", **kwargs)
+                graph = rdflib.Graph()
+                graph.parse(tmpfile, format="xml")
+                graph.serialize(destination=filename, format=format)
+            finally:
+                os.remove(tmpfile)
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
