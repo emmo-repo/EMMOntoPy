@@ -108,6 +108,7 @@ setuptools.setup(
         "tools/emmocheck",
         "tools/ontoconvert",
         "tools/ontoversion",
+        "tools/excel2onto",
     ],
     package_data={
         "ontopy.factpluspluswrapper.java.lib.so": ["*"],

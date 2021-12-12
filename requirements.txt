@@ -2,8 +2,10 @@ blessings>=1.7,<2
 Cython>=0.29.21,<0.30
 defusedxml>=0.7.1,<1
 graphviz>=0.16,<0.20
+openpyxl>=3.0.9,<3.1
 Owlready2>=0.28,<0.36,!=0.32,!=0.34
 packaging>=21.0<22
+pandas>=1.2,<1.4
 pydot>=1.4.1,<2
 Pygments>=2.7.4,<3
 pyparsing>=2.4.7

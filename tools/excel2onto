@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+"""Creates and ontology from an excelfile.
+
+The excel file must be in the formate provided by
+ontology_template.xlsx
+"""
+import argparse
+import sys
+import os
+from ontopy.excelparser import create_ontology_from_excel
+from ontopy.utils import write_catalog
+import owlready2  # pylint: disable=C0411
+
+
+def english(string):
+    """Returns `string` as an English location string."""
+    return owlready2.locstr(string, lang="en")
+
+
+def main():
+    """Main run function."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "excelpath",
+        help="path to excel book",
+    )
+    parser.add_argument(
+        "--output",
+        "-o",
+        default="ontology.ttl",
+        help="Name of output ontology, ´ontology.ttl´ is default",
+    )
+    try:
+        args = parser.parse_args()
+    except SystemExit as exc:
+        sys.exit(exc.code)  # Exit without traceback on invalid arguments
+
+    ontology, catalog = create_ontology_from_excel(args.excelpath)
+
+    # Save new ontology as turtle
+    ontology.save(os.path.join(args.output), format="turtle", overwrite=True)
+    write_catalog(catalog)
+
+
+if __name__ == "__main__":
+    main()
