@@ -9,6 +9,7 @@ subClassOf, Relations.
 
 Note that correct case is mandatory.
 """
+import sys
 import warnings
 from typing import Tuple, Union
 import pyparsing
@@ -32,6 +33,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
     catalog: dict = None,
+    force: bool = False,
 ) -> Tuple[ontopy.ontology.Ontology, dict]:
     """
     Creates an ontology from an excelfile.
@@ -44,16 +46,22 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     )
     metadata = pd.read_excel(excelpath, sheet_name=metadata_sheet_name)
     return create_ontology_from_pandas(
-        conceptdata, metadata, base_iri, base_iri_from_metadata, catalog
+        conceptdata,
+        metadata,
+        base_iri,
+        base_iri_from_metadata,
+        catalog,
+        force=force,
     )
 
 
-def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
+def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments
     data: pd.DataFrame,
     metadata: pd.DataFrame,
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
     catalog: dict = None,
+    force: bool = False,
 ) -> Tuple[ontopy.ontology.Ontology, dict]:
     """
     Create an ontology from a pandas DataFrame.
@@ -81,7 +89,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
         while new_loop:
             number_of_added_classes = 0
             for _, row in data.iterrows():
-                name = row["prefLabel"]
+                name = row["prefLabel"].strip(" ")
                 try:
                     if isinstance(
                         onto.get_by_label(name), owlready2.ThingClass
@@ -91,15 +99,29 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                     pass
 
                 parent_names = str(row["subClassOf"]).split(";")
-
                 try:
-                    parents = [onto.get_by_label(pn) for pn in parent_names]
-                except NoSuchLabelError:
+                    parents = [
+                        onto.get_by_label(pn.strip(" ")) for pn in parent_names
+                    ]
+
+                except (NoSuchLabelError, ValueError) as err:
+                    if force is True:
+                        if final_loop is True:
+                            warnings.warn(
+                                "Invalid name for at least one of the parents:"
+                                f" {err}"
+                            )
+                        else:
+                            continue
+                    else:
+                        print("Should print an error")
+                        sys.exit(1)
+
                     if final_loop is True:
                         parents = owlready2.Thing
 
                         warnings.warn(
-                            "Missing at least one of the defined parents. "
+                            "At least one of the defined parents is missing. "
                             f"Concept: {name}; Defined parents: {parent_names}"
                         )
                         new_loop = False
@@ -131,7 +153,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
         properties = row["Relations"]
         if isinstance(properties, str):
             try:
-                concept = onto.get_by_label(row["prefLabel"])
+                concept = onto.get_by_label(row["prefLabel"].strip(" "))
             except NoSuchLabelError:
                 pass
             props = properties.split(";")
@@ -144,6 +166,11 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
                         f"Property to be Evaluated: {prop}. "
                         f"Error is {err}."
                     )
+                except NoSuchLabelError:
+                    if force is True:
+                        pass
+                    else:
+                        sys.exit(1)
 
     # Synchronise Python attributes to ontology
     onto.sync_attributes(
@@ -188,6 +215,11 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
         )
     except (TypeError, ValueError, AttributeError):
         imported_ontology_paths = []
+    if len(onto.imported_ontologies) == 0:
+        imported_ontology_paths = [
+            "https://emmo-repo.github.io/versions/1.0.0-beta/emmo-inferred.ttl"
+        ]
+
     # Add imported ontologies
     catalog = {} if catalog is None else catalog
     for path in imported_ontology_paths:
@@ -197,29 +229,55 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
 
     with onto:
         # Add title
-        _add_literal(
-            metadata, onto.metadata.title, "Title", metadata=True, only_one=True
-        )
+        try:
+            _add_literal(
+                metadata,
+                onto.metadata.title,
+                "Title",
+                metadata=True,
+                only_one=True,
+            )
+        except AttributeError:
+            pass
 
         # Add license
-        _add_literal(metadata, onto.metadata.license, "License", metadata=True)
+        try:
+            _add_literal(
+                metadata, onto.metadata.license, "License", metadata=True
+            )
+        except AttributeError:
+            pass
 
-        # Add authors onto.metadata.author does not work!
-        _add_literal(metadata, onto.metadata.creator, "Author", metadata=True)
+        # Add authors/creators
+        try:
+            _add_literal(
+                metadata, onto.metadata.creator, "Author", metadata=True
+            )
+        except AttributeError:
+            pass
 
         # Add contributors
-        _add_literal(
-            metadata, onto.metadata.contributor, "Contributor", metadata=True
-        )
+        try:
+            _add_literal(
+                metadata,
+                onto.metadata.contributor,
+                "Contributor",
+                metadata=True,
+            )
+        except AttributeError:
+            pass
 
         # Add versionInfo
-        _add_literal(
-            metadata,
-            onto.metadata.versionInfo,
-            "Ontology version Info",
-            metadata=True,
-            only_one=True,
-        )
+        try:
+            _add_literal(
+                metadata,
+                onto.metadata.versionInfo,
+                "Ontology version Info",
+                metadata=True,
+                only_one=True,
+            )
+        except AttributeError:
+            pass
 
     return onto, catalog
 
