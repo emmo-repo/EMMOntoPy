@@ -215,6 +215,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
         )
     except (TypeError, ValueError, AttributeError):
         imported_ontology_paths = []
+    # IMPORTANT THIS SHOULD BE AN OPTION
     if len(onto.imported_ontologies) == 0:
         imported_ontology_paths = [
             "https://emmo-repo.github.io/versions/1.0.0-beta/emmo-inferred.ttl"
