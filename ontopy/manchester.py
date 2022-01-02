@@ -168,7 +168,7 @@ def evaluate(ontology: owlready2.Ontology, expr: str) -> owlready2.Construct:
             elif rtype in ("some", "only"):
                 return fneg(f(_eval(r)))
             elif rtype in ("min", "max", "exactly"):
-                cardinality = r.pop()
+                cardinality = r.pop(0)
                 return fneg(f(cardinality, _eval(r)))
             else:
                 raise ManchesterError(f"invalid restriction type: {rtype}")
