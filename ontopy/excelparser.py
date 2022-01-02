@@ -114,7 +114,8 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         else:
                             continue
                     else:
-                        print("Should print an error")
+                        print("ERROR:", err)
+                        print("Have you forgotten to add imported ontologies?")
                         sys.exit(1)
 
                     if final_loop is True:
@@ -135,13 +136,13 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 )
 
                 # Add examples
-                _add_literal(row, concept.example, "Examples")
+                _add_literal(row, concept.example, "Examples", expected=False)
 
                 # Add comments
-                _add_literal(row, concept.comment, "Comments")
+                _add_literal(row, concept.comment, "Comments", expected=False)
 
                 # Add altLAbels
-                _add_literal(row, concept.altLabel, "altLabel")
+                _add_literal(row, concept.altLabel, "altLabel", expected=False)
 
                 number_of_added_classes += 1
 
@@ -228,6 +229,8 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
         onto.imported_ontologies.append(imported)
         catalog[imported.base_iri.rstrip("/")] = path
 
+    print("===", onto.imported_ontologies)
+
     with onto:
         # Add title
         try:
@@ -309,7 +312,9 @@ def _add_literal(  # pylint: disable=too-many-arguments
     metadata: bool = False,
     only_one: bool = False,
     sep: str = ";",
+    expected: bool = True,
 ) -> None:
+    """Append literal data to ontological entity."""
     try:
         name_list = _parse_literal(data, name, metadata=metadata, sep=sep)
         if only_one is True and len(name_list) > 1:
@@ -320,4 +325,8 @@ def _add_literal(  # pylint: disable=too-many-arguments
         else:
             destination.extend([english(nm) for nm in name_list])
     except (TypeError, ValueError, AttributeError):
-        warnings.warn(f"No {name} added.")
+        if expected:
+            if metadata:
+                warnings.warn(f"Missing metadata {name}")
+            else:
+                warnings.warn(f"{data[0]} has no {name}")
