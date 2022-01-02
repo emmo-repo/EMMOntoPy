@@ -14,7 +14,7 @@ from typing import Tuple, Union
 import pyparsing
 import pandas as pd
 import ontopy
-from ontopy import World, get_ontology
+from ontopy import World
 from ontopy.utils import NoSuchLabelError
 from ontopy.manchester import evaluate
 import owlready2  # pylint: disable=C0411
@@ -64,10 +64,7 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
     data = data.astype({"prefLabel": "str"})
 
     # Make new ontology
-    world = World()
-    onto = world.get_ontology(base_iri)
-
-    onto, catalog = get_metadata_from_dataframe(metadata, onto)
+    onto, catalog = get_metadata_from_dataframe(metadata, base_iri)
 
     # base_iri from metadata if it exists and base_iri_from_metadata
     if not base_iri_from_metadata:
@@ -155,16 +152,13 @@ def create_ontology_from_pandas(  # pylint: disable=too-many-locals,too-many-bra
 
 def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     metadata: pd.DataFrame,
-    onto: owlready2.Ontology = None,
+    base_iri: str,
     base_iri_from_metadata: bool = True,
     catalog: dict = None,
 ) -> Tuple[ontopy.ontology.Ontology, dict]:
     """
-    Populate ontology with metada from pd.DataFrame
+    Create ontology with metadata from pd.DataFrame
     """
-
-    if onto is None:
-        onto = get_ontology()
 
     # base_iri from metadata if it exists and base_iri_from_metadata
     if base_iri_from_metadata:
@@ -175,9 +169,12 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
                     "More than one Ontology IRI given. The first was chosen."
                 )
             base_iri = base_iris[0] + "#"
-            onto.base_iri = base_iri
         except (TypeError, ValueError, AttributeError):
             pass
+
+    # Make new ontology
+    world = World()
+    onto = world.get_ontology(base_iri)
 
     # Get imported ontologies from metadata
     try:
