@@ -89,7 +89,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
         while new_loop:
             number_of_added_classes = 0
             for _, row in data.iterrows():
-                name = row["prefLabel"].strip(" ")
+                name = row["prefLabel"].strip()
                 try:
                     if isinstance(
                         onto.get_by_label(name), owlready2.ThingClass
@@ -154,7 +154,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
         properties = row["Relations"]
         if isinstance(properties, str):
             try:
-                concept = onto.get_by_label(row["prefLabel"].strip(" "))
+                concept = onto.get_by_label(row["prefLabel"].strip())
             except NoSuchLabelError:
                 pass
             props = properties.split(";")
@@ -167,10 +167,11 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         f"Property to be Evaluated: {prop}. "
                         f"Error is {err}."
                     )
-                except NoSuchLabelError:
+                except NoSuchLabelError as err:
                     if force is True:
                         pass
                     else:
+                        print("ERROR:", err)
                         sys.exit(1)
 
     # Synchronise Python attributes to ontology
