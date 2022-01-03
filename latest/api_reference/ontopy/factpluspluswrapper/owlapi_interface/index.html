@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/factpluspluswrapper/owlapi_interface/">
       
       <link rel="icon" href="../../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.2">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.4">
     
     
       
@@ -21,7 +21,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.f7951f6f.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.bb3983ee.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -1205,6 +1205,84 @@ OwlApiInterface        </code>
 
       <p>Interface to the FaCT++ reasoner via OWLAPI.</p>
 
+        <details class="quote">
+          <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">OwlApiInterface</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Interface to the FaCT++ reasoner via OWLAPI.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the interface.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">reason</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generate the inferred axioms for a given Graph.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            graph (Graph): An rdflib graph to execute the reasoner on.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="s2">&quot;wt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xml&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;--run-reasoner&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">reason_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">owl_files</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Merge the given owl and generate the inferred axioms.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            owl_files (os.path): The owl files two merge</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="o">*</span><span class="n">owl_files</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;--run-reasoner&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">merge_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">owl_files</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Merge the given owl files and its import closure.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            owl_files (os.path): The owl files two merge</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="o">*</span><span class="n">owl_files</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;--merge-only&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="o">*</span><span class="n">owl_files</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run the FaCT++ reasoner using a java command.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            owl_files (str): Path to the owl files to load.</span>
+<span class="sd">            command (str): Either --run-reasoner or --merge-only</span>
+<span class="sd">            output_file (str, optional): Where the output should be stored.</span>
+<span class="sd">                Defaults to None.</span>
+<span class="sd">            return_graph (bool, optional): Whether the result should be parsed</span>
+<span class="sd">                and returned. Defaults to True.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            rdflib.Graph: The reasoned result.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">java_base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;java&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;java&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-cp&quot;</span><span class="p">,</span>
+                <span class="n">java_base</span> <span class="o">+</span> <span class="s2">&quot;/lib/jars/*&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-Djava.library.path=&quot;</span> <span class="o">+</span> <span class="n">java_base</span> <span class="o">+</span> <span class="s2">&quot;/lib/so&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;org.simphony.OntologyLoader&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="o">+</span> <span class="p">[</span><span class="n">command</span><span class="p">]</span>
+            <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">owl_files</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running Reasoner&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Command </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># nosec</span>
+
+        <span class="n">graph</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">return_graph</span><span class="p">:</span>
+            <span class="n">graph</span> <span class="o">=</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">RESULT_FILE</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">output_file</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">RESULT_FILE</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">RESULT_FILE</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">graph</span>
+</code></pre></div>
+        </details>
 
 
 
@@ -1547,10 +1625,10 @@ OwlApiInterface        </code>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../../assets/javascripts/workers/search.0bbba5b5.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../../assets/javascripts/workers/search.361d90f1.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.649a939e.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.289a2a4b.min.js"></script>
       
     
   </body>

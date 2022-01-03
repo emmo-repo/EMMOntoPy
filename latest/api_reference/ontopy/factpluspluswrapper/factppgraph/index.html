@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/factpluspluswrapper/factppgraph/">
       
       <link rel="icon" href="../../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.2">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.4">
     
     
       
@@ -21,7 +21,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.f7951f6f.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.bb3983ee.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -1007,6 +1007,136 @@ Parameters&para;
 graph : owlapi.Graph instance
     The graph to be inferred.
 
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          class FaCTPPGraph:
+    &quot;&quot;&quot;Class for running the FaCT++ reasoner (using OwlApiInterface) and
+    postprocessing the resulting inferred ontology.
+
+    Parameters
+    ----------
+    graph : owlapi.Graph instance
+        The graph to be inferred.
+    &quot;&quot;&quot;
+
+    def __init__(self, graph):
+        self.graph = graph
+        self._inferred = None
+        self._namespaces = None
+        self._base_iri = None
+
+    @property
+    def inferred(self):
+        &quot;&quot;&quot;The current inferred graph.&quot;&quot;&quot;
+        if self._inferred is None:
+            self._inferred = self.raw_inferred_graph()
+        return self._inferred
+
+    @property
+    def base_iri(self):
+        &quot;&quot;&quot;Base iri of inferred ontology.&quot;&quot;&quot;
+        if self._base_iri is None:
+            self._base_iri = URIRef(self.asserted_base_iri() + &quot;-inferred&quot;)
+        return self._base_iri
+
+    @base_iri.setter
+    def base_iri(self, value):
+        &quot;&quot;&quot;Assign inferred base iri.&quot;&quot;&quot;
+        self._base_iri = URIRef(value)
+
+    @property
+    def namespaces(self):
+        &quot;&quot;&quot;Namespaces defined in the original graph.&quot;&quot;&quot;
+        if self._namespaces is None:
+            self._namespaces = dict(self.graph.namespaces()).copy()
+            self._namespaces[&quot;&quot;] = self.base_iri
+        return self._namespaces
+
+    def asserted_base_iri(self):
+        &quot;&quot;&quot;Returns the base iri or the original graph.&quot;&quot;&quot;
+        return URIRef(dict(self.graph.namespaces()).get(&quot;&quot;, &quot;&quot;).rstrip(&quot;#/&quot;))
+
+    def raw_inferred_graph(self):
+        &quot;&quot;&quot;Returns the raw non-postprocessed inferred ontology as a rdflib
+        graph.&quot;&quot;&quot;
+        return OwlApiInterface().reason(self.graph)
+
+    def inferred_graph(self):
+        &quot;&quot;&quot;Returns the postprocessed inferred graph.&quot;&quot;&quot;
+        self.add_base_annotations()
+        self.set_namespace()
+        self.clean_base()
+        self.remove_nothing_is_nothing()
+        self.clean_ancestors()
+        return self.inferred
+
+    def add_base_annotations(self):
+        &quot;&quot;&quot;Copy base annotations from original graph to the inferred graph.&quot;&quot;&quot;
+        base = self.base_iri
+        inferred = self.inferred
+        for _, predicate, obj in self.graph.triples(
+            (self.asserted_base_iri(), None, None)
+        ):
+            if predicate == OWL.versionIRI:
+                version = obj.rsplit(&quot;/&quot;, 1)[-1]
+                obj = URIRef(f&quot;{base}/{version}&quot;)
+            inferred.add((base, predicate, obj))
+
+    def set_namespace(self):
+        &quot;&quot;&quot;Override namespace of inferred graph with the namespace of the
+        original graph.
+        &quot;&quot;&quot;
+        inferred = self.inferred
+        for key, value in self.namespaces.items():
+            inferred.namespace_manager.bind(
+                key, value, override=True, replace=True
+            )
+
+    def clean_base(self):
+        &quot;&quot;&quot;Remove all relations `s? a owl:Ontology` where `s?` is not
+        `base_iri`.
+        &quot;&quot;&quot;
+        inferred = self.inferred
+        for subject, predicate, obj in inferred.triples(
+            (None, RDF.type, OWL.Ontology)
+        ):
+            inferred.remove((subject, predicate, obj))
+        inferred.add((self.base_iri, RDF.type, OWL.Ontology))
+
+    def remove_nothing_is_nothing(self):
+        &quot;&quot;&quot;Remove superfluid relation in inferred graph:
+
+        owl:Nothing rdfs:subClassOf owl:Nothing
+        &quot;&quot;&quot;
+        triple = OWL.Nothing, RDFS.subClassOf, OWL.Nothing
+        inferred = self.inferred
+        if triple in inferred:
+            inferred.remove(triple)
+
+    def clean_ancestors(self):
+        &quot;&quot;&quot;Remove redundant rdfs:subClassOf relations in inferred graph.&quot;&quot;&quot;
+        inferred = self.inferred
+        for (  # pylint: disable=too-many-nested-blocks
+            subject
+        ) in inferred.subjects(RDF.type, OWL.Class):
+            if isinstance(subject, URIRef):
+                parents = set(
+                    parent
+                    for parent in inferred.objects(subject, RDFS.subClassOf)
+                    if isinstance(parent, URIRef)
+                )
+                if len(parents) &gt; 1:
+                    for parent in parents:
+                        ancestors = set(
+                            inferred.transitive_objects(parent, RDFS.subClassOf)
+                        )
+                        for entity in parents:
+                            if entity != parent and entity in ancestors:
+                                triple = subject, RDFS.subClassOf, entity
+                                if triple in inferred:
+                                    inferred.remove(triple)
+
+        
 
 
 
@@ -1388,6 +1518,12 @@ FactPPError
 
       Postprocessing error after reasoning with FaCT++.
 
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          class FactPPError:
+    &quot;&quot;&quot;Postprocessing error after reasoning with FaCT++.&quot;&quot;&quot;
+
+        
 
 
     
@@ -1646,6 +1782,136 @@ Parameters&para;
 graph : owlapi.Graph instance
     The graph to be inferred.
 
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          class FaCTPPGraph:
+    &quot;&quot;&quot;Class for running the FaCT++ reasoner (using OwlApiInterface) and
+    postprocessing the resulting inferred ontology.
+
+    Parameters
+    ----------
+    graph : owlapi.Graph instance
+        The graph to be inferred.
+    &quot;&quot;&quot;
+
+    def __init__(self, graph):
+        self.graph = graph
+        self._inferred = None
+        self._namespaces = None
+        self._base_iri = None
+
+    @property
+    def inferred(self):
+        &quot;&quot;&quot;The current inferred graph.&quot;&quot;&quot;
+        if self._inferred is None:
+            self._inferred = self.raw_inferred_graph()
+        return self._inferred
+
+    @property
+    def base_iri(self):
+        &quot;&quot;&quot;Base iri of inferred ontology.&quot;&quot;&quot;
+        if self._base_iri is None:
+            self._base_iri = URIRef(self.asserted_base_iri() + &quot;-inferred&quot;)
+        return self._base_iri
+
+    @base_iri.setter
+    def base_iri(self, value):
+        &quot;&quot;&quot;Assign inferred base iri.&quot;&quot;&quot;
+        self._base_iri = URIRef(value)
+
+    @property
+    def namespaces(self):
+        &quot;&quot;&quot;Namespaces defined in the original graph.&quot;&quot;&quot;
+        if self._namespaces is None:
+            self._namespaces = dict(self.graph.namespaces()).copy()
+            self._namespaces[&quot;&quot;] = self.base_iri
+        return self._namespaces
+
+    def asserted_base_iri(self):
+        &quot;&quot;&quot;Returns the base iri or the original graph.&quot;&quot;&quot;
+        return URIRef(dict(self.graph.namespaces()).get(&quot;&quot;, &quot;&quot;).rstrip(&quot;#/&quot;))
+
+    def raw_inferred_graph(self):
+        &quot;&quot;&quot;Returns the raw non-postprocessed inferred ontology as a rdflib
+        graph.&quot;&quot;&quot;
+        return OwlApiInterface().reason(self.graph)
+
+    def inferred_graph(self):
+        &quot;&quot;&quot;Returns the postprocessed inferred graph.&quot;&quot;&quot;
+        self.add_base_annotations()
+        self.set_namespace()
+        self.clean_base()
+        self.remove_nothing_is_nothing()
+        self.clean_ancestors()
+        return self.inferred
+
+    def add_base_annotations(self):
+        &quot;&quot;&quot;Copy base annotations from original graph to the inferred graph.&quot;&quot;&quot;
+        base = self.base_iri
+        inferred = self.inferred
+        for _, predicate, obj in self.graph.triples(
+            (self.asserted_base_iri(), None, None)
+        ):
+            if predicate == OWL.versionIRI:
+                version = obj.rsplit(&quot;/&quot;, 1)[-1]
+                obj = URIRef(f&quot;{base}/{version}&quot;)
+            inferred.add((base, predicate, obj))
+
+    def set_namespace(self):
+        &quot;&quot;&quot;Override namespace of inferred graph with the namespace of the
+        original graph.
+        &quot;&quot;&quot;
+        inferred = self.inferred
+        for key, value in self.namespaces.items():
+            inferred.namespace_manager.bind(
+                key, value, override=True, replace=True
+            )
+
+    def clean_base(self):
+        &quot;&quot;&quot;Remove all relations `s? a owl:Ontology` where `s?` is not
+        `base_iri`.
+        &quot;&quot;&quot;
+        inferred = self.inferred
+        for subject, predicate, obj in inferred.triples(
+            (None, RDF.type, OWL.Ontology)
+        ):
+            inferred.remove((subject, predicate, obj))
+        inferred.add((self.base_iri, RDF.type, OWL.Ontology))
+
+    def remove_nothing_is_nothing(self):
+        &quot;&quot;&quot;Remove superfluid relation in inferred graph:
+
+        owl:Nothing rdfs:subClassOf owl:Nothing
+        &quot;&quot;&quot;
+        triple = OWL.Nothing, RDFS.subClassOf, OWL.Nothing
+        inferred = self.inferred
+        if triple in inferred:
+            inferred.remove(triple)
+
+    def clean_ancestors(self):
+        &quot;&quot;&quot;Remove redundant rdfs:subClassOf relations in inferred graph.&quot;&quot;&quot;
+        inferred = self.inferred
+        for (  # pylint: disable=too-many-nested-blocks
+            subject
+        ) in inferred.subjects(RDF.type, OWL.Class):
+            if isinstance(subject, URIRef):
+                parents = set(
+                    parent
+                    for parent in inferred.objects(subject, RDFS.subClassOf)
+                    if isinstance(parent, URIRef)
+                )
+                if len(parents) &gt; 1:
+                    for parent in parents:
+                        ancestors = set(
+                            inferred.transitive_objects(parent, RDFS.subClassOf)
+                        )
+                        for entity in parents:
+                            if entity != parent and entity in ancestors:
+                                triple = subject, RDFS.subClassOf, entity
+                                if triple in inferred:
+                                    inferred.remove(triple)
+
+        
 
 
 
@@ -2027,6 +2293,12 @@ FactPPError
 
       Postprocessing error after reasoning with FaCT++.
 
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          class FactPPError:
+    &quot;&quot;&quot;Postprocessing error after reasoning with FaCT++.&quot;&quot;&quot;
+
+        
 
 
     
@@ -2207,6 +2479,136 @@ postprocessing the resulting inferred ontology.</p>
 <p>graph : owlapi.Graph instance
     The graph to be inferred.</p>
 
+        <details class="quote">
+          <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">FaCTPPGraph</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class for running the FaCT++ reasoner (using OwlApiInterface) and</span>
+<span class="sd">    postprocessing the resulting inferred ontology.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph : owlapi.Graph instance</span>
+<span class="sd">        The graph to be inferred.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">graph</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_inferred</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_namespaces</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_base_iri</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">inferred</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The current inferred graph.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inferred</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_inferred_graph</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inferred</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">base_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Base iri of inferred ontology.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_iri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_base_iri</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">asserted_base_iri</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;-inferred&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_iri</span>
+
+    <span class="nd">@base_iri</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">base_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Assign inferred base iri.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_base_iri</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">namespaces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Namespaces defined in the original graph.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_namespaces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_namespaces</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">namespaces</span><span class="p">())</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_namespaces</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_namespaces</span>
+
+    <span class="k">def</span> <span class="nf">asserted_base_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the base iri or the original graph.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">URIRef</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">namespaces</span><span class="p">())</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">raw_inferred_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the raw non-postprocessed inferred ontology as a rdflib</span>
+<span class="sd">        graph.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">OwlApiInterface</span><span class="p">()</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">inferred_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the postprocessed inferred graph.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_base_annotations</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_namespace</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clean_base</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove_nothing_is_nothing</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clean_ancestors</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
+
+    <span class="k">def</span> <span class="nf">add_base_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Copy base annotations from original graph to the inferred graph.&quot;&quot;&quot;</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span>
+        <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">asserted_base_iri</span><span class="p">(),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="n">predicate</span> <span class="o">==</span> <span class="n">OWL</span><span class="o">.</span><span class="n">versionIRI</span><span class="p">:</span>
+                <span class="n">version</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">obj</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">inferred</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">base</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">set_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Override namespace of inferred graph with the namespace of the</span>
+<span class="sd">        original graph.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespaces</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">inferred</span><span class="o">.</span><span class="n">namespace_manager</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span>
+                <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">clean_base</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove all relations `s? a owl:Ontology` where `s?` is not</span>
+<span class="sd">        `base_iri`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
+        <span class="k">for</span> <span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">inferred</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>
+            <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Ontology</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">inferred</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span>
+        <span class="n">inferred</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Ontology</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">remove_nothing_is_nothing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove superfluid relation in inferred graph:</span>
+
+<span class="sd">        owl:Nothing rdfs:subClassOf owl:Nothing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">triple</span> <span class="o">=</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Nothing</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">subClassOf</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Nothing</span>
+        <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
+        <span class="k">if</span> <span class="n">triple</span> <span class="ow">in</span> <span class="n">inferred</span><span class="p">:</span>
+            <span class="n">inferred</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">clean_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove redundant rdfs:subClassOf relations in inferred graph.&quot;&quot;&quot;</span>
+        <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
+        <span class="k">for</span> <span class="p">(</span>  <span class="c1"># pylint: disable=too-many-nested-blocks</span>
+            <span class="n">subject</span>
+        <span class="p">)</span> <span class="ow">in</span> <span class="n">inferred</span><span class="o">.</span><span class="n">subjects</span><span class="p">(</span><span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">URIRef</span><span class="p">):</span>
+                <span class="n">parents</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+                    <span class="n">parent</span>
+                    <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">inferred</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">subClassOf</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">URIRef</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
+                        <span class="n">ancestors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+                            <span class="n">inferred</span><span class="o">.</span><span class="n">transitive_objects</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">subClassOf</span><span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">entity</span> <span class="o">!=</span> <span class="n">parent</span> <span class="ow">and</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">ancestors</span><span class="p">:</span>
+                                <span class="n">triple</span> <span class="o">=</span> <span class="n">subject</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">subClassOf</span><span class="p">,</span> <span class="n">entity</span>
+                                <span class="k">if</span> <span class="n">triple</span> <span class="ow">in</span> <span class="n">inferred</span><span class="p">:</span>
+                                    <span class="n">inferred</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
+</code></pre></div>
+        </details>
 
 
 
@@ -2588,6 +2990,12 @@ FactPPError        </code>
 
       <p>Postprocessing error after reasoning with FaCT++.</p>
 
+        <details class="quote">
+          <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">FactPPError</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Postprocessing error after reasoning with FaCT++.&quot;&quot;&quot;</span>
+</code></pre></div>
+        </details>
 
 
     </div>
@@ -2689,10 +3097,10 @@ FactPPError        </code>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../../assets/javascripts/workers/search.0bbba5b5.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../../assets/javascripts/workers/search.361d90f1.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.649a939e.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.289a2a4b.min.js"></script>
       
     
   </body>

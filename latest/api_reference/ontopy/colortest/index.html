@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/colortest/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.2">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.4">
     
     
       
@@ -21,7 +21,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.f7951f6f.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.bb3983ee.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -840,6 +840,152 @@ ColourTextTestResult            (TestResult)
       A test result class that prints colour formatted text results to a stream.
 Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py
 
+        
+          Source code in ontopy/colortest.py
+          class ColourTextTestResult(TestResult):
+    &quot;&quot;&quot;
+    A test result class that prints colour formatted text results to a stream.
+
+    Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py
+    &quot;&quot;&quot;
+
+    formatter = formatters.Terminal256Formatter()  # pylint: disable=no-member
+    lexer = Lexer()
+    separator1 = &quot;=&quot; * 70
+    separator2 = &quot;-&quot; * 70
+    indent = &quot; &quot; * 4
+    # if `checkmode` is true, simplified output will be generated with
+    # no traceback
+    checkmode = False
+    _terminal = Terminal()
+    colours = {
+        None: str,
+        &quot;error&quot;: _terminal.bold_red,
+        &quot;expected&quot;: _terminal.blue,
+        # &quot;fail&quot;: _terminal.bold_yellow,
+        &quot;fail&quot;: _terminal.bold_magenta,
+        &quot;skip&quot;: str,
+        &quot;success&quot;: _terminal.green,
+        &quot;title&quot;: _terminal.blue,
+        &quot;unexpected&quot;: _terminal.bold_red,
+    }
+
+    _test_class = None
+
+    def __init__(self, stream, descriptions, verbosity):
+        super().__init__(stream, descriptions, verbosity)
+        self.stream = stream
+        self.show_all = verbosity &gt; 1
+        self.dots = verbosity == 1
+        self.descriptions = descriptions
+
+    def getShortDescription(self, test):
+        doc_first_line = test.shortDescription()
+        if self.descriptions and doc_first_line:
+            return self.indent + doc_first_line
+        return self.indent + test._testMethodName
+
+    def getLongDescription(self, test):
+        doc_first_line = test.shortDescription()
+        if self.descriptions and doc_first_line:
+            return &quot;\n&quot;.join((str(test), doc_first_line))
+        return str(test)
+
+    def getClassDescription(self, test):
+        test_class = test.__class__
+        doc = test_class.__doc__
+        if self.descriptions and doc:
+            return doc.split(&quot;\n&quot;)[0].strip()
+        return strclass(test_class)
+
+    def startTest(self, test):
+        super().startTest(test)
+        pos = 0
+        if self.show_all:
+            if self._test_class != test.__class__:
+                self._test_class = test.__class__
+                title = self.getClassDescription(test)
+                self.stream.writeln(self.colours[&quot;title&quot;](title))
+            descr = self.getShortDescription(test)
+            self.stream.write(descr)
+            pos += len(descr)
+            self.stream.write(&quot; &quot; * (70 - pos))
+            # self.stream.write(&#39; &#39; * (self._terminal.width - 10 - pos))
+            # self.stream.write(&#39; ... &#39;)
+            self.stream.flush()
+
+    def printResult(self, short, extended, colour_key=None):
+        colour = self.colours[colour_key]
+        if self.show_all:
+            self.stream.writeln(colour(extended))
+        elif self.dots:
+            self.stream.write(colour(short))
+            self.stream.flush()
+
+    def addSuccess(self, test):
+        super().addSuccess(test)
+        self.printResult(&quot;.&quot;, &quot;ok&quot;, &quot;success&quot;)
+
+    def addError(self, test, err):
+        super().addError(test, err)
+        self.printResult(&quot;E&quot;, &quot;ERROR&quot;, &quot;error&quot;)
+
+    def addFailure(self, test, err):
+        super().addFailure(test, err)
+        self.printResult(&quot;F&quot;, &quot;FAIL&quot;, &quot;fail&quot;)
+
+    def addSkip(self, test, reason):
+        super().addSkip(test, reason)
+        if self.checkmode:
+            self.printResult(&quot;s&quot;, &quot;skipped&quot;, &quot;skip&quot;)
+        else:
+            self.printResult(&quot;s&quot;, f&quot;skipped {reason!r}&quot;, &quot;skip&quot;)
+
+    def addExpectedFailure(self, test, err):
+        super().addExpectedFailure(test, err)
+        self.printResult(&quot;x&quot;, &quot;expected failure&quot;, &quot;expected&quot;)
+
+    def addUnexpectedSuccess(self, test):
+        super().addUnexpectedSuccess(test)
+        self.printResult(&quot;u&quot;, &quot;unexpected success&quot;, &quot;unexpected&quot;)
+
+    def printErrors(self):
+        if self.dots or self.show_all:
+            self.stream.writeln()
+        self.printErrorList(&quot;ERROR&quot;, self.errors)
+        self.printErrorList(&quot;FAIL&quot;, self.failures)
+
+    def printErrorList(self, flavour, errors):
+        colour = self.colours[flavour.lower()]
+
+        for test, err in errors:
+            if self.checkmode and flavour == &quot;FAIL&quot;:
+                self.stream.writeln(self.separator1)
+                title = f&quot;{flavour}: {test.shortDescription()}&quot;
+                self.stream.writeln(colour(title))
+                self.stream.writeln(str(test))
+                if self.show_all:
+                    self.stream.writeln(self.separator2)
+                    lines = str(err).split(&quot;\n&quot;)
+                    i = 1
+                    for line in lines[1:]:
+                        if line.startswith(&quot; &quot;):
+                            i += 1
+                        else:
+                            break
+                    self.stream.writeln(
+                        highlight(
+                            &quot;\n&quot;.join(lines[i:]), self.lexer, self.formatter
+                        )
+                    )
+            else:
+                self.stream.writeln(self.separator1)
+                title = f&quot;{flavour}: {self.getLongDescription(test)}&quot;
+                self.stream.writeln(colour(title))
+                self.stream.writeln(self.separator2)
+                self.stream.writeln(highlight(err, self.lexer, self.formatter))
+
+        
 
 
 
@@ -1128,6 +1274,16 @@ ColourTextTestRunner            (TextTestRunner)
 
       A test runner that uses colour in its output.
 
+        
+          Source code in ontopy/colortest.py
+          class ColourTextTestRunner(
+    TextTestRunner
+):  # pylint: disable=too-few-public-methods
+    &quot;&quot;&quot;A test runner that uses colour in its output.&quot;&quot;&quot;
+
+    resultclass = ColourTextTestResult
+
+        
 
 
 
@@ -1157,6 +1313,152 @@ resultclass            (TestResult)
       A test result class that prints colour formatted text results to a stream.
 Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py
 
+        
+          Source code in ontopy/colortest.py
+          class ColourTextTestResult(TestResult):
+    &quot;&quot;&quot;
+    A test result class that prints colour formatted text results to a stream.
+
+    Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py
+    &quot;&quot;&quot;
+
+    formatter = formatters.Terminal256Formatter()  # pylint: disable=no-member
+    lexer = Lexer()
+    separator1 = &quot;=&quot; * 70
+    separator2 = &quot;-&quot; * 70
+    indent = &quot; &quot; * 4
+    # if `checkmode` is true, simplified output will be generated with
+    # no traceback
+    checkmode = False
+    _terminal = Terminal()
+    colours = {
+        None: str,
+        &quot;error&quot;: _terminal.bold_red,
+        &quot;expected&quot;: _terminal.blue,
+        # &quot;fail&quot;: _terminal.bold_yellow,
+        &quot;fail&quot;: _terminal.bold_magenta,
+        &quot;skip&quot;: str,
+        &quot;success&quot;: _terminal.green,
+        &quot;title&quot;: _terminal.blue,
+        &quot;unexpected&quot;: _terminal.bold_red,
+    }
+
+    _test_class = None
+
+    def __init__(self, stream, descriptions, verbosity):
+        super().__init__(stream, descriptions, verbosity)
+        self.stream = stream
+        self.show_all = verbosity &gt; 1
+        self.dots = verbosity == 1
+        self.descriptions = descriptions
+
+    def getShortDescription(self, test):
+        doc_first_line = test.shortDescription()
+        if self.descriptions and doc_first_line:
+            return self.indent + doc_first_line
+        return self.indent + test._testMethodName
+
+    def getLongDescription(self, test):
+        doc_first_line = test.shortDescription()
+        if self.descriptions and doc_first_line:
+            return &quot;\n&quot;.join((str(test), doc_first_line))
+        return str(test)
+
+    def getClassDescription(self, test):
+        test_class = test.__class__
+        doc = test_class.__doc__
+        if self.descriptions and doc:
+            return doc.split(&quot;\n&quot;)[0].strip()
+        return strclass(test_class)
+
+    def startTest(self, test):
+        super().startTest(test)
+        pos = 0
+        if self.show_all:
+            if self._test_class != test.__class__:
+                self._test_class = test.__class__
+                title = self.getClassDescription(test)
+                self.stream.writeln(self.colours[&quot;title&quot;](title))
+            descr = self.getShortDescription(test)
+            self.stream.write(descr)
+            pos += len(descr)
+            self.stream.write(&quot; &quot; * (70 - pos))
+            # self.stream.write(&#39; &#39; * (self._terminal.width - 10 - pos))
+            # self.stream.write(&#39; ... &#39;)
+            self.stream.flush()
+
+    def printResult(self, short, extended, colour_key=None):
+        colour = self.colours[colour_key]
+        if self.show_all:
+            self.stream.writeln(colour(extended))
+        elif self.dots:
+            self.stream.write(colour(short))
+            self.stream.flush()
+
+    def addSuccess(self, test):
+        super().addSuccess(test)
+        self.printResult(&quot;.&quot;, &quot;ok&quot;, &quot;success&quot;)
+
+    def addError(self, test, err):
+        super().addError(test, err)
+        self.printResult(&quot;E&quot;, &quot;ERROR&quot;, &quot;error&quot;)
+
+    def addFailure(self, test, err):
+        super().addFailure(test, err)
+        self.printResult(&quot;F&quot;, &quot;FAIL&quot;, &quot;fail&quot;)
+
+    def addSkip(self, test, reason):
+        super().addSkip(test, reason)
+        if self.checkmode:
+            self.printResult(&quot;s&quot;, &quot;skipped&quot;, &quot;skip&quot;)
+        else:
+            self.printResult(&quot;s&quot;, f&quot;skipped {reason!r}&quot;, &quot;skip&quot;)
+
+    def addExpectedFailure(self, test, err):
+        super().addExpectedFailure(test, err)
+        self.printResult(&quot;x&quot;, &quot;expected failure&quot;, &quot;expected&quot;)
+
+    def addUnexpectedSuccess(self, test):
+        super().addUnexpectedSuccess(test)
+        self.printResult(&quot;u&quot;, &quot;unexpected success&quot;, &quot;unexpected&quot;)
+
+    def printErrors(self):
+        if self.dots or self.show_all:
+            self.stream.writeln()
+        self.printErrorList(&quot;ERROR&quot;, self.errors)
+        self.printErrorList(&quot;FAIL&quot;, self.failures)
+
+    def printErrorList(self, flavour, errors):
+        colour = self.colours[flavour.lower()]
+
+        for test, err in errors:
+            if self.checkmode and flavour == &quot;FAIL&quot;:
+                self.stream.writeln(self.separator1)
+                title = f&quot;{flavour}: {test.shortDescription()}&quot;
+                self.stream.writeln(colour(title))
+                self.stream.writeln(str(test))
+                if self.show_all:
+                    self.stream.writeln(self.separator2)
+                    lines = str(err).split(&quot;\n&quot;)
+                    i = 1
+                    for line in lines[1:]:
+                        if line.startswith(&quot; &quot;):
+                            i += 1
+                        else:
+                            break
+                    self.stream.writeln(
+                        highlight(
+                            &quot;\n&quot;.join(lines[i:]), self.lexer, self.formatter
+                        )
+                    )
+            else:
+                self.stream.writeln(self.separator1)
+                title = f&quot;{flavour}: {self.getLongDescription(test)}&quot;
+                self.stream.writeln(colour(title))
+                self.stream.writeln(self.separator2)
+                self.stream.writeln(highlight(err, self.lexer, self.formatter))
+
+        
 
 
 
@@ -1904,6 +2206,152 @@ ColourTextTestResult            (TestResult)
       A test result class that prints colour formatted text results to a stream.
 Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py
 
+        
+          Source code in ontopy/colortest.py
+          class ColourTextTestResult(TestResult):
+    &quot;&quot;&quot;
+    A test result class that prints colour formatted text results to a stream.
+
+    Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py
+    &quot;&quot;&quot;
+
+    formatter = formatters.Terminal256Formatter()  # pylint: disable=no-member
+    lexer = Lexer()
+    separator1 = &quot;=&quot; * 70
+    separator2 = &quot;-&quot; * 70
+    indent = &quot; &quot; * 4
+    # if `checkmode` is true, simplified output will be generated with
+    # no traceback
+    checkmode = False
+    _terminal = Terminal()
+    colours = {
+        None: str,
+        &quot;error&quot;: _terminal.bold_red,
+        &quot;expected&quot;: _terminal.blue,
+        # &quot;fail&quot;: _terminal.bold_yellow,
+        &quot;fail&quot;: _terminal.bold_magenta,
+        &quot;skip&quot;: str,
+        &quot;success&quot;: _terminal.green,
+        &quot;title&quot;: _terminal.blue,
+        &quot;unexpected&quot;: _terminal.bold_red,
+    }
+
+    _test_class = None
+
+    def __init__(self, stream, descriptions, verbosity):
+        super().__init__(stream, descriptions, verbosity)
+        self.stream = stream
+        self.show_all = verbosity &gt; 1
+        self.dots = verbosity == 1
+        self.descriptions = descriptions
+
+    def getShortDescription(self, test):
+        doc_first_line = test.shortDescription()
+        if self.descriptions and doc_first_line:
+            return self.indent + doc_first_line
+        return self.indent + test._testMethodName
+
+    def getLongDescription(self, test):
+        doc_first_line = test.shortDescription()
+        if self.descriptions and doc_first_line:
+            return &quot;\n&quot;.join((str(test), doc_first_line))
+        return str(test)
+
+    def getClassDescription(self, test):
+        test_class = test.__class__
+        doc = test_class.__doc__
+        if self.descriptions and doc:
+            return doc.split(&quot;\n&quot;)[0].strip()
+        return strclass(test_class)
+
+    def startTest(self, test):
+        super().startTest(test)
+        pos = 0
+        if self.show_all:
+            if self._test_class != test.__class__:
+                self._test_class = test.__class__
+                title = self.getClassDescription(test)
+                self.stream.writeln(self.colours[&quot;title&quot;](title))
+            descr = self.getShortDescription(test)
+            self.stream.write(descr)
+            pos += len(descr)
+            self.stream.write(&quot; &quot; * (70 - pos))
+            # self.stream.write(&#39; &#39; * (self._terminal.width - 10 - pos))
+            # self.stream.write(&#39; ... &#39;)
+            self.stream.flush()
+
+    def printResult(self, short, extended, colour_key=None):
+        colour = self.colours[colour_key]
+        if self.show_all:
+            self.stream.writeln(colour(extended))
+        elif self.dots:
+            self.stream.write(colour(short))
+            self.stream.flush()
+
+    def addSuccess(self, test):
+        super().addSuccess(test)
+        self.printResult(&quot;.&quot;, &quot;ok&quot;, &quot;success&quot;)
+
+    def addError(self, test, err):
+        super().addError(test, err)
+        self.printResult(&quot;E&quot;, &quot;ERROR&quot;, &quot;error&quot;)
+
+    def addFailure(self, test, err):
+        super().addFailure(test, err)
+        self.printResult(&quot;F&quot;, &quot;FAIL&quot;, &quot;fail&quot;)
+
+    def addSkip(self, test, reason):
+        super().addSkip(test, reason)
+        if self.checkmode:
+            self.printResult(&quot;s&quot;, &quot;skipped&quot;, &quot;skip&quot;)
+        else:
+            self.printResult(&quot;s&quot;, f&quot;skipped {reason!r}&quot;, &quot;skip&quot;)
+
+    def addExpectedFailure(self, test, err):
+        super().addExpectedFailure(test, err)
+        self.printResult(&quot;x&quot;, &quot;expected failure&quot;, &quot;expected&quot;)
+
+    def addUnexpectedSuccess(self, test):
+        super().addUnexpectedSuccess(test)
+        self.printResult(&quot;u&quot;, &quot;unexpected success&quot;, &quot;unexpected&quot;)
+
+    def printErrors(self):
+        if self.dots or self.show_all:
+            self.stream.writeln()
+        self.printErrorList(&quot;ERROR&quot;, self.errors)
+        self.printErrorList(&quot;FAIL&quot;, self.failures)
+
+    def printErrorList(self, flavour, errors):
+        colour = self.colours[flavour.lower()]
+
+        for test, err in errors:
+            if self.checkmode and flavour == &quot;FAIL&quot;:
+                self.stream.writeln(self.separator1)
+                title = f&quot;{flavour}: {test.shortDescription()}&quot;
+                self.stream.writeln(colour(title))
+                self.stream.writeln(str(test))
+                if self.show_all:
+                    self.stream.writeln(self.separator2)
+                    lines = str(err).split(&quot;\n&quot;)
+                    i = 1
+                    for line in lines[1:]:
+                        if line.startswith(&quot; &quot;):
+                            i += 1
+                        else:
+                            break
+                    self.stream.writeln(
+                        highlight(
+                            &quot;\n&quot;.join(lines[i:]), self.lexer, self.formatter
+                        )
+                    )
+            else:
+                self.stream.writeln(self.separator1)
+                title = f&quot;{flavour}: {self.getLongDescription(test)}&quot;
+                self.stream.writeln(colour(title))
+                self.stream.writeln(self.separator2)
+                self.stream.writeln(highlight(err, self.lexer, self.formatter))
+
+        
 
 
 
@@ -2192,6 +2640,16 @@ ColourTextTestRunner            (TextTestRunner)
 
       A test runner that uses colour in its output.
 
+        
+          Source code in ontopy/colortest.py
+          class ColourTextTestRunner(
+    TextTestRunner
+):  # pylint: disable=too-few-public-methods
+    &quot;&quot;&quot;A test runner that uses colour in its output.&quot;&quot;&quot;
+
+    resultclass = ColourTextTestResult
+
+        
 
 
 
@@ -2221,6 +2679,152 @@ resultclass            (TestResult)
       A test result class that prints colour formatted text results to a stream.
 Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py
 
+        
+          Source code in ontopy/colortest.py
+          class ColourTextTestResult(TestResult):
+    &quot;&quot;&quot;
+    A test result class that prints colour formatted text results to a stream.
+
+    Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py
+    &quot;&quot;&quot;
+
+    formatter = formatters.Terminal256Formatter()  # pylint: disable=no-member
+    lexer = Lexer()
+    separator1 = &quot;=&quot; * 70
+    separator2 = &quot;-&quot; * 70
+    indent = &quot; &quot; * 4
+    # if `checkmode` is true, simplified output will be generated with
+    # no traceback
+    checkmode = False
+    _terminal = Terminal()
+    colours = {
+        None: str,
+        &quot;error&quot;: _terminal.bold_red,
+        &quot;expected&quot;: _terminal.blue,
+        # &quot;fail&quot;: _terminal.bold_yellow,
+        &quot;fail&quot;: _terminal.bold_magenta,
+        &quot;skip&quot;: str,
+        &quot;success&quot;: _terminal.green,
+        &quot;title&quot;: _terminal.blue,
+        &quot;unexpected&quot;: _terminal.bold_red,
+    }
+
+    _test_class = None
+
+    def __init__(self, stream, descriptions, verbosity):
+        super().__init__(stream, descriptions, verbosity)
+        self.stream = stream
+        self.show_all = verbosity &gt; 1
+        self.dots = verbosity == 1
+        self.descriptions = descriptions
+
+    def getShortDescription(self, test):
+        doc_first_line = test.shortDescription()
+        if self.descriptions and doc_first_line:
+            return self.indent + doc_first_line
+        return self.indent + test._testMethodName
+
+    def getLongDescription(self, test):
+        doc_first_line = test.shortDescription()
+        if self.descriptions and doc_first_line:
+            return &quot;\n&quot;.join((str(test), doc_first_line))
+        return str(test)
+
+    def getClassDescription(self, test):
+        test_class = test.__class__
+        doc = test_class.__doc__
+        if self.descriptions and doc:
+            return doc.split(&quot;\n&quot;)[0].strip()
+        return strclass(test_class)
+
+    def startTest(self, test):
+        super().startTest(test)
+        pos = 0
+        if self.show_all:
+            if self._test_class != test.__class__:
+                self._test_class = test.__class__
+                title = self.getClassDescription(test)
+                self.stream.writeln(self.colours[&quot;title&quot;](title))
+            descr = self.getShortDescription(test)
+            self.stream.write(descr)
+            pos += len(descr)
+            self.stream.write(&quot; &quot; * (70 - pos))
+            # self.stream.write(&#39; &#39; * (self._terminal.width - 10 - pos))
+            # self.stream.write(&#39; ... &#39;)
+            self.stream.flush()
+
+    def printResult(self, short, extended, colour_key=None):
+        colour = self.colours[colour_key]
+        if self.show_all:
+            self.stream.writeln(colour(extended))
+        elif self.dots:
+            self.stream.write(colour(short))
+            self.stream.flush()
+
+    def addSuccess(self, test):
+        super().addSuccess(test)
+        self.printResult(&quot;.&quot;, &quot;ok&quot;, &quot;success&quot;)
+
+    def addError(self, test, err):
+        super().addError(test, err)
+        self.printResult(&quot;E&quot;, &quot;ERROR&quot;, &quot;error&quot;)
+
+    def addFailure(self, test, err):
+        super().addFailure(test, err)
+        self.printResult(&quot;F&quot;, &quot;FAIL&quot;, &quot;fail&quot;)
+
+    def addSkip(self, test, reason):
+        super().addSkip(test, reason)
+        if self.checkmode:
+            self.printResult(&quot;s&quot;, &quot;skipped&quot;, &quot;skip&quot;)
+        else:
+            self.printResult(&quot;s&quot;, f&quot;skipped {reason!r}&quot;, &quot;skip&quot;)
+
+    def addExpectedFailure(self, test, err):
+        super().addExpectedFailure(test, err)
+        self.printResult(&quot;x&quot;, &quot;expected failure&quot;, &quot;expected&quot;)
+
+    def addUnexpectedSuccess(self, test):
+        super().addUnexpectedSuccess(test)
+        self.printResult(&quot;u&quot;, &quot;unexpected success&quot;, &quot;unexpected&quot;)
+
+    def printErrors(self):
+        if self.dots or self.show_all:
+            self.stream.writeln()
+        self.printErrorList(&quot;ERROR&quot;, self.errors)
+        self.printErrorList(&quot;FAIL&quot;, self.failures)
+
+    def printErrorList(self, flavour, errors):
+        colour = self.colours[flavour.lower()]
+
+        for test, err in errors:
+            if self.checkmode and flavour == &quot;FAIL&quot;:
+                self.stream.writeln(self.separator1)
+                title = f&quot;{flavour}: {test.shortDescription()}&quot;
+                self.stream.writeln(colour(title))
+                self.stream.writeln(str(test))
+                if self.show_all:
+                    self.stream.writeln(self.separator2)
+                    lines = str(err).split(&quot;\n&quot;)
+                    i = 1
+                    for line in lines[1:]:
+                        if line.startswith(&quot; &quot;):
+                            i += 1
+                        else:
+                            break
+                    self.stream.writeln(
+                        highlight(
+                            &quot;\n&quot;.join(lines[i:]), self.lexer, self.formatter
+                        )
+                    )
+            else:
+                self.stream.writeln(self.separator1)
+                title = f&quot;{flavour}: {self.getLongDescription(test)}&quot;
+                self.stream.writeln(colour(title))
+                self.stream.writeln(self.separator2)
+                self.stream.writeln(highlight(err, self.lexer, self.formatter))
+
+        
 
 
 
@@ -2724,6 +3328,152 @@ ColourTextTestResult            (<span title="unittest.result.TestResult">TestRe
       <p>A test result class that prints colour formatted text results to a stream.</p>
 <p>Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py</p>
 
+        <details class="quote">
+          <summary>Source code in <code>ontopy/colortest.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ColourTextTestResult</span><span class="p">(</span><span class="n">TestResult</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A test result class that prints colour formatted text results to a stream.</span>
+
+<span class="sd">    Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">formatters</span><span class="o">.</span><span class="n">Terminal256Formatter</span><span class="p">()</span>  <span class="c1"># pylint: disable=no-member</span>
+    <span class="n">lexer</span> <span class="o">=</span> <span class="n">Lexer</span><span class="p">()</span>
+    <span class="n">separator1</span> <span class="o">=</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span>
+    <span class="n">separator2</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">70</span>
+    <span class="n">indent</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span>
+    <span class="c1"># if `checkmode` is true, simplified output will be generated with</span>
+    <span class="c1"># no traceback</span>
+    <span class="n">checkmode</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">_terminal</span> <span class="o">=</span> <span class="n">Terminal</span><span class="p">()</span>
+    <span class="n">colours</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kc">None</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">_terminal</span><span class="o">.</span><span class="n">bold_red</span><span class="p">,</span>
+        <span class="s2">&quot;expected&quot;</span><span class="p">:</span> <span class="n">_terminal</span><span class="o">.</span><span class="n">blue</span><span class="p">,</span>
+        <span class="c1"># &quot;fail&quot;: _terminal.bold_yellow,</span>
+        <span class="s2">&quot;fail&quot;</span><span class="p">:</span> <span class="n">_terminal</span><span class="o">.</span><span class="n">bold_magenta</span><span class="p">,</span>
+        <span class="s2">&quot;skip&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="n">_terminal</span><span class="o">.</span><span class="n">green</span><span class="p">,</span>
+        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">_terminal</span><span class="o">.</span><span class="n">blue</span><span class="p">,</span>
+        <span class="s2">&quot;unexpected&quot;</span><span class="p">:</span> <span class="n">_terminal</span><span class="o">.</span><span class="n">bold_red</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">_test_class</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">descriptions</span><span class="p">,</span> <span class="n">verbosity</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">descriptions</span><span class="p">,</span> <span class="n">verbosity</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="n">stream</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span> <span class="o">=</span> <span class="n">verbosity</span> <span class="o">&gt;</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dots</span> <span class="o">=</span> <span class="n">verbosity</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">descriptions</span> <span class="o">=</span> <span class="n">descriptions</span>
+
+    <span class="k">def</span> <span class="nf">getShortDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+        <span class="n">doc_first_line</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">shortDescription</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptions</span> <span class="ow">and</span> <span class="n">doc_first_line</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="n">doc_first_line</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="n">test</span><span class="o">.</span><span class="n">_testMethodName</span>
+
+    <span class="k">def</span> <span class="nf">getLongDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+        <span class="n">doc_first_line</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">shortDescription</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptions</span> <span class="ow">and</span> <span class="n">doc_first_line</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">test</span><span class="p">),</span> <span class="n">doc_first_line</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getClassDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+        <span class="n">test_class</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="n">test_class</span><span class="o">.</span><span class="vm">__doc__</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptions</span> <span class="ow">and</span> <span class="n">doc</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">doc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">strclass</span><span class="p">(</span><span class="n">test_class</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">startTest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">startTest</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_test_class</span> <span class="o">!=</span> <span class="n">test</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_test_class</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="vm">__class__</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassDescription</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colours</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">](</span><span class="n">title</span><span class="p">))</span>
+            <span class="n">descr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getShortDescription</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">descr</span><span class="p">)</span>
+            <span class="n">pos</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">descr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">70</span> <span class="o">-</span> <span class="n">pos</span><span class="p">))</span>
+            <span class="c1"># self.stream.write(&#39; &#39; * (self._terminal.width - 10 - pos))</span>
+            <span class="c1"># self.stream.write(&#39; ... &#39;)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">printResult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">short</span><span class="p">,</span> <span class="n">extended</span><span class="p">,</span> <span class="n">colour_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colours</span><span class="p">[</span><span class="n">colour_key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="n">colour</span><span class="p">(</span><span class="n">extended</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">dots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">colour</span><span class="p">(</span><span class="n">short</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">addSuccess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addSuccess</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;ok&quot;</span><span class="p">,</span> <span class="s2">&quot;success&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">addError</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addError</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">addFailure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addFailure</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="s2">&quot;fail&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">addSkip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">reason</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addSkip</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkmode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;skipped&quot;</span><span class="p">,</span> <span class="s2">&quot;skip&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;skipped </span><span class="si">{</span><span class="n">reason</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;skip&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">addExpectedFailure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addExpectedFailure</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;expected failure&quot;</span><span class="p">,</span> <span class="s2">&quot;expected&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">addUnexpectedSuccess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addUnexpectedSuccess</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="s2">&quot;unexpected success&quot;</span><span class="p">,</span> <span class="s2">&quot;unexpected&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">printErrors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dots</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printErrorList</span><span class="p">(</span><span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printErrorList</span><span class="p">(</span><span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failures</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">printErrorList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flavour</span><span class="p">,</span> <span class="n">errors</span><span class="p">):</span>
+        <span class="n">colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colours</span><span class="p">[</span><span class="n">flavour</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+
+        <span class="k">for</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkmode</span> <span class="ow">and</span> <span class="n">flavour</span> <span class="o">==</span> <span class="s2">&quot;FAIL&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">separator1</span><span class="p">)</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">flavour</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">test</span><span class="o">.</span><span class="n">shortDescription</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="n">colour</span><span class="p">(</span><span class="n">title</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">test</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">separator2</span><span class="p">)</span>
+                    <span class="n">lines</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">):</span>
+                            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">break</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span>
+                        <span class="n">highlight</span><span class="p">(</span>
+                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">:]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">lexer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">formatter</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">separator1</span><span class="p">)</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">flavour</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">getLongDescription</span><span class="p">(</span><span class="n">test</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="n">colour</span><span class="p">(</span><span class="n">title</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">separator2</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="n">highlight</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lexer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">formatter</span><span class="p">))</span>
+</code></pre></div>
+        </details>
 
 
 
@@ -3012,6 +3762,16 @@ ColourTextTestRunner            (<span title="unittest.runner.TextTestRunner">Te
 
       <p>A test runner that uses colour in its output.</p>
 
+        <details class="quote">
+          <summary>Source code in <code>ontopy/colortest.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ColourTextTestRunner</span><span class="p">(</span>
+    <span class="n">TextTestRunner</span>
+<span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+    <span class="sd">&quot;&quot;&quot;A test runner that uses colour in its output.&quot;&quot;&quot;</span>
+
+    <span class="n">resultclass</span> <span class="o">=</span> <span class="n">ColourTextTestResult</span>
+</code></pre></div>
+        </details>
 
 
 
@@ -3041,6 +3801,152 @@ resultclass            (<span title="unittest.result.TestResult">TestResult</spa
       <p>A test result class that prints colour formatted text results to a stream.</p>
 <p>Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py</p>
 
+        <details class="quote">
+          <summary>Source code in <code>ontopy/colortest.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ColourTextTestResult</span><span class="p">(</span><span class="n">TestResult</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A test result class that prints colour formatted text results to a stream.</span>
+
+<span class="sd">    Based on https://github.com/python/cpython/blob/3.3/Lib/unittest/runner.py</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">formatters</span><span class="o">.</span><span class="n">Terminal256Formatter</span><span class="p">()</span>  <span class="c1"># pylint: disable=no-member</span>
+    <span class="n">lexer</span> <span class="o">=</span> <span class="n">Lexer</span><span class="p">()</span>
+    <span class="n">separator1</span> <span class="o">=</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span>
+    <span class="n">separator2</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">70</span>
+    <span class="n">indent</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span>
+    <span class="c1"># if `checkmode` is true, simplified output will be generated with</span>
+    <span class="c1"># no traceback</span>
+    <span class="n">checkmode</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">_terminal</span> <span class="o">=</span> <span class="n">Terminal</span><span class="p">()</span>
+    <span class="n">colours</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kc">None</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">_terminal</span><span class="o">.</span><span class="n">bold_red</span><span class="p">,</span>
+        <span class="s2">&quot;expected&quot;</span><span class="p">:</span> <span class="n">_terminal</span><span class="o">.</span><span class="n">blue</span><span class="p">,</span>
+        <span class="c1"># &quot;fail&quot;: _terminal.bold_yellow,</span>
+        <span class="s2">&quot;fail&quot;</span><span class="p">:</span> <span class="n">_terminal</span><span class="o">.</span><span class="n">bold_magenta</span><span class="p">,</span>
+        <span class="s2">&quot;skip&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="n">_terminal</span><span class="o">.</span><span class="n">green</span><span class="p">,</span>
+        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">_terminal</span><span class="o">.</span><span class="n">blue</span><span class="p">,</span>
+        <span class="s2">&quot;unexpected&quot;</span><span class="p">:</span> <span class="n">_terminal</span><span class="o">.</span><span class="n">bold_red</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">_test_class</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">descriptions</span><span class="p">,</span> <span class="n">verbosity</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">descriptions</span><span class="p">,</span> <span class="n">verbosity</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="n">stream</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span> <span class="o">=</span> <span class="n">verbosity</span> <span class="o">&gt;</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dots</span> <span class="o">=</span> <span class="n">verbosity</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">descriptions</span> <span class="o">=</span> <span class="n">descriptions</span>
+
+    <span class="k">def</span> <span class="nf">getShortDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+        <span class="n">doc_first_line</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">shortDescription</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptions</span> <span class="ow">and</span> <span class="n">doc_first_line</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="n">doc_first_line</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="n">test</span><span class="o">.</span><span class="n">_testMethodName</span>
+
+    <span class="k">def</span> <span class="nf">getLongDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+        <span class="n">doc_first_line</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">shortDescription</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptions</span> <span class="ow">and</span> <span class="n">doc_first_line</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">test</span><span class="p">),</span> <span class="n">doc_first_line</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getClassDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+        <span class="n">test_class</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="n">test_class</span><span class="o">.</span><span class="vm">__doc__</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptions</span> <span class="ow">and</span> <span class="n">doc</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">doc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">strclass</span><span class="p">(</span><span class="n">test_class</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">startTest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">startTest</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_test_class</span> <span class="o">!=</span> <span class="n">test</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_test_class</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="vm">__class__</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassDescription</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colours</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">](</span><span class="n">title</span><span class="p">))</span>
+            <span class="n">descr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getShortDescription</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">descr</span><span class="p">)</span>
+            <span class="n">pos</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">descr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">70</span> <span class="o">-</span> <span class="n">pos</span><span class="p">))</span>
+            <span class="c1"># self.stream.write(&#39; &#39; * (self._terminal.width - 10 - pos))</span>
+            <span class="c1"># self.stream.write(&#39; ... &#39;)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">printResult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">short</span><span class="p">,</span> <span class="n">extended</span><span class="p">,</span> <span class="n">colour_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colours</span><span class="p">[</span><span class="n">colour_key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="n">colour</span><span class="p">(</span><span class="n">extended</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">dots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">colour</span><span class="p">(</span><span class="n">short</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">addSuccess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addSuccess</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;ok&quot;</span><span class="p">,</span> <span class="s2">&quot;success&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">addError</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addError</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">addFailure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addFailure</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="s2">&quot;fail&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">addSkip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">reason</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addSkip</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkmode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;skipped&quot;</span><span class="p">,</span> <span class="s2">&quot;skip&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;skipped </span><span class="si">{</span><span class="n">reason</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;skip&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">addExpectedFailure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addExpectedFailure</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;expected failure&quot;</span><span class="p">,</span> <span class="s2">&quot;expected&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">addUnexpectedSuccess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">addUnexpectedSuccess</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printResult</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="s2">&quot;unexpected success&quot;</span><span class="p">,</span> <span class="s2">&quot;unexpected&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">printErrors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dots</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printErrorList</span><span class="p">(</span><span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printErrorList</span><span class="p">(</span><span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failures</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">printErrorList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flavour</span><span class="p">,</span> <span class="n">errors</span><span class="p">):</span>
+        <span class="n">colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colours</span><span class="p">[</span><span class="n">flavour</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+
+        <span class="k">for</span> <span class="n">test</span><span class="p">,</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkmode</span> <span class="ow">and</span> <span class="n">flavour</span> <span class="o">==</span> <span class="s2">&quot;FAIL&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">separator1</span><span class="p">)</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">flavour</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">test</span><span class="o">.</span><span class="n">shortDescription</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="n">colour</span><span class="p">(</span><span class="n">title</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">test</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">separator2</span><span class="p">)</span>
+                    <span class="n">lines</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">):</span>
+                            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">break</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span>
+                        <span class="n">highlight</span><span class="p">(</span>
+                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">:]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">lexer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">formatter</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">separator1</span><span class="p">)</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">flavour</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">getLongDescription</span><span class="p">(</span><span class="n">test</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="n">colour</span><span class="p">(</span><span class="n">title</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">separator2</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">writeln</span><span class="p">(</span><span class="n">highlight</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lexer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">formatter</span><span class="p">))</span>
+</code></pre></div>
+        </details>
 
 
 
@@ -3417,10 +4323,10 @@ returned by sys.exc_info().</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.0bbba5b5.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.361d90f1.min.js", "version": {"provider": "mike", "default": "latest"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.649a939e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.289a2a4b.min.js"></script>
       
     
   </body>
