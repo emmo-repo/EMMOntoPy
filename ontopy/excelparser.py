@@ -17,12 +17,12 @@ import pyparsing
 
 import ontopy
 from ontopy import get_ontology
-from ontopy.utils import NoSuchLabelError
+from ontopy.utils import EMMOntoPyException, NoSuchLabelError
 from ontopy.manchester import evaluate
 import owlready2  # pylint: disable=C0411
 
 
-class ExcelError(Exception):
+class ExcelError(EMMOntoPyException):
     """Raised on errors in Excel file."""
 
 
