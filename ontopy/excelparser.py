@@ -221,7 +221,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
                     "More than one Ontology IRI given. The first was chosen."
                 )
             base_iri = base_iris[0] + "#"
-        except (TypeError, ValueError, AttributeError):
+        except (TypeError, ValueError, AttributeError, IndexError):
             pass
 
     # Create new ontology
