@@ -110,11 +110,16 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 row = data.loc[index]
                 name = row["prefLabel"].strip()
 
-                # Grr, this is a completely valid use of assert - name should
-                # never be in onto at this point - if it is there anyway, it
-                # is a programming error that should be fixed.
-                # Why does bandit complain about that?
-                # assert name not in onto
+                if name in onto:
+                    if not force:
+                        raise ExcelError(
+                            f'Concept "{name}" already in ontology'
+                        )
+                    warnings.warn(
+                        f'Ignoring concept "{name}" since it is already in '
+                        "the ontology"
+                    )
+                    continue
 
                 if pd.isna(row["subClassOf"]):
                     if not force:
