@@ -30,12 +30,24 @@ def main():
         default="ontology.ttl",
         help="Name of output ontology, ´ontology.ttl´ is default",
     )
+    parser.add_argument(
+        "--force",
+        "-f",
+        dest="force",
+        action="store_true",
+        help="Whether to forcibly make an ontology and not break upon errors.",
+    )
+
+    parser.set_defaults(force=False)
+
     try:
         args = parser.parse_args()
     except SystemExit as exc:
         sys.exit(exc.code)  # Exit without traceback on invalid arguments
 
-    ontology, catalog = create_ontology_from_excel(args.excelpath)
+    ontology, catalog = create_ontology_from_excel(
+        args.excelpath, force=args.force
+    )
 
     # Save new ontology as turtle
     ontology.save(os.path.join(args.output), format="turtle", overwrite=True)
