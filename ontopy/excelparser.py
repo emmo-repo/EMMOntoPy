@@ -146,12 +146,13 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 if pd.isna(row["subClassOf"]):
                     if not force:
                         raise ExcelError(f"{row[0]} has no subClassOf")
-                    parent_names = ["Thing"]
+                    parent_names = []  # Should be "owl:Thing"
                 else:
                     parent_names = str(row["subClassOf"]).split(";")
 
                 parents = []
                 for parent_name in parent_names:
+                    print(parent_name)
                     try:
                         parent = onto.get_by_label(parent_name.strip())
                     except NoSuchLabelError as exc:
@@ -166,6 +167,8 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         ) from exc
                     else:
                         parents.append(parent)
+                if not parents:
+                    parents = [owlready2.Thing]
 
                 concept = onto.new_entity(name, parents)
                 added_rows.add(index)
