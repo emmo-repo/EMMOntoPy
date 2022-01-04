@@ -89,15 +89,22 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     """
 
     # Remove Concepts without prefLabel and make all to string
+    # data[
+    #    data['prefLabel'].apply(lambda x: x.notna())
+    # ]
+    # df['cars'].apply(lambda x: "i" in x) &
+    # df['age'].apply(lambda x: int(x)<2)
+    #  ]
     data = data[data["prefLabel"].notna()]
     data = data.astype({"prefLabel": "str"})
+    data["prefLabel"] = data["prefLabel"].str.strip()
+    data = data[data["prefLabel"].str.len() > 0]
     data.reset_index(drop=True, inplace=True)
 
     # Make new ontology
     onto, catalog = get_metadata_from_dataframe(
         metadata, base_iri, imports=imports
     )
-
     # base_iri from metadata if it exists and base_iri_from_metadata
     if not base_iri_from_metadata:
         onto.base_iri = base_iri
@@ -109,13 +116,12 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             added_rows = set()
             for index in remaining_rows:
                 row = data.loc[index]
-                name = row["prefLabel"].strip()
-
+                name = row["prefLabel"]
                 try:
                     onto.get_by_label(name)
                 except (ValueError, TypeError) as err:
                     warnings.warn(
-                        f'Ignoring concept "{name}".'
+                        f'Ignoring concept "{name}". '
                         f'The following error was raised: "{err}"'
                     )
                     continue
@@ -131,6 +137,10 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         f'Ignoring concept "{name}" since it is already in '
                         "the ontology."
                     )
+                    # What to do if we want to add info to this concept?
+                    # Should that be not allowed?
+                    # If it should be allowed the index has to be added to
+                    # added_rows
                     continue
 
                 if pd.isna(row["subClassOf"]):
@@ -176,18 +186,25 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
 
                 # Add altLabels
                 _add_literal(row, concept.altLabel, "altLabel", expected=False)
-
             remaining_rows.difference_update(added_rows)
 
             # Detect infinite loop...
             if not added_rows and remaining_rows:
                 unadded = [data.loc[i].prefLabel for i in remaining_rows]
-                raise ExcelError(
-                    f"Not able to add the following concepts: {unadded}"
-                )
+                if force:
+                    warnings.warn(
+                        f"Not able to add the following concepts: {unadded}."
+                        " Will continue without these."
+                    )
+                    remaining_rows = False
+                else:
+                    raise ExcelError(
+                        f"Not able to add the following concepts: {unadded}."
+                    )
 
     # Add properties in a second loop
-    for _, row in data.iterrows():
+    for index in added_rows:
+        row = data.loc[index]
         properties = row["Relations"]
         if isinstance(properties, str):
             try:
