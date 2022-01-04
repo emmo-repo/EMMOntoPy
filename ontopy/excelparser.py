@@ -109,6 +109,11 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     if not base_iri_from_metadata:
         onto.base_iri = base_iri
 
+    labels = set(data["prefLabel"])
+    for altlabel in data["altLabel"].str.strip():
+        if not pd.isna(altlabel):
+            labels.update(altlabel.split(";"))
+
     onto.sync_python_names()
     with onto:
         remaining_rows = set(range(len(data)))
@@ -124,6 +129,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         f'Ignoring concept "{name}". '
                         f'The following error was raised: "{err}"'
                     )
+                    print(" -> cont. 1")
                     continue
                 except NoSuchLabelError:
                     pass
@@ -151,22 +157,30 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     parent_names = str(row["subClassOf"]).split(";")
 
                 parents = []
+                invalid_parent = False
                 for parent_name in parent_names:
-                    print(parent_name)
+                    print("***", name, parent_name)
                     try:
                         parent = onto.get_by_label(parent_name.strip())
-                    except NoSuchLabelError as exc:
-                        if force:
-                            warnings.warn(
-                                f'Invalid parents for "{name}": {parent_name}'
-                            )
-                            continue
-                        raise ExcelError(
-                            f'Invalid parents for "{name}": {exc}\n'
-                            "Have you forgotten an imported ontology?"
-                        ) from exc
+                    except NoSuchLabelError:
+                        print(" -> break 2")
+                        invalid_parent = True
+                        break
+                        # if force:
+                        #     warnings.warn(
+                        #         f'Invalid parents for "{name}": {parent_name}'
+                        #     )
+                        #     continue
+                        # raise ExcelError(
+                        #     f'Invalid parents for "{name}": {exc}\n'
+                        #     "Have you forgotten an imported ontology?"
+                        # ) from exc
                     else:
                         parents.append(parent)
+
+                if invalid_parent:
+                    continue
+
                 if not parents:
                     parents = [owlready2.Thing]
 
@@ -190,6 +204,8 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 # Add altLabels
                 _add_literal(row, concept.altLabel, "altLabel", expected=False)
             remaining_rows.difference_update(added_rows)
+            print("--- added rows:", added_rows)
+            print("    remaining rows:", remaining_rows)
 
             # Detect infinite loop...
             if not added_rows and remaining_rows:
