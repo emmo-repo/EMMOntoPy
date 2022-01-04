@@ -111,6 +111,17 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 row = data.loc[index]
                 name = row["prefLabel"].strip()
 
+                try:
+                    onto.get_by_label(name)
+                except (ValueError, TypeError) as err:
+                    warnings.warn(
+                        f'Ignoring concept "{name}".'
+                        f'The following error was raised: "{err}"'
+                    )
+                    continue
+                except NoSuchLabelError:
+                    pass
+
                 if name in onto:
                     if not force:
                         raise ExcelError(
@@ -118,7 +129,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         )
                     warnings.warn(
                         f'Ignoring concept "{name}" since it is already in '
-                        "the ontology"
+                        "the ontology."
                     )
                     continue
 
@@ -325,9 +336,7 @@ def _add_literal(  # pylint: disable=too-many-arguments
     expected: bool = True,
 ) -> None:
     """Append literal data to ontological entity."""
-    print("data", data)
     try:
-        print("### name ### ", name)
         name_list = _parse_literal(data, name, metadata=metadata, sep=sep)
         if only_one is True and len(name_list) > 1:
             warnings.warn(
