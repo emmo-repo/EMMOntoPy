@@ -96,7 +96,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     # df['age'].apply(lambda x: int(x)<2)
     #  ]
     data = data[data["prefLabel"].notna()]
-    data = data.astype({"prefLabel": "str"})
+    data = data.astype(str)
     data["prefLabel"] = data["prefLabel"].str.strip()
     data = data[data["prefLabel"].str.len() > 0]
     data.reset_index(drop=True, inplace=True)
@@ -160,7 +160,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 for parent_name in parent_names:
                     try:
                         parent = onto.get_by_label(parent_name.strip())
-                    except NoSuchLabelError as exc:
+                    except (NoSuchLabelError, ValueError) as exc:
                         if parent_name not in labels:
                             if force:
                                 warnings.warn(
@@ -185,29 +185,68 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
 
                 concept = onto.new_entity(name, parents)
                 added_rows.add(index)
-
                 # Add elucidation
-                _add_literal(
-                    row,
-                    concept.elucidation,
-                    "Elucidation",
-                    only_one=True,
-                )
+                try:
+                    _add_literal(
+                        row,
+                        concept.elucidation,
+                        "Elucidation",
+                        only_one=True,
+                    )
+                except AttributeError as err:
+                    if force:
+                        _add_literal(
+                            row,
+                            concept.comment,
+                            "Elucidation",
+                            only_one=True,
+                        )
+                        warnings.warn("Elucidation added as comment.")
+                    else:
+                        raise ExcelError(
+                            f"Not able to add elucidations. " f"{err}."
+                        ) from err
 
                 # Add examples
-                _add_literal(row, concept.example, "Examples", expected=False)
+                try:
+                    _add_literal(
+                        row, concept.example, "Examples", expected=False
+                    )
+                except AttributeError:
+                    if force:
+                        warnings.warn(
+                            "Not able to add examples. "
+                            "Did you forget to import an ontology?."
+                        )
 
                 # Add comments
                 _add_literal(row, concept.comment, "Comments", expected=False)
 
                 # Add altLabels
-                _add_literal(row, concept.altLabel, "altLabel", expected=False)
+                try:
+                    _add_literal(
+                        row, concept.altLabel, "altLabel", expected=False
+                    )
+                except AttributeError as err:
+                    if force is True:
+                        _add_literal(
+                            row,
+                            concept.label,
+                            "Elucidation",
+                            expected=False,
+                        )
+                        warnings.warn("altLabel added as rdfs.label.")
+                    else:
+                        raise ExcelError(
+                            f"Not able to add altLabels. " f"{err}."
+                        ) from err
+
             remaining_rows.difference_update(added_rows)
 
             # Detect infinite loop...
             if not added_rows and remaining_rows:
                 unadded = [data.loc[i].prefLabel for i in remaining_rows]
-                if force:
+                if force is True:
                     warnings.warn(
                         f"Not able to add the following concepts: {unadded}."
                         " Will continue without these."
