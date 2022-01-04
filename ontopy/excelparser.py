@@ -111,7 +111,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
 
     labels = set(data["prefLabel"])
     for altlabel in data["altLabel"].str.strip():
-        if not pd.isna(altlabel):
+        if not altlabel == "nan":
             labels.update(altlabel.split(";"))
 
     onto.sync_python_names()
@@ -232,7 +232,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         _add_literal(
                             row,
                             concept.label,
-                            "Elucidation",
+                            "altLabel",
                             expected=False,
                         )
                         warnings.warn("altLabel added as rdfs.label.")
@@ -393,7 +393,7 @@ def _parse_literal(
         values = data.loc[data["Metadata name"] == name]["Value"].item()
     else:
         values = data[name]
-    if not pd.isna(values):
+    if not (pd.isna(values) or values == "nan"):
         return str(values).split(sep)
     return []
 
