@@ -91,6 +91,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     # Remove Concepts without prefLabel and make all to string
     data = data[data["prefLabel"].notna()]
     data = data.astype({"prefLabel": "str"})
+    data.reset_index(drop=True, inplace=True)
 
     # Make new ontology
     onto, catalog = get_metadata_from_dataframe(
@@ -150,7 +151,10 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
 
                 # Add elucidation
                 _add_literal(
-                    row, concept.elucidation, "Elucidation", only_one=True
+                    row,
+                    concept.elucidation,
+                    "Elucidation",
+                    only_one=True,
                 )
 
                 # Add examples
@@ -321,7 +325,9 @@ def _add_literal(  # pylint: disable=too-many-arguments
     expected: bool = True,
 ) -> None:
     """Append literal data to ontological entity."""
+    print("data", data)
     try:
+        print("### name ### ", name)
         name_list = _parse_literal(data, name, metadata=metadata, sep=sep)
         if only_one is True and len(name_list) > 1:
             warnings.warn(
