@@ -49,7 +49,6 @@ def main():
     except ExcelError as exc:
         parser.exit(1, f"ERROR: {exc}\n")
 
-
     # Save new ontology as turtle
     ontology.save(os.path.join(args.output), format="turtle", overwrite=True)
     write_catalog(catalog)
