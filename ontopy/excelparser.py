@@ -35,7 +35,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     excelpath: str,
     concept_sheet_name: str = "Concepts",
     metadata_sheet_name: str = "Metadata",
-    imports_sheet_name: str = "Imports",
+    imports_sheet_name: str = "ImportedOntologies",
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
     imports: list = None,
@@ -226,15 +226,6 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
 
     # Create new ontology
     onto = get_ontology(base_iri)
-
-    # Get imported ontologies from metadata
-    imports.extend(
-        _parse_literal(
-            metadata,
-            "Imported ontologies",
-            metadata=True,
-        )
-    )
 
     # Add imported ontologies
     catalog = {} if catalog is None else catalog
