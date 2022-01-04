@@ -9,16 +9,21 @@ subClassOf, Relations.
 
 Note that correct case is mandatory.
 """
-import sys
+from typing import Tuple, Union, Sequence
 import warnings
-from typing import Tuple, Union
-import pyparsing
+
 import pandas as pd
+import pyparsing
+
 import ontopy
-from ontopy import World, get_ontology
-from ontopy.utils import NoSuchLabelError
+from ontopy import get_ontology
+from ontopy.utils import EMMOntoPyException, NoSuchLabelError
 from ontopy.manchester import evaluate
 import owlready2  # pylint: disable=C0411
+
+
+class ExcelError(EMMOntoPyException):
+    """Raised on errors in Excel file."""
 
 
 def english(string):
@@ -30,8 +35,10 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     excelpath: str,
     concept_sheet_name: str = "Concepts",
     metadata_sheet_name: str = "Metadata",
+    imports_sheet_name: str = "ImportedOntologies",
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
+    imports: list = None,
     catalog: dict = None,
     force: bool = False,
 ) -> Tuple[ontopy.ontology.Ontology, dict]:
@@ -40,17 +47,30 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
 
     Catalog is dict of imported ontologies with key name and value path.
     """
+    # Get imported ontologies from optional "Imports" sheet
+    if not imports:
+        imports = []
+    try:
+        imports_frame = pd.read_excel(
+            excelpath, sheet_name=imports_sheet_name, skiprows=[1]
+        )
+    except ValueError:
+        pass
+    else:
+        imports.extend(imports_frame["Imported ontologies"].to_list())
+
     # Read datafile TODO: Some magic to identify the header row
     conceptdata = pd.read_excel(
         excelpath, sheet_name=concept_sheet_name, skiprows=[0, 2]
     )
     metadata = pd.read_excel(excelpath, sheet_name=metadata_sheet_name)
     return create_ontology_from_pandas(
-        conceptdata,
-        metadata,
-        base_iri,
-        base_iri_from_metadata,
-        catalog,
+        data=conceptdata,
+        metadata=metadata,
+        imports=imports,
+        base_iri=base_iri,
+        base_iri_from_metadata=base_iri_from_metadata,
+        catalog=catalog,
         force=force,
     )
 
@@ -58,6 +78,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
 def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments
     data: pd.DataFrame,
     metadata: pd.DataFrame,
+    imports: list,
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
     catalog: dict = None,
@@ -70,12 +91,12 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     # Remove Concepts without prefLabel and make all to string
     data = data[data["prefLabel"].notna()]
     data = data.astype({"prefLabel": "str"})
+    data.reset_index(drop=True, inplace=True)
 
     # Make new ontology
-    world = World()
-    onto = world.get_ontology(base_iri)
-
-    onto, catalog = get_metadata_from_dataframe(metadata, onto)
+    onto, catalog = get_metadata_from_dataframe(
+        metadata, base_iri, imports=imports
+    )
 
     # base_iri from metadata if it exists and base_iri_from_metadata
     if not base_iri_from_metadata:
@@ -83,94 +104,100 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
 
     onto.sync_python_names()
     with onto:
-        # loop through the rows until no more are added
-        new_loop = True
-        final_loop = False
-        while new_loop:
-            number_of_added_classes = 0
-            for _, row in data.iterrows():
-                name = row["prefLabel"].strip(" ")
-                try:
-                    if isinstance(
-                        onto.get_by_label(name), owlready2.ThingClass
-                    ):
-                        continue
-                except NoSuchLabelError:
-                    pass
+        remaining_rows = set(range(len(data)))
+        while remaining_rows:
+            added_rows = set()
+            for index in remaining_rows:
+                row = data.loc[index]
+                name = row["prefLabel"].strip()
 
-                parent_names = str(row["subClassOf"]).split(";")
-                try:
-                    parents = [
-                        onto.get_by_label(pn.strip(" ")) for pn in parent_names
-                    ]
-
-                except (NoSuchLabelError, ValueError) as err:
-                    if force is True:
-                        if final_loop is True:
-                            warnings.warn(
-                                "Invalid name for at least one of the parents:"
-                                f" {err}"
-                            )
-                        else:
-                            continue
-                    else:
-                        print("Should print an error")
-                        sys.exit(1)
-
-                    if final_loop is True:
-                        parents = owlready2.Thing
-
-                        warnings.warn(
-                            "At least one of the defined parents is missing. "
-                            f"Concept: {name}; Defined parents: {parent_names}"
+                if name in onto:
+                    if not force:
+                        raise ExcelError(
+                            f'Concept "{name}" already in ontology'
                         )
-                        new_loop = False
+                    warnings.warn(
+                        f'Ignoring concept "{name}" since it is already in '
+                        "the ontology"
+                    )
+                    continue
+
+                if pd.isna(row["subClassOf"]):
+                    if not force:
+                        raise ExcelError(f"{row[0]} has no subClassOf")
+                    parent_names = ["Thing"]
+                else:
+                    parent_names = str(row["subClassOf"]).split(";")
+
+                parents = []
+                for parent_name in parent_names:
+                    try:
+                        parent = onto.get_by_label(parent_name.strip())
+                    except NoSuchLabelError as exc:
+                        if force:
+                            warnings.warn(
+                                f'Invalid parents for "{name}": {parent_name}'
+                            )
+                            continue
+                        raise ExcelError(
+                            f'Invalid parents for "{name}": {exc}\n'
+                            "Have you forgotten an imported ontology?"
+                        ) from exc
                     else:
-                        continue
+                        parents.append(parent)
 
                 concept = onto.new_entity(name, parents)
+                added_rows.add(index)
+
                 # Add elucidation
                 _add_literal(
-                    row, concept.elucidation, "Elucidation", only_one=True
+                    row,
+                    concept.elucidation,
+                    "Elucidation",
+                    only_one=True,
                 )
 
                 # Add examples
-                _add_literal(row, concept.example, "Examples")
+                _add_literal(row, concept.example, "Examples", expected=False)
 
                 # Add comments
-                _add_literal(row, concept.comment, "Comments")
+                _add_literal(row, concept.comment, "Comments", expected=False)
 
-                # Add altLAbels
-                _add_literal(row, concept.altLabel, "altLabel")
+                # Add altLabels
+                _add_literal(row, concept.altLabel, "altLabel", expected=False)
 
-                number_of_added_classes += 1
+            remaining_rows.difference_update(added_rows)
 
-            if number_of_added_classes == 0:
-                final_loop = True
+            # Detect infinite loop...
+            if not added_rows and remaining_rows:
+                unadded = [data.loc[i].prefLabel for i in remaining_rows]
+                raise ExcelError(
+                    f"Not able to add the following concepts: {unadded}"
+                )
 
     # Add properties in a second loop
     for _, row in data.iterrows():
         properties = row["Relations"]
         if isinstance(properties, str):
             try:
-                concept = onto.get_by_label(row["prefLabel"].strip(" "))
+                concept = onto.get_by_label(row["prefLabel"].strip())
             except NoSuchLabelError:
                 pass
             props = properties.split(";")
             for prop in props:
                 try:
                     concept.is_a.append(evaluate(onto, prop))
-                except pyparsing.ParseException as err:
+                except pyparsing.ParseException as exc:
                     warnings.warn(
                         f"Error in Property assignment for: {concept}. "
                         f"Property to be Evaluated: {prop}. "
-                        f"Error is {err}."
+                        f"Error is {exc}."
                     )
-                except NoSuchLabelError:
+                except NoSuchLabelError as exc:
                     if force is True:
                         pass
                     else:
-                        sys.exit(1)
+                        raise ExcelError(exc) from exc
 
     # Synchronise Python attributes to ontology
     onto.sync_attributes(
@@ -182,16 +209,12 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
 
 def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     metadata: pd.DataFrame,
-    onto: owlready2.Ontology = None,
+    base_iri: str,
     base_iri_from_metadata: bool = True,
+    imports: Sequence = (),
     catalog: dict = None,
 ) -> Tuple[ontopy.ontology.Ontology, dict]:
-    """
-    Populate ontology with metada from pd.DataFrame
-    """
-
-    if onto is None:
-        onto = get_ontology()
+    """Create ontology with metadata from pd.DataFrame"""
 
     # base_iri from metadata if it exists and base_iri_from_metadata
     if base_iri_from_metadata:
@@ -202,31 +225,21 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
                     "More than one Ontology IRI given. The first was chosen."
                 )
             base_iri = base_iris[0] + "#"
-            onto.base_iri = base_iri
-        except (TypeError, ValueError, AttributeError):
+        except (TypeError, ValueError, AttributeError, IndexError):
             pass
 
-    # Get imported ontologies from metadata
-    try:
-        imported_ontology_paths = _parse_literal(
-            metadata,
-            "Imported ontologies",
-            metadata=True,
-        )
-    except (TypeError, ValueError, AttributeError):
-        imported_ontology_paths = []
-    # IMPORTANT THIS SHOULD BE AN OPTION
-    if len(onto.imported_ontologies) == 0:
-        imported_ontology_paths = [
-            "https://emmo-repo.github.io/versions/1.0.0-beta/emmo-inferred.ttl"
-        ]
+    # Create new ontology
+    onto = get_ontology(base_iri)
 
     # Add imported ontologies
     catalog = {} if catalog is None else catalog
-    for path in imported_ontology_paths:
-        imported = onto.world.get_ontology(path).load()
-        onto.imported_ontologies.append(imported)
-        catalog[imported.base_iri.rstrip("/")] = path
+    locations = set()
+    for location in imports:
+        if not pd.isna(location) and location not in locations:
+            imported = onto.world.get_ontology(location).load()
+            onto.imported_ontologies.append(imported)
+            catalog[imported.base_iri.rstrip("#/")] = location
+            locations.add(location)
 
     with onto:
         # Add title
@@ -299,7 +312,7 @@ def _parse_literal(
         values = data[name]
     if not pd.isna(values):
         return str(values).split(sep)
-    return values.split(sep)
+    return []
 
 
 def _add_literal(  # pylint: disable=too-many-arguments
@@ -309,8 +322,12 @@ def _add_literal(  # pylint: disable=too-many-arguments
     metadata: bool = False,
     only_one: bool = False,
     sep: str = ";",
+    expected: bool = True,
 ) -> None:
+    """Append literal data to ontological entity."""
+    print("data", data)
     try:
+        print("### name ### ", name)
         name_list = _parse_literal(data, name, metadata=metadata, sep=sep)
         if only_one is True and len(name_list) > 1:
             warnings.warn(
@@ -320,4 +337,8 @@ def _add_literal(  # pylint: disable=too-many-arguments
         else:
             destination.extend([english(nm) for nm in name_list])
     except (TypeError, ValueError, AttributeError):
-        warnings.warn(f"No {name} added.")
+        if expected:
+            if metadata:
+                warnings.warn(f"Missing metadata {name}")
+            else:
+                warnings.warn(f"{data[0]} has no {name}")
