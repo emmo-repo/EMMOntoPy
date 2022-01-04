@@ -129,7 +129,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         f'Ignoring concept "{name}". '
                         f'The following error was raised: "{err}"'
                     )
-                    print(" -> cont. 1")
                     continue
                 except NoSuchLabelError:
                     pass
@@ -159,22 +158,22 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 parents = []
                 invalid_parent = False
                 for parent_name in parent_names:
-                    print("***", name, parent_name)
                     try:
                         parent = onto.get_by_label(parent_name.strip())
-                    except NoSuchLabelError:
-                        print(" -> break 2")
+                    except NoSuchLabelError as exc:
+                        if parent_name not in labels:
+                            if force:
+                                warnings.warn(
+                                    f'Invalid parents for "{name}": '
+                                    "{parent_name}"
+                                )
+                                break
+                            raise ExcelError(
+                                f'Invalid parents for "{name}": {exc}\n'
+                                "Have you forgotten an imported ontology?"
+                            ) from exc
                         invalid_parent = True
                         break
-                        # if force:
-                        #     warnings.warn(
-                        #         f'Invalid parents for "{name}": {parent_name}'
-                        #     )
-                        #     continue
-                        # raise ExcelError(
-                        #     f'Invalid parents for "{name}": {exc}\n'
-                        #     "Have you forgotten an imported ontology?"
-                        # ) from exc
                     else:
                         parents.append(parent)
 
@@ -204,8 +203,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 # Add altLabels
                 _add_literal(row, concept.altLabel, "altLabel", expected=False)
             remaining_rows.difference_update(added_rows)
-            print("--- added rows:", added_rows)
-            print("    remaining rows:", remaining_rows)
 
             # Detect infinite loop...
             if not added_rows and remaining_rows:
