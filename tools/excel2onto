@@ -36,6 +36,7 @@ def main():
         action="store_true",
         help="Whether to force generation of ontology, on non-fatal error.",
     )
+
     try:
         args = parser.parse_args()
     except SystemExit as exc:
@@ -47,6 +48,7 @@ def main():
         )
     except ExcelError as exc:
         parser.exit(1, f"ERROR: {exc}\n")
+
 
     # Save new ontology as turtle
     ontology.save(os.path.join(args.output), format="turtle", overwrite=True)
