@@ -88,13 +88,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     Create an ontology from a pandas DataFrame.
     """
 
-    # Remove Concepts without prefLabel and make all to string
-    # data[
-    #    data['prefLabel'].apply(lambda x: x.notna())
-    # ]
-    # df['cars'].apply(lambda x: "i" in x) &
-    # df['age'].apply(lambda x: int(x)<2)
-    #  ]
+    # Remove Concepts without prefLabel and make data to string
     data = data[data["prefLabel"].notna()]
     data = data.astype(str)
     data["prefLabel"] = data["prefLabel"].str.strip()
