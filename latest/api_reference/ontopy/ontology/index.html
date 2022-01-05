@@ -3061,11 +3061,14 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>,
 <span class="sd">        distance between a ancestor-descendant pair (counter+1).&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">descendant</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">ancestor</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">counter</span>
-        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_number_of_generations</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">ancestor</span><span class="p">,</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">descendant</span><span class="o">.</span><span class="n">get_parents</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">ancestor</span> <span class="ow">in</span> <span class="n">parent</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span>
-        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">min</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_number_of_generations</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">ancestor</span><span class="p">,</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">descendant</span><span class="o">.</span><span class="n">get_parents</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">ancestor</span> <span class="ow">in</span> <span class="n">parent</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">counter</span>
 
     <span class="k">def</span> <span class="nf">closest_common_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls1</span><span class="p">,</span> <span class="n">cls2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns a list with closest_common_ancestor for cls1 and cls2&quot;&quot;&quot;</span>

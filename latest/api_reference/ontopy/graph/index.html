@@ -1509,7 +1509,7 @@ style : None | dict | "default"
       - edges : attribute for individual edges (E)
     If style is None or "default", the default style is used.
     See https://www.graphviz.org/doc/info/attrs.html
-edgelabels : bool | dict
+edgelabels : None | bool | dict
     Whether to add labels to the edges of the generated graph.
     It is also possible to provide a dict mapping the
     full labels (with cardinality stripped off for restrictions)
@@ -1587,7 +1587,7 @@ kwargs :
 <span class="sd">          - edges : attribute for individual edges (E)</span>
 <span class="sd">        If style is None or &quot;default&quot;, the default style is used.</span>
 <span class="sd">        See https://www.graphviz.org/doc/info/attrs.html</span>
-<span class="sd">    edgelabels : bool | dict</span>
+<span class="sd">    edgelabels : None | bool | dict</span>
 <span class="sd">        Whether to add labels to the edges of the generated graph.</span>
 <span class="sd">        It is also possible to provide a dict mapping the</span>
 <span class="sd">        full labels (with cardinality stripped off for restrictions)</span>
@@ -1625,7 +1625,7 @@ kwargs :
         <span class="n">entities</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;isA&quot;</span><span class="p">,</span>
         <span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">edgelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">addnodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">included_namespaces</span><span class="o">=</span><span class="p">(),</span>
@@ -1709,7 +1709,7 @@ kwargs :
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">entities</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;isA&quot;</span><span class="p">,</span>
-        <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">edgelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">addnodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">nodeattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1740,7 +1740,7 @@ kwargs :
         <span class="n">strict_leafs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;isA&quot;</span><span class="p">,</span>
-        <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">edgelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">addnodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">included_namespaces</span><span class="o">=</span><span class="p">(),</span>
@@ -1865,17 +1865,27 @@ kwargs :
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;`object` &quot;</span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s1">&quot; must have been added&#39;</span><span class="p">)</span>
         <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+
             <span class="k">if</span> <span class="n">edgelabel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">edgelabel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edgelabels</span>
 
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edgelabel</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">edgelabel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tokens</span> <span class="o">=</span> <span class="n">predicate</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;some&quot;</span><span class="p">,</span> <span class="s2">&quot;only&quot;</span><span class="p">):</span>
+                    <span class="n">label</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span>
+                    <span class="s2">&quot;exactly&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;min&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;max&quot;</span><span class="p">,</span>
+                <span class="p">):</span>
+                    <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edgelabel</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="n">label</span> <span class="o">=</span> <span class="n">edgelabel</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edgelabel</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edgelabel</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="n">label</span> <span class="o">=</span> <span class="n">edgelabel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">predicate</span><span class="p">,</span> <span class="n">predicate</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">edgelabel</span><span class="p">:</span>
                 <span class="n">label</span> <span class="o">=</span> <span class="n">predicate</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">label</span> <span class="o">=</span> <span class="kc">None</span>
 
             <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_edge_attrs</span><span class="p">(</span><span class="n">predicate</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -2274,7 +2284,7 @@ kwargs :
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.add_branch">
-<code class="highlight language-python"><span class="n">add_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">leafs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_leafs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">strict_leafs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="s1">&#39;isA&#39;</span><span class="p">,</span> <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">addnodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">included_namespaces</span><span class="o">=</span><span class="p">(),</span> <span class="n">included_ontologies</span><span class="o">=</span><span class="p">(),</span> <span class="n">include_parents</span><span class="o">=</span><span class="s1">&#39;closest&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">add_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">leafs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_leafs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">strict_leafs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="s1">&#39;isA&#39;</span><span class="p">,</span> <span class="n">edgelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addnodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">included_namespaces</span><span class="o">=</span><span class="p">(),</span> <span class="n">included_ontologies</span><span class="o">=</span><span class="p">(),</span> <span class="n">include_parents</span><span class="o">=</span><span class="s1">&#39;closest&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.graph.OntoGraph.add_branch" title="Permanent link">&para;</a></h3>
@@ -2295,7 +2305,7 @@ also included.</p>
     <span class="n">strict_leafs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;isA&quot;</span><span class="p">,</span>
-    <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">edgelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">addnodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">included_namespaces</span><span class="o">=</span><span class="p">(),</span>
@@ -2446,17 +2456,27 @@ triplet.</p>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;`object` &quot;</span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s1">&quot; must have been added&#39;</span><span class="p">)</span>
     <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+
         <span class="k">if</span> <span class="n">edgelabel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">edgelabel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edgelabels</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edgelabel</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">edgelabel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tokens</span> <span class="o">=</span> <span class="n">predicate</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;some&quot;</span><span class="p">,</span> <span class="s2">&quot;only&quot;</span><span class="p">):</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="s2">&quot;exactly&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;min&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;max&quot;</span><span class="p">,</span>
+            <span class="p">):</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edgelabel</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">label</span> <span class="o">=</span> <span class="n">edgelabel</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edgelabel</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edgelabel</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">label</span> <span class="o">=</span> <span class="n">edgelabel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">predicate</span><span class="p">,</span> <span class="n">predicate</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">edgelabel</span><span class="p">:</span>
             <span class="n">label</span> <span class="o">=</span> <span class="n">predicate</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">label</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_edge_attrs</span><span class="p">(</span><span class="n">predicate</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -2523,7 +2543,7 @@ between all current nodes.</p>
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.add_entities">
-<code class="highlight language-python"><span class="n">add_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="s1">&#39;isA&#39;</span><span class="p">,</span> <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">addnodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">add_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="s1">&#39;isA&#39;</span><span class="p">,</span> <span class="n">edgelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addnodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.graph.OntoGraph.add_entities" title="Permanent link">&para;</a></h3>
@@ -2541,7 +2561,7 @@ dedicated nodes.</p>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">entities</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;isA&quot;</span><span class="p">,</span>
-    <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">edgelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">addnodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">nodeattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
