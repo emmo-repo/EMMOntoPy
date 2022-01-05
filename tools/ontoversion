@@ -46,7 +46,7 @@ def main(argv: list = None):
     fmt = args.format if args.format else guess_format(args.iri, fmap=FMAP)
     try:
         graph.parse(args.iri, format=fmt)
-    except Exception as err:
+    except Exception as err:  # pylint: disable=W0703
         print("rdflib could not parse the ontology.")
         print(err)
         sys.exit()

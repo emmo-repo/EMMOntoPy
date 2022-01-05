@@ -295,7 +295,6 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
 ) -> Tuple[ontopy.ontology.Ontology, dict]:
     """Create ontology with metadata from pd.DataFrame"""
 
-
     # base_iri from metadata if it exists and base_iri_from_metadata
     if base_iri_from_metadata:
         try:
