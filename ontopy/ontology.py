@@ -1180,11 +1180,14 @@ class Ontology(  # pylint: disable=too-many-public-methods
         distance between a ancestor-descendant pair (counter+1)."""
         if descendant.name == ancestor.name:
             return counter
-        return min(
-            self._number_of_generations(parent, ancestor, counter + 1)
-            for parent in descendant.get_parents()
-            if ancestor in parent.ancestors()
-        )
+        try:
+            return min(
+                self._number_of_generations(parent, ancestor, counter + 1)
+                for parent in descendant.get_parents()
+                if ancestor in parent.ancestors()
+            )
+        except ValueError:
+            return counter
 
     def closest_common_ancestors(self, cls1, cls2):
         """Returns a list with closest_common_ancestor for cls1 and cls2"""

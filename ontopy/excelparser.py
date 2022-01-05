@@ -96,9 +96,11 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     data.reset_index(drop=True, inplace=True)
 
     # Make new ontology
+
     onto, catalog = get_metadata_from_dataframe(
         metadata, base_iri, imports=imports
     )
+
     # base_iri from metadata if it exists and base_iri_from_metadata
     if not base_iri_from_metadata:
         onto.base_iri = base_iri
@@ -292,6 +294,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
     catalog: dict = None,
 ) -> Tuple[ontopy.ontology.Ontology, dict]:
     """Create ontology with metadata from pd.DataFrame"""
+
 
     # base_iri from metadata if it exists and base_iri_from_metadata
     if base_iri_from_metadata:
