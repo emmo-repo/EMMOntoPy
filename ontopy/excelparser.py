@@ -159,7 +159,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                             if force:
                                 warnings.warn(
                                     f'Invalid parents for "{name}": '
-                                    "{parent_name}"
+                                    f'"{parent_name}".'
                                 )
                                 break
                             raise ExcelError(
