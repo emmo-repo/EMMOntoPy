@@ -87,6 +87,7 @@ _default_style = {
         },
         "hasPart": {"color": "blue"},
         "hasProperPart": {"color": "blue", "style": "dashed"},
+        "hasMember": {"color": "blue", "style": "dotted"},
         "hasParticipant": {"color": "red"},
         "hasProperParticipant": {"color": "red", "style": "dashed"},
         "hasSpatialPart": {"color": "darkgreen"},
@@ -193,7 +194,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
           - edges : attribute for individual edges (E)
         If style is None or "default", the default style is used.
         See https://www.graphviz.org/doc/info/attrs.html
-    edgelabels : bool | dict
+    edgelabels : None | bool | dict
         Whether to add labels to the edges of the generated graph.
         It is also possible to provide a dict mapping the
         full labels (with cardinality stripped off for restrictions)
@@ -231,7 +232,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         entities=None,
         relations="isA",
         style=None,
-        edgelabels=True,
+        edgelabels=None,
         addnodes=False,
         addconstructs=False,
         included_namespaces=(),
@@ -315,7 +316,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         self,
         entities=None,
         relations="isA",
-        edgelabels=True,
+        edgelabels=None,
         addnodes=False,
         addconstructs=False,
         nodeattrs=None,
@@ -346,7 +347,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         strict_leafs=False,
         exclude=None,
         relations="isA",
-        edgelabels=True,
+        edgelabels=None,
         addnodes=False,
         addconstructs=False,
         included_namespaces=(),
@@ -471,17 +472,27 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             raise RuntimeError(f'`object` "{obj}" must have been added')
         key = (subject, predicate, obj)
         if key not in self.edges:
+
             if edgelabel is None:
                 edgelabel = self.edgelabels
 
-            if isinstance(edgelabel, str):
+            label = None
+            if edgelabel is None:
+                tokens = predicate.split()
+                if len(tokens) == 2 and tokens[1] in ("some", "only"):
+                    label = tokens[1]
+                elif len(tokens) == 3 and tokens[1] in (
+                    "exactly",
+                    "min",
+                    "max",
+                ):
+                    label = f"{tokens[1]} {tokens[2]}"
+            elif isinstance(edgelabel, str):
                 label = edgelabel
-            if isinstance(edgelabel, dict):
+            elif isinstance(edgelabel, dict):
                 label = edgelabel.get(predicate, predicate)
             elif edgelabel:
                 label = predicate
-            else:
-                label = None
 
             kwargs = self.get_edge_attrs(predicate, attrs=attrs)
             self.dot.edge(subject, obj, label=label, **kwargs)
