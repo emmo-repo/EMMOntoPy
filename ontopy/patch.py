@@ -192,7 +192,6 @@ def keys(self):
     """Return a generator over annotation property names associates
     with this ontology."""
     namespace = self.namespace
-    print("keys")
     for annotation in namespace.annotation_properties():
         if namespace._has_data_triple_spod(
             s=namespace.storid, p=annotation.storid
