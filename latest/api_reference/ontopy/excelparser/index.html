@@ -1228,10 +1228,7 @@ subClassOf, Relations.</p>
     <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">({</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">})</span>
 
     <span class="c1"># Make new ontology</span>
-    <span class="n">world</span> <span class="o">=</span> <span class="n">World</span><span class="p">()</span>
-    <span class="n">onto</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_ontology</span><span class="p">(</span><span class="n">base_iri</span><span class="p">)</span>
-
-    <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span> <span class="o">=</span> <span class="n">get_metadata_from_dataframe</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">onto</span><span class="p">)</span>
+    <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span> <span class="o">=</span> <span class="n">get_metadata_from_dataframe</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">)</span>
 
     <span class="c1"># base_iri from metadata if it exists and base_iri_from_metadata</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">base_iri_from_metadata</span><span class="p">:</span>
@@ -1355,29 +1352,26 @@ subClassOf, Relations.</p>
 
 
 <h2 class="doc doc-heading" id="ontopy.excelparser.get_metadata_from_dataframe">
-<code class="highlight language-python"><span class="n">get_metadata_from_dataframe</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">onto</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">get_metadata_from_dataframe</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.excelparser.get_metadata_from_dataframe" title="Permanent link">&para;</a></h2>
 
     <div class="doc doc-contents ">
 
-      <p>Populate ontology with metada from pd.DataFrame</p>
+      <p>Create ontology with metadata from pd.DataFrame</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/excelparser.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_metadata_from_dataframe</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-branches,too-many-statements</span>
     <span class="n">metadata</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">onto</span><span class="p">:</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Ontology</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">base_iri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">base_iri_from_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">catalog</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Populate ontology with metada from pd.DataFrame</span>
+<span class="sd">    Create ontology with metadata from pd.DataFrame</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">onto</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">onto</span> <span class="o">=</span> <span class="n">get_ontology</span><span class="p">()</span>
 
     <span class="c1"># base_iri from metadata if it exists and base_iri_from_metadata</span>
     <span class="k">if</span> <span class="n">base_iri_from_metadata</span><span class="p">:</span>
@@ -1388,9 +1382,12 @@ subClassOf, Relations.</p>
                     <span class="s2">&quot;More than one Ontology IRI given. The first was chosen.&quot;</span>
                 <span class="p">)</span>
             <span class="n">base_iri</span> <span class="o">=</span> <span class="n">base_iris</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;#&quot;</span>
-            <span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">=</span> <span class="n">base_iri</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
             <span class="k">pass</span>
+
+    <span class="c1"># Make new ontology</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">World</span><span class="p">()</span>
+    <span class="n">onto</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_ontology</span><span class="p">(</span><span class="n">base_iri</span><span class="p">)</span>
 
     <span class="c1"># Get imported ontologies from metadata</span>
     <span class="k">try</span><span class="p">:</span>
