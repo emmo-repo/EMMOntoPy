@@ -43,36 +43,36 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     force: bool = False,
 ) -> Tuple[ontopy.ontology.Ontology, dict]:
     """
-    Creates an ontology from an excelfile.
+    Creates an ontology from an Excel-file.
 
     Arguments:
-        excelpath: path to excel workbook.
-        concept_sheet_name: name of sheet where concepts are defined.
-            The second row of this excelsheet should contain column names
-            that are supported. Currently these are 'prefLabel','altLabel',
+        excelpath: Path to Excel workbook.
+        concept_sheet_name: Name of sheet where concepts are defined.
+            The second row of this sheet should contain column names that are
+            supported. Currently these are 'prefLabel','altLabel',
             'Elucidation', 'Comments', 'Examples', 'subClassOf', 'Relations'.
             Multiple entries are separated with ';'.
-        metadata_sheet_name: name of sheet where metadata are defined.
+        metadata_sheet_name: Name of sheet where metadata are defined.
             The first row contains column names 'Metadata name' and 'Value'
-            Supported 'Metadata names' are 'Ontology IRI',
+            Supported 'Metadata names' are: 'Ontology IRI',
             'Ontology vesion IRI', 'Ontology version Info', 'Title',
-            'Abstract', 'License', 'Comment', 'Author', 'Contributor'
-            Multiple entries are separated with ';'.
-        imports_sheet_name: name of sheet where imported ontologies are
+            'Abstract', 'License', 'Comment', 'Author', 'Contributor'.
+            Multiple entries are separated with a semi-colon (`;`).
+        imports_sheet_name: Name of sheet where imported ontologies are
             defined.
             Column name is 'Imported ontologies'.
-            Full resolvable URL or path to imported ontologies provided one
+            Fully resolvable URL or path to imported ontologies provided one
             per row.
-        base_iri: base_iri of the new ontology
-        base_iri_from_metadata: whether to use base iri defined from metadata
-        imports: list of imported ontologies
-        catalog: imported ontologies with key: name and value: full path.
-        force: forcibly make an ontology by skipping concepts with a prefLabel
+        base_iri: Base IRI of the new ontology.
+        base_iri_from_metadata: Whether to use base IRI defined from metadata.
+        imports: List of imported ontologies.
+        catalog: Imported ontologies with (name, full path) key/value-pairs.
+        force: Forcibly make an ontology by skipping concepts with a prefLabel
             that is erroneously defined.
 
     Returns:
-        owlready2.Ontology: created ontology.
-        catalog: catalog of ontology names and resolvable path as dict.
+        A tuple of the created ontology and the associated catalog of ontology
+        names and resolvable path as dict.
 
 
     """
