@@ -228,7 +228,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         warnings.warn("Elucidation added as comment.")
                     else:
                         raise ExcelError(
-                            f"Not able to add elucidations. " f"{err}."
+                            f"Not able to add elucidations. {err}."
                         ) from err
 
                 # Add examples
