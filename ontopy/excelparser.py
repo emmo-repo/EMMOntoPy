@@ -59,7 +59,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
             'Abstract', 'License', 'Comment', 'Author', 'Contributor'
             Multiple entries are separated with ';'.
         imports_sheet_name: name of sheet where imported ontologies are
-        defined.
+            defined.
             Column name is 'Imported ontologies'.
             Full resolvable URL or path to imported ontologies provided one
             per row.
