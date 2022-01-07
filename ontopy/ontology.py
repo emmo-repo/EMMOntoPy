@@ -297,8 +297,8 @@ class Ontology(  # pylint: disable=too-many-public-methods
                         if entity.namespace == self.namespaces[namespace]:
                             return entity
                 raise NoSuchLabelError(
-                    f'No label annotations matches "{label!r}" in namespace '
-                    f'"{namespace!r}"'
+                    f"No label annotations matches {label!r} in namespace "
+                    f"{namespace!r}"
                 )
             if label in self.namespaces:
                 return self.namespaces[label]
@@ -321,7 +321,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         if entity:
             return entity
 
-        raise NoSuchLabelError(f'No label annotations matches "{label}"')
+        raise NoSuchLabelError(f"No label annotations matches {label!r}")
 
     def get_by_label_all(self, label, label_annotations=None, namespace=None):
         """Like get_by_label(), but returns a list with all matching labels.
