@@ -7,7 +7,7 @@ ontology_template.xlsx
 import argparse
 import sys
 import os
-from ontopy.excelparser import create_ontology_from_excel
+from ontopy.excelparser import create_ontology_from_excel, ExcelError
 from ontopy.utils import write_catalog
 import owlready2  # pylint: disable=C0411
 
@@ -30,12 +30,24 @@ def main():
         default="ontology.ttl",
         help="Name of output ontology, ´ontology.ttl´ is default",
     )
+    parser.add_argument(
+        "--force",
+        "-f",
+        action="store_true",
+        help="Whether to force generation of ontology on non-fatal error.",
+    )
+
     try:
         args = parser.parse_args()
     except SystemExit as exc:
         sys.exit(exc.code)  # Exit without traceback on invalid arguments
 
-    ontology, catalog = create_ontology_from_excel(args.excelpath)
+    try:
+        ontology, catalog = create_ontology_from_excel(
+            args.excelpath, force=args.force
+        )
+    except ExcelError as exc:
+        parser.exit(1, f"ERROR: {exc}\n")
 
     # Save new ontology as turtle
     ontology.save(os.path.join(args.output), format="turtle", overwrite=True)
