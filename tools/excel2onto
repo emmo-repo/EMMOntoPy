@@ -34,7 +34,7 @@ def main():
         "--force",
         "-f",
         action="store_true",
-        help="Whether to force generation of ontology, on non-fatal error.",
+        help="Whether to force generation of ontology on non-fatal error.",
     )
 
     try:

@@ -1,15 +1,19 @@
-from pathlib import Path
+"""Test the Excel parser module."""
+from typing import TYPE_CHECKING
 
 from ontopy import get_ontology
 from ontopy.excelparser import create_ontology_from_excel
 
-# from ontopy.utils import write_catalog
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
-def test_excelparser(repo_dir: Path) -> None:
+def test_excelparser(repo_dir: "Path") -> None:
+    """Basic test for creating an ontology from an Excel file."""
     ontopath = (
         repo_dir / "tests" / "testonto" / "excelparser" / "fromexcelonto.ttl"
     )
+
     onto = get_ontology(str(ontopath)).load()
     xlspath = repo_dir / "tests" / "testonto" / "excelparser" / "onto.xlsx"
     ontology, catalog = create_ontology_from_excel(xlspath, force=True)

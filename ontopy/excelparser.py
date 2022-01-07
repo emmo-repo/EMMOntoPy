@@ -45,7 +45,36 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     """
     Creates an ontology from an excelfile.
 
-    Catalog is dict of imported ontologies with key name and value path.
+    Arguments:
+        excelpath: path to excel workbook.
+        concept_sheet_name: name of sheet where concepts are defined.
+            The second row of this excelsheet should contain column names
+            that are supported. Currently these are 'prefLabel','altLabel',
+            'Elucidation', 'Comments', 'Examples', 'subClassOf', 'Relations'.
+            Multiple entries are separated with ';'.
+        metadata_sheet_name: name of sheet where metadata are defined.
+            The first row contains column names 'Metadata name' and 'Value'
+            Supported 'Metadata names' are 'Ontology IRI',
+            'Ontology vesion IRI', 'Ontology version Info', 'Title',
+            'Abstract', 'License', 'Comment', 'Author', 'Contributor'
+            Multiple entries are separated with ';'.
+        imports_sheet_name: name of sheet where imported ontologies are
+        defined.
+            Column name is 'Imported ontologies'.
+            Full resolvable URL or path to imported ontologies provided one
+            per row.
+        base_iri: base_iri of the new ontology
+        base_iri_from_metadata: whether to use base iri defined from metadata
+        imports: list of imported ontologies
+        catalog: imported ontologies with key: name and value: full path.
+        force: forcibly make an ontology by skipping concepts with a prefLabel
+            that is erroneously defined.
+
+    Returns:
+        owlready2.Ontology: created ontology.
+        catalog: catalog of ontology names and resolvable path as dict.
+
+
     """
     # Get imported ontologies from optional "Imports" sheet
     if not imports:
@@ -88,20 +117,21 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     Create an ontology from a pandas DataFrame.
     """
 
-    # Remove Concepts without prefLabel and make data to string
+    # Remove lines with empty prefLabel
     data = data[data["prefLabel"].notna()]
+    # Convert all data to string, remove spaces, and finally remove
+    # additional rows with empty prefLabel.
     data = data.astype(str)
     data["prefLabel"] = data["prefLabel"].str.strip()
     data = data[data["prefLabel"].str.len() > 0]
     data.reset_index(drop=True, inplace=True)
 
     # Make new ontology
-
     onto, catalog = get_metadata_from_dataframe(
         metadata, base_iri, imports=imports
     )
 
-    # base_iri from metadata if it exists and base_iri_from_metadata
+    # Set given or default base_iri if base_iri_from_metadata is False.
     if not base_iri_from_metadata:
         onto.base_iri = base_iri
 
@@ -120,16 +150,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 name = row["prefLabel"]
                 try:
                     onto.get_by_label(name)
-                except (ValueError, TypeError) as err:
-                    warnings.warn(
-                        f'Ignoring concept "{name}". '
-                        f'The following error was raised: "{err}"'
-                    )
-                    continue
-                except NoSuchLabelError:
-                    pass
-
-                if name in onto:
                     if not force:
                         raise ExcelError(
                             f'Concept "{name}" already in ontology'
@@ -143,6 +163,14 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     # If it should be allowed the index has to be added to
                     # added_rows
                     continue
+                except (ValueError, TypeError) as err:
+                    warnings.warn(
+                        f'Ignoring concept "{name}". '
+                        f'The following error was raised: "{err}"'
+                    )
+                    continue
+                except NoSuchLabelError:
+                    pass
 
                 if pd.isna(row["subClassOf"]):
                     if not force:
