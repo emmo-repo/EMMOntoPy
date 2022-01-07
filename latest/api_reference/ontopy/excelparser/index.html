@@ -813,6 +813,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.excelparser.ExcelError" class="md-nav__link">
+    ExcelError
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.excelparser.create_ontology_from_excel" class="md-nav__link">
     create_ontology_from_excel()
   </a>
@@ -1083,6 +1090,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.excelparser.ExcelError" class="md-nav__link">
+    ExcelError
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.excelparser.create_ontology_from_excel" class="md-nav__link">
     create_ontology_from_excel()
   </a>
@@ -1149,44 +1163,221 @@ subClassOf, Relations.</p>
 
 
 
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 class="doc doc-heading" id="ontopy.excelparser.ExcelError">
+        <code>
+ExcelError            (<a title="ontopy.utils.EMMOntoPyException" href="../utils/#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a>)
+        </code>
+
+
+
+<a class="headerlink" href="#ontopy.excelparser.ExcelError" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Raised on errors in Excel file.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/excelparser.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ExcelError</span><span class="p">(</span><span class="n">EMMOntoPyException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised on errors in Excel file.&quot;&quot;&quot;</span>
+</code></pre></div>
+        </details>
+
+
+    </div>
+
+  </div>
+
+
+
 
   <div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.excelparser.create_ontology_from_excel">
-<code class="highlight language-python"><span class="n">create_ontology_from_excel</span><span class="p">(</span><span class="n">excelpath</span><span class="p">,</span> <span class="n">concept_sheet_name</span><span class="o">=</span><span class="s1">&#39;Concepts&#39;</span><span class="p">,</span> <span class="n">metadata_sheet_name</span><span class="o">=</span><span class="s1">&#39;Metadata&#39;</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo/domain/onto#&#39;</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">create_ontology_from_excel</span><span class="p">(</span><span class="n">excelpath</span><span class="p">,</span> <span class="n">concept_sheet_name</span><span class="o">=</span><span class="s1">&#39;Concepts&#39;</span><span class="p">,</span> <span class="n">metadata_sheet_name</span><span class="o">=</span><span class="s1">&#39;Metadata&#39;</span><span class="p">,</span> <span class="n">imports_sheet_name</span><span class="o">=</span><span class="s1">&#39;ImportedOntologies&#39;</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo/domain/onto#&#39;</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.excelparser.create_ontology_from_excel" title="Permanent link">&para;</a></h2>
 
     <div class="doc doc-contents ">
 
-      <p>Creates an ontology from an excelfile.</p>
-<p>Catalog is dict of imported ontologies with key name and value path.</p>
+      <p>Creates an ontology from an Excel-file.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>excelpath</code></td>
+        <td><code>str</code></td>
+        <td><p>Path to Excel workbook.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>concept_sheet_name</code></td>
+        <td><code>str</code></td>
+        <td><p>Name of sheet where concepts are defined.
+The second row of this sheet should contain column names that are
+supported. Currently these are 'prefLabel','altLabel',
+'Elucidation', 'Comments', 'Examples', 'subClassOf', 'Relations'.
+Multiple entries are separated with ';'.</p></td>
+        <td><code>&#39;Concepts&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>metadata_sheet_name</code></td>
+        <td><code>str</code></td>
+        <td><p>Name of sheet where metadata are defined.
+The first row contains column names 'Metadata name' and 'Value'
+Supported 'Metadata names' are: 'Ontology IRI',
+'Ontology vesion IRI', 'Ontology version Info', 'Title',
+'Abstract', 'License', 'Comment', 'Author', 'Contributor'.
+Multiple entries are separated with a semi-colon (<code>;</code>).</p></td>
+        <td><code>&#39;Metadata&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>imports_sheet_name</code></td>
+        <td><code>str</code></td>
+        <td><p>Name of sheet where imported ontologies are
+defined.
+Column name is 'Imported ontologies'.
+Fully resolvable URL or path to imported ontologies provided one
+per row.</p></td>
+        <td><code>&#39;ImportedOntologies&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>base_iri</code></td>
+        <td><code>str</code></td>
+        <td><p>Base IRI of the new ontology.</p></td>
+        <td><code>&#39;http://emmo.info/emmo/domain/onto#&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>base_iri_from_metadata</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to use base IRI defined from metadata.</p></td>
+        <td><code>True</code></td>
+      </tr>
+      <tr>
+        <td><code>imports</code></td>
+        <td><code>list</code></td>
+        <td><p>List of imported ontologies.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>catalog</code></td>
+        <td><code>dict</code></td>
+        <td><p>Imported ontologies with (name, full path) key/value-pairs.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>force</code></td>
+        <td><code>bool</code></td>
+        <td><p>Forcibly make an ontology by skipping concepts with a prefLabel
+that is erroneously defined.</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Tuple[ontopy.ontology.Ontology, dict]</code></td>
+      <td><p>A tuple of the created ontology and the associated catalog of ontology
+names and resolvable path as dict.</p></td>
+    </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>ontopy/excelparser.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_ontology_from_excel</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments</span>
     <span class="n">excelpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">concept_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Concepts&quot;</span><span class="p">,</span>
     <span class="n">metadata_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Metadata&quot;</span><span class="p">,</span>
+    <span class="n">imports_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ImportedOntologies&quot;</span><span class="p">,</span>
     <span class="n">base_iri</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://emmo.info/emmo/domain/onto#&quot;</span><span class="p">,</span>
     <span class="n">base_iri_from_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">imports</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">catalog</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates an ontology from an excelfile.</span>
+<span class="sd">    Creates an ontology from an Excel-file.</span>
 
-<span class="sd">    Catalog is dict of imported ontologies with key name and value path.</span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        excelpath: Path to Excel workbook.</span>
+<span class="sd">        concept_sheet_name: Name of sheet where concepts are defined.</span>
+<span class="sd">            The second row of this sheet should contain column names that are</span>
+<span class="sd">            supported. Currently these are &#39;prefLabel&#39;,&#39;altLabel&#39;,</span>
+<span class="sd">            &#39;Elucidation&#39;, &#39;Comments&#39;, &#39;Examples&#39;, &#39;subClassOf&#39;, &#39;Relations&#39;.</span>
+<span class="sd">            Multiple entries are separated with &#39;;&#39;.</span>
+<span class="sd">        metadata_sheet_name: Name of sheet where metadata are defined.</span>
+<span class="sd">            The first row contains column names &#39;Metadata name&#39; and &#39;Value&#39;</span>
+<span class="sd">            Supported &#39;Metadata names&#39; are: &#39;Ontology IRI&#39;,</span>
+<span class="sd">            &#39;Ontology vesion IRI&#39;, &#39;Ontology version Info&#39;, &#39;Title&#39;,</span>
+<span class="sd">            &#39;Abstract&#39;, &#39;License&#39;, &#39;Comment&#39;, &#39;Author&#39;, &#39;Contributor&#39;.</span>
+<span class="sd">            Multiple entries are separated with a semi-colon (`;`).</span>
+<span class="sd">        imports_sheet_name: Name of sheet where imported ontologies are</span>
+<span class="sd">            defined.</span>
+<span class="sd">            Column name is &#39;Imported ontologies&#39;.</span>
+<span class="sd">            Fully resolvable URL or path to imported ontologies provided one</span>
+<span class="sd">            per row.</span>
+<span class="sd">        base_iri: Base IRI of the new ontology.</span>
+<span class="sd">        base_iri_from_metadata: Whether to use base IRI defined from metadata.</span>
+<span class="sd">        imports: List of imported ontologies.</span>
+<span class="sd">        catalog: Imported ontologies with (name, full path) key/value-pairs.</span>
+<span class="sd">        force: Forcibly make an ontology by skipping concepts with a prefLabel</span>
+<span class="sd">            that is erroneously defined.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple of the created ontology and the associated catalog of ontology</span>
+<span class="sd">        names and resolvable path as dict.</span>
+
+
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get imported ontologies from optional &quot;Imports&quot; sheet</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">imports</span><span class="p">:</span>
+        <span class="n">imports</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">imports_frame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
+            <span class="n">excelpath</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">imports_sheet_name</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">imports</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">imports_frame</span><span class="p">[</span><span class="s2">&quot;Imported ontologies&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+
     <span class="c1"># Read datafile TODO: Some magic to identify the header row</span>
     <span class="n">conceptdata</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
         <span class="n">excelpath</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">concept_sheet_name</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
     <span class="p">)</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">excelpath</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">metadata_sheet_name</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">create_ontology_from_pandas</span><span class="p">(</span>
-        <span class="n">conceptdata</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="p">,</span> <span class="n">catalog</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">conceptdata</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+        <span class="n">imports</span><span class="o">=</span><span class="n">imports</span><span class="p">,</span>
+        <span class="n">base_iri</span><span class="o">=</span><span class="n">base_iri</span><span class="p">,</span>
+        <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="n">base_iri_from_metadata</span><span class="p">,</span>
+        <span class="n">catalog</span><span class="o">=</span><span class="n">catalog</span><span class="p">,</span>
+        <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre></div>
         </details>
@@ -1201,7 +1392,7 @@ subClassOf, Relations.</p>
 
 
 <h2 class="doc doc-heading" id="ontopy.excelparser.create_ontology_from_pandas">
-<code class="highlight language-python"><span class="n">create_ontology_from_pandas</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo/domain/onto#&#39;</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">create_ontology_from_pandas</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">imports</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo/domain/onto#&#39;</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.excelparser.create_ontology_from_pandas" title="Permanent link">&para;</a></h2>
@@ -1212,99 +1403,207 @@ subClassOf, Relations.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/excelparser.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_ontology_from_pandas</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-branches,too-many-statements</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_ontology_from_pandas</span><span class="p">(</span>  <span class="c1"># pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">metadata</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">imports</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
     <span class="n">base_iri</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://emmo.info/emmo/domain/onto#&quot;</span><span class="p">,</span>
     <span class="n">base_iri_from_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">catalog</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create an ontology from a pandas DataFrame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># Remove Concepts without prefLabel and make all to string</span>
+    <span class="c1"># Remove lines with empty prefLabel</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()]</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">({</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">})</span>
+    <span class="c1"># Convert all data to string, remove spaces, and finally remove</span>
+    <span class="c1"># additional rows with empty prefLabel.</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Make new ontology</span>
-    <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span> <span class="o">=</span> <span class="n">get_metadata_from_dataframe</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">)</span>
+    <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span> <span class="o">=</span> <span class="n">get_metadata_from_dataframe</span><span class="p">(</span>
+        <span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">imports</span>
+    <span class="p">)</span>
 
-    <span class="c1"># base_iri from metadata if it exists and base_iri_from_metadata</span>
+    <span class="c1"># Set given or default base_iri if base_iri_from_metadata is False.</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">base_iri_from_metadata</span><span class="p">:</span>
         <span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">=</span> <span class="n">base_iri</span>
 
+    <span class="n">labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">altlabel</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;altLabel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">altlabel</span> <span class="o">==</span> <span class="s2">&quot;nan&quot;</span><span class="p">:</span>
+            <span class="n">labels</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">altlabel</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">))</span>
+
     <span class="n">onto</span><span class="o">.</span><span class="n">sync_python_names</span><span class="p">()</span>
     <span class="k">with</span> <span class="n">onto</span><span class="p">:</span>
-        <span class="c1"># loop through the rows until no more are added</span>
-        <span class="n">new_loop</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">final_loop</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">while</span> <span class="n">new_loop</span><span class="p">:</span>
-            <span class="n">number_of_added_classes</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">remaining_rows</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
+        <span class="k">while</span> <span class="n">remaining_rows</span><span class="p">:</span>
+            <span class="n">added_rows</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">remaining_rows</span><span class="p">:</span>
+                <span class="n">row</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
                 <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">]</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
-                        <span class="n">onto</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span>
-                    <span class="p">):</span>
-                        <span class="k">continue</span>
+                    <span class="n">onto</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s1">&#39;Concept &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; already in ontology&#39;</span>
+                        <span class="p">)</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s1">&#39;Ignoring concept &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; since it is already in &#39;</span>
+                        <span class="s2">&quot;the ontology.&quot;</span>
+                    <span class="p">)</span>
+                    <span class="c1"># What to do if we want to add info to this concept?</span>
+                    <span class="c1"># Should that be not allowed?</span>
+                    <span class="c1"># If it should be allowed the index has to be added to</span>
+                    <span class="c1"># added_rows</span>
+                    <span class="k">continue</span>
+                <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s1">&#39;Ignoring concept &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;. &#39;</span>
+                        <span class="sa">f</span><span class="s1">&#39;The following error was raised: &quot;</span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
+                    <span class="p">)</span>
+                    <span class="k">continue</span>
                 <span class="k">except</span> <span class="n">NoSuchLabelError</span><span class="p">:</span>
                     <span class="k">pass</span>
 
-                <span class="n">parent_names</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;subClassOf&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;subClassOf&quot;</span><span class="p">]):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> has no subClassOf&quot;</span><span class="p">)</span>
+                    <span class="n">parent_names</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Should be &quot;owl:Thing&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">parent_names</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;subClassOf&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
 
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">parents</span> <span class="o">=</span> <span class="p">[</span><span class="n">onto</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">pn</span><span class="p">)</span> <span class="k">for</span> <span class="n">pn</span> <span class="ow">in</span> <span class="n">parent_names</span><span class="p">]</span>
-                <span class="k">except</span> <span class="n">NoSuchLabelError</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">final_loop</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-                        <span class="n">parents</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Thing</span>
-
-                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                            <span class="s2">&quot;Missing at least one of the defined parents. &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;Concept: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">; Defined parents: </span><span class="si">{</span><span class="n">parent_names</span><span class="si">}</span><span class="s2">&quot;</span>
-                        <span class="p">)</span>
-                        <span class="n">new_loop</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">parents</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">invalid_parent</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">parent_name</span> <span class="ow">in</span> <span class="n">parent_names</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">parent</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">parent_name</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                    <span class="k">except</span> <span class="p">(</span><span class="n">NoSuchLabelError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">parent_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">force</span><span class="p">:</span>
+                                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                                    <span class="sa">f</span><span class="s1">&#39;Invalid parents for &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;: &#39;</span>
+                                    <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">parent_name</span><span class="si">}</span><span class="s1">&quot;.&#39;</span>
+                                <span class="p">)</span>
+                                <span class="k">break</span>
+                            <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s1">&#39;Invalid parents for &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
+                                <span class="s2">&quot;Have you forgotten an imported ontology?&quot;</span>
+                            <span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
+                        <span class="n">invalid_parent</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="k">continue</span>
+                        <span class="n">parents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">invalid_parent</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">parents</span><span class="p">:</span>
+                    <span class="n">parents</span> <span class="o">=</span> <span class="p">[</span><span class="n">owlready2</span><span class="o">.</span><span class="n">Thing</span><span class="p">]</span>
 
                 <span class="n">concept</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+                <span class="n">added_rows</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
                 <span class="c1"># Add elucidation</span>
-                <span class="n">_add_literal</span><span class="p">(</span>
-                    <span class="n">row</span><span class="p">,</span> <span class="n">concept</span><span class="o">.</span><span class="n">elucidation</span><span class="p">,</span> <span class="s2">&quot;Elucidation&quot;</span><span class="p">,</span> <span class="n">only_one</span><span class="o">=</span><span class="kc">True</span>
-                <span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">_add_literal</span><span class="p">(</span>
+                        <span class="n">row</span><span class="p">,</span>
+                        <span class="n">concept</span><span class="o">.</span><span class="n">elucidation</span><span class="p">,</span>
+                        <span class="s2">&quot;Elucidation&quot;</span><span class="p">,</span>
+                        <span class="n">only_one</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">force</span><span class="p">:</span>
+                        <span class="n">_add_literal</span><span class="p">(</span>
+                            <span class="n">row</span><span class="p">,</span>
+                            <span class="n">concept</span><span class="o">.</span><span class="n">comment</span><span class="p">,</span>
+                            <span class="s2">&quot;Elucidation&quot;</span><span class="p">,</span>
+                            <span class="n">only_one</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Elucidation added as comment.&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Not able to add elucidations. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">.&quot;</span>
+                        <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
 
                 <span class="c1"># Add examples</span>
-                <span class="n">_add_literal</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">concept</span><span class="o">.</span><span class="n">example</span><span class="p">,</span> <span class="s2">&quot;Examples&quot;</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">_add_literal</span><span class="p">(</span>
+                        <span class="n">row</span><span class="p">,</span> <span class="n">concept</span><span class="o">.</span><span class="n">example</span><span class="p">,</span> <span class="s2">&quot;Examples&quot;</span><span class="p">,</span> <span class="n">expected</span><span class="o">=</span><span class="kc">False</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">force</span><span class="p">:</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                            <span class="s2">&quot;Not able to add examples. &quot;</span>
+                            <span class="s2">&quot;Did you forget to import an ontology?.&quot;</span>
+                        <span class="p">)</span>
 
                 <span class="c1"># Add comments</span>
-                <span class="n">_add_literal</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">concept</span><span class="o">.</span><span class="n">comment</span><span class="p">,</span> <span class="s2">&quot;Comments&quot;</span><span class="p">)</span>
+                <span class="n">_add_literal</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">concept</span><span class="o">.</span><span class="n">comment</span><span class="p">,</span> <span class="s2">&quot;Comments&quot;</span><span class="p">,</span> <span class="n">expected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-                <span class="c1"># Add altLAbels</span>
-                <span class="n">_add_literal</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">concept</span><span class="o">.</span><span class="n">altLabel</span><span class="p">,</span> <span class="s2">&quot;altLabel&quot;</span><span class="p">)</span>
+                <span class="c1"># Add altLabels</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">_add_literal</span><span class="p">(</span>
+                        <span class="n">row</span><span class="p">,</span> <span class="n">concept</span><span class="o">.</span><span class="n">altLabel</span><span class="p">,</span> <span class="s2">&quot;altLabel&quot;</span><span class="p">,</span> <span class="n">expected</span><span class="o">=</span><span class="kc">False</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">force</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                        <span class="n">_add_literal</span><span class="p">(</span>
+                            <span class="n">row</span><span class="p">,</span>
+                            <span class="n">concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span>
+                            <span class="s2">&quot;altLabel&quot;</span><span class="p">,</span>
+                            <span class="n">expected</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;altLabel added as rdfs.label.&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Not able to add altLabels. &quot;</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">.&quot;</span>
+                        <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
 
-                <span class="n">number_of_added_classes</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">remaining_rows</span><span class="o">.</span><span class="n">difference_update</span><span class="p">(</span><span class="n">added_rows</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">number_of_added_classes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">final_loop</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># Detect infinite loop...</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">added_rows</span> <span class="ow">and</span> <span class="n">remaining_rows</span><span class="p">:</span>
+                <span class="n">unadded</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">prefLabel</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">remaining_rows</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">force</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Not able to add the following concepts: </span><span class="si">{</span><span class="n">unadded</span><span class="si">}</span><span class="s2">.&quot;</span>
+                        <span class="s2">&quot; Will continue without these.&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">remaining_rows</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Not able to add the following concepts: </span><span class="si">{</span><span class="n">unadded</span><span class="si">}</span><span class="s2">.&quot;</span>
+                    <span class="p">)</span>
 
     <span class="c1"># Add properties in a second loop</span>
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">added_rows</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
         <span class="n">properties</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Relations&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">concept</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">])</span>
+                <span class="n">concept</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
             <span class="k">except</span> <span class="n">NoSuchLabelError</span><span class="p">:</span>
                 <span class="k">pass</span>
             <span class="n">props</span> <span class="o">=</span> <span class="n">properties</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">props</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">concept</span><span class="o">.</span><span class="n">is_a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">evaluate</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">prop</span><span class="p">))</span>
-                <span class="k">except</span> <span class="n">pyparsing</span><span class="o">.</span><span class="n">ParseException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">except</span> <span class="n">pyparsing</span><span class="o">.</span><span class="n">ParseException</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;Error in Property assignment for: </span><span class="si">{</span><span class="n">concept</span><span class="si">}</span><span class="s2">. &quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;Property to be Evaluated: </span><span class="si">{</span><span class="n">prop</span><span class="si">}</span><span class="s2">. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;Error is </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">.&quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;Error is </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">.&quot;</span>
                     <span class="p">)</span>
+                <span class="k">except</span> <span class="n">NoSuchLabelError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">force</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
 
     <span class="c1"># Synchronise Python attributes to ontology</span>
     <span class="n">onto</span><span class="o">.</span><span class="n">sync_attributes</span><span class="p">(</span>
@@ -1352,7 +1651,7 @@ subClassOf, Relations.</p>
 
 
 <h2 class="doc doc-heading" id="ontopy.excelparser.get_metadata_from_dataframe">
-<code class="highlight language-python"><span class="n">get_metadata_from_dataframe</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">get_metadata_from_dataframe</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="p">(),</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.excelparser.get_metadata_from_dataframe" title="Permanent link">&para;</a></h2>
@@ -1367,11 +1666,10 @@ subClassOf, Relations.</p>
     <span class="n">metadata</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">base_iri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">base_iri_from_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">imports</span><span class="p">:</span> <span class="n">Sequence</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">catalog</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create ontology with metadata from pd.DataFrame</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Create ontology with metadata from pd.DataFrame&quot;&quot;&quot;</span>
 
     <span class="c1"># base_iri from metadata if it exists and base_iri_from_metadata</span>
     <span class="k">if</span> <span class="n">base_iri_from_metadata</span><span class="p">:</span>
@@ -1382,54 +1680,73 @@ subClassOf, Relations.</p>
                     <span class="s2">&quot;More than one Ontology IRI given. The first was chosen.&quot;</span>
                 <span class="p">)</span>
             <span class="n">base_iri</span> <span class="o">=</span> <span class="n">base_iris</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;#&quot;</span>
-        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
             <span class="k">pass</span>
 
-    <span class="c1"># Make new ontology</span>
-    <span class="n">world</span> <span class="o">=</span> <span class="n">World</span><span class="p">()</span>
-    <span class="n">onto</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_ontology</span><span class="p">(</span><span class="n">base_iri</span><span class="p">)</span>
+    <span class="c1"># Create new ontology</span>
+    <span class="n">onto</span> <span class="o">=</span> <span class="n">get_ontology</span><span class="p">(</span><span class="n">base_iri</span><span class="p">)</span>
 
-    <span class="c1"># Get imported ontologies from metadata</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">imported_ontology_paths</span> <span class="o">=</span> <span class="n">_parse_literal</span><span class="p">(</span>
-            <span class="n">metadata</span><span class="p">,</span>
-            <span class="s2">&quot;Imported ontologies&quot;</span><span class="p">,</span>
-            <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
-        <span class="n">imported_ontology_paths</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># Add imported ontologies</span>
     <span class="n">catalog</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">catalog</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">catalog</span>
-    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">imported_ontology_paths</span><span class="p">:</span>
-        <span class="n">imported</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">get_ontology</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-        <span class="n">onto</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">imported</span><span class="p">)</span>
-        <span class="n">catalog</span><span class="p">[</span><span class="n">imported</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">path</span>
+    <span class="n">locations</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">location</span> <span class="ow">in</span> <span class="n">imports</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">location</span><span class="p">)</span> <span class="ow">and</span> <span class="n">location</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">locations</span><span class="p">:</span>
+            <span class="n">imported</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">get_ontology</span><span class="p">(</span><span class="n">location</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">imported</span><span class="p">)</span>
+            <span class="n">catalog</span><span class="p">[</span><span class="n">imported</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">location</span>
+            <span class="n">locations</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
 
     <span class="k">with</span> <span class="n">onto</span><span class="p">:</span>
         <span class="c1"># Add title</span>
-        <span class="n">_add_literal</span><span class="p">(</span>
-            <span class="n">metadata</span><span class="p">,</span> <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s2">&quot;Title&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">only_one</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_add_literal</span><span class="p">(</span>
+                <span class="n">metadata</span><span class="p">,</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+                <span class="s2">&quot;Title&quot;</span><span class="p">,</span>
+                <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">only_one</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">pass</span>
 
         <span class="c1"># Add license</span>
-        <span class="n">_add_literal</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">license</span><span class="p">,</span> <span class="s2">&quot;License&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_add_literal</span><span class="p">(</span>
+                <span class="n">metadata</span><span class="p">,</span> <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">license</span><span class="p">,</span> <span class="s2">&quot;License&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">pass</span>
 
-        <span class="c1"># Add authors onto.metadata.author does not work!</span>
-        <span class="n">_add_literal</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">creator</span><span class="p">,</span> <span class="s2">&quot;Author&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Add authors/creators</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_add_literal</span><span class="p">(</span>
+                <span class="n">metadata</span><span class="p">,</span> <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">creator</span><span class="p">,</span> <span class="s2">&quot;Author&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">pass</span>
 
         <span class="c1"># Add contributors</span>
-        <span class="n">_add_literal</span><span class="p">(</span>
-            <span class="n">metadata</span><span class="p">,</span> <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">contributor</span><span class="p">,</span> <span class="s2">&quot;Contributor&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_add_literal</span><span class="p">(</span>
+                <span class="n">metadata</span><span class="p">,</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">contributor</span><span class="p">,</span>
+                <span class="s2">&quot;Contributor&quot;</span><span class="p">,</span>
+                <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">pass</span>
 
         <span class="c1"># Add versionInfo</span>
-        <span class="n">_add_literal</span><span class="p">(</span>
-            <span class="n">metadata</span><span class="p">,</span>
-            <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">versionInfo</span><span class="p">,</span>
-            <span class="s2">&quot;Ontology version Info&quot;</span><span class="p">,</span>
-            <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">only_one</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_add_literal</span><span class="p">(</span>
+                <span class="n">metadata</span><span class="p">,</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">versionInfo</span><span class="p">,</span>
+                <span class="s2">&quot;Ontology version Info&quot;</span><span class="p">,</span>
+                <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">only_one</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">pass</span>
 
     <span class="k">return</span> <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span>
 </code></pre></div>
