@@ -45,7 +45,7 @@ from ontopy.utils import (
     ThingClassDefinitionError,
 )
 
-# from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
+from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
 
 
 # Default annotations to look up
@@ -149,7 +149,7 @@ class World(owlready2.World):
 
 
 class Ontology(  # pylint: disable=too-many-public-methods
-    owlready2.Ontology,  # OntoGraph
+    owlready2.Ontology, OntoGraph
 ):
     """A generic class extending owlready2.Ontology."""
 
