@@ -3016,8 +3016,16 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>,
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_version_iri</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2002/07/owl#versionIRI&quot;</span>
         <span class="n">version_iri_storid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">_version_iri</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_obj_triple_spo</span><span class="p">(</span>
-            <span class="n">subject</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="n">version_iri_storid</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_obj_triple_spo</span><span class="p">(</span>  <span class="c1"># pylint: disable=unexpected-keyword-arg</span>
+            <span class="c1"># For some reason _has_obj_triples_spo exists in both</span>
+            <span class="c1"># owlready2.namespace.Namespace (with arguments subject/predicate)</span>
+            <span class="c1"># and in owlready2.triplelite._GraphManager (with arguments s/p)</span>
+            <span class="c1"># owlready2.Ontology inherits from Namespace directly</span>
+            <span class="c1"># and pylint checks that.</span>
+            <span class="c1"># It actually accesses the one in triplelite.</span>
+            <span class="c1"># subject=self.storid, predicate=version_iri_storid</span>
+            <span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">version_iri_storid</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_del_obj_triple_spo</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">version_iri_storid</span><span class="p">)</span>
 
@@ -4893,8 +4901,16 @@ IRI will be the combination of <code>base_iri</code> and <code>version</code>.</
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_version_iri</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2002/07/owl#versionIRI&quot;</span>
     <span class="n">version_iri_storid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">_version_iri</span><span class="p">)</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_obj_triple_spo</span><span class="p">(</span>
-        <span class="n">subject</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="n">version_iri_storid</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_obj_triple_spo</span><span class="p">(</span>  <span class="c1"># pylint: disable=unexpected-keyword-arg</span>
+        <span class="c1"># For some reason _has_obj_triples_spo exists in both</span>
+        <span class="c1"># owlready2.namespace.Namespace (with arguments subject/predicate)</span>
+        <span class="c1"># and in owlready2.triplelite._GraphManager (with arguments s/p)</span>
+        <span class="c1"># owlready2.Ontology inherits from Namespace directly</span>
+        <span class="c1"># and pylint checks that.</span>
+        <span class="c1"># It actually accesses the one in triplelite.</span>
+        <span class="c1"># subject=self.storid, predicate=version_iri_storid</span>
+        <span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span>
+        <span class="n">p</span><span class="o">=</span><span class="n">version_iri_storid</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_del_obj_triple_spo</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">version_iri_storid</span><span class="p">)</span>
 
