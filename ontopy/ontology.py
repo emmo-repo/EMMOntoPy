@@ -44,6 +44,7 @@ from ontopy.utils import (
     LabelDefinitionError,
     ThingClassDefinitionError,
 )
+
 from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
 
 
@@ -1135,8 +1136,16 @@ class Ontology(  # pylint: disable=too-many-public-methods
         """
         _version_iri = "http://www.w3.org/2002/07/owl#versionIRI"
         version_iri_storid = self.world._abbreviate(_version_iri)
-        if self._has_obj_triple_spo(
-            subject=self.storid, predicate=version_iri_storid
+        if self._has_obj_triple_spo(  # pylint: disable=unexpected-keyword-arg
+            # For some reason _has_obj_triples_spo exists in both
+            # owlready2.namespace.Namespace (with arguments subject/predicate)
+            # and in owlready2.triplelite._GraphManager (with arguments s/p)
+            # owlready2.Ontology inherits from Namespace directly
+            # and pylint checks that.
+            # It actually accesses the one in triplelite.
+            # subject=self.storid, predicate=version_iri_storid
+            s=self.storid,
+            p=version_iri_storid,
         ):
             self._del_obj_triple_spo(s=self.storid, p=version_iri_storid)
 
