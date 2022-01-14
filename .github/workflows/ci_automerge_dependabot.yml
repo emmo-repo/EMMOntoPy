@@ -13,7 +13,7 @@ jobs:
     env:
       DEPENDABOT_BRANCH: ci/dependabot-updates
       GIT_USER_NAME: EMMOntoPy Developers
-      GIT_USER_EMAIL: "EMMOntoPy@emmo.info"
+      GIT_USER_EMAIL: "Team4.0@SINTEF.onmicrosoft.com"
 
     steps:
     - name: Checkout repository
@@ -27,4 +27,4 @@ jobs:
         PR_ID="$(gh api graphql -F owner='{owner}' -F name='{repo}' -f query='query($owner: String!, $name: String!) {repository(owner: $owner, name: $name) {pullRequest(number: ${{ github.event.pull_request.number }}) {id}}}' --jq '.data.repository.pullRequest.id')"
         gh api graphql -f pr_id="$PR_ID" -f query='mutation($pr_id: String!) {enablePullRequestAutoMerge(input:{mergeMethod:SQUASH,pullRequestId:$pr_id }) {pullRequest {number}}}'
       env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_FLB }}
+        GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}

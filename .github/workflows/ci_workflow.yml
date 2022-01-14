@@ -237,7 +237,7 @@ jobs:
     - name: Set up git user
       run: |
         git config --global user.name "EMMOntoPy Developers"
-        git config --global user.email "EMMOntoPy@emmo.info"
+        git config --global user.email "Team4.0@SINTEF.onmicrosoft.com"
 
     - name: Check API Reference and landing page
       run: |

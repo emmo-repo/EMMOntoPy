@@ -7,7 +7,7 @@ on:
 env:
   DEPENDABOT_BRANCH: ci/dependabot-updates
   GIT_USER_NAME: EMMOntoPy Developers
-  GIT_USER_EMAIL: "EMMOntoPy@emmo.info"
+  GIT_USER_EMAIL: "Team4.0@SINTEF.onmicrosoft.com"
   DEFAULT_REPO_BRANCH: master
 
 jobs:
@@ -52,7 +52,7 @@ jobs:
     - name: Push to '${{ env.DEPENDABOT_BRANCH }}'
       uses: CasperWA/push-protected@v2
       with:
-        token: ${{ secrets.RELEASE_TOKEN_FLB }}
+        token: ${{ secrets.RELEASE_PAT }}
         branch: ${{ env.DEPENDABOT_BRANCH }}
         sleep: 15
         force: ${{ env.FORCE_PUSH }}
