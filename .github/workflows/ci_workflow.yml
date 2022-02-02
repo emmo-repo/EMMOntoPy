@@ -69,8 +69,10 @@ jobs:
     - name: Run PyLint
       run: pylint --rcfile=pyproject.toml *.py tools
 
+    # Ignore ID 44715 for now.
+    # See this NumPy issue for more information: https://github.com/numpy/numpy/issues/19038
     - name: Run safety
-      run: pip freeze | safety check --stdin
+      run: pip freeze | safety check --stdin --ignore 44715
 
 
   tests:
