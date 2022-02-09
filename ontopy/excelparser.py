@@ -314,7 +314,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     else:
                         warnings.warn(msg)
                         raise ExcelError(exc) from exc
-    
+
     # Synchronise Python attributes to ontology
     onto.sync_attributes(
         name_policy="uuid", name_prefix="EMMO_", class_docstring="elucidation"
