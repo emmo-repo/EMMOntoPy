@@ -305,13 +305,13 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     )
                 except NoSuchLabelError as exc:
                     if force is True:
-                        pass
+                        warnings.warn(msg)
                     else:
                         warnings.warn(
                         f"Error in Property assignment for: {concept}. "
                         f"Property to be Evaluated: {prop}. "
                         f"Error is {exc}.")
-                        raise ExcelError(exc) from exc
+                        raise ExcelError(msg) from exc
     
     # Synchronise Python attributes to ontology
     onto.sync_attributes(
