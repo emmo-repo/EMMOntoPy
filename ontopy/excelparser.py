@@ -305,7 +305,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     )
                 except NoSuchLabelError as exc:
                     if force is True:
-                        pass
+                        warnings.warn(msg)
                     else:
                         warnings.warn(
                             f"Error in Property assignment for: {concept}. "
