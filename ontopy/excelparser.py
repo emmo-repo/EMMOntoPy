@@ -308,9 +308,10 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         pass
                     else:
                         warnings.warn(
-                        f"Error in Property assignment for: {concept}. "
-                        f"Property to be Evaluated: {prop}. "
-                        f"Error is {exc}.")
+                            f"Error in Property assignment for: {concept}. "
+                            f"Property to be Evaluated: {prop}. "
+                            f"Error is {exc}."
+                        )
                         raise ExcelError(exc) from exc
     
     # Synchronise Python attributes to ontology
