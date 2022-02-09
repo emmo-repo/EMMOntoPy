@@ -282,7 +282,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     )
 
     # Add properties in a second loop
-    
+
     for index in added_rows:
         row = data.loc[index]
         properties = row["Relations"]
@@ -304,14 +304,15 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         f"Error is {exc}."
                     )
                 except NoSuchLabelError as exc:
+                    msg = (
+                        f"Error in Property assignment for: {concept}. "
+                        f"Property to be Evaluated: {prop}. "
+                        f"Error is {exc}."
+                    )
                     if force is True:
                         warnings.warn(msg)
                     else:
-                        warnings.warn(
-                            f"Error in Property assignment for: {concept}. "
-                            f"Property to be Evaluated: {prop}. "
-                            f"Error is {exc}."
-                        )
+                        warnings.warn(msg)
                         raise ExcelError(exc) from exc
     
     # Synchronise Python attributes to ontology
