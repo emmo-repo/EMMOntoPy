@@ -9,6 +9,7 @@ import tempfile
 import types
 from typing import TYPE_CHECKING
 import urllib.request
+import urllib.parse
 import warnings
 import defusedxml.ElementTree as ET
 
@@ -220,12 +221,14 @@ class ReadCatalogError(IOError):
     """Error reading catalog file."""
 
 
-def read_catalog(  # pylint: disable=too-many-locals,too-many-statements
+def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-many-arguments
     uri,
     catalog_file="catalog-v001.xml",
     baseuri=None,
     recursive=False,
     return_paths=False,
+    visited_iris=None,
+    visited_paths=None,
 ):
     """Reads a Protègè catalog file and returns as a dict.
 
@@ -249,10 +252,19 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements
     If `return_paths` is true, a set of directory paths to source
     files is returned in addition to the default dict.
 
+    The `visited_uris` and `visited_paths` arguments are only intended for
+    internal use to avoid infinite recursions.
+
     A ReadCatalogError is raised if the catalog file cannot be found.
     """
     # Protocols supported by urllib.request
     web_protocols = "http://", "https://", "ftp://"
+
+    iris = visited_iris if visited_iris else {}
+    dirs = visited_paths if visited_paths else set()
+    if uri in iris:
+        return (iris, dirs) if return_paths else iris
+
     if uri.startswith(web_protocols):
         # Call read_catalog() recursively to ensure that the temporary
         # file is properly cleaned up
@@ -282,6 +294,8 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements
                         baseuri=baseuri if baseuri else base,
                         recursive=recursive,
                         return_paths=return_paths,
+                        visited_iris=iris,
+                        visited_paths=dirs,
                     )
             raise ReadCatalogError(
                 "Cannot download catalog from URLs: " + ", ".join(uris)
@@ -335,9 +349,8 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements
             if baseuri and baseuri.startswith(web_protocols):
                 url = f"{baseuri}/{uri_as_str}"
             else:
-                url = os.path.normpath(
-                    os.path.join(baseuri if baseuri else dirname, uri_as_str)
-                )
+                url = os.path.join(baseuri if baseuri else dirname, uri_as_str)
+        url = normalise_url(url)
 
         iris.setdefault(uri.attrib["name"], url)
         if recursive:
@@ -351,14 +364,14 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements
                         baseuri=None,
                         recursive=recursive,
                         return_paths=True,
+                        visited_iris=iris,
+                        visited_paths=dirs,
                     )
                     iris.update(iris_)
                     dirs.update(dirs_)
                 else:
                     load_catalog(catalog)
 
-    iris = {}
-    dirs = set()
     load_catalog(filepath)
     if return_paths:
         return iris, dirs
@@ -672,3 +685,11 @@ def annotate_with_ontology(onto, imported=True):
             setattr(entity, "ontology_name", onto.name)
         if onto.base_iri not in getattr(entity, "ontology_iri"):
             setattr(entity, "ontology_iri", onto.base_iri)
+
+
+def normalise_url(url):
+    """Returns `url` in a normalised form."""
+    splitted = urllib.parse.urlsplit(url)
+    components = list(splitted)
+    components[2] = os.path.normpath(splitted.path)
+    return urllib.parse.urlunsplit(components)
