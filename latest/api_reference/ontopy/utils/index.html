@@ -1031,6 +1031,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.utils.normalise_url" class="md-nav__link">
+    normalise_url()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.utils.read_catalog" class="md-nav__link">
     read_catalog()
   </a>
@@ -1282,6 +1289,13 @@
         <li class="md-nav__item">
   <a href="#ontopy.utils.isinteractive" class="md-nav__link">
     isinteractive()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.normalise_url" class="md-nav__link">
+    normalise_url()
   </a>
   
 </li>
@@ -2141,8 +2155,38 @@ false otherwise.</p>
 
 
 
+<h2 class="doc doc-heading" id="ontopy.utils.normalise_url">
+<code class="highlight language-python"><span class="n">normalise_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#ontopy.utils.normalise_url" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns <code>url</code> in a normalised form.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">normalise_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns `url` in a normalised form.&quot;&quot;&quot;</span>
+    <span class="n">splitted</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlsplit</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">components</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">splitted</span><span class="p">)</span>
+    <span class="n">components</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">splitted</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlunsplit</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h2 class="doc doc-heading" id="ontopy.utils.read_catalog">
-<code class="highlight language-python"><span class="n">read_catalog</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_paths</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">read_catalog</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_paths</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visited_iris</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visited_paths</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.utils.read_catalog" title="Permanent link">&para;</a></h2>
@@ -2164,16 +2208,20 @@ component omitted.</p>
 <p>If <code>recursive</code> is true, catalog files in sub-folders are also read.</p>
 <p>If <code>return_paths</code> is true, a set of directory paths to source
 files is returned in addition to the default dict.</p>
+<p>The <code>visited_uris</code> and <code>visited_paths</code> arguments are only intended for
+internal use to avoid infinite recursions.</p>
 <p>A ReadCatalogError is raised if the catalog file cannot be found.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">read_catalog</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-statements</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">read_catalog</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-statements,too-many-arguments</span>
     <span class="n">uri</span><span class="p">,</span>
     <span class="n">catalog_file</span><span class="o">=</span><span class="s2">&quot;catalog-v001.xml&quot;</span><span class="p">,</span>
     <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">return_paths</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">visited_iris</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">visited_paths</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Reads a Protègè catalog file and returns as a dict.</span>
 
@@ -2197,10 +2245,19 @@ files is returned in addition to the default dict.</p>
 <span class="sd">    If `return_paths` is true, a set of directory paths to source</span>
 <span class="sd">    files is returned in addition to the default dict.</span>
 
+<span class="sd">    The `visited_uris` and `visited_paths` arguments are only intended for</span>
+<span class="sd">    internal use to avoid infinite recursions.</span>
+
 <span class="sd">    A ReadCatalogError is raised if the catalog file cannot be found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Protocols supported by urllib.request</span>
     <span class="n">web_protocols</span> <span class="o">=</span> <span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="s2">&quot;ftp://&quot;</span>
+
+    <span class="n">iris</span> <span class="o">=</span> <span class="n">visited_iris</span> <span class="k">if</span> <span class="n">visited_iris</span> <span class="k">else</span> <span class="p">{}</span>
+    <span class="n">dirs</span> <span class="o">=</span> <span class="n">visited_paths</span> <span class="k">if</span> <span class="n">visited_paths</span> <span class="k">else</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">uri</span> <span class="ow">in</span> <span class="n">iris</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">iris</span><span class="p">,</span> <span class="n">dirs</span><span class="p">)</span> <span class="k">if</span> <span class="n">return_paths</span> <span class="k">else</span> <span class="n">iris</span>
+
     <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">web_protocols</span><span class="p">):</span>
         <span class="c1"># Call read_catalog() recursively to ensure that the temporary</span>
         <span class="c1"># file is properly cleaned up</span>
@@ -2230,6 +2287,8 @@ files is returned in addition to the default dict.</p>
                         <span class="n">baseuri</span><span class="o">=</span><span class="n">baseuri</span> <span class="k">if</span> <span class="n">baseuri</span> <span class="k">else</span> <span class="n">base</span><span class="p">,</span>
                         <span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span><span class="p">,</span>
                         <span class="n">return_paths</span><span class="o">=</span><span class="n">return_paths</span><span class="p">,</span>
+                        <span class="n">visited_iris</span><span class="o">=</span><span class="n">iris</span><span class="p">,</span>
+                        <span class="n">visited_paths</span><span class="o">=</span><span class="n">dirs</span><span class="p">,</span>
                     <span class="p">)</span>
             <span class="k">raise</span> <span class="n">ReadCatalogError</span><span class="p">(</span>
                 <span class="s2">&quot;Cannot download catalog from URLs: &quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">uris</span><span class="p">)</span>
@@ -2283,9 +2342,8 @@ files is returned in addition to the default dict.</p>
             <span class="k">if</span> <span class="n">baseuri</span> <span class="ow">and</span> <span class="n">baseuri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">web_protocols</span><span class="p">):</span>
                 <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">baseuri</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">uri_as_str</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">baseuri</span> <span class="k">if</span> <span class="n">baseuri</span> <span class="k">else</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">uri_as_str</span><span class="p">)</span>
-                <span class="p">)</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">baseuri</span> <span class="k">if</span> <span class="n">baseuri</span> <span class="k">else</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">uri_as_str</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">normalise_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="n">iris</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">url</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
@@ -2299,14 +2357,14 @@ files is returned in addition to the default dict.</p>
                         <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span><span class="p">,</span>
                         <span class="n">return_paths</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">visited_iris</span><span class="o">=</span><span class="n">iris</span><span class="p">,</span>
+                        <span class="n">visited_paths</span><span class="o">=</span><span class="n">dirs</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="n">iris</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">iris_</span><span class="p">)</span>
                     <span class="n">dirs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dirs_</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">load_catalog</span><span class="p">(</span><span class="n">catalog</span><span class="p">)</span>
 
-    <span class="n">iris</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">dirs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="n">load_catalog</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">return_paths</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">iris</span><span class="p">,</span> <span class="n">dirs</span>
