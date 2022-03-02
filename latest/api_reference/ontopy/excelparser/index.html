@@ -1583,9 +1583,12 @@ names and resolvable path as dict.</p></td>
                     <span class="p">)</span>
 
     <span class="c1"># Add properties in a second loop</span>
+
     <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">added_rows</span><span class="p">:</span>
         <span class="n">row</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
         <span class="n">properties</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Relations&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">properties</span> <span class="o">==</span> <span class="s2">&quot;nan&quot;</span><span class="p">:</span>
+            <span class="n">properties</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">concept</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
@@ -1602,10 +1605,15 @@ names and resolvable path as dict.</p></td>
                         <span class="sa">f</span><span class="s2">&quot;Error is </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">.&quot;</span>
                     <span class="p">)</span>
                 <span class="k">except</span> <span class="n">NoSuchLabelError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Error in Property assignment for: </span><span class="si">{</span><span class="n">concept</span><span class="si">}</span><span class="s2">. &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;Property to be Evaluated: </span><span class="si">{</span><span class="n">prop</span><span class="si">}</span><span class="s2">. &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;Error is </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">.&quot;</span>
+                    <span class="p">)</span>
                     <span class="k">if</span> <span class="n">force</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-                        <span class="k">pass</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
+                        <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
 
     <span class="c1"># Synchronise Python attributes to ontology</span>
     <span class="n">onto</span><span class="o">.</span><span class="n">sync_attributes</span><span class="p">(</span>
