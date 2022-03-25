@@ -15,7 +15,7 @@ jobs:
     env:
       DEPENDABOT_BRANCH: ci/dependabot-updates
       GIT_USER_NAME: EMMOntoPy Developers
-      GIT_USER_EMAIL: "Team4.0@SINTEF.onmicrosoft.com"
+      GIT_USER_EMAIL: "Team4.0@SINTEF.no"
 
     steps:
     - name: Checkout repository
@@ -87,7 +87,7 @@ jobs:
 
     - name: Create PR
       id: cpr
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v4
       with:
         token: ${{ secrets.RELEASE_PAT }}
         commit-message: New @dependabot-fueled updates
