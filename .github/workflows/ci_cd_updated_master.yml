@@ -7,7 +7,7 @@ on:
 env:
   DEPENDABOT_BRANCH: ci/dependabot-updates
   GIT_USER_NAME: EMMOntoPy Developers
-  GIT_USER_EMAIL: "Team4.0@SINTEF.onmicrosoft.com"
+  GIT_USER_EMAIL: "Team4.0@SINTEF.no"
   DEFAULT_REPO_BRANCH: master
 
 jobs:
