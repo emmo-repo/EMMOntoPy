@@ -39,7 +39,9 @@ from ontopy import World
 
 # Load EMMO
 world = World(filename="demo.sqlite3")
-emmo = world.get_ontology("http://emmo.info/emmo/1.0.0-alpha2")
+emmo = world.get_ontology(
+    "https://raw.githubusercontent.com/emmo-repo/EMMO/master/emmo.ttl"
+)
 emmo.load()
 # emmo.sync_reasoner()
 
