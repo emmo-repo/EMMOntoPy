@@ -67,12 +67,38 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
         base_iri_from_metadata: Whether to use base IRI defined from metadata.
         imports: List of imported ontologies.
         catalog: Imported ontologies with (name, full path) key/value-pairs.
-        force: Forcibly make an ontology by skipping concepts with a prefLabel
-            that is erroneously defined.
+        force: Forcibly make an ontology by skipping concepts
+            that are erroneously defined or other errors in the excel sheet.
 
     Returns:
-        A tuple of the created ontology and the associated catalog of ontology
-        names and resolvable path as dict.
+        A tuple with the
+        * created ontology
+        * associated catalog of ontology names and resolvable path as dict
+        * a dictionary with lists of concepts that raise errors, with the
+          following keys:
+            - "already_defined": These are concepts that are already in
+                                 the ontology,
+                                 either because they were already added in a
+                                 previous line of
+                                 the excelfile/pandas dataframe,
+                                 or because it is already defined
+                                 in the imported ontologies.
+            - "in_imported_ontologies": Concepts that are defined in the excel,
+                                 but already exist in the imported ontologies.
+                                 This is a subset of the 'already_defined'
+            - "wrongly_defined": Concepts that are given an invalid prefLabel
+                                 (e.g. with a space in the name).
+            - "missing_parents": Concepts that are missing parents.
+                                 These concepts are added directly
+                                 under owl:Thing.
+            - "invalid_parents": Concepts with invalidly defined parents.
+                                 These concepts are added directly
+                                 under owl:Thing.
+            - "nonadded_concepts": List of all concepts that are not added,
+                                 either because the prefLabel is invalid,
+                                 or because the concept has already been added
+                                 once or already exists in an imported
+                                 ontology.
 
 
     """
@@ -115,6 +141,8 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
 ) -> Tuple[ontopy.ontology.Ontology, dict]:
     """
     Create an ontology from a pandas DataFrame.
+
+    Check 'create_ontology_from_excel' for complete documentation.
     """
 
     # Remove lines with empty prefLabel
