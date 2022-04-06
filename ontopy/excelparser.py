@@ -130,6 +130,10 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     onto, catalog = get_metadata_from_dataframe(
         metadata, base_iri, imports=imports
     )
+    # Get a set of imported concepts
+    imported_concepts = {
+        concept.prefLabel.first() for concept in onto.get_by_label_all("*")
+    }
 
     # Set given or default base_iri if base_iri_from_metadata is False.
     if not base_iri_from_metadata:
@@ -184,10 +188,11 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 except NoSuchLabelError:
                     pass
 
-                if pd.isna(row["subClassOf"]):
+                if row["subClassOf"] == "nan":
                     if not force:
                         raise ExcelError(f"{row[0]} has no subClassOf")
                     parent_names = []  # Should be "owl:Thing"
+                    print(name)
                     concepts_with_errors["missing_parents"].append(name)
                 else:
                     parent_names = str(row["subClassOf"]).split(";")
@@ -343,6 +348,9 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     concepts_with_errors = {
         key: set(value) for key, value in concepts_with_errors.items()
     }
+    concepts_with_errors["in_imported_ontologies"] = concepts_with_errors[
+        "already_defined"
+    ].intersection(imported_concepts)
     return onto, catalog, concepts_with_errors
 
 
