@@ -16,5 +16,6 @@ def test_excelparser(repo_dir: "Path") -> None:
 
     onto = get_ontology(str(ontopath)).load()
     xlspath = repo_dir / "tests" / "testonto" / "excelparser" / "onto.xlsx"
-    ontology, catalog = create_ontology_from_excel(xlspath, force=True)
+    ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
+    print(errors)
     assert onto == ontology

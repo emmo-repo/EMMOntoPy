@@ -140,6 +140,16 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
         if not altlabel == "nan":
             labels.update(altlabel.split(";"))
 
+    # Dictionary with lists of concepts that raise errors
+    concepts_with_errors = {
+        "already_defined": [],
+        "in_imported_ontologies": [],
+        "wrongly_defined": [],
+        "missing_parents": [],
+        "invalid_parents": [],
+        "nonadded_concepts": [],
+    }
+
     onto.sync_python_names()
     with onto:
         remaining_rows = set(range(len(data)))
@@ -158,6 +168,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         f'Ignoring concept "{name}" since it is already in '
                         "the ontology."
                     )
+                    concepts_with_errors["already_defined"].append(name)
                     # What to do if we want to add info to this concept?
                     # Should that be not allowed?
                     # If it should be allowed the index has to be added to
@@ -168,6 +179,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         f'Ignoring concept "{name}". '
                         f'The following error was raised: "{err}"'
                     )
+                    concepts_with_errors["wrongly_defined"].append(name)
                     continue
                 except NoSuchLabelError:
                     pass
@@ -176,6 +188,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     if not force:
                         raise ExcelError(f"{row[0]} has no subClassOf")
                     parent_names = []  # Should be "owl:Thing"
+                    concepts_with_errors["missing_parents"].append(name)
                 else:
                     parent_names = str(row["subClassOf"]).split(";")
 
@@ -190,6 +203,9 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                                 warnings.warn(
                                     f'Invalid parents for "{name}": '
                                     f'"{parent_name}".'
+                                )
+                                concepts_with_errors["invalid_parents"].append(
+                                    name
                                 )
                                 break
                             raise ExcelError(
@@ -276,6 +292,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         " Will continue without these."
                     )
                     remaining_rows = False
+                    concepts_with_errors["nonadded_concepts"] = unadded
                 else:
                     raise ExcelError(
                         f"Not able to add the following concepts: {unadded}."
@@ -303,6 +320,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         f"Property to be Evaluated: {prop}. "
                         f"Error is {exc}."
                     )
+                    concepts_with_errors["errors_in_properties"].append(name)
                 except NoSuchLabelError as exc:
                     msg = (
                         f"Error in Property assignment for: {concept}. "
@@ -311,6 +329,9 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     )
                     if force is True:
                         warnings.warn(msg)
+                        concepts_with_errors["errors_in_properties"].append(
+                            name
+                        )
                     else:
                         raise ExcelError(msg) from exc
 
@@ -319,7 +340,10 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
         name_policy="uuid", name_prefix="EMMO_", class_docstring="elucidation"
     )
     onto.dir_label = False
-    return onto, catalog
+    concepts_with_errors = {
+        key: set(value) for key, value in concepts_with_errors.items()
+    }
+    return onto, catalog, concepts_with_errors
 
 
 def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
