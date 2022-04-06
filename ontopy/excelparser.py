@@ -192,7 +192,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     if not force:
                         raise ExcelError(f"{row[0]} has no subClassOf")
                     parent_names = []  # Should be "owl:Thing"
-                    print(name)
                     concepts_with_errors["missing_parents"].append(name)
                 else:
                     parent_names = str(row["subClassOf"]).split(";")
