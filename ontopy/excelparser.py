@@ -160,7 +160,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     )
     # Get a set of imported concepts
     imported_concepts = {
-        concept.prefLabel.first() for concept in onto.get_by_label_all("*")
+        concept.prefLabel.first() for concept in onto.get_entities()
     }
 
     # Set given or default base_iri if base_iri_from_metadata is False.
