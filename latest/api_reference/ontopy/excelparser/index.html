@@ -1286,8 +1286,8 @@ per row.</p></td>
       <tr>
         <td><code>force</code></td>
         <td><code>bool</code></td>
-        <td><p>Forcibly make an ontology by skipping concepts with a prefLabel
-that is erroneously defined.</p></td>
+        <td><p>Forcibly make an ontology by skipping concepts
+that are erroneously defined or other errors in the excel sheet.</p></td>
         <td><code>False</code></td>
       </tr>
   </tbody>
@@ -1302,9 +1302,38 @@ that is erroneously defined.</p></td>
   </thead>
   <tbody>
     <tr>
-      <td><code>Tuple[ontopy.ontology.Ontology, dict]</code></td>
-      <td><p>A tuple of the created ontology and the associated catalog of ontology
-names and resolvable path as dict.</p></td>
+      <td><code>A tuple with the
+* created ontology
+* associated catalog of ontology names and resolvable path as dict
+* a dictionary with lists of concepts that raise errors, with the
+  following keys</code></td>
+      <td><ul>
+<li>"already_defined": These are concepts that are already in
+                         the ontology,
+                         either because they were already added in a
+                         previous line of
+                         the excelfile/pandas dataframe,
+                         or because it is already defined
+                         in the imported ontologies.<ul>
+<li>"in_imported_ontologies": Concepts that are defined in the excel,
+                     but already exist in the imported ontologies.
+                     This is a subset of the 'already_defined'</li>
+<li>"wrongly_defined": Concepts that are given an invalid prefLabel
+                     (e.g. with a space in the name).</li>
+<li>"missing_parents": Concepts that are missing parents.
+                     These concepts are added directly
+                     under owl:Thing.</li>
+<li>"invalid_parents": Concepts with invalidly defined parents.
+                     These concepts are added directly
+                     under owl:Thing.</li>
+<li>"nonadded_concepts": List of all concepts that are not added,
+                     either because the prefLabel is invalid,
+                     or because the concept has already been added
+                     once or already exists in an imported
+                     ontology.</li>
+</ul>
+</li>
+</ul></td>
     </tr>
   </tbody>
 </table>
@@ -1346,12 +1375,38 @@ names and resolvable path as dict.</p></td>
 <span class="sd">        base_iri_from_metadata: Whether to use base IRI defined from metadata.</span>
 <span class="sd">        imports: List of imported ontologies.</span>
 <span class="sd">        catalog: Imported ontologies with (name, full path) key/value-pairs.</span>
-<span class="sd">        force: Forcibly make an ontology by skipping concepts with a prefLabel</span>
-<span class="sd">            that is erroneously defined.</span>
+<span class="sd">        force: Forcibly make an ontology by skipping concepts</span>
+<span class="sd">            that are erroneously defined or other errors in the excel sheet.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A tuple of the created ontology and the associated catalog of ontology</span>
-<span class="sd">        names and resolvable path as dict.</span>
+<span class="sd">        A tuple with the</span>
+<span class="sd">        * created ontology</span>
+<span class="sd">        * associated catalog of ontology names and resolvable path as dict</span>
+<span class="sd">        * a dictionary with lists of concepts that raise errors, with the</span>
+<span class="sd">          following keys:</span>
+<span class="sd">            - &quot;already_defined&quot;: These are concepts that are already in</span>
+<span class="sd">                                 the ontology,</span>
+<span class="sd">                                 either because they were already added in a</span>
+<span class="sd">                                 previous line of</span>
+<span class="sd">                                 the excelfile/pandas dataframe,</span>
+<span class="sd">                                 or because it is already defined</span>
+<span class="sd">                                 in the imported ontologies.</span>
+<span class="sd">            - &quot;in_imported_ontologies&quot;: Concepts that are defined in the excel,</span>
+<span class="sd">                                 but already exist in the imported ontologies.</span>
+<span class="sd">                                 This is a subset of the &#39;already_defined&#39;</span>
+<span class="sd">            - &quot;wrongly_defined&quot;: Concepts that are given an invalid prefLabel</span>
+<span class="sd">                                 (e.g. with a space in the name).</span>
+<span class="sd">            - &quot;missing_parents&quot;: Concepts that are missing parents.</span>
+<span class="sd">                                 These concepts are added directly</span>
+<span class="sd">                                 under owl:Thing.</span>
+<span class="sd">            - &quot;invalid_parents&quot;: Concepts with invalidly defined parents.</span>
+<span class="sd">                                 These concepts are added directly</span>
+<span class="sd">                                 under owl:Thing.</span>
+<span class="sd">            - &quot;nonadded_concepts&quot;: List of all concepts that are not added,</span>
+<span class="sd">                                 either because the prefLabel is invalid,</span>
+<span class="sd">                                 or because the concept has already been added</span>
+<span class="sd">                                 once or already exists in an imported</span>
+<span class="sd">                                 ontology.</span>
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1402,6 +1457,7 @@ names and resolvable path as dict.</p></td>
     <div class="doc doc-contents ">
 
       <p>Create an ontology from a pandas DataFrame.</p>
+<p>Check 'create_ontology_from_excel' for complete documentation.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/excelparser.py</code></summary>
@@ -1416,6 +1472,8 @@ names and resolvable path as dict.</p></td>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create an ontology from a pandas DataFrame.</span>
+
+<span class="sd">    Check &#39;create_ontology_from_excel&#39; for complete documentation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Remove lines with empty prefLabel</span>
@@ -1431,6 +1489,10 @@ names and resolvable path as dict.</p></td>
     <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span> <span class="o">=</span> <span class="n">get_metadata_from_dataframe</span><span class="p">(</span>
         <span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">imports</span>
     <span class="p">)</span>
+    <span class="c1"># Get a set of imported concepts</span>
+    <span class="n">imported_concepts</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">concept</span><span class="o">.</span><span class="n">prefLabel</span><span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="k">for</span> <span class="n">concept</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_entities</span><span class="p">()</span>
+    <span class="p">}</span>
 
     <span class="c1"># Set given or default base_iri if base_iri_from_metadata is False.</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">base_iri_from_metadata</span><span class="p">:</span>
@@ -1440,6 +1502,16 @@ names and resolvable path as dict.</p></td>
     <span class="k">for</span> <span class="n">altlabel</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;altLabel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">altlabel</span> <span class="o">==</span> <span class="s2">&quot;nan&quot;</span><span class="p">:</span>
             <span class="n">labels</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">altlabel</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">))</span>
+
+    <span class="c1"># Dictionary with lists of concepts that raise errors</span>
+    <span class="n">concepts_with_errors</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;already_defined&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;in_imported_ontologies&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;wrongly_defined&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;missing_parents&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;invalid_parents&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;nonadded_concepts&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="p">}</span>
 
     <span class="n">onto</span><span class="o">.</span><span class="n">sync_python_names</span><span class="p">()</span>
     <span class="k">with</span> <span class="n">onto</span><span class="p">:</span>
@@ -1459,6 +1531,7 @@ names and resolvable path as dict.</p></td>
                         <span class="sa">f</span><span class="s1">&#39;Ignoring concept &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; since it is already in &#39;</span>
                         <span class="s2">&quot;the ontology.&quot;</span>
                     <span class="p">)</span>
+                    <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;already_defined&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
                     <span class="c1"># What to do if we want to add info to this concept?</span>
                     <span class="c1"># Should that be not allowed?</span>
                     <span class="c1"># If it should be allowed the index has to be added to</span>
@@ -1469,14 +1542,16 @@ names and resolvable path as dict.</p></td>
                         <span class="sa">f</span><span class="s1">&#39;Ignoring concept &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;. &#39;</span>
                         <span class="sa">f</span><span class="s1">&#39;The following error was raised: &quot;</span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
                     <span class="p">)</span>
+                    <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;wrongly_defined&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
                     <span class="k">continue</span>
                 <span class="k">except</span> <span class="n">NoSuchLabelError</span><span class="p">:</span>
                     <span class="k">pass</span>
 
-                <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;subClassOf&quot;</span><span class="p">]):</span>
+                <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;subClassOf&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;nan&quot;</span><span class="p">:</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> has no subClassOf&quot;</span><span class="p">)</span>
                     <span class="n">parent_names</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Should be &quot;owl:Thing&quot;</span>
+                    <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;missing_parents&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">parent_names</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;subClassOf&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
 
@@ -1491,6 +1566,9 @@ names and resolvable path as dict.</p></td>
                                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                                     <span class="sa">f</span><span class="s1">&#39;Invalid parents for &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;: &#39;</span>
                                     <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">parent_name</span><span class="si">}</span><span class="s1">&quot;.&#39;</span>
+                                <span class="p">)</span>
+                                <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;invalid_parents&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                    <span class="n">name</span>
                                 <span class="p">)</span>
                                 <span class="k">break</span>
                             <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span>
@@ -1577,6 +1655,7 @@ names and resolvable path as dict.</p></td>
                         <span class="s2">&quot; Will continue without these.&quot;</span>
                     <span class="p">)</span>
                     <span class="n">remaining_rows</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;nonadded_concepts&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">unadded</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;Not able to add the following concepts: </span><span class="si">{</span><span class="n">unadded</span><span class="si">}</span><span class="s2">.&quot;</span>
@@ -1604,6 +1683,7 @@ names and resolvable path as dict.</p></td>
                         <span class="sa">f</span><span class="s2">&quot;Property to be Evaluated: </span><span class="si">{</span><span class="n">prop</span><span class="si">}</span><span class="s2">. &quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;Error is </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">.&quot;</span>
                     <span class="p">)</span>
+                    <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;errors_in_properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
                 <span class="k">except</span> <span class="n">NoSuchLabelError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                     <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;Error in Property assignment for: </span><span class="si">{</span><span class="n">concept</span><span class="si">}</span><span class="s2">. &quot;</span>
@@ -1612,6 +1692,9 @@ names and resolvable path as dict.</p></td>
                     <span class="p">)</span>
                     <span class="k">if</span> <span class="n">force</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
                         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                        <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;errors_in_properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="n">name</span>
+                        <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
 
@@ -1620,7 +1703,13 @@ names and resolvable path as dict.</p></td>
         <span class="n">name_policy</span><span class="o">=</span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span> <span class="n">name_prefix</span><span class="o">=</span><span class="s2">&quot;EMMO_&quot;</span><span class="p">,</span> <span class="n">class_docstring</span><span class="o">=</span><span class="s2">&quot;elucidation&quot;</span>
     <span class="p">)</span>
     <span class="n">onto</span><span class="o">.</span><span class="n">dir_label</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">return</span> <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span>
+    <span class="n">concepts_with_errors</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">key</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">concepts_with_errors</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;in_imported_ontologies&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">concepts_with_errors</span><span class="p">[</span>
+        <span class="s2">&quot;already_defined&quot;</span>
+    <span class="p">]</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">imported_concepts</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">concepts_with_errors</span>
 </code></pre></div>
         </details>
     </div>
