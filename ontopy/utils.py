@@ -687,6 +687,21 @@ def annotate_with_ontology(onto, imported=True):
             setattr(entity, "ontology_iri", onto.base_iri)
 
 
+def rename_iris(onto, annotation="prefLabel"):
+    """For IRIs with the given annotation, change the name of the entity
+    to the value of the annotation.  Also add an `equivalentTo`
+    annotation referring to the old name.
+    """
+    for e in onto.get_entities():
+        if hasattr(e, annotation):
+            if hasattr(e, "equivalent_to"):
+                #print("***", e)
+                print("***", e, e.equivalent_to)
+                print("   ", getattr(e, annotation))
+                #e.equivalent_to.append(e.iri)
+            e.name = getattr(e, annotation).first()
+
+
 def normalise_url(url):
     """Returns `url` in a normalised form."""
     splitted = urllib.parse.urlsplit(url)

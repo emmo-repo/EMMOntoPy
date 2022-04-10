@@ -8,11 +8,14 @@ import warnings
 from rdflib.graph import Graph
 from rdflib.util import guess_format
 
+from ontopy import get_ontology
 from ontopy.utils import (
     convert_imported,
     FMAP,
     IncompatibleVersion,
     squash_imported,
+    annotate_with_ontology,
+    rename_iris,
     _validate_installed_version,
 )
 from ontopy.factpluspluswrapper.factppgraph import FaCTPPGraph
@@ -92,6 +95,34 @@ def main(argv: list = None):
             "file. Cannot be combined with --recursive."
         ),
     )
+    parser.add_argument(
+        "--annotate-ontology",
+        "-a",
+        action="store_true",
+        help=(
+            "Whether to add 'ontology_name' and 'ontology_iri' annotations "
+            "to all entities.\n"
+            "The ontology name and IRI are important contextual information "
+            "that is lost when ontologies are inferred and/or squashed.  This "
+            "option retain this information as annotations."
+        ),
+    )
+    parser.add_argument(
+        "--rename-iris",
+        "-R",
+        nargs="?",
+        const="prefLabel",
+        metavar="ANNOTATION",
+        help=(
+            "For all entities that have the given annotation ('prefLabel' "
+            "by default), change the name of the entity to the value of the "
+            "annotation.\n"
+            "For all changed entities, an `equivalentTo` annotation is "
+            "added, referring to the old name.\n"
+            "This option is useful to create a copy of an ontology with "
+            "more human readable IRIs."
+        ),
+    )
 
     args = parser.parse_args(args=argv)
 
@@ -111,7 +142,22 @@ def main(argv: list = None):
     # Perform conversion
     with warnings.catch_warnings(record=True) as warnings_handle:
         warnings.simplefilter("always")
-        if args.recursive:
+        if args.annotate_ontology or args.rename_iris:
+            # These options requires the Owlready2 representation
+            onto = get_ontology(args.input).load(
+                format=args.input_format,
+                url_from_catalog=args.url_from_catalog,
+            )
+            if args.inferred:
+                onto.sync_reasoner(include_imported=args.recursive)
+            if args.annotate_ontology:
+                annotate_with_ontology(onto, imported=args.recursive)
+            if args.rename_iris:
+                rename_iris(onto, args.rename_iris)
+            # XXX - check squash option
+            onto.save(args.input, format=args.input_format)
+
+        elif args.recursive:
             convert_imported(
                 args.input,
                 args.output,
