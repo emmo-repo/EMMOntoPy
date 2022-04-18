@@ -612,19 +612,34 @@ class Ontology(  # pylint: disable=too-many-public-methods
                     )
 
     def save(
-        self, filename=None, format=None, overwrite=False, **kwargs
+        self,
+        filename=None,
+        format=None,
+        dir=".",
+        mkdir=False,
+        overwrite=False,
+        squash=False,
     ):  # pylint: disable=redefined-builtin
         """Writes the ontology to file.
 
-        If `overwrite` is `True` and filename exists, it will be removed
-        before saving.  The default is to append an existing ontology.
+        Parameters
+        ----------
+        filename: str | Path
+            Name of file to write to.  If None, it defaults to the name
+            of the ontology with `format` as file extension.
+        format: str
+            Output format. The default is to infer it from `filename`.
+        dir: str | Path
+            If `filename` is a relative path, it is a relative path to `dir`.
+        mkdir: bool
+            Whether to create output directory if it does not exists.
+        owerwrite: bool
+            If true and `filename` exists, remove the existing file before
+            saving.  The default is to append to an existing ontology.
+        squash: bool
+            If true, rdflib will be used to save the current ontology
+            together with all its sub-ontologies into `filename`.
         """
-        if overwrite and filename and os.path.exists(filename):
-            os.remove(filename)
-
-        if not format:
-            format = guess_format(filename, fmap=FMAP)
-
         if not _validate_installed_version(
             package="rdflib", min_version="6.0.0"
         ) and format == FMAP.get("ttl", ""):
@@ -642,13 +657,34 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 )
             )
 
-        if format in OWLREADY2_FORMATS:
+        if filename is None:
+            if format:
+                filename = f"{self.name}.{format}"
+            else:
+                TypeError("`filename` and `format` cannot both be None.")
+        filename = os.path.join(dir, filename)
+
+        if mkdir:
+            outdir = pathlib.Path(filename).parent.resolve()
+            if not outdir.exists():
+                outdir.mkdir(parents=True)
+
+        if not format:
+            format = guess_format(filename, fmap=FMAP)
+
+        if overwrite and filename and os.path.exists(filename):
+            os.remove(filename)
+
+        if squash:
+            graph = self.world.as_rdflib_graph()
+            graph.serialize(destination=filename, format=format)
+        elif format in OWLREADY2_FORMATS:
             revmap = {value: key for key, value in FMAP.items()}
-            super().save(file=filename, format=revmap[format], **kwargs)
+            super().save(file=filename, format=revmap[format])
         else:
             with tempfile.NamedTemporaryFile(suffix=".owl") as handle:
                 tmpname = handle.name
-            super().save(file=tmpname, format="rdfxml", **kwargs)
+            super().save(file=tmpname, format="rdfxml")
             graph = rdflib.Graph()
             graph.parse(tmpname, format="xml")
             graph.serialize(destination=filename, format=format)
@@ -914,11 +950,10 @@ class Ontology(  # pylint: disable=too-many-public-methods
             if not hasattr(ind, "prefLabel"):
                 # no prefLabel - create new annotation property..
                 with self:
-
                     # pylint: disable=invalid-name,missing-class-docstring
                     # pylint: disable=function-redefined
                     class prefLabel(owlready2.label):
-                        pass
+                        iri = "http://www.w3.org/2004/02/skos/core#prefLabel"
 
                 ind.prefLabel = [locstr(ind.name, lang="en")]
             elif not ind.prefLabel:
