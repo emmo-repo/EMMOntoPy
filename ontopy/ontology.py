@@ -661,7 +661,6 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 graph.serialize(destination=filename, format=format)
             finally:
                 os.remove(tmpfile)
-    
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
