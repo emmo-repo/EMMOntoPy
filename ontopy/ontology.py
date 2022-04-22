@@ -16,6 +16,7 @@ import warnings
 import uuid
 import tempfile
 import types
+import pathlib
 from typing import Union
 from collections import defaultdict
 from collections.abc import Iterable
@@ -28,9 +29,11 @@ from owlready2 import locstr
 from owlready2.entity import ThingClass
 
 from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
-
-from ontopy.utils import asstring, read_catalog, infer_version, convert_imported
 from ontopy.utils import (
+    asstring,
+    read_catalog,
+    infer_version,
+    convert_imported,
     FMAP,
     IncompatibleVersion,
     isinteractive,
@@ -41,6 +44,7 @@ from ontopy.utils import (
     LabelDefinitionError,
     ThingClassDefinitionError,
 )
+
 from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
 
 
@@ -80,6 +84,12 @@ class World(owlready2.World):
           - "emmo-development": load latest inferred development version
             of EMMO
         """
+        base_iri = (
+            base_iri.as_uri()
+            if isinstance(base_iri, pathlib.Path)
+            else base_iri
+        )
+
         if base_iri == "emmo":
             base_iri = (
                 "https://raw.githubusercontent.com/emmo-repo/"
@@ -115,6 +125,27 @@ class World(owlready2.World):
             onto = Ontology(self, iri)
 
         return onto
+
+    def get_unabbreviated_triples(self, label=None):
+        """Returns all triples unabbreviated.
+
+        If `label` is given, it will be used to represent blank nodes.
+        """
+
+        def _unabbreviate(i):
+            if isinstance(i, int):
+                # negative storid corresponds to blank nodes
+                if i >= 0:
+                    return self._unabbreviate(i)
+                return BlankNode(self, i) if label is None else label
+            return i
+
+        for subject, predicate, obj in self.get_triples():
+            yield (
+                _unabbreviate(subject),
+                _unabbreviate(predicate),
+                _unabbreviate(obj),
+            )
 
 
 class Ontology(  # pylint: disable=too-many-public-methods
@@ -202,38 +233,29 @@ class Ontology(  # pylint: disable=too-many-public-methods
         pass
 
     def __hash__(self):
-        """Returns hash based on base_iri
+        """Returns a hash based on base_iri.
         This is done to keep Ontology hashable when defining __eq__.
         """
         return hash(self.base_iri)
 
     def __eq__(self, other):
-        """Checks if this ontology is equal to other.
+        """Checks if this ontology is equal to `other`.
 
-        Equality of all triples obtained from self.get_unabbreviated_triples(),
-        i.e. blank nodes are not distinguished, but relations
-        to blank nodes are included.
+        This function compares the result of
+        ``set(self.get_unabbreviated_triples(label='_:b'))``,
+        i.e. blank nodes are not distinguished, but relations to blank
+        nodes are included.
         """
-        return set(self.get_unabbreviated_triples()) == set(
-            other.get_unabbreviated_triples()
+        return set(self.get_unabbreviated_triples(label="_:b")) == set(
+            other.get_unabbreviated_triples(label="_:b")
         )
 
-    def get_unabbreviated_triples(self):
-        """Returns all triples unabbreviated"""
+    def get_unabbreviated_triples(self, label=None):
+        """Returns all triples unabbreviated.
 
-        def _unabbreviate(i):
-            if isinstance(i, int):
-                if i >= 0:
-                    return self._unabbreviate(i)
-                return "_:"  # blank nodes are given random neg. storid
-            return i
-
-        for subject, predicate, obj in self.get_triples():
-            yield (
-                _unabbreviate(subject),
-                _unabbreviate(predicate),
-                _unabbreviate(obj),
-            )
+        If `label` is given, it will be used to represent blank nodes.
+        """
+        return World.get_unabbreviated_triples(self, label)
 
     def get_by_label(
         self, label, label_annotations=None, namespace=None
@@ -300,7 +322,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         if entity:
             return entity
 
-        raise NoSuchLabelError(f"No label annotations matches {label}")
+        raise NoSuchLabelError(f"No label annotations matches {label!r}")
 
     def get_by_label_all(self, label, label_annotations=None, namespace=None):
         """Like get_by_label(), but returns a list with all matching labels.
@@ -639,6 +661,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 graph.serialize(destination=filename, format=format)
             finally:
                 os.remove(tmpfile)
+    
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
@@ -1081,9 +1104,10 @@ class Ontology(  # pylint: disable=too-many-public-methods
             entity = self.get_by_label(entity)
         return hasattr(entity, "equivalent_to") and bool(entity.equivalent_to)
 
-    def get_version(self, as_iri=False):
+    def get_version(self, as_iri=False) -> str:
         """Returns the version number of the ontology as inferred from the
-        owl:versionIRI tag.
+        owl:versionIRI tag or, if owl:versionIRI is not found, from
+        owl:versionINFO.
 
         If `as_iri` is True, the full versionIRI is returned.
         """
@@ -1091,13 +1115,29 @@ class Ontology(  # pylint: disable=too-many-public-methods
             "http://www.w3.org/2002/07/owl#versionIRI"
         )
         tokens = self.get_triples(s=self.storid, p=version_iri_storid)
+        if (not tokens) and (as_iri is True):
+            raise TypeError(
+                "No owl:versionIRI "
+                f"in Ontology {self.base_iri!r}. "
+                "Search for owl:versionInfo with as_iri=False"
+            )
+        if tokens:
+            _, _, obj = tokens[0]
+            version_iri = self.world._unabbreviate(obj)
+            if as_iri:
+                return version_iri
+            return infer_version(self.base_iri, version_iri)
+
+        version_info_storid = self.world._abbreviate(
+            "http://www.w3.org/2002/07/owl#versionInfo"
+        )
+        tokens = self.get_triples(s=self.storid, p=version_info_storid)
         if not tokens:
-            raise TypeError(f"No versionIRI in Ontology {self.base_iri!r}")
-        _, _, obj = tokens[0]
-        version_iri = self.world._unabbreviate(obj)
-        if as_iri:
-            return version_iri
-        return infer_version(self.base_iri, version_iri)
+            raise TypeError(
+                "No versionIRI or versionInfo " f"in Ontology {self.base_iri!r}"
+            )
+        _, _, version_info = tokens[0]
+        return version_info.strip('"').strip("'")
 
     def set_version(self, version=None, version_iri=None):
         """Assign version to ontology by asigning owl:versionIRI.
@@ -1107,8 +1147,16 @@ class Ontology(  # pylint: disable=too-many-public-methods
         """
         _version_iri = "http://www.w3.org/2002/07/owl#versionIRI"
         version_iri_storid = self.world._abbreviate(_version_iri)
-        if self._has_obj_triple_spo(
-            subject=self.storid, predicate=version_iri_storid
+        if self._has_obj_triple_spo(  # pylint: disable=unexpected-keyword-arg
+            # For some reason _has_obj_triples_spo exists in both
+            # owlready2.namespace.Namespace (with arguments subject/predicate)
+            # and in owlready2.triplelite._GraphManager (with arguments s/p)
+            # owlready2.Ontology inherits from Namespace directly
+            # and pylint checks that.
+            # It actually accesses the one in triplelite.
+            # subject=self.storid, predicate=version_iri_storid
+            s=self.storid,
+            p=version_iri_storid,
         ):
             self._del_obj_triple_spo(s=self.storid, p=version_iri_storid)
 
@@ -1152,11 +1200,14 @@ class Ontology(  # pylint: disable=too-many-public-methods
         distance between a ancestor-descendant pair (counter+1)."""
         if descendant.name == ancestor.name:
             return counter
-        return min(
-            self._number_of_generations(parent, ancestor, counter + 1)
-            for parent in descendant.get_parents()
-            if ancestor in parent.ancestors()
-        )
+        try:
+            return min(
+                self._number_of_generations(parent, ancestor, counter + 1)
+                for parent in descendant.get_parents()
+                if ancestor in parent.ancestors()
+            )
+        except ValueError:
+            return counter
 
     def closest_common_ancestors(self, cls1, cls2):
         """Returns a list with closest_common_ancestor for cls1 and cls2"""
@@ -1269,3 +1320,36 @@ class Ontology(  # pylint: disable=too-many-public-methods
         with self:
             entity = types.new_class(name, parents)
         return entity
+
+
+class BlankNode:
+    """Represents a blank node.
+
+    A blank node is a node that is not a literal and has no IRI.
+    Resources represented by blank nodes are also called anonumous resources.
+    Only the subject or object in an RDF triple can be a blank node.
+    """
+
+    def __init__(self, onto: Union[World, Ontology], storid: int):
+        """Initiate a blank node.
+
+        Args:
+            onto: Ontology or World instance.
+            storid: The storage id of the blank node.
+        """
+        if storid >= 0:
+            raise ValueError(
+                f"A BlankNode is supposed to have a negative storid: {storid}"
+            )
+        self.onto = onto
+        self.storid = storid
+
+    def __repr__(self):
+        return repr(f"_:b{-self.storid}")
+
+    def __hash__(self):
+        return hash((self.onto, self.storid))
+
+    def __eq__(self, other):
+        """For now blank nodes always compare true against each other."""
+        return isinstance(other, BlankNode)

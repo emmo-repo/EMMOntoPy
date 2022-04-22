@@ -25,8 +25,15 @@ from ontopy.ontodoc import (
 import owlready2
 
 
-def main():
-    """Main run function."""
+def main(argv: list = None):
+    """Main run function.
+
+    Parameters:
+        argv: List of arguments, similar to `sys.argv[1:]`.
+            Mainly for testing purposes, since it allows one to invoke the tool
+            manually / through Python.
+
+    """
     parser = argparse.ArgumentParser(
         description="Tool for documenting ontologies.",
         epilog=(
@@ -192,7 +199,7 @@ def main():
             "debugging)."
         ),
     )
-    args = parser.parse_args()
+    args = parser.parse_args(args=argv)
 
     # Append to onto_path
     for paths in args.path:

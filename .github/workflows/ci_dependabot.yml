@@ -15,16 +15,16 @@ jobs:
     env:
       DEPENDABOT_BRANCH: ci/dependabot-updates
       GIT_USER_NAME: EMMOntoPy Developers
-      GIT_USER_EMAIL: "EMMOntoPy@emmo.info"
+      GIT_USER_EMAIL: "Team4.0@SINTEF.no"
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: master
 
     - name: Set up Python 3.7
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: 3.7
 
@@ -81,15 +81,15 @@ jobs:
 
     - name: Fetch PR body
       id: pr_body
-      uses: chuhlomin/render-template@v1.2
+      uses: chuhlomin/render-template@v1.4
       with:
         template: .github/utils/single_dependency_pr_body.txt
 
     - name: Create PR
       id: cpr
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v4
       with:
-        token: ${{ secrets.RELEASE_TOKEN_FLB }}
+        token: ${{ secrets.RELEASE_PAT }}
         commit-message: New @dependabot-fueled updates
         committer: "${{ env.GIT_USER_NAME }} <${{ env.GIT_USER_EMAIL }}>"
         author: "${{ env.GIT_USER_NAME }} <${{ env.GIT_USER_EMAIL }}>"

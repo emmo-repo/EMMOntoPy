@@ -15,10 +15,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python 3.7
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: 3.7
 
@@ -51,10 +51,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python 3.7
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: 3.7
 
@@ -69,8 +69,12 @@ jobs:
     - name: Run PyLint
       run: pylint --rcfile=pyproject.toml *.py tools
 
+    # Ignore ID 44715 for now.
+    # See this NumPy issue for more information: https://github.com/numpy/numpy/issues/19038
+    # Also ignore IDs 44716 and 44717 as they are not deemed to be as severe as it is
+    # laid out in the CVE.
     - name: Run safety
-      run: pip freeze | safety check --stdin
+      run: pip freeze | safety check --stdin -i 44715 -i 44716 -i 44717
 
 
   tests:
@@ -79,10 +83,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python 3.7
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: 3.7
 
@@ -120,10 +124,10 @@ jobs:
     name: EMMO documentation (test using ontodoc)
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Python 3.7
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: 3.7
 
@@ -177,10 +181,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python 3.7
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: 3.7
 
@@ -221,10 +225,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python 3.7
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: 3.7
 
@@ -237,7 +241,7 @@ jobs:
     - name: Set up git user
       run: |
         git config --global user.name "EMMOntoPy Developers"
-        git config --global user.email "EMMOntoPy@emmo.info"
+        git config --global user.email "Team4.0@SINTEF.no"
 
     - name: Check API Reference and landing page
       run: |
