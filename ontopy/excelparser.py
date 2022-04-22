@@ -41,7 +41,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     imports: list = None,
     catalog: dict = None,
     force: bool = False,
-) -> Tuple[ontopy.ontology.Ontology, dict]:
+) -> Tuple[ontopy.ontology.Ontology, dict, dict]:
     """
     Creates an ontology from an Excel-file.
 
