@@ -6,7 +6,6 @@ import sys
 import re
 import datetime
 import tempfile
-import types
 from typing import TYPE_CHECKING
 import urllib.request
 import urllib.parse
@@ -665,49 +664,39 @@ def infer_version(iri, version_iri):
     return version
 
 
-def annotate_with_ontology(onto, imported=True):
-    """Annotate all entities with the `ontology_name` and `ontology_iri`.
+def annotate_source(onto, imported=True):
+    """Annotate all entities with the base IRI of the ontology using
+    `dcterms:source` annotations.
 
-    If imported is true, imported ontologies will also be annotated.
+    If `imported` is true, all entities in imported sub-ontologies will
+    also be annotated.
 
-    The ontology name and IRI are important contextual information
-    that is lost when ontologies are inferred and/or squashed.  This
-    function retain this information as annotations.
+    This is contextual information that is otherwise lost when the ontology
+    is squashed and/or inferred.
     """
-    with onto:
-        if "ontology_name" not in onto.world._props:
-            types.new_class("ontology_name", (owlready2.AnnotationProperty,))
-        if "ontology_iri" not in onto.world._props:
-            types.new_class("ontology_iri", (owlready2.AnnotationProperty,))
-
+    source = onto._abbreviate("http://purl.org/dc/terms/source")
     for entity in onto.get_entities(imported=imported):
-        if onto.name not in getattr(entity, "ontology_name"):
-            setattr(entity, "ontology_name", onto.name)
-        if onto.base_iri not in getattr(entity, "ontology_iri"):
-            setattr(entity, "ontology_iri", onto.base_iri)
+        onto._add_obj_triple_spo(
+            entity.storid,
+            source,
+            onto._abbreviate(entity.namespace.ontology.base_iri),
+        )
 
 
 def rename_iris(onto, annotation="prefLabel"):
     """For IRIs with the given annotation, change the name of the entity
-    to the value of the annotation.  Also add an `equivalentTo`
-    annotation referring to the old name.
+    to the value of the annotation.  Also add an `skos:exactMatch`
+    annotation referring to the old IRI.
     """
-    #        if not hasattr(ind, "prefLabel"):
-    #            # no prefLabel - create new annotation property..
-    #            with self:
-    #                # pylint: disable=invalid-name,missing-class-docstring
-    #                # pylint: disable=function-redefined
-    #                class prefLabel(owlready2.label):
-    #                    iri="http://www.w3.org/2004/02/skos/core#prefLabel"
-
-    for e in onto.get_entities():
-        if hasattr(e, annotation) and getattr(e, annotation):
-            if hasattr(e, "equivalent_to"):
-                # print("***", e)
-                print("***", e, e.equivalent_to)
-                print("   ", getattr(e, annotation))
-                # e.equivalent_to.append(e.iri)
-            e.name = getattr(e, annotation).first()
+    exactMatch = onto._abbreviate(  # pylint:disable=invalid-name
+        "http://www.w3.org/2004/02/skos/core#exactMatch"
+    )
+    for entity in onto.get_entities():
+        if hasattr(entity, annotation) and getattr(entity, annotation):
+            onto._add_data_triple_spod(
+                entity.storid, exactMatch, entity.iri, ""
+            )
+            entity.name = getattr(entity, annotation).first()
 
 
 def normalise_url(url):

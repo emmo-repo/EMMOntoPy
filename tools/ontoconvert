@@ -2,23 +2,12 @@
 """Converts file format of input ontology and write it to output file(s).
 """
 import argparse
-import os
 import warnings
 
-from rdflib.graph import Graph
 from rdflib.util import guess_format
 
 from ontopy import get_ontology
-from ontopy.utils import (
-    convert_imported,
-    FMAP,
-    IncompatibleVersion,
-    squash_imported,
-    annotate_with_ontology,
-    rename_iris,
-    _validate_installed_version,
-)
-from ontopy.factpluspluswrapper.factppgraph import FaCTPPGraph
+from ontopy.utils import convert_imported, annotate_source, rename_iris
 
 
 def main(argv: list = None):
@@ -104,7 +93,7 @@ def main(argv: list = None):
             "the input. "
             "This option requires Protege catalog files to be present. "
             "It cannot be combined with other options like --squash, "
-            "--inferred, --annotate-ontology, and --rename-iris."
+            "--inferred, --annotate-source, and --rename-iris."
         ),
     )
     parser.add_argument(
@@ -117,15 +106,14 @@ def main(argv: list = None):
         ),
     )
     parser.add_argument(
-        "--annotate-ontology",
+        "--annotate-source",
         "-a",
         action="store_true",
         help=(
-            "Whether to add 'ontology_name' and 'ontology_iri' annotations "
-            "to all entities.\n"
-            "The ontology name and IRI are important contextual information "
-            "that is lost when ontologies are inferred and/or squashed.  This "
-            "option retain this information as annotations."
+            "Whether to annotate all entities with be base IRI of the source "
+            "ontology using `dcterms:source` relations.  This is contextual "
+            "information that is otherwise lost when ontologies are inferred "
+            "and/or squashed."
         ),
     )
     parser.add_argument(
@@ -160,8 +148,6 @@ def main(argv: list = None):
     if not output_format:
         output_format = "xml"
 
-    output_rdf_format = FMAP.get(output_format, output_format)
-
     # Perform conversion
     with warnings.catch_warnings(record=True) as warnings_handle:
         warnings.simplefilter("always")
@@ -169,11 +155,11 @@ def main(argv: list = None):
             if (
                 args.squash
                 or args.inferred
-                or args.annotate_ontology
+                or args.annotate_source
                 or args.rename_iris
             ):
                 warnings.warn(
-                    "Options --squash, --inferred, --annotate-ontolog and "
+                    "Options --squash, --inferred, --annotate-source and "
                     "--rename-iris cannot be combined with --recursive."
                 )
             convert_imported(
@@ -190,8 +176,8 @@ def main(argv: list = None):
             )
             if args.inferred:
                 onto.sync_reasoner(include_imported=args.recursive)
-            if args.annotate_ontology:
-                annotate_with_ontology(onto, imported=args.recursive)
+            if args.annotate_source:
+                annotate_source(onto)
             if args.rename_iris:
                 rename_iris(onto, args.rename_iris)
             onto.save(
@@ -202,46 +188,6 @@ def main(argv: list = None):
                 overwrite=args.overwrite,
                 squash=args.squash,
             )
-
-        # elif args.inferred:
-        #    graph = squash_imported(args.input, None, input_format=input_format)
-        #    factpp_graph = FaCTPPGraph(graph)
-        #    if args.base_iri:
-        #        factpp_graph.base_iri = args.base_iri
-        #    graph2 = factpp_graph.inferred_graph()
-        #    graph2.serialize(destination=args.output, format=output_format)
-        # elif args.squash:
-        #    squash_imported(
-        #        args.input,
-        #        args.output,
-        #        input_format=input_format,
-        #        output_format=output_format,
-        #        url_from_catalog=args.url_from_catalog,
-        #    )
-        # else:
-        #    if not _validate_installed_version(
-        #        package="rdflib", min_version="6.0.0"
-        #    ) and (
-        #        output_format == FMAP.get("ttl", "")
-        #        or os.path.splitext(args.output)[1] == "ttl"
-        #    ):
-        #        from rdflib import (  # pylint: disable=import-outside-toplevel
-        #            __version__ as __rdflib_version__,
-        #        )
-        #
-        #        warnings.warn(
-        #            IncompatibleVersion(
-        #                "To correctly convert to Turtle format, rdflib must be"
-        #                " version 6.0.0 or greater, however, the detected "
-        #                "rdflib version used by your Python interpreter is "
-        #                f"{__rdflib_version__!r}. For more information see the"
-        #                " 'Known issues' section of the README."
-        #            )
-        #        )
-        #
-        #    graph = Graph()
-        #    graph.parse(args.input, format=input_format)
-        #    graph.serialize(destination=args.output, format=output_format)
 
         for warning in warnings_handle:
             print(

@@ -305,10 +305,10 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 return self.namespaces[label]
 
         if label_annotations is None:
-            annotations = (_.name for _ in self.label_annotations)
+            annotations = (a.name for a in self.label_annotations)
         else:
             annotations = (
-                _.name if hasattr(_, "storid") else _ for _ in label_annotations
+                a.name if hasattr(a, "storid") else a for a in label_annotations
             )
         for key in annotations:
             entity = self.search_one(**{key: label})
@@ -460,7 +460,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         catalog_file="catalog-v001.xml",
         **kwargs,
     ):
-        """Help function for _load()."""
+        """Help function for load()."""
         web_protocol = "http://", "https://", "ftp://"
 
         url = filename if filename else self.base_iri.rstrip("/#")
@@ -619,7 +619,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         mkdir=False,
         overwrite=False,
         squash=False,
-    ):  # pylint: disable=redefined-builtin
+    ):  # pylint: disable=redefined-builtin,too-many-arguments
         """Writes the ontology to file.
 
         Parameters
@@ -675,8 +675,13 @@ class Ontology(  # pylint: disable=too-many-public-methods
         if overwrite and filename and os.path.exists(filename):
             os.remove(filename)
 
+        EMMO = rdflib.Namespace(  # pylint:disable=invalid-name
+            "http://emmo.info/emmo#"
+        )
+
         if squash:
             graph = self.world.as_rdflib_graph()
+            graph.namespace_manager.bind("emmo", EMMO)
             graph.serialize(destination=filename, format=format)
         elif format in OWLREADY2_FORMATS:
             revmap = {value: key for key, value in FMAP.items()}
@@ -686,6 +691,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 tmpname = handle.name
             super().save(file=tmpname, format="rdfxml")
             graph = rdflib.Graph()
+            graph.namespace_manager.bind("emmo", EMMO)
             graph.parse(tmpname, format="xml")
             graph.serialize(destination=filename, format=format)
 
