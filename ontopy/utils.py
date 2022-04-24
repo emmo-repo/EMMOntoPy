@@ -6,6 +6,7 @@ import sys
 import re
 import datetime
 import tempfile
+from pathlib import Path
 from typing import TYPE_CHECKING
 import urllib.request
 import urllib.parse
@@ -259,6 +260,7 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
     # Protocols supported by urllib.request
     web_protocols = "http://", "https://", "ftp://"
 
+    uri = str(uri)  # in case uri is a pathlib.Path object
     iris = visited_iris if visited_iris else {}
     dirs = visited_paths if visited_paths else set()
     if uri in iris:
@@ -377,15 +379,30 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
     return iris
 
 
-def write_catalog(mappings, output="catalog-v001.xml"):
-    """Writes a catalog file.
+def write_catalog(
+    mappings: dict,
+    output: "Union[str, Path]" = "catalog-v001.xml",
+    dir: "Union[str, Path]" = ".",
+    append: bool = False,
+):  # pylint: disable=redefined-builtin
+    """Write catalog file do disk.
 
-    `mappings` is a dict mapping ontology IRIs (name) to actual
-    locations (uri).  It has the same format as the dict returned
-    by read_catalog().
-
-    `output` it the name of the generated file.
+    Args:
+        mappings: dict mapping ontology IRIs (name) to actual locations
+            (URIs).  It has the same format as the dict returned by
+            read_catalog().
+        output: name of catalog file.
+        dir: directory path to the catalog file.  Only used if `output`
+            is a relative path.
+        append: whether to append to a possible existing catalog file.
+            If false, an existing file will be overwritten.
     """
+    filename = (Path(dir) / output).resolve()
+    if filename.exists() and append:
+        iris = read_catalog(filename)
+        iris.update(mappings)
+        mappings = iris
+
     res = [
         '<?xml version="1.0" encoding="UTF-8" standalone="no"?>',
         '<catalog prefer="public" '
@@ -397,7 +414,7 @@ def write_catalog(mappings, output="catalog-v001.xml"):
         res.append(f'        <uri name="{key}" uri="{value}"/>')
     res.append("    </group>")
     res.append("</catalog>")
-    with open(output, "wt") as handle:
+    with open(filename, "wt") as handle:
         handle.write("\n".join(res) + "\n")
 
 
@@ -589,6 +606,7 @@ def squash_imported(  # pylint: disable=too-many-arguments
         more information.
 
     """
+    # pylint: disable=too-many-locals,too-many-branches
     inroot = os.path.dirname(os.path.abspath(input_ontology))
 
     if url_from_catalog is None:
