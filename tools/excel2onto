@@ -43,7 +43,7 @@ def main():
         sys.exit(exc.code)  # Exit without traceback on invalid arguments
 
     try:
-        ontology, catalog = create_ontology_from_excel(
+        ontology, catalog, _ = create_ontology_from_excel(
             args.excelpath, force=args.force
         )
     except ExcelError as exc:
