@@ -9,6 +9,7 @@ The class extension is defined within.
 If desirable some of this may be moved back into owlready2.
 """
 # pylint: disable=too-many-lines,fixme,arguments-differ,protected-access
+from typing import TYPE_CHECKING, Union
 import os
 import itertools
 import inspect
@@ -17,7 +18,6 @@ import uuid
 import tempfile
 import types
 import pathlib
-from typing import Union
 from collections import defaultdict
 from collections.abc import Iterable
 
@@ -46,6 +46,9 @@ from ontopy.utils import (
 )
 
 from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
+
+if TYPE_CHECKING:
+    from typing import List
 
 
 # Default annotations to look up
@@ -1270,6 +1273,81 @@ class Ontology(  # pylint: disable=too-many-public-methods
             return ancestors.difference(classes)
         return ancestors
 
+    def get_descendants(
+        self,
+        classes: "Union[List, ThingClass]",
+        common: bool = False,
+        generations: int = 1,
+        all_descendants: bool = False,
+    ):
+        """Return descendants/subclasses of all classes in `classes`.
+        Arguments:
+        - classes: to be provided as list
+        - common: only return common descendants
+        - generations: Include this number of descendant levels.
+        Returns: a list of
+        """
+        descendants = dict.fromkeys(classes, [])
+        print("----", descendants)
+
+        def _children_recursively(num, newentity, entity, descendants):
+            """Helper function to get all children up to generation."""
+            for child in self.get_children_of(newentity):
+                print("***")
+                print(entity, child)
+                print(descendants[entity])
+                print(descendants)
+                descendants[entity].append(child)
+                if num < generations:
+                    (num + 1, child, entity, descendants)
+
+        if generations == 0:
+            return set()
+
+        if not isinstance(classes, list):
+            classes = [classes]
+
+        if all_descendants is True:
+            for entity in classes:
+                descendants[
+                    entity
+                ] = entity.descendants()  # self.get_children_of(entity)
+
+        else:
+            for entity in classes:
+                _children_recursively(1, entity, entity, descendants)
+
+        # counter = 0
+        # while True:
+        #    counter+=1
+        #    if (counter > generations) & (all_descendants==False):
+        #        break
+
+        #    new_generation = dict.fromkeys(descendants.keys(), [])
+        #    for entity in classes:
+        #        print('Entity', entity)
+        #        for new_entity in current_descendants[entity]:
+        #            print('New_entity', new_entity)
+        #            print('children', self.get_children_of(new_entity))
+        # new_generation[entity].extend(self.get_children_of(new_entity))
+        #            print('****', new_generation)
+        #        print('Descendants of this entity', descendants[entity])
+        #        descendants[entity].extend(new_generation[entity])
+        #        print('New descendants', new_generation)
+        #        print('Descendats with new', descendants[entity])
+
+        #    if (all_descendants == True) & 
+        # (all(value == [] for value in new_generation.values())):
+        #        break
+        #    current_descendants = new_generation
+
+        print(descendants)
+        results = [val for _, val in descendants.items()]
+        print(results)
+        if common is True:
+            return set.intersection(*map(set, results))
+        return set(flatten(results))
+
     def get_wu_palmer_measure(self, cls1, cls2):
         """Return Wu-Palmer measure for semantic similarity.
 
@@ -1343,3 +1421,13 @@ class BlankNode:
     def __eq__(self, other):
         """For now blank nodes always compare true against each other."""
         return isinstance(other, BlankNode)
+
+
+def flatten(items):
+    """Yield items from any nested iterable."""
+    for item in items:
+        if isinstance(item, Iterable) and not isinstance(item, (str, bytes)):
+            for sub_item in flatten(item):
+                yield sub_item
+        else:
+            yield item
