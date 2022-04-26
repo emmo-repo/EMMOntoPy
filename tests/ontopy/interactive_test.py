@@ -2,7 +2,7 @@
 # "ipython -i"
 from pathlib import Path
 
-from conftest import get_triples, has_triple
+from .conftest import get_triples, has_triple
 from ontopy import get_ontology
 
 

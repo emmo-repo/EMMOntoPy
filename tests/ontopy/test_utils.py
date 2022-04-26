@@ -1,12 +1,12 @@
 import ontopy.utils as utils
-from conftest import get_triples, has_triple
+from testutils import get_triples, has_triple
 
 
 def test_annotate_source(onto):
     assert not has_triple(
         onto,
         "http://emmo.info/models#testclass",
-        "http://purl.org/dc/terms/source",
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy",
         "http://emmo.info/models#",
     )
 
@@ -14,7 +14,7 @@ def test_annotate_source(onto):
     assert not has_triple(
         onto,
         "http://emmo.info/models#testclass",
-        "http://purl.org/dc/terms/source",
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy",
         "http://emmo.info/models#",
     )
 
@@ -22,7 +22,7 @@ def test_annotate_source(onto):
     assert has_triple(
         onto,
         "http://emmo.info/models#testclass",
-        "http://purl.org/dc/terms/source",
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy",
         "http://emmo.info/models#",
     )
 

@@ -607,7 +607,7 @@ def infer_version(iri, version_iri):
 
 def annotate_source(onto, imported=True):
     """Annotate all entities with the base IRI of the ontology using
-    `dcterms:source` annotations.
+    `rdfs:isDefinedBy` annotations.
 
     If `imported` is true, all entities in imported sub-ontologies will
     also be annotated.
@@ -615,13 +615,17 @@ def annotate_source(onto, imported=True):
     This is contextual information that is otherwise lost when the ontology
     is squashed and/or inferred.
     """
-    source = onto._abbreviate("http://purl.org/dc/terms/source")
+    source = onto._abbreviate(
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy"
+    )
     for entity in onto.get_entities(imported=imported):
-        onto._add_obj_triple_spo(
+        triple = (
             entity.storid,
             source,
             onto._abbreviate(entity.namespace.ontology.base_iri),
         )
+        if not onto._has_obj_triple_spo(*triple):
+            onto._add_obj_triple_spo(*triple)
 
 
 def rename_iris(onto, annotation="prefLabel"):
