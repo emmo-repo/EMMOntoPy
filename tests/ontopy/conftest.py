@@ -18,9 +18,9 @@ def get_triples(onto, s=None, p=None, o=None) -> list:
     """Returns a list of triples matching spo."""
     return [
         (
-            onto._unabbreviate(s_) if isinstance(s_, int) else s_,
-            onto._unabbreviate(p_) if isinstance(p_, int) else p_,
-            onto._unabbreviate(o_) if isinstance(o_, int) else o_,
+            onto._unabbreviate(s_) if isinstance(s_, int) and s_ > 0 else s_,
+            onto._unabbreviate(p_) if isinstance(p_, int) and p_ > 0 else p_,
+            onto._unabbreviate(o_) if isinstance(o_, int) and o_ > 0 else o_,
         )
         for s_, p_, o_, d in onto._get_triples_spod_spod(
             abbreviate(onto, s),
