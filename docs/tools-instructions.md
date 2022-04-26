@@ -356,3 +356,8 @@ Since the catalog file will be overwritten in the above example writing output t
 ```console
 ontoconvert --recursive emmo.ttl owl/emmo.owl
 ```
+
+
+### Bugs
+Since parsing the results from the reasoner is currently broken in Owlready2 (v0.37), a workaround has been added to ontoconvert.
+This workaround only only supports FaCT++.  Hence, HermiT and Pellet are currently not available.

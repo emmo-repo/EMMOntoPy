@@ -285,6 +285,7 @@ def main(argv: list = None):
             )
 
         # Bring back these lines when _apply_reasoning_results() works again
+        # Remember to remove the Bugs subsection in the documentation
 
         # if args.reasoner:
         #     include_imported = not args.no_infer_imported
