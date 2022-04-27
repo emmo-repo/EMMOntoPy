@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/factpluspluswrapper/sync_factpp/">
       
       <link rel="icon" href="../../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.9">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.11">
     
     
       
@@ -21,7 +21,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.120efc48.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.8c5ef100.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.9647289d.min.css">
@@ -1042,7 +1042,7 @@ debug : bool
 
         
           Source code in ontopy/factpluspluswrapper/sync_factpp.py
-          def sync_reasoner_factpp(  # pylint: disable=too-many-locals,too-many-branches
+          def sync_reasoner_factpp(
     ontology_or_world=None, infer_property_values=False, debug=1
 ):
     &quot;&quot;&quot;Run FaCT++ reasoner and load the inferred relations back into
@@ -1057,6 +1057,7 @@ debug : bool
     debug : bool
         Whether to print debug info to standard output.
     &quot;&quot;&quot;
+    # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     if isinstance(ontology_or_world, World):
         world = ontology_or_world
     elif isinstance(ontology_or_world, Ontology):
@@ -1078,7 +1079,8 @@ debug : bool
         world.graph.release_write_lock()  # Not needed during reasoning
 
     try:
-        print(&quot;*** Prepare graph&quot;)
+        if debug:
+            print(&quot;*** Prepare graph&quot;)
         # Exclude owl:imports because they are not needed and can
         # cause trouble when loading the inferred ontology
         graph1 = rdflib.Graph()
@@ -1088,10 +1090,12 @@ debug : bool
             if predicate != OWL.imports:
                 graph1.add((subject, predicate, obj))
 
-        print(&quot;*** Run FaCT++ reasoner (and postprocess)&quot;)
+        if debug:
+            print(&quot;*** Run FaCT++ reasoner (and postprocess)&quot;)
         graph2 = FaCTPPGraph(graph1).inferred_graph()
 
-        print(&quot;*** Load inferred ontology&quot;)
+        if debug:
+            print(&quot;*** Load inferred ontology&quot;)
         # Check all rdfs:subClassOf relations in the inferred graph and add
         # them to the world if they are missing
         new_parents = defaultdict(list)
@@ -1133,7 +1137,9 @@ debug : bool
         if locked:
             world.graph.acquire_write_lock()  # re-lock when applying results
 
-    print(&quot;*** Applying reasoning results&quot;)
+    if debug:
+        print(&quot;*** Applying reasoning results&quot;)
+
     _apply_reasoning_results(
         world, ontology, debug, new_parents, new_equivs, entity_2_type
     )
@@ -1292,7 +1298,7 @@ debug : bool
 
         
           Source code in ontopy/factpluspluswrapper/sync_factpp.py
-          def sync_reasoner_factpp(  # pylint: disable=too-many-locals,too-many-branches
+          def sync_reasoner_factpp(
     ontology_or_world=None, infer_property_values=False, debug=1
 ):
     &quot;&quot;&quot;Run FaCT++ reasoner and load the inferred relations back into
@@ -1307,6 +1313,7 @@ debug : bool
     debug : bool
         Whether to print debug info to standard output.
     &quot;&quot;&quot;
+    # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     if isinstance(ontology_or_world, World):
         world = ontology_or_world
     elif isinstance(ontology_or_world, Ontology):
@@ -1328,7 +1335,8 @@ debug : bool
         world.graph.release_write_lock()  # Not needed during reasoning
 
     try:
-        print(&quot;*** Prepare graph&quot;)
+        if debug:
+            print(&quot;*** Prepare graph&quot;)
         # Exclude owl:imports because they are not needed and can
         # cause trouble when loading the inferred ontology
         graph1 = rdflib.Graph()
@@ -1338,10 +1346,12 @@ debug : bool
             if predicate != OWL.imports:
                 graph1.add((subject, predicate, obj))
 
-        print(&quot;*** Run FaCT++ reasoner (and postprocess)&quot;)
+        if debug:
+            print(&quot;*** Run FaCT++ reasoner (and postprocess)&quot;)
         graph2 = FaCTPPGraph(graph1).inferred_graph()
 
-        print(&quot;*** Load inferred ontology&quot;)
+        if debug:
+            print(&quot;*** Load inferred ontology&quot;)
         # Check all rdfs:subClassOf relations in the inferred graph and add
         # them to the world if they are missing
         new_parents = defaultdict(list)
@@ -1383,7 +1393,9 @@ debug : bool
         if locked:
             world.graph.acquire_write_lock()  # re-lock when applying results
 
-    print(&quot;*** Applying reasoning results&quot;)
+    if debug:
+        print(&quot;*** Applying reasoning results&quot;)
+
     _apply_reasoning_results(
         world, ontology, debug, new_parents, new_equivs, entity_2_type
     )
@@ -1493,7 +1505,7 @@ debug : bool
 
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/sync_factpp.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">sync_reasoner_factpp</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-branches</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">sync_reasoner_factpp</span><span class="p">(</span>
     <span class="n">ontology_or_world</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">infer_property_values</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Run FaCT++ reasoner and load the inferred relations back into</span>
@@ -1508,6 +1520,7 @@ debug : bool
 <span class="sd">    debug : bool</span>
 <span class="sd">        Whether to print debug info to standard output.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># pylint: disable=too-many-locals,too-many-branches,too-many-statements</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ontology_or_world</span><span class="p">,</span> <span class="n">World</span><span class="p">):</span>
         <span class="n">world</span> <span class="o">=</span> <span class="n">ontology_or_world</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ontology_or_world</span><span class="p">,</span> <span class="n">Ontology</span><span class="p">):</span>
@@ -1529,7 +1542,8 @@ debug : bool
         <span class="n">world</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">release_write_lock</span><span class="p">()</span>  <span class="c1"># Not needed during reasoning</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** Prepare graph&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** Prepare graph&quot;</span><span class="p">)</span>
         <span class="c1"># Exclude owl:imports because they are not needed and can</span>
         <span class="c1"># cause trouble when loading the inferred ontology</span>
         <span class="n">graph1</span> <span class="o">=</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
@@ -1539,10 +1553,12 @@ debug : bool
             <span class="k">if</span> <span class="n">predicate</span> <span class="o">!=</span> <span class="n">OWL</span><span class="o">.</span><span class="n">imports</span><span class="p">:</span>
                 <span class="n">graph1</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** Run FaCT++ reasoner (and postprocess)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** Run FaCT++ reasoner (and postprocess)&quot;</span><span class="p">)</span>
         <span class="n">graph2</span> <span class="o">=</span> <span class="n">FaCTPPGraph</span><span class="p">(</span><span class="n">graph1</span><span class="p">)</span><span class="o">.</span><span class="n">inferred_graph</span><span class="p">()</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** Load inferred ontology&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** Load inferred ontology&quot;</span><span class="p">)</span>
         <span class="c1"># Check all rdfs:subClassOf relations in the inferred graph and add</span>
         <span class="c1"># them to the world if they are missing</span>
         <span class="n">new_parents</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
@@ -1584,7 +1600,9 @@ debug : bool
         <span class="k">if</span> <span class="n">locked</span><span class="p">:</span>
             <span class="n">world</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">acquire_write_lock</span><span class="p">()</span>  <span class="c1"># re-lock when applying results</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** Applying reasoning results&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** Applying reasoning results&quot;</span><span class="p">)</span>
+
     <span class="n">_apply_reasoning_results</span><span class="p">(</span>
         <span class="n">world</span><span class="p">,</span> <span class="n">ontology</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">new_parents</span><span class="p">,</span> <span class="n">new_equivs</span><span class="p">,</span> <span class="n">entity_2_type</span>
     <span class="p">)</span>
@@ -1680,7 +1698,7 @@ debug : bool
     <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.6e54b5cd.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.748e2769.min.js"></script>
       
     
   </body>
