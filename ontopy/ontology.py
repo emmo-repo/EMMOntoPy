@@ -9,7 +9,7 @@ The class extension is defined within.
 If desirable some of this may be moved back into owlready2.
 """
 # pylint: disable=too-many-lines,fixme,arguments-differ,protected-access
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Union, Sequence
 import os
 import itertools
 import inspect
@@ -1291,7 +1291,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
             'generations' defaults to all.
         """
 
-        if not isinstance(classes, list):
+        if not isinstance(classes, Sequence):
             classes = [classes]
 
         descendants = {name: [] for name in classes}
