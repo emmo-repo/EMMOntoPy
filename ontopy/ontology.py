@@ -1278,7 +1278,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         classes: "Union[List, ThingClass]",
         common: bool = False,
         generations: int = None,
-    ):
+    ) -> set:
         """Return descendants/subclasses of all classes in `classes`.
         Arguments:
         - classes: to be provided as list.
