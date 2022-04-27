@@ -17,7 +17,7 @@ import warnings
 import uuid
 import tempfile
 import types
-import pathlib
+from pathlib import Path
 from collections import defaultdict
 from collections.abc import Iterable
 
@@ -32,6 +32,7 @@ from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 from ontopy.utils import (
     asstring,
     read_catalog,
+    write_catalog,
     infer_version,
     convert_imported,
     FMAP,
@@ -87,11 +88,7 @@ class World(owlready2.World):
           - "emmo-development": load latest inferred development version
             of EMMO
         """
-        base_iri = (
-            base_iri.as_uri()
-            if isinstance(base_iri, pathlib.Path)
-            else base_iri
-        )
+        base_iri = base_iri.as_uri() if isinstance(base_iri, Path) else base_iri
 
         if base_iri == "emmo":
             base_iri = (
@@ -308,10 +305,10 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 return self.namespaces[label]
 
         if label_annotations is None:
-            annotations = (_.name for _ in self.label_annotations)
+            annotations = (a.name for a in self.label_annotations)
         else:
             annotations = (
-                _.name if hasattr(_, "storid") else _ for _ in label_annotations
+                a.name if hasattr(a, "storid") else a for a in label_annotations
             )
         for key in annotations:
             entity = self.search_one(**{key: label})
@@ -377,7 +374,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
             raise ValueError(f"IRI not in ontology: {iri}")
         self._label_annotations.remove(label_annotation)
 
-    def load(  # pylint: disable=too-many-arguments
+    def load(  # pylint: disable=too-many-arguments,arguments-renamed
         self,
         only_local=False,
         filename=None,
@@ -463,7 +460,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         catalog_file="catalog-v001.xml",
         **kwargs,
     ):
-        """Help function for _load()."""
+        """Help function for load()."""
         web_protocol = "http://", "https://", "ftp://"
 
         url = filename if filename else self.base_iri.rstrip("/#")
@@ -615,19 +612,52 @@ class Ontology(  # pylint: disable=too-many-public-methods
                     )
 
     def save(
-        self, filename=None, format=None, overwrite=False, **kwargs
-    ):  # pylint: disable=redefined-builtin
+        self,
+        filename=None,
+        format=None,
+        dir=".",
+        mkdir=False,
+        overwrite=False,
+        recursive=False,
+        squash=False,
+        write_catalog_file=False,
+        append_catalog=False,
+        catalog_file="catalog-v001.xml",
+    ):
         """Writes the ontology to file.
 
-        If `overwrite` is `True` and filename exists, it will be removed
-        before saving.  The default is to append an existing ontology.
+        Parameters
+        ----------
+        filename: None | str | Path
+            Name of file to write to.  If None, it defaults to the name
+            of the ontology with `format` as file extension.
+        format: str
+            Output format. The default is to infer it from `filename`.
+        dir: str | Path
+            If `filename` is a relative path, it is a relative path to `dir`.
+        mkdir: bool
+            Whether to create output directory if it does not exists.
+        owerwrite: bool
+            If true and `filename` exists, remove the existing file before
+            saving.  The default is to append to an existing ontology.
+        recursive: bool
+            Whether to save imported ontologies recursively.  This is
+            commonly combined with `filename=None`, `dir` and `mkdir`.
+        squash: bool
+            If true, rdflib will be used to save the current ontology
+            together with all its sub-ontologies into `filename`.
+            It make no sense to combine this with `recursive`.
+        write_catalog_file: bool
+            Whether to also write a catalog file to disk.
+        append_catalog: bool
+            Whether to append to an existing catalog file.
+        catalog_file: str | Path
+            Name of catalog file.  If not an absolute path, it is prepended
+            to `dir`.
         """
-        if overwrite and filename and os.path.exists(filename):
-            os.remove(filename)
-
-        if not format:
-            format = guess_format(filename, fmap=FMAP)
-
+        # pylint: disable=redefined-builtin,too-many-arguments
+        # pylint: disable=too-many-statements,too-many-branches
+        # pylint: disable=too-many-locals,arguments-renamed
         if not _validate_installed_version(
             package="rdflib", min_version="6.0.0"
         ) and format == FMAP.get("ttl", ""):
@@ -645,16 +675,104 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 )
             )
 
-        if format in OWLREADY2_FORMATS:
-            revmap = {value: key for key, value in FMAP.items()}
-            super().save(file=filename, format=revmap[format], **kwargs)
+        revmap = {value: key for key, value in FMAP.items()}
+
+        if filename is None:
+            if format:
+                fmt = revmap.get(format, format)
+                filename = f"{self.name}.{fmt}"
+            else:
+                TypeError("`filename` and `format` cannot both be None.")
+        filename = os.path.join(dir, filename)
+        dir = Path(filename).resolve().parent
+
+        if mkdir:
+            outdir = Path(filename).parent.resolve()
+            if not outdir.exists():
+                outdir.mkdir(parents=True)
+
+        if not format:
+            format = guess_format(filename, fmap=FMAP)
+        fmt = revmap.get(format, format)
+
+        if overwrite and filename and os.path.exists(filename):
+            os.remove(filename)
+
+        EMMO = rdflib.Namespace(  # pylint:disable=invalid-name
+            "http://emmo.info/emmo#"
+        )
+
+        if recursive:
+            if squash:
+                raise ValueError(
+                    "`recursive` and `squash` should not both be true"
+                )
+            base = self.base_iri.rstrip("#/")
+            for onto in self.imported_ontologies:
+                obase = onto.base_iri.rstrip("#/")
+                newdir = Path(dir) / os.path.relpath(obase, base)
+                onto.save(
+                    filename=None,
+                    format=format,
+                    dir=newdir.resolve(),
+                    mkdir=mkdir,
+                    overwrite=overwrite,
+                    recursive=recursive,
+                    squash=squash,
+                    write_catalog_file=write_catalog_file,
+                    append_catalog=append_catalog,
+                    catalog_file=catalog_file,
+                )
+
+        if squash:
+            from rdflib import (  # pylint:disable=import-outside-toplevel
+                URIRef,
+                RDF,
+                OWL,
+            )
+
+            graph = self.world.as_rdflib_graph()
+            graph.namespace_manager.bind("emmo", EMMO)
+
+            # Remove anonymous namespace and imports
+            graph.remove((URIRef("http://anonymous"), RDF.type, OWL.Ontology))
+            imports = list(graph.triples((None, OWL.imports, None)))
+            for triple in imports:
+                graph.remove(triple)
+
+            graph.serialize(destination=filename, format=format)
+        elif format in OWLREADY2_FORMATS:
+            super().save(file=filename, format=fmt)
         else:
             with tempfile.NamedTemporaryFile(suffix=".owl") as handle:
                 tmpname = handle.name
-            super().save(file=tmpname, format="rdfxml", **kwargs)
-            graph = rdflib.Graph()
-            graph.parse(tmpname, format="xml")
-            graph.serialize(destination=filename, format=format)
+            try:
+                super().save(file=tmpname, format="rdfxml")
+                graph = rdflib.Graph()
+                graph.namespace_manager.bind("emmo", EMMO)
+                graph.parse(tmpname, format="xml")
+                graph.serialize(destination=filename, format=format)
+            finally:
+                os.remove(tmpname)
+
+        if write_catalog_file:
+            mappings = {}
+            base = self.base_iri.rstrip("#/")
+
+            def append(onto):
+                obase = onto.base_iri.rstrip("#/")
+                newdir = Path(dir) / os.path.relpath(obase, base)
+                newpath = newdir.resolve() / f"{onto.name}.{fmt}"
+                relpath = os.path.relpath(newpath, dir)
+                mappings[onto.get_version(as_iri=True)] = str(relpath)
+                for imported in onto.imported_ontologies:
+                    append(imported)
+
+            if recursive:
+                append(self)
+            write_catalog(
+                mappings, output=catalog_file, dir=dir, append=append_catalog
+            )
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
@@ -840,23 +958,27 @@ class Ontology(  # pylint: disable=too-many-public-methods
 
         Keyword arguments are passed to the underlying owlready2 function.
         """
-        if reasoner == "Pellet":
+        if reasoner == "FaCT++":
+            sync = sync_reasoner_factpp
+        elif reasoner == "Pellet":
             sync = owlready2.sync_reasoner_pellet
         elif reasoner == "HermiT":
             sync = owlready2.sync_reasoner_hermit
-        elif reasoner == "FaCT++":
-            sync = sync_reasoner_factpp
         else:
             raise ValueError(
-                f"unknown reasoner {reasoner!r}. Supported reasoners are "
-                '"Pellet", "HermiT" and "FaCT++".'
+                f"unknown reasoner {reasoner!r}. Supported reasoners "
+                'are "Pellet", "HermiT" and "FaCT++".'
             )
 
-        if include_imported:
-            with self:
-                sync(**kwargs)
-        else:
-            sync([self], **kwargs)
+        # For some reason we must visit all entities once before running
+        # the reasoner...
+        list(self.get_entities())
+
+        with self:
+            if include_imported:
+                sync(self.world, **kwargs)
+            else:
+                sync(self, **kwargs)
 
     def sync_attributes(  # pylint: disable=too-many-branches
         self,
@@ -917,11 +1039,10 @@ class Ontology(  # pylint: disable=too-many-public-methods
             if not hasattr(ind, "prefLabel"):
                 # no prefLabel - create new annotation property..
                 with self:
-
                     # pylint: disable=invalid-name,missing-class-docstring
                     # pylint: disable=function-redefined
                     class prefLabel(owlready2.label):
-                        pass
+                        iri = "http://www.w3.org/2004/02/skos/core#prefLabel"
 
                 ind.prefLabel = [locstr(ind.name, lang="en")]
             elif not ind.prefLabel:
