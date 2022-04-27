@@ -1277,27 +1277,19 @@ class Ontology(  # pylint: disable=too-many-public-methods
         self,
         classes: "Union[List, ThingClass]",
         common: bool = False,
-        generations: int = -1,
-        all_descendants: bool = False,
+        generations: int = None,
     ):
         """Return descendants/subclasses of all classes in `classes`.
         Arguments:
         - classes: to be provided as list.
         - common: whether to only return descendants common to all classes.
-        - generations: Include this number of descendant levels.
-        - all_descendants: Include all descendants.
+        - generations: Include this number of descendant levels, default is all.
         Returns:
-            A list of descendants including required generation.
+            A list of descendants for given number of generations.
             If 'common'=True, the common descendants are returned
             within the specified number of generations.
-            If 'generations' is not given and 'common' is True all
-            descendants will be checked.
-            'generations' defaults to 1 if 'common' not True.
+            'generations' defaults to all.
         """
-        if (common) & (generations == -1):
-            all_descendants = True
-        elif generations == -1:
-            generations = 1
 
         if not isinstance(classes, list):
             classes = [classes]
@@ -1314,15 +1306,17 @@ class Ontology(  # pylint: disable=too-many-public-methods
         if generations == 0:
             return set()
 
-        if all_descendants is True:
+        if not generations:
             for entity in classes:
                 descendants[entity] = entity.descendants()
+                # only include proper descendants
+                descendants[entity].remove(entity)
 
         else:
             for entity in classes:
                 _children_recursively(1, entity, entity, descendants)
 
-        results = [val for _, val in descendants.items()]
+        results = descendants.values()
         if common is True:
             return set.intersection(*map(set, results))
         return set(flatten(results))

@@ -13,25 +13,33 @@ def test_descendants(emmo: "Ontology", repo_dir: "Path") -> None:
 
     onto = get_ontology(ontopath).load()
 
-    # Test that default gives one generation
+    # Test that default gives all descendants.
     assert onto.get_descendants(onto.Tree) == {
         onto.EvergreenTree,
         onto.DesiduousTree,
+        onto.Avocado,
+        onto.Spruce,
+        onto.EngelmannSpruce,
+        onto.NorwaySpruce,
     }
+
+    # Test that asking for 0 generations returns empty set
+    assert onto.get_descendants(onto.Tree, generations=0) == set()
+
+    # Check that number of generations are returned correctly
     assert onto.get_descendants(onto.Tree, generations=1) == {
         onto.EvergreenTree,
         onto.DesiduousTree,
     }
-    # Test that asking for 0 generations returns empty set
-    assert onto.get_descendants(onto.Tree, generations=0) == set()
-    # Check that more than one generation works
+
     assert onto.get_descendants(onto.Tree, generations=2) == {
         onto.EvergreenTree,
         onto.DesiduousTree,
         onto.Avocado,
         onto.Spruce,
     }
-    # Check that no error is generated if one of the subclasses do not have enough children for all given generations
+    # Check that no error is generated if one of the subclasses do
+    # not have enough children for all given generations
     assert onto.get_descendants(onto.Tree, generations=3) == {
         onto.EvergreenTree,
         onto.DesiduousTree,
@@ -54,6 +62,9 @@ def test_descendants(emmo: "Ontology", repo_dir: "Path") -> None:
         onto.DesiduousTree,
         onto.Avocado,
         onto.ShingledHedgehogMushroom,
+        onto.Spruce,
+        onto.EngelmannSpruce,
+        onto.NorwaySpruce,
     }
     # Check that common descendants within the number of generations are found
     # With all descentants if number of generations not given
