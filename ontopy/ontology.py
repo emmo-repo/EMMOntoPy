@@ -1311,7 +1311,6 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 descendants[entity] = entity.descendants()
                 # only include proper descendants
                 descendants[entity].remove(entity)
-
         else:
             for entity in classes:
                 _children_recursively(1, entity, entity, descendants)
