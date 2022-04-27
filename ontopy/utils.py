@@ -6,7 +6,7 @@ import sys
 import re
 import datetime
 import tempfile
-import types
+from pathlib import Path
 from typing import TYPE_CHECKING
 import urllib.request
 import urllib.parse
@@ -260,6 +260,7 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
     # Protocols supported by urllib.request
     web_protocols = "http://", "https://", "ftp://"
 
+    uri = str(uri)  # in case uri is a pathlib.Path object
     iris = visited_iris if visited_iris else {}
     dirs = visited_paths if visited_paths else set()
     if uri in iris:
@@ -378,15 +379,30 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
     return iris
 
 
-def write_catalog(mappings, output="catalog-v001.xml"):
-    """Writes a catalog file.
+def write_catalog(
+    mappings: dict,
+    output: "Union[str, Path]" = "catalog-v001.xml",
+    dir: "Union[str, Path]" = ".",
+    append: bool = False,
+):  # pylint: disable=redefined-builtin
+    """Write catalog file do disk.
 
-    `mappings` is a dict mapping ontology IRIs (name) to actual
-    locations (uri).  It has the same format as the dict returned
-    by read_catalog().
-
-    `output` it the name of the generated file.
+    Args:
+        mappings: dict mapping ontology IRIs (name) to actual locations
+            (URIs).  It has the same format as the dict returned by
+            read_catalog().
+        output: name of catalog file.
+        dir: directory path to the catalog file.  Only used if `output`
+            is a relative path.
+        append: whether to append to a possible existing catalog file.
+            If false, an existing file will be overwritten.
     """
+    filename = (Path(dir) / output).resolve()
+    if filename.exists() and append:
+        iris = read_catalog(filename)
+        iris.update(mappings)
+        mappings = iris
+
     res = [
         '<?xml version="1.0" encoding="UTF-8" standalone="no"?>',
         '<catalog prefer="public" '
@@ -398,7 +414,7 @@ def write_catalog(mappings, output="catalog-v001.xml"):
         res.append(f'        <uri name="{key}" uri="{value}"/>')
     res.append("    </group>")
     res.append("</catalog>")
-    with open(output, "wt") as handle:
+    with open(filename, "wt") as handle:
         handle.write("\n".join(res) + "\n")
 
 
@@ -568,82 +584,6 @@ def convert_imported(  # pylint: disable=too-many-arguments,too-many-locals
     recur(graph, outext)
 
 
-def squash_imported(  # pylint: disable=too-many-arguments
-    input_ontology,
-    output_ontology,
-    input_format=None,
-    output_format="xml",
-    url_from_catalog=None,
-    catalog_file="catalog-v001.xml",
-):
-    """Convert imported ontologies and squash them into a single file.
-
-    If `url_from_catalog` is true the catalog file will be used to
-    load possible imported ontologies.  If `url_from_catalog` is None, it will
-    only be used if it exists in the same directory as the input file.
-
-    The the squash rdflib graph is returned.
-
-    Warning:
-        To convert to Turtle (`.ttl`) format, you must have installed
-        `rdflib>=6.0.0`. See [Known issues](../../../#known-issues) for
-        more information.
-
-    """
-    inroot = os.path.dirname(os.path.abspath(input_ontology))
-
-    if url_from_catalog is None:
-        url_from_catalog = os.path.exists(os.path.join(inroot, catalog_file))
-
-    if url_from_catalog:
-        iris = read_catalog(inroot, catalog_file=catalog_file, recursive=True)
-    else:
-        iris = {}
-
-    imported = set()
-
-    def recur(graph):
-        for subject, predicate, obj in graph.triples(
-            (None, URIRef("http://www.w3.org/2002/07/owl#imports"), None)
-        ):
-            graph.remove((subject, predicate, obj))
-            iri = iris.get(str(obj), str(obj))
-            if iri not in imported:
-                imported.add(iri)
-                new_graph = Graph()
-                new_graph.parse(iri, format=input_format)
-                recur(new_graph)
-                for triple in new_graph.triples((None, None, None)):
-                    graph.add(triple)
-
-    graph = Graph()
-    graph.parse(input_ontology, format=input_format)
-    recur(graph)
-    if output_ontology:
-        if not _validate_installed_version(
-            package="rdflib", min_version="6.0.0"
-        ) and (
-            output_format == FMAP.get("ttl", "")
-            or os.path.splitext(output_ontology)[1] == "ttl"
-        ):
-            from rdflib import (  # pylint: disable=import-outside-toplevel
-                __version__ as __rdflib_version__,
-            )
-
-            warnings.warn(
-                IncompatibleVersion(
-                    "To correctly convert to Turtle format, rdflib must be "
-                    "version 6.0.0 or greater, however, the detected rdflib "
-                    "version used by your Python interpreter is "
-                    f"{__rdflib_version__!r}. For more information see the "
-                    "'Known issues' section of the README."
-                )
-            )
-
-        graph.serialize(destination=output_ontology, format=output_format)
-    return graph
-
-
 def infer_version(iri, version_iri):
     """Infer version from IRI and versionIRI."""
     if str(version_iri[: len(iri)]) == str(iri):
@@ -665,26 +605,43 @@ def infer_version(iri, version_iri):
     return version
 
 
-def annotate_with_ontology(onto, imported=True):
-    """Annotate all entities with the `ontology_name` and `ontology_iri`.
+def annotate_source(onto, imported=True):
+    """Annotate all entities with the base IRI of the ontology using
+    `rdfs:isDefinedBy` annotations.
 
-    If imported is true, imported ontologies will also be annotated.
+    If `imported` is true, all entities in imported sub-ontologies will
+    also be annotated.
 
-    The ontology name and IRI are important contextual information
-    that is lost when ontologies are inferred and/or squashed.  This
-    function retain this information as annotations.
+    This is contextual information that is otherwise lost when the ontology
+    is squashed and/or inferred.
     """
-    with onto:
-        if "ontology_name" not in onto.world._props:
-            types.new_class("ontology_name", (owlready2.AnnotationProperty,))
-        if "ontology_iri" not in onto.world._props:
-            types.new_class("ontology_iri", (owlready2.AnnotationProperty,))
-
+    source = onto._abbreviate(
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy"
+    )
     for entity in onto.get_entities(imported=imported):
-        if onto.name not in getattr(entity, "ontology_name"):
-            setattr(entity, "ontology_name", onto.name)
-        if onto.base_iri not in getattr(entity, "ontology_iri"):
-            setattr(entity, "ontology_iri", onto.base_iri)
+        triple = (
+            entity.storid,
+            source,
+            onto._abbreviate(entity.namespace.ontology.base_iri),
+        )
+        if not onto._has_obj_triple_spo(*triple):
+            onto._add_obj_triple_spo(*triple)
+
+
+def rename_iris(onto, annotation="prefLabel"):
+    """For IRIs with the given annotation, change the name of the entity
+    to the value of the annotation.  Also add an `skos:exactMatch`
+    annotation referring to the old IRI.
+    """
+    exactMatch = onto._abbreviate(  # pylint:disable=invalid-name
+        "http://www.w3.org/2004/02/skos/core#exactMatch"
+    )
+    for entity in onto.get_entities():
+        if hasattr(entity, annotation) and getattr(entity, annotation):
+            onto._add_data_triple_spod(
+                entity.storid, exactMatch, entity.iri, ""
+            )
+            entity.name = getattr(entity, annotation).first()
 
 
 def normalise_url(url):

@@ -23,10 +23,11 @@ OWL_2_TYPE = {
     RDF.type: "individual",
     OWL.equivalentClass: "class",
     OWL.equivalentProperty: "property",
+    OWL.sameAs: "individual",
 }
 
 
-def sync_reasoner_factpp(  # pylint: disable=too-many-locals,too-many-branches
+def sync_reasoner_factpp(
     ontology_or_world=None, infer_property_values=False, debug=1
 ):
     """Run FaCT++ reasoner and load the inferred relations back into
@@ -41,6 +42,7 @@ def sync_reasoner_factpp(  # pylint: disable=too-many-locals,too-many-branches
     debug : bool
         Whether to print debug info to standard output.
     """
+    # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     if isinstance(ontology_or_world, World):
         world = ontology_or_world
     elif isinstance(ontology_or_world, Ontology):
@@ -62,7 +64,8 @@ def sync_reasoner_factpp(  # pylint: disable=too-many-locals,too-many-branches
         world.graph.release_write_lock()  # Not needed during reasoning
 
     try:
-        print("*** Prepare graph")
+        if debug:
+            print("*** Prepare graph")
         # Exclude owl:imports because they are not needed and can
         # cause trouble when loading the inferred ontology
         graph1 = rdflib.Graph()
@@ -72,10 +75,12 @@ def sync_reasoner_factpp(  # pylint: disable=too-many-locals,too-many-branches
             if predicate != OWL.imports:
                 graph1.add((subject, predicate, obj))
 
-        print("*** Run FaCT++ reasoner (and postprocess)")
+        if debug:
+            print("*** Run FaCT++ reasoner (and postprocess)")
         graph2 = FaCTPPGraph(graph1).inferred_graph()
 
-        print("*** Load inferred ontology")
+        if debug:
+            print("*** Load inferred ontology")
         # Check all rdfs:subClassOf relations in the inferred graph and add
         # them to the world if they are missing
         new_parents = defaultdict(list)
@@ -117,7 +122,9 @@ def sync_reasoner_factpp(  # pylint: disable=too-many-locals,too-many-branches
         if locked:
             world.graph.acquire_write_lock()  # re-lock when applying results
 
-    print("*** Applying reasoning results")
+    if debug:
+        print("*** Applying reasoning results")
+
     _apply_reasoning_results(
         world, ontology, debug, new_parents, new_equivs, entity_2_type
     )
