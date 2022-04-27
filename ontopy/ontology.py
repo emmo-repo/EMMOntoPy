@@ -1285,7 +1285,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         - common: whether to only return descendants common to all classes.
         - generations: Include this number of descendant levels, default is all.
         Returns:
-            A list of descendants for given number of generations.
+            A set of descendants for given number of generations.
             If 'common'=True, the common descendants are returned
             within the specified number of generations.
             'generations' defaults to all.
