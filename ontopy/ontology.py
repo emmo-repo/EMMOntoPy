@@ -1283,7 +1283,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         """Return descendants/subclasses of all classes in `classes`.
         Arguments:
         - classes: to be provided as list.
-        - common: only return common descendants.
+        - common: whether to only return descendants common to all classes.
         - generations: Include this number of descendant levels.
         - all_descendants: Include all descendants.
         Returns:
