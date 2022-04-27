@@ -1401,10 +1401,10 @@ class Ontology(  # pylint: disable=too-many-public-methods
         generations: int = None,
     ) -> set:
         """Return descendants/subclasses of all classes in `classes`.
-        Arguments:
-        - classes: to be provided as list.
-        - common: whether to only return descendants common to all classes.
-        - generations: Include this number of descendant levels, default is all.
+        Args:
+            classes: to be provided as list.
+            common: whether to only return descendants common to all classes.
+            generations: Include this number of generations, default is all.
         Returns:
             A set of descendants for given number of generations.
             If 'common'=True, the common descendants are returned
