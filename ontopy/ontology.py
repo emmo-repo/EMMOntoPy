@@ -9,6 +9,7 @@ The class extension is defined within.
 If desirable some of this may be moved back into owlready2.
 """
 # pylint: disable=too-many-lines,fixme,arguments-differ,protected-access
+from typing import TYPE_CHECKING, Union, Sequence
 import os
 import itertools
 import inspect
@@ -16,7 +17,6 @@ import warnings
 import uuid
 import tempfile
 import types
-from typing import Union
 from pathlib import Path
 from collections import defaultdict
 from collections.abc import Iterable
@@ -47,6 +47,9 @@ from ontopy.utils import (
 )
 
 from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
+
+if TYPE_CHECKING:
+    from typing import List
 
 
 # Default annotations to look up
@@ -1391,6 +1394,53 @@ class Ontology(  # pylint: disable=too-many-public-methods
             return ancestors.difference(classes)
         return ancestors
 
+    def get_descendants(
+        self,
+        classes: "Union[List, ThingClass]",
+        common: bool = False,
+        generations: int = None,
+    ) -> set:
+        """Return descendants/subclasses of all classes in `classes`.
+        Args:
+            classes: to be provided as list.
+            common: whether to only return descendants common to all classes.
+            generations: Include this number of generations, default is all.
+        Returns:
+            A set of descendants for given number of generations.
+            If 'common'=True, the common descendants are returned
+            within the specified number of generations.
+            'generations' defaults to all.
+        """
+
+        if not isinstance(classes, Sequence):
+            classes = [classes]
+
+        descendants = {name: [] for name in classes}
+
+        def _children_recursively(num, newentity, parent, descendants):
+            """Helper function to get all children up to generation."""
+            for child in self.get_children_of(newentity):
+                descendants[parent].append(child)
+                if num < generations:
+                    _children_recursively(num + 1, child, parent, descendants)
+
+        if generations == 0:
+            return set()
+
+        if not generations:
+            for entity in classes:
+                descendants[entity] = entity.descendants()
+                # only include proper descendants
+                descendants[entity].remove(entity)
+        else:
+            for entity in classes:
+                _children_recursively(1, entity, entity, descendants)
+
+        results = descendants.values()
+        if common is True:
+            return set.intersection(*map(set, results))
+        return set(flatten(results))
+
     def get_wu_palmer_measure(self, cls1, cls2):
         """Return Wu-Palmer measure for semantic similarity.
 
@@ -1464,3 +1514,13 @@ class BlankNode:
     def __eq__(self, other):
         """For now blank nodes always compare true against each other."""
         return isinstance(other, BlankNode)
+
+
+def flatten(items):
+    """Yield items from any nested iterable."""
+    for item in items:
+        if isinstance(item, Iterable) and not isinstance(item, (str, bytes)):
+            for sub_item in flatten(item):
+                yield sub_item
+        else:
+            yield item
