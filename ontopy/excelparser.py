@@ -71,35 +71,30 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
             that are erroneously defined or other errors in the excel sheet.
 
     Returns:
-        A tuple with the
-        * created ontology
-        * associated catalog of ontology names and resolvable path as dict
-        * a dictionary with lists of concepts that raise errors, with the
-          following keys:
-            - "already_defined": These are concepts that are already in
-                                 the ontology,
-                                 either because they were already added in a
-                                 previous line of
-                                 the excelfile/pandas dataframe,
-                                 or because it is already defined
-                                 in the imported ontologies.
-            - "in_imported_ontologies": Concepts that are defined in the excel,
-                                 but already exist in the imported ontologies.
-                                 This is a subset of the 'already_defined'
-            - "wrongly_defined": Concepts that are given an invalid prefLabel
-                                 (e.g. with a space in the name).
-            - "missing_parents": Concepts that are missing parents.
-                                 These concepts are added directly
-                                 under owl:Thing.
-            - "invalid_parents": Concepts with invalidly defined parents.
-                                 These concepts are added directly
-                                 under owl:Thing.
-            - "nonadded_concepts": List of all concepts that are not added,
-                                 either because the prefLabel is invalid,
-                                 or because the concept has already been added
-                                 once or already exists in an imported
-                                 ontology.
+        A tuple with the:
 
+            * created ontology
+            * associated catalog of ontology names and resolvable path as dict
+            * a dictionary with lists of concepts that raise errors, with the
+              following keys:
+
+                - "already_defined": These are concepts that are already in the
+                    ontology, either because they were already added in a
+                    previous line of the excelfile/pandas dataframe, or because
+                    it is already defined in the imported ontologies.
+                - "in_imported_ontologies": Concepts that are defined in the
+                    excel, but already exist in the imported ontologies.
+                    This is a subset of the 'already_defined'.
+                - "wrongly_defined": Concepts that are given an invalid
+                    prefLabel (e.g. with a space in the name).
+                - "missing_parents": Concepts that are missing parents.
+                    These concepts are added directly under owl:Thing.
+                - "invalid_parents": Concepts with invalidly defined parents.
+                    These concepts are added directly under owl:Thing.
+                - "nonadded_concepts": List of all concepts that are not added,
+                    either because the prefLabel is invalid, or because the
+                    concept has already been added once or already exists in an
+                    imported ontology.
 
     """
     # Get imported ontologies from optional "Imports" sheet

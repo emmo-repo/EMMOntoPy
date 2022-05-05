@@ -12,12 +12,17 @@ import shutil
 import subprocess  # nosec
 from textwrap import dedent
 from tempfile import NamedTemporaryFile, TemporaryDirectory
+from typing import TYPE_CHECKING
 
 import yaml
 import owlready2
 
 from ontopy.utils import asstring, camelsplit, get_label
 from ontopy.graph import OntoGraph, filter_classes
+
+if TYPE_CHECKING:
+    from pathlib import Path
+    from typing import Iterable, Union
 
 
 class OntoDoc:
@@ -720,20 +725,20 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
 
     def _make_branchfig(  # pylint: disable=too-many-arguments,too-many-locals
         self,
-        name,
-        path,
-        terminated,
-        include_leafs,
-        strict_leafs,
-        width,
-        leafs,
-        relations,
-        edgelabels,
-        rankdir,
-        legend,
-        included_namespaces,
-        included_ontologies,
-    ):
+        name: str,
+        path: "Union[Path, str]",
+        terminated: bool,
+        include_leafs: bool,
+        strict_leafs: bool,
+        width: float,
+        leafs: "Union[str, list[str]]",
+        relations: str,
+        edgelabels: str,
+        rankdir: str,
+        legend: bool,
+        included_namespaces: "Iterable[str]",
+        included_ontologies: "Iterable[str]",
+    ) -> "tuple[str, list[str], float]":
         """Help method for process_branchfig().
 
         Args:
@@ -750,10 +755,12 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
             legend: whether to add legend
             included_namespaces: sequence of names of namespaces to be included
             included_ontologies: sequence of names of ontologies to be included
+
         Returns:
             filepath: path to generated figure
             leafs: used list of leaf node names
             width: actual figure width
+
         """
         onto = self.ontodoc.onto
         if leafs:

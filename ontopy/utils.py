@@ -21,7 +21,7 @@ import owlready2
 
 if TYPE_CHECKING:
     from packaging.version import Version, LegacyVersion
-    from typing import Union
+    from typing import Optional, Union
 
 
 # Format mappings: file extension -> rdflib format name
@@ -465,12 +465,12 @@ def _validate_installed_version(
 
 
 def convert_imported(  # pylint: disable=too-many-arguments,too-many-locals
-    input_ontology,
-    output_ontology,
-    input_format=None,
-    output_format="xml",
-    url_from_catalog=None,
-    catalog_file="catalog-v001.xml",
+    input_ontology: "Union[Path, str]",
+    output_ontology: "Union[Path, str]",
+    input_format: "Optional[str]" = None,
+    output_format: str = "xml",
+    url_from_catalog: "Optional[bool]" = None,
+    catalog_file: str = "catalog-v001.xml",
 ):
     """Convert imported ontologies.
 
@@ -490,8 +490,8 @@ def convert_imported(  # pylint: disable=too-many-arguments,too-many-locals
             `input_ontology`
         output_format: output format. The default is to infer from
             `output_ontology`
-        url_from_catalog: bool | None. Whether to read urls form catalog file.
-            If None, the catalog file will be used if it exists.
+        url_from_catalog: Whether to read urls form catalog file.
+            If False, the catalog file will be used if it exists.
         catalog_file: name of catalog file, that maps ontology IRIs to
             local file names
     """
