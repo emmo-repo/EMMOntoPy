@@ -28,6 +28,7 @@ class OwlApiInterface:
 
         Args:
             graph (Graph): An rdflib graph to execute the reasoner on.
+
         """
         with tempfile.NamedTemporaryFile("wt") as tmpdir:
             graph.serialize(tmpdir.name, format="xml")
@@ -37,7 +38,8 @@ class OwlApiInterface:
         """Merge the given owl and generate the inferred axioms.
 
         Args:
-            owl_files (os.path): The owl files two merge
+            *owl_files (os.path): The owl files two merge.
+
         """
         return self._run(*owl_files, command="--run-reasoner")
 
@@ -45,16 +47,19 @@ class OwlApiInterface:
         """Merge the given owl files and its import closure.
 
         Args:
-            owl_files (os.path): The owl files two merge
+            *owl_files (os.path): The owl files two merge.
+
         """
         return self._run(*owl_files, command="--merge-only")
 
     @staticmethod
-    def _run(*owl_files, command, output_file=None, return_graph=True):
+    def _run(
+        *owl_files, command, output_file=None, return_graph=True
+    ) -> rdflib.Graph:
         """Run the FaCT++ reasoner using a java command.
 
         Args:
-            owl_files (str): Path to the owl files to load.
+            *owl_files (str): Path to the owl files to load.
             command (str): Either --run-reasoner or --merge-only
             output_file (str, optional): Where the output should be stored.
                 Defaults to None.
@@ -62,7 +67,8 @@ class OwlApiInterface:
                 and returned. Defaults to True.
 
         Returns:
-            rdflib.Graph: The reasoned result.
+            The reasoned result.
+
         """
         java_base = os.path.abspath(
             os.path.join(os.path.dirname(__file__), "java")
