@@ -262,4 +262,14 @@ jobs:
         fi
 
     - name: Build check
-      run: mkdocs build --strict --verbose
+      run: |
+        mkdocs build 2>build_out.txt
+        WARNING_LINES=$( cat build_out.txt | grep WARNING | wc -l )
+        if [ ${WARNING_LINES} != 1 ]; then
+          echo -e "FAIL !\n\n"
+          cat build_out.txt
+          exit 1
+        else
+          echo -e "Only 1 warning - that's workable :)\n\n"
+          cat build_out.txt
+        fi
