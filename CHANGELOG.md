@@ -1,5 +1,40 @@
 # Changelog
 
+## [v0.3.0](https://github.com/emmo-repo/EMMO-python/tree/v0.3.0) (2022-05-05)
+
+[Full Changelog](https://github.com/emmo-repo/EMMO-python/compare/v0.2.0...v0.3.0)
+
+**Fixed bugs:**
+
+- Documentation is currently not building [\#407](https://github.com/emmo-repo/EMMO-python/issues/407)
+- Pytest is currently failing [\#384](https://github.com/emmo-repo/EMMO-python/issues/384)
+- permission denied when working with temporary file [\#313](https://github.com/emmo-repo/EMMO-python/issues/313)
+
+**Closed issues:**
+
+- Make get\_descendants\(levels=1\) [\#403](https://github.com/emmo-repo/EMMO-python/issues/403)
+- Add functionality for setting name part of IRI to prefLabel [\#398](https://github.com/emmo-repo/EMMO-python/issues/398)
+- Generate excelsheet from ontology. [\#394](https://github.com/emmo-repo/EMMO-python/issues/394)
+- Return a list of the concepts that are disregarded during when converting from excel with -force argument [\#393](https://github.com/emmo-repo/EMMO-python/issues/393)
+- Demo - Broken ontology URLs [\#390](https://github.com/emmo-repo/EMMO-python/issues/390)
+- Excelparser: how to handle entities that already exist in one of the imported ontologies? [\#334](https://github.com/emmo-repo/EMMO-python/issues/334)
+
+**Merged pull requests:**
+
+- Updated docs python handler [\#408](https://github.com/emmo-repo/EMMO-python/pull/408) ([CasperWA](https://github.com/CasperWA))
+- Flb/get descendants [\#405](https://github.com/emmo-repo/EMMO-python/pull/405) ([francescalb](https://github.com/francescalb))
+- Corrected expected number of returned arguments [\#404](https://github.com/emmo-repo/EMMO-python/pull/404) ([jesper-friis](https://github.com/jesper-friis))
+- \[Auto-generated\] Update dependencies [\#402](https://github.com/emmo-repo/EMMO-python/pull/402) ([TEAM4-0](https://github.com/TEAM4-0))
+- \[Auto-generated\] Update dependencies [\#400](https://github.com/emmo-repo/EMMO-python/pull/400) ([TEAM4-0](https://github.com/TEAM4-0))
+- Add functionality for setting name part of IRI to prefLabel [\#399](https://github.com/emmo-repo/EMMO-python/pull/399) ([jesper-friis](https://github.com/jesper-friis))
+- create\_from\_excel/pandas return as list of concepts that are worngly defined in the excelfile [\#396](https://github.com/emmo-repo/EMMO-python/pull/396) ([francescalb](https://github.com/francescalb))
+- \[Auto-generated\] Update dependencies [\#395](https://github.com/emmo-repo/EMMO-python/pull/395) ([TEAM4-0](https://github.com/TEAM4-0))
+- Download EMMO from raw.github deirectly as redirection is broken [\#392](https://github.com/emmo-repo/EMMO-python/pull/392) ([francescalb](https://github.com/francescalb))
+- \[Auto-generated\] Update dependencies [\#389](https://github.com/emmo-repo/EMMO-python/pull/389) ([TEAM4-0](https://github.com/TEAM4-0))
+- Workaround for failing test [\#385](https://github.com/emmo-repo/EMMO-python/pull/385) ([CasperWA](https://github.com/CasperWA))
+- \[Auto-generated\] Update dependencies [\#380](https://github.com/emmo-repo/EMMO-python/pull/380) ([TEAM4-0](https://github.com/TEAM4-0))
+- fix \#313 remove handle [\#315](https://github.com/emmo-repo/EMMO-python/pull/315) ([sygout](https://github.com/sygout))
+
 ## [v0.2.0](https://github.com/emmo-repo/EMMO-python/tree/v0.2.0) (2022-03-02)
 
 [Full Changelog](https://github.com/emmo-repo/EMMO-python/compare/v0.1.3...v0.2.0)
