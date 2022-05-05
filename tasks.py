@@ -67,8 +67,10 @@ def setver(_, ver=""):
             "Remove the 'api_reference' sub directory prior to (re)creation."
         )
     }
-)  # pylint: disable=too-many-branches
-def create_api_reference_docs(context, pre_clean=False, pre_commit=False):
+)
+def create_api_reference_docs(
+    context, pre_clean=False, pre_commit=False
+):  # pylint: disable=too-many-branches
     """Create the API Reference in the documentation"""
     import os
     import shutil
