@@ -753,7 +753,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
                     suffix=".owl", delete=False
                 ) as handle:
                     tmpfile = handle.name
-                super().save(tmpfile, format="rdfxml", **kwargs)
+                super().save(tmpfile, format="rdfxml")
                 graph = rdflib.Graph()
                 graph.parse(tmpfile, format="xml")
                 graph.serialize(destination=filename, format=format)
