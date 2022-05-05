@@ -744,16 +744,21 @@ class Ontology(  # pylint: disable=too-many-public-methods
         elif format in OWLREADY2_FORMATS:
             super().save(file=filename, format=fmt)
         else:
-            with tempfile.NamedTemporaryFile(suffix=".owl") as handle:
-                tmpname = handle.name
+            # The try-finally clause is needed for cleanup and because
+            # we have to provide delete=False to NamedTemporaryFile
+            # since Windows does not allow to reopen an already open
+            # file.
             try:
-                super().save(file=tmpname, format="rdfxml")
+                with tempfile.NamedTemporaryFile(
+                    suffix=".owl", delete=False
+                ) as handle:
+                    tmpfile = handle.name
+                super().save(tmpfile, format="rdfxml")
                 graph = rdflib.Graph()
-                graph.namespace_manager.bind("emmo", EMMO)
-                graph.parse(tmpname, format="xml")
+                graph.parse(tmpfile, format="xml")
                 graph.serialize(destination=filename, format=format)
             finally:
-                os.remove(tmpname)
+                os.remove(tmpfile)
 
         if write_catalog_file:
             mappings = {}
