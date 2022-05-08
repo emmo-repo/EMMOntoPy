@@ -1154,7 +1154,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
                     #
                     # where R is the root, L is a leaf and A is a direct
                     # child of both.  Logically, since A is a child of the
-                    # leaf we want to skip A.  But a strait forward imple-
+                    # leaf, we want to skip A.  But a strait forward imple-
                     # mentation will see that A is a child of the root and
                     # include it.  Requireing that the R should be a strict
                     # parent of A solves this.
