@@ -7,7 +7,7 @@ import os
 import re
 import tempfile
 import warnings
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 import defusedxml.ElementTree as ET
 import owlready2
 import graphviz
@@ -15,6 +15,10 @@ import graphviz
 from ontopy.utils import asstring, get_label
 from ontopy.ontology import Ontology
 from ontopy.utils import EMMOntoPyException
+
+if TYPE_CHECKING:
+    from ipywidgets.widgets.widget_templates import GridspecLayout
+
 
 typenames = (
     owlready2.class_construct._restriction_type_2_label  # pylint: disable=protected-access
@@ -1053,7 +1057,8 @@ def cytoscapegraph(
     onto: Optional[Ontology] = None,
     infobox: str = None,
     force: bool = False,
-):  # pylint: disable=too-many-locals,too-many-statements
+) -> "GridspecLayout":
+    # pylint: disable=too-many-locals,too-many-statements
     """Returns and instance of icytoscape-figure for an
     instance Graph of OntoGraph, the accompanying ontology
     is required for mouse actions.
