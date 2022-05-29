@@ -11,7 +11,7 @@ theme:
     accent: light green
   icon:
     repo: fontawesome/brands/github
-  logo: images/suspected_logo.svg
+  logo: images/emmontopy-logo.svg
   favicon: images/favicon.png
   language: en
   features:
