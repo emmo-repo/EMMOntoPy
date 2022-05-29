@@ -1,4 +1,4 @@
-<img src="docs/images/emmontopy_logo.png" width="40%" align="right">
+<img src="docs/images/emmontopy-logo.png" width="40%" align="right">
 
 # EMMOntoPy
 
