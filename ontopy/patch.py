@@ -207,7 +207,7 @@ def items(self):
         if namespace._has_data_triple_spod(
             s=namespace.storid, p=annotation.storid
         ):
-            yield annotation, self.__getattr__(annotation.name)
+            yield annotation, getattr(self, annotation.name)
 
 
 def has(self, name):
