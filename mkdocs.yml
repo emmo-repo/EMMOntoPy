@@ -68,7 +68,7 @@ plugins:
             filters:
               - "!^_"
               - "^__init__$"
-            members: none
+            members: null
             # inherited_members: false
             docstring_style: google
           #   docstring_options:
