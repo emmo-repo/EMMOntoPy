@@ -67,7 +67,7 @@ jobs:
         pip install safety
 
     - name: Run PyLint
-      run: pylint --rcfile=pyproject.toml *.py tools
+      run: pylint --rcfile=pyproject.toml *.py tools emmopy ontopy
 
     # Ignore ID 44715 for now.
     # See this NumPy issue for more information: https://github.com/numpy/numpy/issues/19038
