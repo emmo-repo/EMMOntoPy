@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/graph/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.16">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.3">
     
     
       
@@ -21,15 +21,16 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.1c3799f8.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4a0965b7.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cbb835fc.min.css">
         
           
           
           <meta name="theme-color" content="#4cae4f">
         
+      
       
     
     
@@ -1434,14 +1435,15 @@
 <h1 id="graph">graph<a class="headerlink" href="#graph" title="Permanent link">&para;</a></h1>
 
 
-  <div class="doc doc-object doc-module">
+<div class="doc doc-object doc-module">
+
 
 <a id="ontopy.graph"></a>
-    <div class="doc doc-contents first">
-
+  <div class="doc doc-contents first">
+  
       <p>A module for visualising ontologies using graphviz.</p>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -1452,23 +1454,20 @@
 
 
 
-
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.graph.OntoGraph">
-          <code>OntoGraph</code>
-
+        <code>OntoGraph</code>
 
 
 <a class="headerlink" href="#ontopy.graph.OntoGraph" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
+  <div class="doc doc-contents ">
 
-
+  
       <p>Class for visualising an ontology.</p>
 <h4 id="ontopy.graph.OntoGraph--parameters">Parameters<a class="headerlink" href="#ontopy.graph.OntoGraph--parameters" title="Permanent link">&para;</a></h4>
 
@@ -1575,9 +1574,9 @@ is created using the keyword arguments.</p>
   <p>Passed to graphviz.Digraph.</p>
 </details>
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/graph.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">157</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/graph.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">157</span>
 <span class="normal">158</span>
 <span class="normal">159</span>
 <span class="normal">160</span>
@@ -3023,9 +3022,9 @@ is created using the keyword arguments.</p>
 
         <span class="k">return</span> <span class="n">asfloat</span><span class="p">(</span><span class="n">width</span><span class="p">),</span> <span class="n">asfloat</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-          </details>
+        </details>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -3037,37 +3036,25 @@ is created using the keyword arguments.</p>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.add_branch">
 <code class="highlight language-python"><span class="n">add_branch</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">leafs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_leafs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">strict_leafs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="s1">&#39;isA&#39;</span><span class="p">,</span> <span class="n">edgelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addnodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">included_namespaces</span><span class="o">=</span><span class="p">(),</span> <span class="n">included_ontologies</span><span class="o">=</span><span class="p">(),</span> <span class="n">include_parents</span><span class="o">=</span><span class="s1">&#39;closest&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.add_branch" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Adds branch under <code>root</code> ending at any entiry included in the
 sequence <code>leafs</code>.  If <code>include_leafs</code> is true, leafs classes are
 also included.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">349</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">349</span>
 <span class="normal">350</span>
 <span class="normal">351</span>
 <span class="normal">352</span>
@@ -3199,31 +3186,28 @@ also included.</p>
             <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
         <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.add_class_construct">
 <code class="highlight language-python"><span class="n">add_class_construct</span><span class="p">(</span><span class="n">construct</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.add_class_construct" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Adds class construct and return its label.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">632</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">632</span>
 <span class="normal">633</span>
 <span class="normal">634</span>
 <span class="normal">635</span>
@@ -3275,32 +3259,29 @@ also included.</p>
     <span class="c1"># Neither and nor inverse constructs are</span>
     <span class="k">return</span> <span class="n">label</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.add_edge">
 <code class="highlight language-python"><span class="n">add_edge</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">edgelabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.add_edge" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Add edge corresponding for <code>(subject, predicate, object)</code>
 triplet.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">464</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">464</span>
 <span class="normal">465</span>
 <span class="normal">466</span>
 <span class="normal">467</span>
@@ -3386,33 +3367,30 @@ triplet.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.add_edges">
 <code class="highlight language-python"><span class="n">add_edges</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edgelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addnodes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addconstructs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.add_edges" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Adds all relations originating from entities <code>sources</code> who's type
 are listed in <code>relations</code>.  If <code>sources</code> is None, edges are added
 between all current nodes.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">593</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">593</span>
 <span class="normal">594</span>
 <span class="normal">595</span>
 <span class="normal">596</span>
@@ -3458,34 +3436,31 @@ between all current nodes.</p>
             <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
         <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.add_entities">
 <code class="highlight language-python"><span class="n">add_entities</span><span class="p">(</span><span class="n">entities</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="s1">&#39;isA&#39;</span><span class="p">,</span> <span class="n">edgelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addnodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.add_entities" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Adds a sequence of entities to the graph.  If <code>entities</code> is None,
 all classes are added to the graph.</p>
 <p><code>nodeattrs</code> is a dict mapping node names to are attributes for
 dedicated nodes.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">322</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">322</span>
 <span class="normal">323</span>
 <span class="normal">324</span>
 <span class="normal">325</span>
@@ -3537,26 +3512,23 @@ dedicated nodes.</p>
         <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.add_legend">
 <code class="highlight language-python"><span class="n">add_legend</span><span class="p">(</span><span class="n">relations</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.add_legend" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Adds legend for specified relations to the graph.</p>
 <p>If <code>relations</code> is "all", the legend will contain all relations
 that are defined in the style.  By default the legend will
@@ -3565,9 +3537,9 @@ graph.</p>
 <p>Hence, you usually want to call add_legend() as the last method
 before saving or displaying.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">748</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">748</span>
 <span class="normal">749</span>
 <span class="normal">750</span>
 <span class="normal">751</span>
@@ -3689,33 +3661,30 @@ before saving or displaying.</p>
                     <span class="sa">f</span><span class="s2">&quot;key2:i</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">:w&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;key1:i</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">:e&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
                 <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.add_missing_node">
 <code class="highlight language-python"><span class="n">add_missing_node</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">addnodes</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.add_missing_node" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Checks if <code>name</code> corresponds to a missing node and add it if
 <code>addnodes</code> is true.</p>
 <p>Returns true if the node exists or is added, false otherwise.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">617</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">617</span>
 <span class="normal">618</span>
 <span class="normal">619</span>
 <span class="normal">620</span>
@@ -3743,31 +3712,28 @@ before saving or displaying.</p>
             <span class="k">return</span> <span class="kc">False</span>
     <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.add_node">
 <code class="highlight language-python"><span class="n">add_node</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.add_node" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Add node with given name. <code>attrs</code> are graphviz node attributes.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">446</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">446</span>
 <span class="normal">447</span>
 <span class="normal">448</span>
 <span class="normal">449</span>
@@ -3791,31 +3757,28 @@ before saving or displaying.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.add_nodes">
 <code class="highlight language-python"><span class="n">add_nodes</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.add_nodes" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Add nodes with given names. <code>attrs</code> are graphviz node attributes.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">459</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">459</span>
 <span class="normal">460</span>
 <span class="normal">461</span>
 <span class="normal">462</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
@@ -3823,31 +3786,28 @@ before saving or displaying.</p>
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="o">=</span><span class="n">nodeattrs</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.add_parents">
 <code class="highlight language-python"><span class="n">add_parents</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="s1">&#39;isA&#39;</span><span class="p">,</span> <span class="n">edgelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addnodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.add_parents" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Add <code>levels</code> levels of strict parents of entity <code>name</code>.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">416</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">416</span>
 <span class="normal">417</span>
 <span class="normal">418</span>
 <span class="normal">419</span>
@@ -3905,32 +3865,29 @@ before saving or displaying.</p>
         <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.add_source_edges">
 <code class="highlight language-python"><span class="n">add_source_edges</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edgelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addnodes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addconstructs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.add_source_edges" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Adds all relations originating from entity <code>source</code> who's type
 are listed in <code>relations</code>.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">508</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">508</span>
 <span class="normal">509</span>
 <span class="normal">510</span>
 <span class="normal">511</span>
@@ -4098,32 +4055,29 @@ are listed in <code>relations</code>.</p>
                     <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
                 <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.get_edge_attrs">
 <code class="highlight language-python"><span class="n">get_edge_attrs</span><span class="p">(</span><span class="n">predicate</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.get_edge_attrs" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns attributes for node or edge <code>name</code>.  <code>attrs</code> overrides
 the default style.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">694</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">694</span>
 <span class="normal">695</span>
 <span class="normal">696</span>
 <span class="normal">697</span>
@@ -4229,31 +4183,28 @@ the default style.</p>
     <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">kwargs</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.get_figsize">
 <code class="highlight language-python"><span class="n">get_figsize</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.get_figsize" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns the default figure size (width, height) in points.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">860</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">860</span>
 <span class="normal">861</span>
 <span class="normal">862</span>
 <span class="normal">863</span>
@@ -4293,32 +4244,29 @@ the default style.</p>
 
     <span class="k">return</span> <span class="n">asfloat</span><span class="p">(</span><span class="n">width</span><span class="p">),</span> <span class="n">asfloat</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.get_node_attrs">
 <code class="highlight language-python"><span class="n">get_node_attrs</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.get_node_attrs" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns attributes for node or edge <code>name</code>.  <code>attrs</code> overrides
 the default style.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">659</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">659</span>
 <span class="normal">660</span>
 <span class="normal">661</span>
 <span class="normal">662</span>
@@ -4386,32 +4334,29 @@ the default style.</p>
     <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">kwargs</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.get_relations">
 <code class="highlight language-python"><span class="n">get_relations</span><span class="p">(</span><span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.get_relations" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns a set of relations in current graph.  If <code>sort</code> is true,
 a sorted list is returned.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">810</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">810</span>
 <span class="normal">811</span>
 <span class="normal">812</span>
 <span class="normal">813</span>
@@ -4469,32 +4414,29 @@ a sorted list is returned.</p>
 
     <span class="k">return</span> <span class="n">relations</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.save">
 <code class="highlight language-python"><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.save" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Saves graph to <code>filename</code>.  If format is not given, it is
 inferred from <code>filename</code>.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">840</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">840</span>
 <span class="normal">841</span>
 <span class="normal">842</span>
 <span class="normal">843</span>
@@ -4524,76 +4466,68 @@ inferred from <code>filename</code>.</p>
         <span class="n">fmt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;format&quot;</span><span class="p">,</span> <span class="n">fmt</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.graph.OntoGraph.view">
 <code class="highlight language-python"><span class="n">view</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.OntoGraph.view" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Shows the graph in a viewer.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">856</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">856</span>
 <span class="normal">857</span>
 <span class="normal">858</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Shows the graph in a viewer.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
 
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.graph.check_module_dependencies">
 <code class="highlight language-python"><span class="n">check_module_dependencies</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.check_module_dependencies" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Check module dependencies and return a copy of modules with
 redundant dependencies removed.</p>
 <p>If <code>verbose</code> is true, warnings are printed for each module that</p>
 <p>If <code>modules</code> is given, it should be a dict returned by
 get_module_dependencies().</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1010</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1010</span>
 <span class="normal">1011</span>
 <span class="normal">1012</span>
 <span class="normal">1013</span>
@@ -4679,31 +4613,28 @@ get_module_dependencies().</p>
 
     <span class="k">return</span> <span class="n">mods</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.graph.cytoscape_style">
 <code class="highlight language-python"><span class="n">cytoscape_style</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.cytoscape_style" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Get list of color, style and fills.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">116</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">116</span>
 <span class="normal">117</span>
 <span class="normal">118</span>
 <span class="normal">119</span>
@@ -4781,26 +4712,23 @@ get_module_dependencies().</p>
                 <span class="n">fill</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;filled&quot;</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">colours</span><span class="p">,</span> <span class="n">styles</span><span class="p">,</span> <span class="n">fill</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.graph.cytoscapegraph">
 <code class="highlight language-python"><span class="n">cytoscapegraph</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">onto</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">infobox</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.cytoscapegraph" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns and instance of icytoscape-figure for an
 instance Graph of OntoGraph, the accompanying ontology
 is required for mouse actions.</p>
@@ -4884,9 +4812,9 @@ is required for mouse actions.</p>
     </tbody>
   </table>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1055</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1055</span>
 <span class="normal">1056</span>
 <span class="normal">1057</span>
 <span class="normal">1058</span>
@@ -5272,34 +5200,31 @@ is required for mouse actions.</p>
 
     <span class="k">return</span> <span class="n">cytofig</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.graph.filter_classes">
 <code class="highlight language-python"><span class="n">filter_classes</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">included_namespaces</span><span class="o">=</span><span class="p">(),</span> <span class="n">included_ontologies</span><span class="o">=</span><span class="p">())</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.filter_classes" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Filter out classes whos namespace is not in <code>included_namespaces</code>
 or whos ontology name is not in one of the ontologies in
 <code>included_ontologies</code>.</p>
 <p><code>classes</code> should be a sequence of classes.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">882</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">882</span>
 <span class="normal">883</span>
 <span class="normal">884</span>
 <span class="normal">885</span>
@@ -5337,34 +5262,31 @@ or whos ontology name is not in one of the ontologies in
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">filtered</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.graph.get_module_dependencies">
 <code class="highlight language-python"><span class="n">get_module_dependencies</span><span class="p">(</span><span class="n">iri_or_onto</span><span class="p">,</span> <span class="n">strip_base</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.get_module_dependencies" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Reads <code>iri_or_onto</code> and returns a dict mapping ontology names to a
 list of ontologies that they depends on.</p>
 <p>If <code>strip_base</code> is true, the base IRI is stripped from ontology
 names.  If it is a string, it lstrip'ped from the base iri.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">903</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">903</span>
 <span class="normal">904</span>
 <span class="normal">905</span>
 <span class="normal">906</span>
@@ -5452,26 +5374,23 @@ names.  If it is a string, it lstrip'ped from the base iri.</p>
     <span class="n">setmodules</span><span class="p">(</span><span class="n">onto</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">modules</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.graph.plot_modules">
 <code class="highlight language-python"><span class="n">plot_modules</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">strip_base</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ignore_redundant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.graph.plot_modules" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Plot module dependency graph for <code>src</code> and return a graph object.</p>
 <p>Here <code>src</code> may be an IRI, a path the the ontology or a dict returned by
 get_module_dependencies().</p>
@@ -5482,9 +5401,9 @@ get_module_dependencies().</p>
 a dict.</p>
 <p>If <code>ignore_redundant</code> is true, redundant dependencies are not plotted.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 949</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/graph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 949</span>
 <span class="normal"> 950</span>
 <span class="normal"> 951</span>
 <span class="normal"> 952</span>
@@ -5602,27 +5521,26 @@ a dict.</p>
 
     <span class="k">return</span> <span class="n">dot</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
               
             </article>
+            
           </div>
         </div>
         
-          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
             Back to top
           </a>
@@ -5631,7 +5549,8 @@ a dict.</p>
       
         <footer class="md-footer">
   
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
         <a href="../excelparser/" class="md-footer__link md-footer__link--prev" aria-label="Previous: excelparser" rel="prev">
@@ -5700,10 +5619,10 @@ a dict.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../assets/javascripts/workers/search.b028fd86.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.3a4b43e5.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.f758a944.min.js"></script>
       
     
   </body>

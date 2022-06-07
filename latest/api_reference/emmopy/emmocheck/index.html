@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/emmopy/emmocheck/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.16">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.3">
     
     
       
@@ -21,15 +21,16 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.1c3799f8.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4a0965b7.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cbb835fc.min.css">
         
           
           
           <meta name="theme-color" content="#4cae4f">
         
+      
       
     
     
@@ -1276,11 +1277,12 @@
 <h1 id="emmocheck">emmocheck<a class="headerlink" href="#emmocheck" title="Permanent link">&para;</a></h1>
 
 
-  <div class="doc doc-object doc-module">
+<div class="doc doc-object doc-module">
+
 
 <a id="emmopy.emmocheck"></a>
-    <div class="doc doc-contents first">
-
+  <div class="doc doc-contents first">
+  
       <p>A module for testing an ontology against conventions defined for EMMO.</p>
 <p>A YAML file can be provided with additional test configurations.</p>
 
@@ -1295,7 +1297,7 @@
 <p>enable:
   - name_of_test_to_enable</p>
 </details>
-
+  
 
   <div class="doc doc-children">
 
@@ -1305,27 +1307,27 @@
 
 
 
-  <div class="doc doc-object doc-class">
+
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="emmopy.emmocheck.TestEMMOConventions">
-          <code>TestEMMOConventions</code>
-
+        <code>TestEMMOConventions</code>
 
 
 <a class="headerlink" href="#emmopy.emmocheck.TestEMMOConventions" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
+  <div class="doc doc-contents ">
 
-
+  
       <p>Base class for testing an ontology against EMMO conventions.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
 <span class="normal">41</span>
 <span class="normal">42</span>
 <span class="normal">43</span>
@@ -1367,9 +1369,9 @@
             <span class="k">return</span> <span class="n">default</span>
         <span class="k">return</span> <span class="n">result</span>
 </code></pre></div></td></tr></table></div>
-          </details>
+        </details>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -1381,28 +1383,27 @@
 
 
 
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="emmopy.emmocheck.TestEMMOConventions.get_config">
 <code class="highlight language-python"><span class="n">get_config</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#emmopy.emmocheck.TestEMMOConventions.get_config" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns the configuration specified by <code>string</code>.</p>
 <p>If configuration is not found in the configuration file, <code>default</code> is
 returned.</p>
 <p>Sub-configurations can be accessed by separating the components with
 dots, like "test_namespace.exceptions".</p>
 
-        <details class="quote">
-          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">45</span>
+      <details class="quote">
+        <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">45</span>
 <span class="normal">46</span>
 <span class="normal">47</span>
 <span class="normal">48</span>
@@ -1434,44 +1435,39 @@ dots, like "test_namespace.exceptions".</p>
         <span class="k">return</span> <span class="n">default</span>
     <span class="k">return</span> <span class="n">result</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
+</div>
 
-  </div>
-
-
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="emmopy.emmocheck.TestFunctionalEMMOConventions">
-          <code>TestFunctionalEMMOConventions</code>
-
+        <code>TestFunctionalEMMOConventions</code>
 
 
 <a class="headerlink" href="#emmopy.emmocheck.TestFunctionalEMMOConventions" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
+  <div class="doc doc-contents ">
 
-
+  
       <p>Test functional EMMO conventions.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">170</span>
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">170</span>
 <span class="normal">171</span>
 <span class="normal">172</span>
 <span class="normal">173</span>
@@ -2049,9 +2045,9 @@ dots, like "test_namespace.exceptions".</p>
         <span class="n">visited_onto</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">checker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_namespace</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-          </details>
+        </details>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -2062,28 +2058,28 @@ dots, like "test_namespace.exceptions".</p>
 
 
 
-  <div class="doc doc-object doc-function">
+
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="emmopy.emmocheck.TestFunctionalEMMOConventions.test_namespace">
 <code class="highlight language-python"><span class="n">test_namespace</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_namespace" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Check that all IRIs are namespaced after their (sub)ontology.</p>
 
 <details class="configurations">
   <summary>Configurations</summary>
   <p>exceptions - full name of entities to ignore.</p>
 </details>
-        <details class="quote">
-          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">388</span>
+      <details class="quote">
+        <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">388</span>
 <span class="normal">389</span>
 <span class="normal">390</span>
 <span class="normal">391</span>
@@ -2225,26 +2221,23 @@ dots, like "test_namespace.exceptions".</p>
     <span class="n">visited_onto</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="n">checker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_namespace</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="emmopy.emmocheck.TestFunctionalEMMOConventions.test_physical_quantity_dimension">
 <code class="highlight language-python"><span class="n">test_physical_quantity_dimension</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_physical_quantity_dimension" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Check that all physical quantities have <code>hasPhysicalDimension</code>.</p>
 <p>Note: this test will fail before isq is moved to emmo/domain.</p>
 
@@ -2252,9 +2245,9 @@ dots, like "test_namespace.exceptions".</p>
   <summary>Configurations</summary>
   <p>exceptions - full class names of classes to ignore.</p>
 </details>
-        <details class="quote">
-          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">312</span>
+      <details class="quote">
+        <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">312</span>
 <span class="normal">313</span>
 <span class="normal">314</span>
 <span class="normal">315</span>
@@ -2404,26 +2397,23 @@ dots, like "test_namespace.exceptions".</p>
                     <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">hasPhysicalDimension</span><span class="p">,</span> <span class="n">class_props</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span>
                 <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="emmopy.emmocheck.TestFunctionalEMMOConventions.test_quantity_dimension">
 <code class="highlight language-python"><span class="n">test_quantity_dimension</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_quantity_dimension" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Check that all quantities have a physicalDimension annotation.</p>
 <p>Note: this test will be deprecated when isq is moved to emmo/domain.</p>
 
@@ -2431,9 +2421,9 @@ dots, like "test_namespace.exceptions".</p>
   <summary>Configurations</summary>
   <p>exceptions - full class names of classes to ignore.</p>
 </details>
-        <details class="quote">
-          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">238</span>
+      <details class="quote">
+        <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">238</span>
 <span class="normal">239</span>
 <span class="normal">240</span>
 <span class="normal">241</span>
@@ -2579,35 +2569,32 @@ dots, like "test_namespace.exceptions".</p>
                 <span class="n">physdim</span> <span class="o">=</span> <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;physicalDimension&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">assertRegex</span><span class="p">(</span><span class="n">physdim</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="emmopy.emmocheck.TestFunctionalEMMOConventions.test_unit_dimension">
 <code class="highlight language-python"><span class="n">test_unit_dimension</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_unit_dimension" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Check that all measurement units have a physical dimension.</p>
 
 <details class="configurations">
   <summary>Configurations</summary>
   <p>exceptions - full class names of classes to ignore.</p>
 </details>
-        <details class="quote">
-          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">173</span>
+      <details class="quote">
+        <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">173</span>
 <span class="normal">174</span>
 <span class="normal">175</span>
 <span class="normal">176</span>
@@ -2735,44 +2722,39 @@ dots, like "test_namespace.exceptions".</p>
                     <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span>
                 <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
+</div>
 
-  </div>
-
-
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="emmopy.emmocheck.TestSyntacticEMMOConventions">
-          <code>TestSyntacticEMMOConventions</code>
-
+        <code>TestSyntacticEMMOConventions</code>
 
 
 <a class="headerlink" href="#emmopy.emmocheck.TestSyntacticEMMOConventions" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
+  <div class="doc doc-contents ">
 
-
+  
       <p>Test syntactic EMMO conventions.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 63</span>
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 63</span>
 <span class="normal"> 64</span>
 <span class="normal"> 65</span>
 <span class="normal"> 66</span>
@@ -2970,21 +2952,21 @@ dots, like "test_namespace.exceptions".</p>
                         <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;has&quot;</span><span class="p">):</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
                                 <span class="n">label</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
-                                <span class="s1">&#39;what follows &quot;has&quot; must be &#39;</span> <span class="s2">&quot;uppercase&quot;</span><span class="p">,</span>
+                                <span class="s1">&#39;what follows &quot;has&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
                             <span class="p">)</span>
                         <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;is&quot;</span><span class="p">):</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
                                 <span class="n">label</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
-                                <span class="s1">&#39;what follows &quot;is&quot; must be &#39;</span> <span class="s2">&quot;uppercase&quot;</span><span class="p">,</span>
+                                <span class="s1">&#39;what follows &quot;is&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
                             <span class="p">)</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
                                 <span class="n">label</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;Of&quot;</span><span class="p">,</span> <span class="s2">&quot;With&quot;</span><span class="p">)),</span>
                                 <span class="s1">&#39;should end with &quot;Of&quot; or &quot;With&quot;&#39;</span><span class="p">,</span>
                             <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-          </details>
+        </details>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -2995,26 +2977,26 @@ dots, like "test_namespace.exceptions".</p>
 
 
 
-  <div class="doc doc-object doc-function">
+
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="emmopy.emmocheck.TestSyntacticEMMOConventions.test_class_label">
 <code class="highlight language-python"><span class="n">test_class_label</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_class_label" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Check that class labels are CamelCase and valid identifiers.</p>
 <p>For CamelCase, we are currently only checking that the labels
 start with upper case.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">108</span>
+      <details class="quote">
+        <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">108</span>
 <span class="normal">109</span>
 <span class="normal">110</span>
 <span class="normal">111</span>
@@ -3060,34 +3042,31 @@ start with upper case.</p>
                     <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">())</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">())</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="emmopy.emmocheck.TestSyntacticEMMOConventions.test_number_of_labels">
 <code class="highlight language-python"><span class="n">test_number_of_labels</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_number_of_labels" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Check that all entities have one and only one prefLabel.</p>
 <p>Use "altLabel" for synonyms.</p>
 <p>The only allowed exception is entities who's representation
 starts with "owl.".</p>
 
-        <details class="quote">
-          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 66</span>
+      <details class="quote">
+        <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 66</span>
 <span class="normal"> 67</span>
 <span class="normal"> 68</span>
 <span class="normal"> 69</span>
@@ -3169,35 +3148,32 @@ starts with "owl.".</p>
     <span class="k">else</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ontology has no prefLabel&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="emmopy.emmocheck.TestSyntacticEMMOConventions.test_object_property_label">
 <code class="highlight language-python"><span class="n">test_object_property_label</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_object_property_label" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Check that object property labels are lowerCamelCase.</p>
 <p>Allowed exceptions: "EMMORelation"</p>
 <p>If they start with "has" or "is" they should be followed by a
 upper case letter.</p>
 <p>If they start with "is" they should also end with "Of".</p>
 
-        <details class="quote">
-          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">132</span>
+      <details class="quote">
+        <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">132</span>
 <span class="normal">133</span>
 <span class="normal">134</span>
 <span class="normal">135</span>
@@ -3257,49 +3233,44 @@ upper case letter.</p>
                     <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;has&quot;</span><span class="p">):</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
                             <span class="n">label</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
-                            <span class="s1">&#39;what follows &quot;has&quot; must be &#39;</span> <span class="s2">&quot;uppercase&quot;</span><span class="p">,</span>
+                            <span class="s1">&#39;what follows &quot;has&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
                         <span class="p">)</span>
                     <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;is&quot;</span><span class="p">):</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
                             <span class="n">label</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
-                            <span class="s1">&#39;what follows &quot;is&quot; must be &#39;</span> <span class="s2">&quot;uppercase&quot;</span><span class="p">,</span>
+                            <span class="s1">&#39;what follows &quot;is&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
                         <span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
                             <span class="n">label</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;Of&quot;</span><span class="p">,</span> <span class="s2">&quot;With&quot;</span><span class="p">)),</span>
                             <span class="s1">&#39;should end with &quot;Of&quot; or &quot;With&quot;&#39;</span><span class="p">,</span>
                         <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
 
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="emmopy.emmocheck.main">
 <code class="highlight language-python"><span class="n">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#emmopy.emmocheck.main" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Run all checks on ontology <code>iri</code>.</p>
 <p>Default is 'http://emmo.info/emmo'.</p>
 
@@ -3329,9 +3300,9 @@ manually / through Python.</p></td>
     </tbody>
   </table>
 
-        <details class="quote">
-          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">461</span>
+      <details class="quote">
+        <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">461</span>
 <span class="normal">462</span>
 <span class="normal">463</span>
 <span class="normal">464</span>
@@ -3799,27 +3770,26 @@ manually / through Python.</p></td>
 
     <span class="k">return</span> <span class="n">status</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
               
             </article>
+            
           </div>
         </div>
         
-          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
             Back to top
           </a>
@@ -3828,7 +3798,8 @@ manually / through Python.</p></td>
       
         <footer class="md-footer">
   
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
         <a href="../../../CHANGELOG/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Changelog" rel="prev">
@@ -3897,10 +3868,10 @@ manually / through Python.</p></td>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../assets/javascripts/workers/search.b028fd86.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.3a4b43e5.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.f758a944.min.js"></script>
       
     
   </body>

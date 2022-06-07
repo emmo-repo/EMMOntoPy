@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/utils/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.16">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.3">
     
     
       
@@ -21,15 +21,16 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.1c3799f8.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4a0965b7.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cbb835fc.min.css">
         
           
           
           <meta name="theme-color" content="#4cae4f">
         
+      
       
     
     
@@ -982,13 +983,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ontopy.utils._validate_installed_version" class="md-nav__link">
-    _validate_installed_version()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ontopy.utils.annotate_source" class="md-nav__link">
     annotate_source()
   </a>
@@ -1252,13 +1246,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ontopy.utils._validate_installed_version" class="md-nav__link">
-    _validate_installed_version()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ontopy.utils.annotate_source" class="md-nav__link">
     annotate_source()
   </a>
@@ -1352,14 +1339,15 @@
 <h1 id="utils">utils<a class="headerlink" href="#utils" title="Permanent link">&para;</a></h1>
 
 
-  <div class="doc doc-object doc-module">
+<div class="doc doc-object doc-module">
+
 
 <a id="ontopy.utils"></a>
-    <div class="doc doc-contents first">
-
+  <div class="doc doc-contents first">
+  
       <p>Some generic utility functions.</p>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -1370,102 +1358,92 @@
 
 
 
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.EMMOntoPyException">
-          <code>EMMOntoPyException</code>
-
+        <code>EMMOntoPyException</code>
 
 
 <a class="headerlink" href="#ontopy.utils.EMMOntoPyException" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-        <p class="doc doc-class-bases">
-          Bases: <code>Exception</code></p>
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code>Exception</code></p>
 
-
+  
       <p>A BaseException class for EMMOntoPy</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/utils.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
 <span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">EMMOntoPyException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A BaseException class for EMMOntoPy&quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-
-
-    </div>
+        </details>
 
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.EMMOntoPyWarning">
-          <code>EMMOntoPyWarning</code>
-
+        <code>EMMOntoPyWarning</code>
 
 
 <a class="headerlink" href="#ontopy.utils.EMMOntoPyWarning" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-        <p class="doc doc-class-bases">
-          Bases: <code>Warning</code></p>
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code>Warning</code></p>
 
-
+  
       <p>A BaseWarning class for EMMOntoPy</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/utils.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">44</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">44</span>
 <span class="normal">45</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">EMMOntoPyWarning</span><span class="p">(</span><span class="ne">Warning</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A BaseWarning class for EMMOntoPy&quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-
-
-    </div>
+        </details>
 
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.IncompatibleVersion">
-          <code>IncompatibleVersion</code>
-
+        <code>IncompatibleVersion</code>
 
 
 <a class="headerlink" href="#ontopy.utils.IncompatibleVersion" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-        <p class="doc doc-class-bases">
-          Bases: <code><a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyWarning" href="#ontopy.utils.EMMOntoPyWarning">EMMOntoPyWarning</a></code></p>
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyWarning" href="#ontopy.utils.EMMOntoPyWarning">EMMOntoPyWarning</a></code></p>
 
-
+  
       <p>An installed dependency version may be incompatible with a functionality
 of this package - or rather an outcome of a functionality.
 This is not critical, hence this is only a warning.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/utils.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">48</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">48</span>
 <span class="normal">49</span>
 <span class="normal">50</span>
 <span class="normal">51</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">IncompatibleVersion</span><span class="p">(</span><span class="n">EMMOntoPyWarning</span><span class="p">):</span>
@@ -1473,395 +1451,180 @@ This is not critical, hence this is only a warning.</p>
 <span class="sd">    of this package - or rather an outcome of a functionality.</span>
 <span class="sd">    This is not critical, hence this is only a warning.&quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-
-
-    </div>
+        </details>
 
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.LabelDefinitionError">
-          <code>LabelDefinitionError</code>
-
+        <code>LabelDefinitionError</code>
 
 
 <a class="headerlink" href="#ontopy.utils.LabelDefinitionError" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-        <p class="doc doc-class-bases">
-          Bases: <code><a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a></code></p>
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a></code></p>
 
-
+  
       <p>Error in label definition.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/utils.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">62</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">62</span>
 <span class="normal">63</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">LabelDefinitionError</span><span class="p">(</span><span class="n">EMMOntoPyException</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Error in label definition.&quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-
-
-    </div>
+        </details>
 
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.NoSuchLabelError">
-          <code>NoSuchLabelError</code>
-
+        <code>NoSuchLabelError</code>
 
 
 <a class="headerlink" href="#ontopy.utils.NoSuchLabelError" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-        <p class="doc doc-class-bases">
-          Bases: <code>LookupError</code>, <code>AttributeError</code>, <code><a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a></code></p>
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code>LookupError</code>, <code>AttributeError</code>, <code><a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a></code></p>
 
-
+  
       <p>Error raised when a label cannot be found.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/utils.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">58</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">58</span>
 <span class="normal">59</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">NoSuchLabelError</span><span class="p">(</span><span class="ne">LookupError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="n">EMMOntoPyException</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Error raised when a label cannot be found.&quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-
-
-    </div>
+        </details>
 
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.ReadCatalogError">
-          <code>ReadCatalogError</code>
-
+        <code>ReadCatalogError</code>
 
 
 <a class="headerlink" href="#ontopy.utils.ReadCatalogError" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-        <p class="doc doc-class-bases">
-          Bases: <code>IOError</code></p>
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code>IOError</code></p>
 
-
+  
       <p>Error reading catalog file.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/utils.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">220</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">220</span>
 <span class="normal">221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ReadCatalogError</span><span class="p">(</span><span class="ne">IOError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Error reading catalog file.&quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-
-
-    </div>
+        </details>
 
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.ThingClassDefinitionError">
-          <code>ThingClassDefinitionError</code>
-
+        <code>ThingClassDefinitionError</code>
 
 
 <a class="headerlink" href="#ontopy.utils.ThingClassDefinitionError" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-        <p class="doc doc-class-bases">
-          Bases: <code><a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a></code></p>
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a></code></p>
 
-
+  
       <p>Error in ThingClass definition.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/utils.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">66</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">66</span>
 <span class="normal">67</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ThingClassDefinitionError</span><span class="p">(</span><span class="n">EMMOntoPyException</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Error in ThingClass definition.&quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-
-
-    </div>
+        </details>
 
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.UnknownVersion">
-          <code>UnknownVersion</code>
-
+        <code>UnknownVersion</code>
 
 
 <a class="headerlink" href="#ontopy.utils.UnknownVersion" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-        <p class="doc doc-class-bases">
-          Bases: <code><a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a></code></p>
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a></code></p>
 
-
+  
       <p>Cannot retrieve version from a package.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/utils.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">54</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">54</span>
 <span class="normal">55</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">UnknownVersion</span><span class="p">(</span><span class="n">EMMOntoPyException</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Cannot retrieve version from a package.&quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-
-
-    </div>
-
-  </div>
-
-
-
-
-  <div class="doc doc-object doc-function">
-
-
-
-<h2 class="doc doc-heading" id="ontopy.utils._validate_installed_version">
-<code class="highlight language-python"><span class="n">_validate_installed_version</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="n">min_version</span><span class="p">)</span></code>
-
-
-<a class="headerlink" href="#ontopy.utils._validate_installed_version" title="Permanent link">&para;</a></h2>
-
-
-    <div class="doc doc-contents ">
-
-      <p>Validate an installed package.</p>
-<p>Examine whether a minimum version is installed in the used Python
-interpreter for a specific package.</p>
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>package</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>The package to be investigated as a string, e.g., <code>"rdflib"</code>.</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>min_version</code></td>
-          <td>
-                <code>Union[str, Version, LegacyVersion]</code>
-          </td>
-          <td><p>The minimum version expected to be installed.</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  <p><strong>Raises:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code><a class="autorefs autorefs-internal" title="ontopy.utils.UnknownVersion" href="#ontopy.utils.UnknownVersion">UnknownVersion</a></code>
-          </td>
-          <td><p>If the supplied package does not have a <code>__version__</code>
-attribute.</p></td>
-        </tr>
-    </tbody>
-  </table>
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code>bool</code>
-          </td>
-          <td><p>Whether or not the installed version is equal to or greater than the</p></td>
-        </tr>
-        <tr>
-          <td>
-                <code>bool</code>
-          </td>
-          <td><p><code>min_version</code>.</p></td>
-        </tr>
-    </tbody>
-  </table>
-
-        <details class="quote">
-          <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">421</span>
-<span class="normal">422</span>
-<span class="normal">423</span>
-<span class="normal">424</span>
-<span class="normal">425</span>
-<span class="normal">426</span>
-<span class="normal">427</span>
-<span class="normal">428</span>
-<span class="normal">429</span>
-<span class="normal">430</span>
-<span class="normal">431</span>
-<span class="normal">432</span>
-<span class="normal">433</span>
-<span class="normal">434</span>
-<span class="normal">435</span>
-<span class="normal">436</span>
-<span class="normal">437</span>
-<span class="normal">438</span>
-<span class="normal">439</span>
-<span class="normal">440</span>
-<span class="normal">441</span>
-<span class="normal">442</span>
-<span class="normal">443</span>
-<span class="normal">444</span>
-<span class="normal">445</span>
-<span class="normal">446</span>
-<span class="normal">447</span>
-<span class="normal">448</span>
-<span class="normal">449</span>
-<span class="normal">450</span>
-<span class="normal">451</span>
-<span class="normal">452</span>
-<span class="normal">453</span>
-<span class="normal">454</span>
-<span class="normal">455</span>
-<span class="normal">456</span>
-<span class="normal">457</span>
-<span class="normal">458</span>
-<span class="normal">459</span>
-<span class="normal">460</span>
-<span class="normal">461</span>
-<span class="normal">462</span>
-<span class="normal">463</span>
-<span class="normal">464</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">_validate_installed_version</span><span class="p">(</span>
-    <span class="n">package</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">min_version</span><span class="p">:</span> <span class="s2">&quot;Union[str, Version, LegacyVersion]&quot;</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Validate an installed package.</span>
-
-<span class="sd">    Examine whether a minimum version is installed in the used Python</span>
-<span class="sd">    interpreter for a specific package.</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        package: The package to be investigated as a string, e.g., `&quot;rdflib&quot;`.</span>
-<span class="sd">        min_version: The minimum version expected to be installed.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        UnknownVersion: If the supplied package does not have a `__version__`</span>
-<span class="sd">            attribute.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Whether or not the installed version is equal to or greater than the</span>
-<span class="sd">        `min_version`.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># pylint: disable=import-outside-toplevel</span>
-    <span class="kn">import</span> <span class="nn">importlib</span>
-    <span class="kn">from</span> <span class="nn">packaging.version</span> <span class="kn">import</span> <span class="n">parse</span> <span class="k">as</span> <span class="n">parse_version</span><span class="p">,</span> <span class="n">LegacyVersion</span><span class="p">,</span> <span class="n">Version</span>
-
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">min_version</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">min_version</span> <span class="o">=</span> <span class="n">parse_version</span><span class="p">(</span><span class="n">min_version</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">min_version</span><span class="p">,</span> <span class="p">(</span><span class="n">LegacyVersion</span><span class="p">,</span> <span class="n">Version</span><span class="p">)):</span>
-        <span class="c1"># We have the format we want</span>
-        <span class="k">pass</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="s2">&quot;min_version should be either a str, LegacyVersion or Version. &quot;</span>
-            <span class="s2">&quot;The latter classes being from the packaging.version module.&quot;</span>
-        <span class="p">)</span>
-
-    <span class="n">installed_package</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">package</span><span class="p">)</span>
-    <span class="n">installed_package_version</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">installed_package</span><span class="p">,</span> <span class="s2">&quot;__version__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">installed_package_version</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">UnknownVersion</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Cannot retrieve version information from package </span><span class="si">{</span><span class="n">package</span><span class="si">!r}</span><span class="s2">.&quot;</span>
-        <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">parse_version</span><span class="p">(</span><span class="n">installed_package_version</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">min_version</span>
-</code></pre></div></td></tr></table></div>
         </details>
-    </div>
 
   </div>
 
+</div>
 
 
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.annotate_source">
 <code class="highlight language-python"><span class="n">annotate_source</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.utils.annotate_source" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Annotate all entities with the base IRI of the ontology using
 <code>rdfs:isDefinedBy</code> annotations.</p>
 <p>If <code>imported</code> is true, all entities in imported sub-ontologies will
@@ -1869,9 +1632,9 @@ also be annotated.</p>
 <p>This is contextual information that is otherwise lost when the ontology
 is squashed and/or inferred.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">608</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/utils.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">608</span>
 <span class="normal">609</span>
 <span class="normal">610</span>
 <span class="normal">611</span>
@@ -1913,26 +1676,23 @@ is squashed and/or inferred.</p>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">onto</span><span class="o">.</span><span class="n">_has_obj_triple_spo</span><span class="p">(</span><span class="o">*</span><span class="n">triple</span><span class="p">):</span>
             <span class="n">onto</span><span class="o">.</span><span class="n">_add_obj_triple_spo</span><span class="p">(</span><span class="o">*</span><span class="n">triple</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.asstring">
 <code class="highlight language-python"><span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">recursion_depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_object</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.utils.asstring" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns a string representation of <code>expr</code>, which may be an entity,
 restriction, or logical expression of these.  <code>link</code> is a format
 string for formatting references to entities or relations.  It may
@@ -1941,9 +1701,9 @@ contain the keywords "name", "url" and "lowerurl".
 use. If <code>exclude_object</code> is true, the object will be excluded in
 restrictions.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/utils.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
 <span class="normal"> 96</span>
 <span class="normal"> 97</span>
 <span class="normal"> 98</span>
@@ -2145,32 +1905,29 @@ restrictions.</p>
 
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown expression: </span><span class="si">{</span><span class="n">expr</span><span class="si">!r}</span><span class="s2"> (type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="si">!r}</span><span class="s2">)&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.camelsplit">
 <code class="highlight language-python"><span class="n">camelsplit</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.utils.camelsplit" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Splits CamelCase string before upper case letters (except
 if there is a sequence of upper case letters).</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">198</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/utils.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">198</span>
 <span class="normal">199</span>
 <span class="normal">200</span>
 <span class="normal">201</span>
@@ -2210,26 +1967,23 @@ if there is a sequence of upper case letters).</p>
     <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
     <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.convert_imported">
 <code class="highlight language-python"><span class="n">convert_imported</span><span class="p">(</span><span class="n">input_ontology</span><span class="p">,</span> <span class="n">output_ontology</span><span class="p">,</span> <span class="n">input_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s1">&#39;xml&#39;</span><span class="p">,</span> <span class="n">url_from_catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.utils.convert_imported" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Convert imported ontologies.</p>
 <p>Store the output in a directory structure matching the source
 files.  This require catalog file(s) to be present.</p>
@@ -2319,9 +2073,9 @@ local file names</p></td>
     </tbody>
   </table>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">467</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/utils.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">467</span>
 <span class="normal">468</span>
 <span class="normal">469</span>
 <span class="normal">470</span>
@@ -2557,31 +2311,28 @@ local file names</p></td>
     <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">output_ontology</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">output_format</span><span class="p">)</span>
     <span class="n">recur</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">outext</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.get_label">
 <code class="highlight language-python"><span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.utils.get_label" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns the label of an entity.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">80</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/utils.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">80</span>
 <span class="normal">81</span>
 <span class="normal">82</span>
 <span class="normal">83</span>
@@ -2607,31 +2358,28 @@ local file names</p></td>
         <span class="k">return</span> <span class="n">entity</span>
     <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.infer_version">
 <code class="highlight language-python"><span class="n">infer_version</span><span class="p">(</span><span class="n">iri</span><span class="p">,</span> <span class="n">version_iri</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.utils.infer_version" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Infer version from IRI and versionIRI.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">587</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/utils.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">587</span>
 <span class="normal">588</span>
 <span class="normal">589</span>
 <span class="normal">590</span>
@@ -2669,32 +2417,29 @@ local file names</p></td>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">version</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.isinteractive">
 <code class="highlight language-python"><span class="n">isinteractive</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.utils.isinteractive" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns true if we are running from an interactive interpreater,
 false otherwise.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">70</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/utils.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">70</span>
 <span class="normal">71</span>
 <span class="normal">72</span>
 <span class="normal">73</span>
@@ -2710,31 +2455,28 @@ false otherwise.</p>
         <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s2">&quot;ps1&quot;</span><span class="p">)</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.normalise_url">
 <code class="highlight language-python"><span class="n">normalise_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.utils.normalise_url" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns <code>url</code> in a normalised form.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">647</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/utils.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">647</span>
 <span class="normal">648</span>
 <span class="normal">649</span>
 <span class="normal">650</span>
@@ -2746,26 +2488,23 @@ false otherwise.</p>
     <span class="n">components</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">splitted</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlunsplit</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.read_catalog">
 <code class="highlight language-python"><span class="n">read_catalog</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_paths</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visited_iris</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visited_paths</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.utils.read_catalog" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Reads a Protègè catalog file and returns as a dict.</p>
 <p>The returned dict maps the ontology IRI (name) to its actual
 location (URI).  The location can be either an absolute file path
@@ -2785,9 +2524,9 @@ files is returned in addition to the default dict.</p>
 internal use to avoid infinite recursions.</p>
 <p>A ReadCatalogError is raised if the catalog file cannot be found.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">224</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/utils.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">224</span>
 <span class="normal">225</span>
 <span class="normal">226</span>
 <span class="normal">227</span>
@@ -3099,33 +2838,30 @@ internal use to avoid infinite recursions.</p>
         <span class="k">return</span> <span class="n">iris</span><span class="p">,</span> <span class="n">dirs</span>
     <span class="k">return</span> <span class="n">iris</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.rename_iris">
 <code class="highlight language-python"><span class="n">rename_iris</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">annotation</span><span class="o">=</span><span class="s1">&#39;prefLabel&#39;</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.utils.rename_iris" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>For IRIs with the given annotation, change the name of the entity
 to the value of the annotation.  Also add an <code>skos:exactMatch</code>
 annotation referring to the old IRI.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">631</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/utils.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">631</span>
 <span class="normal">632</span>
 <span class="normal">633</span>
 <span class="normal">634</span>
@@ -3153,26 +2889,23 @@ annotation referring to the old IRI.</p>
             <span class="p">)</span>
             <span class="n">entity</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">annotation</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.write_catalog">
 <code class="highlight language-python"><span class="n">write_catalog</span><span class="p">(</span><span class="n">mappings</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.utils.write_catalog" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Write catalog file do disk.</p>
 
   <p><strong>Parameters:</strong></p>
@@ -3233,9 +2966,9 @@ If false, an existing file will be overwritten.</p></td>
     </tbody>
   </table>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">382</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/utils.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">382</span>
 <span class="normal">383</span>
 <span class="normal">384</span>
 <span class="normal">385</span>
@@ -3309,27 +3042,26 @@ If false, an existing file will be overwritten.</p></td>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
         <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
               
             </article>
+            
           </div>
         </div>
         
-          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
             Back to top
           </a>
@@ -3338,7 +3070,8 @@ If false, an existing file will be overwritten.</p></td>
       
         <footer class="md-footer">
   
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
         <a href="../patch/" class="md-footer__link md-footer__link--prev" aria-label="Previous: patch" rel="prev">
@@ -3407,10 +3140,10 @@ If false, an existing file will be overwritten.</p></td>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../assets/javascripts/workers/search.b028fd86.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.3a4b43e5.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.f758a944.min.js"></script>
       
     
   </body>

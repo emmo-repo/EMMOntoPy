@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/excelparser/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.16">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.3">
     
     
       
@@ -21,15 +21,16 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.1c3799f8.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4a0965b7.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cbb835fc.min.css">
         
           
           
           <meta name="theme-color" content="#4cae4f">
         
+      
       
     
     
@@ -821,20 +822,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ontopy.excelparser._add_literal" class="md-nav__link">
-    _add_literal()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ontopy.excelparser._parse_literal" class="md-nav__link">
-    _parse_literal()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ontopy.excelparser.create_ontology_from_excel" class="md-nav__link">
     create_ontology_from_excel()
   </a>
@@ -1112,20 +1099,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ontopy.excelparser._add_literal" class="md-nav__link">
-    _add_literal()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ontopy.excelparser._parse_literal" class="md-nav__link">
-    _parse_literal()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ontopy.excelparser.create_ontology_from_excel" class="md-nav__link">
     create_ontology_from_excel()
   </a>
@@ -1170,11 +1143,12 @@
 <h1 id="excelparser">excelparser<a class="headerlink" href="#excelparser" title="Permanent link">&para;</a></h1>
 
 
-  <div class="doc doc-object doc-module">
+<div class="doc doc-object doc-module">
+
 
 <a id="ontopy.excelparser"></a>
-    <div class="doc doc-contents first">
-
+  <div class="doc doc-contents first">
+  
       <p>Module from parsing an excelfile and creating an
 ontology from it.</p>
 <p>The excelfile is read by pandas and the pandas
@@ -1183,7 +1157,7 @@ prefLabel, altLabel, Elucidation, Comments, Examples,
 subClassOf, Relations.</p>
 <p>Note that correct case is mandatory.</p>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -1193,188 +1167,51 @@ subClassOf, Relations.</p>
 
 
 
-  <div class="doc doc-object doc-class">
+
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.excelparser.ExcelError">
-          <code>ExcelError</code>
-
+        <code>ExcelError</code>
 
 
 <a class="headerlink" href="#ontopy.excelparser.ExcelError" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-        <p class="doc doc-class-bases">
-          Bases: <code><a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="../utils/#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a></code></p>
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="../utils/#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a></code></p>
 
-
+  
       <p>Raised on errors in Excel file.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/excelparser.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">25</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/excelparser.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">25</span>
 <span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ExcelError</span><span class="p">(</span><span class="n">EMMOntoPyException</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Raised on errors in Excel file.&quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-
-
-    </div>
-
-  </div>
-
-
-
-
-  <div class="doc doc-object doc-function">
-
-
-
-<h2 class="doc doc-heading" id="ontopy.excelparser._add_literal">
-<code class="highlight language-python"><span class="n">_add_literal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">only_one</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">expected</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
-
-
-<a class="headerlink" href="#ontopy.excelparser._add_literal" title="Permanent link">&para;</a></h2>
-
-
-    <div class="doc doc-contents ">
-
-      <p>Append literal data to ontological entity.</p>
-
-        <details class="quote">
-          <summary>Source code in <code>ontopy/excelparser.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">487</span>
-<span class="normal">488</span>
-<span class="normal">489</span>
-<span class="normal">490</span>
-<span class="normal">491</span>
-<span class="normal">492</span>
-<span class="normal">493</span>
-<span class="normal">494</span>
-<span class="normal">495</span>
-<span class="normal">496</span>
-<span class="normal">497</span>
-<span class="normal">498</span>
-<span class="normal">499</span>
-<span class="normal">500</span>
-<span class="normal">501</span>
-<span class="normal">502</span>
-<span class="normal">503</span>
-<span class="normal">504</span>
-<span class="normal">505</span>
-<span class="normal">506</span>
-<span class="normal">507</span>
-<span class="normal">508</span>
-<span class="normal">509</span>
-<span class="normal">510</span>
-<span class="normal">511</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">_add_literal</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">],</span>
-    <span class="n">destination</span><span class="p">:</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">prop</span><span class="o">.</span><span class="n">IndividualValueList</span><span class="p">,</span>  <span class="c1">#</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">only_one</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">sep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="p">,</span>
-    <span class="n">expected</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Append literal data to ontological entity.&quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">name_list</span> <span class="o">=</span> <span class="n">_parse_literal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">sep</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">only_one</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">name_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;More than one </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> is given. The first was chosen.&quot;</span>
-            <span class="p">)</span>
-            <span class="n">destination</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">english</span><span class="p">(</span><span class="n">name_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">destination</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">english</span><span class="p">(</span><span class="n">nm</span><span class="p">)</span> <span class="k">for</span> <span class="n">nm</span> <span class="ow">in</span> <span class="n">name_list</span><span class="p">])</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">expected</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">metadata</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing metadata </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> has no </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
         </details>
-    </div>
 
   </div>
 
+</div>
 
 
-  <div class="doc doc-object doc-function">
-
-
-
-<h2 class="doc doc-heading" id="ontopy.excelparser._parse_literal">
-<code class="highlight language-python"><span class="n">_parse_literal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span></code>
-
-
-<a class="headerlink" href="#ontopy.excelparser._parse_literal" title="Permanent link">&para;</a></h2>
-
-
-    <div class="doc doc-contents ">
-
-      <p>Helper function to make list ouf strings from ';'-delimited
-strings in one string.</p>
-
-        <details class="quote">
-          <summary>Source code in <code>ontopy/excelparser.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">468</span>
-<span class="normal">469</span>
-<span class="normal">470</span>
-<span class="normal">471</span>
-<span class="normal">472</span>
-<span class="normal">473</span>
-<span class="normal">474</span>
-<span class="normal">475</span>
-<span class="normal">476</span>
-<span class="normal">477</span>
-<span class="normal">478</span>
-<span class="normal">479</span>
-<span class="normal">480</span>
-<span class="normal">481</span>
-<span class="normal">482</span>
-<span class="normal">483</span>
-<span class="normal">484</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">_parse_literal</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">],</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">sep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Helper function to make list ouf strings from &#39;;&#39;-delimited</span>
-<span class="sd">    strings in one string.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Metadata name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">name</span><span class="p">][</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="ow">or</span> <span class="n">values</span> <span class="o">==</span> <span class="s2">&quot;nan&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">[]</span>
-</code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.excelparser.create_ontology_from_excel">
 <code class="highlight language-python"><span class="n">create_ontology_from_excel</span><span class="p">(</span><span class="n">excelpath</span><span class="p">,</span> <span class="n">concept_sheet_name</span><span class="o">=</span><span class="s1">&#39;Concepts&#39;</span><span class="p">,</span> <span class="n">metadata_sheet_name</span><span class="o">=</span><span class="s1">&#39;Metadata&#39;</span><span class="p">,</span> <span class="n">imports_sheet_name</span><span class="o">=</span><span class="s1">&#39;ImportedOntologies&#39;</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo/domain/onto#&#39;</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.excelparser.create_ontology_from_excel" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Creates an ontology from an Excel-file.</p>
 
   <p><strong>Parameters:</strong></p>
@@ -1540,9 +1377,9 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
     </tbody>
   </table>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/excelparser.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 34</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/excelparser.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 34</span>
 <span class="normal"> 35</span>
 <span class="normal"> 36</span>
 <span class="normal"> 37</span>
@@ -1726,32 +1563,29 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
         <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.excelparser.create_ontology_from_pandas">
 <code class="highlight language-python"><span class="n">create_ontology_from_pandas</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">imports</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo/domain/onto#&#39;</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.excelparser.create_ontology_from_pandas" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Create an ontology from a pandas DataFrame.</p>
 <p>Check 'create_ontology_from_excel' for complete documentation.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/excelparser.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">128</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/excelparser.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">128</span>
 <span class="normal">129</span>
 <span class="normal">130</span>
 <span class="normal">131</span>
@@ -2249,61 +2083,55 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
     <span class="p">]</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">imported_concepts</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">concepts_with_errors</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.excelparser.english">
 <code class="highlight language-python"><span class="n">english</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.excelparser.english" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns <code>string</code> as an English location string.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/excelparser.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">29</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/excelparser.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">29</span>
 <span class="normal">30</span>
 <span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">english</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns `string` as an English location string.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">locstr</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.excelparser.get_metadata_from_dataframe">
 <code class="highlight language-python"><span class="n">get_metadata_from_dataframe</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="p">(),</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.excelparser.get_metadata_from_dataframe" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Create ontology with metadata from pd.DataFrame</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/excelparser.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">379</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/excelparser.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">379</span>
 <span class="normal">380</span>
 <span class="normal">381</span>
 <span class="normal">382</span>
@@ -2477,27 +2305,26 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
 
     <span class="k">return</span> <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
               
             </article>
+            
           </div>
         </div>
         
-          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
             Back to top
           </a>
@@ -2506,7 +2333,8 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
       
         <footer class="md-footer">
   
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
         <a href="../colortest/" class="md-footer__link md-footer__link--prev" aria-label="Previous: colortest" rel="prev">
@@ -2575,10 +2403,10 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../assets/javascripts/workers/search.b028fd86.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.3a4b43e5.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.f758a944.min.js"></script>
       
     
   </body>

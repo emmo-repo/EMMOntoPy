@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/ontograph/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.16">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.3">
     
     
       
@@ -21,15 +21,16 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.1c3799f8.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4a0965b7.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cbb835fc.min.css">
         
           
           
           <meta name="theme-color" content="#4cae4f">
         
+      
       
     
     
@@ -892,20 +893,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ontopy.ontograph.OntoGraph._get_dot_add_edges" class="md-nav__link">
-    _get_dot_add_edges()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ontopy.ontograph.OntoGraph._get_dot_graph" class="md-nav__link">
-    _get_dot_graph()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#ontopy.ontograph.OntoGraph.get_dot_graph" class="md-nav__link">
     get_dot_graph()
   </a>
@@ -1125,20 +1112,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ontopy.ontograph.OntoGraph._get_dot_add_edges" class="md-nav__link">
-    _get_dot_add_edges()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ontopy.ontograph.OntoGraph._get_dot_graph" class="md-nav__link">
-    _get_dot_graph()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#ontopy.ontograph.OntoGraph.get_dot_graph" class="md-nav__link">
     get_dot_graph()
   </a>
@@ -1194,14 +1167,15 @@
 <h1 id="ontograph">ontograph<a class="headerlink" href="#ontograph" title="Permanent link">&para;</a></h1>
 
 
-  <div class="doc doc-object doc-module">
+<div class="doc doc-object doc-module">
+
 
 <a id="ontopy.ontograph"></a>
-    <div class="doc doc-contents first">
-
+  <div class="doc doc-contents first">
+  
       <p>A module adding graphing functionality to ontopy.ontology</p>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -1211,28 +1185,28 @@
 
 
 
-  <div class="doc doc-object doc-class">
+
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontograph.OntoGraph">
-          <code>OntoGraph</code>
-
+        <code>OntoGraph</code>
 
 
 <a class="headerlink" href="#ontopy.ontograph.OntoGraph" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
+  <div class="doc doc-contents ">
 
-
+  
       <p>A mixin class used by ontopy.ontology.Ontology that adds
 functionality for generating graph representations of the ontology.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/ontograph.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 33</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontograph.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 33</span>
 <span class="normal"> 34</span>
 <span class="normal"> 35</span>
 <span class="normal"> 36</span>
@@ -2264,9 +2238,9 @@ functionality for generating graph representations of the ontology.</p>
             <span class="n">root</span><span class="o">=</span><span class="n">roots</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="n">relations</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">style</span>
         <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-          </details>
+        </details>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -2278,478 +2252,18 @@ functionality for generating graph representations of the ontology.</p>
 
 
 
-
-  <div class="doc doc-object doc-function">
-
-
-
-<h3 class="doc doc-heading" id="ontopy.ontograph.OntoGraph._get_dot_add_edges">
-<code class="highlight language-python"><span class="n">_get_dot_add_edges</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">relation</span><span class="p">,</span> <span class="n">relations</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">constraint</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
-
-
-<a class="headerlink" href="#ontopy.ontograph.OntoGraph._get_dot_add_edges" title="Permanent link">&para;</a></h3>
-
-
-    <div class="doc doc-contents ">
-
-      <p>Adds edges to <code>graph</code> for relations between <code>entity</code> and all
-members in <code>targets</code>.  <code>style</code> is a dict with options to pydot.Edge().</p>
-
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontograph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">328</span>
-<span class="normal">329</span>
-<span class="normal">330</span>
-<span class="normal">331</span>
-<span class="normal">332</span>
-<span class="normal">333</span>
-<span class="normal">334</span>
-<span class="normal">335</span>
-<span class="normal">336</span>
-<span class="normal">337</span>
-<span class="normal">338</span>
-<span class="normal">339</span>
-<span class="normal">340</span>
-<span class="normal">341</span>
-<span class="normal">342</span>
-<span class="normal">343</span>
-<span class="normal">344</span>
-<span class="normal">345</span>
-<span class="normal">346</span>
-<span class="normal">347</span>
-<span class="normal">348</span>
-<span class="normal">349</span>
-<span class="normal">350</span>
-<span class="normal">351</span>
-<span class="normal">352</span>
-<span class="normal">353</span>
-<span class="normal">354</span>
-<span class="normal">355</span>
-<span class="normal">356</span>
-<span class="normal">357</span>
-<span class="normal">358</span>
-<span class="normal">359</span>
-<span class="normal">360</span>
-<span class="normal">361</span>
-<span class="normal">362</span>
-<span class="normal">363</span>
-<span class="normal">364</span>
-<span class="normal">365</span>
-<span class="normal">366</span>
-<span class="normal">367</span>
-<span class="normal">368</span>
-<span class="normal">369</span>
-<span class="normal">370</span>
-<span class="normal">371</span>
-<span class="normal">372</span>
-<span class="normal">373</span>
-<span class="normal">374</span>
-<span class="normal">375</span>
-<span class="normal">376</span>
-<span class="normal">377</span>
-<span class="normal">378</span>
-<span class="normal">379</span>
-<span class="normal">380</span>
-<span class="normal">381</span>
-<span class="normal">382</span>
-<span class="normal">383</span>
-<span class="normal">384</span>
-<span class="normal">385</span>
-<span class="normal">386</span>
-<span class="normal">387</span>
-<span class="normal">388</span>
-<span class="normal">389</span>
-<span class="normal">390</span>
-<span class="normal">391</span>
-<span class="normal">392</span>
-<span class="normal">393</span>
-<span class="normal">394</span>
-<span class="normal">395</span>
-<span class="normal">396</span>
-<span class="normal">397</span>
-<span class="normal">398</span>
-<span class="normal">399</span>
-<span class="normal">400</span>
-<span class="normal">401</span>
-<span class="normal">402</span>
-<span class="normal">403</span>
-<span class="normal">404</span>
-<span class="normal">405</span>
-<span class="normal">406</span>
-<span class="normal">407</span>
-<span class="normal">408</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">_get_dot_add_edges</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments,too-many-locals,too-many-branches</span>
-    <span class="bp">self</span><span class="p">,</span>
-    <span class="n">graph</span><span class="p">,</span>
-    <span class="n">entity</span><span class="p">,</span>
-    <span class="n">targets</span><span class="p">,</span>
-    <span class="n">relation</span><span class="p">,</span>
-    <span class="n">relations</span><span class="p">,</span>
-    <span class="n">style</span><span class="p">,</span>
-    <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">constraint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Adds edges to `graph` for relations between `entity` and all</span>
-<span class="sd">    members in `targets`.  `style` is a dict with options to pydot.Edge().</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">nodes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">asstring</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">nodes</span><span class="p">:</span>
-        <span class="k">return</span>
-    <span class="n">node</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
-        <span class="n">entity_string</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
-            <span class="k">pass</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="n">target</span><span class="p">,</span> <span class="p">(</span><span class="n">owlready2</span><span class="o">.</span><span class="n">ObjectPropertyClass</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">PropertyClass</span><span class="p">)</span>
-        <span class="p">):</span>
-            <span class="n">label</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-            <span class="n">nodes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">nodes</span><span class="p">:</span>
-                <span class="n">kwargs</span> <span class="o">=</span> <span class="n">style</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edgelabels</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">edgelabels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">edgelabels</span><span class="p">:</span>
-                    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
-                <span class="n">edge</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">constraint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">edge</span><span class="o">.</span><span class="n">set_constraint</span><span class="p">(</span><span class="n">constraint</span><span class="p">)</span>
-                <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Restriction</span><span class="p">):</span>
-            <span class="n">rname</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">property</span><span class="p">)</span>
-            <span class="n">rtype</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">class_construct</span><span class="o">.</span><span class="n">_restriction_type_2_label</span><span class="p">[</span>  <span class="c1"># pylint: disable=protected-access</span>
-                <span class="n">target</span><span class="o">.</span><span class="n">type</span>
-            <span class="p">]</span>
-
-            <span class="k">if</span> <span class="n">relations</span> <span class="ow">or</span> <span class="n">rname</span> <span class="ow">in</span> <span class="n">relations</span><span class="p">:</span>
-                <span class="n">vname</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-                <span class="n">others</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">vname</span><span class="p">)</span>
-
-                <span class="c1"># Only proceede if there is only one node named `vname`</span>
-                <span class="c1"># and an edge to that node does not already exists</span>
-                <span class="k">if</span> <span class="p">(</span>
-                    <span class="nb">len</span><span class="p">(</span><span class="n">others</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
-                    <span class="ow">and</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span> <span class="n">vname</span><span class="p">)</span>
-                    <span class="ow">not</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">obj_dict</span><span class="p">[</span><span class="s2">&quot;edges&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-                <span class="p">):</span>
-                    <span class="n">other</span> <span class="o">=</span> <span class="n">others</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">continue</span>
-
-                <span class="k">if</span> <span class="n">rtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;exactly&quot;</span><span class="p">):</span>
-                    <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rname</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rtype</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">target</span><span class="o">.</span><span class="n">cardinality</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rname</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rtype</span><span class="si">}</span><span class="s2">&quot;</span>
-
-                <span class="n">kwargs</span> <span class="o">=</span> <span class="n">style</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edgelabels</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                    <span class="n">slabel</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rname</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rtype</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">edgelabels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slabel</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;   &quot;</span>
-                <span class="k">elif</span> <span class="n">edgelabels</span><span class="p">:</span>
-                    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span> <span class="o">+</span> <span class="s2">&quot;   &quot;</span>  <span class="c1"># Add some extra space</span>
-
-                <span class="n">edge</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">constraint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">edge</span><span class="o">.</span><span class="n">set_constraint</span><span class="p">(</span><span class="n">constraint</span><span class="p">)</span>
-                <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_verbose&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;* get_dot_graph() * Ignoring: </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span><span class="si">}</span><span class="s2"> &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">relation</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">entity_string</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-function">
-
-
-
-<h3 class="doc doc-heading" id="ontopy.ontograph.OntoGraph._get_dot_graph">
-<code class="highlight language-python"><span class="n">_get_dot_graph</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="s1">&#39;is_a&#39;</span><span class="p">,</span> <span class="n">leafs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visited</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
-
-
-<a class="headerlink" href="#ontopy.ontograph.OntoGraph._get_dot_graph" title="Permanent link">&para;</a></h3>
-
-
-    <div class="doc doc-contents ">
-
-      <p>Help method. See get_dot_graph(). <code>visited</code> is used to filter
-out circular dependencies.</p>
-
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontograph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">410</span>
-<span class="normal">411</span>
-<span class="normal">412</span>
-<span class="normal">413</span>
-<span class="normal">414</span>
-<span class="normal">415</span>
-<span class="normal">416</span>
-<span class="normal">417</span>
-<span class="normal">418</span>
-<span class="normal">419</span>
-<span class="normal">420</span>
-<span class="normal">421</span>
-<span class="normal">422</span>
-<span class="normal">423</span>
-<span class="normal">424</span>
-<span class="normal">425</span>
-<span class="normal">426</span>
-<span class="normal">427</span>
-<span class="normal">428</span>
-<span class="normal">429</span>
-<span class="normal">430</span>
-<span class="normal">431</span>
-<span class="normal">432</span>
-<span class="normal">433</span>
-<span class="normal">434</span>
-<span class="normal">435</span>
-<span class="normal">436</span>
-<span class="normal">437</span>
-<span class="normal">438</span>
-<span class="normal">439</span>
-<span class="normal">440</span>
-<span class="normal">441</span>
-<span class="normal">442</span>
-<span class="normal">443</span>
-<span class="normal">444</span>
-<span class="normal">445</span>
-<span class="normal">446</span>
-<span class="normal">447</span>
-<span class="normal">448</span>
-<span class="normal">449</span>
-<span class="normal">450</span>
-<span class="normal">451</span>
-<span class="normal">452</span>
-<span class="normal">453</span>
-<span class="normal">454</span>
-<span class="normal">455</span>
-<span class="normal">456</span>
-<span class="normal">457</span>
-<span class="normal">458</span>
-<span class="normal">459</span>
-<span class="normal">460</span>
-<span class="normal">461</span>
-<span class="normal">462</span>
-<span class="normal">463</span>
-<span class="normal">464</span>
-<span class="normal">465</span>
-<span class="normal">466</span>
-<span class="normal">467</span>
-<span class="normal">468</span>
-<span class="normal">469</span>
-<span class="normal">470</span>
-<span class="normal">471</span>
-<span class="normal">472</span>
-<span class="normal">473</span>
-<span class="normal">474</span>
-<span class="normal">475</span>
-<span class="normal">476</span>
-<span class="normal">477</span>
-<span class="normal">478</span>
-<span class="normal">479</span>
-<span class="normal">480</span>
-<span class="normal">481</span>
-<span class="normal">482</span>
-<span class="normal">483</span>
-<span class="normal">484</span>
-<span class="normal">485</span>
-<span class="normal">486</span>
-<span class="normal">487</span>
-<span class="normal">488</span>
-<span class="normal">489</span>
-<span class="normal">490</span>
-<span class="normal">491</span>
-<span class="normal">492</span>
-<span class="normal">493</span>
-<span class="normal">494</span>
-<span class="normal">495</span>
-<span class="normal">496</span>
-<span class="normal">497</span>
-<span class="normal">498</span>
-<span class="normal">499</span>
-<span class="normal">500</span>
-<span class="normal">501</span>
-<span class="normal">502</span>
-<span class="normal">503</span>
-<span class="normal">504</span>
-<span class="normal">505</span>
-<span class="normal">506</span>
-<span class="normal">507</span>
-<span class="normal">508</span>
-<span class="normal">509</span>
-<span class="normal">510</span>
-<span class="normal">511</span>
-<span class="normal">512</span>
-<span class="normal">513</span>
-<span class="normal">514</span>
-<span class="normal">515</span>
-<span class="normal">516</span>
-<span class="normal">517</span>
-<span class="normal">518</span>
-<span class="normal">519</span>
-<span class="normal">520</span>
-<span class="normal">521</span>
-<span class="normal">522</span>
-<span class="normal">523</span>
-<span class="normal">524</span>
-<span class="normal">525</span>
-<span class="normal">526</span>
-<span class="normal">527</span>
-<span class="normal">528</span>
-<span class="normal">529</span>
-<span class="normal">530</span>
-<span class="normal">531</span>
-<span class="normal">532</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">_get_dot_graph</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements</span>
-    <span class="bp">self</span><span class="p">,</span>
-    <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;is_a&quot;</span><span class="p">,</span>
-    <span class="n">leafs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">visited</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Help method. See get_dot_graph(). `visited` is used to filter</span>
-<span class="sd">    out circular dependencies.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;newrank&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-        <span class="n">graph</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Dot</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">relations</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">relations</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;is_a&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_relations</span><span class="p">())</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">relations</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">relations</span> <span class="o">=</span> <span class="p">[</span><span class="n">relations</span><span class="p">]</span>
-    <span class="n">relations</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
-        <span class="n">r</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
-        <span class="k">else</span> <span class="n">asstring</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">label</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
-        <span class="k">else</span> <span class="n">r</span><span class="o">.</span><span class="n">name</span>
-        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">relations</span>
-    <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">visited</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">root_cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_root_classes</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_get_dot_graph</span><span class="p">(</span>
-                <span class="n">root</span><span class="o">=</span><span class="n">root_cls</span><span class="p">,</span>
-                <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
-                <span class="n">relations</span><span class="o">=</span><span class="n">relations</span><span class="p">,</span>
-                <span class="n">leafs</span><span class="o">=</span><span class="n">leafs</span><span class="p">,</span>
-                <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="p">,</span>
-                <span class="n">visited</span><span class="o">=</span><span class="n">visited</span><span class="p">,</span>
-                <span class="n">edgelabels</span><span class="o">=</span><span class="n">edgelabels</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="n">graph</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">set</span><span class="p">)):</span>
-        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_get_dot_graph</span><span class="p">(</span>
-                <span class="n">root</span><span class="o">=</span><span class="n">_</span><span class="p">,</span>
-                <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
-                <span class="n">relations</span><span class="o">=</span><span class="n">relations</span><span class="p">,</span>
-                <span class="n">leafs</span><span class="o">=</span><span class="n">leafs</span><span class="p">,</span>
-                <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="p">,</span>
-                <span class="n">visited</span><span class="o">=</span><span class="n">visited</span><span class="p">,</span>
-                <span class="n">edgelabels</span><span class="o">=</span><span class="n">edgelabels</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="n">graph</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_verbose&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Circular dependency of class </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="si">!r}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="n">graph</span>
-    <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
-
-    <span class="n">label</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
-    <span class="n">nodes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">nodes</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;More than one node corresponding to label: </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-        <span class="n">node</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_individual</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
-            <span class="n">node</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;individual&quot;</span><span class="p">,</span> <span class="p">{}))</span>
-            <span class="n">node</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_defined</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
-            <span class="n">node</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;defined_class&quot;</span><span class="p">,</span> <span class="p">{}))</span>
-            <span class="n">node</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">node</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="p">{}))</span>
-            <span class="n">node</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-        <span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">leafs</span> <span class="ow">and</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">leafs</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">graph</span>
-
-    <span class="k">for</span> <span class="n">sub_cls</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">subclasses</span><span class="p">():</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span><span class="n">sub_cls</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_individual</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
-            <span class="n">subnode</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;individual&quot;</span><span class="p">,</span> <span class="p">{}))</span>
-            <span class="n">subnode</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_defined</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
-            <span class="n">subnode</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;defined_class&quot;</span><span class="p">,</span> <span class="p">{}))</span>
-            <span class="n">subnode</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">subnode</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="p">{}))</span>
-            <span class="n">subnode</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-        <span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">subnode</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">relations</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="s2">&quot;is_a&quot;</span> <span class="ow">in</span> <span class="n">relations</span><span class="p">:</span>
-            <span class="n">kwargs</span> <span class="o">=</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_a&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edgelabels</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">edgelabels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_a&quot;</span><span class="p">,</span> <span class="s2">&quot;is_a&quot;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">edgelabels</span><span class="p">:</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;is_a&quot;</span>
-            <span class="n">edge</span> <span class="o">=</span> <span class="n">pydot</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">subnode</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_get_dot_graph</span><span class="p">(</span>
-            <span class="n">root</span><span class="o">=</span><span class="n">sub_cls</span><span class="p">,</span>
-            <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
-            <span class="n">relations</span><span class="o">=</span><span class="n">relations</span><span class="p">,</span>
-            <span class="n">leafs</span><span class="o">=</span><span class="n">leafs</span><span class="p">,</span>
-            <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="p">,</span>
-            <span class="n">visited</span><span class="o">=</span><span class="n">visited</span><span class="p">,</span>
-            <span class="n">edgelabels</span><span class="o">=</span><span class="n">edgelabels</span><span class="p">,</span>
-        <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">graph</span>
-</code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontograph.OntoGraph.get_dot_graph">
 <code class="highlight language-python"><span class="n">get_dot_graph</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="s1">&#39;is_a&#39;</span><span class="p">,</span> <span class="n">leafs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edgelabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">constraint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontograph.OntoGraph.get_dot_graph" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns a pydot graph object for visualising the ontology.</p>
 <h5 id="ontopy.ontograph.OntoGraph.get_dot_graph--parameters">Parameters<a class="headerlink" href="#ontopy.ontograph.OntoGraph.get_dot_graph--parameters" title="Permanent link">&para;</a></h5>
 
@@ -2806,9 +2320,9 @@ to some abbriviations.</p>
 </details>      <p>constraint : None | bool</p>
 <p>Note: This method requires pydot.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontograph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">133</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontograph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">133</span>
 <span class="normal">134</span>
 <span class="normal">135</span>
 <span class="normal">136</span>
@@ -3196,33 +2710,30 @@ to some abbriviations.</p>
 
     <span class="k">return</span> <span class="n">graph</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontograph.OntoGraph.get_dot_relations_graph">
 <code class="highlight language-python"><span class="n">get_dot_relations_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="s1">&#39;is_a&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontograph.OntoGraph.get_dot_relations_graph" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns a disjoined graph of all relations.</p>
 <p>This method simply calls get_dot_graph() with all root relations.
 All arguments are passed on.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontograph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">534</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontograph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">534</span>
 <span class="normal">535</span>
 <span class="normal">536</span>
 <span class="normal">537</span>
@@ -3252,43 +2763,38 @@ All arguments are passed on.</p>
         <span class="n">root</span><span class="o">=</span><span class="n">roots</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="n">relations</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">style</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
 
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontograph.get_figsize">
 <code class="highlight language-python"><span class="n">get_figsize</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontograph.get_figsize" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns figure size (width, height) in points of figures for the
 current pydot graph object <code>graph</code>.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontograph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">551</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontograph.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">551</span>
 <span class="normal">552</span>
 <span class="normal">553</span>
 <span class="normal">554</span>
@@ -3330,27 +2836,26 @@ current pydot graph object <code>graph</code>.</p>
 
     <span class="k">return</span> <span class="n">asfloat</span><span class="p">(</span><span class="n">width</span><span class="p">),</span> <span class="n">asfloat</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
               
             </article>
+            
           </div>
         </div>
         
-          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
             Back to top
           </a>
@@ -3359,7 +2864,8 @@ current pydot graph object <code>graph</code>.</p>
       
         <footer class="md-footer">
   
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
         <a href="../ontodoc/" class="md-footer__link md-footer__link--prev" aria-label="Previous: ontodoc" rel="prev">
@@ -3428,10 +2934,10 @@ current pydot graph object <code>graph</code>.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../assets/javascripts/workers/search.b028fd86.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.3a4b43e5.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.f758a944.min.js"></script>
       
     
   </body>

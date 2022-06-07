@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/factpluspluswrapper/owlapi_interface/">
       
       <link rel="icon" href="../../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.16">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.3">
     
     
       
@@ -21,15 +21,16 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.1c3799f8.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.4a0965b7.min.css">
       
         
-        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.cbb835fc.min.css">
         
           
           
           <meta name="theme-color" content="#4cae4f">
         
+      
       
     
     
@@ -997,13 +998,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface._run" class="md-nav__link">
-    _run()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface.merge_files" class="md-nav__link">
     merge_files()
   </a>
@@ -1128,13 +1122,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface._run" class="md-nav__link">
-    _run()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface.merge_files" class="md-nav__link">
     merge_files()
   </a>
@@ -1184,16 +1171,17 @@
 <h1 id="owlapi_interface">owlapi_interface<a class="headerlink" href="#owlapi_interface" title="Permanent link">&para;</a></h1>
 
 
-  <div class="doc doc-object doc-module">
+<div class="doc doc-object doc-module">
+
 
 <a id="ontopy.factpluspluswrapper.owlapi_interface"></a>
-    <div class="doc doc-contents first">
-
+  <div class="doc doc-contents first">
+  
       <p>Python interface to the FaCT++ Reasoner.</p>
 <p>This module is copied from the SimPhoNy project.</p>
 <p>Original author: Matthias Urban</p>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -1204,28 +1192,26 @@
 
 
 
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface">
-          <code>OwlApiInterface</code>
-
+        <code>OwlApiInterface</code>
 
 
 <a class="headerlink" href="#ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
+  <div class="doc doc-contents ">
 
-
+  
       <p>Interface to the FaCT++ reasoner via OWLAPI.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">20</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">20</span>
 <span class="normal">21</span>
 <span class="normal">22</span>
 <span class="normal">23</span>
@@ -1385,9 +1371,9 @@
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">RESULT_FILE</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">graph</span>
 </code></pre></div></td></tr></table></div>
-          </details>
+        </details>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -1398,238 +1384,44 @@
 
 
 
-  <div class="doc doc-object doc-function">
+
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface.__init__">
 <code class="highlight language-python"><span class="fm">__init__</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface.__init__" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Initialize the interface.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">23</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">23</span>
 <span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Initialize the interface.&quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
-
-
-
-<h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface._run">
-<code class="highlight language-python"><span class="n">_run</span><span class="p">(</span><span class="o">*</span><span class="n">owl_files</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
-
-  <span class="doc doc-properties">
-      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
-  </span>
-
-<a class="headerlink" href="#ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface._run" title="Permanent link">&para;</a></h3>
-
-
-    <div class="doc doc-contents ">
-
-      <p>Run the FaCT++ reasoner using a java command.</p>
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>*owl_files</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>Path to the owl files to load.</p></td>
-          <td>
-                <code>()</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>command</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>Either --run-reasoner or --merge-only</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>output_file</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>Where the output should be stored.
-Defaults to None.</p></td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>return_graph</code></td>
-          <td>
-                <code>bool</code>
-          </td>
-          <td><p>Whether the result should be parsed
-and returned. Defaults to True.</p></td>
-          <td>
-                <code>True</code>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code>rdflib.<span title="rdflib.Graph">Graph</span></code>
-          </td>
-          <td><p>The reasoned result.</p></td>
-        </tr>
-    </tbody>
-  </table>
-
-        <details class="quote">
-          <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span>
-<span class="normal">84</span>
-<span class="normal">85</span>
-<span class="normal">86</span>
-<span class="normal">87</span>
-<span class="normal">88</span>
-<span class="normal">89</span>
-<span class="normal">90</span>
-<span class="normal">91</span>
-<span class="normal">92</span>
-<span class="normal">93</span>
-<span class="normal">94</span>
-<span class="normal">95</span>
-<span class="normal">96</span>
-<span class="normal">97</span>
-<span class="normal">98</span>
-<span class="normal">99</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
-<span class="k">def</span> <span class="nf">_run</span><span class="p">(</span>
-    <span class="o">*</span><span class="n">owl_files</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_graph</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Run the FaCT++ reasoner using a java command.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        *owl_files (str): Path to the owl files to load.</span>
-<span class="sd">        command (str): Either --run-reasoner or --merge-only</span>
-<span class="sd">        output_file (str, optional): Where the output should be stored.</span>
-<span class="sd">            Defaults to None.</span>
-<span class="sd">        return_graph (bool, optional): Whether the result should be parsed</span>
-<span class="sd">            and returned. Defaults to True.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        The reasoned result.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">java_base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;java&quot;</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">[</span>
-            <span class="s2">&quot;java&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;-cp&quot;</span><span class="p">,</span>
-            <span class="n">java_base</span> <span class="o">+</span> <span class="s2">&quot;/lib/jars/*&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;-Djava.library.path=&quot;</span> <span class="o">+</span> <span class="n">java_base</span> <span class="o">+</span> <span class="s2">&quot;/lib/so&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;org.simphony.OntologyLoader&quot;</span><span class="p">,</span>
-        <span class="p">]</span>
-        <span class="o">+</span> <span class="p">[</span><span class="n">command</span><span class="p">]</span>
-        <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">owl_files</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running Reasoner&quot;</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Command </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
-    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># nosec</span>
-
-    <span class="n">graph</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="n">return_graph</span><span class="p">:</span>
-        <span class="n">graph</span> <span class="o">=</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-        <span class="n">graph</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">RESULT_FILE</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">output_file</span><span class="p">:</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">RESULT_FILE</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">RESULT_FILE</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">graph</span>
-</code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface.merge_files">
 <code class="highlight language-python"><span class="n">merge_files</span><span class="p">(</span><span class="o">*</span><span class="n">owl_files</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface.merge_files" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Merge the given owl files and its import closure.</p>
 
   <p><strong>Parameters:</strong></p>
@@ -1656,9 +1448,9 @@ and returned. Defaults to True.</p></td>
     </tbody>
   </table>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">46</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">46</span>
 <span class="normal">47</span>
 <span class="normal">48</span>
 <span class="normal">49</span>
@@ -1674,26 +1466,23 @@ and returned. Defaults to True.</p></td>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="o">*</span><span class="n">owl_files</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;--merge-only&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface.reason">
 <code class="highlight language-python"><span class="n">reason</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface.reason" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Generate the inferred axioms for a given Graph.</p>
 
   <p><strong>Parameters:</strong></p>
@@ -1720,9 +1509,9 @@ and returned. Defaults to True.</p></td>
     </tbody>
   </table>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">26</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">26</span>
 <span class="normal">27</span>
 <span class="normal">28</span>
 <span class="normal">29</span>
@@ -1742,26 +1531,23 @@ and returned. Defaults to True.</p></td>
         <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xml&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;--run-reasoner&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface.reason_files">
 <code class="highlight language-python"><span class="n">reason_files</span><span class="p">(</span><span class="o">*</span><span class="n">owl_files</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.factpluspluswrapper.owlapi_interface.OwlApiInterface.reason_files" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Merge the given owl and generate the inferred axioms.</p>
 
   <p><strong>Parameters:</strong></p>
@@ -1788,9 +1574,9 @@ and returned. Defaults to True.</p></td>
     </tbody>
   </table>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">37</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">37</span>
 <span class="normal">38</span>
 <span class="normal">39</span>
 <span class="normal">40</span>
@@ -1806,42 +1592,37 @@ and returned. Defaults to True.</p></td>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="o">*</span><span class="n">owl_files</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;--run-reasoner&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
 
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.factpluspluswrapper.owlapi_interface.reason_from_terminal">
 <code class="highlight language-python"><span class="n">reason_from_terminal</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.factpluspluswrapper.owlapi_interface.reason_from_terminal" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Run the reasoner from terminal.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">102</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">102</span>
 <span class="normal">103</span>
 <span class="normal">104</span>
 <span class="normal">105</span>
@@ -1883,27 +1664,26 @@ and returned. Defaults to True.</p></td>
         <span class="n">output_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
               
             </article>
+            
           </div>
         </div>
         
-          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
             Back to top
           </a>
@@ -1912,7 +1692,8 @@ and returned. Defaults to True.</p></td>
       
         <footer class="md-footer">
   
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
         <a href="../factppgraph/" class="md-footer__link md-footer__link--prev" aria-label="Previous: factppgraph" rel="prev">
@@ -1981,10 +1762,10 @@ and returned. Defaults to True.</p></td>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../../assets/javascripts/workers/search.b028fd86.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.3a4b43e5.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.f758a944.min.js"></script>
       
     
   </body>

@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/ontodoc/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.16">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.3">
     
     
       
@@ -21,15 +21,16 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.1c3799f8.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4a0965b7.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cbb835fc.min.css">
         
           
           
           <meta name="theme-color" content="#4cae4f">
         
+      
       
     
     
@@ -892,13 +893,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ontopy.ontodoc.DocPP._make_branchfig" class="md-nav__link">
-    _make_branchfig()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#ontopy.ontodoc.DocPP.copy" class="md-nav__link">
     copy()
   </a>
@@ -1422,13 +1416,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ontopy.ontodoc.DocPP._make_branchfig" class="md-nav__link">
-    _make_branchfig()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#ontopy.ontodoc.DocPP.copy" class="md-nav__link">
     copy()
   </a>
@@ -1760,14 +1747,15 @@
 <h1 id="ontodoc">ontodoc<a class="headerlink" href="#ontodoc" title="Permanent link">&para;</a></h1>
 
 
-  <div class="doc doc-object doc-module">
+<div class="doc doc-object doc-module">
+
 
 <a id="ontopy.ontodoc"></a>
-    <div class="doc doc-contents first">
-
+  <div class="doc doc-contents first">
+  
       <p>A module for documenting ontologies.</p>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -1777,30 +1765,30 @@
 
 
 
-  <div class="doc doc-object doc-class">
+
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.AttributeDict">
-          <code>AttributeDict</code>
-
+        <code>AttributeDict</code>
 
 
 <a class="headerlink" href="#ontopy.ontodoc.AttributeDict" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-        <p class="doc doc-class-bases">
-          Bases: <code>dict</code></p>
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code>dict</code></p>
 
-
+  
       <p>A dict with attribute access.</p>
 <p>Note that methods like key() and update() may be overridden.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">424</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">424</span>
 <span class="normal">425</span>
 <span class="normal">426</span>
 <span class="normal">427</span>
@@ -1816,9 +1804,9 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="bp">self</span>
 </code></pre></div></td></tr></table></div>
-          </details>
+        </details>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -1832,30 +1820,26 @@
 
 
 
+  </div>
 
   </div>
 
-    </div>
+</div>
 
-  </div>
-
-
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.DocPP">
-          <code>DocPP</code>
-
+        <code>DocPP</code>
 
 
 <a class="headerlink" href="#ontopy.ontodoc.DocPP" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
+  <div class="doc doc-contents ">
 
-
+  
       <p>Documentation pre-processor.</p>
 
 <details class="it-supports-the-following-features">
@@ -1970,9 +1954,9 @@
   <p>Whether to include imported entities.</p>
 </details>
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 456</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 456</span>
 <span class="normal"> 457</span>
 <span class="normal"> 458</span>
 <span class="normal"> 459</span>
@@ -3418,9 +3402,9 @@
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="s2">&quot;wt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
                 <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-          </details>
+        </details>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -3432,411 +3416,23 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-function">
-
-
-
-<h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP._make_branchfig">
-<code class="highlight language-python"><span class="n">_make_branchfig</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">terminated</span><span class="p">,</span> <span class="n">include_leafs</span><span class="p">,</span> <span class="n">strict_leafs</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">leafs</span><span class="p">,</span> <span class="n">relations</span><span class="p">,</span> <span class="n">edgelabels</span><span class="p">,</span> <span class="n">rankdir</span><span class="p">,</span> <span class="n">legend</span><span class="p">,</span> <span class="n">included_namespaces</span><span class="p">,</span> <span class="n">included_ontologies</span><span class="p">)</span></code>
-
-
-<a class="headerlink" href="#ontopy.ontodoc.DocPP._make_branchfig" title="Permanent link">&para;</a></h3>
-
-
-    <div class="doc doc-contents ">
-
-      <p>Help method for process_branchfig().</p>
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>name</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>name of branch root</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>path</code></td>
-          <td>
-                <code>Union[Path, str]</code>
-          </td>
-          <td><p>optional figure path name</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>include_leafs</code></td>
-          <td>
-                <code>bool</code>
-          </td>
-          <td><p>whether to include leafs</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>strict_leafs</code></td>
-          <td>
-                <code>bool</code>
-          </td>
-          <td><p>whether strictly exclude leafs descendants</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>terminated</code></td>
-          <td>
-                <code>bool</code>
-          </td>
-          <td><p>whether the graph should be terminated at leaf nodes</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>width</code></td>
-          <td>
-                <code>float</code>
-          </td>
-          <td><p>optional figure width</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>leafs</code></td>
-          <td>
-                <code>Union[str, list[str]]</code>
-          </td>
-          <td><p>optional leafs node names for graph termination</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>relations</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>comma-separated list of relations to include</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>edgelabels</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>whether to include edgelabels</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>rankdir</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>graph direction (BT, TB, RL, LR)</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>legend</code></td>
-          <td>
-                <code>bool</code>
-          </td>
-          <td><p>whether to add legend</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>included_namespaces</code></td>
-          <td>
-                <code>Iterable[str]</code>
-          </td>
-          <td><p>sequence of names of namespaces to be included</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>included_ontologies</code></td>
-          <td>
-                <code>Iterable[str]</code>
-          </td>
-          <td><p>sequence of names of ontologies to be included</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-<th>Name</th>        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-<td><code>filepath</code></td>          <td>
-                <code>tuple[str, list[str], float]</code>
-          </td>
-          <td><p>path to generated figure</p></td>
-        </tr>
-        <tr>
-<td><code>leafs</code></td>          <td>
-                <code>tuple[str, list[str], float]</code>
-          </td>
-          <td><p>used list of leaf node names</p></td>
-        </tr>
-        <tr>
-<td><code>width</code></td>          <td>
-                <code>tuple[str, list[str], float]</code>
-          </td>
-          <td><p>actual figure width</p></td>
-        </tr>
-    </tbody>
-  </table>
-
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">726</span>
-<span class="normal">727</span>
-<span class="normal">728</span>
-<span class="normal">729</span>
-<span class="normal">730</span>
-<span class="normal">731</span>
-<span class="normal">732</span>
-<span class="normal">733</span>
-<span class="normal">734</span>
-<span class="normal">735</span>
-<span class="normal">736</span>
-<span class="normal">737</span>
-<span class="normal">738</span>
-<span class="normal">739</span>
-<span class="normal">740</span>
-<span class="normal">741</span>
-<span class="normal">742</span>
-<span class="normal">743</span>
-<span class="normal">744</span>
-<span class="normal">745</span>
-<span class="normal">746</span>
-<span class="normal">747</span>
-<span class="normal">748</span>
-<span class="normal">749</span>
-<span class="normal">750</span>
-<span class="normal">751</span>
-<span class="normal">752</span>
-<span class="normal">753</span>
-<span class="normal">754</span>
-<span class="normal">755</span>
-<span class="normal">756</span>
-<span class="normal">757</span>
-<span class="normal">758</span>
-<span class="normal">759</span>
-<span class="normal">760</span>
-<span class="normal">761</span>
-<span class="normal">762</span>
-<span class="normal">763</span>
-<span class="normal">764</span>
-<span class="normal">765</span>
-<span class="normal">766</span>
-<span class="normal">767</span>
-<span class="normal">768</span>
-<span class="normal">769</span>
-<span class="normal">770</span>
-<span class="normal">771</span>
-<span class="normal">772</span>
-<span class="normal">773</span>
-<span class="normal">774</span>
-<span class="normal">775</span>
-<span class="normal">776</span>
-<span class="normal">777</span>
-<span class="normal">778</span>
-<span class="normal">779</span>
-<span class="normal">780</span>
-<span class="normal">781</span>
-<span class="normal">782</span>
-<span class="normal">783</span>
-<span class="normal">784</span>
-<span class="normal">785</span>
-<span class="normal">786</span>
-<span class="normal">787</span>
-<span class="normal">788</span>
-<span class="normal">789</span>
-<span class="normal">790</span>
-<span class="normal">791</span>
-<span class="normal">792</span>
-<span class="normal">793</span>
-<span class="normal">794</span>
-<span class="normal">795</span>
-<span class="normal">796</span>
-<span class="normal">797</span>
-<span class="normal">798</span>
-<span class="normal">799</span>
-<span class="normal">800</span>
-<span class="normal">801</span>
-<span class="normal">802</span>
-<span class="normal">803</span>
-<span class="normal">804</span>
-<span class="normal">805</span>
-<span class="normal">806</span>
-<span class="normal">807</span>
-<span class="normal">808</span>
-<span class="normal">809</span>
-<span class="normal">810</span>
-<span class="normal">811</span>
-<span class="normal">812</span>
-<span class="normal">813</span>
-<span class="normal">814</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">_make_branchfig</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments,too-many-locals</span>
-    <span class="bp">self</span><span class="p">,</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">path</span><span class="p">:</span> <span class="s2">&quot;Union[Path, str]&quot;</span><span class="p">,</span>
-    <span class="n">terminated</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-    <span class="n">include_leafs</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-    <span class="n">strict_leafs</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-    <span class="n">width</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">leafs</span><span class="p">:</span> <span class="s2">&quot;Union[str, list[str]]&quot;</span><span class="p">,</span>
-    <span class="n">relations</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">edgelabels</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">rankdir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">legend</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-    <span class="n">included_namespaces</span><span class="p">:</span> <span class="s2">&quot;Iterable[str]&quot;</span><span class="p">,</span>
-    <span class="n">included_ontologies</span><span class="p">:</span> <span class="s2">&quot;Iterable[str]&quot;</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;tuple[str, list[str], float]&quot;</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Help method for process_branchfig().</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        name: name of branch root</span>
-<span class="sd">        path: optional figure path name</span>
-<span class="sd">        include_leafs: whether to include leafs</span>
-<span class="sd">        strict_leafs: whether strictly exclude leafs descendants</span>
-<span class="sd">        terminated: whether the graph should be terminated at leaf nodes</span>
-<span class="sd">        width: optional figure width</span>
-<span class="sd">        leafs: optional leafs node names for graph termination</span>
-<span class="sd">        relations: comma-separated list of relations to include</span>
-<span class="sd">        edgelabels: whether to include edgelabels</span>
-<span class="sd">        rankdir: graph direction (BT, TB, RL, LR)</span>
-<span class="sd">        legend: whether to add legend</span>
-<span class="sd">        included_namespaces: sequence of names of namespaces to be included</span>
-<span class="sd">        included_ontologies: sequence of names of ontologies to be included</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        filepath: path to generated figure</span>
-<span class="sd">        leafs: used list of leaf node names</span>
-<span class="sd">        width: actual figure width</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">onto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="o">.</span><span class="n">onto</span>
-    <span class="k">if</span> <span class="n">leafs</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">leafs</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">leafs</span> <span class="o">=</span> <span class="n">leafs</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">terminated</span><span class="p">:</span>
-        <span class="n">leafs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_branches</span><span class="p">())</span>
-        <span class="n">leafs</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">leafs</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="n">path</span><span class="p">:</span>
-        <span class="n">figdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-        <span class="n">formatext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">formatext</span><span class="p">:</span>
-            <span class="n">fmt</span> <span class="o">=</span> <span class="n">formatext</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">fmt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figformat</span>
-            <span class="n">path</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">fmt</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">figdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figdir</span>
-        <span class="n">fmt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figformat</span>
-        <span class="n">term</span> <span class="o">=</span> <span class="s2">&quot;T&quot;</span> <span class="k">if</span> <span class="n">terminated</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">figdir</span><span class="p">,</span> <span class="n">name</span> <span class="o">+</span> <span class="n">term</span><span class="p">)</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">fmt</span><span class="si">}</span><span class="s2">&quot;</span>
-
-    <span class="c1"># Create graph</span>
-    <span class="n">graph</span> <span class="o">=</span> <span class="n">OntoGraph</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">graph_attr</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rankdir&quot;</span><span class="p">:</span> <span class="n">rankdir</span><span class="p">})</span>
-    <span class="n">graph</span><span class="o">.</span><span class="n">add_branch</span><span class="p">(</span>
-        <span class="n">root</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-        <span class="n">leafs</span><span class="o">=</span><span class="n">leafs</span><span class="p">,</span>
-        <span class="n">include_leafs</span><span class="o">=</span><span class="n">include_leafs</span><span class="p">,</span>
-        <span class="n">strict_leafs</span><span class="o">=</span><span class="n">strict_leafs</span><span class="p">,</span>
-        <span class="n">relations</span><span class="o">=</span><span class="n">relations</span><span class="p">,</span>
-        <span class="n">edgelabels</span><span class="o">=</span><span class="n">edgelabels</span><span class="p">,</span>
-        <span class="n">included_namespaces</span><span class="o">=</span><span class="n">included_namespaces</span><span class="p">,</span>
-        <span class="n">included_ontologies</span><span class="o">=</span><span class="n">included_ontologies</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="k">if</span> <span class="n">legend</span><span class="p">:</span>
-        <span class="n">graph</span><span class="o">.</span><span class="n">add_legend</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">width</span><span class="p">:</span>
-        <span class="n">figwidth</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_figsize</span><span class="p">()</span>
-        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figscale</span> <span class="o">*</span> <span class="n">figwidth</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxwidth</span> <span class="ow">and</span> <span class="n">width</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxwidth</span><span class="p">:</span>
-            <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxwidth</span>
-
-    <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basedir</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-    <span class="n">destdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">destdir</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">destdir</span><span class="p">)</span>
-    <span class="n">graph</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">leafs</span><span class="p">,</span> <span class="n">width</span>
-</code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.copy">
 <code class="highlight language-python"><span class="n">copy</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.copy" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns a copy of self.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">591</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">591</span>
 <span class="normal">592</span>
 <span class="normal">593</span>
 <span class="normal">594</span>
@@ -3862,34 +3458,31 @@
     <span class="n">docpp</span><span class="o">.</span><span class="n">figdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figdir</span>
     <span class="k">return</span> <span class="n">docpp</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.get_branches">
 <code class="highlight language-python"><span class="n">get_branches</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.get_branches" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns a list with all branch names as specified with %BRANCH
 (in current and all included documents).  The returned value is
 cached for efficiency purposes and so that it is not lost after
 processing branches.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">605</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">605</span>
 <span class="normal">606</span>
 <span class="normal">607</span>
 <span class="normal">608</span>
@@ -3917,61 +3510,55 @@ processing branches.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">_branch_cache</span> <span class="o">=</span> <span class="n">names</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_branch_cache</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.get_buffer">
 <code class="highlight language-python"><span class="n">get_buffer</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.get_buffer" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns the current buffer.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">587</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">587</span>
 <span class="normal">588</span>
 <span class="normal">589</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns the current buffer.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.process">
 <code class="highlight language-python"><span class="n">process</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.process" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Perform all pre-processing steps.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1093</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1093</span>
 <span class="normal">1094</span>
 <span class="normal">1095</span>
 <span class="normal">1096</span>
@@ -3999,31 +3586,28 @@ processing branches.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">process_includes</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_processed</span> <span class="o">=</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.process_allfig">
 <code class="highlight language-python"><span class="n">process_allfig</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.process_allfig" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Process all %ALLFIG directives.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 986</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 986</span>
 <span class="normal"> 987</span>
 <span class="normal"> 988</span>
 <span class="normal"> 989</span>
@@ -4181,31 +3765,28 @@ processing branches.</p>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sec</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.process_alls">
 <code class="highlight language-python"><span class="n">process_alls</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.process_alls" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Expand all %ALL specifications.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">958</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">958</span>
 <span class="normal">959</span>
 <span class="normal">960</span>
 <span class="normal">961</span>
@@ -4259,31 +3840,28 @@ processing branches.</p>
                 <span class="n">items</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">header_level</span><span class="p">)</span>  <span class="c1"># pylint: disable=no-member</span>
             <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.process_branchdocs">
 <code class="highlight language-python"><span class="n">process_branchdocs</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.process_branchdocs" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Process all %BRANCHDOC and  %BRANCHEAD directives.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">873</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">873</span>
 <span class="normal">874</span>
 <span class="normal">875</span>
 <span class="normal">876</span>
@@ -4451,31 +4029,28 @@ processing branches.</p>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sec</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.process_branches">
 <code class="highlight language-python"><span class="n">process_branches</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.process_branches" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Expand all %BRANCH specifications.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">680</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">680</span>
 <span class="normal">681</span>
 <span class="normal">682</span>
 <span class="normal">683</span>
@@ -4565,31 +4140,28 @@ processing branches.</p>
                 <span class="n">branch</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">header_level</span><span class="p">)</span>  <span class="c1"># pylint: disable=no-member</span>
             <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.process_branchfigs">
 <code class="highlight language-python"><span class="n">process_branchfigs</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.process_branchfigs" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Process all %BRANCHFIG directives.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">816</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">816</span>
 <span class="normal">817</span>
 <span class="normal">818</span>
 <span class="normal">819</span>
@@ -4701,61 +4273,55 @@ processing branches.</p>
                 <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
             <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.process_comments">
 <code class="highlight language-python"><span class="n">process_comments</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.process_comments" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Strips out comment lines starting with "%%".</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">638</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">638</span>
 <span class="normal">639</span>
 <span class="normal">640</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process_comments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Strips out comment lines starting with &quot;%%&quot;.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%%</span><span class="s2">&quot;</span><span class="p">)]</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.process_entities">
 <code class="highlight language-python"><span class="n">process_entities</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.process_entities" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Expand all %ENTITY specifications.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">668</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">668</span>
 <span class="normal">669</span>
 <span class="normal">670</span>
 <span class="normal">671</span>
@@ -4777,31 +4343,28 @@ processing branches.</p>
                 <span class="n">name</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">header_level</span><span class="p">)</span>  <span class="c1"># pylint: disable=no-member</span>
             <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.process_figures">
 <code class="highlight language-python"><span class="n">process_figures</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.process_figures" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Expand all %FIGURE specifications.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">654</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">654</span>
 <span class="normal">655</span>
 <span class="normal">656</span>
 <span class="normal">657</span>
@@ -4827,31 +4390,28 @@ processing branches.</p>
                 <span class="n">width</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
             <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.process_headers">
 <code class="highlight language-python"><span class="n">process_headers</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.process_headers" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Expand all %HEADER specifications.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">642</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">642</span>
 <span class="normal">643</span>
 <span class="normal">644</span>
 <span class="normal">645</span>
@@ -4873,31 +4433,28 @@ processing branches.</p>
                 <span class="n">name</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">level</span><span class="p">)</span>  <span class="c1"># pylint: disable=no-member</span>
             <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.process_includes">
 <code class="highlight language-python"><span class="n">process_includes</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.process_includes" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Process all %INCLUDE directives.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1066</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1066</span>
 <span class="normal">1067</span>
 <span class="normal">1068</span>
 <span class="normal">1069</span>
@@ -4949,32 +4506,29 @@ processing branches.</p>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">docpp</span><span class="o">.</span><span class="n">lines</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.shift_header_levels">
 <code class="highlight language-python"><span class="n">shift_header_levels</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.shift_header_levels" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Shift header level of all hashtag-headers in buffer.  Underline
 headers are ignored.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">620</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">620</span>
 <span class="normal">621</span>
 <span class="normal">622</span>
 <span class="normal">623</span>
@@ -5008,26 +4562,23 @@ headers are ignored.</p>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">counter</span><span class="p">:]</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.DocPP.write">
 <code class="highlight language-python"><span class="n">write</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pandoc_option_files</span><span class="o">=</span><span class="p">(),</span> <span class="n">pandoc_options</span><span class="o">=</span><span class="p">(),</span> <span class="n">genfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.DocPP.write" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Writes documentation to <code>outfile</code>.</p>
 <h5 id="ontopy.ontodoc.DocPP.write--parameters">Parameters<a class="headerlink" href="#ontopy.ontodoc.DocPP.write--parameters" title="Permanent link">&para;</a></h5>
 
@@ -5060,9 +4611,9 @@ to this file (for debugging).</p>
   <summary>bool</summary>
   <p>Whether to show some messages when running pandoc.</p>
 </details>
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1108</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1108</span>
 <span class="normal">1109</span>
 <span class="normal">1110</span>
 <span class="normal">1111</span>
@@ -5204,73 +4755,64 @@ to this file (for debugging).</p>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="s2">&quot;wt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
             <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
+</div>
 
-  </div>
-
-
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.InvalidTemplateError">
-          <code>InvalidTemplateError</code>
-
+        <code>InvalidTemplateError</code>
 
 
 <a class="headerlink" href="#ontopy.ontodoc.InvalidTemplateError" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-        <p class="doc doc-class-bases">
-          Bases: <code>NameError</code></p>
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code>NameError</code></p>
 
-
+  
       <p>Raised on errors in template files.</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">434</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">434</span>
 <span class="normal">435</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">InvalidTemplateError</span><span class="p">(</span><span class="ne">NameError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Raised on errors in template files.&quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-
-
-    </div>
+        </details>
 
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.OntoDoc">
-          <code>OntoDoc</code>
-
+        <code>OntoDoc</code>
 
 
 <a class="headerlink" href="#ontopy.ontodoc.OntoDoc" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
+  <div class="doc doc-contents ">
 
-
+  
       <p>A class for helping documentating ontologies.</p>
 <h4 id="ontopy.ontodoc.OntoDoc--parameters">Parameters<a class="headerlink" href="#ontopy.ontodoc.OntoDoc--parameters" title="Permanent link">&para;</a></h4>
 
@@ -5295,9 +4837,9 @@ to this file (for debugging).</p>
     annotation values.</p>
 </details>
 
-          <details class="quote">
-            <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 28</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 28</span>
 <span class="normal"> 29</span>
 <span class="normal"> 30</span>
 <span class="normal"> 31</span>
@@ -6085,9 +5627,9 @@ to this file (for debugging).</p>
             <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sep_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">))</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-          </details>
+        </details>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -6099,30 +5641,23 @@ to this file (for debugging).</p>
 
 
 
-
-
-
-
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.OntoDoc.get_default_template">
 <code class="highlight language-python"><span class="n">get_default_template</span><span class="p">()</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.OntoDoc.get_default_template" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns default template.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">170</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">170</span>
 <span class="normal">171</span>
 <span class="normal">172</span>
 <span class="normal">173</span>
@@ -6188,31 +5723,28 @@ to this file (for debugging).</p>
     <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">irilink</span><span class="o">=</span><span class="n">irilink</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">template</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.OntoDoc.get_figure">
 <code class="highlight language-python"><span class="n">get_figure</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.OntoDoc.get_figure" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns a formatted insert-figure-directive.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">211</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">211</span>
 <span class="normal">212</span>
 <span class="normal">213</span>
 <span class="normal">214</span>
@@ -6228,31 +5760,28 @@ to this file (for debugging).</p>
         <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span> <span class="n">figwidth</span><span class="o">=</span><span class="n">figwidth</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.OntoDoc.get_header">
 <code class="highlight language-python"><span class="n">get_header</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.OntoDoc.get_header" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns <code>label</code> formatted as a header of given level.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">204</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">204</span>
 <span class="normal">205</span>
 <span class="normal">206</span>
 <span class="normal">207</span>
@@ -6264,26 +5793,23 @@ to this file (for debugging).</p>
         <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">header_level</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">lowerlabel</span><span class="o">=</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.OntoDoc.itemdoc">
 <code class="highlight language-python"><span class="n">itemdoc</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">show_disjoints</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.OntoDoc.itemdoc" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns documentation of <code>item</code>.</p>
 <h5 id="ontopy.ontodoc.OntoDoc.itemdoc--parameters">Parameters<a class="headerlink" href="#ontopy.ontodoc.OntoDoc.itemdoc--parameters" title="Permanent link">&para;</a></h5>
 
@@ -6299,9 +5825,9 @@ to this file (for debugging).</p>
   <summary>Bool</summary>
   <p>Whether to show <code>disjoint_with</code> relations.</p>
 </details>
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">220</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">220</span>
 <span class="normal">221</span>
 <span class="normal">222</span>
 <span class="normal">223</span>
@@ -6687,31 +6213,28 @@ to this file (for debugging).</p>
 
     <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.OntoDoc.itemsdoc">
 <code class="highlight language-python"><span class="n">itemsdoc</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.OntoDoc.itemsdoc" title="Permanent link">&para;</a></h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns documentation of <code>items</code>.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">414</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">414</span>
 <span class="normal">415</span>
 <span class="normal">416</span>
 <span class="normal">417</span>
@@ -6727,37 +6250,32 @@ to this file (for debugging).</p>
         <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sep_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">))</span>
     <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
 
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.append_pandoc_options">
 <code class="highlight language-python"><span class="n">append_pandoc_options</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.append_pandoc_options" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Append <code>updates</code> to pandoc options <code>options</code>.</p>
 <h4 id="ontopy.ontodoc.append_pandoc_options--parameters">Parameters<a class="headerlink" href="#ontopy.ontodoc.append_pandoc_options--parameters" title="Permanent link">&para;</a></h4>
 
@@ -6778,9 +6296,9 @@ from <code>options</code>.</p>
   <summary>list</summary>
   <p>Updated pandoc options.</p>
 </details>
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1204</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1204</span>
 <span class="normal">1205</span>
 <span class="normal">1206</span>
 <span class="normal">1207</span>
@@ -6874,31 +6392,28 @@ from <code>options</code>.</p>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">new_options</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.get_docpp">
 <code class="highlight language-python"><span class="n">get_docpp</span><span class="p">(</span><span class="n">ontodoc</span><span class="p">,</span> <span class="n">infile</span><span class="p">,</span> <span class="n">figdir</span><span class="o">=</span><span class="s1">&#39;genfigs&#39;</span><span class="p">,</span> <span class="n">figformat</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">maxwidth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.get_docpp" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Read <code>infile</code> and return a new docpp instance.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1421</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1421</span>
 <span class="normal">1422</span>
 <span class="normal">1423</span>
 <span class="normal">1424</span>
@@ -6954,31 +6469,28 @@ from <code>options</code>.</p>
 
     <span class="k">return</span> <span class="n">docpp</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.get_figformat">
 <code class="highlight language-python"><span class="n">get_figformat</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.get_figformat" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Infer preferred figure format from output format.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1401</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1401</span>
 <span class="normal">1402</span>
 <span class="normal">1403</span>
 <span class="normal">1404</span>
@@ -6996,31 +6508,28 @@ from <code>options</code>.</p>
         <span class="n">figformat</span> <span class="o">=</span> <span class="s2">&quot;png&quot;</span>
     <span class="k">return</span> <span class="n">figformat</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.get_format">
 <code class="highlight language-python"><span class="n">get_format</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.get_format" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Infer format from outfile and format.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1379</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1379</span>
 <span class="normal">1380</span>
 <span class="normal">1381</span>
 <span class="normal">1382</span>
@@ -7038,31 +6547,28 @@ from <code>options</code>.</p>
         <span class="n">fmt</span> <span class="o">=</span> <span class="n">fmt</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
     <span class="k">return</span> <span class="n">fmt</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.get_maxwidth">
 <code class="highlight language-python"><span class="n">get_maxwidth</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.get_maxwidth" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Infer preferred max figure width from output format.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1412</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1412</span>
 <span class="normal">1413</span>
 <span class="normal">1414</span>
 <span class="normal">1415</span>
@@ -7076,33 +6582,30 @@ from <code>options</code>.</p>
         <span class="n">maxwidth</span> <span class="o">=</span> <span class="mi">1024</span>
     <span class="k">return</span> <span class="n">maxwidth</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.get_options">
 <code class="highlight language-python"><span class="n">get_options</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.get_options" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Returns a dict with options from the sequence <code>opts</code> with
 "name=value" pairs. Valid option names and default values are
 provided with the keyword arguments.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">438</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">438</span>
 <span class="normal">439</span>
 <span class="normal">440</span>
 <span class="normal">441</span>
@@ -7134,31 +6637,28 @@ provided with the keyword arguments.</p>
         <span class="n">res</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">res_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.get_style">
 <code class="highlight language-python"><span class="n">get_style</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.get_style" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Infer style from output format.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1390</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1390</span>
 <span class="normal">1391</span>
 <span class="normal">1392</span>
 <span class="normal">1393</span>
@@ -7176,32 +6676,29 @@ provided with the keyword arguments.</p>
         <span class="n">style</span> <span class="o">=</span> <span class="s2">&quot;markdown&quot;</span>
     <span class="k">return</span> <span class="n">style</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.load_pandoc_option_file">
 <code class="highlight language-python"><span class="n">load_pandoc_option_file</span><span class="p">(</span><span class="n">yamlfile</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.load_pandoc_option_file" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Loads pandoc options from <code>yamlfile</code> and return a list with
 corresponding pandoc command line arguments.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1181</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1181</span>
 <span class="normal">1182</span>
 <span class="normal">1183</span>
 <span class="normal">1184</span>
@@ -7243,26 +6740,23 @@ corresponding pandoc command line arguments.</p>
 
     <span class="k">return</span> <span class="n">options</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.run_pandoc">
 <code class="highlight language-python"><span class="n">run_pandoc</span><span class="p">(</span><span class="n">genfile</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">pandoc_option_files</span><span class="o">=</span><span class="p">(),</span> <span class="n">pandoc_options</span><span class="o">=</span><span class="p">(),</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.run_pandoc" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Runs pandoc.</p>
 <h4 id="ontopy.ontodoc.run_pandoc--parameters">Parameters<a class="headerlink" href="#ontopy.ontodoc.run_pandoc--parameters" title="Permanent link">&para;</a></h4>
 
@@ -7297,9 +6791,9 @@ corresponding pandoc command line arguments.</p>
     If the pandoc process returns with non-zero status.  The <code>returncode</code>
     attribute will hold the exit code.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1253</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1253</span>
 <span class="normal">1254</span>
 <span class="normal">1255</span>
 <span class="normal">1256</span>
@@ -7429,31 +6923,28 @@ corresponding pandoc command line arguments.</p>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">))</span>
         <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>  <span class="c1"># nosec</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.ontodoc.run_pandoc_pdf">
 <code class="highlight language-python"><span class="n">run_pandoc_pdf</span><span class="p">(</span><span class="n">latex_dir</span><span class="p">,</span> <span class="n">pdf_engine</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
-
 <a class="headerlink" href="#ontopy.ontodoc.run_pandoc_pdf" title="Permanent link">&para;</a></h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Run pandoc for pdf generation.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1320</span>
+      <details class="quote">
+        <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1320</span>
 <span class="normal">1321</span>
 <span class="normal">1322</span>
 <span class="normal">1323</span>
@@ -7567,27 +7058,26 @@ corresponding pandoc command line arguments.</p>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;move </span><span class="si">{</span><span class="n">pdffile</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">outfile</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">pdffile</span><span class="p">,</span> <span class="n">outfile</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
               
             </article>
+            
           </div>
         </div>
         
-          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
             Back to top
           </a>
@@ -7596,7 +7086,8 @@ corresponding pandoc command line arguments.</p>
       
         <footer class="md-footer">
   
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
         <a href="../nadict/" class="md-footer__link md-footer__link--prev" aria-label="Previous: nadict" rel="prev">
@@ -7665,10 +7156,10 @@ corresponding pandoc command line arguments.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../assets/javascripts/workers/search.b028fd86.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.3a4b43e5.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.f758a944.min.js"></script>
       
     
   </body>
