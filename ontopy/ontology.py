@@ -603,20 +603,32 @@ class Ontology(  # pylint: disable=too-many-public-methods
 
                 self.loaded = False
                 with open(output, "rb") as handle:
-                    return super().load(
-                        only_local=True,
-                        fileobj=handle,
-                        reload=reload,
-                        reload_if_newer=reload_if_newer,
-                        format="rdfxml",
-                        **kwargs,
-                    )
-        except HTTPError as exc:
-            # The string representation of HTTPError does unfortunately
-            # not include the URL.  Include it in the message and
-            # re-raise the exception.  This makes debugging easier...
-            exc.msg = f"{exc.url}: {exc.msg}"
-            raise exc
+                    try:
+                        return super().load(
+                            only_local=True,
+                            fileobj=handle,
+                            reload=reload,
+                            reload_if_newer=reload_if_newer,
+                            format="rdfxml",
+                            **kwargs,
+                        )
+                    except HTTPError as exc:  # Add url to HTTPError message
+                        raise HTTPError(
+                            url=exc.url,
+                            code=exc.code,
+                            msg=f"{exc.url}: {exc.msg}",
+                            hdrs=exc.hdrs,
+                            fp=exc.fp,
+                        ).with_traceback(exc.__traceback__)
+
+        except HTTPError as exc:  # Add url to HTTPError message
+            raise HTTPError(
+                url=exc.url,
+                code=exc.code,
+                msg=f"{exc.url}: {exc.msg}",
+                hdrs=exc.hdrs,
+                fp=exc.fp,
+            ).with_traceback(exc.__traceback__)
 
     def save(
         self,
