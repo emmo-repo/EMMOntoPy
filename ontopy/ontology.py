@@ -20,6 +20,7 @@ import types
 from pathlib import Path
 from collections import defaultdict
 from collections.abc import Iterable
+from urllib.request import HTTPError
 
 import rdflib
 from rdflib.util import guess_format
@@ -610,6 +611,12 @@ class Ontology(  # pylint: disable=too-many-public-methods
                         format="rdfxml",
                         **kwargs,
                     )
+        except HTTPError as exc:
+            # The string representation of HTTPError does unfortunately
+            # not include the URL.  Include it in the message and
+            # re-raise the exception.  This makes debugging easier...
+            exc.msg = f"{exc.url}: {exc.msg}"
+            raise exc
 
     def save(
         self,
