@@ -136,7 +136,9 @@ class EMMO2Meta:
         if not self.coll.has(label):
             uri = self.get_uri(label)
             dims, props = self.get_properties(cls)
-            entity = Instance(uri, dims, props, self.get_description(cls))
+            entity = Instance.create_metadata(
+                uri, dims, props, self.get_description(cls)
+            )
             self.coll.add(label, entity)
             for relation in cls.is_a:
                 if relation is owlready2.Thing:
