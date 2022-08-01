@@ -87,7 +87,9 @@ def sync_reasoner_factpp(
         new_equivs = defaultdict(list)
         entity_2_type = {}
 
-        for subject, predicate, obj in graph2.triples((None, None, None)):
+        for subject, predicate, obj in graph2.triples(
+            (None, None, None)
+        ):  # pylint: disable=not-an-iterable
             if (
                 isinstance(subject, URIRef)
                 and predicate in OWL_2_TYPE
