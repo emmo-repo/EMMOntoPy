@@ -345,7 +345,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
             annotations = (
                 _.name if hasattr(_, "storid") else _ for _ in label_annotations
             )
-        entity = self.world.search(**{annotations.__next__(): label})
+        entity = self.world.search(**{next(annotations): label})
         for key in annotations:
             entity.extend(self.world.search(**{key: label}))
         if self._special_labels and label in self._special_labels:

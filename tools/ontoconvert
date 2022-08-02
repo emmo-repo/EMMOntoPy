@@ -213,7 +213,7 @@ def main(argv: list = None):
                 raise NotImplementedError(
                     "Only FaCT++ is currently supported..."
                 )
-            if args.output_dir:
+            if args.output_dir != ".":
                 raise NotImplementedError(
                     "The --output-dir option is currently not supported "
                     "together with --reasoner."

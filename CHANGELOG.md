@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.3.1](https://github.com/emmo-repo/EMMO-python/tree/v0.3.1) (2022-05-08)
+
+[Full Changelog](https://github.com/emmo-repo/EMMO-python/compare/v0.3.0...v0.3.1)
+
+**Merged pull requests:**
+
+- Fixed typo in ontoconvert [\#409](https://github.com/emmo-repo/EMMO-python/pull/409) ([jesper-friis](https://github.com/jesper-friis))
+
 ## [v0.3.0](https://github.com/emmo-repo/EMMO-python/tree/v0.3.0) (2022-05-05)
 
 [Full Changelog](https://github.com/emmo-repo/EMMO-python/compare/v0.2.0...v0.3.0)
