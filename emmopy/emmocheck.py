@@ -154,12 +154,12 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                         if label.startswith("has"):
                             self.assertTrue(
                                 label[3].isupper(),
-                                'what follows "has" must be ' "uppercase",
+                                'what follows "has" must be "uppercase"',
                             )
                         if label.startswith("is"):
                             self.assertTrue(
                                 label[2].isupper(),
-                                'what follows "is" must be ' "uppercase",
+                                'what follows "is" must be "uppercase"',
                             )
                             self.assertTrue(
                                 label.endswith(("Of", "With")),
