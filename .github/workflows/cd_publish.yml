@@ -22,7 +22,7 @@ jobs:
         fetch-depth: 0
 
     - name: Set up Python 3.7
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: 3.7
 
@@ -103,7 +103,7 @@ jobs:
         ref: ${{ env.PUBLISH_UPDATE_BRANCH }}
 
     - name: Set up Python 3.7
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: 3.7
 
