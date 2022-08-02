@@ -97,7 +97,11 @@ class FaCTPPGraph:
         `base_iri`.
         """
         inferred = self.inferred
-        for subject, predicate, obj in inferred.triples(
+        for (
+            subject,
+            predicate,
+            obj,
+        ) in inferred.triples(  # pylint: disable=not-an-iterable
             (None, RDF.type, OWL.Ontology)
         ):
             inferred.remove((subject, predicate, obj))
