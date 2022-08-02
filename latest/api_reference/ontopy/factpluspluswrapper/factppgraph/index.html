@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/factpluspluswrapper/factppgraph/">
       
       <link rel="icon" href="../../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.9">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.3.9">
     
     
       
@@ -1141,7 +1141,11 @@ Parameters&para;
 134
 135
 136
-137class FaCTPPGraph:
+137
+138
+139
+140
+141class FaCTPPGraph:
     &quot;&quot;&quot;Class for running the FaCT++ reasoner (using OwlApiInterface) and
     postprocessing the resulting inferred ontology.
 
@@ -1229,7 +1233,11 @@ Parameters&para;
         `base_iri`.
         &quot;&quot;&quot;
         inferred = self.inferred
-        for subject, predicate, obj in inferred.triples(
+        for (
+            subject,
+            predicate,
+            obj,
+        ) in inferred.triples(  # pylint: disable=not-an-iterable
             (None, RDF.type, OWL.Ontology)
         ):
             inferred.remove((subject, predicate, obj))
@@ -1406,11 +1414,7 @@ clean_ancestors()
 
       
         Source code in ontopy/factpluspluswrapper/factppgraph.py
-        116
-117
-118
-119
-120
+        120
 121
 122
 123
@@ -1427,7 +1431,11 @@ clean_ancestors()
 134
 135
 136
-137def clean_ancestors(self):
+137
+138
+139
+140
+141def clean_ancestors(self):
     &quot;&quot;&quot;Remove redundant rdfs:subClassOf relations in inferred graph.&quot;&quot;&quot;
     inferred = self.inferred
     for (  # pylint: disable=too-many-nested-blocks
@@ -1481,12 +1489,20 @@ base_iri.
 101
 102
 103
-104def clean_base(self):
+104
+105
+106
+107
+108def clean_base(self):
     &quot;&quot;&quot;Remove all relations `s? a owl:Ontology` where `s?` is not
     `base_iri`.
     &quot;&quot;&quot;
     inferred = self.inferred
-    for subject, predicate, obj in inferred.triples(
+    for (
+        subject,
+        predicate,
+        obj,
+    ) in inferred.triples(  # pylint: disable=not-an-iterable
         (None, RDF.type, OWL.Ontology)
     ):
         inferred.remove((subject, predicate, obj))
@@ -1657,15 +1673,15 @@ owl:Nothing rdfs:subClassOf owl:Nothing
 
       
         Source code in ontopy/factpluspluswrapper/factppgraph.py
-        106
-107
-108
-109
-110
+        110
 111
 112
 113
-114def remove_nothing_is_nothing(self):
+114
+115
+116
+117
+118def remove_nothing_is_nothing(self):
     &quot;&quot;&quot;Remove superfluid relation in inferred graph:
 
     owl:Nothing rdfs:subClassOf owl:Nothing
@@ -2136,7 +2152,11 @@ Parameters&para;
 134
 135
 136
-137class FaCTPPGraph:
+137
+138
+139
+140
+141class FaCTPPGraph:
     &quot;&quot;&quot;Class for running the FaCT++ reasoner (using OwlApiInterface) and
     postprocessing the resulting inferred ontology.
 
@@ -2224,7 +2244,11 @@ Parameters&para;
         `base_iri`.
         &quot;&quot;&quot;
         inferred = self.inferred
-        for subject, predicate, obj in inferred.triples(
+        for (
+            subject,
+            predicate,
+            obj,
+        ) in inferred.triples(  # pylint: disable=not-an-iterable
             (None, RDF.type, OWL.Ontology)
         ):
             inferred.remove((subject, predicate, obj))
@@ -2401,11 +2425,7 @@ clean_ancestors()
 
       
         Source code in ontopy/factpluspluswrapper/factppgraph.py
-        116
-117
-118
-119
-120
+        120
 121
 122
 123
@@ -2422,7 +2442,11 @@ clean_ancestors()
 134
 135
 136
-137def clean_ancestors(self):
+137
+138
+139
+140
+141def clean_ancestors(self):
     &quot;&quot;&quot;Remove redundant rdfs:subClassOf relations in inferred graph.&quot;&quot;&quot;
     inferred = self.inferred
     for (  # pylint: disable=too-many-nested-blocks
@@ -2476,12 +2500,20 @@ base_iri.
 101
 102
 103
-104def clean_base(self):
+104
+105
+106
+107
+108def clean_base(self):
     &quot;&quot;&quot;Remove all relations `s? a owl:Ontology` where `s?` is not
     `base_iri`.
     &quot;&quot;&quot;
     inferred = self.inferred
-    for subject, predicate, obj in inferred.triples(
+    for (
+        subject,
+        predicate,
+        obj,
+    ) in inferred.triples(  # pylint: disable=not-an-iterable
         (None, RDF.type, OWL.Ontology)
     ):
         inferred.remove((subject, predicate, obj))
@@ -2652,15 +2684,15 @@ owl:Nothing rdfs:subClassOf owl:Nothing
 
       
         Source code in ontopy/factpluspluswrapper/factppgraph.py
-        106
-107
-108
-109
-110
+        110
 111
 112
 113
-114def remove_nothing_is_nothing(self):
+114
+115
+116
+117
+118def remove_nothing_is_nothing(self):
     &quot;&quot;&quot;Remove superfluid relation in inferred graph:
 
     owl:Nothing rdfs:subClassOf owl:Nothing
@@ -3054,7 +3086,11 @@ postprocessing the resulting inferred ontology.</p>
 <span class="normal">134</span>
 <span class="normal">135</span>
 <span class="normal">136</span>
-<span class="normal">137</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">FaCTPPGraph</span><span class="p">:</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">FaCTPPGraph</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class for running the FaCT++ reasoner (using OwlApiInterface) and</span>
 <span class="sd">    postprocessing the resulting inferred ontology.</span>
 
@@ -3142,7 +3178,11 @@ postprocessing the resulting inferred ontology.</p>
 <span class="sd">        `base_iri`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
-        <span class="k">for</span> <span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">inferred</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>
+        <span class="k">for</span> <span class="p">(</span>
+            <span class="n">subject</span><span class="p">,</span>
+            <span class="n">predicate</span><span class="p">,</span>
+            <span class="n">obj</span><span class="p">,</span>
+        <span class="p">)</span> <span class="ow">in</span> <span class="n">inferred</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>  <span class="c1"># pylint: disable=not-an-iterable</span>
             <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Ontology</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="n">inferred</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span>
@@ -3319,11 +3359,7 @@ postprocessing the resulting inferred ontology.</p>
 
       <details class="quote">
         <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">120</span>
 <span class="normal">121</span>
 <span class="normal">122</span>
 <span class="normal">123</span>
@@ -3340,7 +3376,11 @@ postprocessing the resulting inferred ontology.</p>
 <span class="normal">134</span>
 <span class="normal">135</span>
 <span class="normal">136</span>
-<span class="normal">137</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">clean_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">clean_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Remove redundant rdfs:subClassOf relations in inferred graph.&quot;&quot;&quot;</span>
     <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
     <span class="k">for</span> <span class="p">(</span>  <span class="c1"># pylint: disable=too-many-nested-blocks</span>
@@ -3394,12 +3434,20 @@ postprocessing the resulting inferred ontology.</p>
 <span class="normal">101</span>
 <span class="normal">102</span>
 <span class="normal">103</span>
-<span class="normal">104</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">clean_base</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">clean_base</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Remove all relations `s? a owl:Ontology` where `s?` is not</span>
 <span class="sd">    `base_iri`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
-    <span class="k">for</span> <span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">inferred</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>
+    <span class="k">for</span> <span class="p">(</span>
+        <span class="n">subject</span><span class="p">,</span>
+        <span class="n">predicate</span><span class="p">,</span>
+        <span class="n">obj</span><span class="p">,</span>
+    <span class="p">)</span> <span class="ow">in</span> <span class="n">inferred</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>  <span class="c1"># pylint: disable=not-an-iterable</span>
         <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Ontology</span><span class="p">)</span>
     <span class="p">):</span>
         <span class="n">inferred</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span>
@@ -3570,15 +3618,15 @@ graph.</p>
 
       <details class="quote">
         <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">110</span>
 <span class="normal">111</span>
 <span class="normal">112</span>
 <span class="normal">113</span>
-<span class="normal">114</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_nothing_is_nothing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_nothing_is_nothing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Remove superfluid relation in inferred graph:</span>
 
 <span class="sd">    owl:Nothing rdfs:subClassOf owl:Nothing</span>

@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMO-python/latest/api_reference/ontopy/factpluspluswrapper/sync_factpp/">
       
       <link rel="icon" href="../../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.9">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.3.9">
     
     
       
@@ -1154,7 +1154,13 @@ Parameters&para;
 131
 132
 133
-134def sync_reasoner_factpp(
+134
+135
+136
+137
+138
+139
+140def sync_reasoner_factpp(
     ontology_or_world=None, infer_property_values=False, debug=1
 ):
     &quot;&quot;&quot;Run FaCT++ reasoner and load the inferred relations back into
@@ -1214,7 +1220,13 @@ Parameters&para;
         new_equivs = defaultdict(list)
         entity_2_type = {}
 
-        for subject, predicate, obj in graph2.triples((None, None, None)):
+        for (
+            subject,
+            predicate,
+            obj,
+        ) in graph2.triples(  # pylint: disable=not-an-iterable
+            (None, None, None)
+        ):
             if (
                 isinstance(subject, URIRef)
                 and predicate in OWL_2_TYPE
@@ -1516,7 +1528,13 @@ Parameters&para;
 131
 132
 133
-134def sync_reasoner_factpp(
+134
+135
+136
+137
+138
+139
+140def sync_reasoner_factpp(
     ontology_or_world=None, infer_property_values=False, debug=1
 ):
     &quot;&quot;&quot;Run FaCT++ reasoner and load the inferred relations back into
@@ -1576,7 +1594,13 @@ Parameters&para;
         new_equivs = defaultdict(list)
         entity_2_type = {}
 
-        for subject, predicate, obj in graph2.triples((None, None, None)):
+        for (
+            subject,
+            predicate,
+            obj,
+        ) in graph2.triples(  # pylint: disable=not-an-iterable
+            (None, None, None)
+        ):
             if (
                 isinstance(subject, URIRef)
                 and predicate in OWL_2_TYPE
@@ -1829,7 +1853,13 @@ the owlready2 triplestore.</p>
 <span class="normal">131</span>
 <span class="normal">132</span>
 <span class="normal">133</span>
-<span class="normal">134</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">sync_reasoner_factpp</span><span class="p">(</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">sync_reasoner_factpp</span><span class="p">(</span>
     <span class="n">ontology_or_world</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">infer_property_values</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Run FaCT++ reasoner and load the inferred relations back into</span>
@@ -1889,7 +1919,13 @@ the owlready2 triplestore.</p>
         <span class="n">new_equivs</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="n">entity_2_type</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">for</span> <span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">graph2</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="p">(</span>
+            <span class="n">subject</span><span class="p">,</span>
+            <span class="n">predicate</span><span class="p">,</span>
+            <span class="n">obj</span><span class="p">,</span>
+        <span class="p">)</span> <span class="ow">in</span> <span class="n">graph2</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>  <span class="c1"># pylint: disable=not-an-iterable</span>
+            <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="p">):</span>
             <span class="k">if</span> <span class="p">(</span>
                 <span class="nb">isinstance</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">URIRef</span><span class="p">)</span>
                 <span class="ow">and</span> <span class="n">predicate</span> <span class="ow">in</span> <span class="n">OWL_2_TYPE</span>
