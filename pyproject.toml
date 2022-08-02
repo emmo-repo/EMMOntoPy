@@ -4,8 +4,6 @@ target-version = ['py36', 'py37']
 
 [tool.pylint.messages_control]
 disable = [
-    "wrong-hanging-indentation",  # C0330
-    "bad-whitespace",  # C0326
     "duplicate-code",  # R0801
     "unspecified-encoding"  # W1514
 ]

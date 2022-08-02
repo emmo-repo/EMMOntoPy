@@ -6,12 +6,19 @@ A module for visualising ontologies using graphviz.
 import os
 import re
 import tempfile
+import warnings
+from typing import Optional, TYPE_CHECKING
 import defusedxml.ElementTree as ET
-
 import owlready2
 import graphviz
 
 from ontopy.utils import asstring, get_label
+from ontopy.ontology import Ontology
+from ontopy.utils import EMMOntoPyException
+
+if TYPE_CHECKING:
+    from ipywidgets.widgets.widget_templates import GridspecLayout
+
 
 typenames = (
     owlready2.class_construct._restriction_type_2_label  # pylint: disable=protected-access
@@ -1041,11 +1048,26 @@ def check_module_dependencies(modules, verbose=True):
 
 
 def cytoscapegraph(
-    graph, onto=None, infobox=None
-):  # pylint: disable=too-many-locals,too-many-statements
+    graph: OntoGraph,
+    onto: Optional[Ontology] = None,
+    infobox: str = None,
+    force: bool = False,
+) -> "GridspecLayout":
+    # pylint: disable=too-many-locals,too-many-statements
     """Returns and instance of icytoscape-figure for an
-    instance Graph of OntoGraph, the accomanying ontology
-    is required for mouse actions"""
+    instance Graph of OntoGraph, the accompanying ontology
+    is required for mouse actions.
+    Args:
+            graph: graph generated with OntoGraph with edgelabels=True.
+            onto: ontology to be used for mouse actions.
+            infobox: "left" or "right". Placement of infbox with
+                     respect to graph.
+            force: force generate graph withour correct edgelabels.
+    Returns:
+            cytoscapewidget with graph and infobox to be visualized
+            in jupyter lab.
+
+    """
     # pylint: disable=import-error,import-outside-toplevel
     from ipywidgets import Output, VBox, GridspecLayout
     from IPython.display import display, Image
@@ -1064,9 +1086,24 @@ def cytoscapegraph(
 
     data = cytoscape_data(pydot_graph)["elements"]
     for datum in data["edges"]:
-        datum["data"]["label"] = (
-            datum["data"]["label"].rsplit(" ", 1)[0].lstrip('"')
-        )
+        try:
+            datum["data"]["label"] = (
+                datum["data"]["label"].rsplit(" ", 1)[0].lstrip('"')
+            )
+        except KeyError as err:
+            if not force:
+                raise EMMOntoPyException(
+                    "Edge label is not defined. Are you sure that the OntoGraph"
+                    "instance you provided was generated with "
+                    "´edgelabels=True´?"
+                ) from err
+            warnings.warn(
+                "ARROWS WILL NOT BE DISPLAYED CORRECTLY. "
+                "Edge label is not defined. Are you sure that the OntoGraph "
+                "instance you provided was generated with ´edgelabels=True´?"
+            )
+            datum["data"]["label"] = ""
+
         lab = datum["data"]["label"].replace("Inverse(", "").rstrip(")")
         try:
             datum["data"]["colour"] = colours[lab]
