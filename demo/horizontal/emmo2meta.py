@@ -20,7 +20,7 @@ import dlite
 from dlite import Instance, Dimension, Property
 
 from ontopy import get_ontology
-from ontopy.utils import asstring
+from ontopy.utils import asstring, get_label
 
 import owlready2  # pylint: disable=wrong-import-order
 
@@ -96,7 +96,7 @@ class EMMO2Meta:
     def get_label(entity):
         """Returns a label for entity."""
         if hasattr(entity, "label"):
-            return entity.label.first()
+            return get_label(entity)
         name = repr(entity)
         label, _ = re.subn(r"emmo(-[a-z]+)?\.", "", name)
         return label
@@ -116,6 +116,9 @@ class EMMO2Meta:
     def add(self, entity):
         """Adds owl entity to collection and returns a reference to the
         new metadata."""
+        # if isinstance(entity, str):
+        #    entity = self.onto[entity]
+
         if entity == owlready2.Thing:
             raise ValueError(f"invalid entity: {entity}")
 
@@ -125,26 +128,28 @@ class EMMO2Meta:
         if isinstance(entity, owlready2.ClassConstruct):
             return self.add_class_construct(entity)
 
-        raise ValueError(f"invalid entity: {entity}")
+        raise ValueError(
+            f'invalid entity "{entity}" of class {entity.__class__}'
+        )
 
     def add_class(self, cls):
         """Adds owl class `cls` to collection and returns a reference to
         the new metadata."""
         if isinstance(cls, str):
             cls = self.onto[cls]
-        label = cls.label.first()
+        label = get_label(cls)
         if not self.coll.has(label):
             uri = self.get_uri(label)
             dims, props = self.get_properties(cls)
-            entity = Instance(uri, dims, props, self.get_description(cls))
+            entity = Instance.create_metadata(
+                uri, dims, props, self.get_description(cls)
+            )
             self.coll.add(label, entity)
             for relation in cls.is_a:
                 if relation is owlready2.Thing:
                     pass
                 elif isinstance(relation, owlready2.ThingClass):
-                    self.coll.add_relation(
-                        label, "is_a", relation.label.first()
-                    )
+                    self.coll.add_relation(label, "is_a", get_label(relation))
                     self.add_class(relation)
                 elif isinstance(relation, owlready2.Restriction):
                     # Correct this test if EMMO reintroduce isPropertyOf
@@ -285,6 +290,12 @@ class EMMO2Meta:
         vlabel = self.get_label(restriction.value)
         self.coll.add(label, inst)
         self.coll.add_relation(label, asstring(restriction.property), vlabel)
+        print()
+        print(f"*** {restriction=}")
+        print(f"*** {restriction.type=}")
+        print(f"*** {restriction.value=}")
+        print(f"*** {label=}")
+        print(f"*** {vlabel=}")
         if not self.coll.has(vlabel):
             self.add(restriction.value)
         return inst
@@ -312,7 +323,7 @@ class EMMO2Meta:
                     ),
                 ),
             ]
-            entity = Instance(
+            entity = Instance.create_metadata(
                 uri,
                 [],
                 props,
