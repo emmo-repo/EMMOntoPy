@@ -107,7 +107,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     except ValueError:
         pass
     else:
-        imports.extend(imports_frame["Imported ontologies"].to_list())
+        imports.extend(imports_frame["Imported ontologies"].str.strip().to_list())
 
     # Read datafile TODO: Some magic to identify the header row
     conceptdata = pd.read_excel(
