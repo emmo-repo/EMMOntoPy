@@ -153,6 +153,11 @@ class Ontology(  # pylint: disable=too-many-public-methods
 ):
     """A generic class extending owlready2.Ontology."""
 
+    # def __init__(self, *args, **kwargs):
+    #    # Set ontology prefix to ontology._namespace.name as default
+    #    self.prefix = self._namespace.name
+    # super().__init__(*args, **kwargs)
+
     # Properties controlling what annotations that are considered by
     # get_by_label()
     _label_annotations = []
@@ -258,7 +263,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         return World.get_unabbreviated_triples(self, label)
 
     def get_by_label(
-        self, label, label_annotations=None, namespace=None
+        self, label, label_annotations=None, prefix=None
     ):  # pylint: disable=too-many-arguments,too-many-branches
         """Returns entity with label annotation `label`.
 
@@ -289,20 +294,22 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 f"Invalid label definition, {label!r} contains spaces."
             )
 
-        if "namespaces" in self.__dict__:
-            if namespace:
-                if namespace in self.namespaces:
-                    for entity in self.get_by_label_all(
-                        label, label_annotations=label_annotations
-                    ):
-                        if entity.namespace == self.namespaces[namespace]:
-                            return entity
-                raise NoSuchLabelError(
-                    f"No label annotations matches {label!r} in namespace "
-                    f"{namespace!r}"
+        if "_namespaces" in self.__dict__:
+            if prefix:
+                entitylist = self.get_by_label_all(
+                    label,
+                    label_annotations=label_annotations,
+                    prefix=prefix,
                 )
-            if label in self.namespaces:
-                return self.namespaces[label]
+                if len(entitylist) > 0:
+                    return entitylist[0]
+
+                raise NoSuchLabelError(
+                    f"No label annotations matches {label!r}  with prefix "
+                    f"{prefix!r}"
+                )
+            # if label in self._namespaces:
+            #    return self._namespaces[label]
 
         if label_annotations is None:
             annotations = (a.name for a in self.label_annotations)
@@ -324,7 +331,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
 
         raise NoSuchLabelError(f"No label annotations matches {label!r}")
 
-    def get_by_label_all(self, label, label_annotations=None, namespace=None):
+    def get_by_label_all(self, label, label_annotations=None, prefix=None):
         """Like get_by_label(), but returns a list with all matching labels.
 
         Returns an empty list if no matches could be found.
@@ -349,8 +356,8 @@ class Ontology(  # pylint: disable=too-many-public-methods
             entity.extend(self.world.search(**{key: label}))
         if self._special_labels and label in self._special_labels:
             entity.append(self._special_labels[label])
-        if namespace:
-            return [_ for _ in entity if _.namespace.name == namespace]
+        if prefix:
+            return [_ for _ in entity if _.namespace.name == prefix]
         return entity
 
     def add_label_annotation(self, iri):
