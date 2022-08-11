@@ -5,7 +5,8 @@ if TYPE_CHECKING:
 
 
 def test_load(repo_dir: "Path") -> None:
-    from ontopy import get_ontology, HTTPError
+    from ontopy import get_ontology
+    from ontopy.ontology import HTTPError
 
     # Check that the defaults works
     emmo = get_ontology("emmo").load()  # ttl format
