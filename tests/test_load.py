@@ -5,7 +5,7 @@ if TYPE_CHECKING:
 
 
 def test_load(repo_dir: "Path") -> None:
-    from ontopy import get_ontology
+    from ontopy import get_ontology, HTTPError
 
     # Check that the defaults works
     emmo = get_ontology("emmo").load()  # ttl format
@@ -33,6 +33,9 @@ def test_load(repo_dir: "Path") -> None:
         "battinfo.ttl"
     ).load()
     assert onto.Electrolyte.prefLabel.first() == "Electrolyte"
+
+    with pytest.raises(HTTPError):
+        get_ontology("http://emmo.info/non-existing/ontology#").load()
 
 
 def test_load_rdfs() -> None:
