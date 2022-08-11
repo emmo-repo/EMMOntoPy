@@ -169,6 +169,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
     # Name of special unlabeled entities, like Thing, Nothing, etc...
     _special_labels = None
 
+    prefix = None
     # Some properties for customising dir() listing - useful in
     # interactive sessions...
     _dir_preflabel = isinteractive()
@@ -295,20 +296,20 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 f"Invalid label definition, {label!r} contains spaces."
             )
 
-        if "_namespaces" in self.__dict__:
-            if prefix:
-                entitylist = self.get_by_label_all(
-                    label,
-                    label_annotations=label_annotations,
-                    prefix=prefix,
-                )
-                if len(entitylist) > 0:
-                    return entitylist[0]
+        # if "_namespaces" in self.__dict__:
+        if prefix:
+            entitylist = self.get_by_label_all(
+                label,
+                label_annotations=label_annotations,
+                prefix=prefix,
+            )
+            if len(entitylist) > 0:
+                return entitylist[0]
 
-                raise NoSuchLabelError(
-                    f"No label annotations matches {label!r}  with prefix "
-                    f"{prefix!r}"
-                )
+            raise NoSuchLabelError(
+                f"No label annotations matches {label!r}  with prefix "
+                f"{prefix!r}"
+            )
             # if label in self._namespaces:
             #    return self._namespaces[label]
 
@@ -392,6 +393,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         url_from_catalog=None,
         catalog_file="catalog-v001.xml",
         emmo_based=True,
+        prefix=None,
         **kwargs,
     ):
         """Load the ontology.
@@ -422,6 +424,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
             defaults to "catalog-v001.xml".
         emmo_based : bool
             Whether this is an EMMO-based ontology or not, default `True`.
+        prefix : defaults to self.get_namespace.name if
         kwargs
             Additional keyword arguments are passed on to
             owlready2.Ontology.load().
@@ -454,7 +457,13 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 "owl:Nothing": owlready2.Nothing,
                 "owl:topObjectProperty": top,
             }
-
+        # set prefix if anotehr prefix is desired
+        # if we do this, shouldn't we make the name of all
+        # entities of the given ontology to the same?
+        if prefix:
+            self.prefix = prefix
+        else:
+            self.prefix = self.name
         return self
 
     def _load(  # pylint: disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements
