@@ -359,7 +359,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         if self._special_labels and label in self._special_labels:
             entity.append(self._special_labels[label])
         if prefix:
-            return [_ for _ in entity if _.namespace.name == prefix]
+            return [_ for _ in entity if _.namespace.ontology.prefix == prefix]
         return entity
 
     def add_label_annotation(self, iri):
