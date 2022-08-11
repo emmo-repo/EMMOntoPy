@@ -296,7 +296,24 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 f"Invalid label definition, {label!r} contains spaces."
             )
 
-        # if "_namespaces" in self.__dict__:
+        splitlabel = label.split(":")
+        if len(splitlabel) > 2:
+            raise ValueError(
+                f"Invalid label definition, {label!r}"
+                " contains more than one ':' ."
+                "The string before ':' indicates the prefix. "
+                "The string after ':' indicates the label."
+            )
+        if len(splitlabel) == 2:
+            label = splitlabel[1]
+            if prefix and prefix != splitlabel[0]:
+                warnings.warn(
+                    f"Prefix given both as argument ({prefix}) "
+                    f"and in label ({splitlabel[0]}). "
+                    "Prefix given in label takes presendence "
+                )
+            prefix = splitlabel[0]
+
         if prefix:
             entitylist = self.get_by_label_all(
                 label,
@@ -383,6 +400,24 @@ class Ontology(  # pylint: disable=too-many-public-methods
             raise ValueError(f"IRI not in ontology: {iri}")
         self._label_annotations.remove(label_annotation)
 
+    def set_common_prefix(
+        self,
+        iri_base: str = "http://emmo.info/emmo",
+        prefix: str = "emmo",
+    ) -> None:
+        """Set a common prefix for all imported ontologies
+        with the same first part of the base_iri.
+
+        Args:
+            iri_base: The start of the base_iri to look for. Defaults to
+            the emmo base_iri http://emmo.info/emmo
+            prefix: the desired prefix. Defaults to emmo.
+        """
+        if self.base_iri.startswith(iri_base):
+            self.prefix = prefix
+        for onto in self.imported_ontologies:
+            onto.set_common_prefix(iri_base=iri_base, prefix=prefix)
+
     def load(  # pylint: disable=too-many-arguments,arguments-renamed
         self,
         only_local=False,
@@ -394,6 +429,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         catalog_file="catalog-v001.xml",
         emmo_based=True,
         prefix=None,
+        prefix_emmo=None,
         **kwargs,
     ):
         """Load the ontology.
@@ -425,6 +461,9 @@ class Ontology(  # pylint: disable=too-many-public-methods
         emmo_based : bool
             Whether this is an EMMO-based ontology or not, default `True`.
         prefix : defaults to self.get_namespace.name if
+        prefix_emmo: bool, default None. If emmo_based is True it
+            defaults to True and sets the prefix of all imported ontologies
+            with base_iri starting with 'http://emmo.info/emmo' to emmo
         kwargs
             Additional keyword arguments are passed on to
             owlready2.Ontology.load().
@@ -464,6 +503,12 @@ class Ontology(  # pylint: disable=too-many-public-methods
             self.prefix = prefix
         else:
             self.prefix = self.name
+
+        if emmo_based and prefix_emmo is None:
+            prefix_emmo = True
+        if prefix_emmo:
+            self.set_common_prefix()
+
         return self
 
     def _load(  # pylint: disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements

@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 def test_prefix(repo_dir: "Path") -> None:
     """Test get_version function in ontology"""
     from ontopy import get_ontology
+    from emmopy import get_emmo
 
     ontopath = repo_dir / "tests" / "testonto"
     testonto = get_ontology(str(ontopath) + "/testonto.ttl").load()
@@ -31,3 +32,18 @@ def test_prefix(repo_dir: "Path") -> None:
 
     assert testonto.prefix == "testonto"
     assert testonto.get_imported_ontologies()[0].prefix == "models"
+
+    assert testonto.get_by_label("models:TestClass") == testonto.get_by_label(
+        "TestClass", prefix="models"
+    )
+
+    emmo = get_emmo("emmo")
+
+    assert emmo.Atom.namespace.ontology.prefix == "emmo"
+    assert emmo.get_by_label("Atom", prefix="emmo") == emmo.Atom
+
+    # To be added when emmo-inferred is released with the correcto iri
+    # emmo_inferred = get_emmo()
+
+    # assert emmo_inferred.Atom.namespace.ontology.prefix == 'emmo'
+    # assert emmo_inferred.get_by_label('Atom', prefix='emmo') == emmo_inferred.Atom
