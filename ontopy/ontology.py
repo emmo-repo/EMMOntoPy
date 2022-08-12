@@ -92,12 +92,16 @@ class World(owlready2.World):
 
         if base_iri == "emmo":
             base_iri = (
+                # "https://raw.githubusercontent.com/emmo-repo/"
+                # "EMMO/master/emmo.ttl"
                 "https://raw.githubusercontent.com/emmo-repo/"
-                "EMMO/master/emmo.ttl"
+                "EMMO/1.0.0-beta4/emmo.ttl"
             )
         elif base_iri == "emmo-inferred":
             base_iri = (
-                "https://emmo-repo.github.io/latest-stable/emmo-inferred.ttl"
+                # "https://emmo-repo.github.io/latest-stable/emmo-inferred.ttl"
+                "https://raw.githubusercontent.com/emmo-repo/"
+                "EMMO/1.0.0-beta4/emmo.ttl"
             )
         elif base_iri == "emmo-development":
             base_iri = (

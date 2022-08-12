@@ -53,10 +53,10 @@ def test_manchester():
         "(Atom and Molecule) or Proton",
         (emmo.Atom & emmo.Molecule) | emmo.Proton,
     )
-    check(
-        "inverse(hasPart) value Universe",
-        Inverse(emmo.hasPart).value(emmo.Universe),
-    )
+    # check(
+    #     "inverse(hasPart) value Universe",
+    #     Inverse(emmo.hasPart).value(emmo.Universe),
+    # )
     # literal data restriction
     check('hasSymbolData value "hello"', emmo.hasSymbolData.value("hello"))
     check("hasSymbolData value 42", emmo.hasSymbolData.value(42))

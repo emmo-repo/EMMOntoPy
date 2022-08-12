@@ -9,12 +9,12 @@ if TYPE_CHECKING:
 def test_graph2(emmo: "Ontology", tmpdir: "Path") -> None:
     from ontopy.graph import OntoGraph
 
-    graph = OntoGraph(
-        emmo,
-        emmo.hasPart,
-        leafs=("mereotopological", "semiotical", "connected"),
-    )
-    graph.save(tmpdir / "hasPart.svg")
+    # graph = OntoGraph(
+    #    emmo,
+    #    emmo.hasPart,
+    #    leafs=("mereotopological", "semiotical", "connected"),
+    # )
+    # graph.save(tmpdir / "hasPart.svg")
 
     graph = OntoGraph(
         emmo, emmo.Matter, relations="all", addnodes=True, edgelabels=None
@@ -113,7 +113,7 @@ def test_graph2(emmo: "Ontology", tmpdir: "Path") -> None:
         emmo.Icon,
         emmo.Interpretant,
         emmo.Index,
-        emmo.SubjectiveProperty,
+        # emmo.SubjectiveProperty,
         emmo.NominalProperty,
         emmo.ConventionalQuantitativeProperty,
         emmo.ModelledQuantitativeProperty,
@@ -139,7 +139,7 @@ def test_graph2(emmo: "Ontology", tmpdir: "Path") -> None:
             emmo.Quantity,
             emmo.String,
             emmo.PrefixedUnit,
-            emmo.SymbolicComposition,
+            # emmo.SymbolicComposition,
             emmo.Matter,
         ],
         parents=2,
