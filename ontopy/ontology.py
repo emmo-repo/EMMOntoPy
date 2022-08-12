@@ -264,18 +264,21 @@ class Ontology(  # pylint: disable=too-many-public-methods
         return World.get_unabbreviated_triples(self, label)
 
     def get_by_label(
-        self, label, label_annotations=None, prefix=None
+        self, label: str, label_annotations: str = None, prefix: str = None
     ):  # pylint: disable=too-many-arguments,too-many-branches
         """Returns entity with label annotation `label`.
 
         Args:
+           label: label so serach for.
+               May be written as 'label' or 'prefix:label'.
+               get_by_label('prefix:label') ==
+               get_by_label('label', prefix='prefix').
            label_annotations: a sequence of label annotation names to look up.
-           Defaults to the `label_annotations` property.
-
+               Defaults to the `label_annotations` property.
            prefix: if provided, it should be the last component of
-           the base iri of an ontology (with trailing slash (/) or hash
-           (#) stripped off).  The search for a matching label will be
-           limited to this namespace.
+               the base iri of an ontology (with trailing slash (/) or hash
+               (#) stripped off).  The search for a matching label will be
+               limited to this namespace.
 
         If several entities have the same label, only the one which is
         found first is returned.Use get_by_label_all() to get all matches.
