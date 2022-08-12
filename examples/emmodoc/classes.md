@@ -36,7 +36,7 @@ branch of mereotopology.
 %BRANCHDOC Perspective
 
 %BRANCHDOC Holistic
-%BRANCHDOC Semiotic
+%BRANCHDOC Semiotics
 %BRANCHDOC Sign
 %BRANCHDOC Interpreter
 %BRANCHDOC Object
