@@ -57,11 +57,11 @@ The characteristics of the different properties are described by the following *
 %BRANCHFIG EMMORelation   caption="Top-level of the EMMO relation hierarchy."
 %ENTITY EMMORelation
 
-%%BRANCHDOC mereotopological
-%BRANCHHEAD mereotopological
-%BRANCH mereotopological
+#%%BRANCHDOC mereotopological
+#%BRANCHHEAD mereotopological
+#%BRANCH mereotopological
 
-%BRANCHDOC connected
+#%BRANCHDOC connected
 
 %BRANCHDOC hasPart
 
