@@ -157,6 +157,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        sudo apt-get update
         sudo apt-get install -y graphviz
         sudo apt-get install -y texlive-xetex
         sudo apt-get install -y texlive-latex-extra
@@ -170,7 +171,9 @@ jobs:
         cd examples/emmodoc
         python ../../tools/ontodoc -f simple-html emmo-inferred emmo-simple.html
         python ../../tools/ontodoc -t emmo.md -p no-self-contained emmo-inferred emmo.html
-        python ../../tools/ontodoc -t emmo.md emmo-inferred emmo.pdf
+        # pdf generation is commented out as there is a xetex error which
+        # needs to be resolved if we decide to keep ontodoc as a tool.
+        # python ../../tools/ontodoc -t emmo.md emmo-inferred emmo.pdf
         cd -
 
 

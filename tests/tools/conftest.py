@@ -20,6 +20,7 @@ def tool(request: "Dict[str, Any]") -> "ModuleType":
     original_tool_path: Path = (
         Path(__file__).resolve().parent.parent.parent / "tools" / request.param
     )
+    sys.path.append(str(original_tool_path.parent.parent))
 
     assert (
         original_tool_path.exists()
