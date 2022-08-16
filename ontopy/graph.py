@@ -723,7 +723,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                         break
                 else:
                     warnings.warn(
-                        f"Style not defined for relation {relation}."
+                        f"Style not defined for relation {name}. "
                         "Resorting to default style."
                     )
                     rattrs = self.style.get("default_relation", {})
