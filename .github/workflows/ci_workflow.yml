@@ -171,6 +171,8 @@ jobs:
         cd examples/emmodoc
         python ../../tools/ontodoc -f simple-html emmo-inferred emmo-simple.html
         python ../../tools/ontodoc -t emmo.md -p no-self-contained emmo-inferred emmo.html
+        # pdf generation is commented out as there is a xetex error which
+        # needs to be resolved if we decide to keep ontodoc as a tool.
         # python ../../tools/ontodoc -t emmo.md emmo-inferred emmo.pdf
         cd -
 
