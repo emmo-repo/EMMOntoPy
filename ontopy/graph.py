@@ -722,9 +722,11 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                         )
                         break
                 else:
-                    raise ValueError(
-                        f"Relation {relation} not found in entity.mro()."
+                    warnings.warn(
+                        f"Style not defined for relation {relation}."
+                        "Resorting to default style."
                     )
+                    rattrs = self.style.get("default_relation", {})
                 # object property
                 if isinstance(
                     entity,
