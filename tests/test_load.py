@@ -14,13 +14,13 @@ def test_load(repo_dir: "Path") -> None:
     emmo = get_ontology("emmo-inferred").load()
     assert emmo.Atom.prefLabel.first() == "Atom"
 
-    # emmo = get_ontology("emmo-development").load()  # ttl format
-    # assert emmo.Atom.prefLabel.first() == "Atom"
+    emmo = get_ontology("emmo-development").load()  # ttl format
+    assert emmo.Atom.prefLabel.first() == "Atom"
 
-    # emmo = get_ontology(
-    #    "https://emmo-repo.github.io/latest-stable/" "emmo-inferred.owl"
-    # ).load()  # owl format
-    # assert emmo.Atom.prefLabel.first() == "Atom"
+    emmo = get_ontology(
+        "https://emmo-repo.github.io/latest-stable/" "emmo-inferred.owl"
+    ).load()  # owl format
+    assert emmo.Atom.prefLabel.first() == "Atom"
 
     # Load a local ontology with catalog
     testonto = repo_dir / "tests" / "testonto" / "testonto.ttl"

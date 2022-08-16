@@ -82,30 +82,28 @@ class World(owlready2.World):
         The `base_iri` argument may be one of:
           - valid URL (possible excluding final .owl or .ttl)
           - file name (possible excluding final .owl or .ttl)
-          - "emmo": load latest stable version of asserted EMMO
-          - "emmo-inferred": load latest stable version of inferred EMMO
+          - "emmo": load latest version of asserted EMMO
+          - "emmo-inferred": load latest version of inferred EMMO
             (default)
           - "emmo-development": load latest inferred development version
-            of EMMO
+            of EMMO. Until first stable release emmo-inferred and
+            emmo-development will be the same.
         """
         base_iri = base_iri.as_uri() if isinstance(base_iri, Path) else base_iri
 
         if base_iri == "emmo":
             base_iri = (
-                # "https://raw.githubusercontent.com/emmo-repo/"
-                # "EMMO/master/emmo.ttl"
-                "https://raw.githubusercontent.com/emmo-repo/"
-                "EMMO/1.0.0-beta4/emmo.ttl"
+                "http://emmo-repo.github.io/versions/1.0.0-beta4/emmo.ttl"
             )
         elif base_iri == "emmo-inferred":
             base_iri = (
-                # "https://emmo-repo.github.io/latest-stable/emmo-inferred.ttl"
-                "https://raw.githubusercontent.com/emmo-repo/"
-                "EMMO/1.0.0-beta4/emmo.ttl"
+                "https://emmo-repo.github.io/versions/1.0.0-beta4/"
+                "emmo-inferred.ttl"
             )
         elif base_iri == "emmo-development":
             base_iri = (
-                "https://emmo-repo.github.io/development/emmo-inferred.ttl"
+                "https://emmo-repo.github.io/versions/1.0.0-beta4/"
+                "emmo-inferred.ttl"
             )
 
         if base_iri in self.ontologies:

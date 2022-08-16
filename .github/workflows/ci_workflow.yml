@@ -171,7 +171,7 @@ jobs:
         cd examples/emmodoc
         python ../../tools/ontodoc -f simple-html emmo-inferred emmo-simple.html
         python ../../tools/ontodoc -t emmo.md -p no-self-contained emmo-inferred emmo.html
-        # python ../../tools/ontodoc -t emmo.md emmo-inferred emmo.pdf
+        python ../../tools/ontodoc -t emmo.md emmo-inferred emmo.pdf
         cd -
 
 
