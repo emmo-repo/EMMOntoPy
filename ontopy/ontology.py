@@ -501,7 +501,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 "owl:Nothing": owlready2.Nothing,
                 "owl:topObjectProperty": top,
             }
-        # set prefix if anotehr prefix is desired
+        # set prefix if another prefix is desired
         # if we do this, shouldn't we make the name of all
         # entities of the given ontology to the same?
         if prefix:

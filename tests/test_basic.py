@@ -52,11 +52,7 @@ def test_basic(emmo: "Ontology") -> None:
     assert len(water.name) == len(name_prefix) + 36
 
 
-def test_sync_reasoner(repo_dir: "Path") -> None:
+def test_sync_reasoner(testonto: "Ontology") -> None:
     """Test `ontopy:Ontology.sync_reasoner()`."""
-    from ontopy import get_ontology
 
-    ontodir = repo_dir / "tests" / "testonto"
-
-    onto: "Ontology" = get_ontology((ontodir / "testonto.ttl").as_uri())
-    onto.sync_reasoner()
+    testonto.sync_reasoner()
