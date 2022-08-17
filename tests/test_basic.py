@@ -40,6 +40,8 @@ def test_basic(emmo: "Ontology") -> None:
         water = H2O()
         water.hasSpatialDirectPart = [H1, H2, O]
 
+    print(onto.label_annotations)
+    print(onto._label_annotations)
     name_prefix = "myonto_"
     onto.sync_attributes(name_policy="sequential", name_prefix=name_prefix)
     assert f"{onto.base_iri}{name_prefix}0" in onto
