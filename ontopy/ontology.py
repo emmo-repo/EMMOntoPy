@@ -153,6 +153,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         # get_by_label()
         super().__init__(*args, **kwargs)
         self._label_annotations = None
+        self.prefix = None
 
     # Properties controlling what annotations that are considered by
     # get_by_label()
@@ -164,7 +165,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     # Name of special unlabeled entities, like Thing, Nothing, etc...
     _special_labels = None
 
-    prefix = None
     # Some properties for customising dir() listing - useful in
     # interactive sessions...
     _dir_preflabel = isinteractive()
