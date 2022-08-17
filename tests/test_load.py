@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-def test_load(repo_dir: "Path") -> None:
+def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
     from ontopy import get_ontology
     from ontopy.ontology import HTTPError
 
@@ -24,9 +24,7 @@ def test_load(repo_dir: "Path") -> None:
     assert emmo.Atom.prefLabel.first() == "Atom"
 
     # Load a local ontology with catalog
-    testonto = repo_dir / "tests" / "testonto" / "testonto.ttl"
-    onto = get_ontology(testonto).load()
-    assert onto.TestClass.prefLabel.first() == "TestClass"
+    assert testonto.TestClass.prefLabel.first() == "TestClass"
 
     # Use catalog file when downloading from web
     onto = get_ontology(

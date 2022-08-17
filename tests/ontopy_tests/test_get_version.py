@@ -5,12 +5,11 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-def test_get_version(repo_dir: "Path") -> None:
+def test_get_version(repo_dir: "Path", testonto: "Ontology") -> None:
     """Test get_version function in ontology"""
     from ontopy import get_ontology
 
     ontopath = repo_dir / "tests" / "testonto"
-    testonto = get_ontology(str(ontopath) + "/testonto.ttl").load()
     assert (
         testonto.get_version(as_iri=True) == "http://emmo.info/testonto/0.1.0"
     )

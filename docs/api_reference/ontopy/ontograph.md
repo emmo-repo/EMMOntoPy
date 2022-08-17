@@ -1,3 +1,0 @@
-# ontograph
-
-::: ontopy.ontograph

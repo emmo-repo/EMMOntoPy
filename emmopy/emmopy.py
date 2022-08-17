@@ -23,4 +23,4 @@ def get_emmo(inferred: Optional[bool] = True) -> "Ontology":
 
     """
     name = "emmo-inferred" if inferred in [True, None] else "emmo"
-    return get_ontology(name).load()
+    return get_ontology(name).load(prefix_emmo=True)
