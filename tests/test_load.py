@@ -5,6 +5,7 @@ if TYPE_CHECKING:
 
 
 def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
+    import pytest
     from ontopy import get_ontology
     from ontopy.ontology import HTTPError
 
@@ -33,7 +34,10 @@ def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
     ).load()
     assert onto.Electrolyte.prefLabel.first() == "Electrolyte"
 
-    with pytest.raises(HTTPError):
+    with pytest.raises(
+        HTTPError,
+        match="HTTP Error 404: https://emmo.info/non-existing/ontology: Not Found",
+    ):
         get_ontology("http://emmo.info/non-existing/ontology#").load()
 
 
