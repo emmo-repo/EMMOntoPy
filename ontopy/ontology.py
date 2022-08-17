@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-"""A module adding additional functionality to owlready2. The main additions
-includes:
-  - Visualisation of taxonomy and ontology as graphs (using pydot, see
-    ontograph.py).
+"""A module adding additional functionality to owlready2.
 
-The class extension is defined within.
-
-If desirable some of this may be moved back into owlready2.
+If desirable some of these additions may be moved back into owlready2.
 """
 # pylint: disable=too-many-lines,fixme,arguments-differ,protected-access
 from typing import TYPE_CHECKING, Union, Sequence
@@ -45,8 +40,6 @@ from ontopy.utils import (
     LabelDefinitionError,
     ThingClassDefinitionError,
 )
-
-from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
 
 if TYPE_CHECKING:
     from typing import List
@@ -126,8 +119,14 @@ class World(owlready2.World):
 
         return onto
 
-    def get_unabbreviated_triples(self, label=None):
+    def get_unabbreviated_triples(
+        self, subject=None, predicate=None, obj=None, label=None
+    ):
+        # pylint: disable=invalid-name
         """Returns all triples unabbreviated.
+
+        If any of the `subject`, `predicate` or `object` arguments are given,
+        only matching triples will be returned.
 
         If `label` is given, it will be used to represent blank nodes.
         """
@@ -140,17 +139,11 @@ class World(owlready2.World):
                 return BlankNode(self, i) if label is None else label
             return i
 
-        for subject, predicate, obj in self.get_triples():
-            yield (
-                _unabbreviate(subject),
-                _unabbreviate(predicate),
-                _unabbreviate(obj),
-            )
+        for s, p, o in self.get_triples(subject, predicate, obj):
+            yield (_unabbreviate(s), _unabbreviate(p), _unabbreviate(o))
 
 
-class Ontology(  # pylint: disable=too-many-public-methods
-    owlready2.Ontology, OntoGraph
-):
+class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     """A generic class extending owlready2.Ontology."""
 
     # Properties controlling what annotations that are considered by
@@ -518,9 +511,9 @@ class Ontology(  # pylint: disable=too-many-public-methods
         resolved_url = self.world._iri_mappings.get(url, url)
 
         # Append paths from catalog file to onto_path
-        for _ in sorted(dirs, reverse=True):
-            if _ not in owlready2.onto_path:
-                owlready2.onto_path.append(_)
+        for path in sorted(dirs, reverse=True):
+            if path not in owlready2.onto_path:
+                owlready2.onto_path.append(path)
 
         # Use catalog file to update IRIs of imported ontologies
         # in internal store and try to load again...
@@ -1299,9 +1292,9 @@ class Ontology(  # pylint: disable=too-many-public-methods
         Note that this method requires the Python graphviz package.
         """
         # pylint: disable=import-outside-toplevel,cyclic-import
-        from ontopy.graph import OntoGraph as NewOntoGraph
+        from ontopy.graph import OntoGraph
 
-        return NewOntoGraph(self, **kwargs)
+        return OntoGraph(self, **kwargs)
 
     @staticmethod
     def common_ancestors(cls1, cls2):
