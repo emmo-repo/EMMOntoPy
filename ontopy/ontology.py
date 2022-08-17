@@ -247,16 +247,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         i.e. blank nodes are not distinguished, but relations to blank
         nodes are included.
         """
-        return set(self.get_unabbreviated_triples(label="_:b")) == set(
-            other.get_unabbreviated_triples(label="_:b")
+        return set(self.get_unabbreviated_triples(blank="_:b")) == set(
+            other.get_unabbreviated_triples(blank="_:b")
         )
 
-    def get_unabbreviated_triples(self, label=None):
+    def get_unabbreviated_triples(self, blank=None):
         """Returns all triples unabbreviated.
 
         If `label` is given, it will be used to represent blank nodes.
         """
-        return World.get_unabbreviated_triples(self, label)
+        return World.get_unabbreviated_triples(self, blank=blank)
 
     def get_by_label(
         self, label: str, label_annotations: str = None, prefix: str = None
