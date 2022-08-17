@@ -120,7 +120,7 @@ class World(owlready2.World):
         return onto
 
     def get_unabbreviated_triples(
-        self, subject=None, predicate=None, obj=None, label=None
+        self, subject=None, predicate=None, obj=None, blank=None
     ):
         # pylint: disable=invalid-name
         """Returns all triples unabbreviated.
@@ -128,7 +128,7 @@ class World(owlready2.World):
         If any of the `subject`, `predicate` or `object` arguments are given,
         only matching triples will be returned.
 
-        If `label` is given, it will be used to represent blank nodes.
+        If `blank` is given, it will be used to represent blank nodes.
         """
 
         def _unabbreviate(i):
@@ -136,7 +136,7 @@ class World(owlready2.World):
                 # negative storid corresponds to blank nodes
                 if i >= 0:
                     return self._unabbreviate(i)
-                return BlankNode(self, i) if label is None else label
+                return BlankNode(self, i) if blank is None else blank
             return i
 
         for s, p, o in self.get_triples(subject, predicate, obj):
