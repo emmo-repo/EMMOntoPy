@@ -416,7 +416,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         Args:
             iri_base: The start of the base_iri to look for. Defaults to
-            the emmo base_iri http://emmo.info/emmo
+                the emmo base_iri http://emmo.info/emmo
             prefix: the desired prefix. Defaults to emmo.
         """
         if self.base_iri.startswith(iri_base):
@@ -442,35 +442,35 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         Parameters
         ----------
-        only_local : bool
+        only_local: bool
             Whether to only read local files.  This requires that you
             have appended the path to the ontology to owlready2.onto_path.
-        filename : str
+        filename: str
             Path to file to load the ontology from.  Defaults to `base_iri`
             provided to get_ontology().
-        format : str
+        format: str
             Format of `filename`.  Default is inferred from `filename`
             extension.
-        reload : bool
+        reload: bool
             Whether to reload the ontology if it is already loaded.
-        reload_if_newer : bool
+        reload_if_newer: bool
             Whether to reload the ontology if the source has changed since
             last time it was loaded.
-        url_from_catalog : bool | None
+        url_from_catalog: bool | None
             Whether to use catalog file to resolve the location of `base_iri`.
             If None, the catalog file is used if it exists in the same
             directory as `filename`.
-        catalog_file : str
+        catalog_file: str
             Name of Protègè catalog file in the same folder as the
             ontology.  This option is used together with `only_local` and
             defaults to "catalog-v001.xml".
-        emmo_based : bool
+        emmo_based: bool
             Whether this is an EMMO-based ontology or not, default `True`.
-        prefix : defaults to self.get_namespace.name if
+        prefix: defaults to self.get_namespace.name if
         prefix_emmo: bool, default None. If emmo_based is True it
             defaults to True and sets the prefix of all imported ontologies
             with base_iri starting with 'http://emmo.info/emmo' to emmo
-        kwargs
+        kwargs:
             Additional keyword arguments are passed on to
             owlready2.Ontology.load().
         """
