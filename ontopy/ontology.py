@@ -155,14 +155,18 @@ class Ontology(  # pylint: disable=too-many-public-methods
 ):
     """A generic class extending owlready2.Ontology."""
 
-    # def __init__(self, *args, **kwargs):
-    #    # Set ontology prefix to ontology._namespace.name as default
-    #    self.prefix = self._namespace.name
-    # super().__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        # Properties controlling what annotations that are considered by
+        # get_by_label()
+        super().__init__(*args, **kwargs)
+        self._label_annotations = None
+        #if emmo_based:
+        #    self_label_annotations = DEFAULT_LABEL_ANNOTATIONS  
+        #print(self._label_annotations)
+
 
     # Properties controlling what annotations that are considered by
     # get_by_label()
-    _label_annotations = []
     label_annotations = property(
         fget=lambda self: self._label_annotations,
         doc="List of label annotation searched for by get_by_label().",
@@ -221,6 +225,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
         return item
 
     def __getattr__(self, name):
+        print('attr', name)
         attr = super().__getattr__(name)
         if not attr:
             attr = self.get_by_label(name)
@@ -300,6 +305,13 @@ class Ontology(  # pylint: disable=too-many-public-methods
             raise ValueError(
                 f"Invalid label definition, {label!r} contains spaces."
             )
+        if self._label_annotations is None:
+            for iri in DEFAULT_LABEL_ANNOTATIONS:
+                try:
+                    self.add_label_annotation(iri)
+                except ValueError:
+                    pass
+    
 
         splitlabel = label.split(":")
         if len(splitlabel) > 2:
@@ -334,7 +346,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
             )
             # if label in self._namespaces:
             #    return self._namespaces[label]
-
+    
         if label_annotations is None:
             annotations = (a.name for a in self.label_annotations)
         else:
@@ -389,6 +401,10 @@ class Ontology(  # pylint: disable=too-many-public-methods
 
         May be provided either as an IRI or as its owlready2 representation.
         """
+        if self._label_annotations is None:
+            self._label_annotations = []
+        print('iri',iri)
+        print(hasattr(iri, "storid"))
         label_annotation = iri if hasattr(iri, "storid") else self.world[iri]
         if not label_annotation:
             raise ValueError(f"IRI not in ontology: {iri}")
