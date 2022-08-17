@@ -127,7 +127,7 @@ class World(owlready2.World):
         # pylint: disable=invalid-name
         """Returns all triples unabbreviated.
 
-        If any of the `subject`, `predicate` or `object` arguments are given,
+        If any of the `subject`, `predicate` or `obj` arguments are given,
         only matching triples will be returned.
 
         If `blank` is given, it will be used to represent blank nodes.
