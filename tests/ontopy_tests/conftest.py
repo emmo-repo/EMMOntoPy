@@ -45,13 +45,3 @@ def has_triple(onto, s=None, p=None, o=None) -> bool:
         return bool(get_triples(onto, s, p, o))
     except ValueError:
         return False
-
-
-@pytest.fixture
-def onto() -> "ontopy.Ontology":
-    """Test ontology."""
-    from ontopy import get_ontology
-
-    url = Path(__file__).parent.parent / "testonto" / "testonto.ttl"
-    onto = get_ontology(url).load()
-    return onto

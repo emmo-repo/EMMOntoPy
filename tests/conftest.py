@@ -32,3 +32,15 @@ def tmpdir() -> Path:
     res = TemporaryDirectory()
     yield Path(res.name)
     res.cleanup()
+
+
+@pytest.fixture
+def testonto() -> "Ontology":
+    """Load and return the local testonto."""
+    from ontopy import get_ontology
+
+    path = Path(__file__).parent.parent.resolve() / "tests" / "testonto"
+
+    testonto = get_ontology(str(path) + "/testonto.ttl").load()
+
+    return testonto
