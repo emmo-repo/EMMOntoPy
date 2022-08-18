@@ -36,7 +36,7 @@ branch of mereotopology.
 %BRANCHDOC Perspective
 
 %BRANCHDOC Holistic
-%BRANCHDOC Semiotic
+%BRANCHDOC Semiotics
 %BRANCHDOC Sign
 %BRANCHDOC Interpreter
 %BRANCHDOC Object
@@ -73,7 +73,7 @@ branch of mereotopology.
 
 %BRANCHDOC Physicalistic
 %BRANCHDOC ElementaryParticle
-%BRANCHDOC Subatomic
+#%BRANCHDOC Subatomic
 %BRANCHDOC Matter
 %BRANCHDOC Fluid
 %BRANCHDOC Mixture

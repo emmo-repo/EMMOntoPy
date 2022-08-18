@@ -15,6 +15,7 @@ import defusedxml.ElementTree as ET
 
 from rdflib import Graph, URIRef
 from rdflib.util import guess_format
+from rdflib.plugin import PluginException
 
 import owlready2
 
@@ -26,9 +27,10 @@ if TYPE_CHECKING:
 
 # Format mappings: file extension -> rdflib format name
 FMAP = {
+    "": "turtle",
+    "ttl": "turtle",
     "n3": "ntriples",
     "nt": "ntriples",
-    "ttl": "turtle",
     "owl": "xml",
     "rdfxml": "xml",
 }
@@ -579,7 +581,12 @@ def convert_imported(  # pylint: disable=too-many-arguments,too-many-locals
         )
 
     graph = Graph()
-    graph.parse(input_ontology, format=fmt)
+    try:
+        graph.parse(input_ontology, format=fmt)
+    except PluginException as exc:  # Add input_ontology to exception msg
+        raise PluginException(
+            f'Cannot load "{input_ontology}": {exc.msg}'
+        ).with_traceback(exc.__traceback__)
     graph.serialize(destination=output_ontology, format=output_format)
     recur(graph, outext)
 

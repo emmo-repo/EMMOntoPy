@@ -2,14 +2,14 @@ from typing import TYPE_CHECKING
 import pytest
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     from ontopy.ontology import Ontology
 
 
 def test_basic(emmo: "Ontology") -> None:
     from ontopy import get_ontology
     from ontopy.utils import LabelDefinitionError
-
-    emmo.sync_reasoner()
 
     onto = get_ontology("onto.owl")
     onto.imported_ontologies.append(emmo)
@@ -40,6 +40,8 @@ def test_basic(emmo: "Ontology") -> None:
         water = H2O()
         water.hasSpatialDirectPart = [H1, H2, O]
 
+    print(onto.label_annotations)
+    print(onto._label_annotations)
     name_prefix = "myonto_"
     onto.sync_attributes(name_policy="sequential", name_prefix=name_prefix)
     assert f"{onto.base_iri}{name_prefix}0" in onto
@@ -50,3 +52,9 @@ def test_basic(emmo: "Ontology") -> None:
     assert water.name.startswith("onto_")
     # A UUID is 32 chars long + 4 `-` chars = 36 chars
     assert len(water.name) == len(name_prefix) + 36
+
+
+def test_sync_reasoner(testonto: "Ontology") -> None:
+    """Test `ontopy:Ontology.sync_reasoner()`."""
+
+    testonto.sync_reasoner()

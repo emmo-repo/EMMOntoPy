@@ -26,7 +26,10 @@ from ontopy import get_ontology
 # Load our ontology from the vertical case
 ontopath = os.path.abspath(
     os.path.join(
-        os.path.dirname(__file__), "..", "vertical", "usercase_ontology.owl"
+        # os.path.dirname(__file__), "..", "vertical", "usercase_ontology.owl"
+        os.path.dirname(__file__),
+        "..",
+        "demo.owl",
     )
 )
 onto = get_ontology(ontopath)

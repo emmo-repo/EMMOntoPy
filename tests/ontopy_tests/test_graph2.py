@@ -12,7 +12,7 @@ def test_graph2(emmo: "Ontology", tmpdir: "Path") -> None:
     graph = OntoGraph(
         emmo,
         emmo.hasPart,
-        leafs=("mereotopological", "semiotical", "connected"),
+        leafs=("mereological", "semiotical", "causal"),
     )
     graph.save(tmpdir / "hasPart.svg")
 
@@ -113,7 +113,7 @@ def test_graph2(emmo: "Ontology", tmpdir: "Path") -> None:
         emmo.Icon,
         emmo.Interpretant,
         emmo.Index,
-        emmo.SubjectiveProperty,
+        emmo.Subjective,
         emmo.NominalProperty,
         emmo.ConventionalQuantitativeProperty,
         emmo.ModelledQuantitativeProperty,
@@ -139,7 +139,7 @@ def test_graph2(emmo: "Ontology", tmpdir: "Path") -> None:
             emmo.Quantity,
             emmo.String,
             emmo.PrefixedUnit,
-            emmo.SymbolicComposition,
+            emmo.SymbolicConstruct,
             emmo.Matter,
         ],
         parents=2,

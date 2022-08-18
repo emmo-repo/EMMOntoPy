@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-"""A module adding additional functionality to owlready2. The main additions
-includes:
-  - Visualisation of taxonomy and ontology as graphs (using pydot, see
-    ontograph.py).
+"""A module adding additional functionality to owlready2.
 
-The class extension is defined within.
-
-If desirable some of this may be moved back into owlready2.
+If desirable some of these additions may be moved back into owlready2.
 """
 # pylint: disable=too-many-lines,fixme,arguments-differ,protected-access
 from typing import TYPE_CHECKING, Union, Sequence
@@ -20,6 +15,7 @@ import types
 from pathlib import Path
 from collections import defaultdict
 from collections.abc import Iterable
+from urllib.request import HTTPError
 
 import rdflib
 from rdflib.util import guess_format
@@ -45,8 +41,6 @@ from ontopy.utils import (
     LabelDefinitionError,
     ThingClassDefinitionError,
 )
-
-from ontopy.ontograph import OntoGraph  # FIXME: deprecate...
 
 if TYPE_CHECKING:
     from typing import List
@@ -82,26 +76,28 @@ class World(owlready2.World):
         The `base_iri` argument may be one of:
           - valid URL (possible excluding final .owl or .ttl)
           - file name (possible excluding final .owl or .ttl)
-          - "emmo": load latest stable version of asserted EMMO
-          - "emmo-inferred": load latest stable version of inferred EMMO
+          - "emmo": load latest version of asserted EMMO
+          - "emmo-inferred": load latest version of inferred EMMO
             (default)
           - "emmo-development": load latest inferred development version
-            of EMMO
+            of EMMO. Until first stable release emmo-inferred and
+            emmo-development will be the same.
         """
         base_iri = base_iri.as_uri() if isinstance(base_iri, Path) else base_iri
 
         if base_iri == "emmo":
             base_iri = (
-                "https://raw.githubusercontent.com/emmo-repo/"
-                "EMMO/master/emmo.ttl"
+                "http://emmo-repo.github.io/versions/1.0.0-beta4/emmo.ttl"
             )
         elif base_iri == "emmo-inferred":
             base_iri = (
-                "https://emmo-repo.github.io/latest-stable/emmo-inferred.ttl"
+                "https://emmo-repo.github.io/versions/1.0.0-beta4/"
+                "emmo-inferred.ttl"
             )
         elif base_iri == "emmo-development":
             base_iri = (
-                "https://emmo-repo.github.io/development/emmo-inferred.ttl"
+                "https://emmo-repo.github.io/versions/1.0.0-beta4/"
+                "emmo-inferred.ttl"
             )
 
         if base_iri in self.ontologies:
@@ -126,10 +122,16 @@ class World(owlready2.World):
 
         return onto
 
-    def get_unabbreviated_triples(self, label=None):
+    def get_unabbreviated_triples(
+        self, subject=None, predicate=None, obj=None, blank=None
+    ):
+        # pylint: disable=invalid-name
         """Returns all triples unabbreviated.
 
-        If `label` is given, it will be used to represent blank nodes.
+        If any of the `subject`, `predicate` or `obj` arguments are given,
+        only matching triples will be returned.
+
+        If `blank` is given, it will be used to represent blank nodes.
         """
 
         def _unabbreviate(i):
@@ -137,25 +139,25 @@ class World(owlready2.World):
                 # negative storid corresponds to blank nodes
                 if i >= 0:
                     return self._unabbreviate(i)
-                return BlankNode(self, i) if label is None else label
+                return BlankNode(self, i) if blank is None else blank
             return i
 
-        for subject, predicate, obj in self.get_triples():
-            yield (
-                _unabbreviate(subject),
-                _unabbreviate(predicate),
-                _unabbreviate(obj),
-            )
+        for s, p, o in self.get_triples(subject, predicate, obj):
+            yield (_unabbreviate(s), _unabbreviate(p), _unabbreviate(o))
 
 
-class Ontology(  # pylint: disable=too-many-public-methods
-    owlready2.Ontology, OntoGraph
-):
+class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     """A generic class extending owlready2.Ontology."""
+
+    def __init__(self, *args, **kwargs):
+        # Properties controlling what annotations that are considered by
+        # get_by_label()
+        super().__init__(*args, **kwargs)
+        self._label_annotations = None
+        self.prefix = None
 
     # Properties controlling what annotations that are considered by
     # get_by_label()
-    _label_annotations = []
     label_annotations = property(
         fget=lambda self: self._label_annotations,
         doc="List of label annotation searched for by get_by_label().",
@@ -246,29 +248,33 @@ class Ontology(  # pylint: disable=too-many-public-methods
         i.e. blank nodes are not distinguished, but relations to blank
         nodes are included.
         """
-        return set(self.get_unabbreviated_triples(label="_:b")) == set(
-            other.get_unabbreviated_triples(label="_:b")
+        return set(self.get_unabbreviated_triples(blank="_:b")) == set(
+            other.get_unabbreviated_triples(blank="_:b")
         )
 
-    def get_unabbreviated_triples(self, label=None):
+    def get_unabbreviated_triples(self, blank=None):
         """Returns all triples unabbreviated.
 
         If `label` is given, it will be used to represent blank nodes.
         """
-        return World.get_unabbreviated_triples(self, label)
+        return World.get_unabbreviated_triples(self, blank=blank)
 
     def get_by_label(
-        self, label, label_annotations=None, namespace=None
+        self, label: str, label_annotations: str = None, prefix: str = None
     ):  # pylint: disable=too-many-arguments,too-many-branches
         """Returns entity with label annotation `label`.
 
-        `label_annotations` is a sequence of label annotation names to look up.
-        Defaults to the `label_annotations` property.
-
-        If `namespace` is provided, it should be the last component of
-        the base iri of an ontology (with trailing slash (/) or hash
-        (#) stripped off).  The search for a matching label will be
-        limited to this namespace.
+        Args:
+           label: label so serach for.
+               May be written as 'label' or 'prefix:label'.
+               get_by_label('prefix:label') ==
+               get_by_label('label', prefix='prefix').
+           label_annotations: a sequence of label annotation names to look up.
+               Defaults to the `label_annotations` property.
+           prefix: if provided, it should be the last component of
+               the base iri of an ontology (with trailing slash (/) or hash
+               (#) stripped off).  The search for a matching label will be
+               limited to this namespace.
 
         If several entities have the same label, only the one which is
         found first is returned.Use get_by_label_all() to get all matches.
@@ -288,21 +294,46 @@ class Ontology(  # pylint: disable=too-many-public-methods
             raise ValueError(
                 f"Invalid label definition, {label!r} contains spaces."
             )
+        if self._label_annotations is None:
+            for iri in DEFAULT_LABEL_ANNOTATIONS:
+                try:
+                    self.add_label_annotation(iri)
+                except ValueError:
+                    pass
 
-        if "namespaces" in self.__dict__:
-            if namespace:
-                if namespace in self.namespaces:
-                    for entity in self.get_by_label_all(
-                        label, label_annotations=label_annotations
-                    ):
-                        if entity.namespace == self.namespaces[namespace]:
-                            return entity
-                raise NoSuchLabelError(
-                    f"No label annotations matches {label!r} in namespace "
-                    f"{namespace!r}"
+        splitlabel = label.split(":")
+        if len(splitlabel) > 2:
+            raise ValueError(
+                f"Invalid label definition, {label!r}"
+                " contains more than one ':' ."
+                "The string before ':' indicates the prefix. "
+                "The string after ':' indicates the label."
+            )
+        if len(splitlabel) == 2:
+            label = splitlabel[1]
+            if prefix and prefix != splitlabel[0]:
+                warnings.warn(
+                    f"Prefix given both as argument ({prefix}) "
+                    f"and in label ({splitlabel[0]}). "
+                    "Prefix given in label takes presendence "
                 )
-            if label in self.namespaces:
-                return self.namespaces[label]
+            prefix = splitlabel[0]
+
+        if prefix:
+            entitylist = self.get_by_label_all(
+                label,
+                label_annotations=label_annotations,
+                prefix=prefix,
+            )
+            if len(entitylist) > 0:
+                return entitylist[0]
+
+            raise NoSuchLabelError(
+                f"No label annotations matches {label!r}  with prefix "
+                f"{prefix!r}"
+            )
+            # if label in self._namespaces:
+            #    return self._namespaces[label]
 
         if label_annotations is None:
             annotations = (a.name for a in self.label_annotations)
@@ -324,7 +355,7 @@ class Ontology(  # pylint: disable=too-many-public-methods
 
         raise NoSuchLabelError(f"No label annotations matches {label!r}")
 
-    def get_by_label_all(self, label, label_annotations=None, namespace=None):
+    def get_by_label_all(self, label, label_annotations=None, prefix=None):
         """Like get_by_label(), but returns a list with all matching labels.
 
         Returns an empty list if no matches could be found.
@@ -349,8 +380,8 @@ class Ontology(  # pylint: disable=too-many-public-methods
             entity.extend(self.world.search(**{key: label}))
         if self._special_labels and label in self._special_labels:
             entity.append(self._special_labels[label])
-        if namespace:
-            return [_ for _ in entity if _.namespace.name == namespace]
+        if prefix:
+            return [_ for _ in entity if _.namespace.ontology.prefix == prefix]
         return entity
 
     def add_label_annotation(self, iri):
@@ -358,6 +389,8 @@ class Ontology(  # pylint: disable=too-many-public-methods
 
         May be provided either as an IRI or as its owlready2 representation.
         """
+        if self._label_annotations is None:
+            self._label_annotations = []
         label_annotation = iri if hasattr(iri, "storid") else self.world[iri]
         if not label_annotation:
             raise ValueError(f"IRI not in ontology: {iri}")
@@ -374,6 +407,24 @@ class Ontology(  # pylint: disable=too-many-public-methods
             raise ValueError(f"IRI not in ontology: {iri}")
         self._label_annotations.remove(label_annotation)
 
+    def set_common_prefix(
+        self,
+        iri_base: str = "http://emmo.info/emmo",
+        prefix: str = "emmo",
+    ) -> None:
+        """Set a common prefix for all imported ontologies
+        with the same first part of the base_iri.
+
+        Args:
+            iri_base: The start of the base_iri to look for. Defaults to
+                the emmo base_iri http://emmo.info/emmo
+            prefix: the desired prefix. Defaults to emmo.
+        """
+        if self.base_iri.startswith(iri_base):
+            self.prefix = prefix
+        for onto in self.imported_ontologies:
+            onto.set_common_prefix(iri_base=iri_base, prefix=prefix)
+
     def load(  # pylint: disable=too-many-arguments,arguments-renamed
         self,
         only_local=False,
@@ -384,37 +435,43 @@ class Ontology(  # pylint: disable=too-many-public-methods
         url_from_catalog=None,
         catalog_file="catalog-v001.xml",
         emmo_based=True,
+        prefix=None,
+        prefix_emmo=None,
         **kwargs,
     ):
         """Load the ontology.
 
         Parameters
         ----------
-        only_local : bool
+        only_local: bool
             Whether to only read local files.  This requires that you
             have appended the path to the ontology to owlready2.onto_path.
-        filename : str
+        filename: str
             Path to file to load the ontology from.  Defaults to `base_iri`
             provided to get_ontology().
-        format : str
+        format: str
             Format of `filename`.  Default is inferred from `filename`
             extension.
-        reload : bool
+        reload: bool
             Whether to reload the ontology if it is already loaded.
-        reload_if_newer : bool
+        reload_if_newer: bool
             Whether to reload the ontology if the source has changed since
             last time it was loaded.
-        url_from_catalog : bool | None
+        url_from_catalog: bool | None
             Whether to use catalog file to resolve the location of `base_iri`.
             If None, the catalog file is used if it exists in the same
             directory as `filename`.
-        catalog_file : str
+        catalog_file: str
             Name of Protègè catalog file in the same folder as the
             ontology.  This option is used together with `only_local` and
             defaults to "catalog-v001.xml".
-        emmo_based : bool
+        emmo_based: bool
             Whether this is an EMMO-based ontology or not, default `True`.
-        kwargs
+        prefix: defaults to self.get_namespace.name if
+        prefix_emmo: bool, default None. If emmo_based is True it
+            defaults to True and sets the prefix of all imported ontologies
+            with base_iri starting with 'http://emmo.info/emmo' to emmo
+        kwargs:
             Additional keyword arguments are passed on to
             owlready2.Ontology.load().
         """
@@ -446,6 +503,18 @@ class Ontology(  # pylint: disable=too-many-public-methods
                 "owl:Nothing": owlready2.Nothing,
                 "owl:topObjectProperty": top,
             }
+        # set prefix if another prefix is desired
+        # if we do this, shouldn't we make the name of all
+        # entities of the given ontology to the same?
+        if prefix:
+            self.prefix = prefix
+        else:
+            self.prefix = self.name
+
+        if emmo_based and prefix_emmo is None:
+            prefix_emmo = True
+        if prefix_emmo:
+            self.set_common_prefix()
 
         return self
 
@@ -518,9 +587,9 @@ class Ontology(  # pylint: disable=too-many-public-methods
         resolved_url = self.world._iri_mappings.get(url, url)
 
         # Append paths from catalog file to onto_path
-        for _ in sorted(dirs, reverse=True):
-            if _ not in owlready2.onto_path:
-                owlready2.onto_path.append(_)
+        for path in sorted(dirs, reverse=True):
+            if path not in owlready2.onto_path:
+                owlready2.onto_path.append(path)
 
         # Use catalog file to update IRIs of imported ontologies
         # in internal store and try to load again...
@@ -602,14 +671,32 @@ class Ontology(  # pylint: disable=too-many-public-methods
 
                 self.loaded = False
                 with open(output, "rb") as handle:
-                    return super().load(
-                        only_local=True,
-                        fileobj=handle,
-                        reload=reload,
-                        reload_if_newer=reload_if_newer,
-                        format="rdfxml",
-                        **kwargs,
-                    )
+                    try:
+                        return super().load(
+                            only_local=True,
+                            fileobj=handle,
+                            reload=reload,
+                            reload_if_newer=reload_if_newer,
+                            format="rdfxml",
+                            **kwargs,
+                        )
+                    except HTTPError as exc:  # Add url to HTTPError message
+                        raise HTTPError(
+                            url=exc.url,
+                            code=exc.code,
+                            msg=f"{exc.url}: {exc.msg}",
+                            hdrs=exc.hdrs,
+                            fp=exc.fp,
+                        ).with_traceback(exc.__traceback__)
+
+        except HTTPError as exc:  # Add url to HTTPError message
+            raise HTTPError(
+                url=exc.url,
+                code=exc.code,
+                msg=f"{exc.url}: {exc.msg}",
+                hdrs=exc.hdrs,
+                fp=exc.fp,
+            ).with_traceback(exc.__traceback__)
 
     def save(
         self,
@@ -1299,9 +1386,9 @@ class Ontology(  # pylint: disable=too-many-public-methods
         Note that this method requires the Python graphviz package.
         """
         # pylint: disable=import-outside-toplevel,cyclic-import
-        from ontopy.graph import OntoGraph as NewOntoGraph
+        from ontopy.graph import OntoGraph
 
-        return NewOntoGraph(self, **kwargs)
+        return OntoGraph(self, **kwargs)
 
     @staticmethod
     def common_ancestors(cls1, cls2):
