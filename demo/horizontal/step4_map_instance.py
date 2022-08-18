@@ -72,13 +72,11 @@ def map_app2common(instance, meta_collection, out_id=None):
 
 # Load metadata collection from step 1
 metacoll = dlite.Collection(
-    "json://usercase_metadata.json?mode=r#usercase_ontology", True
+    "json://usercase_metadata.json?mode=r#usercase_ontology"
 )
 
 # Load dlite-representation of atoms structure from step 3
-coll = dlite.Collection(
-    "json://usercase_appdata.json?mode=r#usercase_appdata", False
-)
+coll = dlite.Collection("json://usercase_appdata.json?mode=r#usercase_appdata")
 inst = coll.get("atoms")
 
 # Do the mapping

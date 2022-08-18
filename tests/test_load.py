@@ -4,8 +4,11 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-def test_load(repo_dir: "Path") -> None:
+def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
+    import pytest
+
     from ontopy import get_ontology
+    from ontopy.ontology import HTTPError
 
     # Check that the defaults works
     emmo = get_ontology("emmo").load()  # ttl format
@@ -23,9 +26,7 @@ def test_load(repo_dir: "Path") -> None:
     assert emmo.Atom.prefLabel.first() == "Atom"
 
     # Load a local ontology with catalog
-    testonto = repo_dir / "tests" / "testonto" / "testonto.ttl"
-    onto = get_ontology(testonto).load()
-    assert onto.TestClass.prefLabel.first() == "TestClass"
+    assert testonto.TestClass.prefLabel.first() == "TestClass"
 
     # Use catalog file when downloading from web
     onto = get_ontology(
@@ -33,6 +34,12 @@ def test_load(repo_dir: "Path") -> None:
         "battinfo.ttl"
     ).load()
     assert onto.Electrolyte.prefLabel.first() == "Electrolyte"
+
+    with pytest.raises(
+        HTTPError,
+        match="HTTP Error 404: https://emmo.info/non-existing/ontology: Not Found",
+    ):
+        get_ontology("http://emmo.info/non-existing/ontology#").load()
 
 
 def test_load_rdfs() -> None:
