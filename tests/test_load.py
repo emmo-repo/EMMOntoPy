@@ -6,6 +6,7 @@ if TYPE_CHECKING:
 
 def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
     import pytest
+
     from ontopy import get_ontology
     from ontopy.ontology import HTTPError
 
