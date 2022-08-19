@@ -261,7 +261,6 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
     """
     # Protocols supported by urllib.request
     web_protocols = "http://", "https://", "ftp://"
-
     uri = str(uri)  # in case uri is a pathlib.Path object
     iris = visited_iris if visited_iris else {}
     dirs = visited_paths if visited_paths else set()
@@ -291,6 +290,7 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
                 else:
                     if "Content-Length" not in msg:
                         continue
+
                     return read_catalog(
                         destfile,
                         catalog_file=catalog_file,
@@ -343,10 +343,7 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
             raise ValueError(f"{gettag(uri)!r} should be 'uri'.")
         uri_as_str = uri.attrib["uri"]
         if uri_as_str.startswith(web_protocols):
-            if baseuri:
-                url = baseuri.rstrip("/#") + "/" + os.path.basename(uri_as_str)
-            else:
-                url = uri_as_str
+            url = uri_as_str
         else:
             uri_as_str = os.path.normpath(uri_as_str)
             if baseuri and baseuri.startswith(web_protocols):
