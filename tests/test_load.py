@@ -41,6 +41,14 @@ def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
     ):
         get_ontology("http://emmo.info/non-existing/ontology#").load()
 
+    # test loading of ontologies that only import subparts of emmo
+    # with url to raw on github specified in catalog-file
+    onto = get_ontology(
+        "https://raw.githubusercontent.com/emmo-repo/"
+        "datamodel-ontology/master/datamodel.ttl"
+    ).load()
+    assert onto.DataModel
+
 
 def test_load_rdfs() -> None:
     from ontopy import get_ontology
