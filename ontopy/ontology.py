@@ -122,6 +122,23 @@ class World(owlready2.World):
 
         return onto
 
+    def _unabbreviate(self, abb, blank=None):
+        """Return unabbreviation of `abb`.
+
+        The `abb` argument is normally be an integer corresponding to
+        a store id.  If it is not an integer, it is assumed to already
+        be unabbreviated and returned as is.
+
+        If `blank` is given, it will be used to represent blank nodes
+        (corresponding to a negative store id).
+        """
+        if isinstance(abb, int):
+            # negative storid corresponds to blank nodes
+            if abb >= 0:
+                return super()._unabbreviate(abb)
+            return BlankNode(self, abb) if blank is None else blank
+        return abb
+
     def get_unabbreviated_triples(
         self, subject=None, predicate=None, obj=None, blank=None
     ):
@@ -133,17 +150,12 @@ class World(owlready2.World):
 
         If `blank` is given, it will be used to represent blank nodes.
         """
-
-        def _unabbreviate(i):
-            if isinstance(i, int):
-                # negative storid corresponds to blank nodes
-                if i >= 0:
-                    return self._unabbreviate(i)
-                return BlankNode(self, i) if blank is None else blank
-            return i
-
         for s, p, o in self.get_triples(subject, predicate, obj):
-            yield (_unabbreviate(s), _unabbreviate(p), _unabbreviate(o))
+            yield (
+                self._unabbreviate(s, blank=blank),
+                self._unabbreviate(p, blank=blank),
+                self._unabbreviate(o, blank=blank),
+            )
 
 
 class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
@@ -255,17 +267,21 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def get_unabbreviated_triples(
         self, subject=None, predicate=None, obj=None, blank=None
     ):
-        """Returns all triples unabbreviated.
+        """Returns all matching triples unabbreviated.
 
-        If `label` is given, it will be used to represent blank nodes.
+        If `blank` is given, it will be used to represent blank nodes.
         """
-        return World.get_unabbreviated_triples(
-            self, subject=subject, predicate=predicate, obj=obj, blank=blank
-        )
+        # pylint: disable=invalid-name
+        for s, p, o in self.get_triples(subject, predicate, obj):
+            yield (
+                self.world._unabbreviate(s, blank=blank),
+                self.world._unabbreviate(p, blank=blank),
+                self.world._unabbreviate(o, blank=blank),
+            )
 
     def get_by_label(
         self, label: str, label_annotations: str = None, prefix: str = None
-    ):  # pylint: disable=too-many-arguments,too-many-branches
+    ):
         """Returns entity with label annotation `label`.
 
         Args:
@@ -290,6 +306,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         The current implementation also supports "*" as a wildcard
         matching any number of characters. This may change in the future.
         """
+        # pylint: disable=too-many-arguments,too-many-branches
         if not isinstance(label, str):
             raise TypeError(
                 f"Invalid label definition, must be a string: {label!r}"
