@@ -252,12 +252,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             other.get_unabbreviated_triples(blank="_:b")
         )
 
-    def get_unabbreviated_triples(self, blank=None):
+    def get_unabbreviated_triples(
+        self, subject=None, predicate=None, obj=None, blank=None
+    ):
         """Returns all triples unabbreviated.
 
         If `label` is given, it will be used to represent blank nodes.
         """
-        return World.get_unabbreviated_triples(self, blank=blank)
+        return World.get_unabbreviated_triples(
+            self, subject=subject, predicate=predicate, obj=obj, blank=blank
+        )
 
     def get_by_label(
         self, label: str, label_annotations: str = None, prefix: str = None
