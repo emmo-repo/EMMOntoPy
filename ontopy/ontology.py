@@ -1626,7 +1626,7 @@ def _unabbreviate(
     storid: Union[int, str],
     blank: Optional[str] = None,
 ):
-    """Return unabbreviation of `storid`.
+    """Help function returning unabbreviation of `storid`.
 
     The `storid` argument is normally be an integer corresponding to
     a store id.  If it is not an integer, it is assumed to already
@@ -1646,7 +1646,7 @@ def _unabbreviate(
 def _get_unabbreviated_triples(
     self, subject=None, predicate=None, obj=None, blank=None
 ):
-    """Returns all matching triples unabbreviated.
+    """Help function returning all matching triples unabbreviated.
 
     If `blank` is given, it will be used to represent blank nodes.
     """
