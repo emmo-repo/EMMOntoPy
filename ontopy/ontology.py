@@ -133,12 +133,9 @@ class World(owlready2.World):
 
         If `blank` is given, it will be used to represent blank nodes.
         """
-        for s, p, o in self.get_triples(subject, predicate, obj):
-            yield (
-                _unabbreviate(self, s, blank=blank),
-                _unabbreviate(self, p, blank=blank),
-                _unabbreviate(self, o, blank=blank),
-            )
+        return _get_unabbreviated_triples(
+            self, subject=subject, predicate=predicate, obj=obj, blank=blank
+        )
 
 
 class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
@@ -255,12 +252,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         If `blank` is given, it will be used to represent blank nodes.
         """
         # pylint: disable=invalid-name
-        for s, p, o in self.get_triples(subject, predicate, obj):
-            yield (
-                _unabbreviate(self, s, blank=blank),
-                _unabbreviate(self, p, blank=blank),
-                _unabbreviate(self, o, blank=blank),
-            )
+        return _get_unabbreviated_triples(
+            self, subject=subject, predicate=predicate, obj=obj, blank=blank
+        )
 
     def get_by_label(
         self, label: str, label_annotations: str = None, prefix: str = None
@@ -396,8 +390,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         if self._label_annotations is None:
             self._label_annotations = []
         label_annotation = iri if hasattr(iri, "storid") else self.world[iri]
-        if not label_annotation:
-            raise ValueError(f"IRI not in ontology: {iri}")
+        if label_annotation is None:
+            warnings.warn(f"adding new IRI to ontology: {iri}")
+            name = iri.rsplit("/")[-1].rsplit("#")[-1]
+            with self:
+                label_annotation = types.new_class(
+                    name, (owlready2.AnnotationProperty,)
+                )
         if label_annotation not in self._label_annotations:
             self._label_annotations.append(label_annotation)
 
@@ -536,7 +535,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """Help function for load()."""
         web_protocol = "http://", "https://", "ftp://"
 
-        url = filename if filename else self.base_iri.rstrip("/#")
+        url = str(filename) if filename else self.base_iri.rstrip("/#")
         if url.startswith(web_protocol):
             baseurl = os.path.dirname(url)
             catalogurl = baseurl + "/" + catalog_file
@@ -1161,7 +1160,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 counter = 0
                 while f"{self.base_iri}{name_prefix}{counter}" in self:
                     counter += 1
-                obj.name = name_prefix + str(counter)
+                obj.name = f"{name_prefix}{counter}"
         elif name_policy is not None:
             raise TypeError(f"invalid name_policy: {name_policy!r}")
 
@@ -1642,3 +1641,34 @@ def _unabbreviate(
             return onto._unabbreviate(storid)
         return BlankNode(onto, storid) if blank is None else blank
     return storid
+
+
+def _get_unabbreviated_triples(
+    self, subject=None, predicate=None, obj=None, blank=None
+):
+    """Returns all matching triples unabbreviated.
+
+    If `blank` is given, it will be used to represent blank nodes.
+    """
+    # pylint: disable=invalid-name
+    abb = (
+        None if subject is None else self._abbreviate(subject),
+        None if predicate is None else self._abbreviate(predicate),
+        None if obj is None else self._abbreviate(obj),
+    )
+    for s, p, o in self._get_obj_triples_spo_spo(*abb):
+        yield (
+            _unabbreviate(self, s, blank=blank),
+            _unabbreviate(self, p, blank=blank),
+            _unabbreviate(self, o, blank=blank),
+        )
+    for s, p, o, d in self._get_data_triples_spod_spod(*abb, d=""):
+        yield (
+            _unabbreviate(self, s, blank=blank),
+            _unabbreviate(self, p, blank=blank),
+            f'"{o}"{d}'
+            if isinstance(d, str)
+            else f'"{o}"^^{_unabbreviate(self, d)}'
+            if d
+            else o,
+        )
