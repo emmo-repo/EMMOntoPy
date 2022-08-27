@@ -393,10 +393,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         if label_annotation is None:
             warnings.warn(f"adding new IRI to ontology: {iri}")
             name = iri.rsplit("/")[-1].rsplit("#")[-1]
+            bases = (owlready2.AnnotationProperty,)
             with self:
-                label_annotation = types.new_class(
-                    name, (owlready2.AnnotationProperty,)
-                )
+                label_annotation = types.new_class(name, bases)
         if label_annotation not in self._label_annotations:
             self._label_annotations.append(label_annotation)
 
