@@ -4,7 +4,7 @@
 If desirable some of these additions may be moved back into owlready2.
 """
 # pylint: disable=too-many-lines,fixme,arguments-differ,protected-access
-from typing import TYPE_CHECKING, Union, Sequence
+from typing import TYPE_CHECKING, Optional, Union, Sequence
 import os
 import itertools
 import inspect
@@ -122,23 +122,6 @@ class World(owlready2.World):
 
         return onto
 
-    def _unabbreviate(self, abb, blank=None):
-        """Return unabbreviation of `abb`.
-
-        The `abb` argument is normally be an integer corresponding to
-        a store id.  If it is not an integer, it is assumed to already
-        be unabbreviated and returned as is.
-
-        If `blank` is given, it will be used to represent blank nodes
-        (corresponding to a negative store id).
-        """
-        if isinstance(abb, int):
-            # negative storid corresponds to blank nodes
-            if abb >= 0:
-                return super()._unabbreviate(abb)
-            return BlankNode(self, abb) if blank is None else blank
-        return abb
-
     def get_unabbreviated_triples(
         self, subject=None, predicate=None, obj=None, blank=None
     ):
@@ -152,9 +135,9 @@ class World(owlready2.World):
         """
         for s, p, o in self.get_triples(subject, predicate, obj):
             yield (
-                self._unabbreviate(s, blank=blank),
-                self._unabbreviate(p, blank=blank),
-                self._unabbreviate(o, blank=blank),
+                _unabbreviate(self, s, blank=blank),
+                _unabbreviate(self, p, blank=blank),
+                _unabbreviate(self, o, blank=blank),
             )
 
 
@@ -274,9 +257,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         # pylint: disable=invalid-name
         for s, p, o in self.get_triples(subject, predicate, obj):
             yield (
-                self.world._unabbreviate(s, blank=blank),
-                self.world._unabbreviate(p, blank=blank),
-                self.world._unabbreviate(o, blank=blank),
+                _unabbreviate(self, s, blank=blank),
+                _unabbreviate(self, p, blank=blank),
+                _unabbreviate(self, o, blank=blank),
             )
 
     def get_by_label(
@@ -1637,3 +1620,25 @@ def flatten(items):
                 yield sub_item
         else:
             yield item
+
+
+def _unabbreviate(
+    onto: Union[World, Ontology],
+    storid: Union[int, str],
+    blank: Optional[str] = None,
+):
+    """Return unabbreviation of `storid`.
+
+    The `storid` argument is normally be an integer corresponding to
+    a store id.  If it is not an integer, it is assumed to already
+    be unabbreviated and returned as is.
+
+    If `blank` is given, it will be used to represent blank nodes
+    (corresponding to a negative store id).
+    """
+    if isinstance(storid, int):
+        # negative storid corresponds to blank nodes
+        if storid >= 0:
+            return onto._unabbreviate(storid)
+        return BlankNode(onto, storid) if blank is None else blank
+    return storid
