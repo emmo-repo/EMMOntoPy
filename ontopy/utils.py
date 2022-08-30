@@ -350,7 +350,7 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
                 url = f"{baseuri}/{uri_as_str}"
             else:
                 url = os.path.join(baseuri if baseuri else dirname, uri_as_str)
-        url = normalise_url(url)
+        # url = normalise_url(url)
 
         iris.setdefault(uri.attrib["name"], url)
         if recursive:
