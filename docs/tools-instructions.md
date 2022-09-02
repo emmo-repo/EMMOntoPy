@@ -9,6 +9,7 @@
 - [ontograph](#ontograph)
 - [ontodoc](#ontodoc)
 - [ontoconvert](#ontoconvert)
+- [excel2onto](#excel2onto)
 
 ---
 
@@ -361,3 +362,46 @@ ontoconvert --recursive emmo.ttl owl/emmo.owl
 ### Bugs
 Since parsing the results from the reasoner is currently broken in Owlready2 (v0.37), a workaround has been added to ontoconvert.
 This workaround only only supports FaCT++.  Hence, HermiT and Pellet are currently not available.
+
+
+## `excel2onto`
+
+Tool for converting EMMO-based ontologies from Excel to OWL, making it easy for non-ontologists to make EMMO-based domain ontologies.
+
+The Excel file must be in the format provided by ontology_template.xlsx.
+
+### Usage
+
+```console
+excel2onto [options] excelpath
+```
+
+### Dependencies
+
+- `pandas` (Python package)
+
+### Options
+
+```console
+positional arguments:
+  excelpath             path to excel book
+
+options:
+  -h, --help            show this help message and exit
+  --output OUTPUT, -o OUTPUT
+                        Name of output ontology, ´ontology.ttl´ is default
+  --force, -f           Whether to force generation of ontology on non-fatal
+                        error.
+```
+
+### Examples
+
+Create a `new_ontology.ttl` turtle file from the Excel file `new_ontology.xlsx`:
+```console
+excel2onto -o new_ontology.ttl new_ontology.xlsx
+```
+
+
+### Bugs
+
+`equivalentTo` is currently not supported.
