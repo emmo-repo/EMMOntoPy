@@ -183,8 +183,8 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     onto.sync_python_names()
     with onto:
         remaining_rows = set(range(len(data)))
+        added_rows = set()
         while remaining_rows:
-            added_rows = set()
             for index in remaining_rows:
                 row = data.loc[index]
                 name = row["prefLabel"]
@@ -343,19 +343,19 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             props = properties.split(";")
             for prop in props:
                 try:
-                    concept.is_a.append(evaluate(onto, prop))
+                    concept.is_a.append(evaluate(onto, prop.strip()))
                 except pyparsing.ParseException as exc:
                     warnings.warn(
-                        f"Error in Property assignment for: {concept}. "
-                        f"Property to be Evaluated: {prop}. "
-                        f"Error is {exc}."
+                        f"Error in Property assignment for: '{concept}'. "
+                        f"Property to be Evaluated: '{prop}'. "
+                        f"{exc}"
                     )
                     concepts_with_errors["errors_in_properties"].append(name)
                 except NoSuchLabelError as exc:
                     msg = (
                         f"Error in Property assignment for: {concept}. "
                         f"Property to be Evaluated: {prop}. "
-                        f"Error is {exc}."
+                        f"{exc}"
                     )
                     if force is True:
                         warnings.warn(msg)
