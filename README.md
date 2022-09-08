@@ -38,6 +38,8 @@ On top of that EMMOntoPy provides:
     Documents an ontology.
   - [`ontoconvert`](docs/tools-instructions.md#ontoconvert):
     Converts between ontology formats.
+  - [`excel2onto`](docs/tools-instructions.md#excel2onto):
+    Generate an EMMO-based ontology from an excel file.
 
 Some examples of what you can do with EMMOntoPy includes:
 
