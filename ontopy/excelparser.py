@@ -178,13 +178,15 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
         "missing_parents": [],
         "invalid_parents": [],
         "nonadded_concepts": [],
+        "errors_in_properties": [],
     }
 
     onto.sync_python_names()
     with onto:
         remaining_rows = set(range(len(data)))
-        added_rows = set()
+        all_added_rows = []
         while remaining_rows:
+            added_rows = set()
             for index in remaining_rows:
                 row = data.loc[index]
                 name = row["prefLabel"]
@@ -327,10 +329,11 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     raise ExcelError(
                         f"Not able to add the following concepts: {unadded}."
                     )
+            all_added_rows.extend(added_rows)
 
     # Add properties in a second loop
 
-    for index in added_rows:
+    for index in all_added_rows:
         row = data.loc[index]
         properties = row["Relations"]
         if properties == "nan":
