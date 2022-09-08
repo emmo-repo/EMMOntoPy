@@ -477,6 +477,54 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#excel2onto" class="md-nav__link">
+    excel2onto
+  </a>
+  
+    <nav class="md-nav" aria-label="excel2onto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usage_5" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_3" class="md-nav__link">
+    Dependencies
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options_5" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_5" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bugs_1" class="md-nav__link">
+    Bugs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1446,6 +1494,54 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#excel2onto" class="md-nav__link">
+    excel2onto
+  </a>
+  
+    <nav class="md-nav" aria-label="excel2onto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usage_5" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_3" class="md-nav__link">
+    Dependencies
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options_5" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_5" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bugs_1" class="md-nav__link">
+    Bugs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1470,6 +1566,7 @@
 <li><a href="#ontograph">ontograph</a></li>
 <li><a href="#ontodoc">ontodoc</a></li>
 <li><a href="#ontoconvert">ontoconvert</a></li>
+<li><a href="#excel2onto">excel2onto</a></li>
 </ul>
 <hr />
 <h2 id="emmocheck"><code>emmocheck</code><a class="headerlink" href="#emmocheck" title="Permanent link">&para;</a></h2>
@@ -1748,6 +1845,33 @@
 <h3 id="bugs">Bugs<a class="headerlink" href="#bugs" title="Permanent link">&para;</a></h3>
 <p>Since parsing the results from the reasoner is currently broken in Owlready2 (v0.37), a workaround has been added to ontoconvert.
 This workaround only only supports FaCT++.  Hence, HermiT and Pellet are currently not available.</p>
+<h2 id="excel2onto"><code>excel2onto</code><a class="headerlink" href="#excel2onto" title="Permanent link">&para;</a></h2>
+<p>Tool for converting EMMO-based ontologies from Excel to OWL, making it easy for non-ontologists to make EMMO-based domain ontologies.</p>
+<p>The Excel file must be in the format provided by ontology_template.xlsx.</p>
+<h3 id="usage_5">Usage<a class="headerlink" href="#usage_5" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="go">excel2onto [options] excelpath</span>
+</code></pre></div>
+<h3 id="dependencies_3">Dependencies<a class="headerlink" href="#dependencies_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>pandas</code> (Python package)</li>
+</ul>
+<h3 id="options_5">Options<a class="headerlink" href="#options_5" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="go">positional arguments:</span>
+<span class="go">  excelpath             path to excel book</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help            show this help message and exit</span>
+<span class="go">  --output OUTPUT, -o OUTPUT</span>
+<span class="go">                        Name of output ontology, ´ontology.ttl´ is default</span>
+<span class="go">  --force, -f           Whether to force generation of ontology on non-fatal</span>
+<span class="go">                        error.</span>
+</code></pre></div>
+<h3 id="examples_5">Examples<a class="headerlink" href="#examples_5" title="Permanent link">&para;</a></h3>
+<p>Create a <code>new_ontology.ttl</code> turtle file from the Excel file <code>new_ontology.xlsx</code>:
+<div class="highlight"><pre><span></span><code><span class="go">excel2onto -o new_ontology.ttl new_ontology.xlsx</span>
+</code></pre></div></p>
+<h3 id="bugs_1">Bugs<a class="headerlink" href="#bugs_1" title="Permanent link">&para;</a></h3>
+<p><code>equivalentTo</code> is currently not supported.</p>
 
 
 
