@@ -1351,9 +1351,7 @@ only value restrictions supported so far.</p>
 <span class="normal">188</span>
 <span class="normal">189</span>
 <span class="normal">190</span>
-<span class="normal">191</span>
-<span class="normal">192</span>
-<span class="normal">193</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">ontology</span><span class="p">:</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Construct</span><span class="p">:</span>
+<span class="normal">191</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">ontology</span><span class="p">:</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Construct</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Evaluate expression in Manchester syntax.</span>
 
 <span class="sd">    Args:</span>
@@ -1401,7 +1399,6 @@ only value restrictions supported so far.</p>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># r is atomic, returns its owlready2 repr</span>
             <span class="k">return</span> <span class="n">ontology</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>
-
         <span class="n">neg</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># whether the expression starts with &quot;not&quot;</span>
         <span class="k">while</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;not&quot;</span><span class="p">:</span>
             <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># strip off the &quot;not&quot; and proceed</span>
@@ -1451,7 +1448,6 @@ only value restrictions supported so far.</p>
             <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">f</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">rtype</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">rtype</span> <span class="o">==</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===&quot;</span><span class="p">,</span> <span class="n">_parse_literal</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
                 <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">_parse_literal</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">ManchesterError</span><span class="p">(</span>
@@ -1559,7 +1555,7 @@ only value restrictions supported so far.</p>
     <span class="c1"># Subset of the Manchester grammar for expressions</span>
     <span class="c1"># It is based on https://www.w3.org/TR/owl2-manchester-syntax/</span>
     <span class="c1"># but allows logical constructs within restrictions (like Protege)</span>
-    <span class="n">ident</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Word</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">alphas</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">pp</span><span class="o">.</span><span class="n">alphanums</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">asKeyword</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ident</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Word</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">alphas</span> <span class="o">+</span> <span class="s2">&quot;_:-&quot;</span><span class="p">,</span> <span class="n">pp</span><span class="o">.</span><span class="n">alphanums</span> <span class="o">+</span> <span class="s2">&quot;_:-&quot;</span><span class="p">,</span> <span class="n">asKeyword</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">uint</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Word</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">nums</span><span class="p">)</span>
     <span class="n">alphas</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Word</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">alphas</span><span class="p">)</span>
     <span class="n">string</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Word</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">alphanums</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
