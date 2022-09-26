@@ -128,4 +128,3 @@
             owl:someValuesFrom :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ],
         :EMMO_cd254842-c697-55f6-917d-9805c77b9187 ;
     core:prefLabel "FinitePattern"@en .
-
