@@ -69,6 +69,7 @@ def test_manchester():
         'hasSymbolData value "hello"@en',
         emmo.hasSymbolData.value(locstr("hello", "en")),
     )
+    check("emmo:hasPart some emmo:Atom", emmo.hasPart.some(emmo.Atom))
 
 
 if __name__ == "__main__":
