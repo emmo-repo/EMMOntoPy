@@ -31,7 +31,7 @@ def manchester_expression():
     # Subset of the Manchester grammar for expressions
     # It is based on https://www.w3.org/TR/owl2-manchester-syntax/
     # but allows logical constructs within restrictions (like Protege)
-    ident = pp.Word(pp.alphas + "_", pp.alphanums + "_", asKeyword=True)
+    ident = pp.Word(pp.alphas + "_:-", pp.alphanums + "_:-", asKeyword=True)
     uint = pp.Word(pp.nums)
     alphas = pp.Word(pp.alphas)
     string = pp.Word(pp.alphanums + ":")
@@ -129,7 +129,6 @@ def evaluate(ontology: owlready2.Ontology, expr: str) -> owlready2.Construct:
 
         if isinstance(r, str):  # r is atomic, returns its owlready2 repr
             return ontology[r]
-
         neg = False  # whether the expression starts with "not"
         while r[0] == "not":
             r.pop(0)  # strip off the "not" and proceed
@@ -179,7 +178,6 @@ def evaluate(ontology: owlready2.Ontology, expr: str) -> owlready2.Construct:
             r.pop(0)
             f = getattr(prop, rtype)
             if rtype == "value":
-                print("===", _parse_literal(r))
                 return f(_parse_literal(r))
             else:
                 raise ManchesterError(
