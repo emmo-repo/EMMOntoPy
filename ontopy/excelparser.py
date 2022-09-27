@@ -9,10 +9,11 @@ subClassOf, Relations.
 
 Note that correct case is mandatory.
 """
-from typing import Tuple, Union, Sequence
+from typing import Tuple, Union
 import warnings
 
 import pandas as pd
+import numpy as np
 import pyparsing
 
 import ontopy
@@ -99,18 +100,19 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     """
     # Get imported ontologies from optional "Imports" sheet
     if not imports:
-        imports = []
+        imports = pd.DataFrame()
+
     try:
-        imports_frame = pd.read_excel(
+        imports = pd.read_excel(
             excelpath, sheet_name=imports_sheet_name, skiprows=[1]
         )
     except ValueError:
         pass
     else:
-        # Strip leading and trailing white spaces in path
-        imports.extend(
-            imports_frame["Imported ontologies"].str.strip().to_list()
-        )
+        # Strip leading and trailing white spaces in paths
+        imports = imports.replace(" ", "")
+        # Set empty strings to nan
+        imports = imports.replace(r"^\s*$", np.nan, regex=True)
 
     # Read datafile TODO: Some magic to identify the header row
     conceptdata = pd.read_excel(
@@ -131,7 +133,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
 def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments
     data: pd.DataFrame,
     metadata: pd.DataFrame,
-    imports: list,
+    imports: pd.DataFrame,
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
     catalog: dict = None,
@@ -386,7 +388,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
     metadata: pd.DataFrame,
     base_iri: str,
     base_iri_from_metadata: bool = True,
-    imports: Sequence = (),
+    imports: pd.DataFrame = None,
     catalog: dict = None,
 ) -> Tuple[ontopy.ontology.Ontology, dict]:
     """Create ontology with metadata from pd.DataFrame"""
@@ -409,12 +411,24 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
     # Add imported ontologies
     catalog = {} if catalog is None else catalog
     locations = set()
-    for location in imports:
+    for _, row in imports.iterrows():
+        # for location in imports:
+        location = row["Imported ontologies"]
         if not pd.isna(location) and location not in locations:
             imported = onto.world.get_ontology(location).load()
             onto.imported_ontologies.append(imported)
             catalog[imported.base_iri.rstrip("#/")] = location
             locations.add(location)
+        # set defined prefix
+        if not pd.isna(row["prefix"]):
+            # set prefix for all ontologies with same 'base_iri_root'
+            if not pd.isna(row["base_iri_root"]):
+                onto.set_common_prefix(
+                    iri_base=row["base_iri_root"], prefix=row["prefix"]
+                )
+            # If base_root not given, set prefix only to top ontology
+            else:
+                imported.prefix = row["prefix"]
 
     with onto:
         # Add title

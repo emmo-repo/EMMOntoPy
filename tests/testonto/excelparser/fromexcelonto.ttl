@@ -12,7 +12,8 @@
         "Jesper Friis"@en,
         "Sylvain Gouttebroze"@en ;
     term:title "A test domain ontology"@en ;
-    owl:imports <https://raw.githubusercontent.com/emmo-repo/emmo-repo.github.io/master/versions/1.0.0-beta/emmo-inferred-chemistry> ;
+    owl:imports <http://ontology.info/ontology>,
+        <https://raw.githubusercontent.com/emmo-repo/emmo-repo.github.io/master/versions/1.0.0-beta/emmo-inferred-chemistry> ;
     owl:versionInfo "0.01"@en .
 
 :EMMO_0264be35-e8ad-5b35-a1a3-84b37bde22d1 a owl:Class ;
@@ -24,6 +25,10 @@
         :EMMO_138590b8-3333-515d-87ab-717aac8434e6,
         :EMMO_4b32833e-0833-56a7-903c-28a6a8191fe8 ;
     core:prefLabel "FiniteTemporalPattern"@en .
+
+:EMMO_080262b7-4f7e-582b-916e-8274c73dd629 a owl:Class ;
+    rdfs:subClassOf <http://ontology.info/ontology#testclass> ;
+    core:prefLabel "ANewTestClass"@en .
 
 :EMMO_1c81f1eb-8b94-5e74-96de-1aeacbdb5b93 a owl:Class ;
     emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "The boundary of a grain"@en ;
@@ -57,6 +62,10 @@
     rdfs:subClassOf :EMMO_4b32833e-0833-56a7-903c-28a6a8191fe8,
         :EMMO_9fa9ca88-2891-538a-a8dd-ccb8a08b9890 ;
     core:prefLabel "FiniteSpatioTemporalPattern"@en .
+
+:EMMO_e4e653eb-72cd-5dd6-a428-f506d9679774 a owl:Class ;
+    rdfs:subClassOf <http://ontology.info/subontology#testclass2> ;
+    core:prefLabel "AnotherNewTestClass"@en .
 
 :EMMO_e633d033-2af6-5f04-a706-dab826854fb1 a owl:Class ;
     emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "The boundary of a subgrain"@en ;
