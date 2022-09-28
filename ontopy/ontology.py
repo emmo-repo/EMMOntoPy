@@ -1152,7 +1152,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         if name_policy == "uuid":
             for obj in chain:
                 obj.name = name_prefix + str(
-                    uuid.uuid5(uuid.NAMESPACE_DNS, obj.name)
+                    uuid.uuid5(uuid.NAMESPACE_DNS, self.base_iri + obj.name)
                 )
         elif name_policy == "sequential":
             for obj in chain:
