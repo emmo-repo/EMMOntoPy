@@ -13,7 +13,7 @@
         "Sylvain Gouttebroze"@en ;
     term:title "A test domain ontology"@en ;
     owl:imports <http://ontology.info/ontology>,
-        <https://raw.githubusercontent.com/emmo-repo/emmo-repo.github.io/master/versions/1.0.0-beta/emmo-inferred-chemistry> ;
+        <http://emmo.info/emmo/1.0.0-beta/emmo-inferred-chemistry> ;
     owl:versionInfo "0.01"@en .
 
 :EMMO_0264be35-e8ad-5b35-a1a3-84b37bde22d1 a owl:Class ;
