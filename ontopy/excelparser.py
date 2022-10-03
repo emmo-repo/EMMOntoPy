@@ -19,6 +19,7 @@ import pyparsing
 import ontopy
 from ontopy import get_ontology
 from ontopy.utils import EMMOntoPyException, NoSuchLabelError
+from ontopy.utils import ReadCatalogError, read_catalog
 from ontopy.manchester import evaluate
 import owlready2  # pylint: disable=C0411
 
@@ -418,6 +419,11 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
             imported = onto.world.get_ontology(location).load()
             onto.imported_ontologies.append(imported)
             catalog[imported.base_iri.rstrip("#/")] = location
+            try:
+                cat = read_catalog(location.rsplit("/", 1)[0])
+                catalog.update(cat)
+            except ReadCatalogError:
+                warnings.warn(f"Catalog for {imported} not found.")
             locations.add(location)
         # set defined prefix
         if not pd.isna(row["prefix"]):
