@@ -350,7 +350,6 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
                 url = f"{baseuri}/{uri_as_str}"
             else:
                 url = os.path.join(baseuri if baseuri else dirname, uri_as_str)
-        # url = normalise_url(url)
 
         iris.setdefault(uri.attrib["name"], url)
         if recursive:
@@ -381,7 +380,8 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
 def write_catalog(
     mappings: dict,
     output: "Union[str, Path]" = "catalog-v001.xml",
-    dir: "Union[str, Path]" = ".",
+    directory: "Union[str, Path]" = ".",
+    relative_paths: bool = True,
     append: bool = False,
 ):  # pylint: disable=redefined-builtin
     """Write catalog file do disk.
@@ -391,12 +391,22 @@ def write_catalog(
             (URIs).  It has the same format as the dict returned by
             read_catalog().
         output: name of catalog file.
-        dir: directory path to the catalog file.  Only used if `output`
+        directory: directory path to the catalog file.  Only used if `output`
             is a relative path.
+        relative_paths: whether to write aboslute paths or paths relative to
+            directory for local paths inside the catalog file.
         append: whether to append to a possible existing catalog file.
             If false, an existing file will be overwritten.
     """
-    filename = (Path(dir) / output).resolve()
+    web_protocol = "http://", "https://", "ftp://"
+    if relative_paths:
+        for key, item in mappings.items():
+            mappings[key] = (
+                item
+                if item.startswith(web_protocol)
+                else os.path.relpath(item, Path(directory).resolve())
+            )
+    filename = (Path(directory) / output).resolve()
     if filename.exists() and append:
         iris = read_catalog(filename)
         iris.update(mappings)
