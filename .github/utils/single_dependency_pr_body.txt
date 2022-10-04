@@ -1,8 +1,8 @@
 ### Update dependencies
 
-Automatically created PR from [`ci/dependabot-updates`](https://github.com/emmo-repo/EMMO-python/tree/ci/dependabot-updates).
+Automatically created PR from [`ci/dependabot-updates`](https://github.com/emmo-repo/EMMOntoPy/tree/ci/dependabot-updates).
 
-For more information see the ["Dependabot updates" workflow](https://github.com/emmo-repo/EMMO-python/blob/master/.github/workflows/ci_dependabot.yml).
+For more information see the ["Dependabot updates" workflow](https://github.com/emmo-repo/EMMOntoPy/blob/master/.github/workflows/ci_dependabot.yml).
 
 #### To-do
 

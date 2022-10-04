@@ -23,10 +23,10 @@ jobs:
       with:
         ref: master
 
-    - name: Set up Python 3.7
+    - name: Set up Python 3.8
       uses: actions/setup-python@v4
       with:
-        python-version: 3.7
+        python-version: "3.8"
 
     - name: Install `pre-commit` and dependencies
       run: |

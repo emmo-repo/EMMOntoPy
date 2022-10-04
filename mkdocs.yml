@@ -1,6 +1,6 @@
 site_name: EMMOntoPy
 site_description: Documentation for the EMMOntoPy library
-site_url: https://emmo-repo.github.io/EMMO-python
+site_url: https://emmo-repo.github.io/EMMOntoPy
 copyright: Copyright &copy; 2019-2021 SINTEF
 
 theme:
@@ -18,8 +18,8 @@ theme:
     - navigation.instant
     - navigation.top
 
-repo_name: EMMO-python
-repo_url: https://github.com/emmo-repo/EMMO-python
+repo_name: EMMOntoPy
+repo_url: https://github.com/emmo-repo/EMMOntoPy
 edit_uri: ""
 
 extra:

@@ -344,7 +344,7 @@ ontoconvert --recursive emmo.ttl owl/emmo.owl
 ontoconvert --inferred emmo.ttl emmo-inferred.owl
 ```
 
-Note, it is then required to add the argument `only_local=True` when loading the locally converted ontology in EMMO-python, e.g.:
+Note, it is then required to add the argument `only_local=True` when loading the locally converted ontology in EMMOntoPy, e.g.:
 
 ```python
 from ontopy import get_ontology
