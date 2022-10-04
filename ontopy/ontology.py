@@ -865,7 +865,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             if recursive:
                 append(self)
             write_catalog(
-                mappings, output=catalog_file, dir=dir, append=append_catalog
+                mappings,
+                output=catalog_file,
+                directory=dir,
+                append=append_catalog,
             )
 
     def get_imported_ontologies(self, recursive=False):
