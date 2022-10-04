@@ -8,6 +8,53 @@ on:
       - 'push-action/**'
 
 jobs:
+  tests:
+    name: External
+    uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v1
+    with:
+      # General
+      python_version: "3.7"
+      install_extras: "[dev,docs]"
+
+      # pre-commit
+      # Run this test as an explicit job (see below),
+      # since a different Python version is used and necessary.
+      run_pre-commit: false
+
+      # pylint
+      run_pylint: true
+      pylint_options: "--rcfile=pyproject.toml"
+      pylint_targets: "*.py tools emmopy ontopy"
+
+      # safety
+      # Ignore ID 44715 for now.
+      # See this NumPy issue for more information: https://github.com/numpy/numpy/issues/19038
+      # Also ignore IDs 44716 and 44717 as they are not deemed to be as severe as it is
+      # laid out in the CVE.
+      # Remove ignoring 48547 as soon as RDFLib/rdflib#1844 has been fixed and the fix
+      # has been released.
+      run_safety: true
+      safety_options: |
+        --ignore 44715
+        --ignore 44716
+        --ignore 44717
+        --ignore 48547
+
+      # Build distribution
+      run_build_package: true
+      build_cmd: "python -m build"
+
+      # Build documentation
+      run_build_docs: true
+      update_python_api_ref: true
+      update_docs_landing_page: true
+      package_dirs: |
+        emmopy
+        ontopy
+      landing_page_replacements: |
+        (LICENSE.txt),(LICENSE.md)
+        (tools),(../tools)
+
 
   pre-commit:
     name: pre-commit
@@ -42,44 +89,10 @@ jobs:
         pip install ${pre_commit} ${invoke}
 
     - name: Run pre-commit
-      run: SKIP=pylint pre-commit run --all-files --show-diff-on-failure
+      run: SKIP=pylint pre-commit run --all-files
 
 
-  pylint-safety:
-    name: PyLint and safety
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.7
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -U setuptools wheel
-
-        pip install -U -r requirements.txt -r requirements_dev.txt -r requirements_docs.txt
-        pip install safety
-
-    - name: Run PyLint
-      run: pylint --rcfile=pyproject.toml *.py tools emmopy ontopy
-
-    # Ignore ID 44715 for now.
-    # See this NumPy issue for more information: https://github.com/numpy/numpy/issues/19038
-    # Also ignore IDs 44716 and 44717 as they are not deemed to be as severe as it is
-    # laid out in the CVE.
-    # Remove ignoring 48547 as soon as RDFLib/rdflib#1844 has been fixed and the fix
-    # has been released.
-    - name: Run safety
-      run: pip freeze | safety check --stdin -i 44715 -i 44716 -i 44717 -i 48547
-
-
-  tests:
+  pytest:
     name: pytest
     runs-on: ubuntu-latest
 
@@ -223,58 +236,3 @@ jobs:
         mkdir -p /tmp/installation_dir
         cd /tmp/installation_dir
         pip install ${ORIGINAL_PWD}/${BDIST_DIR}/${{ env.BDIST_FILE }}
-
-  documentation:
-    name: Check documentation
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.7
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -U setuptools wheel
-        pip install -U -e .[docs]
-
-    - name: Set up git user
-      run: |
-        git config --global user.name "EMMOntoPy Developers"
-        git config --global user.email "Team4.0@SINTEF.no"
-
-    - name: Check API Reference and landing page
-      run: |
-        invoke create-api-reference-docs --pre-clean
-        invoke create-docs-index
-
-        if [ -n "$(git status --porcelain docs/api_reference docs/index.md)" ]; then
-          echo -e "\u274c Discrepancies found !"
-          echo -e "The following files in the documentation must be committed:"
-          git status --porcelain docs/api_reference docs/index.md
-          echo -e "\nRun:\n"
-          echo "    invoke create-api-reference-docs --pre-clean"
-          echo -e "    invoke create-docs-index\n"
-          echo "And commit the changed files."
-          exit 1
-        else
-          echo -e "\u2705 All good !"
-        fi
-
-    - name: Build check
-      run: |
-        mkdocs build 2>build_out.txt
-        WARNING_LINES=$( cat build_out.txt | grep WARNING | wc -l )
-        if [ ${WARNING_LINES} != 1 ]; then
-          echo -e "FAIL !\n\n"
-          cat build_out.txt
-          exit 1
-        else
-          echo -e "Only 1 warning - that's workable :)\n\n"
-          cat build_out.txt
-        fi
