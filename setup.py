@@ -25,7 +25,7 @@ def fglob(patt):
 
 # Read long description from README.md file replacing references to local
 # files to github urls
-BASE_URL = "https://raw.githubusercontent.com/emmo-repo/EMMO-python/master/"
+BASE_URL = "https://raw.githubusercontent.com/emmo-repo/EMMOntoPy/master/"
 with open(os.path.join(rootdir, "README.md"), "rt") as handle:
     long_description = re.sub(
         r"(\[[^]]+\])\(([^:)]+)\)", rf"\1({BASE_URL}\2)", handle.read()
@@ -80,7 +80,7 @@ setuptools.setup(
     ),
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/emmo-repo/EMMO-python",
+    url="https://github.com/emmo-repo/EMMOntoPy",
     license="BSD",
     python_requires=">=3.6.0",
     classifiers=[
@@ -117,18 +117,18 @@ setuptools.setup(
     },
     include_package_data=True,
     data_files=[
-        ("share/EMMO-python", ["README.md", "LICENSE.txt"]),
+        ("share/EMMOntoPy", ["README.md", "LICENSE.txt"]),
         (
-            "share/EMMO-python/examples/emmodoc",
+            "share/EMMOntoPy/examples/emmodoc",
             glob("examples/emmodoc/*.md")
             + glob("examples/emmodoc/*.yaml")
             + glob("examples/emmodoc/pandoc-*"),
         ),
         (
-            "share/EMMO-python/examples/emmodoc/figs",
+            "share/EMMOntoPy/examples/emmodoc/figs",
             fglob("examples/emmodoc/figs/*"),
         ),
-        # ('share/EMMO-python/examples', rglob('examples/**')),
-        ("share/EMMO-python/demo", rglob("demo/**")),
+        # ('share/EMMOntoPy/examples', rglob('examples/**')),
+        ("share/EMMOntoPy/demo", rglob("demo/**")),
     ],
 )
