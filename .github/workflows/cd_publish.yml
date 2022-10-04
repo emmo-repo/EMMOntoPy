@@ -12,7 +12,7 @@ env:
 jobs:
   update-and-publish:
     name: Update CHANGELOG and documentation
-    if: github.repository == 'emmo-repo/EMMO-python'
+    if: github.repository == 'emmo-repo/EMMOntoPy'
     runs-on: ubuntu-latest
 
     steps:

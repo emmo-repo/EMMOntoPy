@@ -6,7 +6,7 @@
 
 <!-- markdownlint-disable MD033 -->
 
-![CI tests](https://github.com/emmo-repo/EMMO-python/workflows/CI%20Tests/badge.svg)
+![CI tests](https://github.com/emmo-repo/EMMOntoPy/workflows/CI%20Tests/badge.svg)
 [![PyPI version](https://badge.fury.io/py/EMMOntoPy.svg)](https://badge.fury.io/py/EMMOntoPy)
 
 > ***Note**: EMMOntoPy is a continuation of the EMMO-python project and the associated `emmo` Python package.
@@ -75,7 +75,7 @@ Some examples of what you can do with EMMOntoPy includes:
 ## Documentation and examples
 
 The [Owlready2 documentation][Owlready2-doc] is a good starting point.
-The EMMOntoPy package also has its own [dedicated documentation](https://emmo-repo.github.io/EMMO-python).
+The EMMOntoPy package also has its own [dedicated documentation](https://emmo-repo.github.io/EMMOntoPy).
 
 This includes a few examples and demos:
 
@@ -160,7 +160,7 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/), specifically:
   Grant Agreement No: 953167
   <img src="https://openmodel.ifam.fraunhofer.de/app/uploads/sites/2/2021/07/open-model-logo.png" width="90">
 
-[EMMOntoPy]: https://github.com/emmo-repo/EMMO-python/
+[EMMOntoPy]: https://github.com/emmo-repo/EMMOntoPy/
 [Owlready2]: https://pypi.org/project/Owlready2/
 [Owlready2-doc]: https://owlready2.readthedocs.io/
 [EMMO]: https://emmo-repo.github.io

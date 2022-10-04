@@ -40,7 +40,7 @@ def main(argv: list = None):
             "The easiest way to generate nice-looking documentation using "
             "pandoc is to copy the emmodoc example to the current directory "
             "and adapt it. See "
-            "https://github.com/emmo-repo/EMMO-python/tree/master/examples/"
+            "https://github.com/emmo-repo/EMMOntoPy/tree/master/examples/"
             "emmodoc for more info."
         ),
     )
