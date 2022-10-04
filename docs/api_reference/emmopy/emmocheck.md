@@ -1,5 +1,5 @@
 # emmocheck
 
 ::: emmopy.emmocheck
-    options:
+    rendering:
       show_bases: false
