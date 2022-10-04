@@ -3,13 +3,13 @@
 ## Clone project
 
 ```bash
-git clone git@github.com:emmo-repo/EMMO-python.git
+git clone git@github.com:emmo-repo/EMMOntoPy.git
 ```
 
 ## Build Docker image
 
 ```bash
-cd EMMO-python
+cd EMMOntoPy
 docker build -t emmo .
 ```
 
@@ -41,19 +41,19 @@ docker build -t emmomount -f mount.Dockerfile .
 In a unix terminal (Linux)
 
 ```bash
-docker run --rm -it -v $(pwd):/home/user/EMMO-python emmomount
+docker run --rm -it -v $(pwd):/home/user/EMMOntoPy emmomount
 ```
 
 In PowerShell (Windows 10):
 
 ```PowerShell
-docker run --rm -it -v ${PWD}:/home/user/EMMO-python emmomount
+docker run --rm -it -v ${PWD}:/home/user/EMMOntoPy emmomount
 ```
 
 To install EMMOntoPy package inside container:
 
 ```bash
-cd EMMO-python
+cd EMMOntoPy
 pip install .
 ```
 
