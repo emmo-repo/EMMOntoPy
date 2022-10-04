@@ -110,7 +110,9 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
         pass
     else:
         # Strip leading and trailing white spaces in paths
-        imports.replace(r"^\s+", regexp=True).replace(r"\s+$", regexp=True)
+        imports.replace(r"^\s+", "", regex=True).replace(
+            r"\s+$", "", regex=True
+        )
         # Set empty strings to nan
         imports = imports.replace(r"^\s*$", np.nan, regex=True)
 
@@ -414,9 +416,12 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
     for _, row in imports.iterrows():
         # for location in imports:
         location = row["Imported ontologies"]
+        print("location", location)
         if not pd.isna(location) and location not in locations:
             imported = onto.world.get_ontology(location).load()
             onto.imported_ontologies.append(imported)
+            print(imported)
+            print(onto.imported_ontologies)
             catalog[imported.base_iri.rstrip("#/")] = location
             try:
                 cat = read_catalog(location.rsplit("/", 1)[0])
