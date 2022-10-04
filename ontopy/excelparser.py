@@ -99,7 +99,6 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
                     imported ontology.
 
     """
-    # Get imported ontologies from optional "Imports" sheet
     if not imports:
         imports = pd.DataFrame()
 
@@ -111,7 +110,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
         pass
     else:
         # Strip leading and trailing white spaces in paths
-        imports = imports.replace(" ", "")
+        imports.replace(r"^\s+", regexp=True).replace(r"\s+$", regexp=True)
         # Set empty strings to nan
         imports = imports.replace(r"^\s*$", np.nan, regex=True)
 
