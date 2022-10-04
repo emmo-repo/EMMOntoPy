@@ -101,16 +101,16 @@ To install the package, please do **not** install from PyPI.
 Instead you should clone the repository from GitHub:
 
 ```console
-$ git clone https://github.com/emmo-repo/EMMO-python.git
+$ git clone https://github.com/emmo-repo/EMMOntoPy.git
 ```
 
 or, if you are using an SSH connection to GitHub, you can instead clone via:
 
 ```console
-$ git clone git@github.com:emmo-repo/EMMO-python.git
+$ git clone git@github.com:emmo-repo/EMMOntoPy.git
 ```
 
-Then enter into the newly cloned `EMMO-python` directory (`cd EMMO-python`) and run:
+Then enter into the newly cloned `EMMOntoPy` directory (`cd EMMOntoPy`) and run:
 
 ```console
 $ pip install -U -e .[dev]
