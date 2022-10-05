@@ -73,7 +73,6 @@ def test_write_catalog_choosing_relative_paths(
     repo_dir: "Path", tmpdir: "Path"
 ) -> None:
     ontodir = repo_dir / "tests" / "catalogs_for_testing"
-    print(" PRINT ")
     catalog1 = read_catalog(str(ontodir))
     write_catalog(
         catalog1,
