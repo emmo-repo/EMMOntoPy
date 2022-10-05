@@ -9,6 +9,7 @@ subClassOf, Relations.
 
 Note that correct case is mandatory.
 """
+import os
 from typing import Tuple, Union
 import warnings
 
@@ -99,15 +100,20 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
                     imported ontology.
 
     """
-    if not imports:
-        imports = pd.DataFrame()
+    web_protocol = "http://", "https://", "ftp://"
+
+    def _relative_to_absolute_paths(path):
+        if isinstance(path, str):
+            if not path.startswith(web_protocol):
+                path = os.path.dirname(excelpath) + "/" + str(path)
+        return path
 
     try:
         imports = pd.read_excel(
             excelpath, sheet_name=imports_sheet_name, skiprows=[1]
         )
     except ValueError:
-        pass
+        imports = pd.DataFrame()
     else:
         # Strip leading and trailing white spaces in paths
         imports.replace(r"^\s+", "", regex=True).replace(
@@ -115,6 +121,10 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
         )
         # Set empty strings to nan
         imports = imports.replace(r"^\s*$", np.nan, regex=True)
+        if "Imported ontologies" in imports.columns:
+            imports["Imported ontologies"] = imports[
+                "Imported ontologies"
+            ].apply(_relative_to_absolute_paths)
 
     # Read datafile TODO: Some magic to identify the header row
     conceptdata = pd.read_excel(
@@ -336,7 +346,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             all_added_rows.extend(added_rows)
 
     # Add properties in a second loop
-
     for index in all_added_rows:
         row = data.loc[index]
         properties = row["Relations"]
@@ -383,6 +392,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     concepts_with_errors["in_imported_ontologies"] = concepts_with_errors[
         "already_defined"
     ].intersection(imported_concepts)
+
     return onto, catalog, concepts_with_errors
 
 
@@ -416,12 +426,9 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
     for _, row in imports.iterrows():
         # for location in imports:
         location = row["Imported ontologies"]
-        print("location", location)
         if not pd.isna(location) and location not in locations:
             imported = onto.world.get_ontology(location).load()
             onto.imported_ontologies.append(imported)
-            print(imported)
-            print(onto.imported_ontologies)
             catalog[imported.base_iri.rstrip("#/")] = location
             try:
                 cat = read_catalog(location.rsplit("/", 1)[0])
