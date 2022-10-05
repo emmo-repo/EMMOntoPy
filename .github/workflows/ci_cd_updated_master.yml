@@ -19,12 +19,13 @@ jobs:
       update_docs: true
       update_python_api_ref: true
       update_docs_landing_page: true
-      package_dir: ontopy
+      package_dirs: |
+        emmopy
+        ontopy
       python_version: "3.7"
       doc_extras: "[docs]"
+      special_file_api_ref_options: "emmopy/emmocheck.py,show_bases: false"
       landing_page_replacements: |
         (LICENSE.txt),(LICENSE.md)
         (tools),(../tools)
       changelog_exclude_labels: dependencies
-
-      test: true

@@ -12,19 +12,21 @@ jobs:
     with:
       git_username: EMMOntoPy Developers
       git_email: "Team4.0@SINTEF.no"
-      python_version: "3.7"
       release_branch: master
 
       # Publish package
       python_package: true
-      # We're mentioning only 'ontopy', since the version is set only in ontopy/__init__.py
-      package_dir: ontopy
+      python_version_build: "3.7"
+      # We're mentioning only 'ontopy', since the version is set statically only in
+      # ontopy/__init__.py
+      package_dirs: ontopy
       install_extras: "[dev]"
       build_cmd: "python -m build"
       publish_on_pypi: true
 
       # Update documentation
       update_docs: true
+      python_version_docs: "3.7"
       doc_extras: "[docs]"
       changelog_exclude_labels: dependencies
 
