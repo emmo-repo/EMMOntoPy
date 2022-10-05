@@ -34,33 +34,6 @@ def update_file(
         handle.write("\n")
 
 
-@task(help={"ver": "EMMOntoPy version to set"})
-def setver(_, ver=""):
-    """Sets the EMMOntoPy version."""
-    match = re.fullmatch(
-        (
-            r"v?(?P<version>[0-9]+(\.[0-9]+){2}"  # Major.Minor.Patch
-            r"(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?"  # pre-release
-            r"(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?)"  # build metadata
-        ),
-        ver,
-    )
-    if not match:
-        sys.exit(
-            "Error: Please specify version as "
-            "'Major.Minor.Patch(-Pre-Release+Build Metadata)' or "
-            "'vMajor.Minor.Patch(-Pre-Release+Build Metadata)'"
-        )
-    ver = match.group("version")
-
-    update_file(
-        TOP_DIR / "ontopy" / "__init__.py",
-        (r"__version__ = ('|\").*('|\")", f'__version__ = "{ver}"'),
-    )
-
-    print(f"Bumped version to {ver}")
-
-
 @task(
     help={
         "pre-clean": (
