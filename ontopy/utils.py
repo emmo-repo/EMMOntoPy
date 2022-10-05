@@ -393,19 +393,16 @@ def write_catalog(
         output: name of catalog file.
         directory: directory path to the catalog file.  Only used if `output`
             is a relative path.
-        relative_paths: whether to write aboslute paths or paths relative to
-            directory for local paths inside the catalog file.
+        relative_paths: whether to write absolute or relative paths to
+            for file paths inside the catalog file.
         append: whether to append to a possible existing catalog file.
             If false, an existing file will be overwritten.
     """
     web_protocol = "http://", "https://", "ftp://"
     if relative_paths:
         for key, item in mappings.items():
-            mappings[key] = (
-                item
-                if item.startswith(web_protocol)
-                else os.path.relpath(item, Path(directory).resolve())
-            )
+            if not item.startswith(web_protocol):
+                mappings[key] = os.path.relpath(item, Path(directory).resolve())
     filename = (Path(directory) / output).resolve()
     if filename.exists() and append:
         iris = read_catalog(filename)
