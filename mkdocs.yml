@@ -84,7 +84,10 @@ nav:
   - License: LICENSE.md
   - Examples and demonstrations:
     - ... | demo/**
-    - ... | examples/**
+    - Examples:
+      - Generate documentation for EMMO: examples/emmodoc/README.md
+      - examples/emmodoc/important_concepts.md
+      - examples/emmodoc/introduction.md
   - ... | developers/**
   - Changelog: CHANGELOG.md
   - ... | api_reference/**
