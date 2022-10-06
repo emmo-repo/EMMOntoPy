@@ -82,7 +82,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/emmo-repo/EMMOntoPy",
     license="BSD",
-    python_requires=">=3.6.0",
+    python_requires=">=3.6",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
