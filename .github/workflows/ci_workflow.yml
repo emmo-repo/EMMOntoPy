@@ -88,25 +88,28 @@ jobs:
         pip install -U setuptools wheel
         pip install -U -e .[dev]
 
-    - name: Test (covering ontopy)
-      run: pytest -vvv --cov=ontopy --cov-report="xml:coverage_ontopy.xml" --cov-report=term
+    - name: Test
+      run: pytest -vvv --cov=ontopy --cov=emmopy --cov-report=xml --cov-report=term
 
-    - name: Test (covering emmopy)
-      run: pytest -vvv --cov=emmopy --cov-report="xml:coverage_emmopy.xml" --cov-report=term
+    # - name: Test (covering ontopy)
+    #   run: pytest -vvv --cov=ontopy --cov-report="xml:coverage_ontopy.xml" --cov-report=term
+
+    # - name: Test (covering emmopy)
+    #   run: pytest -vvv --cov=emmopy --cov-report="xml:coverage_emmopy.xml" --cov-report=term
 
     - name: Upload ontopy coverage to Codecov
       if: matrix.python-version == '3.7' && github.repository == 'emmo-repo/EMMOntoPy'
       uses: codecov/codecov-action@v3
-      with:
-        flags: ontopy
-        files: coverage_ontopy.xml
+      # with:
+        # flags: ontopy
+        # files: coverage_ontopy.xml
 
-    - name: Upload emmopy coverage to Codecov
-      if: matrix.python-version == '3.7' && github.repository == 'emmo-repo/EMMOntoPy'
-      uses: codecov/codecov-action@v3
-      with:
-        flags: emmopy
-        files: coverage_emmopy.xml
+    # - name: Upload emmopy coverage to Codecov
+    #   if: matrix.python-version == '3.7' && github.repository == 'emmo-repo/EMMOntoPy'
+    #   uses: codecov/codecov-action@v3
+    #   with:
+    #     flags: emmopy
+    #     files: coverage_emmopy.xml
 
     # - name: Run vertical demo
     #   run: |
