@@ -1,4 +1,3 @@
-invoke~=1.7
 mike~=1.1
 mkdocs~=1.4
 mkdocs-awesome-pages-plugin~=2.8
