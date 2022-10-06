@@ -17,6 +17,7 @@ theme:
   features:
     - navigation.instant
     - navigation.top
+    - content.tabs.link
 
 repo_name: EMMOntoPy
 repo_url: https://github.com/emmo-repo/EMMOntoPy
@@ -40,7 +41,8 @@ markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences
   - pymdownx.inlinehilite
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.caret
   - pymdownx.tilde
   - pymdownx.keys
