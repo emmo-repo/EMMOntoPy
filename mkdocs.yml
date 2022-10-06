@@ -1,7 +1,7 @@
 site_name: EMMOntoPy
 site_description: Documentation for the EMMOntoPy library
 site_url: https://emmo-repo.github.io/EMMOntoPy
-copyright: Copyright &copy; 2019-2021 SINTEF
+copyright: Copyright &copy; 2019-2022 SINTEF
 
 theme:
   name: material
@@ -83,11 +83,13 @@ nav:
   - Docker: docker-instructions.md
   - License: LICENSE.md
   - Examples and demonstrations:
-    - ... | demo/**
+    - Demo:
+      - demo/README.md
+      - demo/horizontal/README.md
+      - demo/vertical/README.md
     - Examples:
-      - Generate documentation for EMMO: examples/emmodoc/README.md
-      - examples/emmodoc/important_concepts.md
-      - examples/emmodoc/introduction.md
+      - EMMOdoc: examples/emmodoc/README.md
+      - Jupyter visualization: examples/jupyter-visualization/README.md
   - ... | developers/**
   - Changelog: CHANGELOG.md
   - ... | api_reference/**
