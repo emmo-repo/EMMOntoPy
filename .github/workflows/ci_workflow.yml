@@ -35,10 +35,10 @@ jobs:
       # has been released.
       run_safety: true
       safety_options: |
-        --ignore 44715
-        --ignore 44716
-        --ignore 44717
-        --ignore 48547
+        --ignore=44715
+        --ignore=44716
+        --ignore=44717
+        --ignore=48547
 
       # Build distribution
       run_build_package: true
