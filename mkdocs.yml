@@ -73,11 +73,7 @@ plugins:
             docstring_style: google
             docstring_options:
               replace_admonitions: true
-      watch:
-        - emmopy
-        - ontopy
-  - awesome-pages:
-      collapse_single_pages: true
+  - awesome-pages
 
 nav:
   - Home: index.md
@@ -90,3 +86,7 @@ nav:
   - ... | developers/**
   - Changelog: CHANGELOG.md
   - ... | api_reference/**
+
+watch:
+  - emmopy
+  - ontopy
