@@ -143,9 +143,11 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/), specifically:
 
 ### Contributing projects
 
-- [EMMC-CSA](https://emmc.eu/);
+- EMMC-CSA;
   Grant Agreement No: 723867
   <img src="docs/images/emmc_logo.png" width="50">
+
+  The [EMMC-ASBL organization](https://emmc.eu/emmc-members/mission/) takes on the efforts of continuing and expanding on the efforts of the CSA.
 - [MarketPlace](https://www.the-marketplace-project.eu/);
   Grant Agreement No: 760173
   <img src="https://www.the-marketplace-project.eu/content/dam/iwm/the-marketplace-project/images/MARKETPLACE_LOGO_300dpi.png" width="120">
