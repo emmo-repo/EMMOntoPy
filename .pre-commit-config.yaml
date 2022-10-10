@@ -40,23 +40,16 @@ repos:
   hooks:
   - id: docs-api-reference
     args:
-    - --package-dir
-    - emmopy
-    - --package-dir
-    - ontopy
-    - --special-option
-    - "emmopy/emmocheck.py,show_bases: false"
-    - --unwanted-folder
-    - __pycache__
-    - --unwanted-folder
-    - java
+    - --package-dir=emmopy
+    - --package-dir=ontopy
+    - "--special-option=emmopy/emmocheck.py,show_bases: false"
+    - --unwanted-folder=__pycache__
+    - --unwanted-folder=java
     files: ^(emmopy|ontopy)/.*\.py$
   - id: docs-landing-page
     args:
-    - --replacement
-    - (LICENSE.txt),(LICENSE.md)
-    - --replacement
-    - (tools),(../tools)
+    - --replacement=(LICENSE.txt),(LICENSE.md)
+    - --replacement=(tools),(../tools)
     files: ^README.md$
 
 - repo: local
