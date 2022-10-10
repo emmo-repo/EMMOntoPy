@@ -97,7 +97,7 @@ pip install EMMOntoPy
 
 ### Required Dependencies
 
-- [Python] 3.6 or later.
+- [Python] 3.7 or later.
 - [Owlready2] v0.23 or later.
 
 ### Optional Dependencies
