@@ -405,113 +405,10 @@
   
   
   
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2_1" type="checkbox" id="__nav_5_2_1" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_5_2_1">
-          Emmodoc
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Emmodoc" data-md-level="3">
-        <label class="md-nav__title" for="__nav_5_2_1">
-          <span class="md-nav__icon md-icon"></span>
-          Emmodoc
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../examples/emmodoc/" class="md-nav__link">
-        Generate documentation for EMMO
+        EMMOdoc
       </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/emmodoc/classes/" class="md-nav__link">
-        Classes
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/emmodoc/emmo/" class="md-nav__link">
-        Emmo
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/emmodoc/important_concepts/" class="md-nav__link">
-        Important concepts
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/emmodoc/introduction/" class="md-nav__link">
-        Introduction
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/emmodoc/relations/" class="md-nav__link">
-        Relations
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
     </li>
   
 
@@ -524,7 +421,7 @@
   
     <li class="md-nav__item">
       <a href="../../examples/jupyter-visualization/" class="md-nav__link">
-        Visualise an ontology using pyctoscape in Jupyter Notebook
+        Jupyter visualization
       </a>
     </li>
   
@@ -1011,18 +908,22 @@
 
 <h1 id="steps-for-creating-a-new-release">Steps for creating a new release<a class="headerlink" href="#steps-for-creating-a-new-release" title="Permanent link">&para;</a></h1>
 <ol>
-<li>Create a release on GitHub with a short release description.</li>
-</ol>
+<li>
+<p>Create a release on GitHub with a short release description.</p>
 <p>Ensure you add a <code># &lt;version number&gt;</code> title to the description.</p>
-<p>Set the tag to the version number prefixed with <code>"v"</code> and title to the version number as explained above.
-1. Ensure the GitHub Action CD workflows run as expected.</p>
+<p>Set the tag to the version number prefixed with <code>"v"</code> and title to the version number as explained above.</p>
+</li>
+<li>
+<p>Ensure the GitHub Action CD workflows run as expected.</p>
+</li>
+</ol>
 <div class="admonition danger">
 <p class="admonition-title">The workflow failed</p>
-</div>
 <p>If something is wrong and the workflow fails <strong>before</strong> publishing the package to PyPI, make sure to remove all traces of the release and tag, fix the bug, and try again.</p>
 <p>If something is wrong and the workflow fails <strong>after</strong> publishing the package to PyPI: <strong>DO NOT REMOVE THE RELEASE OR TAG !</strong></p>
 <p>Deployment of the documentation should (in theory) be the only thing that has failed.
-   This can be deployed manually using similar steps as in the workflow.</p>
+This can be deployed manually using similar steps as in the workflow.</p>
+</div>
 
 
 
@@ -1033,6 +934,8 @@
             </div>
           
           
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
         </div>
         
           <a href="#" class="md-top md-icon" data-md-component="top" hidden>
@@ -1048,7 +951,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../../examples/jupyter-visualization/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Visualise an ontology using pyctoscape in Jupyter Notebook" rel="prev">
+        <a href="../../examples/jupyter-visualization/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Jupyter visualization" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -1057,7 +960,7 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Visualise an ontology using pyctoscape in Jupyter Notebook
+              Jupyter visualization
             </div>
           </div>
         </a>
@@ -1085,7 +988,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2019-2021 SINTEF
+      Copyright &copy; 2019-2022 SINTEF
     </div>
   
   
@@ -1115,7 +1018,7 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.top"], "search": "../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.078830c0.min.js"></script>

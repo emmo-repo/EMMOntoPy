@@ -405,113 +405,10 @@
   
   
   
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2_1" type="checkbox" id="__nav_5_2_1" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_5_2_1">
-          Emmodoc
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Emmodoc" data-md-level="3">
-        <label class="md-nav__title" for="__nav_5_2_1">
-          <span class="md-nav__icon md-icon"></span>
-          Emmodoc
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../../../examples/emmodoc/" class="md-nav__link">
-        Generate documentation for EMMO
+        EMMOdoc
       </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../../examples/emmodoc/classes/" class="md-nav__link">
-        Classes
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../../examples/emmodoc/emmo/" class="md-nav__link">
-        Emmo
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../../examples/emmodoc/important_concepts/" class="md-nav__link">
-        Important concepts
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../../examples/emmodoc/introduction/" class="md-nav__link">
-        Introduction
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../../examples/emmodoc/relations/" class="md-nav__link">
-        Relations
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
     </li>
   
 
@@ -524,7 +421,7 @@
   
     <li class="md-nav__item">
       <a href="../../../../examples/jupyter-visualization/" class="md-nav__link">
-        Visualise an ontology using pyctoscape in Jupyter Notebook
+        Jupyter visualization
       </a>
     </li>
   
@@ -986,167 +883,50 @@
   <a href="#ontopy.factpluspluswrapper.sync_factpp--ontopyfactpluspluswrappersyncfatpp" class="md-nav__link">
     
 
-
-
-
-
   
-  
+
+
+    
+
       ontopy.factpluspluswrapper.syncfatpp&para;
 
+
+
   
 
+
+
+
+
+
+
+
+
   
-
-
-
-
-
-
-
-
-
-
 
 
 
 
 sync_reasoner_factpp(ontology_or_world=None, infer_property_values=False, debug=1)
 
+
 amppara;
 
+    
 
-  
-  
       Run FaCT++ reasoner and load the inferred relations back into
 the owlready2 triplestore.
 Parameters&para;
+ontology_or_world : None | Ontology instance | World instance | list
+    Identifies the world to run the reasoner over.
+infer_property_values : bool
+    Whether to also infer property values.
+debug : bool
+    Whether to print debug info to standard output.
 
-
-  None | Ontology instance | World instance | list
-  Identifies the world to run the reasoner over.
-
-
-  bool
-  Whether to also infer property values.
-
-
-  bool
-  Whether to print debug info to standard output.
-
-      
-        Source code in ontopy/factpluspluswrapper/sync_factpp.py
-         30
- 31
- 32
- 33
- 34
- 35
- 36
- 37
- 38
- 39
- 40
- 41
- 42
- 43
- 44
- 45
- 46
- 47
- 48
- 49
- 50
- 51
- 52
- 53
- 54
- 55
- 56
- 57
- 58
- 59
- 60
- 61
- 62
- 63
- 64
- 65
- 66
- 67
- 68
- 69
- 70
- 71
- 72
- 73
- 74
- 75
- 76
- 77
- 78
- 79
- 80
- 81
- 82
- 83
- 84
- 85
- 86
- 87
- 88
- 89
- 90
- 91
- 92
- 93
- 94
- 95
- 96
- 97
- 98
- 99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140def sync_reasoner_factpp(
+        
+          Source code in ontopy/factpluspluswrapper/sync_factpp.py
+          def sync_reasoner_factpp(
     ontology_or_world=None, infer_property_values=False, debug=1
 ):
     &quot;&quot;&quot;Run FaCT++ reasoner and load the inferred relations back into
@@ -1258,14 +1038,19 @@ Parameters&para;
             world, ontology, debug, inferred_obj_relations
         )
 
-      
-  
-
-
-
-
+        
+    
 
   
+
+
+
+
+
+
+  
+
+    
 
   
 
@@ -1360,167 +1145,50 @@ Parameters&para;
   <a href="#ontopy.factpluspluswrapper.sync_factpp--ontopyfactpluspluswrappersyncfatpp" class="md-nav__link">
     
 
-
-
-
-
   
-  
+
+
+    
+
       ontopy.factpluspluswrapper.syncfatpp&para;
 
+
+
   
 
+
+
+
+
+
+
+
+
   
-
-
-
-
-
-
-
-
-
-
 
 
 
 
 sync_reasoner_factpp(ontology_or_world=None, infer_property_values=False, debug=1)
 
+
 amppara;
 
+    
 
-  
-  
       Run FaCT++ reasoner and load the inferred relations back into
 the owlready2 triplestore.
 Parameters&para;
+ontology_or_world : None | Ontology instance | World instance | list
+    Identifies the world to run the reasoner over.
+infer_property_values : bool
+    Whether to also infer property values.
+debug : bool
+    Whether to print debug info to standard output.
 
-
-  None | Ontology instance | World instance | list
-  Identifies the world to run the reasoner over.
-
-
-  bool
-  Whether to also infer property values.
-
-
-  bool
-  Whether to print debug info to standard output.
-
-      
-        Source code in ontopy/factpluspluswrapper/sync_factpp.py
-         30
- 31
- 32
- 33
- 34
- 35
- 36
- 37
- 38
- 39
- 40
- 41
- 42
- 43
- 44
- 45
- 46
- 47
- 48
- 49
- 50
- 51
- 52
- 53
- 54
- 55
- 56
- 57
- 58
- 59
- 60
- 61
- 62
- 63
- 64
- 65
- 66
- 67
- 68
- 69
- 70
- 71
- 72
- 73
- 74
- 75
- 76
- 77
- 78
- 79
- 80
- 81
- 82
- 83
- 84
- 85
- 86
- 87
- 88
- 89
- 90
- 91
- 92
- 93
- 94
- 95
- 96
- 97
- 98
- 99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140def sync_reasoner_factpp(
+        
+          Source code in ontopy/factpluspluswrapper/sync_factpp.py
+          def sync_reasoner_factpp(
     ontology_or_world=None, infer_property_values=False, debug=1
 ):
     &quot;&quot;&quot;Run FaCT++ reasoner and load the inferred relations back into
@@ -1632,14 +1300,19 @@ Parameters&para;
             world, ontology, debug, inferred_obj_relations
         )
 
-      
-  
-
-
-
-
+        
+    
 
   
+
+
+
+
+
+
+  
+
+    
 
   
 
@@ -1686,15 +1359,14 @@ Parameters&para;
 <h1 id="sync_factpp">sync_factpp<a class="headerlink" href="#sync_factpp" title="Permanent link">&para;</a></h1>
 
 
-<div class="doc doc-object doc-module">
-
+  <div class="doc doc-object doc-module">
 
 <a id="ontopy.factpluspluswrapper.sync_factpp"></a>
-  <div class="doc doc-contents first">
-  
+    <div class="doc doc-contents first">
+
       <h2 id="ontopy.factpluspluswrapper.sync_factpp--ontopyfactpluspluswrappersyncfatpp"><code>ontopy.factpluspluswrapper.syncfatpp</code><a class="headerlink" href="#ontopy.factpluspluswrapper.sync_factpp--ontopyfactpluspluswrappersyncfatpp" title="Permanent link">&para;</a></h2>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -1706,147 +1378,31 @@ Parameters&para;
 
 
 
-<div class="doc doc-object doc-function">
+  <div class="doc doc-object doc-function">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.factpluspluswrapper.sync_factpp.sync_reasoner_factpp">
 <code class="highlight language-python"><span class="n">sync_reasoner_factpp</span><span class="p">(</span><span class="n">ontology_or_world</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">infer_property_values</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code>
 
+
 <a class="headerlink" href="#ontopy.factpluspluswrapper.sync_factpp.sync_reasoner_factpp" title="Permanent link">&para;</a></h2>
 
+    <div class="doc doc-contents ">
 
-  <div class="doc doc-contents ">
-  
       <p>Run FaCT++ reasoner and load the inferred relations back into
 the owlready2 triplestore.</p>
 <h4 id="ontopy.factpluspluswrapper.sync_factpp.sync_reasoner_factpp--parameters">Parameters<a class="headerlink" href="#ontopy.factpluspluswrapper.sync_factpp.sync_reasoner_factpp--parameters" title="Permanent link">&para;</a></h4>
+<p>ontology_or_world : None | Ontology instance | World instance | list
+    Identifies the world to run the reasoner over.
+infer_property_values : bool
+    Whether to also infer property values.
+debug : bool
+    Whether to print debug info to standard output.</p>
 
-<details class="ontology_or_world-">
-  <summary>None | Ontology instance | World instance | list</summary>
-  <p>Identifies the world to run the reasoner over.</p>
-</details>
-<details class="infer_property_values-">
-  <summary>bool</summary>
-  <p>Whether to also infer property values.</p>
-</details>
-<details class="debug-">
-  <summary>bool</summary>
-  <p>Whether to print debug info to standard output.</p>
-</details>
-      <details class="quote">
-        <summary>Source code in <code>ontopy/factpluspluswrapper/sync_factpp.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 30</span>
-<span class="normal"> 31</span>
-<span class="normal"> 32</span>
-<span class="normal"> 33</span>
-<span class="normal"> 34</span>
-<span class="normal"> 35</span>
-<span class="normal"> 36</span>
-<span class="normal"> 37</span>
-<span class="normal"> 38</span>
-<span class="normal"> 39</span>
-<span class="normal"> 40</span>
-<span class="normal"> 41</span>
-<span class="normal"> 42</span>
-<span class="normal"> 43</span>
-<span class="normal"> 44</span>
-<span class="normal"> 45</span>
-<span class="normal"> 46</span>
-<span class="normal"> 47</span>
-<span class="normal"> 48</span>
-<span class="normal"> 49</span>
-<span class="normal"> 50</span>
-<span class="normal"> 51</span>
-<span class="normal"> 52</span>
-<span class="normal"> 53</span>
-<span class="normal"> 54</span>
-<span class="normal"> 55</span>
-<span class="normal"> 56</span>
-<span class="normal"> 57</span>
-<span class="normal"> 58</span>
-<span class="normal"> 59</span>
-<span class="normal"> 60</span>
-<span class="normal"> 61</span>
-<span class="normal"> 62</span>
-<span class="normal"> 63</span>
-<span class="normal"> 64</span>
-<span class="normal"> 65</span>
-<span class="normal"> 66</span>
-<span class="normal"> 67</span>
-<span class="normal"> 68</span>
-<span class="normal"> 69</span>
-<span class="normal"> 70</span>
-<span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
-<span class="normal"> 74</span>
-<span class="normal"> 75</span>
-<span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
-<span class="normal"> 80</span>
-<span class="normal"> 81</span>
-<span class="normal"> 82</span>
-<span class="normal"> 83</span>
-<span class="normal"> 84</span>
-<span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
-<span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
-<span class="normal">114</span>
-<span class="normal">115</span>
-<span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">sync_reasoner_factpp</span><span class="p">(</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/factpluspluswrapper/sync_factpp.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">sync_reasoner_factpp</span><span class="p">(</span>
     <span class="n">ontology_or_world</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">infer_property_values</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Run FaCT++ reasoner and load the inferred relations back into</span>
@@ -1957,19 +1513,22 @@ the owlready2 triplestore.</p>
         <span class="n">_apply_inferred_obj_relations</span><span class="p">(</span>
             <span class="n">world</span><span class="p">,</span> <span class="n">ontology</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">inferred_obj_relations</span>
         <span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-      </details>
-  </div>
-
-</div>
-
-
+</code></pre></div>
+        </details>
+    </div>
 
   </div>
 
+
+
+
+
+
   </div>
 
-</div>
+    </div>
+
+  </div>
 
 
 
@@ -1980,6 +1539,8 @@ the owlready2 triplestore.</p>
             </div>
           
           
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
         </div>
         
           <a href="#" class="md-top md-icon" data-md-component="top" hidden>
@@ -2017,7 +1578,7 @@ the owlready2 triplestore.</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2019-2021 SINTEF
+      Copyright &copy; 2019-2022 SINTEF
     </div>
   
   
@@ -2047,7 +1608,7 @@ the owlready2 triplestore.</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
       <script src="../../../../assets/javascripts/bundle.078830c0.min.js"></script>

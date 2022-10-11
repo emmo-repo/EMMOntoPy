@@ -405,113 +405,10 @@
   
   
   
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2_1" type="checkbox" id="__nav_5_2_1" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_5_2_1">
-          Emmodoc
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Emmodoc" data-md-level="3">
-        <label class="md-nav__title" for="__nav_5_2_1">
-          <span class="md-nav__icon md-icon"></span>
-          Emmodoc
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../examples/emmodoc/" class="md-nav__link">
-        Generate documentation for EMMO
+        EMMOdoc
       </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/emmodoc/classes/" class="md-nav__link">
-        Classes
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/emmodoc/emmo/" class="md-nav__link">
-        Emmo
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/emmodoc/important_concepts/" class="md-nav__link">
-        Important concepts
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/emmodoc/introduction/" class="md-nav__link">
-        Introduction
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/emmodoc/relations/" class="md-nav__link">
-        Relations
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
     </li>
   
 
@@ -524,7 +421,7 @@
   
     <li class="md-nav__item">
       <a href="../../examples/jupyter-visualization/" class="md-nav__link">
-        Visualise an ontology using pyctoscape in Jupyter Notebook
+        Jupyter visualization
       </a>
     </li>
   
@@ -1142,7 +1039,7 @@
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
 <div class="admonition important">
 <p class="admonition-title">Requirements</p>
-<p>This section expects you to be running on a Unix-like system (e.g., Linux) with <em>minimum</em> Python 3.6.</p>
+<p>This section expects you to be running on a Unix-like system (e.g., Linux) with <em>minimum</em> Python 3.7.</p>
 </div>
 <h3 id="virtual-environment">Virtual environment<a class="headerlink" href="#virtual-environment" title="Permanent link">&para;</a></h3>
 <p>Since development can be messy, it is good to separate the development environment from the rest of your system's environment.</p>
@@ -1154,7 +1051,9 @@ There are a several different ways to create a virtual environment, but we recom
 <p>A great resource for an overview can be found in <a href="https://stackoverflow.com/a/41573588/12404091" rel="noopener" target="_blank">this StackOverflow answer</a>.
 However, note that in the end, it is very subjective on the solution one uses and one is not necessarily "better" than another.</p>
 </div>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1"><code>virtualenv</code> (recommended)</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1"><code>virtualenv</code> (recommended)</label><label for="__tabbed_1_2"><code>venv</code></label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <p>To install <code>virtualenv</code>+<code>virtualenvwrapper</code> run:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>pip install virtualenvwrapper
 </code></pre></div>
@@ -1179,7 +1078,7 @@ Or you can choose to use another version of Python by changing this argument to 
 <div class="highlight"><pre><span></span><code><span class="gp gp-VirtualEnv">(emmo-python)</span> <span class="gp">$ </span>deactivate
 </code></pre></div>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2"><code>venv</code></label><div class="tabbed-content">
+<div class="tabbed-block">
 <p><code>venv</code> is a built-in package in Python, which works similar to <code>virtualenv</code>, but with fewer capabilities.</p>
 <p>To create a new virtual environment with <code>venv</code>, first go to the directory, where you desire to keep your virtual environment.
 Then run the <code>venv</code> module using the Python interpreter you wish to use in the virtual environment.
@@ -1197,6 +1096,7 @@ For Python 3.7 this would look like the following:</p>
 <p>To deactivate the virtual environment, returning to the system/global environment again, run:</p>
 <div class="highlight"><pre><span></span><code><span class="gp gp-VirtualEnv">(emmo-python)</span> <span class="gp">$ </span>deactivate
 </code></pre></div>
+</div>
 </div>
 </div>
 <div class="admonition important">
@@ -1241,6 +1141,8 @@ These can be installed by running (on a Debian system):</p>
             </div>
           
           
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
         </div>
         
           <a href="#" class="md-top md-icon" data-md-component="top" hidden>
@@ -1293,7 +1195,7 @@ These can be installed by running (on a Debian system):</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2019-2021 SINTEF
+      Copyright &copy; 2019-2022 SINTEF
     </div>
   
   
@@ -1323,7 +1225,7 @@ These can be installed by running (on a Debian system):</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.top"], "search": "../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.078830c0.min.js"></script>

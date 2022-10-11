@@ -405,113 +405,10 @@
   
   
   
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2_1" type="checkbox" id="__nav_5_2_1" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_5_2_1">
-          Emmodoc
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Emmodoc" data-md-level="3">
-        <label class="md-nav__title" for="__nav_5_2_1">
-          <span class="md-nav__icon md-icon"></span>
-          Emmodoc
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../../../examples/emmodoc/" class="md-nav__link">
-        Generate documentation for EMMO
+        EMMOdoc
       </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../../examples/emmodoc/classes/" class="md-nav__link">
-        Classes
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../../examples/emmodoc/emmo/" class="md-nav__link">
-        Emmo
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../../examples/emmodoc/important_concepts/" class="md-nav__link">
-        Important concepts
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../../examples/emmodoc/introduction/" class="md-nav__link">
-        Introduction
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../../examples/emmodoc/relations/" class="md-nav__link">
-        Relations
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
     </li>
   
 
@@ -524,7 +421,7 @@
   
     <li class="md-nav__item">
       <a href="../../../../examples/jupyter-visualization/" class="md-nav__link">
-        Visualise an ontology using pyctoscape in Jupyter Notebook
+        Jupyter visualization
       </a>
     </li>
   
@@ -958,180 +855,46 @@
   <a href="#ontopy.factpluspluswrapper.factppgraph--ontopyfactpluspluswrapperfactppgraph" class="md-nav__link">
     
 
-
-
-
-
   
-  
+
+
+    
+
       ontopy.factpluspluswrapper.factppgraph&para;
 
+
+
   
 
+
+
+
+
+
+
   
 
 
 
 
+        
+FaCTPPGraph        
 
-
-
-
-
-
-
-
-
-        FaCTPPGraph
 
 
 amppara;
 
+    
 
-  
-
-  
       Class for running the FaCT++ reasoner (using OwlApiInterface) and
 postprocessing the resulting inferred ontology.
 Parameters&para;
-
-
-  owlapi.Graph instance
-  The graph to be inferred.
-
+graph : owlapi.Graph instance
+    The graph to be inferred.
 
         
           Source code in ontopy/factpluspluswrapper/factppgraph.py
-           12
- 13
- 14
- 15
- 16
- 17
- 18
- 19
- 20
- 21
- 22
- 23
- 24
- 25
- 26
- 27
- 28
- 29
- 30
- 31
- 32
- 33
- 34
- 35
- 36
- 37
- 38
- 39
- 40
- 41
- 42
- 43
- 44
- 45
- 46
- 47
- 48
- 49
- 50
- 51
- 52
- 53
- 54
- 55
- 56
- 57
- 58
- 59
- 60
- 61
- 62
- 63
- 64
- 65
- 66
- 67
- 68
- 69
- 70
- 71
- 72
- 73
- 74
- 75
- 76
- 77
- 78
- 79
- 80
- 81
- 82
- 83
- 84
- 85
- 86
- 87
- 88
- 89
- 90
- 91
- 92
- 93
- 94
- 95
- 96
- 97
- 98
- 99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141class FaCTPPGraph:
+          class FaCTPPGraph:
     &quot;&quot;&quot;Class for running the FaCT++ reasoner (using OwlApiInterface) and
     postprocessing the resulting inferred ontology.
 
@@ -1264,45 +1027,105 @@ Parameters&para;
 
         
 
+
+
   
 
+
+
+
+
+
   
 
 
 
 
+base_iri
 
-
-
-
-
-
-
-
-
-
-add_base_annotations()
+  
+      property
+      writable
+  
 
 amppara;
 
+    
+
+      Base iri of inferred ontology.
+    
 
   
+
+
+
   
+
+
+
+
+inferred
+
+  
+      property
+      readonly
+  
+
+amppara;
+
+    
+
+      The current inferred graph.
+    
+
+  
+
+
+
+  
+
+
+
+
+namespaces
+
+  
+      property
+      readonly
+  
+
+amppara;
+
+    
+
+      Namespaces defined in the original graph.
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+add_base_annotations(self)
+
+
+amppara;
+
+    
+
       Copy base annotations from original graph to the inferred graph.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83def add_base_annotations(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def add_base_annotations(self):
     &quot;&quot;&quot;Copy base annotations from original graph to the inferred graph.&quot;&quot;&quot;
     base = self.base_iri
     inferred = self.inferred
@@ -1314,114 +1137,57 @@ add_base_annotations()
             obj = URIRef(f&quot;{base}/{version}&quot;)
         inferred.add((base, predicate, obj))
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+asserted_base_iri(self)
 
-
-
-
-asserted_base_iri()
 
 amppara;
 
+    
 
-  
-  
       Returns the base iri or the original graph.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        55
-56
-57def asserted_base_iri(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def asserted_base_iri(self):
     &quot;&quot;&quot;Returns the base iri or the original graph.&quot;&quot;&quot;
     return URIRef(dict(self.graph.namespaces()).get(&quot;&quot;, &quot;&quot;).rstrip(&quot;#/&quot;))
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+clean_ancestors(self)
 
-
-
-
-base_iri()
-  
-  
-      property
-      writable
-  
 
 amppara;
 
+    
 
-  
-  
-      Base iri of inferred ontology.
-
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        35
-36
-37
-38
-39
-40@property
-def base_iri(self):
-    &quot;&quot;&quot;Base iri of inferred ontology.&quot;&quot;&quot;
-    if self._base_iri is None:
-        self._base_iri = URIRef(self.asserted_base_iri() + &quot;-inferred&quot;)
-    return self._base_iri
-
-      
-  
-
-
-
-
-
-
-
-
-clean_ancestors()
-
-amppara;
-
-
-  
-  
       Remove redundant rdfs:subClassOf relations in inferred graph.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141def clean_ancestors(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def clean_ancestors(self):
     &quot;&quot;&quot;Remove redundant rdfs:subClassOf relations in inferred graph.&quot;&quot;&quot;
     inferred = self.inferred
     for (  # pylint: disable=too-many-nested-blocks
@@ -1444,42 +1210,31 @@ clean_ancestors()
                             if triple in inferred:
                                 inferred.remove(triple)
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+clean_base(self)
 
-
-
-
-clean_base()
 
 amppara;
 
+    
 
-  
-  
       Remove all relations s? a owl:Ontology where s? is not
 base_iri.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-         95
- 96
- 97
- 98
- 99
-100
-101
-102
-103
-104
-105
-106
-107
-108def clean_base(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def clean_base(self):
     &quot;&quot;&quot;Remove all relations `s? a owl:Ontology` where `s?` is not
     `base_iri`.
     &quot;&quot;&quot;
@@ -1494,72 +1249,30 @@ base_iri.
         inferred.remove((subject, predicate, obj))
     inferred.add((self.base_iri, RDF.type, OWL.Ontology))
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+inferred_graph(self)
 
-
-
-
-inferred()
-  
-  
-      property
-  
 
 amppara;
 
+    
 
-  
-  
-      The current inferred graph.
-
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        28
-29
-30
-31
-32
-33@property
-def inferred(self):
-    &quot;&quot;&quot;The current inferred graph.&quot;&quot;&quot;
-    if self._inferred is None:
-        self._inferred = self.raw_inferred_graph()
-    return self._inferred
-
-      
-  
-
-
-
-
-
-
-
-
-inferred_graph()
-
-amppara;
-
-
-  
-  
       Returns the postprocessed inferred graph.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        64
-65
-66
-67
-68
-69
-70
-71def inferred_graph(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def inferred_graph(self):
     &quot;&quot;&quot;Returns the postprocessed inferred graph.&quot;&quot;&quot;
     self.add_base_annotations()
     self.set_namespace()
@@ -1568,106 +1281,60 @@ inferred_graph()
     self.clean_ancestors()
     return self.inferred
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+raw_inferred_graph(self)
 
-
-
-
-namespaces()
-  
-  
-      property
-  
 
 amppara;
 
+    
 
-  
-  
-      Namespaces defined in the original graph.
-
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        47
-48
-49
-50
-51
-52
-53@property
-def namespaces(self):
-    &quot;&quot;&quot;Namespaces defined in the original graph.&quot;&quot;&quot;
-    if self._namespaces is None:
-        self._namespaces = dict(self.graph.namespaces()).copy()
-        self._namespaces[&quot;&quot;] = self.base_iri
-    return self._namespaces
-
-      
-  
-
-
-
-
-
-
-
-
-raw_inferred_graph()
-
-amppara;
-
-
-  
-  
       Returns the raw non-postprocessed inferred ontology as a rdflib
 graph.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        59
-60
-61
-62def raw_inferred_graph(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def raw_inferred_graph(self):
     &quot;&quot;&quot;Returns the raw non-postprocessed inferred ontology as a rdflib
     graph.&quot;&quot;&quot;
     return OwlApiInterface().reason(self.graph)
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+remove_nothing_is_nothing(self)
 
-
-
-
-remove_nothing_is_nothing()
 
 amppara;
 
+    
 
-  
-  
       Remove superfluid relation in inferred graph:
 owl:Nothing rdfs:subClassOf owl:Nothing
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        110
-111
-112
-113
-114
-115
-116
-117
-118def remove_nothing_is_nothing(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def remove_nothing_is_nothing(self):
     &quot;&quot;&quot;Remove superfluid relation in inferred graph:
 
     owl:Nothing rdfs:subClassOf owl:Nothing
@@ -1677,37 +1344,31 @@ owl:Nothing rdfs:subClassOf owl:Nothing
     if triple in inferred:
         inferred.remove(triple)
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+set_namespace(self)
 
-
-
-
-set_namespace()
 
 amppara;
 
+    
 
-  
-  
       Override namespace of inferred graph with the namespace of the
 original graph.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        85
-86
-87
-88
-89
-90
-91
-92
-93def set_namespace(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def set_namespace(self):
     &quot;&quot;&quot;Override namespace of inferred graph with the namespace of the
     original graph.
     &quot;&quot;&quot;
@@ -1717,14 +1378,8 @@ original graph.
             key, value, override=True, replace=True
         )
 
-      
-  
-
-
-
-
-
-  
+        
+    
 
   
 
@@ -1732,37 +1387,51 @@ original graph.
 
 
 
+  
+
+    
+
+  
 
 
 
-        FactPPError
+  
+
+
+
+
+        
+FactPPError        
+
 
 
 amppara;
 
+    
 
-  
-
-  
       Postprocessing error after reasoning with FaCT++.
-
 
         
           Source code in ontopy/factpluspluswrapper/factppgraph.py
-          8
-9class FactPPError:
+          class FactPPError:
     &quot;&quot;&quot;Postprocessing error after reasoning with FaCT++.&quot;&quot;&quot;
 
         
 
-  
 
-
-
-
-
+    
 
   
+
+
+
+
+
+
+
+  
+
+    
 
   
 
@@ -1787,6 +1456,27 @@ original graph.
 </li>
         
           <li class="md-nav__item">
+  <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.base_iri" class="md-nav__link">
+    base_iri
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.inferred" class="md-nav__link">
+    inferred
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.namespaces" class="md-nav__link">
+    namespaces
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.add_base_annotations" class="md-nav__link">
     add_base_annotations()
   </a>
@@ -1796,13 +1486,6 @@ original graph.
           <li class="md-nav__item">
   <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.asserted_base_iri" class="md-nav__link">
     asserted_base_iri()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.base_iri" class="md-nav__link">
-    base_iri()
   </a>
   
 </li>
@@ -1822,22 +1505,8 @@ original graph.
 </li>
         
           <li class="md-nav__item">
-  <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.inferred" class="md-nav__link">
-    inferred()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.inferred_graph" class="md-nav__link">
     inferred_graph()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.namespaces" class="md-nav__link">
-    namespaces()
   </a>
   
 </li>
@@ -1969,180 +1638,46 @@ original graph.
   <a href="#ontopy.factpluspluswrapper.factppgraph--ontopyfactpluspluswrapperfactppgraph" class="md-nav__link">
     
 
-
-
-
-
   
-  
+
+
+    
+
       ontopy.factpluspluswrapper.factppgraph&para;
 
+
+
   
 
+
+
+
+
+
+
   
 
 
 
 
+        
+FaCTPPGraph        
 
-
-
-
-
-
-
-
-
-        FaCTPPGraph
 
 
 amppara;
 
+    
 
-  
-
-  
       Class for running the FaCT++ reasoner (using OwlApiInterface) and
 postprocessing the resulting inferred ontology.
 Parameters&para;
-
-
-  owlapi.Graph instance
-  The graph to be inferred.
-
+graph : owlapi.Graph instance
+    The graph to be inferred.
 
         
           Source code in ontopy/factpluspluswrapper/factppgraph.py
-           12
- 13
- 14
- 15
- 16
- 17
- 18
- 19
- 20
- 21
- 22
- 23
- 24
- 25
- 26
- 27
- 28
- 29
- 30
- 31
- 32
- 33
- 34
- 35
- 36
- 37
- 38
- 39
- 40
- 41
- 42
- 43
- 44
- 45
- 46
- 47
- 48
- 49
- 50
- 51
- 52
- 53
- 54
- 55
- 56
- 57
- 58
- 59
- 60
- 61
- 62
- 63
- 64
- 65
- 66
- 67
- 68
- 69
- 70
- 71
- 72
- 73
- 74
- 75
- 76
- 77
- 78
- 79
- 80
- 81
- 82
- 83
- 84
- 85
- 86
- 87
- 88
- 89
- 90
- 91
- 92
- 93
- 94
- 95
- 96
- 97
- 98
- 99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141class FaCTPPGraph:
+          class FaCTPPGraph:
     &quot;&quot;&quot;Class for running the FaCT++ reasoner (using OwlApiInterface) and
     postprocessing the resulting inferred ontology.
 
@@ -2275,45 +1810,105 @@ Parameters&para;
 
         
 
+
+
   
 
+
+
+
+
+
   
 
 
 
 
+base_iri
 
-
-
-
-
-
-
-
-
-
-add_base_annotations()
+  
+      property
+      writable
+  
 
 amppara;
 
+    
+
+      Base iri of inferred ontology.
+    
 
   
+
+
+
   
+
+
+
+
+inferred
+
+  
+      property
+      readonly
+  
+
+amppara;
+
+    
+
+      The current inferred graph.
+    
+
+  
+
+
+
+  
+
+
+
+
+namespaces
+
+  
+      property
+      readonly
+  
+
+amppara;
+
+    
+
+      Namespaces defined in the original graph.
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+add_base_annotations(self)
+
+
+amppara;
+
+    
+
       Copy base annotations from original graph to the inferred graph.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83def add_base_annotations(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def add_base_annotations(self):
     &quot;&quot;&quot;Copy base annotations from original graph to the inferred graph.&quot;&quot;&quot;
     base = self.base_iri
     inferred = self.inferred
@@ -2325,114 +1920,57 @@ add_base_annotations()
             obj = URIRef(f&quot;{base}/{version}&quot;)
         inferred.add((base, predicate, obj))
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+asserted_base_iri(self)
 
-
-
-
-asserted_base_iri()
 
 amppara;
 
+    
 
-  
-  
       Returns the base iri or the original graph.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        55
-56
-57def asserted_base_iri(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def asserted_base_iri(self):
     &quot;&quot;&quot;Returns the base iri or the original graph.&quot;&quot;&quot;
     return URIRef(dict(self.graph.namespaces()).get(&quot;&quot;, &quot;&quot;).rstrip(&quot;#/&quot;))
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+clean_ancestors(self)
 
-
-
-
-base_iri()
-  
-  
-      property
-      writable
-  
 
 amppara;
 
+    
 
-  
-  
-      Base iri of inferred ontology.
-
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        35
-36
-37
-38
-39
-40@property
-def base_iri(self):
-    &quot;&quot;&quot;Base iri of inferred ontology.&quot;&quot;&quot;
-    if self._base_iri is None:
-        self._base_iri = URIRef(self.asserted_base_iri() + &quot;-inferred&quot;)
-    return self._base_iri
-
-      
-  
-
-
-
-
-
-
-
-
-clean_ancestors()
-
-amppara;
-
-
-  
-  
       Remove redundant rdfs:subClassOf relations in inferred graph.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141def clean_ancestors(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def clean_ancestors(self):
     &quot;&quot;&quot;Remove redundant rdfs:subClassOf relations in inferred graph.&quot;&quot;&quot;
     inferred = self.inferred
     for (  # pylint: disable=too-many-nested-blocks
@@ -2455,42 +1993,31 @@ clean_ancestors()
                             if triple in inferred:
                                 inferred.remove(triple)
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+clean_base(self)
 
-
-
-
-clean_base()
 
 amppara;
 
+    
 
-  
-  
       Remove all relations s? a owl:Ontology where s? is not
 base_iri.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-         95
- 96
- 97
- 98
- 99
-100
-101
-102
-103
-104
-105
-106
-107
-108def clean_base(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def clean_base(self):
     &quot;&quot;&quot;Remove all relations `s? a owl:Ontology` where `s?` is not
     `base_iri`.
     &quot;&quot;&quot;
@@ -2505,72 +2032,30 @@ base_iri.
         inferred.remove((subject, predicate, obj))
     inferred.add((self.base_iri, RDF.type, OWL.Ontology))
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+inferred_graph(self)
 
-
-
-
-inferred()
-  
-  
-      property
-  
 
 amppara;
 
+    
 
-  
-  
-      The current inferred graph.
-
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        28
-29
-30
-31
-32
-33@property
-def inferred(self):
-    &quot;&quot;&quot;The current inferred graph.&quot;&quot;&quot;
-    if self._inferred is None:
-        self._inferred = self.raw_inferred_graph()
-    return self._inferred
-
-      
-  
-
-
-
-
-
-
-
-
-inferred_graph()
-
-amppara;
-
-
-  
-  
       Returns the postprocessed inferred graph.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        64
-65
-66
-67
-68
-69
-70
-71def inferred_graph(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def inferred_graph(self):
     &quot;&quot;&quot;Returns the postprocessed inferred graph.&quot;&quot;&quot;
     self.add_base_annotations()
     self.set_namespace()
@@ -2579,106 +2064,60 @@ inferred_graph()
     self.clean_ancestors()
     return self.inferred
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+raw_inferred_graph(self)
 
-
-
-
-namespaces()
-  
-  
-      property
-  
 
 amppara;
 
+    
 
-  
-  
-      Namespaces defined in the original graph.
-
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        47
-48
-49
-50
-51
-52
-53@property
-def namespaces(self):
-    &quot;&quot;&quot;Namespaces defined in the original graph.&quot;&quot;&quot;
-    if self._namespaces is None:
-        self._namespaces = dict(self.graph.namespaces()).copy()
-        self._namespaces[&quot;&quot;] = self.base_iri
-    return self._namespaces
-
-      
-  
-
-
-
-
-
-
-
-
-raw_inferred_graph()
-
-amppara;
-
-
-  
-  
       Returns the raw non-postprocessed inferred ontology as a rdflib
 graph.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        59
-60
-61
-62def raw_inferred_graph(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def raw_inferred_graph(self):
     &quot;&quot;&quot;Returns the raw non-postprocessed inferred ontology as a rdflib
     graph.&quot;&quot;&quot;
     return OwlApiInterface().reason(self.graph)
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+remove_nothing_is_nothing(self)
 
-
-
-
-remove_nothing_is_nothing()
 
 amppara;
 
+    
 
-  
-  
       Remove superfluid relation in inferred graph:
 owl:Nothing rdfs:subClassOf owl:Nothing
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        110
-111
-112
-113
-114
-115
-116
-117
-118def remove_nothing_is_nothing(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def remove_nothing_is_nothing(self):
     &quot;&quot;&quot;Remove superfluid relation in inferred graph:
 
     owl:Nothing rdfs:subClassOf owl:Nothing
@@ -2688,37 +2127,31 @@ owl:Nothing rdfs:subClassOf owl:Nothing
     if triple in inferred:
         inferred.remove(triple)
 
-      
+        
+    
+
+  
+
+
+
   
 
 
 
 
+set_namespace(self)
 
-
-
-
-set_namespace()
 
 amppara;
 
+    
 
-  
-  
       Override namespace of inferred graph with the namespace of the
 original graph.
 
-      
-        Source code in ontopy/factpluspluswrapper/factppgraph.py
-        85
-86
-87
-88
-89
-90
-91
-92
-93def set_namespace(self):
+        
+          Source code in ontopy/factpluspluswrapper/factppgraph.py
+          def set_namespace(self):
     &quot;&quot;&quot;Override namespace of inferred graph with the namespace of the
     original graph.
     &quot;&quot;&quot;
@@ -2728,14 +2161,8 @@ original graph.
             key, value, override=True, replace=True
         )
 
-      
-  
-
-
-
-
-
-  
+        
+    
 
   
 
@@ -2743,37 +2170,51 @@ original graph.
 
 
 
+  
+
+    
+
+  
 
 
 
-        FactPPError
+  
+
+
+
+
+        
+FactPPError        
+
 
 
 amppara;
 
+    
 
-  
-
-  
       Postprocessing error after reasoning with FaCT++.
-
 
         
           Source code in ontopy/factpluspluswrapper/factppgraph.py
-          8
-9class FactPPError:
+          class FactPPError:
     &quot;&quot;&quot;Postprocessing error after reasoning with FaCT++.&quot;&quot;&quot;
 
         
 
-  
 
-
-
-
-
+    
 
   
+
+
+
+
+
+
+
+  
+
+    
 
   
 
@@ -2798,6 +2239,27 @@ original graph.
 </li>
         
           <li class="md-nav__item">
+  <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.base_iri" class="md-nav__link">
+    base_iri
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.inferred" class="md-nav__link">
+    inferred
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.namespaces" class="md-nav__link">
+    namespaces
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.add_base_annotations" class="md-nav__link">
     add_base_annotations()
   </a>
@@ -2807,13 +2269,6 @@ original graph.
           <li class="md-nav__item">
   <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.asserted_base_iri" class="md-nav__link">
     asserted_base_iri()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.base_iri" class="md-nav__link">
-    base_iri()
   </a>
   
 </li>
@@ -2833,22 +2288,8 @@ original graph.
 </li>
         
           <li class="md-nav__item">
-  <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.inferred" class="md-nav__link">
-    inferred()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.inferred_graph" class="md-nav__link">
     inferred_graph()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.namespaces" class="md-nav__link">
-    namespaces()
   </a>
   
 </li>
@@ -2904,15 +2345,14 @@ original graph.
 <h1 id="factppgraph">factppgraph<a class="headerlink" href="#factppgraph" title="Permanent link">&para;</a></h1>
 
 
-<div class="doc doc-object doc-module">
-
+  <div class="doc doc-object doc-module">
 
 <a id="ontopy.factpluspluswrapper.factppgraph"></a>
-  <div class="doc doc-contents first">
-  
+    <div class="doc doc-contents first">
+
       <h2 id="ontopy.factpluspluswrapper.factppgraph--ontopyfactpluspluswrapperfactppgraph"><code>ontopy.factpluspluswrapper.factppgraph</code><a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph--ontopyfactpluspluswrapperfactppgraph" title="Permanent link">&para;</a></h2>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2922,162 +2362,29 @@ original graph.
 
 
 
-
-<div class="doc doc-object doc-class">
+  <div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph">
-        <code>FaCTPPGraph</code>
+        <code>
+FaCTPPGraph        </code>
+
 
 
 <a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph" title="Permanent link">&para;</a></h2>
 
+    <div class="doc doc-contents ">
 
-  <div class="doc doc-contents ">
-
-  
       <p>Class for running the FaCT++ reasoner (using OwlApiInterface) and
 postprocessing the resulting inferred ontology.</p>
 <h4 id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph--parameters">Parameters<a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph--parameters" title="Permanent link">&para;</a></h4>
-
-<details class="graph-">
-  <summary>owlapi.Graph instance</summary>
-  <p>The graph to be inferred.</p>
-</details>
+<p>graph : owlapi.Graph instance
+    The graph to be inferred.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 12</span>
-<span class="normal"> 13</span>
-<span class="normal"> 14</span>
-<span class="normal"> 15</span>
-<span class="normal"> 16</span>
-<span class="normal"> 17</span>
-<span class="normal"> 18</span>
-<span class="normal"> 19</span>
-<span class="normal"> 20</span>
-<span class="normal"> 21</span>
-<span class="normal"> 22</span>
-<span class="normal"> 23</span>
-<span class="normal"> 24</span>
-<span class="normal"> 25</span>
-<span class="normal"> 26</span>
-<span class="normal"> 27</span>
-<span class="normal"> 28</span>
-<span class="normal"> 29</span>
-<span class="normal"> 30</span>
-<span class="normal"> 31</span>
-<span class="normal"> 32</span>
-<span class="normal"> 33</span>
-<span class="normal"> 34</span>
-<span class="normal"> 35</span>
-<span class="normal"> 36</span>
-<span class="normal"> 37</span>
-<span class="normal"> 38</span>
-<span class="normal"> 39</span>
-<span class="normal"> 40</span>
-<span class="normal"> 41</span>
-<span class="normal"> 42</span>
-<span class="normal"> 43</span>
-<span class="normal"> 44</span>
-<span class="normal"> 45</span>
-<span class="normal"> 46</span>
-<span class="normal"> 47</span>
-<span class="normal"> 48</span>
-<span class="normal"> 49</span>
-<span class="normal"> 50</span>
-<span class="normal"> 51</span>
-<span class="normal"> 52</span>
-<span class="normal"> 53</span>
-<span class="normal"> 54</span>
-<span class="normal"> 55</span>
-<span class="normal"> 56</span>
-<span class="normal"> 57</span>
-<span class="normal"> 58</span>
-<span class="normal"> 59</span>
-<span class="normal"> 60</span>
-<span class="normal"> 61</span>
-<span class="normal"> 62</span>
-<span class="normal"> 63</span>
-<span class="normal"> 64</span>
-<span class="normal"> 65</span>
-<span class="normal"> 66</span>
-<span class="normal"> 67</span>
-<span class="normal"> 68</span>
-<span class="normal"> 69</span>
-<span class="normal"> 70</span>
-<span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
-<span class="normal"> 74</span>
-<span class="normal"> 75</span>
-<span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
-<span class="normal"> 80</span>
-<span class="normal"> 81</span>
-<span class="normal"> 82</span>
-<span class="normal"> 83</span>
-<span class="normal"> 84</span>
-<span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
-<span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
-<span class="normal">114</span>
-<span class="normal">115</span>
-<span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span>
-<span class="normal">141</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">FaCTPPGraph</span><span class="p">:</span>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">FaCTPPGraph</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class for running the FaCT++ reasoner (using OwlApiInterface) and</span>
 <span class="sd">    postprocessing the resulting inferred ontology.</span>
 
@@ -3207,10 +2514,10 @@ postprocessing the resulting inferred ontology.</p>
                                 <span class="n">triple</span> <span class="o">=</span> <span class="n">subject</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">subClassOf</span><span class="p">,</span> <span class="n">entity</span>
                                 <span class="k">if</span> <span class="n">triple</span> <span class="ow">in</span> <span class="n">inferred</span><span class="p">:</span>
                                     <span class="n">inferred</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
+</code></pre></div>
         </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -3219,36 +2526,96 @@ postprocessing the resulting inferred ontology.</p>
 
 
 
+  <div class="doc doc-object doc-attribute">
 
 
 
-<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.base_iri">
+<code class="highlight language-python"><span class="n">base_iri</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-writable"><code>writable</code></small>
+  </span>
+
+<a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.base_iri" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Base iri of inferred ontology.</p>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-attribute">
+
+
+
+<h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.inferred">
+<code class="highlight language-python"><span class="n">inferred</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+<a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.inferred" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>The current inferred graph.</p>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-attribute">
+
+
+
+<h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.namespaces">
+<code class="highlight language-python"><span class="n">namespaces</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+<a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.namespaces" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Namespaces defined in the original graph.</p>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.add_base_annotations">
-<code class="highlight language-python"><span class="n">add_base_annotations</span><span class="p">()</span></code>
+<code class="highlight language-python"><span class="n">add_base_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
 
 <a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.add_base_annotations" title="Permanent link">&para;</a></h3>
 
+    <div class="doc doc-contents ">
 
-  <div class="doc doc-contents ">
-  
       <p>Copy base annotations from original graph to the inferred graph.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_base_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_base_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Copy base annotations from original graph to the inferred graph.&quot;&quot;&quot;</span>
     <span class="n">base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span>
     <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
@@ -3259,115 +2626,58 @@ postprocessing the resulting inferred ontology.</p>
             <span class="n">version</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">inferred</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">base</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span>
-</code></pre></div></td></tr></table></div>
-      </details>
+</code></pre></div>
+        </details>
+    </div>
+
   </div>
 
-</div>
 
-<div class="doc doc-object doc-function">
+
+  <div class="doc doc-object doc-method">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.asserted_base_iri">
-<code class="highlight language-python"><span class="n">asserted_base_iri</span><span class="p">()</span></code>
+<code class="highlight language-python"><span class="n">asserted_base_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
 
 <a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.asserted_base_iri" title="Permanent link">&para;</a></h3>
 
+    <div class="doc doc-contents ">
 
-  <div class="doc doc-contents ">
-  
       <p>Returns the base iri or the original graph.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">asserted_base_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">asserted_base_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns the base iri or the original graph.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">URIRef</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">namespaces</span><span class="p">())</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">))</span>
-</code></pre></div></td></tr></table></div>
-      </details>
+</code></pre></div>
+        </details>
+    </div>
+
   </div>
 
-</div>
-
-<div class="doc doc-object doc-function">
 
 
-
-<h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.base_iri">
-<code class="highlight language-python"><span class="n">base_iri</span><span class="p">()</span></code>
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-property"><code>property</code></small>
-      <small class="doc doc-label doc-label-writable"><code>writable</code></small>
-  </span>
-
-<a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.base_iri" title="Permanent link">&para;</a></h3>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Base iri of inferred ontology.</p>
-
-      <details class="quote">
-        <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@property</span>
-<span class="k">def</span> <span class="nf">base_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Base iri of inferred ontology.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_iri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_base_iri</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">asserted_base_iri</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;-inferred&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_iri</span>
-</code></pre></div></td></tr></table></div>
-      </details>
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
+  <div class="doc doc-object doc-method">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.clean_ancestors">
-<code class="highlight language-python"><span class="n">clean_ancestors</span><span class="p">()</span></code>
+<code class="highlight language-python"><span class="n">clean_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
 
 <a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.clean_ancestors" title="Permanent link">&para;</a></h3>
 
+    <div class="doc doc-contents ">
 
-  <div class="doc doc-contents ">
-  
       <p>Remove redundant rdfs:subClassOf relations in inferred graph.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span>
-<span class="normal">141</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">clean_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">clean_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Remove redundant rdfs:subClassOf relations in inferred graph.&quot;&quot;&quot;</span>
     <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
     <span class="k">for</span> <span class="p">(</span>  <span class="c1"># pylint: disable=too-many-nested-blocks</span>
@@ -3389,43 +2699,32 @@ postprocessing the resulting inferred ontology.</p>
                             <span class="n">triple</span> <span class="o">=</span> <span class="n">subject</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">subClassOf</span><span class="p">,</span> <span class="n">entity</span>
                             <span class="k">if</span> <span class="n">triple</span> <span class="ow">in</span> <span class="n">inferred</span><span class="p">:</span>
                                 <span class="n">inferred</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-      </details>
+</code></pre></div>
+        </details>
+    </div>
+
   </div>
 
-</div>
 
-<div class="doc doc-object doc-function">
+
+  <div class="doc doc-object doc-method">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.clean_base">
-<code class="highlight language-python"><span class="n">clean_base</span><span class="p">()</span></code>
+<code class="highlight language-python"><span class="n">clean_base</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
 
 <a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.clean_base" title="Permanent link">&para;</a></h3>
 
+    <div class="doc doc-contents ">
 
-  <div class="doc doc-contents ">
-  
       <p>Remove all relations <code>s? a owl:Ontology</code> where <code>s?</code> is not
 <code>base_iri</code>.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">clean_base</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">clean_base</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Remove all relations `s? a owl:Ontology` where `s?` is not</span>
 <span class="sd">    `base_iri`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3439,73 +2738,31 @@ postprocessing the resulting inferred ontology.</p>
     <span class="p">):</span>
         <span class="n">inferred</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span>
     <span class="n">inferred</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Ontology</span><span class="p">))</span>
-</code></pre></div></td></tr></table></div>
-      </details>
+</code></pre></div>
+        </details>
+    </div>
+
   </div>
 
-</div>
-
-<div class="doc doc-object doc-function">
 
 
-
-<h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.inferred">
-<code class="highlight language-python"><span class="n">inferred</span><span class="p">()</span></code>
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-property"><code>property</code></small>
-  </span>
-
-<a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.inferred" title="Permanent link">&para;</a></h3>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>The current inferred graph.</p>
-
-      <details class="quote">
-        <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@property</span>
-<span class="k">def</span> <span class="nf">inferred</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The current inferred graph.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inferred</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_inferred_graph</span><span class="p">()</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inferred</span>
-</code></pre></div></td></tr></table></div>
-      </details>
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
+  <div class="doc doc-object doc-method">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.inferred_graph">
-<code class="highlight language-python"><span class="n">inferred_graph</span><span class="p">()</span></code>
+<code class="highlight language-python"><span class="n">inferred_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
 
 <a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.inferred_graph" title="Permanent link">&para;</a></h3>
 
+    <div class="doc doc-contents ">
 
-  <div class="doc doc-contents ">
-  
       <p>Returns the postprocessed inferred graph.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">inferred_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">inferred_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns the postprocessed inferred graph.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">add_base_annotations</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">set_namespace</span><span class="p">()</span>
@@ -3513,107 +2770,61 @@ postprocessing the resulting inferred ontology.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">remove_nothing_is_nothing</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clean_ancestors</span><span class="p">()</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
-</code></pre></div></td></tr></table></div>
-      </details>
+</code></pre></div>
+        </details>
+    </div>
+
   </div>
 
-</div>
-
-<div class="doc doc-object doc-function">
 
 
-
-<h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.namespaces">
-<code class="highlight language-python"><span class="n">namespaces</span><span class="p">()</span></code>
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-property"><code>property</code></small>
-  </span>
-
-<a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.namespaces" title="Permanent link">&para;</a></h3>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Namespaces defined in the original graph.</p>
-
-      <details class="quote">
-        <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@property</span>
-<span class="k">def</span> <span class="nf">namespaces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Namespaces defined in the original graph.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_namespaces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_namespaces</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">namespaces</span><span class="p">())</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_namespaces</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_namespaces</span>
-</code></pre></div></td></tr></table></div>
-      </details>
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
+  <div class="doc doc-object doc-method">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.raw_inferred_graph">
-<code class="highlight language-python"><span class="n">raw_inferred_graph</span><span class="p">()</span></code>
+<code class="highlight language-python"><span class="n">raw_inferred_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
 
 <a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.raw_inferred_graph" title="Permanent link">&para;</a></h3>
 
+    <div class="doc doc-contents ">
 
-  <div class="doc doc-contents ">
-  
       <p>Returns the raw non-postprocessed inferred ontology as a rdflib
 graph.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">raw_inferred_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">raw_inferred_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns the raw non-postprocessed inferred ontology as a rdflib</span>
 <span class="sd">    graph.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">OwlApiInterface</span><span class="p">()</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-      </details>
+</code></pre></div>
+        </details>
+    </div>
+
   </div>
 
-</div>
 
-<div class="doc doc-object doc-function">
+
+  <div class="doc doc-object doc-method">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.remove_nothing_is_nothing">
-<code class="highlight language-python"><span class="n">remove_nothing_is_nothing</span><span class="p">()</span></code>
+<code class="highlight language-python"><span class="n">remove_nothing_is_nothing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
 
 <a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.remove_nothing_is_nothing" title="Permanent link">&para;</a></h3>
 
+    <div class="doc doc-contents ">
 
-  <div class="doc doc-contents ">
-  
       <p>Remove superfluid relation in inferred graph:</p>
 <p>owl:Nothing rdfs:subClassOf owl:Nothing</p>
 
-      <details class="quote">
-        <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
-<span class="normal">114</span>
-<span class="normal">115</span>
-<span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_nothing_is_nothing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">remove_nothing_is_nothing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Remove superfluid relation in inferred graph:</span>
 
 <span class="sd">    owl:Nothing rdfs:subClassOf owl:Nothing</span>
@@ -3622,38 +2833,32 @@ graph.</p>
     <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
     <span class="k">if</span> <span class="n">triple</span> <span class="ow">in</span> <span class="n">inferred</span><span class="p">:</span>
         <span class="n">inferred</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-      </details>
+</code></pre></div>
+        </details>
+    </div>
+
   </div>
 
-</div>
 
-<div class="doc doc-object doc-function">
+
+  <div class="doc doc-object doc-method">
 
 
 
 <h3 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.set_namespace">
-<code class="highlight language-python"><span class="n">set_namespace</span><span class="p">()</span></code>
+<code class="highlight language-python"><span class="n">set_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
 
 <a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FaCTPPGraph.set_namespace" title="Permanent link">&para;</a></h3>
 
+    <div class="doc doc-contents ">
 
-  <div class="doc doc-contents ">
-  
       <p>Override namespace of inferred graph with the namespace of the
 original graph.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">85</span>
-<span class="normal">86</span>
-<span class="normal">87</span>
-<span class="normal">88</span>
-<span class="normal">89</span>
-<span class="normal">90</span>
-<span class="normal">91</span>
-<span class="normal">92</span>
-<span class="normal">93</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Override namespace of inferred graph with the namespace of the</span>
 <span class="sd">    original graph.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3662,57 +2867,63 @@ original graph.</p>
         <span class="n">inferred</span><span class="o">.</span><span class="n">namespace_manager</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span>
             <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-      </details>
-  </div>
-
-</div>
-
-
+</code></pre></div>
+        </details>
+    </div>
 
   </div>
 
+
+
+
+
   </div>
 
-</div>
+    </div>
 
-<div class="doc doc-object doc-class">
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
 
 
 
 <h2 class="doc doc-heading" id="ontopy.factpluspluswrapper.factppgraph.FactPPError">
-        <code>FactPPError</code>
+        <code>
+FactPPError        </code>
+
 
 
 <a class="headerlink" href="#ontopy.factpluspluswrapper.factppgraph.FactPPError" title="Permanent link">&para;</a></h2>
 
+    <div class="doc doc-contents ">
 
-  <div class="doc doc-contents ">
-
-  
       <p>Postprocessing error after reasoning with FaCT++.</p>
-
 
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">8</span>
-<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">FactPPError</span><span class="p">:</span>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">FactPPError</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Postprocessing error after reasoning with FaCT++.&quot;&quot;&quot;</span>
-</code></pre></div></td></tr></table></div>
+</code></pre></div>
         </details>
 
-  </div>
 
-</div>
-
-
-
+    </div>
 
   </div>
 
+
+
+
+
+
+
   </div>
 
-</div>
+    </div>
+
+  </div>
 
 
 
@@ -3723,6 +2934,8 @@ original graph.</p>
             </div>
           
           
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
         </div>
         
           <a href="#" class="md-top md-icon" data-md-component="top" hidden>
@@ -3775,7 +2988,7 @@ original graph.</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2019-2021 SINTEF
+      Copyright &copy; 2019-2022 SINTEF
     </div>
   
   
@@ -3805,7 +3018,7 @@ original graph.</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.instant", "navigation.top"], "search": "../../../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
       <script src="../../../../assets/javascripts/bundle.078830c0.min.js"></script>

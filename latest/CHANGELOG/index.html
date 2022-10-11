@@ -405,113 +405,10 @@
   
   
   
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2_1" type="checkbox" id="__nav_5_2_1" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_5_2_1">
-          Emmodoc
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Emmodoc" data-md-level="3">
-        <label class="md-nav__title" for="__nav_5_2_1">
-          <span class="md-nav__icon md-icon"></span>
-          Emmodoc
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
     <li class="md-nav__item">
       <a href="../examples/emmodoc/" class="md-nav__link">
-        Generate documentation for EMMO
+        EMMOdoc
       </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/emmodoc/classes/" class="md-nav__link">
-        Classes
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/emmodoc/emmo/" class="md-nav__link">
-        Emmo
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/emmodoc/important_concepts/" class="md-nav__link">
-        Important concepts
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/emmodoc/introduction/" class="md-nav__link">
-        Introduction
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/emmodoc/relations/" class="md-nav__link">
-        Relations
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
     </li>
   
 
@@ -524,7 +421,7 @@
   
     <li class="md-nav__item">
       <a href="../examples/jupyter-visualization/" class="md-nav__link">
-        Visualise an ontology using pyctoscape in Jupyter Notebook
+        Jupyter visualization
       </a>
     </li>
   
@@ -660,6 +557,13 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#unreleased-2022-10-11" class="md-nav__link">
+    Unreleased (2022-10-11)
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#v040-2022-10-04" class="md-nav__link">
@@ -1305,6 +1209,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#unreleased-2022-10-11" class="md-nav__link">
+    Unreleased (2022-10-11)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v040-2022-10-04" class="md-nav__link">
     v0.4.0 (2022-10-04)
   </a>
@@ -1600,6 +1511,20 @@
 
 
 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
+<h2 id="unreleased-2022-10-11"><a href="https://github.com/emmo-repo/EMMOntoPy/tree/Unreleased">Unreleased</a> (2022-10-11)<a class="headerlink" href="#unreleased-2022-10-11" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/emmo-repo/EMMOntoPy/compare/v0.4.0...Unreleased">Full Changelog</a></p>
+<p><strong>Closed issues:</strong></p>
+<ul>
+<li>Drop Python 3.6 support - extend Python >3.7 support <a href="https://github.com/emmo-repo/EMMOntoPy/issues/486">#486</a></li>
+<li>Update pypi-release github action <a href="https://github.com/emmo-repo/EMMOntoPy/issues/482">#482</a></li>
+<li>Make workflows dispatchable <a href="https://github.com/emmo-repo/EMMOntoPy/issues/481">#481</a></li>
+<li>Give option to write_catalog for writing relative paths <a href="https://github.com/emmo-repo/EMMOntoPy/issues/473">#473</a></li>
+</ul>
+<p><strong>Merged pull requests:</strong></p>
+<ul>
+<li>Makeover for CI/CD workflows, pre-commit &amp; MkDocs <a href="https://github.com/emmo-repo/EMMOntoPy/pull/485">#485</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
+<li>write catalog now writes relative paths per default <a href="https://github.com/emmo-repo/EMMOntoPy/pull/483">#483</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
+</ul>
 <h2 id="v040-2022-10-04"><a href="https://github.com/emmo-repo/EMMOntoPy/tree/v0.4.0">v0.4.0</a> (2022-10-04)<a class="headerlink" href="#v040-2022-10-04" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/emmo-repo/EMMOntoPy/compare/v0.3.1...v0.4.0">Full Changelog</a></p>
 <p><strong>Fixed bugs:</strong></p>
@@ -1628,34 +1553,22 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/480">#480</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>Update from 'EMMO-python' -> 'EMMOntoPy' <a href="https://github.com/emmo-repo/EMMOntoPy/pull/477">#477</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/471">#471</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>Allow for adding prefix in manchester notation. <a href="https://github.com/emmo-repo/EMMOntoPy/pull/469">#469</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/466">#466</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/461">#461</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>Fixed issue with exel2onto: not all relations are included in the generated ontology <a href="https://github.com/emmo-repo/EMMOntoPy/pull/458">#458</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Added documentation of excel2onto <a href="https://github.com/emmo-repo/EMMOntoPy/pull/456">#456</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>factpluspluswrapper README file <a href="https://github.com/emmo-repo/EMMOntoPy/pull/453">#453</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/452">#452</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>Improved get_unabbreviated_triples() <a href="https://github.com/emmo-repo/EMMOntoPy/pull/449">#449</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Fix loading in windows, url paths <a href="https://github.com/emmo-repo/EMMOntoPy/pull/446">#446</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Fixed reading web destinations defined in catalog <a href="https://github.com/emmo-repo/EMMOntoPy/pull/445">#445</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/443">#443</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>SUPPORT EMMO-beta4.0 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/441">#441</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Support for userdefined prefixes <a href="https://github.com/emmo-repo/EMMOntoPy/pull/439">#439</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Flb/issue421 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/438">#438</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Update demo <a href="https://github.com/emmo-repo/EMMOntoPy/pull/437">#437</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Silence false negative from pylint on github <a href="https://github.com/emmo-repo/EMMOntoPy/pull/436">#436</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Better error messages <a href="https://github.com/emmo-repo/EMMOntoPy/pull/435">#435</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/434">#434</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/432">#432</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/430">#430</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/425">#425</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/420">#420</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>Updated logo. <a href="https://github.com/emmo-repo/EMMOntoPy/pull/418">#418</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>cytoscapegraph fails with missing edge labels <a href="https://github.com/emmo-repo/EMMOntoPy/pull/414">#414</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/413">#413</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 </ul>
 <h2 id="v031-2022-05-08"><a href="https://github.com/emmo-repo/EMMOntoPy/tree/v0.3.1">v0.3.1</a> (2022-05-08)<a class="headerlink" href="#v031-2022-05-08" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/emmo-repo/EMMOntoPy/compare/v0.3.0...v0.3.1">Full Changelog</a></p>
@@ -1685,15 +1598,10 @@
 <li>Updated docs python handler <a href="https://github.com/emmo-repo/EMMOntoPy/pull/408">#408</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
 <li>Flb/get descendants <a href="https://github.com/emmo-repo/EMMOntoPy/pull/405">#405</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Corrected expected number of returned arguments <a href="https://github.com/emmo-repo/EMMOntoPy/pull/404">#404</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/402">#402</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/400">#400</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>Add functionality for setting name part of IRI to prefLabel <a href="https://github.com/emmo-repo/EMMOntoPy/pull/399">#399</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>create_from_excel/pandas return as list of concepts that are worngly defined in the excelfile <a href="https://github.com/emmo-repo/EMMOntoPy/pull/396">#396</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/395">#395</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>Download EMMO from raw.github deirectly as redirection is broken <a href="https://github.com/emmo-repo/EMMOntoPy/pull/392">#392</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/389">#389</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>Workaround for failing test <a href="https://github.com/emmo-repo/EMMOntoPy/pull/385">#385</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/380">#380</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>fix #313 remove handle <a href="https://github.com/emmo-repo/EMMOntoPy/pull/315">#315</a> (<a href="https://github.com/sygout">sygout</a>)</li>
 </ul>
 <h2 id="v020-2022-03-02"><a href="https://github.com/emmo-repo/EMMOntoPy/tree/v0.2.0">v0.2.0</a> (2022-03-02)<a class="headerlink" href="#v020-2022-03-02" title="Permanent link">&para;</a></h2>
@@ -1706,22 +1614,20 @@
 <li>Standard dunder/magic methods for <code>Ontology</code> <a href="https://github.com/emmo-repo/EMMOntoPy/issues/228">#228</a></li>
 <li>Update code styling and linting <a href="https://github.com/emmo-repo/EMMOntoPy/issues/223">#223</a></li>
 <li>Fix checking PR body &amp; improve error message in CD <a href="https://github.com/emmo-repo/EMMOntoPy/pull/318">#318</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
-<li>New workflows for dependabot automation <a href="https://github.com/emmo-repo/EMMOntoPy/pull/285">#285</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
 </ul>
 <p><strong>Fixed bugs:</strong></p>
 <ul>
 <li>GH GraphQL type issue for auto-merge workflow <a href="https://github.com/emmo-repo/EMMOntoPy/issues/374">#374</a></li>
 <li>Missing warning for excel parser relations and problem with "nan" <a href="https://github.com/emmo-repo/EMMOntoPy/issues/365">#365</a></li>
-<li>Ignore NumPy <code>safety</code> warning <a href="https://github.com/emmo-repo/EMMOntoPy/issues/360">#360</a></li>
 <li>Seting metadata in excelparser fails if there are no imported ontologies. <a href="https://github.com/emmo-repo/EMMOntoPy/issues/331">#331</a></li>
 <li>Edge-case fails CD workflow for dependabot <a href="https://github.com/emmo-repo/EMMOntoPy/issues/319">#319</a></li>
 <li>Ontodoc failing due to wrong <code>rdflib</code> import <a href="https://github.com/emmo-repo/EMMOntoPy/issues/306">#306</a></li>
 <li>Overwriting <code>get_triples()</code> method <a href="https://github.com/emmo-repo/EMMOntoPy/issues/280">#280</a></li>
 <li>OpenModel logo not loading in README <a href="https://github.com/emmo-repo/EMMOntoPy/issues/278">#278</a></li>
+<li>Disable FOAF test as xmlns.com is down <a href="https://github.com/emmo-repo/EMMOntoPy/issues/276">#276</a></li>
 </ul>
 <p><strong>Closed issues:</strong></p>
 <ul>
-<li>Add NumPy as an explicit dependency <a href="https://github.com/emmo-repo/EMMOntoPy/issues/359">#359</a></li>
 <li>Use TEAM 4.0[bot] for GH Actions jobs <a href="https://github.com/emmo-repo/EMMOntoPy/issues/352">#352</a></li>
 <li>_get_triples_spo take argumens s, and p, not subject and predicate <a href="https://github.com/emmo-repo/EMMOntoPy/issues/350">#350</a></li>
 <li>Add --force to excelparser <a href="https://github.com/emmo-repo/EMMOntoPy/issues/333">#333</a></li>
@@ -1734,43 +1640,33 @@
 <li>Let ontology.new_entity acccept one or more parents directly <a href="https://github.com/emmo-repo/EMMOntoPy/issues/294">#294</a></li>
 <li>Make ManchesterSyntaxParser that returns Owlready2 <a href="https://github.com/emmo-repo/EMMOntoPy/issues/293">#293</a></li>
 <li>onto.new_entity should throw Error if label name consists of more than one word <a href="https://github.com/emmo-repo/EMMOntoPy/issues/290">#290</a></li>
+<li>ReadTheDocs <a href="https://github.com/emmo-repo/EMMOntoPy/issues/288">#288</a></li>
 <li>Add logo to README <a href="https://github.com/emmo-repo/EMMOntoPy/issues/287">#287</a></li>
 <li>Write EMMO-python is deprecated and link to EMMOtopy on PyPi <a href="https://github.com/emmo-repo/EMMOntoPy/issues/269">#269</a></li>
+<li>Consider MarkDown header styling <a href="https://github.com/emmo-repo/EMMOntoPy/issues/231">#231</a></li>
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/378">#378</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>Use <code>ID!</code> type instead of <code>String!</code> <a href="https://github.com/emmo-repo/EMMOntoPy/pull/375">#375</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/371">#371</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>Avoided infinite recursion when loading catalog files that recursively <a href="https://github.com/emmo-repo/EMMOntoPy/pull/370">#370</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/367">#367</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>Warning relation excelparser <a href="https://github.com/emmo-repo/EMMOntoPy/pull/366">#366</a> (<a href="https://github.com/sygout">sygout</a>)</li>
 <li>Close temporary file before reading it <a href="https://github.com/emmo-repo/EMMOntoPy/pull/364">#364</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Ignore safety ID 44715 + add numpy dependency <a href="https://github.com/emmo-repo/EMMOntoPy/pull/361">#361</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/358">#358</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/357">#357</a> (<a href="https://github.com/TEAM4-0">TEAM4-0</a>)</li>
 <li>Use TEAM 4.0[bot] <a href="https://github.com/emmo-repo/EMMOntoPy/pull/353">#353</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
 <li>Changed arguments in _has_obj_triples_spo <a href="https://github.com/emmo-repo/EMMOntoPy/pull/351">#351</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/349">#349</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Fix serialised ontology iri <a href="https://github.com/emmo-repo/EMMOntoPy/pull/341">#341</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Corrected parsing cardinality restrictions <a href="https://github.com/emmo-repo/EMMOntoPy/pull/340">#340</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>When visualising restrictions, annotate the edges with the restriction type by default <a href="https://github.com/emmo-repo/EMMOntoPy/pull/339">#339</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/338">#338</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Flb/update excel parser accroding to thermodynamics example <a href="https://github.com/emmo-repo/EMMOntoPy/pull/336">#336</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/330">#330</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Added sconverting Posix to str in get_ontology <a href="https://github.com/emmo-repo/EMMOntoPy/pull/327">#327</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/324">#324</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Added package specific base exception and base warning for EMMOntoPy <a href="https://github.com/emmo-repo/EMMOntoPy/pull/322">#322</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Added checking that label is string in get_by_label <a href="https://github.com/emmo-repo/EMMOntoPy/pull/312">#312</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Make excelparser that converts a filled excel sheet to an ontology <a href="https://github.com/emmo-repo/EMMOntoPy/pull/309">#309</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/308">#308</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Fix ontoconvert rdflib import <a href="https://github.com/emmo-repo/EMMOntoPy/pull/307">#307</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
 <li>Check first versionIRI then versionInfo in ontology.get_version() <a href="https://github.com/emmo-repo/EMMOntoPy/pull/301">#301</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/300">#300</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Removed .readthedocs.yml <a href="https://github.com/emmo-repo/EMMOntoPy/pull/298">#298</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Added support for evaluating Manchester expression to owlready2 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/296">#296</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Added functionality for more than one parent in new_entity <a href="https://github.com/emmo-repo/EMMOntoPy/pull/295">#295</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>[Auto-generated] Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/292">#292</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Added test for label name length in ontology.new_entity <a href="https://github.com/emmo-repo/EMMOntoPy/pull/291">#291</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>add logo to Readme and doc <a href="https://github.com/emmo-repo/EMMOntoPy/pull/289">#289</a> (<a href="https://github.com/m-abdollahi">m-abdollahi</a>)</li>
 <li>Improved representation of blank nodes <a href="https://github.com/emmo-repo/EMMOntoPy/pull/283">#283</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
@@ -1827,12 +1723,9 @@
 <li>Reset version to 0.1.0 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/271">#271</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
 <li>Update README with PyPI and deprecation msgs <a href="https://github.com/emmo-repo/EMMOntoPy/pull/270">#270</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
 <li>Added option: EMMObased = False in ontology.load() <a href="https://github.com/emmo-repo/EMMOntoPy/pull/262">#262</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>Update pyyaml requirement from \&lt;6,>=5.4.1 to >=5.4.1,\&lt;7 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/260">#260</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
-<li>Update owlready2 requirement from !=0.32,!=0.34,\&lt;0.35,>=0.28 to >=0.28,!=0.32,!=0.34,\&lt;0.36 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/259">#259</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
 <li>Added new test "test_physical_quantity_dimension" <a href="https://github.com/emmo-repo/EMMOntoPy/pull/258">#258</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Add <code>packaging</code> to list of requirements <a href="https://github.com/emmo-repo/EMMOntoPy/pull/256">#256</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
 <li>Fix MkDocs build warnings and CI job <a href="https://github.com/emmo-repo/EMMOntoPy/pull/254">#254</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
-<li>Update mkdocstrings requirement from ~=0.16.1 to ~=0.16.2 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/253">#253</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
 <li>Update dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/252">#252</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
 <li>Add OpenModel contributing project <a href="https://github.com/emmo-repo/EMMOntoPy/pull/247">#247</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Automate documentation releases <a href="https://github.com/emmo-repo/EMMOntoPy/pull/242">#242</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
@@ -1840,7 +1733,6 @@
 <li>Ensure all produced files from tests are in a temp dir <a href="https://github.com/emmo-repo/EMMOntoPy/pull/239">#239</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
 <li>Changed EMMO to be acronym for Elemental Multiperspective Material Ontology <a href="https://github.com/emmo-repo/EMMOntoPy/pull/238">#238</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Use width in img HTML <a href="https://github.com/emmo-repo/EMMOntoPy/pull/235">#235</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
-<li>Update graphviz requirement from \&lt;0.17,>=0.16 to >=0.16,\&lt;0.18 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/229">#229</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
 <li>Added function to load the emmo (the ontology) directly <a href="https://github.com/emmo-repo/EMMOntoPy/pull/226">#226</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Created pull request template <a href="https://github.com/emmo-repo/EMMOntoPy/pull/225">#225</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Setup new documentation framework <a href="https://github.com/emmo-repo/EMMOntoPy/pull/222">#222</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
@@ -1866,10 +1758,6 @@
 </ul>
 <h2 id="v101-2021-07-01"><a href="https://github.com/emmo-repo/EMMOntoPy/tree/v1.0.1">v1.0.1</a> (2021-07-01)<a class="headerlink" href="#v101-2021-07-01" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/emmo-repo/EMMOntoPy/compare/v1.0.0...v1.0.1">Full Changelog</a></p>
-<p><strong>Implemented enhancements:</strong></p>
-<ul>
-<li>Specify version ranges for dependencies <a href="https://github.com/emmo-repo/EMMOntoPy/issues/155">#155</a></li>
-</ul>
 <p><strong>Fixed bugs:</strong></p>
 <ul>
 <li>Windows paths are not handled properly <a href="https://github.com/emmo-repo/EMMOntoPy/issues/147">#147</a></li>
@@ -1897,12 +1785,8 @@
 <li>Changed requirements to greater than <a href="https://github.com/emmo-repo/EMMOntoPy/pull/179">#179</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Owread2-0.32 not accepted die to error in owlready2 triplelite <a href="https://github.com/emmo-repo/EMMOntoPy/pull/178">#178</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Fixed import of defaultstyle in ontograph-tool <a href="https://github.com/emmo-repo/EMMOntoPy/pull/177">#177</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>Update pyyaml requirement from ~=5.4.0 to ~=5.4.1 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/171">#171</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
 <li>Updated pygments req to at least 2.7.4 because of high seq alert <a href="https://github.com/emmo-repo/EMMOntoPy/pull/168">#168</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Owlready requirement >0.28 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/167">#167</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>Bump actions/setup-python from 2 to 2.2.2 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/166">#166</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
-<li>Bump actions/checkout from 2 to 2.3.4 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/165">#165</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
-<li>Bump owlready2 from 0.30 to 0.31 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/164">#164</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
 <li>WIP: Ipycytoscape <a href="https://github.com/emmo-repo/EMMOntoPy/pull/163">#163</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Made it possible to load other ontologies like foaf <a href="https://github.com/emmo-repo/EMMOntoPy/pull/162">#162</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Added get_label instead of asstring <a href="https://github.com/emmo-repo/EMMOntoPy/pull/160">#160</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
@@ -1911,7 +1795,6 @@
 <li>Make one get label <a href="https://github.com/emmo-repo/EMMOntoPy/pull/154">#154</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Issue150 ontograph cannotload emmo inferred directly <a href="https://github.com/emmo-repo/EMMOntoPy/pull/151">#151</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Added Fact++ in tools documentation <a href="https://github.com/emmo-repo/EMMOntoPy/pull/149">#149</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>Bump owlready2 from 0.29 to 0.30 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/148">#148</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
 <li>Improved issue reporting in emmocheck <a href="https://github.com/emmo-repo/EMMOntoPy/pull/146">#146</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 </ul>
 <h2 id="v100-2021-03-25"><a href="https://github.com/emmo-repo/EMMOntoPy/tree/v1.0.0">v1.0.0</a> (2021-03-25)<a class="headerlink" href="#v100-2021-03-25" title="Permanent link">&para;</a></h2>
@@ -1945,7 +1828,6 @@
 <p><strong>Merged pull requests:</strong></p>
 <ul>
 <li>Fixed reading xml as 'rdfxml' <a href="https://github.com/emmo-repo/EMMOntoPy/pull/139">#139</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>Bump owlready2 from 0.28 to 0.29 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/136">#136</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
 <li>Added wu_palmer_measure for semantic similarity <a href="https://github.com/emmo-repo/EMMOntoPy/pull/135">#135</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 </ul>
 <h2 id="v100-alpha-28-2021-03-09"><a href="https://github.com/emmo-repo/EMMOntoPy/tree/v1.0.0-alpha-28">v1.0.0-alpha-28</a> (2021-03-09)<a class="headerlink" href="#v100-alpha-28-2021-03-09" title="Permanent link">&para;</a></h2>
@@ -1958,7 +1840,6 @@
 <p><strong>Merged pull requests:</strong></p>
 <ul>
 <li>Version updated for rel of v0.28 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/133">#133</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
-<li>Bump owlready2 from 0.27 to 0.28 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/132">#132</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
 <li>Load ontology <a href="https://github.com/emmo-repo/EMMOntoPy/pull/131">#131</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Optimised label lookup in ontology and dir listing. It is now much faster <a href="https://github.com/emmo-repo/EMMOntoPy/pull/127">#127</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Use catalog by default <a href="https://github.com/emmo-repo/EMMOntoPy/pull/126">#126</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
@@ -1981,7 +1862,6 @@
 <p><strong>Merged pull requests:</strong></p>
 <ul>
 <li>Added functionality to document domain ontologies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/124">#124</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
-<li>Bump owlready2 from 0.25 to 0.27 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/121">#121</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
 <li>Made ontoconvert and ontograph tools executable in linux <a href="https://github.com/emmo-repo/EMMOntoPy/pull/120">#120</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Update CI  <a href="https://github.com/emmo-repo/EMMOntoPy/pull/119">#119</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
 <li>Update publish workflow + add dependabot <a href="https://github.com/emmo-repo/EMMOntoPy/pull/116">#116</a> (<a href="https://github.com/CasperWA">CasperWA</a>)</li>
@@ -2029,7 +1909,6 @@
 <ul>
 <li>Release 1.0.0-alpha-23 <a href="https://github.com/emmo-repo/EMMOntoPy/pull/104">#104</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Allow to load turtle ontologies without catalog file. <a href="https://github.com/emmo-repo/EMMOntoPy/pull/102">#102</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
-<li>Bump junit from 4.11 to 4.13.1 in /emmo/factpluspluswrapper/java <a href="https://github.com/emmo-repo/EMMOntoPy/pull/101">#101</a> (<a href="https://github.com/apps/dependabot">dependabot[bot]</a>)</li>
 <li>Updated README file <a href="https://github.com/emmo-repo/EMMOntoPy/pull/100">#100</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Changed the sync_reasoner() method to use FaCT++ as the default reasoner <a href="https://github.com/emmo-repo/EMMOntoPy/pull/94">#94</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>Add reasoning <a href="https://github.com/emmo-repo/EMMOntoPy/pull/93">#93</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
@@ -2233,6 +2112,8 @@
             </div>
           
           
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
         </div>
         
           <a href="#" class="md-top md-icon" data-md-component="top" hidden>
@@ -2285,7 +2166,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2019-2021 SINTEF
+      Copyright &copy; 2019-2022 SINTEF
     </div>
   
   
@@ -2315,7 +2196,7 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.top"], "search": "../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
       <script src="../assets/javascripts/bundle.078830c0.min.js"></script>
