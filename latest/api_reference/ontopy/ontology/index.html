@@ -2458,7 +2458,13 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
             <span class="k">if</span> <span class="n">fmt</span> <span class="ow">and</span> <span class="n">fmt</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">OWLREADY2_FORMATS</span><span class="p">:</span>
                 <span class="c1"># Convert filename to rdfxml before passing it to owlready2</span>
                 <span class="n">graph</span> <span class="o">=</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-                <span class="n">graph</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">resolved_url</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">graph</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">resolved_url</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">URLError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">EMMOntoPyException</span><span class="p">(</span>
+                        <span class="s2">&quot;URL error&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="n">resolved_url</span>
+                    <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+
                 <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
                     <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">handle</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xml&quot;</span><span class="p">)</span>
                     <span class="n">handle</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>

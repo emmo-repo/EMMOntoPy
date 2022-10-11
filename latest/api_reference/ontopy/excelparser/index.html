@@ -1288,20 +1288,31 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
 <span class="sd">                    imported ontology.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Get imported ontologies from optional &quot;Imports&quot; sheet</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">imports</span><span class="p">:</span>
-        <span class="n">imports</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">web_protocol</span> <span class="o">=</span> <span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="s2">&quot;ftp://&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_relative_to_absolute_paths</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">web_protocol</span><span class="p">):</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">excelpath</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">path</span>
+
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">imports_frame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
+        <span class="n">imports</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
             <span class="n">excelpath</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">imports_sheet_name</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-        <span class="k">pass</span>
+        <span class="n">imports</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Strip leading and trailing white spaces in path</span>
-        <span class="n">imports</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-            <span class="n">imports_frame</span><span class="p">[</span><span class="s2">&quot;Imported ontologies&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="c1"># Strip leading and trailing white spaces in paths</span>
+        <span class="n">imports</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s+&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;\s+$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
+        <span class="c1"># Set empty strings to nan</span>
+        <span class="n">imports</span> <span class="o">=</span> <span class="n">imports</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*$&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;Imported ontologies&quot;</span> <span class="ow">in</span> <span class="n">imports</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">imports</span><span class="p">[</span><span class="s2">&quot;Imported ontologies&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">imports</span><span class="p">[</span>
+                <span class="s2">&quot;Imported ontologies&quot;</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">_relative_to_absolute_paths</span><span class="p">)</span>
 
     <span class="c1"># Read datafile TODO: Some magic to identify the header row</span>
     <span class="n">conceptdata</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
@@ -1345,7 +1356,7 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_ontology_from_pandas</span><span class="p">(</span>  <span class="c1"># pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">metadata</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">imports</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+    <span class="n">imports</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">base_iri</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://emmo.info/emmo/domain/onto#&quot;</span><span class="p">,</span>
     <span class="n">base_iri_from_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">catalog</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1546,7 +1557,6 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
             <span class="n">all_added_rows</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">added_rows</span><span class="p">)</span>
 
     <span class="c1"># Add properties in a second loop</span>
-
     <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">all_added_rows</span><span class="p">:</span>
         <span class="n">row</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
         <span class="n">properties</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Relations&quot;</span><span class="p">]</span>
@@ -1593,6 +1603,7 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
     <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;in_imported_ontologies&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">concepts_with_errors</span><span class="p">[</span>
         <span class="s2">&quot;already_defined&quot;</span>
     <span class="p">]</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">imported_concepts</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">concepts_with_errors</span>
 </code></pre></div>
         </details>
@@ -1634,7 +1645,7 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
 
 
 <h2 class="doc doc-heading" id="ontopy.excelparser.get_metadata_from_dataframe">
-<code class="highlight language-python"><span class="n">get_metadata_from_dataframe</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="p">(),</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">get_metadata_from_dataframe</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.excelparser.get_metadata_from_dataframe" title="Permanent link">&para;</a></h2>
@@ -1649,7 +1660,7 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
     <span class="n">metadata</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">base_iri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">base_iri_from_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">imports</span><span class="p">:</span> <span class="n">Sequence</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">imports</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">catalog</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Create ontology with metadata from pd.DataFrame&quot;&quot;&quot;</span>
@@ -1672,12 +1683,29 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
     <span class="c1"># Add imported ontologies</span>
     <span class="n">catalog</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">catalog</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">catalog</span>
     <span class="n">locations</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">location</span> <span class="ow">in</span> <span class="n">imports</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">imports</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="c1"># for location in imports:</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Imported ontologies&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">location</span><span class="p">)</span> <span class="ow">and</span> <span class="n">location</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">locations</span><span class="p">:</span>
             <span class="n">imported</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">get_ontology</span><span class="p">(</span><span class="n">location</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
             <span class="n">onto</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">imported</span><span class="p">)</span>
             <span class="n">catalog</span><span class="p">[</span><span class="n">imported</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">location</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cat</span> <span class="o">=</span> <span class="n">read_catalog</span><span class="p">(</span><span class="n">location</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">catalog</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cat</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">ReadCatalogError</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Catalog for </span><span class="si">{</span><span class="n">imported</span><span class="si">}</span><span class="s2"> not found.&quot;</span><span class="p">)</span>
             <span class="n">locations</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+        <span class="c1"># set defined prefix</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;prefix&quot;</span><span class="p">]):</span>
+            <span class="c1"># set prefix for all ontologies with same &#39;base_iri_root&#39;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;base_iri_root&quot;</span><span class="p">]):</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">set_common_prefix</span><span class="p">(</span>
+                    <span class="n">iri_base</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;base_iri_root&quot;</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;prefix&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="c1"># If base_root not given, set prefix only to top ontology</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">imported</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;prefix&quot;</span><span class="p">]</span>
 
     <span class="k">with</span> <span class="n">onto</span><span class="p">:</span>
         <span class="c1"># Add title</span>
