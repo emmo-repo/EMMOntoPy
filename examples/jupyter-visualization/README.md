@@ -8,7 +8,7 @@ In a terminal, run:
 cd /path/to/env/dirs
 python -m venv cytopy  # cytopy is my name, you can choose what ouy want
 source cytopy/bin/activate
-cd /dir/to/EMMO-python/
+cd /dir/to/EMMOntoPy/
 pip install -e .
 pip install jupyterlab
 python -m ipykernel install --user --name=cytopy

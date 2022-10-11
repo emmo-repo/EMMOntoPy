@@ -1,0 +1,12 @@
+[tool.black]
+line-length = 80
+target-version = ['py36', 'py37']
+
+[tool.pylint.messages_control]
+disable = [
+    "duplicate-code",  # R0801
+    "unspecified-encoding"  # W1514
+]
+
+[tool.pylint.format]
+max-line-length = "80"

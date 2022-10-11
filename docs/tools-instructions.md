@@ -9,6 +9,7 @@
 - [ontograph](#ontograph)
 - [ontodoc](#ontodoc)
 - [ontoconvert](#ontoconvert)
+- [excel2onto](#excel2onto)
 
 ---
 
@@ -51,7 +52,7 @@ optional arguments:
   --skip, -s ShellPattern
             Shell pattern matching tests to skip.  This option may be
                         provided multiple times.
-  --url-from-catalog, -u 
+  --url-from-catalog, -u
       Get url from catalog file.
   --ignore-namespace, -n
                         Namespace to be ignored. Can be given multiple times
@@ -62,9 +63,9 @@ optional arguments:
 ```console
     emmocheck http://emmo.info/emmo/1.0.0-alpha2
     emmocheck --database demo.sqlite3 http://www.emmc.info/emmc-csa/demo#
-    emmocheck -l emmo.owl (in folder to which emmo was downloaded locally) 
+    emmocheck -l emmo.owl (in folder to which emmo was downloaded locally)
     emmocheck --check-imported --ignore-namespace=physicalistic --verbose --url-from-catalog emmo.owl (in folder with downloaded EMMO)
-    emmocheck --check-imported --local --url-from-catalog --skip test_namespace emmo.owl 
+    emmocheck --check-imported --local --url-from-catalog --skip test_namespace emmo.owl
 ```
 <!-- (Missing example with local and path) -->
 
@@ -162,7 +163,7 @@ optional arguments:
                         multiple --path options.
   --reasoner [{FaCT++,HermiT,Pellet}]
                         Run given reasoner on the ontology. Valid reasoners
-                        are "FaCT++" (default), "HermiT" and "Pellet". 
+                        are "FaCT++" (default), "HermiT" and "Pellet".
                         Note: FaCT++ is preferred with EMMO.
   --root ROOT, -r ROOT  Name of root node in the graph. Defaults to all
                         classes.
@@ -321,17 +322,17 @@ positional arguments:
 
     optional arguments:
       -h, --help            show this help message and exit
-      --input-format, -f INPUT_FORMAT 
+      --input-format, -f INPUT_FORMAT
                             Inputformat. Default is to infer from input.
-      --output-format, -F OUTPUT_FORMAT 
+      --output-format, -F OUTPUT_FORMAT
                             Default is to infer from output.
       --no-catalog, -n      Do not read catalog even if it exists.
       --inferred, -i        Add additional relations inferred by the FaCT++ reasoner to the converted ontology. Implies --squash.
-      --base-iri BASE_IRI, -b BASE_IRI 
+      --base-iri BASE_IRI, -b BASE_IRI
                             Base iri of inferred ontology. The default is the base
                             iri of the input ontology with "-inferred" appended to
                             it. Used together with --inferred.
- 
+
       --recursive, -r       The output is written to the directories matching the input. This requires Protege catalog files to be present.
       --squash, -s          Squash imported ontologies into a single output file.
 ```
@@ -343,7 +344,7 @@ ontoconvert --recursive emmo.ttl owl/emmo.owl
 ontoconvert --inferred emmo.ttl emmo-inferred.owl
 ```
 
-Note, it is then required to add the argument `only_local=True` when loading the locally converted ontology in EMMO-python, e.g.:
+Note, it is then required to add the argument `only_local=True` when loading the locally converted ontology in EMMOntoPy, e.g.:
 
 ```python
 from ontopy import get_ontology
@@ -356,3 +357,51 @@ Since the catalog file will be overwritten in the above example writing output t
 ```console
 ontoconvert --recursive emmo.ttl owl/emmo.owl
 ```
+
+
+### Bugs
+Since parsing the results from the reasoner is currently broken in Owlready2 (v0.37), a workaround has been added to ontoconvert.
+This workaround only only supports FaCT++.  Hence, HermiT and Pellet are currently not available.
+
+
+## `excel2onto`
+
+Tool for converting EMMO-based ontologies from Excel to OWL, making it easy for non-ontologists to make EMMO-based domain ontologies.
+
+The Excel file must be in the format provided by ontology_template.xlsx.
+
+### Usage
+
+```console
+excel2onto [options] excelpath
+```
+
+### Dependencies
+
+- `pandas` (Python package)
+
+### Options
+
+```console
+positional arguments:
+  excelpath             path to excel book
+
+options:
+  -h, --help            show this help message and exit
+  --output OUTPUT, -o OUTPUT
+                        Name of output ontology, ´ontology.ttl´ is default
+  --force, -f           Whether to force generation of ontology on non-fatal
+                        error.
+```
+
+### Examples
+
+Create a `new_ontology.ttl` turtle file from the Excel file `new_ontology.xlsx`:
+```console
+excel2onto -o new_ontology.ttl new_ontology.xlsx
+```
+
+
+### Bugs
+
+`equivalentTo` is currently not supported.

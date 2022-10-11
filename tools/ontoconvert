@@ -2,61 +2,169 @@
 """Converts file format of input ontology and write it to output file(s).
 """
 import argparse
-import os
 import warnings
 
-from rdflib.util import Graph, guess_format
+from rdflib.util import guess_format
 
-from ontopy.utils import (
-    convert_imported,
-    FMAP,
-    IncompatibleVersion,
-    squash_imported,
-    _validate_installed_version,
-)
-from ontopy.factpluspluswrapper.factppgraph import FaCTPPGraph
+from ontopy import get_ontology
+from ontopy.utils import annotate_source, rename_iris
 
 
-def main():
+def main(argv: list = None):
+    """Main run function.
+
+    Parameters:
+        argv: List of arguments, similar to `sys.argv[1:]`.
+            Mainly for testing purposes, since it allows one to invoke the tool
+            manually / through Python.
+
+    """
+    # pylint: disable=too-many-branches,too-many-statements,invalid-name
+    # pylint: disable=too-many-locals
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("input", help="IRI/file to OWL source.")
+    parser.add_argument("output", help="Output file name.")
     parser.add_argument(
-        'input',
-        help='IRI/file to OWL source.')
+        "--input-format",
+        "-f",
+        help=(
+            "Input format (default is to infer from input).  Available "
+            'formats: "xml" (rdf/xml), "n3", "nt", "trix", "rdfa"'
+        ),
+    )
     parser.add_argument(
-        'output',
-        help='Output file name.')
+        "--output-format",
+        "-F",
+        help=(
+            "Output format (default is to infer from output.  Available "
+            'formats: "xml" (rdf/xml), "n3", "turtle", "nt", "pretty-xml", '
+            '"trix"'
+        ),
+    )
     parser.add_argument(
-        '--input-format', '-f',
-        help='Input format (default is to infer from input).  Available '
-        'formats: "xml" (rdf/xml), "n3", "nt", "trix", "rdfa"')
+        "--output-dir",
+        "-d",
+        default=".",
+        help=(
+            "Output directory.  If `output` is a relative path, it will be "
+            "relative to this directory."
+        ),
+    )
     parser.add_argument(
-        '--output-format', '-F',
-        help='Output format (default is to infer from output.  Available '
-        'formats: "xml" (rdf/xml), "n3", "turtle", "nt", "pretty-xml", "trix"')
+        "--overwrite",
+        "-w",
+        action="store_true",
+        help=(
+            "Whether to remove `output` if it already exists. "
+            "The default is to append to it."
+        ),
+    )
     parser.add_argument(
-        '--no-catalog', '-n', action='store_false', dest='url_from_catalog',
-         default=None,
-        help='Whether to not read catalog file even if it exists.')
+        "--no-catalog",
+        "-n",
+        action="store_false",
+        dest="url_from_catalog",
+        default=None,
+        help="Whether to not read catalog file even if it exists.",
+    )
     parser.add_argument(
-        '--inferred', '-i', action='store_true',
-        help='Add additional relations inferred by the FaCT++ reasoner to '
-        'the converted ontology.  Implies --squash.')
+        "--reasoner",
+        "--infer",
+        "-i",
+        nargs="?",
+        const="FaCT++",
+        metavar="NAME",
+        help=(
+            "Add additional relations inferred by the reasoner.  Supported "
+            'reasoners are "FaCT++" (default), "HermiT" and "Pellet".'
+        ),
+    )
     parser.add_argument(
-        '--base-iri', '-b',
-        help='Base iri of inferred ontology.  The default is the base iri of '
-        'the input ontology with "-inferred" appended to it.  Used together '
-        'with --inferred.')
+        "--no-infer-imported",
+        "--no-reason-imported",
+        action="store_true",
+        help="Do not infer imported ontologies.",
+    )
     parser.add_argument(
-        '--recursive', '-r', action='store_true',
-        help='Whether to also convert imported ontologies recursively. '
-        'The output is written to a directory structure matching the input. '
-        'This requires Protege catalog files to be present.')
+        "--base-iri",
+        "-b",
+        help=(
+            "Base iri of inferred ontology. The default is the base iri of "
+            'the input ontology with "-inferred" appended to it. Used '
+            "together with --reasoner."
+        ),
+    )
     parser.add_argument(
-        '--squash', '-s', action='store_true',
-        help='Whether to also squash imported ontologies into a single output '
-        'file.  Cannot be combined with --recursive.')
+        "--quiet",
+        "-q",
+        action="store_true",
+        help="Don't print a lot of stuff to stdout during reasoning.",
+    )
+    parser.add_argument(
+        "--recursive",
+        "-r",
+        action="store_true",
+        help=(
+            "Whether to also convert imported ontologies recursively using "
+            "rdflib. The output is written to a directory structure matching "
+            "the input. "
+            "This option requires Protege catalog files to be present. "
+            "It cannot be combined with other options like --squash, "
+            "--inferred, --annotate-source, and --rename-iris."
+        ),
+    )
+    parser.add_argument(
+        "--squash",
+        "-s",
+        action="store_true",
+        help=(
+            "Whether to also squash imported ontologies into a single output "
+            "file. Cannot be combined with --recursive."
+        ),
+    )
+    parser.add_argument(
+        "--annotate-source",
+        "-a",
+        action="store_true",
+        help=(
+            "Whether to annotate all entities with be base IRI of the source "
+            "ontology using `dcterms:source` relations.  This is contextual "
+            "information that is otherwise lost when ontologies are inferred "
+            "and/or squashed."
+        ),
+    )
+    parser.add_argument(
+        "--rename-iris",
+        "-R",
+        nargs="?",
+        const="prefLabel",
+        metavar="ANNOTATION",
+        help=(
+            "For all entities that have the given annotation ('prefLabel' "
+            "by default), change the name of the entity to the value of the "
+            "annotation.\n"
+            "For all changed entities, an `equivalentTo` annotation is "
+            "added, referring to the old name.\n"
+            "This option is useful to create a copy of an ontology with "
+            "more human readable IRIs."
+        ),
+    )
+    parser.add_argument(
+        "--catalog-file",
+        "-C",
+        nargs="?",
+        const="catalog-v001.xml",
+        metavar="FILENAME",
+        help='Whether to write catalog file. Defaults to "catalog-v001.xml".',
+    )
+    parser.add_argument(
+        "--append-catalog",
+        "-A",
+        action="store_true",
+        help="Whether to append to (possible) existing catalog file.",
+    )
 
-    args = parser.parse_args()
+    args = parser.parse_args(args=argv)
 
     # Inferred default input and output file formats
     if args.input_format:
@@ -69,58 +177,142 @@ def main():
     else:
         output_format = guess_format(args.output)
     if not output_format:
-        output_format = 'xml'
+        output_format = "xml"
 
     # Perform conversion
     with warnings.catch_warnings(record=True) as warnings_handle:
         warnings.simplefilter("always")
-        if args.recursive:
-            convert_imported(args.input, args.output,
-                            input_format=input_format,
-                            output_format=output_format,
-                            url_from_catalog=args.url_from_catalog)
-        elif args.inferred:
-            g = squash_imported(args.input, None,
-                                input_format=input_format)
-            fg = FaCTPPGraph(g)
+
+        onto = get_ontology(args.input).load(
+            format=input_format,
+            url_from_catalog=args.url_from_catalog,
+        )
+
+        if args.annotate_source:
+            annotate_source(onto)
+
+        if args.rename_iris:
+            rename_iris(onto, args.rename_iris)
+
+        # owlready2.reasoning._apply_reasoning_results() is broken!
+        # Currently it messes up everything by adding the inferred
+        # rdfs:subClassOf relations as rdf:type relations :-(
+        #
+        # Temporary workaround
+        # Instead of calling onto.sync_reasoner() we call FaCTPPGraph
+        # directly. This means that HermiT and Pellet are currently not
+        # supported
+        if args.reasoner:
+            # pylint:disable=import-outside-toplevel
+            from ontopy.factpluspluswrapper.factppgraph import FaCTPPGraph
+            from ontopy.utils import FMAP
+            import rdflib
+            from rdflib import OWL, RDF, URIRef
+
+            if args.reasoner != "FaCT++":
+                raise NotImplementedError(
+                    "Only FaCT++ is currently supported..."
+                )
+            if args.output_dir != ".":
+                raise NotImplementedError(
+                    "The --output-dir option is currently not supported "
+                    "together with --reasoner."
+                )
+            if args.recursive:
+                raise NotImplementedError(
+                    "The --recursive option is currently not supported "
+                    "together with --reasoner."
+                )
+            if args.no_infer_imported:
+                raise NotImplementedError(
+                    "The --no-infer-imported option is currently not "
+                    "supported together with --reasoner."
+                )
+
+            graph0 = onto.world.as_rdflib_graph()
+            graph1 = rdflib.Graph()
+            for s, p, o in graph0.triples((None, None, None)):
+                if p != OWL.imports:
+                    graph1.add((s, p, o))
+            graph2 = FaCTPPGraph(graph1).inferred_graph()
+
+            # Remove existing ontology(ies)
+            remove = list(graph2.triples((None, RDF.type, OWL.Ontology)))
+            for triple in remove:
+                graph2.remove(triple)
+
+            # Add new ontology
             if args.base_iri:
-                fg.base_iri = args.base_iri
-            g2 = fg.inferred_graph()
-            g2.serialize(destination=args.output, format=output_format)
-        elif args.squash:
-            squash_imported(args.input, args.output,
-                            input_format=input_format,
-                            output_format=output_format,
-                            url_from_catalog=args.url_from_catalog)
+                base_iri = args.base_iri
+            else:
+                stripped = onto.base_iri.rstrip("#/")
+                terminal = onto.base_iri[len(stripped) :]
+                base_iri = f"{stripped}-inferred{terminal}"
+            iri = URIRef(base_iri)
+            graph2.add((iri, RDF.type, OWL.Ontology))
+
+            # Add ontology metadata
+            ontologies = list(graph0.subjects(RDF.type, OWL.Ontology))
+            while str(ontologies[0]) == "http://anonymous":
+                ontologies.pop(0)
+            if ontologies:
+                for s, p, o in graph0.triples((ontologies[0], None, None)):
+                    graph2.add((iri, p, o))
+
+            # Serialise
+            if args.output_format:
+                fmt = FMAP.get(args.output_format, args.output_format)
+            else:
+                fmt = guess_format(args.output, fmap=FMAP)
+            graph2.namespace_manager.bind(
+                "emmo", rdflib.Namespace("http://emmo.info/emmo#")
+            )
+            graph2.serialize(destination=args.output, format=fmt)
+
         else:
-            if (
-                not _validate_installed_version(
-                    package="rdflib", min_version="6.0.0"
-                )
-                and (
-                    output_format == FMAP.get("ttl", "")
-                    or os.path.splitext(args.output)[1] == "ttl"
-                )
-            ):
-                from rdflib import __version__ as __rdflib_version__
 
-                warnings.warn(
-                    IncompatibleVersion(
-                        "To correctly convert to Turtle format, rdflib must be"
-                        " version 6.0.0 or greater, however, the detected "
-                        "rdflib version used by your Python interpreter is "
-                        f"{__rdflib_version__!r}. For more information see the"
-                        " 'Known issues' section of the README."
-                    )
-                )
+            onto.save(
+                args.output,
+                format=output_format,
+                dir=args.output_dir,
+                mkdir=True,
+                overwrite=args.overwrite,
+                recursive=args.recursive,
+                squash=args.squash,
+                write_catalog_file=bool(args.catalog_file),
+                append_catalog=args.append_catalog,
+                catalog_file=args.catalog_file,
+            )
 
-            g = Graph()
-            g.parse(args.input, format=input_format)
-            g.serialize(destination=args.output, format=output_format)
+        # Bring back these lines when _apply_reasoning_results() works again
+        # Remember to remove the Bugs subsection in the documentation
+
+        # if args.reasoner:
+        #     include_imported = not args.no_infer_imported
+        #     verbose = not args.quiet
+        #     onto.sync_reasoner(reasoner=args.reasoner,
+        #                        include_imported=include_imported,
+        #                        debug=verbose)
+        #
+        # onto.save(
+        #     args.output,
+        #     format=output_format,
+        #     dir=args.output_dir,
+        #     mkdir=True,
+        #     overwrite=args.overwrite,
+        #     recursive=args.recursive,
+        #     squash=args.squash,
+        #     write_catalog_file=bool(args.catalog_file),
+        #     append_catalog=args.append_catalog,
+        #     catalog_file=args.catalog_file,
+        # )
 
         for warning in warnings_handle:
-            print(f"\033[93mWARNING\033[0m: [{warning.category.__name__}] {warning.message}")
+            print(
+                f"\033[93mWARNING\033[0m: [{warning.category.__name__}] "
+                f"{warning.message}"
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

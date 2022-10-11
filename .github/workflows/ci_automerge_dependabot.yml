@@ -1,0 +1,13 @@
+name: CI - Activate auto-merging for Dependabot PRs
+
+on:
+  pull_request_target:
+    branches: [ci/dependabot-updates]
+
+jobs:
+  update-dependabot-branch:
+    name: External
+    uses: SINTEF/ci-cd/.github/workflows/ci_automerge_prs.yml@v1
+    if: github.repository_owner == 'emmo-repo' && startsWith(github.event.pull_request.head.ref, 'dependabot/') && github.actor == 'dependabot[bot]'
+    secrets:
+      PAT: ${{ secrets.RELEASE_PAT }}

@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 """This module injects some additional methods into owlready2 classes."""
+# pylint: disable=protected-access
 import types
 
 import owlready2
@@ -7,17 +7,17 @@ from owlready2 import ThingClass, PropertyClass, Thing, Restriction, Namespace
 from owlready2 import Metadata
 
 
-# Improve default rendering of entities
 def render_func(entity):
-    if hasattr(entity, 'prefLabel') and entity.prefLabel:
+    """Improve default rendering of entities."""
+    if hasattr(entity, "prefLabel") and entity.prefLabel:
         name = entity.prefLabel[0]
-    elif hasattr(entity, 'label') and entity.label:
+    elif hasattr(entity, "label") and entity.label:
         name = entity.label[0]
-    elif hasattr(entity, 'altLabel') and entity.altLabel:
+    elif hasattr(entity, "altLabel") and entity.altLabel:
         name = entity.altLabel[0]
     else:
         name = entity.name
-    return "%s.%s" % (entity.namespace.name, name)
+    return f"{entity.namespace.name}.{name}"
 
 
 owlready2.set_render_func(render_func)
@@ -34,159 +34,139 @@ def get_preferred_label(self):
       - if label annotation property exists, returns the first label
       - otherwise return the name
     """
-    if hasattr(self, 'prefLabel') and self.prefLabel:
+    if hasattr(self, "prefLabel") and self.prefLabel:
         return self.prefLabel[0]
-    elif hasattr(self, 'label') and self.label:
+    if hasattr(self, "label") and self.label:
         return self.label.first()
-    else:
-        return self.name
+    return self.name
 
 
 def get_parents(self, strict=False):
-    """Returns a list of all parents.  If `strict` is true, parents that are
-    parents of other parents are excluded."""
+    """Returns a list of all parents.
+
+    If `strict` is `True`, parents that are parents of other parents are
+    excluded.
+    """
     if strict:
-        s = self.get_parents()
-        for e in s.copy():
-            s.difference_update(e.ancestors(include_self=False))
-        return s
-    elif isinstance(self, ThingClass):
-        return {cls for cls in self.is_a
-                if isinstance(cls, ThingClass)}
-    elif isinstance(self, owlready2.ObjectPropertyClass):
-        return {cls for cls in self.is_a
-                if isinstance(cls, owlready2.ObjectPropertyClass)}
-    else:
-        assert 0
+        parents = self.get_parents()
+        for entity in parents.copy():
+            parents.difference_update(entity.ancestors(include_self=False))
+        return parents
+    if isinstance(self, ThingClass):
+        return {cls for cls in self.is_a if isinstance(cls, ThingClass)}
+    if isinstance(self, owlready2.ObjectPropertyClass):
+        return {
+            cls
+            for cls in self.is_a
+            if isinstance(cls, owlready2.ObjectPropertyClass)
+        }
+    raise Exception("self has no parents - this should not be possible!")
 
 
 def _dir(self):
     """Extend in dir() listing of ontology classes."""
-    s = set(object.__dir__(self))
+    set_dir = set(object.__dir__(self))
     props = self.namespace.world._props.keys()
-    s.update(props)
-    return sorted(s)
+    set_dir.update(props)
+    return sorted(set_dir)
 
 
-def get_class_annotations(self, all=False, imported=True):
+def get_annotations(
+    self, all=False, imported=True
+):  # pylint: disable=redefined-builtin
     """Returns a dict with non-empty annotations.
 
-    If `all` is true, also annotations with no value are included.
+    If `all` is `True`, also annotations with no value are included.
 
-    If `imported` is true, also include annotations defined in
-    imported ontologies.
+    If `imported` is `True`, also include annotations defined in imported
+    ontologies.
     """
     onto = self.namespace.ontology
-    d = {get_preferred_label(a): a._get_values_for_class(self)
-         for a in onto.annotation_properties(imported=imported)}
+    annotations = {
+        get_preferred_label(_): _._get_values_for_class(self)
+        for _ in onto.annotation_properties(imported=imported)
+    }
     if all:
-        return d
-    else:
-        return {k: v for k, v in d.items() if v}
+        return annotations
+    return {key: value for key, value in annotations.items() if value}
 
 
 def disjoint_with(self, reduce=False):
     """Returns a generator with all classes that are disjoint with `self`.
-    If `reduce` is true, all classes that are a descendant of another class
-    will be excluded."""
+
+    If `reduce` is `True`, all classes that are a descendant of another class
+    will be excluded.
+    """
     if reduce:
-        s = set(self.disjoint_with())
-        for e in s.copy():
-            s.difference_update(e.descendants(include_self=False))
-        for e in s:
-            yield e
+        disjoint_set = set(self.disjoint_with())
+        for entity in disjoint_set.copy():
+            disjoint_set.difference_update(
+                entity.descendants(include_self=False)
+            )
+        for entity in disjoint_set:
+            yield entity
     else:
-        for d in self.disjoints():
-            for e in d.entities:
-                if e is not self:
-                    yield e
+        for disjoint in self.disjoints():
+            for entity in disjoint.entities:
+                if entity is not self:
+                    yield entity
 
 
 def get_indirect_is_a(self, skip_classes=True):
-    """Returns the set of all isSubclassOf relations of self and its
-    ancestors.  If `skip_classes` is true, indirect classes are not
-    included in the returned set.
+    """Returns the set of all isSubclassOf relations of self and its ancestors.
+
+    If `skip_classes` is `True`, indirect classes are not included in the
+    returned set.
     """
-    s = set()
-    for e in reversed(self.mro()):
-        if hasattr(e, 'is_a'):
+    subclass_relations = set()
+    for entity in reversed(self.mro()):
+        if hasattr(entity, "is_a"):
             if skip_classes:
-                s.update(r for r in e.is_a
-                         if not isinstance(r, owlready2.ThingClass))
+                subclass_relations.update(
+                    _
+                    for _ in entity.is_a
+                    if not isinstance(_, owlready2.ThingClass)
+                )
             else:
-                s.update(e.is_a)
-    s.update(self.is_a)
-    return s
+                subclass_relations.update(entity.is_a)
+    subclass_relations.update(self.is_a)
+    return subclass_relations
 
 
 # Inject methods into ThingClass
-setattr(ThingClass, '__dir__', _dir)
-setattr(ThingClass, 'get_preferred_label', get_preferred_label)
-setattr(ThingClass, 'get_parents', get_parents)
-setattr(ThingClass, 'get_annotations', get_class_annotations)
-setattr(ThingClass, 'disjoint_with', disjoint_with)
-setattr(ThingClass, 'get_indirect_is_a', get_indirect_is_a)
+setattr(ThingClass, "__dir__", _dir)
+setattr(ThingClass, "get_preferred_label", get_preferred_label)
+setattr(ThingClass, "get_parents", get_parents)
+setattr(ThingClass, "get_annotations", get_annotations)
+setattr(ThingClass, "disjoint_with", disjoint_with)
+setattr(ThingClass, "get_indirect_is_a", get_indirect_is_a)
 
 
 #
 # Extending PropertyClass (properties)
 # ====================================
-def get_property_annotations(self, all=False, imported=True):
-    """Returns a dict with non-empty property annotations.
-
-    If `all` is true, also annotations with no value are included.
-
-    If `imported` is true, also include annotations defined in
-    imported ontologies.
-    """
-    onto = self.namespace.ontology
-    d = {get_preferred_label(a): a._get_values_for_class(self)
-         for a in onto.annotation_properties(imported=imported)}
-    if all:
-        return d
-    else:
-        return {k: v for k, v in d.items() if v}
-
-
-setattr(PropertyClass, 'get_preferred_label', get_preferred_label)
-setattr(PropertyClass, 'get_parents', get_parents)
-setattr(PropertyClass, 'get_annotations', get_property_annotations)
+setattr(PropertyClass, "get_preferred_label", get_preferred_label)
+setattr(PropertyClass, "get_parents", get_parents)
+setattr(PropertyClass, "get_annotations", get_annotations)
 
 
 #
 # Extending Thing (individuals)
 # =============================
-def get_individual_annotations(self, all=False, imported=True):
-    """Returns a dict with non-empty individual annotations.
-
-    If `all` is true, also annotations with no value are included.
-
-    If `imported` is true, also include annotations defined in
-    imported ontologies.
-    """
-    onto = self.namespace.ontology
-    d = {get_preferred_label(a): a._get_values_for_individual(self)
-         for a in onto.annotation_properties(imported=imported)}
-    if all:
-        return d
-    else:
-        return {k: v for k, v in d.items() if v}
-
-
 # Method names for individuals must be different from method names for classes
-type.__setattr__(Thing, 'get_preflabel', get_preferred_label)
-type.__setattr__(Thing, 'get_individual_annotations',
-                 get_individual_annotations)
+type.__setattr__(Thing, "get_preflabel", get_preferred_label)
+type.__setattr__(Thing, "get_individual_annotations", get_annotations)
 
 
 #
 # Extending Restriction
 # =====================
 def get_typename(self):
+    """Get restriction type label/name."""
     return owlready2.class_construct._restriction_type_2_label[self.type]
 
 
-setattr(Restriction, 'get_typename', get_typename)
+setattr(Restriction, "get_typename", get_typename)
 
 
 #
@@ -196,12 +176,13 @@ orig_namespace_init = Namespace.__init__
 
 
 def namespace_init(self, world_or_ontology, base_iri, name=None):
+    """__init__ function for the `Namespace` class."""
     orig_namespace_init(self, world_or_ontology, base_iri, name)
-    if self.name.endswith('.ttl'):
+    if self.name.endswith(".ttl"):
         self.name = self.name[:-4]
 
 
-setattr(Namespace, '__init__', namespace_init)
+setattr(Namespace, "__init__", namespace_init)
 
 
 #
@@ -210,19 +191,23 @@ setattr(Namespace, '__init__', namespace_init)
 def keys(self):
     """Return a generator over annotation property names associates
     with this ontology."""
-    ns = self.namespace
-    for a in ns.annotation_properties():
-        if ns._has_data_triple_spod(s=ns.storid, p=a.storid):
-            yield a
+    namespace = self.namespace
+    for annotation in namespace.annotation_properties():
+        if namespace._has_data_triple_spod(
+            s=namespace.storid, p=annotation.storid
+        ):
+            yield annotation
 
 
 def items(self):
     """Return a generator over annotation property (name, value_list)
     pairs associates with this ontology."""
-    ns = self.namespace
-    for a in ns.annotation_properties():
-        if ns._has_data_triple_spod(s=ns.storid, p=a.storid):
-            yield a, self.__getattr__(a.name)
+    namespace = self.namespace
+    for annotation in namespace.annotation_properties():
+        if namespace._has_data_triple_spod(
+            s=namespace.storid, p=annotation.storid
+        ):
+            yield annotation, getattr(self, annotation.name)
 
 
 def has(self, name):
@@ -243,37 +228,44 @@ def __setattr__(self, attr, values):
     # Make sure that __setattr__() also updates the triplestore
     lst = self.__dict__[attr]
     if lst:
-        ns = self.namespace
-        annot = {
-            a.name: a for a in owlready2.AnnotationProperty.__subclasses__()}
-        if attr in annot:
-            prop = annot[attr]
+        namespace = self.namespace
+        annotation = {
+            _.name: _ for _ in owlready2.AnnotationProperty.__subclasses__()
+        }
+        if attr in annotation:
+            prop = annotation[attr]
         else:
-            with ns.ontology:
-                prop = types.new_class(attr, (owlready2.AnnotationProperty, ))
-        o, d = owlready2.to_literal(lst[0])
-        ns._set_data_triple_spod(ns.storid, prop.storid, o, d)
-        for e in lst[1:]:
-            o, d = owlready2.to_literal(e)
-            ns._set_data_triple_spod(ns.storid, prop.storid, o, d)
+            with namespace.ontology:
+                prop = types.new_class(attr, (owlready2.AnnotationProperty,))
+        onto, data = owlready2.to_literal(lst[0])
+        namespace._set_data_triple_spod(
+            namespace.storid, prop.storid, onto, data
+        )
+        for entity in lst[1:]:
+            onto, data = owlready2.to_literal(entity)
+            namespace._set_data_triple_spod(
+                namespace.storid, prop.storid, onto, data
+            )
 
 
 def __repr__(self):
-    s = ['Metadata(']
-    for a, values in self.items():
-        sep = '\n' + ' ' * (len(a.name) + 4)
-        s.append('  %s=[%s],' % (a.name, sep.join(repr(v) for v in values)))
-    s.append(')')
-    return '\n'.join(s)
+    result = ["Metadata("]
+    for annotation, values in self.items():
+        sep = f"\n{' ' * (len(annotation.name) + 4)}"
+        result.append(
+            f"  {annotation.name}=[{sep.join(repr(_) for _ in values)}],"
+        )
+    result.append(")")
+    return "\n".join(result)
 
 
 metadata__setattr__save = Metadata.__setattr__
-setattr(Metadata, 'keys', keys)
-setattr(Metadata, 'items', items)
-setattr(Metadata, 'has', has)
-setattr(Metadata, '__contains__', __contains__)
-setattr(Metadata, '__iter__', __iter__)
-setattr(Metadata, '__setattr__', __setattr__)
-setattr(Metadata, '__repr__', __repr__)
+setattr(Metadata, "keys", keys)
+setattr(Metadata, "items", items)
+setattr(Metadata, "has", has)
+setattr(Metadata, "__contains__", __contains__)
+setattr(Metadata, "__iter__", __iter__)
+setattr(Metadata, "__setattr__", __setattr__)
+setattr(Metadata, "__repr__", __repr__)
 Metadata.__getitem__ = Metadata.__getattr__
 Metadata.__setitem__ = Metadata.__setattr__

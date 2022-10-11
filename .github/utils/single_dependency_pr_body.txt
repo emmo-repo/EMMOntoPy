@@ -1,0 +1,10 @@
+### Update dependencies
+
+Automatically created PR from [`ci/dependabot-updates`](https://github.com/emmo-repo/EMMOntoPy/tree/ci/dependabot-updates).
+
+For more information see the ["Dependabot updates" workflow](https://github.com/emmo-repo/EMMOntoPy/blob/master/.github/workflows/ci_dependabot.yml).
+
+#### To-do
+
+- [ ] Check that the diff is sensible, and that tests and builds pass with the new dependency versions.
+- [ ] Make sure that the PR is **squash** merged, with a sensible commit message.

@@ -1,0 +1,31 @@
+name: CI/CD - New updates to 'master'
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  updates-to-master:
+    name: External
+    uses: SINTEF/ci-cd/.github/workflows/ci_cd_updated_default_branch.yml@v1
+    if: github.repository_owner == 'emmo-repo'
+    with:
+      git_username: EMMOntoPy Developers
+      git_email: "Team4.0@SINTEF.no"
+      permanent_dependencies_branch: ci/dependabot-updates
+      default_repo_branch: master
+
+      # Update documentation
+      update_docs: true
+      update_python_api_ref: true
+      update_docs_landing_page: true
+      package_dirs: |
+        emmopy
+        ontopy
+      python_version: "3.7"
+      doc_extras: "[docs]"
+      special_file_api_ref_options: "emmopy/emmocheck.py,show_bases: false"
+      landing_page_replacements: |
+        (LICENSE.txt),(LICENSE.md)
+        (tools),(../tools)
+      changelog_exclude_labels: dependencies

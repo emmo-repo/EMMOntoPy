@@ -1,0 +1,4 @@
+pre-commit~=2.20
+pylint~=2.15
+pytest~=7.1
+pytest-cov~=4.0

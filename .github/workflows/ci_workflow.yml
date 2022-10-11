@@ -8,74 +8,119 @@ on:
       - 'push-action/**'
 
 jobs:
-
-  lint:
-    name: Lint with flake8
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2.3.4
-
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v2.2.2
-      with:
-        python-version: 3.7
-
-    - name: Lint with flake8
-      run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --extend-exclude "tests/*"
-        flake8 . --count --statistics --extend-exclude "tests/*"
-
   tests:
-    name: Pytest and demos
+    name: External
+    uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v1
+    with:
+      # General
+      install_extras: "[dev,docs]"
+
+      # pre-commit
+      run_pre-commit: true
+      python_version_pre-commit: "3.8"
+      skip_pre-commit_hooks: pylint
+
+      # pylint
+      run_pylint: true
+      python_version_pylint_safety: "3.7"
+      pylint_options: "--rcfile=pyproject.toml"
+      pylint_targets: "*.py tools emmopy ontopy"
+
+      # safety
+      # Ignore ID 44715 for now.
+      # See this NumPy issue for more information: https://github.com/numpy/numpy/issues/19038
+      # Also ignore IDs 44716 and 44717 as they are not deemed to be as severe as it is
+      # laid out in the CVE.
+      # Remove ignoring 48547 as soon as RDFLib/rdflib#1844 has been fixed and the fix
+      # has been released.
+      run_safety: true
+      safety_options: |
+        --ignore=44715
+        --ignore=44716
+        --ignore=44717
+        --ignore=48547
+
+      # Build distribution
+      run_build_package: true
+      python_version_package: "3.7"
+      build_cmd: "python -m build"
+
+      # Build documentation
+      # Exclude base classes in emmopy.emmocheck
+      run_build_docs: true
+      python_version_docs: "3.7"
+      update_python_api_ref: true
+      update_docs_landing_page: true
+      package_dirs: |
+        emmopy
+        ontopy
+      special_file_api_ref_options: "emmopy/emmocheck.py,show_bases: false"
+      landing_page_replacements: |
+        (LICENSE.txt),(LICENSE.md)
+        (tools),(../tools)
+
+
+  pytest:
+    name: pytest
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
+
     steps:
-    - uses: actions/checkout@v2.3.4
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v2.2.2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
       with:
-        python-version: 3.7
+        python-version: ${{ matrix.python-version }}
 
-    - name: Install other dependencies
+    - name: Install system dependencies
+      run: sudo apt-get update && sudo apt-get install -y graphviz openjdk-11-jre-headless
+
+    - name: Install Python dependencies (and EMMOntoPy)
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pytest
-        sudo apt-get install -y graphviz openjdk-11-jre-headless
+        pip install -U setuptools wheel
+        pip install -U -e .[dev]
 
-    - name: Install EMMOntoPy
-      run: python setup.py install
+    - name: Test
+      run: pytest -vvv --cov=ontopy --cov=emmopy --cov-report=xml --cov-report=term
 
-    - name: Test with pytest
-      run: pytest
+    - name: Upload coverage to Codecov
+      if: matrix.python-version == '3.7' && github.repository == 'emmo-repo/EMMOntoPy'
+      uses: codecov/codecov-action@v3
 
-    - name: Run vertical demo
-      run: |
-        cd demo/vertical
-        #python define_ontology.py
-        #python plot_ontology.py
-        cd -
-    - name: Run horizontal demo
-      run: |
-        cd demo/horizontal
-        #python step1_generate_metadata.py
-        #python step2_define_metadata.py
-        #python step3_instantiate.py
-        #python step4_map_instance.py
-        cd -
+    # - name: Run vertical demo
+    #   run: |
+    #     cd demo/vertical
+    #     python define_ontology.py
+    #     python plot_ontology.py
+    #     cd -
+
+    # - name: Run horizontal demo
+    #   run: |
+    #     cd demo/horizontal
+    #     python step1_generate_metadata.py
+    #     python step2_define_metadata.py
+    #     python step3_instantiate.py
+    #     python step4_map_instance.py
+    #     cd -
+
 
   ontodoc:
     name: EMMO documentation (test using ontodoc)
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2.3.4
+    - uses: actions/checkout@v3
 
     - name: Set up Python 3.7
-      uses: actions/setup-python@v2.2.2
+      uses: actions/setup-python@v4
       with:
-        python-version: 3.7
+        python-version: "3.7"
 
     - name: Check Ubuntu version we are running under
       run: |
@@ -101,6 +146,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        sudo apt-get update
         sudo apt-get install -y graphviz
         sudo apt-get install -y texlive-xetex
         sudo apt-get install -y texlive-latex-extra
@@ -114,97 +160,7 @@ jobs:
         cd examples/emmodoc
         python ../../tools/ontodoc -f simple-html emmo-inferred emmo-simple.html
         python ../../tools/ontodoc -t emmo.md -p no-self-contained emmo-inferred emmo.html
-        python ../../tools/ontodoc -t emmo.md emmo-inferred emmo.pdf
+        # pdf generation is commented out as there is a xetex error which
+        # needs to be resolved if we decide to keep ontodoc as a tool.
+        # python ../../tools/ontodoc -t emmo.md emmo-inferred emmo.pdf
         cd -
-
-  build_package:
-    name: Build Python package and install (integrity test)
-    runs-on: ubuntu-latest
-    env:
-      SDIST_DIR: sdist_action
-      BDIST_DIR: bdist_action
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2.3.4
-
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v2.2.2
-      with:
-        python-version: 3.7
-
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -U setuptools wheel
-        pip install -r requirements.txt
-
-    - name: Build source and built distributions
-      run: python setup.py sdist bdist_wheel
-
-    - name: Check build and installation of PyPI source distribution
-      run: |
-        python setup.py -v sdist -d ${SDIST_DIR} bdist_wheel -d ${BDIST_DIR}
-        SDIST_FILE=$( ls ${SDIST_DIR}/ )
-        echo "BDIST_FILE=$( ls ${BDIST_DIR}/ )" >> $GITHUB_ENV
-        ORIGINAL_PWD=$(pwd)
-        mkdir -p /tmp/installation_dir
-        cd /tmp/installation_dir
-        pip install ${ORIGINAL_PWD}/${SDIST_DIR}/${SDIST_FILE}
-
-    - name: Remove installation again
-      run: pip uninstall -y EMMO
-
-    - name: Install built distribution (wheel)
-      run: |
-        ORIGINAL_PWD=$(pwd)
-
-        if [ "${ORIGINAL_PWD}" == "/tmp/installation_dir" ]; then echo "Wrong original dir: ${ORIGINAL_PWD}"; exit 1; fi
-        mkdir -p /tmp/installation_dir
-        cd /tmp/installation_dir
-        pip install ${ORIGINAL_PWD}/${BDIST_DIR}/${{ env.BDIST_FILE }}
-
-  documentation:
-    name: Check documentation
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.7
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -U setuptools wheel
-        pip install -U -e .[docs]
-
-    - name: Set up git user
-      run: |
-        git config --global user.name "EMMOntoPy Developers"
-        git config --global user.email "EMMOntoPy@emmo.info"
-
-    - name: Check API Reference and landing page
-      run: |
-        invoke create-api-reference-docs --pre-clean
-        invoke create-docs-index
-
-        if [ -n "$(git status --porcelain docs/api_reference docs/index.md)" ]; then
-          echo -e "\u274c Discrepancies found !"
-          echo -e "The following files in the documentation must be committed:"
-          git status --porcelain docs/api_reference docs/index.md
-          echo -e "\nRun:\n"
-          echo "    invoke create-api-reference-docs --pre-clean"
-          echo -e "    invoke create-docs-index\n"
-          echo "And commit the changed files."
-          exit 1
-        else
-          echo -e "\u2705 All good !"
-        fi
-
-    - name: Build check
-      run: mkdocs build --strict --verbose

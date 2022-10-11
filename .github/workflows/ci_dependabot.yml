@@ -1,0 +1,28 @@
+name: CI - Single Dependabot PR
+
+on:
+  schedule:
+    # At 8:30 every Wednesday (6:30 UTC)
+    # Dependabot runs once a week (every Monday) (pip)
+    # and every day (GH Actions) between 7:00 and 7:30 (5:00-5:30 UTC)
+    - cron: "30 6 * * 3"
+  workflow_dispatch:
+
+jobs:
+  create-collected-pr:
+    name: External
+    uses: SINTEF/ci-cd/.github/workflows/ci_update_dependencies.yml@v1
+    if: github.repository_owner == 'emmo-repo'
+    with:
+      git_username: EMMOntoPy Developers
+      git_email: "Team4.0@SINTEF.no"
+      permanent_dependencies_branch: ci/dependabot-updates
+      default_repo_branch: master
+      pr_labels: dependencies,github_actions
+      extra_to_dos: "- [ ] Make sure that the PR is **squash** merged, with a sensible commit message."
+      update_pre-commit: true
+      python_version: "3.8"
+      install_extras: "[dev,docs]"
+      skip_pre-commit_hooks: pylint
+    secrets:
+      PAT: ${{ secrets.RELEASE_PAT }}

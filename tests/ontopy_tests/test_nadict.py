@@ -6,4 +6,4 @@ def test_nadict() -> None:
     assert nadict.a == 1
     assert nadict.b.c == 3
     assert nadict.b.d == 4
-    assert nadict['b.c'] == 3
+    assert nadict["b.c"] == 3

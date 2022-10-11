@@ -5,12 +5,16 @@ import sys
 import os
 
 # Support to run from uninstalled version by adding parent dir to sys path
-rootdir = os.path.abspath(os.path.realpath((os.path.dirname(
-    os.path.dirname(__file__)))))
-sys.path.insert(1, rootdir)
+rootdir = os.path.abspath(
+    os.path.realpath((os.path.dirname(os.path.dirname(__file__))))
+)
+if rootdir not in sys.path:
+    sys.path.insert(1, rootdir)
 
-from emmopy.emmocheck import main  # noqa: E402
+from emmopy.emmocheck import (  # pylint: disable=wrong-import-position,import-error
+    main,
+)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
