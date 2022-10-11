@@ -8,7 +8,7 @@ def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
     import pytest
 
     from ontopy import get_ontology
-    from ontopy.ontology import HTTPError
+    from ontopy.ontology import EMMOntoPyException
 
     # Check that the defaults works
     emmo = get_ontology("emmo").load()  # ttl format
@@ -36,8 +36,9 @@ def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
     assert onto.Electrolyte.prefLabel.first() == "Electrolyte"
 
     with pytest.raises(
-        HTTPError,
-        match="HTTP Error 404: https://emmo.info/non-existing/ontology: Not Found",
+        EMMOntoPyException,
+        match="'URL error', <HTTPError 404: 'Not Found'>, 'http://emmo.info/non-existing/ontology'"
+        # match="HTTP Error 404: https://emmo.info/non-existing/ontology: Not Found",
     ):
         get_ontology("http://emmo.info/non-existing/ontology#").load()
 
