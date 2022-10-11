@@ -10,10 +10,11 @@ import subprocess  # nosec
 rootdir = os.path.abspath(
     os.path.realpath((os.path.dirname(os.path.dirname(__file__))))
 )
-sys.path.insert(1, rootdir)
+if rootdir not in sys.path:
+    sys.path.insert(1, rootdir)
 
-from ontopy import World, onto_path
-from ontopy.ontodoc import (
+from ontopy import World, onto_path  # pylint: disable=import-error
+from ontopy.ontodoc import (  # pylint: disable=import-error
     OntoDoc,
     get_format,
     get_style,

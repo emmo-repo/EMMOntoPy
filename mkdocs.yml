@@ -1,7 +1,7 @@
 site_name: EMMOntoPy
 site_description: Documentation for the EMMOntoPy library
 site_url: https://emmo-repo.github.io/EMMOntoPy
-copyright: Copyright &copy; 2019-2021 SINTEF
+copyright: Copyright &copy; 2019-2022 SINTEF
 
 theme:
   name: material
@@ -17,6 +17,7 @@ theme:
   features:
     - navigation.instant
     - navigation.top
+    - content.tabs.link
 
 repo_name: EMMOntoPy
 repo_url: https://github.com/emmo-repo/EMMOntoPy
@@ -40,7 +41,8 @@ markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences
   - pymdownx.inlinehilite
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.caret
   - pymdownx.tilde
   - pymdownx.keys
@@ -69,18 +71,11 @@ plugins:
               - "!^_"
               - "^__init__$"
             members: null
-            # inherited_members: false
+            inherited_members: false
             docstring_style: google
-          #   docstring_options:
-          #     replace_admonitions: true
-          # setup_commands:
-          #   - import os
-          #   - os.environ["MKDOCS_BUILD"] = "1"
-      watch:
-        - emmopy
-        - ontopy
-  - awesome-pages:
-      collapse_single_pages: true
+            docstring_options:
+              replace_admonitions: true
+  - awesome-pages
 
 nav:
   - Home: index.md
@@ -88,8 +83,17 @@ nav:
   - Docker: docker-instructions.md
   - License: LICENSE.md
   - Examples and demonstrations:
-    - ... | demo/**
-    - ... | examples/**
+    - Demo:
+      - demo/README.md
+      - demo/horizontal/README.md
+      - demo/vertical/README.md
+    - Examples:
+      - EMMOdoc: examples/emmodoc/README.md
+      - Jupyter visualization: examples/jupyter-visualization/README.md
   - ... | developers/**
   - Changelog: CHANGELOG.md
   - ... | api_reference/**
+
+watch:
+  - emmopy
+  - ontopy

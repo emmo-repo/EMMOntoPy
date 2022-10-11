@@ -20,7 +20,8 @@ def tool(request: "Dict[str, Any]") -> "ModuleType":
     original_tool_path: Path = (
         Path(__file__).resolve().parent.parent.parent / "tools" / request.param
     )
-    sys.path.append(str(original_tool_path.parent.parent))
+    if str(original_tool_path.parent) not in sys.path:
+        sys.path.append(str(original_tool_path.parent))
 
     assert (
         original_tool_path.exists()
@@ -29,7 +30,7 @@ def tool(request: "Dict[str, Any]") -> "ModuleType":
         tool_path = original_tool_path.rename(
             original_tool_path.with_name(f"{request.param}.py")
         )
-        yield importlib.import_module(f"tools.{request.param}")
+        yield importlib.import_module(request.param)
     finally:
         if tool_path and tool_path.exists():
             tool_path.rename(tool_path.with_name(request.param))

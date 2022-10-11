@@ -4,121 +4,32 @@ on:
   release:
     types: [published]
 
-env:
-  PUBLISH_UPDATE_BRANCH: master
-  GIT_USER_NAME: EMMOntoPy Developers
-  GIT_USER_EMAIL: "Team4.0@SINTEF.no"
-
 jobs:
-  update-and-publish:
-    name: Update CHANGELOG and documentation
-    if: github.repository == 'emmo-repo/EMMOntoPy'
-    runs-on: ubuntu-latest
+  publish:
+    name: External
+    uses: SINTEF/ci-cd/.github/workflows/cd_release.yml@v1
+    if: github.repository == 'emmo-repo/EMMOntoPy' && startsWith(github.ref, 'refs/tags/v')
+    with:
+      git_username: EMMOntoPy Developers
+      git_email: "Team4.0@SINTEF.no"
+      release_branch: master
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+      # Publish package
+      python_package: true
+      python_version_build: "3.7"
+      # We're mentioning only 'ontopy', since the version is set statically only in
+      # ontopy/__init__.py
+      package_dirs: ontopy
+      install_extras: "[dev]"
+      build_cmd: "python -m build"
+      publish_on_pypi: true
 
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.7
+      # Update documentation
+      update_docs: true
+      python_version_docs: "3.7"
+      doc_extras: "[docs]"
+      changelog_exclude_labels: dependencies
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install setuptools wheel
-        pip install -U -e .[dev]
-
-    - name: Set up git user
-      run: |
-        git config --global user.name "${GIT_USER_NAME}"
-        git config --global user.email "${GIT_USER_EMAIL}"
-
-    - name: Update changelog
-      uses: CharMixer/auto-changelog-action@v1
-      with:
-        token: ${{ secrets.RELEASE_PAT }}
-        release_branch: ${{ env.PUBLISH_UPDATE_BRANCH }}
-
-    - name: Update version and tag
-      run: |
-        invoke setver --ver="${GITHUB_REF#refs/tags/}"
-        git add ontopy/__init__.py CHANGELOG.md
-        git commit -m "Release ${GITHUB_REF#refs/tags/}"
-
-        TAG_MSG=.github/utils/release_tag_msg.txt
-        sed -i "s|TAG_NAME|${GITHUB_REF#refs/tags/}|" "${TAG_MSG}"
-        git tag -af -F "${TAG_MSG}" ${GITHUB_REF#refs/tags/}
-
-    - name: Push new commit and update tag
-      uses: CasperWA/push-protected@v2
-      with:
-        token: ${{ secrets.RELEASE_PAT }}
-        branch: ${{ env.PUBLISH_UPDATE_BRANCH }}
-        force: true
-        tags: true
-        unprotect_reviews: true
-
-    - name: Get tagged versions
-      run: echo "PREVIOUS_VERSION=$(git tag -l --sort -version:refname | grep -E "^v0\.[1-8].*$" | sed -n 2p)" >> $GITHUB_ENV
-
-    - name: Create release-specific changelog
-      uses: CharMixer/auto-changelog-action@v1
-      with:
-        token: ${{ secrets.RELEASE_PAT }}
-        release_branch: ${{ env.PUBLISH_UPDATE_BRANCH }}
-        since_tag: "${{ env.PREVIOUS_VERSION }}"
-        output: "release_changelog.md"
-
-    - name: Append changelog to release body
-      run: |
-        gh api /repos/${{ github.repository }}/releases/${{ github.event.release.id }} --jq '.body' > release_body.md
-        cat release_changelog.md >> release_body.md
-        gh api /repos/${{ github.repository }}/releases/${{ github.event.release.id }} -X PATCH -F body='@release_body.md'
-      env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
-
-    - name: Build source and built distributions
-      run: python setup.py sdist bdist_wheel
-
-    - name: Publish to PyPI
-      uses: pypa/gh-action-pypi-publish@master
-      with:
-        user: __token__
-        password: ${{ secrets.PYPI_TOKEN }}
-
-  deploy-docs:
-    name: Deploy new documentation
-    runs-on: ubuntu-latest
-    needs: update-and-publish
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        ref: ${{ env.PUBLISH_UPDATE_BRANCH }}
-
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.7
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install setuptools wheel
-        pip install -U -e .[docs]
-
-    - name: Set up git user
-      run: |
-        git config --global user.name "${{ env.GIT_USER_NAME }}"
-        git config --global user.email "${{ env.GIT_USER_EMAIL }}"
-
-    - name: Deploy documentation
-      run: |
-        mike deploy --push --remote origin --branch gh-pages --update-aliases --config-file mkdocs.yml ${GITHUB_REF#refs/tags/v} stable
-        mike deploy --push --remote origin --branch gh-pages --update-aliases --config-file mkdocs.yml latest ${{ env.PUBLISH_UPDATE_BRANCH }}
+    secrets:
+      PyPI_token: ${{ secrets.PYPI_TOKEN }}
+      PAT: ${{ secrets.RELEASE_PAT }}

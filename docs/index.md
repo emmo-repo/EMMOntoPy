@@ -1,10 +1,9 @@
+<!-- markdownlint-disable MD033 MD041 -->
 <img src="images/emmontopy-logo.png" width="40%" align="right">
 
 # EMMOntoPy
 
 *Python API for the Elemental Multiperspective Material Ontology ([EMMO]).*
-
-<!-- markdownlint-disable MD033 -->
 
 ![CI tests](https://github.com/emmo-repo/EMMOntoPy/workflows/CI%20Tests/badge.svg)
 [![PyPI version](https://badge.fury.io/py/EMMOntoPy.svg)](https://badge.fury.io/py/EMMOntoPy)
@@ -98,12 +97,12 @@ pip install EMMOntoPy
 
 ### Required Dependencies
 
-- [Python] 3.6 or later.
+- [Python] 3.7 or later.
 - [Owlready2] v0.23 or later.
 
 ### Optional Dependencies
 
-- [Graphviz]: Needed for graph generation.
+- [Graphviz][graphviz_website]: Needed for graph generation.
   With support for generation pdf, png and svg figures for tests and generation of documentation automatically (`ontodoc`).
 - [pandoc]: Only used for generated documentation from markdown to nicely formatted html or pdf.
   Tested with v2.1.2.
@@ -114,7 +113,7 @@ pip install EMMOntoPy
   Needed for reasoning.
 
 - Optional Python packages:
-  - [graphviz]: Generation of documentation and graphs.
+  - [graphviz][graphviz_python]: Generation of documentation and graphs.
   - [PyYAML]: Required for generating documentation with pandoc.
   - [blessings]: Clean output for `emmocheck`.
   - [Pygments]: Coloured output for `emmocheck`.
@@ -144,9 +143,11 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/), specifically:
 
 ### Contributing projects
 
-- [EMMC-CSA](https://emmc.info/about-emmc-csa/);
+- EMMC-CSA;
   Grant Agreement No: 723867
-  <img src="https://i2.wp.com/emmc.info/wp-content/uploads/2018/10/emmc_logo-low.jpg?fit=1701%2C1701&ssl=1" width="50">
+  <img src="images/emmc_logo.png" width="50">
+
+  The [EMMC-ASBL organization](https://emmc.eu/emmc-members/mission/) takes on the efforts of continuing and expanding on the efforts of the CSA.
 - [MarketPlace](https://www.the-marketplace-project.eu/);
   Grant Agreement No: 760173
   <img src="https://www.the-marketplace-project.eu/content/dam/iwm/the-marketplace-project/images/MARKETPLACE_LOGO_300dpi.png" width="120">
@@ -169,11 +170,11 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/), specifically:
 [IPython]: https://ipython.org/
 [DLite]: https://github.com/SINTEF/dlite/
 [pydot]: https://pypi.org/project/pydot/
-[Graphviz]: https://www.graphviz.org/
+[graphviz_website]: https://www.graphviz.org/
 [pandoc]: http://pandoc.org/
 [XeLaTeX]: https://www.overleaf.com/learn/latex/XeLaTeX/
 [pdfLaTeX]: https://www.latex-project.org/
-[graphviz]: https://pypi.org/project/graphviz
+[graphviz_python]: https://pypi.org/project/graphviz
 [PyYAML]: https://pypi.org/project/PyYAML/
 [blessings]: https://pypi.org/project/blessings/
 [Pygments]: https://pypi.org/project/Pygments/

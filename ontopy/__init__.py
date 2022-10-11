@@ -5,8 +5,8 @@ import sys
 __version__ = "0.4.0"
 
 # Ensure correct Python version
-if sys.version_info < (3, 6):
-    raise RuntimeError("ontopy requires Python 3.6 or later")
+if sys.version_info < (3, 7):
+    raise RuntimeError("ontopy requires Python 3.7 or later")
 
 # Ensure ontopy is imported before owlready2...
 if "owlready2" in sys.modules and "ontopy" not in sys.modules:
