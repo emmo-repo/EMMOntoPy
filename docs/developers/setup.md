@@ -7,7 +7,7 @@ This section outlines some suggestions as well as conventions used by the EMMOnt
 ## Setup
 
 !!! important "Requirements"
-    This section expects you to be running on a Unix-like system (e.g., Linux) with *minimum* Python 3.6.
+    This section expects you to be running on a Unix-like system (e.g., Linux) with *minimum* Python 3.7.
 
 ### Virtual environment
 
