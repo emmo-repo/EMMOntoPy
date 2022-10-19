@@ -36,7 +36,7 @@ repos:
 #     exclude: ^tests/.*$
 
 - repo: https://github.com/SINTEF/ci-cd
-  rev: 6a258b3bce2d2db022908c127d0532c8a7591707  # frozen: v1
+  rev: 94e7f9936a3278aed1a656cb7e151dd89da95409  # frozen: v1
   hooks:
   - id: docs-api-reference
     args:
