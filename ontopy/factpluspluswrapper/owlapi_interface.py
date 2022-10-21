@@ -30,9 +30,10 @@ class OwlApiInterface:
             graph (Graph): An rdflib graph to execute the reasoner on.
 
         """
-        with tempfile.NamedTemporaryFile("wt") as tmpdir:
-            graph.serialize(tmpdir.name, format="xml")
-            return self._run(tmpdir.name, command="--run-reasoner")
+        with tempfile.TemporaryDirectory("wt") as tmpdir:
+            tmpfile = os.path.join(tmpdir, "tmponto.xml")
+            graph.serialize(tmpfile, format="xml")
+            return self._run(tmpfile, command="--run-reasoner")
 
     def reason_files(self, *owl_files):
         """Merge the given owl and generate the inferred axioms.
