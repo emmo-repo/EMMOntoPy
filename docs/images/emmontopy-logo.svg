@@ -8,7 +8,7 @@
    version="1.1"
    id="svg5"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
-   sodipodi:docname="emmontopy5.svg"
+   sodipodi:docname="emmontopy-logo.svg"
    inkscape:export-filename="/home/friisj/emmontopy5.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
@@ -29,9 +29,9 @@
      inkscape:zoom="0.77771465"
      inkscape:cx="-5.7861839"
      inkscape:cy="765.70501"
-     inkscape:window-width="3440"
+     inkscape:window-width="2560"
      inkscape:window-height="1388"
-     inkscape:window-x="0"
+     inkscape:window-x="1920"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="g55"
@@ -159,10 +159,10 @@
         <g
            id="g73"
            transform="translate(203.36226,800.34683)"
-           style="fill:#ffcb3b;fill-opacity:1">
+           style="fill:#656263;fill-opacity:1">
           <path
              d="M 0,0 C 54.503,31.047 123.855,12.031 154.902,-42.472 185.948,-96.975 166.933,-166.327 112.43,-197.373 57.927,-228.42 -11.425,-209.405 -42.472,-154.901 -73.518,-100.398 -54.503,-31.047 0,0"
-             style="fill:#ffcb3b;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             style="fill:#656263;fill-opacity:1;fill-rule:nonzero;stroke:none"
              id="path75" />
         </g>
         <g
@@ -175,7 +175,7 @@
         </g>
         <path
            d="m 431.49496,401.88093 c 54.503,31.047 123.855,12.031 154.902,-42.472 31.046,-54.503 12.031,-123.855 -42.472,-154.901 -54.503,-31.047 -123.855,-12.032 -154.902,42.471 -31.046,54.504 -12.031,123.855 42.472,154.902"
-           style="fill:#3773a5;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           style="fill:#656263;fill-opacity:1;fill-rule:nonzero;stroke:none"
            id="path83"
            inkscape:export-filename="/home/friisj/emmontopy5.png"
            inkscape:export-xdpi="96"
