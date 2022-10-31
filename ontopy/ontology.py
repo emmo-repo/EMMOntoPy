@@ -15,7 +15,7 @@ import types
 from pathlib import Path
 from collections import defaultdict
 from collections.abc import Iterable
-from urllib.request import HTTPError
+from urllib.request import HTTPError, URLError
 
 import rdflib
 from rdflib.util import guess_format
@@ -40,6 +40,7 @@ from ontopy.utils import (
     _validate_installed_version,
     LabelDefinitionError,
     ThingClassDefinitionError,
+    EMMOntoPyException,
 )
 
 if TYPE_CHECKING:
@@ -617,7 +618,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             if fmt and fmt not in OWLREADY2_FORMATS:
                 # Convert filename to rdfxml before passing it to owlready2
                 graph = rdflib.Graph()
-                graph.parse(resolved_url, format=fmt)
+                try:
+                    graph.parse(resolved_url, format=fmt)
+                except URLError as err:
+                    raise EMMOntoPyException(
+                        "URL error", err, resolved_url
+                    ) from err
+
                 with tempfile.NamedTemporaryFile() as handle:
                     graph.serialize(destination=handle, format="xml")
                     handle.seek(0)
@@ -865,7 +872,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             if recursive:
                 append(self)
             write_catalog(
-                mappings, output=catalog_file, dir=dir, append=append_catalog
+                mappings,
+                output=catalog_file,
+                directory=dir,
+                append=append_catalog,
             )
 
     def get_imported_ontologies(self, recursive=False):

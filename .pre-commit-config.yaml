@@ -17,7 +17,7 @@ repos:
     args: [--markdown-linebreak-ext=md]
 
 - repo: https://github.com/ambv/black
-  rev: 22.8.0
+  rev: 22.10.0
   hooks:
   - id: black
     name: Blacken
@@ -35,24 +35,25 @@ repos:
 #   - id: mypy
 #     exclude: ^tests/.*$
 
+- repo: https://github.com/SINTEF/ci-cd
+  rev: 94e7f9936a3278aed1a656cb7e151dd89da95409  # frozen: v1
+  hooks:
+  - id: docs-api-reference
+    args:
+    - --package-dir=emmopy
+    - --package-dir=ontopy
+    - "--special-option=emmopy/emmocheck.py,show_bases: false"
+    - --unwanted-folder=__pycache__
+    - --unwanted-folder=java
+    files: ^(emmopy|ontopy)/.*\.py$
+  - id: docs-landing-page
+    args:
+    - --replacement=(LICENSE.txt),(LICENSE.md)
+    - --replacement=(tools),(../tools)
+    files: ^README.md$
+
 - repo: local
   hooks:
-  - id: update-docs-api-reference
-    name: Update API Reference in Documentation
-    entry: invoke
-    args: [create-api-reference-docs, --pre-clean, --pre-commit]
-    language: python
-    pass_filenames: false
-    files: ^(emmopy|ontopy)/.*\.py$
-    description: Update the API Reference documentation, whenever a Python file is touched in the code base.
-  - id: update-docs-index
-    name: Update Landing Page for Documentation
-    entry: invoke
-    args: [create-docs-index]
-    language: python
-    pass_filenames: false
-    files: ^README.md$
-    description: Update the landing page for the documentation if the source file (README.md) is changed.
   - id: pylint
     name: pylint
     entry: pylint

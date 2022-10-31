@@ -541,7 +541,7 @@ Possible annotations are:
 [Manchester_OWL]: http://ceur-ws.org/Vol-216/submission_9.pdf
 [Owlready2]: https://pythonhosted.org/Owlready2/
 [Lamy2017]: http://www.lesfleursdunormal.fr/_downloads/article_owlready_aim_2017.pdf
-[EMMOntoPy]: https://github.com/emmo-repo/EMMO-python
+[EMMOntoPy]: https://github.com/emmo-repo/EMMOntoPy
 [Great_table_of_DL]: http://www.lesfleursdunormal.fr/static/_downloads/great_ontology_table.pdf
 [universal_restriction]: https://en.wikipedia.org/wiki/Universal_quantifier
 [existential_restriction]: https://en.wikipedia.org/wiki/Universal_quantifier

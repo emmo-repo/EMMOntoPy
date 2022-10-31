@@ -10,11 +10,16 @@ import json
 rootdir = os.path.abspath(
     os.path.realpath((os.path.dirname(os.path.dirname(__file__))))
 )
-sys.path.insert(1, rootdir)
+if rootdir not in sys.path:
+    sys.path.insert(1, rootdir)
 
-from ontopy import World, onto_path
-from ontopy.graph import OntoGraph, plot_modules, _default_style
-from ontopy.utils import get_label
+from ontopy import World, onto_path  # pylint: disable=import-error
+from ontopy.graph import (  # pylint: disable=import-error
+    OntoGraph,
+    plot_modules,
+    _default_style,
+)
+from ontopy.utils import get_label  # pylint: disable=import-error
 import owlready2
 
 
