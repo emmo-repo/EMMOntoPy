@@ -18,6 +18,14 @@ def test_basic(emmo: "Ontology") -> None:
     # Add entity directly
     onto.new_entity("Hydrogen", emmo.Atom)
 
+    # Test that new entity is found by both version of get_by_label
+    assert onto.get_by_label("Hydrogen") == onto.Hydrogen
+    assert onto.get_by_label_all("Hydrogen") == [onto.Hydrogen]
+
+    onto.sync_attributes()
+    # Test that after sync_attributes, the entity is not counted more than once
+    assert onto.get_by_label_all("Hydrogen") == [onto.Hydrogen]
+
     with pytest.raises(LabelDefinitionError):
         onto.new_entity("Hydr ogen", emmo.Atom)
 
@@ -40,8 +48,6 @@ def test_basic(emmo: "Ontology") -> None:
         water = H2O()
         water.hasSpatialDirectPart = [H1, H2, O]
 
-    print(onto.label_annotations)
-    print(onto._label_annotations)
     name_prefix = "myonto_"
     onto.sync_attributes(name_policy="sequential", name_prefix=name_prefix)
     assert f"{onto.base_iri}{name_prefix}0" in onto
