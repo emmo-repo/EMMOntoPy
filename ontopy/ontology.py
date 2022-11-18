@@ -343,16 +343,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         for key in annotations:
             entity = self.search_one(**{key: label})
             if entity:
-                print("entity from search one", entity)
                 return entity
 
         if self._special_labels and label in self._special_labels:
-            print("special_labels", self._special_labels[label])
             return self._special_labels[label]
 
         entity = self.world[self.base_iri + label]
         if entity:
-            print("from self.world", entity)
             return entity
 
         raise NoSuchLabelError(f"No label annotations matches {label!r}")
