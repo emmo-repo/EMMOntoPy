@@ -343,13 +343,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         for key in annotations:
             entity = self.search_one(**{key: label})
             if entity:
+                print("entity from search one", entity)
                 return entity
 
         if self._special_labels and label in self._special_labels:
+            print("special_labels", self._special_labels[label])
             return self._special_labels[label]
 
         entity = self.world[self.base_iri + label]
         if entity:
+            print("from self.world", entity)
             return entity
 
         raise NoSuchLabelError(f"No label annotations matches {label!r}")
@@ -377,8 +380,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         entity = self.world.search(**{next(annotations): label})
         for key in annotations:
             entity.extend(self.world.search(**{key: label}))
+
         if self._special_labels and label in self._special_labels:
             entity.append(self._special_labels[label])
+
+        entity_only_in_world = self.world[self.base_iri + label]
+        if entity_only_in_world and entity_only_in_world not in entity:
+            entity.append(entity_only_in_world)
+
         if prefix:
             return [_ for _ in entity if _.namespace.ontology.prefix == prefix]
         return entity
