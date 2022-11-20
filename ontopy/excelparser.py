@@ -170,10 +170,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     onto, catalog = get_metadata_from_dataframe(
         metadata, base_iri, imports=imports
     )
-    # Get a set of imported concepts
-    imported_concepts = {
-        concept.prefLabel.first() for concept in onto.get_entities()
-    }
 
     # Set given or default base_iri if base_iri_from_metadata is False.
     if not base_iri_from_metadata:
@@ -206,20 +202,21 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 name = row["prefLabel"]
                 try:
                     onto.get_by_label(name)
-                    if not force:
-                        raise ExcelError(
-                            f'Concept "{name}" already in ontology'
+                    if any(
+                        item.iri.startswith(onto.base_iri)
+                        for item in onto.get_by_label_all(name)
+                    ):
+                        if not force:
+                            raise ExcelError(
+                                f'Concept "{name}" already in ontology'
+                            )
+                        warnings.warn(
+                            f'Ignoring concept "{name}" since it is already in '
+                            "the ontology."
                         )
-                    warnings.warn(
-                        f'Ignoring concept "{name}" since it is already in '
-                        "the ontology."
-                    )
-                    concepts_with_errors["already_defined"].append(name)
-                    # What to do if we want to add info to this concept?
-                    # Should that be not allowed?
-                    # If it should be allowed the index has to be added to
-                    # added_rows
-                    continue
+                        concepts_with_errors["already_defined"].append(name)
+                        continue
+                    concepts_with_errors["in_imported_ontologies"].append(name)
                 except (ValueError, TypeError) as err:
                     warnings.warn(
                         f'Ignoring concept "{name}". '
@@ -389,9 +386,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     concepts_with_errors = {
         key: set(value) for key, value in concepts_with_errors.items()
     }
-    concepts_with_errors["in_imported_ontologies"] = concepts_with_errors[
-        "already_defined"
-    ].intersection(imported_concepts)
 
     return onto, catalog, concepts_with_errors
 
