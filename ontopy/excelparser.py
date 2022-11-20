@@ -82,12 +82,12 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
               following keys:
 
                 - "already_defined": These are concepts that are already in the
-                    ontology, either because they were already added in a
+                    ontology, because they were already added in a
                     previous line of the excelfile/pandas dataframe, or because
-                    it is already defined in the imported ontologies.
+                    it is already defined in an imported ontology with the same
+                    base_iri as the newly created ontology.
                 - "in_imported_ontologies": Concepts that are defined in the
                     excel, but already exist in the imported ontologies.
-                    This is a subset of the 'already_defined'.
                 - "wrongly_defined": Concepts that are given an invalid
                     prefLabel (e.g. with a space in the name).
                 - "missing_parents": Concepts that are missing parents.
