@@ -377,8 +377,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         entity = self.world.search(**{next(annotations): label})
         for key in annotations:
             entity.extend(self.world.search(**{key: label}))
+
         if self._special_labels and label in self._special_labels:
             entity.append(self._special_labels[label])
+
+        entity_accessed_directly = self.world[self.base_iri + label]
+        if entity_accessed_directly and entity_accessed_directly not in entity:
+            entity.append(entity_accessed_directly)
+
         if prefix:
             return [_ for _ in entity if _.namespace.ontology.prefix == prefix]
         return entity
