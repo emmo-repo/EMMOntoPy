@@ -202,10 +202,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 name = row["prefLabel"]
                 try:
                     onto.get_by_label(name)
-                    if any(
-                        item.iri.startswith(onto.base_iri)
-                        for item in onto.get_by_label_all(name)
-                    ):
+                    if onto.world[onto.base_iri + name]:
                         if not force:
                             raise ExcelError(
                                 f'Concept "{name}" already in ontology'
