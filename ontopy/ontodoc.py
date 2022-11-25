@@ -391,9 +391,15 @@ class OntoDoc:
         # Instances (individuals)
         if hasattr(item, "instances"):
             points = []
-            for entity in [
-                _ for _ in item.instances() if item in _.is_instance_of
-            ]:
+            entities = []
+            for entity in item.instances():
+                try:
+                    if item in entity.is_instance_of:
+                        entities.append(entity)
+                except TypeError:
+                    # entity.is_instance_of is not an iterable
+                    pass
+            for entity in entities:
                 points.append(
                     point_style.format(
                         point=asstring(entity, link_style), ontology=onto
