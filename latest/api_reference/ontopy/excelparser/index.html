@@ -1196,12 +1196,12 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
   following keys:</p>
 <ul>
 <li>"already_defined": These are concepts that are already in the
-    ontology, either because they were already added in a
+    ontology, because they were already added in a
     previous line of the excelfile/pandas dataframe, or because
-    it is already defined in the imported ontologies.</li>
+    it is already defined in an imported ontology with the same
+    base_iri as the newly created ontology.</li>
 <li>"in_imported_ontologies": Concepts that are defined in the
-    excel, but already exist in the imported ontologies.
-    This is a subset of the 'already_defined'.</li>
+    excel, but already exist in the imported ontologies.</li>
 <li>"wrongly_defined": Concepts that are given an invalid
     prefLabel (e.g. with a space in the name).</li>
 <li>"missing_parents": Concepts that are missing parents.
@@ -1270,12 +1270,12 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
 <span class="sd">              following keys:</span>
 
 <span class="sd">                - &quot;already_defined&quot;: These are concepts that are already in the</span>
-<span class="sd">                    ontology, either because they were already added in a</span>
+<span class="sd">                    ontology, because they were already added in a</span>
 <span class="sd">                    previous line of the excelfile/pandas dataframe, or because</span>
-<span class="sd">                    it is already defined in the imported ontologies.</span>
+<span class="sd">                    it is already defined in an imported ontology with the same</span>
+<span class="sd">                    base_iri as the newly created ontology.</span>
 <span class="sd">                - &quot;in_imported_ontologies&quot;: Concepts that are defined in the</span>
 <span class="sd">                    excel, but already exist in the imported ontologies.</span>
-<span class="sd">                    This is a subset of the &#39;already_defined&#39;.</span>
 <span class="sd">                - &quot;wrongly_defined&quot;: Concepts that are given an invalid</span>
 <span class="sd">                    prefLabel (e.g. with a space in the name).</span>
 <span class="sd">                - &quot;missing_parents&quot;: Concepts that are missing parents.</span>
@@ -1381,10 +1381,6 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
     <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span> <span class="o">=</span> <span class="n">get_metadata_from_dataframe</span><span class="p">(</span>
         <span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">imports</span>
     <span class="p">)</span>
-    <span class="c1"># Get a set of imported concepts</span>
-    <span class="n">imported_concepts</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">concept</span><span class="o">.</span><span class="n">prefLabel</span><span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="k">for</span> <span class="n">concept</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_entities</span><span class="p">()</span>
-    <span class="p">}</span>
 
     <span class="c1"># Set given or default base_iri if base_iri_from_metadata is False.</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">base_iri_from_metadata</span><span class="p">:</span>
@@ -1417,20 +1413,18 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
                 <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">]</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">onto</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s1">&#39;Concept &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; already in ontology&#39;</span>
+                    <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">+</span> <span class="n">name</span><span class="p">]:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s1">&#39;Concept &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; already in ontology&#39;</span>
+                            <span class="p">)</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s1">&#39;Ignoring concept &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; since it is already in &#39;</span>
+                            <span class="s2">&quot;the ontology.&quot;</span>
                         <span class="p">)</span>
-                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s1">&#39;Ignoring concept &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; since it is already in &#39;</span>
-                        <span class="s2">&quot;the ontology.&quot;</span>
-                    <span class="p">)</span>
-                    <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;already_defined&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-                    <span class="c1"># What to do if we want to add info to this concept?</span>
-                    <span class="c1"># Should that be not allowed?</span>
-                    <span class="c1"># If it should be allowed the index has to be added to</span>
-                    <span class="c1"># added_rows</span>
-                    <span class="k">continue</span>
+                        <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;already_defined&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                        <span class="k">continue</span>
+                    <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;in_imported_ontologies&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
                 <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
                     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s1">&#39;Ignoring concept &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;. &#39;</span>
@@ -1600,9 +1594,6 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
     <span class="n">concepts_with_errors</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">key</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">concepts_with_errors</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
     <span class="p">}</span>
-    <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;in_imported_ontologies&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">concepts_with_errors</span><span class="p">[</span>
-        <span class="s2">&quot;already_defined&quot;</span>
-    <span class="p">]</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">imported_concepts</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">concepts_with_errors</span>
 </code></pre></div>
