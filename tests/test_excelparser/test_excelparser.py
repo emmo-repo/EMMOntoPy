@@ -15,9 +15,10 @@ def test_excelparser(repo_dir: "Path") -> None:
     onto = get_ontology(str(ontopath)).load()
     xlspath = repo_dir / "tests" / "test_excelparser" / "onto.xlsx"
     ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
+
     assert onto == ontology
 
-    assert errors["already_defined"] == {"Atom", "Pattern"}
+    assert errors["already_defined"] == {"Pattern"}
     assert errors["in_imported_ontologies"] == {"Atom"}
     assert errors["wrongly_defined"] == {"Temporal Boundary"}
     assert errors["missing_parents"] == {"SpatioTemporalBoundary"}
@@ -27,7 +28,8 @@ def test_excelparser(repo_dir: "Path") -> None:
         "SubgrainBoundary",
     }
     assert errors["nonadded_concepts"] == {
-        "Atom",
         "Pattern",
         "Temporal Boundary",
     }
+
+    assert len(ontology.get_by_label_all("Atom")) == 2
