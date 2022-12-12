@@ -4,7 +4,6 @@ from pathlib import Path
 import pytest
 
 
-@pytest.mark.skip("ontodoc is tested in other ways")
 @pytest.mark.parametrize("tool", ["ontodoc"], indirect=True)
 def test_run(tool, tmpdir: Path) -> None:
     """Check that running `ontodoc` works."""
@@ -13,3 +12,6 @@ def test_run(tool, tmpdir: Path) -> None:
     )
 
     tool.main([str(test_file), str(tmpdir / "test.md")])
+    tool.main(
+        [str(test_file), "--format=simple-html", str(tmpdir / "test.html")]
+    )

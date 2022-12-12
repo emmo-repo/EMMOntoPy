@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 def test_prefix(testonto: "Ontology", emmo: "Ontology") -> None:
     """Test prefix in ontology"""
 
-    assert len(testonto.get_by_label_all("*")) == 2
+    assert len(testonto.get_by_label_all("*")) == 3
     assert testonto.get_by_label_all("*", prefix="testonto") == [
         testonto.TestClass
     ]
