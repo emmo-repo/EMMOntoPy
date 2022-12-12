@@ -21,7 +21,7 @@ import owlready2
 
 
 if TYPE_CHECKING:
-    from packaging.version import Version, LegacyVersion
+    from packaging.version import Version
     from typing import Optional, Union
 
 
@@ -425,7 +425,7 @@ def write_catalog(
 
 
 def _validate_installed_version(
-    package: str, min_version: "Union[str, Version, LegacyVersion]"
+    package: str, min_version: "Union[str, Version]"
 ) -> bool:
     """Validate an installed package.
 
@@ -447,16 +447,16 @@ def _validate_installed_version(
     """
     # pylint: disable=import-outside-toplevel
     import importlib
-    from packaging.version import parse as parse_version, LegacyVersion, Version
+    from packaging.version import parse as parse_version, Version
 
     if isinstance(min_version, str):
         min_version = parse_version(min_version)
-    elif isinstance(min_version, (LegacyVersion, Version)):
+    elif isinstance(min_version, (Version)):
         # We have the format we want
         pass
     else:
         raise TypeError(
-            "min_version should be either a str, LegacyVersion or Version. "
+            "min_version should be either a str (Version). "
             "The latter classes being from the packaging.version module."
         )
 
