@@ -89,7 +89,7 @@ This includes a few examples and demos:
 
 ## Installation
 
-Install with
+Install with:
 
 ```console
 pip install EMMOntoPy
