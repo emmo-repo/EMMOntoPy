@@ -12,6 +12,7 @@ import urllib.request
 import urllib.parse
 import warnings
 import defusedxml.ElementTree as ET
+from packaging.version import parse as parse_version, Version
 
 from rdflib import Graph, URIRef
 from rdflib.util import guess_format
@@ -21,7 +22,6 @@ import owlready2
 
 
 if TYPE_CHECKING:
-    from packaging.version import Version
     from typing import Optional, Union
 
 
@@ -447,7 +447,6 @@ def _validate_installed_version(
     """
     # pylint: disable=import-outside-toplevel
     import importlib
-    from packaging.version import parse as parse_version, Version
 
     if isinstance(min_version, str):
         min_version = parse_version(min_version)
