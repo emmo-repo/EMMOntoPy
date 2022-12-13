@@ -456,7 +456,7 @@ def _validate_installed_version(
         pass
     else:
         raise TypeError(
-            "min_version should be either a str (Version). "
+            "min_version should be either a str or packaging.Version. "
             "The latter classes being from the packaging.version module."
         )
 
