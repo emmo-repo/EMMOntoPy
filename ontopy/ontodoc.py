@@ -289,7 +289,7 @@ class OntoDoc:
         ):
             for value in annotations[key]:
                 value = str(value)
-                if self.url_regex.match(str(value)):
+                if self.url_regex.match(value):
                     doc.append(
                         annotation_style.format(
                             key=key, value=asstring(value, link_style)
