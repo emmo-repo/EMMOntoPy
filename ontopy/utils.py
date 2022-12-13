@@ -450,7 +450,7 @@ def _validate_installed_version(
 
     if isinstance(min_version, str):
         min_version = parse_version(min_version)
-    elif isinstance(min_version, (Version)):
+    elif isinstance(min_version, Version):
         # We have the format we want
         pass
     else:
