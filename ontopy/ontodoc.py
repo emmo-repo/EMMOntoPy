@@ -288,6 +288,7 @@ class OntoDoc:
             annotations.keys(), key=lambda key: order.get(key, key)
         ):
             for value in annotations[key]:
+                value = str(value)
                 if self.url_regex.match(value):
                     doc.append(
                         annotation_style.format(
