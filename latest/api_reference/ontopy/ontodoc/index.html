@@ -3797,6 +3797,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
             <span class="n">annotations</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="n">order</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
                     <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                         <span class="n">annotation_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -4157,6 +4158,7 @@ show_disjoints : Bool
         <span class="n">annotations</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="n">order</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
     <span class="p">):</span>
         <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
                 <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">annotation_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>

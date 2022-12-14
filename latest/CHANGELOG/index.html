@@ -1521,6 +1521,7 @@
 <ul>
 <li>Remove dependency on LegacyVersion of packaging <a href="https://github.com/emmo-repo/EMMOntoPy/issues/514">#514</a></li>
 <li>pytests are importing packaging 22.0 even though it is not allowed in requirements <a href="https://github.com/emmo-repo/EMMOntoPy/issues/513">#513</a></li>
+<li>ontodoc: adding annotations that are not strings fail <a href="https://github.com/emmo-repo/EMMOntoPy/issues/510">#510</a></li>
 <li>get_by_label_all only works after sync_attributes <a href="https://github.com/emmo-repo/EMMOntoPy/issues/502">#502</a></li>
 <li>excel2onto: allow to use prefLabel already in imported ontologies <a href="https://github.com/emmo-repo/EMMOntoPy/issues/500">#500</a></li>
 <li>Drop Python 3.6 support - extend Python >3.7 support <a href="https://github.com/emmo-repo/EMMOntoPy/issues/486">#486</a></li>
@@ -1533,6 +1534,7 @@
 <p><strong>Merged pull requests:</strong></p>
 <ul>
 <li>Removed LegacyVersion from ontopy.utils <a href="https://github.com/emmo-repo/EMMOntoPy/pull/515">#515</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
+<li>Added fix for adding annotations that are not strings in ontodoc <a href="https://github.com/emmo-repo/EMMOntoPy/pull/512">#512</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Do not trigger an emmocheck failure for ontologies with a foaf:logo annotation <a href="https://github.com/emmo-repo/EMMOntoPy/pull/509">#509</a> (<a href="https://github.com/jesper-friis">jesper-friis</a>)</li>
 <li>New concepts allowed even if name alrady exists in imported ontologies <a href="https://github.com/emmo-repo/EMMOntoPy/pull/504">#504</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
 <li>Corrected so that get_by_label_all also returns all concepts <a href="https://github.com/emmo-repo/EMMOntoPy/pull/503">#503</a> (<a href="https://github.com/francescalb">francescalb</a>)</li>
