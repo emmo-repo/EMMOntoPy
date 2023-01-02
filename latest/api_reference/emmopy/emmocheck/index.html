@@ -1210,12 +1210,12 @@ TestEMMOConventions        </code>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">TestEMMOConventions</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Base class for testing an ontology against EMMO conventions.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for testing an ontology against EMMO conventions.&quot;&quot;&quot;</span>
 
     <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># configurations</span>
 
     <span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the configuration specified by `string`.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the configuration specified by `string`.</span>
 
 <span class="sd">        If configuration is not found in the configuration file, `default` is</span>
 <span class="sd">        returned.</span>
@@ -1267,7 +1267,7 @@ dots, like "test_namespace.exceptions".</p>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns the configuration specified by `string`.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the configuration specified by `string`.</span>
 
 <span class="sd">    If configuration is not found in the configuration file, `default` is</span>
 <span class="sd">    returned.</span>
@@ -1319,10 +1319,10 @@ TestFunctionalEMMOConventions        </code>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">TestFunctionalEMMOConventions</span><span class="p">(</span><span class="n">TestEMMOConventions</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Test functional EMMO conventions.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test functional EMMO conventions.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">test_unit_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check that all measurement units have a physical dimension.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all measurement units have a physical dimension.</span>
 
 <span class="sd">        Configurations:</span>
 <span class="sd">            exceptions - full class names of classes to ignore.</span>
@@ -1387,7 +1387,7 @@ TestFunctionalEMMOConventions        </code>
                     <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">test_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check that all quantities have a physicalDimension annotation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all quantities have a physicalDimension annotation.</span>
 
 <span class="sd">        Note: this test will be deprecated when isq is moved to emmo/domain.</span>
 
@@ -1461,7 +1461,7 @@ TestFunctionalEMMOConventions        </code>
                     <span class="bp">self</span><span class="o">.</span><span class="n">assertRegex</span><span class="p">(</span><span class="n">physdim</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">test_physical_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check that all physical quantities have `hasPhysicalDimension`.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all physical quantities have `hasPhysicalDimension`.</span>
 
 <span class="sd">        Note: this test will fail before isq is moved to emmo/domain.</span>
 
@@ -1537,7 +1537,7 @@ TestFunctionalEMMOConventions        </code>
                     <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">test_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check that all IRIs are namespaced after their (sub)ontology.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all IRIs are namespaced after their (sub)ontology.</span>
 
 <span class="sd">        Configurations:</span>
 <span class="sd">            exceptions - full name of entities to ignore.</span>
@@ -1643,7 +1643,7 @@ TestFunctionalEMMOConventions        </code>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check that all IRIs are namespaced after their (sub)ontology.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all IRIs are namespaced after their (sub)ontology.</span>
 
 <span class="sd">    Configurations:</span>
 <span class="sd">        exceptions - full name of entities to ignore.</span>
@@ -1743,7 +1743,7 @@ TestFunctionalEMMOConventions        </code>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_physical_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check that all physical quantities have `hasPhysicalDimension`.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all physical quantities have `hasPhysicalDimension`.</span>
 
 <span class="sd">    Note: this test will fail before isq is moved to emmo/domain.</span>
 
@@ -1847,7 +1847,7 @@ TestFunctionalEMMOConventions        </code>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check that all quantities have a physicalDimension annotation.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all quantities have a physicalDimension annotation.</span>
 
 <span class="sd">    Note: this test will be deprecated when isq is moved to emmo/domain.</span>
 
@@ -1948,7 +1948,7 @@ TestFunctionalEMMOConventions        </code>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_unit_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check that all measurement units have a physical dimension.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all measurement units have a physical dimension.</span>
 
 <span class="sd">    Configurations:</span>
 <span class="sd">        exceptions - full class names of classes to ignore.</span>
@@ -2048,10 +2048,10 @@ TestSyntacticEMMOConventions        </code>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">TestSyntacticEMMOConventions</span><span class="p">(</span><span class="n">TestEMMOConventions</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Test syntactic EMMO conventions.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test syntactic EMMO conventions.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">test_number_of_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check that all entities have one and only one prefLabel.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all entities have one and only one prefLabel.</span>
 
 <span class="sd">        Use &quot;altLabel&quot; for synonyms.</span>
 
@@ -2094,7 +2094,7 @@ TestSyntacticEMMOConventions        </code>
             <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ontology has no prefLabel&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">test_class_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check that class labels are CamelCase and valid identifiers.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that class labels are CamelCase and valid identifiers.</span>
 
 <span class="sd">        For CamelCase, we are currently only checking that the labels</span>
 <span class="sd">        start with upper case.</span>
@@ -2118,7 +2118,7 @@ TestSyntacticEMMOConventions        </code>
                         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">())</span>
 
     <span class="k">def</span> <span class="nf">test_object_property_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check that object property labels are lowerCamelCase.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that object property labels are lowerCamelCase.</span>
 
 <span class="sd">        Allowed exceptions: &quot;EMMORelation&quot;</span>
 
@@ -2187,7 +2187,7 @@ start with upper case.</p>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_class_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check that class labels are CamelCase and valid identifiers.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that class labels are CamelCase and valid identifiers.</span>
 
 <span class="sd">    For CamelCase, we are currently only checking that the labels</span>
 <span class="sd">    start with upper case.</span>
@@ -2237,7 +2237,7 @@ starts with "owl.".</p>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_number_of_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check that all entities have one and only one prefLabel.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all entities have one and only one prefLabel.</span>
 
 <span class="sd">    Use &quot;altLabel&quot; for synonyms.</span>
 
@@ -2307,7 +2307,7 @@ upper case letter.</p>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_object_property_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check that object property labels are lowerCamelCase.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that object property labels are lowerCamelCase.</span>
 
 <span class="sd">    Allowed exceptions: &quot;EMMORelation&quot;</span>
 
@@ -2402,7 +2402,7 @@ manually / through Python.</p></td>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">(</span>
     <span class="n">argv</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-branches,too-many-statements</span>
-    <span class="sd">&quot;&quot;&quot;Run all checks on ontology `iri`.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run all checks on ontology `iri`.</span>
 
 <span class="sd">    Default is &#39;http://emmo.info/emmo&#39;.</span>
 

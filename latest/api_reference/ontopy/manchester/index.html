@@ -1041,7 +1041,7 @@ ManchesterError            (<a class="autorefs autorefs-internal" title="ontopy.
         <details class="quote">
           <summary>Source code in <code>ontopy/manchester.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ManchesterError</span><span class="p">(</span><span class="n">EMMOntoPyException</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Raised on invalid Manchester notation.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised on invalid Manchester notation.&quot;&quot;&quot;</span>
 </code></pre></div>
         </details>
 
@@ -1131,7 +1131,7 @@ only value restrictions supported so far.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/manchester.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">ontology</span><span class="p">:</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Construct</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Evaluate expression in Manchester syntax.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate expression in Manchester syntax.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        ontology: The ontology within which the expression will be evaluated.</span>
@@ -1157,7 +1157,7 @@ only value restrictions supported so far.</p>
 
     <span class="c1"># pylint: disable=invalid-name</span>
     <span class="k">def</span> <span class="nf">_parse_literal</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compiles literal to Owlready2 type.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compiles literal to Owlready2 type.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">language</span><span class="p">:</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">locstr</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">string</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">language</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">r</span><span class="o">.</span><span class="n">number</span><span class="p">:</span>
@@ -1169,11 +1169,11 @@ only value restrictions supported so far.</p>
     <span class="c1"># pylint: disable=invalid-name,no-else-return,too-many-return-statements</span>
     <span class="c1"># pylint: disable=too-many-branches</span>
     <span class="k">def</span> <span class="nf">_eval</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Recursively evaluate expression produced by pyparsing into an</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Recursively evaluate expression produced by pyparsing into an</span>
 <span class="sd">        Owlready2 construct.&quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">fneg</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;Negates the argument if `neg` is true.&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Negates the argument if `neg` is true.&quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Not</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">neg</span> <span class="k">else</span> <span class="n">x</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># r is atomic, returns its owlready2 repr</span>
@@ -1265,7 +1265,7 @@ only value restrictions supported so far.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/manchester.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">manchester_expression</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Returns pyparsing grammar for a Manchester expression.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns pyparsing grammar for a Manchester expression.</span>
 
 <span class="sd">    This function is mostly for internal use.</span>
 

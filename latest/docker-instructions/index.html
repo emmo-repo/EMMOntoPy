@@ -1062,14 +1062,14 @@
 
 <h1 id="emmontopy-docker">EMMOntoPy Docker<a class="headerlink" href="#emmontopy-docker" title="Permanent link">&para;</a></h1>
 <h2 id="clone-project">Clone project<a class="headerlink" href="#clone-project" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>git clone git@github.com:emmo-repo/EMMOntoPy.git
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:emmo-repo/EMMOntoPy.git
 </code></pre></div>
 <h2 id="build-docker-image">Build Docker image<a class="headerlink" href="#build-docker-image" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span> EMMOntoPy
-docker build -t emmo .
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>EMMOntoPy
+docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>emmo<span class="w"> </span>.
 </code></pre></div>
 <h2 id="run-docker-container">Run Docker container<a class="headerlink" href="#run-docker-container" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>docker run -it emmo
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>emmo
 </code></pre></div>
 <h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
 <ul>
@@ -1082,18 +1082,18 @@ docker build -t emmo .
 </ul>
 <h2 id="dockerfile-for-mounting-emmontopy-as-volume-mountdockerfile">Dockerfile for mounting EMMOntoPy as volume (mount.Dockerfile)<a class="headerlink" href="#dockerfile-for-mounting-emmontopy-as-volume-mountdockerfile" title="Permanent link">&para;</a></h2>
 <h3 id="build-docker-image-mountdockerfile">Build Docker image (mount.DockerFile)<a class="headerlink" href="#build-docker-image-mountdockerfile" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>docker build -t emmomount -f mount.Dockerfile .
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>emmomount<span class="w"> </span>-f<span class="w"> </span>mount.Dockerfile<span class="w"> </span>.
 </code></pre></div>
 <h3 id="run-docker-container-mountdockerfile">Run Docker container (mount.Dockerfile)<a class="headerlink" href="#run-docker-container-mountdockerfile" title="Permanent link">&para;</a></h3>
 <p>In a unix terminal (Linux)</p>
-<div class="highlight"><pre><span></span><code>docker run --rm -it -v <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>:/home/user/EMMOntoPy emmomount
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>-v<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>:/home/user/EMMOntoPy<span class="w"> </span>emmomount
 </code></pre></div>
 <p>In PowerShell (Windows 10):</p>
 <div class="highlight"><pre><span></span><code><span class="n">docker</span> <span class="n">run</span> <span class="p">-</span><span class="n">-rm</span> <span class="n">-it</span> <span class="n">-v</span> <span class="p">${</span><span class="n">PWD</span><span class="p">}:/</span><span class="n">home</span><span class="p">/</span><span class="n">user</span><span class="p">/</span><span class="n">EMMOntoPy</span> <span class="n">emmomount</span>
 </code></pre></div>
 <p>To install EMMOntoPy package inside container:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span> EMMOntoPy
-pip install .
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>EMMOntoPy
+pip<span class="w"> </span>install<span class="w"> </span>.
 </code></pre></div>
 <h3 id="notes-on-mounting-on-windows">Notes on mounting on Windows<a class="headerlink" href="#notes-on-mounting-on-windows" title="Permanent link">&para;</a></h3>
 <ul>

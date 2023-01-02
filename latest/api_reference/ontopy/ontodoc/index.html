@@ -1669,7 +1669,7 @@ AttributeDict            (<span title="dict">dict</span>)
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">AttributeDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A dict with attribute access.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A dict with attribute access.</span>
 
 <span class="sd">    Note that methods like key() and update() may be overridden.&quot;&quot;&quot;</span>
 
@@ -1826,7 +1826,7 @@ imported : bool
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">DocPP</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-many-instance-attributes</span>
-    <span class="sd">&quot;&quot;&quot;Documentation pre-processor.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Documentation pre-processor.</span>
 
 <span class="sd">    It supports the following features:</span>
 
@@ -1957,11 +1957,11 @@ imported : bool
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_buffer</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">get_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the current buffer.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the current buffer.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns a copy of self.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a copy of self.&quot;&quot;&quot;</span>
         <span class="n">docpp</span> <span class="o">=</span> <span class="n">DocPP</span><span class="p">(</span>
             <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="p">,</span>
@@ -1975,7 +1975,7 @@ imported : bool
         <span class="k">return</span> <span class="n">docpp</span>
 
     <span class="k">def</span> <span class="nf">get_branches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns a list with all branch names as specified with %BRANCH</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a list with all branch names as specified with %BRANCH</span>
 <span class="sd">        (in current and all included documents).  The returned value is</span>
 <span class="sd">        cached for efficiency purposes and so that it is not lost after</span>
 <span class="sd">        processing branches.&quot;&quot;&quot;</span>
@@ -1990,7 +1990,7 @@ imported : bool
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_branch_cache</span>
 
     <span class="k">def</span> <span class="nf">shift_header_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Shift header level of all hashtag-headers in buffer.  Underline</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Shift header level of all hashtag-headers in buffer.  Underline</span>
 <span class="sd">        headers are ignored.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">shift</span><span class="p">:</span>
             <span class="k">return</span>
@@ -2008,11 +2008,11 @@ imported : bool
                         <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">counter</span><span class="p">:]</span>
 
     <span class="k">def</span> <span class="nf">process_comments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Strips out comment lines starting with &quot;%%&quot;.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Strips out comment lines starting with &quot;%%&quot;.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%%</span><span class="s2">&quot;</span><span class="p">)]</span>
 
     <span class="k">def</span> <span class="nf">process_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Expand all %HEADER specifications.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Expand all %HEADER specifications.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
             <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%HEADER &quot;</span><span class="p">):</span>
                 <span class="n">tokens</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -2024,7 +2024,7 @@ imported : bool
                 <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">process_figures</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Expand all %FIGURE specifications.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Expand all %FIGURE specifications.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
             <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%F</span><span class="s2">IGURE &quot;</span><span class="p">):</span>
                 <span class="n">tokens</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -2038,7 +2038,7 @@ imported : bool
                 <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">process_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Expand all %ENTITY specifications.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Expand all %ENTITY specifications.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
             <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%E</span><span class="s2">NTITY &quot;</span><span class="p">):</span>
                 <span class="n">tokens</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -2050,7 +2050,7 @@ imported : bool
                 <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">process_branches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Expand all %BRANCH specifications.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Expand all %BRANCH specifications.&quot;&quot;&quot;</span>
         <span class="n">onto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="o">.</span><span class="n">onto</span>
 
         <span class="c1"># Get all branch names in final document</span>
@@ -2111,7 +2111,7 @@ imported : bool
         <span class="n">included_namespaces</span><span class="p">:</span> <span class="s2">&quot;Iterable[str]&quot;</span><span class="p">,</span>
         <span class="n">included_ontologies</span><span class="p">:</span> <span class="s2">&quot;Iterable[str]&quot;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;tuple[str, list[str], float]&quot;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Help method for process_branchfig().</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Help method for process_branchfig().</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name: name of branch root</span>
@@ -2186,7 +2186,7 @@ imported : bool
         <span class="k">return</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">leafs</span><span class="p">,</span> <span class="n">width</span>
 
     <span class="k">def</span> <span class="nf">process_branchfigs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Process all %BRANCHFIG directives.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process all %BRANCHFIG directives.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
             <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%BRANCHFIG &quot;</span><span class="p">):</span>
                 <span class="n">tokens</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -2243,7 +2243,7 @@ imported : bool
                 <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">process_branchdocs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-many-locals</span>
-        <span class="sd">&quot;&quot;&quot;Process all %BRANCHDOC and  %BRANCHEAD directives.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process all %BRANCHDOC and  %BRANCHEAD directives.&quot;&quot;&quot;</span>
         <span class="n">onto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="o">.</span><span class="n">onto</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
             <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%BRANCHDOC &quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
@@ -2328,7 +2328,7 @@ imported : bool
                 <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sec</span>
 
     <span class="k">def</span> <span class="nf">process_alls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Expand all %ALL specifications.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Expand all %ALL specifications.&quot;&quot;&quot;</span>
         <span class="n">onto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="o">.</span><span class="n">onto</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
             <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%ALL &quot;</span><span class="p">):</span>
@@ -2356,7 +2356,7 @@ imported : bool
                 <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">process_allfig</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-many-locals</span>
-        <span class="sd">&quot;&quot;&quot;Process all %ALLFIG directives.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process all %ALLFIG directives.&quot;&quot;&quot;</span>
         <span class="n">onto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="o">.</span><span class="n">onto</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
             <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%ALLFIG &quot;</span><span class="p">):</span>
@@ -2436,7 +2436,7 @@ imported : bool
                 <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sec</span>
 
     <span class="k">def</span> <span class="nf">process_includes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Process all %INCLUDE directives.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process all %INCLUDE directives.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
             <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%INCLUDE &quot;</span><span class="p">):</span>
                 <span class="n">tokens</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -2463,7 +2463,7 @@ imported : bool
                 <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">docpp</span><span class="o">.</span><span class="n">lines</span>
 
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Perform all pre-processing steps.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform all pre-processing steps.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_processed</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_comments</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_headers</span><span class="p">()</span>
@@ -2486,7 +2486,7 @@ imported : bool
         <span class="n">genfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Writes documentation to `outfile`.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes documentation to `outfile`.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2581,7 +2581,7 @@ imported : bool
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns a copy of self.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a copy of self.&quot;&quot;&quot;</span>
     <span class="n">docpp</span> <span class="o">=</span> <span class="n">DocPP</span><span class="p">(</span>
         <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="p">,</span>
@@ -2621,7 +2621,7 @@ processing branches.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_branches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns a list with all branch names as specified with %BRANCH</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a list with all branch names as specified with %BRANCH</span>
 <span class="sd">    (in current and all included documents).  The returned value is</span>
 <span class="sd">    cached for efficiency purposes and so that it is not lost after</span>
 <span class="sd">    processing branches.&quot;&quot;&quot;</span>
@@ -2659,7 +2659,7 @@ processing branches.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns the current buffer.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the current buffer.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">)</span>
 </code></pre></div>
         </details>
@@ -2686,7 +2686,7 @@ processing branches.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Perform all pre-processing steps.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform all pre-processing steps.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_processed</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process_comments</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process_headers</span><span class="p">()</span>
@@ -2724,7 +2724,7 @@ processing branches.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">process_allfig</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-many-locals</span>
-    <span class="sd">&quot;&quot;&quot;Process all %ALLFIG directives.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process all %ALLFIG directives.&quot;&quot;&quot;</span>
     <span class="n">onto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="o">.</span><span class="n">onto</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
         <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%ALLFIG &quot;</span><span class="p">):</span>
@@ -2827,7 +2827,7 @@ processing branches.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">process_alls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Expand all %ALL specifications.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Expand all %ALL specifications.&quot;&quot;&quot;</span>
     <span class="n">onto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="o">.</span><span class="n">onto</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
         <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%ALL &quot;</span><span class="p">):</span>
@@ -2878,7 +2878,7 @@ processing branches.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">process_branchdocs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-many-locals</span>
-    <span class="sd">&quot;&quot;&quot;Process all %BRANCHDOC and  %BRANCHEAD directives.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process all %BRANCHDOC and  %BRANCHEAD directives.&quot;&quot;&quot;</span>
     <span class="n">onto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="o">.</span><span class="n">onto</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
         <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%BRANCHDOC &quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
@@ -2986,7 +2986,7 @@ processing branches.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">process_branches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Expand all %BRANCH specifications.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Expand all %BRANCH specifications.&quot;&quot;&quot;</span>
     <span class="n">onto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="o">.</span><span class="n">onto</span>
 
     <span class="c1"># Get all branch names in final document</span>
@@ -3055,7 +3055,7 @@ processing branches.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">process_branchfigs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Process all %BRANCHFIG directives.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process all %BRANCHFIG directives.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
         <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%BRANCHFIG &quot;</span><span class="p">):</span>
             <span class="n">tokens</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -3135,7 +3135,7 @@ processing branches.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">process_comments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Strips out comment lines starting with &quot;%%&quot;.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Strips out comment lines starting with &quot;%%&quot;.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%%</span><span class="s2">&quot;</span><span class="p">)]</span>
 </code></pre></div>
         </details>
@@ -3162,7 +3162,7 @@ processing branches.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">process_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Expand all %ENTITY specifications.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Expand all %ENTITY specifications.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
         <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%E</span><span class="s2">NTITY &quot;</span><span class="p">):</span>
             <span class="n">tokens</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -3197,7 +3197,7 @@ processing branches.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">process_figures</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Expand all %FIGURE specifications.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Expand all %FIGURE specifications.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
         <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%F</span><span class="s2">IGURE &quot;</span><span class="p">):</span>
             <span class="n">tokens</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -3234,7 +3234,7 @@ processing branches.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">process_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Expand all %HEADER specifications.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Expand all %HEADER specifications.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
         <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%HEADER &quot;</span><span class="p">):</span>
             <span class="n">tokens</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -3269,7 +3269,7 @@ processing branches.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">process_includes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Process all %INCLUDE directives.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process all %INCLUDE directives.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">))):</span>
         <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%INCLUDE &quot;</span><span class="p">):</span>
             <span class="n">tokens</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -3320,7 +3320,7 @@ headers are ignored.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">shift_header_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Shift header level of all hashtag-headers in buffer.  Underline</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shift header level of all hashtag-headers in buffer.  Underline</span>
 <span class="sd">    headers are ignored.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">shift</span><span class="p">:</span>
         <span class="k">return</span>
@@ -3387,7 +3387,7 @@ verbose : bool
     <span class="n">genfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Writes documentation to `outfile`.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Writes documentation to `outfile`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -3487,7 +3487,7 @@ InvalidTemplateError            (<span title="NameError">NameError</span>)
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">InvalidTemplateError</span><span class="p">(</span><span class="ne">NameError</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Raised on errors in template files.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised on errors in template files.&quot;&quot;&quot;</span>
 </code></pre></div>
         </details>
 
@@ -3535,7 +3535,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">OntoDoc</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;A class for helping documentating ontologies.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for helping documentating ontologies.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -3677,7 +3677,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="bp">self</span><span class="o">.</span><span class="n">url_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;https?:\/\/[^\s ]+&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_default_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns default template.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns default template.&quot;&quot;&quot;</span>
         <span class="n">title</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">))</span>
         <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -3687,7 +3687,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
             <span class="n">lowerurl</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">template</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;\</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;\</span>
 <span class="sd">        %HEADER {title}</span>
 <span class="sd">        Documentation of {irilink}</span>
 
@@ -3711,14 +3711,14 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="k">return</span> <span class="n">template</span>
 
     <span class="k">def</span> <span class="nf">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns `label` formatted as a header of given level.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `label` formatted as a header of given level.&quot;&quot;&quot;</span>
         <span class="n">header_style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{label}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">header_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">header_level</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">lowerlabel</span><span class="o">=</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns a formatted insert-figure-directive.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a formatted insert-figure-directive.&quot;&quot;&quot;</span>
         <span class="n">figwidth_style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;figwidth&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">figure_style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;figure&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">figwidth</span> <span class="o">=</span> <span class="n">figwidth_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span> <span class="k">if</span> <span class="n">width</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
@@ -3729,7 +3729,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
     <span class="k">def</span> <span class="nf">itemdoc</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">show_disjoints</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">):</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-branches,too-many-statements</span>
-        <span class="sd">&quot;&quot;&quot;Returns documentation of `item`.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns documentation of `item`.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -3877,7 +3877,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="k">for</span> <span class="n">domain</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">,</span> <span class="p">()):</span>
             <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;domain </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;domain </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span><span class="w"> </span><span class="n">link_style</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
@@ -3885,7 +3885,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="k">for</span> <span class="n">restriction</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="p">()):</span>
             <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;range </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">restriction</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;range </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">restriction</span><span class="p">,</span><span class="w"> </span><span class="n">link_style</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
@@ -3922,7 +3922,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">itemsdoc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns documentation of `items`.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns documentation of `items`.&quot;&quot;&quot;</span>
         <span class="n">sep_style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sep&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">doc</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
@@ -3962,7 +3962,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_default_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns default template.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns default template.&quot;&quot;&quot;</span>
     <span class="n">title</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">))</span>
     <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -3972,7 +3972,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="n">lowerurl</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">template</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span>
-        <span class="sd">&quot;&quot;&quot;\</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;\</span>
 <span class="sd">    %HEADER {title}</span>
 <span class="sd">    Documentation of {irilink}</span>
 
@@ -4019,7 +4019,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns a formatted insert-figure-directive.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a formatted insert-figure-directive.&quot;&quot;&quot;</span>
     <span class="n">figwidth_style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;figwidth&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="n">figure_style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;figure&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="n">figwidth</span> <span class="o">=</span> <span class="n">figwidth_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span> <span class="k">if</span> <span class="n">width</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
@@ -4051,7 +4051,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns `label` formatted as a header of given level.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns `label` formatted as a header of given level.&quot;&quot;&quot;</span>
     <span class="n">header_style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{label}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">header_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
         <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">header_level</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">lowerlabel</span><span class="o">=</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -4090,7 +4090,7 @@ show_disjoints : Bool
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">itemdoc</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">show_disjoints</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-branches,too-many-statements</span>
-    <span class="sd">&quot;&quot;&quot;Returns documentation of `item`.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns documentation of `item`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -4238,7 +4238,7 @@ show_disjoints : Bool
     <span class="k">for</span> <span class="n">domain</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">,</span> <span class="p">()):</span>
         <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;domain </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;domain </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span><span class="w"> </span><span class="n">link_style</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
@@ -4246,7 +4246,7 @@ show_disjoints : Bool
     <span class="k">for</span> <span class="n">restriction</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="p">()):</span>
         <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;range </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">restriction</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;range </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">restriction</span><span class="p">,</span><span class="w"> </span><span class="n">link_style</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
@@ -4306,7 +4306,7 @@ show_disjoints : Bool
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">itemsdoc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns documentation of `items`.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns documentation of `items`.&quot;&quot;&quot;</span>
     <span class="n">sep_style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sep&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">doc</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
@@ -4362,7 +4362,7 @@ from `options`.
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">append_pandoc_options</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">updates</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Append `updates` to pandoc options `options`.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Append `updates` to pandoc options `options`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -4440,7 +4440,7 @@ from `options`.
     <span class="n">maxwidth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Read `infile` and return a new docpp instance.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read `infile` and return a new docpp instance.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">infile</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
             <span class="n">template</span> <span class="o">=</span> <span class="n">handle</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
@@ -4485,7 +4485,7 @@ from `options`.
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_figformat</span><span class="p">(</span><span class="n">fmt</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Infer preferred figure format from output format.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Infer preferred figure format from output format.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s2">&quot;pdf&quot;</span><span class="p">:</span>
         <span class="n">figformat</span> <span class="o">=</span> <span class="s2">&quot;pdf&quot;</span>  <span class="c1"># XXX</span>
     <span class="k">elif</span> <span class="s2">&quot;html&quot;</span> <span class="ow">in</span> <span class="n">fmt</span><span class="p">:</span>
@@ -4518,7 +4518,7 @@ from `options`.
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_format</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Infer format from outfile and format.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Infer format from outfile and format.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fmt</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">outfile</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fmt</span><span class="p">:</span>
@@ -4551,7 +4551,7 @@ from `options`.
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_maxwidth</span><span class="p">(</span><span class="n">fmt</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Infer preferred max figure width from output format.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Infer preferred max figure width from output format.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s2">&quot;pdf&quot;</span><span class="p">:</span>
         <span class="n">maxwidth</span> <span class="o">=</span> <span class="mi">668</span>
     <span class="k">else</span><span class="p">:</span>
@@ -4584,7 +4584,7 @@ provided with the keyword arguments.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_options</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns a dict with options from the sequence `opts` with</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a dict with options from the sequence `opts` with</span>
 <span class="sd">    &quot;name=value&quot; pairs. Valid option names and default values are</span>
 <span class="sd">    provided with the keyword arguments.&quot;&quot;&quot;</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">AttributeDict</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
@@ -4624,7 +4624,7 @@ provided with the keyword arguments.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_style</span><span class="p">(</span><span class="n">fmt</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Infer style from output format.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Infer style from output format.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s2">&quot;simple-html&quot;</span><span class="p">:</span>
         <span class="n">style</span> <span class="o">=</span> <span class="s2">&quot;html&quot;</span>
     <span class="k">elif</span> <span class="n">fmt</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;tex&quot;</span><span class="p">,</span> <span class="s2">&quot;latex&quot;</span><span class="p">,</span> <span class="s2">&quot;pdf&quot;</span><span class="p">):</span>
@@ -4658,7 +4658,7 @@ corresponding pandoc command line arguments.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">load_pandoc_option_file</span><span class="p">(</span><span class="n">yamlfile</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Loads pandoc options from `yamlfile` and return a list with</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads pandoc options from `yamlfile` and return a list with</span>
 <span class="sd">    corresponding pandoc command line arguments.&quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yamlfile</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
         <span class="n">pandoc_options</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
@@ -4730,7 +4730,7 @@ verbose : bool
     <span class="n">pandoc_options</span><span class="o">=</span><span class="p">(),</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Runs pandoc.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Runs pandoc.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -4812,7 +4812,7 @@ verbose : bool
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">run_pandoc_pdf</span><span class="p">(</span><span class="n">latex_dir</span><span class="p">,</span> <span class="n">pdf_engine</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Run pandoc for pdf generation.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run pandoc for pdf generation.&quot;&quot;&quot;</span>
     <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
         <span class="n">latex_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">outfile</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
     <span class="p">)</span>

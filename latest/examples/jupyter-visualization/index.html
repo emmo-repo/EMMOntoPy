@@ -971,18 +971,18 @@
 <h1 id="visualise-an-ontology-using-pyctoscape-in-jupyter-notebook">Visualise an ontology using pyctoscape in Jupyter Notebook<a class="headerlink" href="#visualise-an-ontology-using-pyctoscape-in-jupyter-notebook" title="Permanent link">&para;</a></h1>
 <h2 id="installation-instructions">Installation instructions<a class="headerlink" href="#installation-instructions" title="Permanent link">&para;</a></h2>
 <p>In a terminal, run:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span> /path/to/env/dirs
-python -m venv cytopy  <span class="c1"># cytopy is my name, you can choose what ouy want</span>
-<span class="nb">source</span> cytopy/bin/activate
-<span class="nb">cd</span> /dir/to/EMMOntoPy/
-pip install -e .
-pip install jupyterlab
-python -m ipykernel install --user --name<span class="o">=</span>cytopy
-pip install ipywidgets
-pip install nodejs <span class="c1"># Note requires that node.js and npm has already been isntalled!</span>
-pip install ipycytoscape pydotplus networkx
-pip install --upgrade setuptools
-jupyter labextension install @jupyter-widgets/jupyterlab-manager
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/path/to/env/dirs
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>cytopy<span class="w">  </span><span class="c1"># cytopy is my name, you can choose what ouy want</span>
+<span class="nb">source</span><span class="w"> </span>cytopy/bin/activate
+<span class="nb">cd</span><span class="w"> </span>/dir/to/EMMOntoPy/
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+pip<span class="w"> </span>install<span class="w"> </span>jupyterlab
+python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>cytopy
+pip<span class="w"> </span>install<span class="w"> </span>ipywidgets
+pip<span class="w"> </span>install<span class="w"> </span>nodejs<span class="w"> </span><span class="c1"># Note requires that node.js and npm has already been isntalled!</span>
+pip<span class="w"> </span>install<span class="w"> </span>ipycytoscape<span class="w"> </span>pydotplus<span class="w"> </span>networkx
+pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>setuptools
+jupyter<span class="w"> </span>labextension<span class="w"> </span>install<span class="w"> </span>@jupyter-widgets/jupyterlab-manager
 </code></pre></div>
 <h2 id="test-the-notebook">Test the notebook<a class="headerlink" href="#test-the-notebook" title="Permanent link">&para;</a></h2>
 <p>In a terminal, run:</p>

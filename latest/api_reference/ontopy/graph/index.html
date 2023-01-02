@@ -1428,7 +1428,7 @@ kwargs :
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">OntoGraph</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-many-instance-attributes</span>
-    <span class="sd">&quot;&quot;&quot;Class for visualising an ontology.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for visualising an ontology.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1602,7 +1602,7 @@ kwargs :
         <span class="n">nodeattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Adds a sequence of entities to the graph.  If `entities` is None,</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a sequence of entities to the graph.  If `entities` is None,</span>
 <span class="sd">        all classes are added to the graph.</span>
 
 <span class="sd">        `nodeattrs` is a dict mapping node names to are attributes for</span>
@@ -1635,7 +1635,7 @@ kwargs :
         <span class="n">include_parents</span><span class="o">=</span><span class="s2">&quot;closest&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Adds branch under `root` ending at any entiry included in the</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds branch under `root` ending at any entiry included in the</span>
 <span class="sd">        sequence `leafs`.  If `include_leafs` is true, leafs classes are</span>
 <span class="sd">        also included.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">leafs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1696,7 +1696,7 @@ kwargs :
         <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add `levels` levels of strict parents of entity `name`.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add `levels` levels of strict parents of entity `name`.&quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">addparents</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">parents</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">nodes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1717,7 +1717,7 @@ kwargs :
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add node with given name. `attrs` are graphviz node attributes.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add node with given name. `attrs` are graphviz node attributes.&quot;&quot;&quot;</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">name</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">excluded_nodes</span><span class="p">):</span>
@@ -1730,12 +1730,12 @@ kwargs :
             <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">add_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add nodes with given names. `attrs` are graphviz node attributes.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add nodes with given names. `attrs` are graphviz node attributes.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="o">=</span><span class="n">nodeattrs</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">edgelabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add edge corresponding for ``(subject, predicate, object)``</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add edge corresponding for ``(subject, predicate, object)``</span>
 <span class="sd">        triplet.&quot;&quot;&quot;</span>
         <span class="n">subject</span> <span class="o">=</span> <span class="n">subject</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">get_label</span><span class="p">(</span><span class="n">subject</span><span class="p">)</span>
         <span class="n">predicate</span> <span class="o">=</span> <span class="p">(</span>
@@ -1787,7 +1787,7 @@ kwargs :
         <span class="n">addconstructs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Adds all relations originating from entity `source` who&#39;s type</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds all relations originating from entity `source` who&#39;s type</span>
 <span class="sd">        are listed in `relations`.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">relations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">relations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relations</span>
@@ -1872,7 +1872,7 @@ kwargs :
         <span class="n">addconstructs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Adds all relations originating from entities `sources` who&#39;s type</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds all relations originating from entities `sources` who&#39;s type</span>
 <span class="sd">        are listed in `relations`.  If `sources` is None, edges are added</span>
 <span class="sd">        between all current nodes.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">sources</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1888,7 +1888,7 @@ kwargs :
             <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">add_missing_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">addnodes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Checks if `name` corresponds to a missing node and add it if</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if `name` corresponds to a missing node and add it if</span>
 <span class="sd">        `addnodes` is true.</span>
 
 <span class="sd">        Returns true if the node exists or is added, false otherwise.&quot;&quot;&quot;</span>
@@ -1903,7 +1903,7 @@ kwargs :
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="nf">add_class_construct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">construct</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Adds class construct and return its label.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds class construct and return its label.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">construct</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;class_construct&quot;</span><span class="p">,</span> <span class="p">{}))</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">construct</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">construct</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Or</span><span class="p">):</span>
@@ -1930,7 +1930,7 @@ kwargs :
         <span class="k">return</span> <span class="n">label</span>
 
     <span class="k">def</span> <span class="nf">get_node_attrs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns attributes for node or edge `name`.  `attrs` overrides</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns attributes for node or edge `name`.  `attrs` overrides</span>
 <span class="sd">        the default style.&quot;&quot;&quot;</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">name</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
@@ -1965,7 +1965,7 @@ kwargs :
         <span class="k">return</span> <span class="n">kwargs</span>
 
     <span class="k">def</span> <span class="nf">get_edge_attrs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns attributes for node or edge `name`.  `attrs` overrides</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns attributes for node or edge `name`.  `attrs` overrides</span>
 <span class="sd">        the default style.&quot;&quot;&quot;</span>
         <span class="c1"># given type</span>
         <span class="n">types</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;isA&quot;</span><span class="p">,</span> <span class="s2">&quot;equivalent_to&quot;</span><span class="p">,</span> <span class="s2">&quot;disjoint_with&quot;</span><span class="p">,</span> <span class="s2">&quot;inverse_of&quot;</span><span class="p">)</span>
@@ -2021,7 +2021,7 @@ kwargs :
         <span class="k">return</span> <span class="n">kwargs</span>
 
     <span class="k">def</span> <span class="nf">add_legend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Adds legend for specified relations to the graph.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds legend for specified relations to the graph.</span>
 
 <span class="sd">        If `relations` is &quot;all&quot;, the legend will contain all relations</span>
 <span class="sd">        that are defined in the style.  By default the legend will</span>
@@ -2083,7 +2083,7 @@ kwargs :
                     <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_relations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns a set of relations in current graph.  If `sort` is true,</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a set of relations in current graph.  If `sort` is true,</span>
 <span class="sd">        a sorted list is returned.&quot;&quot;&quot;</span>
         <span class="n">relations</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
@@ -2113,7 +2113,7 @@ kwargs :
         <span class="k">return</span> <span class="n">relations</span>
 
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Saves graph to `filename`.  If format is not given, it is</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Saves graph to `filename`.  If format is not given, it is</span>
 <span class="sd">        inferred from `filename`.&quot;&quot;&quot;</span>
         <span class="n">base</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2129,11 +2129,11 @@ kwargs :
             <span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Shows the graph in a viewer.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Shows the graph in a viewer.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_figsize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the default figure size (width, height) in points.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the default figure size (width, height) in points.&quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
             <span class="n">tmpfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s2">&quot;graph.svg&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">)</span>
@@ -2202,7 +2202,7 @@ also included.</p>
     <span class="n">include_parents</span><span class="o">=</span><span class="s2">&quot;closest&quot;</span><span class="p">,</span>
     <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Adds branch under `root` ending at any entiry included in the</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds branch under `root` ending at any entiry included in the</span>
 <span class="sd">    sequence `leafs`.  If `include_leafs` is true, leafs classes are</span>
 <span class="sd">    also included.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">leafs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2277,7 +2277,7 @@ also included.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_class_construct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">construct</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Adds class construct and return its label.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds class construct and return its label.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">construct</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;class_construct&quot;</span><span class="p">,</span> <span class="p">{}))</span>
     <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">construct</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">construct</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Or</span><span class="p">):</span>
@@ -2328,7 +2328,7 @@ triplet.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">edgelabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Add edge corresponding for ``(subject, predicate, object)``</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add edge corresponding for ``(subject, predicate, object)``</span>
 <span class="sd">    triplet.&quot;&quot;&quot;</span>
     <span class="n">subject</span> <span class="o">=</span> <span class="n">subject</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">get_label</span><span class="p">(</span><span class="n">subject</span><span class="p">)</span>
     <span class="n">predicate</span> <span class="o">=</span> <span class="p">(</span>
@@ -2405,7 +2405,7 @@ between all current nodes.</p>
     <span class="n">addconstructs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Adds all relations originating from entities `sources` who&#39;s type</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds all relations originating from entities `sources` who&#39;s type</span>
 <span class="sd">    are listed in `relations`.  If `sources` is None, edges are added</span>
 <span class="sd">    between all current nodes.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">sources</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2456,7 +2456,7 @@ dedicated nodes.</p>
     <span class="n">nodeattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Adds a sequence of entities to the graph.  If `entities` is None,</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds a sequence of entities to the graph.  If `entities` is None,</span>
 <span class="sd">    all classes are added to the graph.</span>
 
 <span class="sd">    `nodeattrs` is a dict mapping node names to are attributes for</span>
@@ -2503,7 +2503,7 @@ before saving or displaying.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_legend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Adds legend for specified relations to the graph.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds legend for specified relations to the graph.</span>
 
 <span class="sd">    If `relations` is &quot;all&quot;, the legend will contain all relations</span>
 <span class="sd">    that are defined in the style.  By default the legend will</span>
@@ -2590,7 +2590,7 @@ before saving or displaying.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_missing_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">addnodes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Checks if `name` corresponds to a missing node and add it if</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks if `name` corresponds to a missing node and add it if</span>
 <span class="sd">    `addnodes` is true.</span>
 
 <span class="sd">    Returns true if the node exists or is added, false otherwise.&quot;&quot;&quot;</span>
@@ -2628,7 +2628,7 @@ before saving or displaying.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Add node with given name. `attrs` are graphviz node attributes.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add node with given name. `attrs` are graphviz node attributes.&quot;&quot;&quot;</span>
     <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">name</span>
     <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">excluded_nodes</span><span class="p">):</span>
@@ -2664,7 +2664,7 @@ before saving or displaying.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Add nodes with given names. `attrs` are graphviz node attributes.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add nodes with given names. `attrs` are graphviz node attributes.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="o">=</span><span class="n">nodeattrs</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span>
 </code></pre></div>
@@ -2701,7 +2701,7 @@ before saving or displaying.</p>
     <span class="n">addconstructs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Add `levels` levels of strict parents of entity `name`.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add `levels` levels of strict parents of entity `name`.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">addparents</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">parents</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">nodes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -2754,7 +2754,7 @@ are listed in <code>relations</code>.</p>
     <span class="n">addconstructs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Adds all relations originating from entity `source` who&#39;s type</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds all relations originating from entity `source` who&#39;s type</span>
 <span class="sd">    are listed in `relations`.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">relations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">relations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relations</span>
@@ -2855,7 +2855,7 @@ the default style.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_edge_attrs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns attributes for node or edge `name`.  `attrs` overrides</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns attributes for node or edge `name`.  `attrs` overrides</span>
 <span class="sd">    the default style.&quot;&quot;&quot;</span>
     <span class="c1"># given type</span>
     <span class="n">types</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;isA&quot;</span><span class="p">,</span> <span class="s2">&quot;equivalent_to&quot;</span><span class="p">,</span> <span class="s2">&quot;disjoint_with&quot;</span><span class="p">,</span> <span class="s2">&quot;inverse_of&quot;</span><span class="p">)</span>
@@ -2934,7 +2934,7 @@ the default style.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_figsize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns the default figure size (width, height) in points.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the default figure size (width, height) in points.&quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
         <span class="n">tmpfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s2">&quot;graph.svg&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">)</span>
@@ -2979,7 +2979,7 @@ the default style.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_node_attrs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">nodeattrs</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns attributes for node or edge `name`.  `attrs` overrides</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns attributes for node or edge `name`.  `attrs` overrides</span>
 <span class="sd">    the default style.&quot;&quot;&quot;</span>
     <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">name</span>
     <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
@@ -3038,7 +3038,7 @@ a sorted list is returned.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_relations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns a set of relations in current graph.  If `sort` is true,</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a set of relations in current graph.  If `sort` is true,</span>
 <span class="sd">    a sorted list is returned.&quot;&quot;&quot;</span>
     <span class="n">relations</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
@@ -3092,7 +3092,7 @@ inferred from <code>filename</code>.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Saves graph to `filename`.  If format is not given, it is</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saves graph to `filename`.  If format is not given, it is</span>
 <span class="sd">    inferred from `filename`.&quot;&quot;&quot;</span>
     <span class="n">base</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -3131,7 +3131,7 @@ inferred from <code>filename</code>.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Shows the graph in a viewer.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shows the graph in a viewer.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
         </details>
@@ -3173,7 +3173,7 @@ get_module_dependencies().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">check_module_dependencies</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check module dependencies and return a copy of modules with</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check module dependencies and return a copy of modules with</span>
 <span class="sd">    redundant dependencies removed.</span>
 
 <span class="sd">    If `verbose` is true, warnings are printed for each module that</span>
@@ -3184,7 +3184,7 @@ get_module_dependencies().</p>
     <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">get_deps</span><span class="p">(</span><span class="n">iri</span><span class="p">,</span> <span class="n">excl</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns a set with all dependencies of `iri`, excluding `excl` and</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a set with all dependencies of `iri`, excluding `excl` and</span>
 <span class="sd">        its dependencies.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">iri</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">set</span><span class="p">()</span>
@@ -3240,7 +3240,7 @@ get_module_dependencies().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">cytoscape_style</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-many-branches</span>
-    <span class="sd">&quot;&quot;&quot;Get list of color, style and fills.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get list of color, style and fills.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">style</span><span class="p">:</span>
         <span class="n">style</span> <span class="o">=</span> <span class="n">_default_style</span>
     <span class="n">colours</span> <span class="o">=</span> <span class="p">{}</span>
@@ -3365,7 +3365,7 @@ in jupyter lab.</p></td>
     <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;GridspecLayout&quot;</span><span class="p">:</span>
     <span class="c1"># pylint: disable=too-many-locals,too-many-statements</span>
-    <span class="sd">&quot;&quot;&quot;Returns and instance of icytoscape-figure for an</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns and instance of icytoscape-figure for an</span>
 <span class="sd">    instance Graph of OntoGraph, the accompanying ontology</span>
 <span class="sd">    is required for mouse actions.</span>
 <span class="sd">    Args:</span>
@@ -3579,7 +3579,7 @@ or whos ontology name is not in one of the ontologies in
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">filter_classes</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">included_namespaces</span><span class="o">=</span><span class="p">(),</span> <span class="n">included_ontologies</span><span class="o">=</span><span class="p">()):</span>
-    <span class="sd">&quot;&quot;&quot;Filter out classes whos namespace is not in `included_namespaces`</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter out classes whos namespace is not in `included_namespaces`</span>
 <span class="sd">    or whos ontology name is not in one of the ontologies in</span>
 <span class="sd">    `included_ontologies`.</span>
 
@@ -3625,7 +3625,7 @@ names.  If it is a string, it lstrip'ped from the base iri.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_module_dependencies</span><span class="p">(</span><span class="n">iri_or_onto</span><span class="p">,</span> <span class="n">strip_base</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Reads `iri_or_onto` and returns a dict mapping ontology names to a</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reads `iri_or_onto` and returns a dict mapping ontology names to a</span>
 <span class="sd">    list of ontologies that they depends on.</span>
 
 <span class="sd">    If `strip_base` is true, the base IRI is stripped from ontology</span>
@@ -3708,7 +3708,7 @@ a dict.</p>
     <span class="n">strip_base</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">ignore_redundant</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Plot module dependency graph for `src` and return a graph object.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot module dependency graph for `src` and return a graph object.</span>
 
 <span class="sd">    Here `src` may be an IRI, a path the the ontology or a dict returned by</span>
 <span class="sd">    get_module_dependencies().</span>

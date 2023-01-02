@@ -1095,13 +1095,13 @@ OwlApiInterface        </code>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">OwlApiInterface</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Interface to the FaCT++ reasoner via OWLAPI.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface to the FaCT++ reasoner via OWLAPI.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialize the interface.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the interface.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">reason</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generate the inferred axioms for a given Graph.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the inferred axioms for a given Graph.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            graph (Graph): An rdflib graph to execute the reasoner on.</span>
@@ -1112,7 +1112,7 @@ OwlApiInterface        </code>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;--run-reasoner&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">reason_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">owl_files</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Merge the given owl and generate the inferred axioms.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Merge the given owl and generate the inferred axioms.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            *owl_files (os.path): The owl files two merge.</span>
@@ -1121,7 +1121,7 @@ OwlApiInterface        </code>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="o">*</span><span class="n">owl_files</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;--run-reasoner&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">merge_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">owl_files</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Merge the given owl files and its import closure.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Merge the given owl files and its import closure.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            *owl_files (os.path): The owl files two merge.</span>
@@ -1133,7 +1133,7 @@ OwlApiInterface        </code>
     <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span>
         <span class="o">*</span><span class="n">owl_files</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_graph</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Run the FaCT++ reasoner using a java command.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the FaCT++ reasoner using a java command.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            *owl_files (str): Path to the owl files to load.</span>
@@ -1209,7 +1209,7 @@ OwlApiInterface        </code>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Initialize the interface.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the interface.&quot;&quot;&quot;</span>
 </code></pre></div>
         </details>
     </div>
@@ -1254,7 +1254,7 @@ OwlApiInterface        </code>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">merge_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">owl_files</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Merge the given owl files and its import closure.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Merge the given owl files and its import closure.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        *owl_files (os.path): The owl files two merge.</span>
@@ -1305,7 +1305,7 @@ OwlApiInterface        </code>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">reason</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generate the inferred axioms for a given Graph.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate the inferred axioms for a given Graph.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        graph (Graph): An rdflib graph to execute the reasoner on.</span>
@@ -1358,7 +1358,7 @@ OwlApiInterface        </code>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">reason_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">owl_files</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Merge the given owl and generate the inferred axioms.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Merge the given owl and generate the inferred axioms.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        *owl_files (os.path): The owl files two merge.</span>
@@ -1401,7 +1401,7 @@ OwlApiInterface        </code>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/owlapi_interface.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">reason_from_terminal</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Run the reasoner from terminal.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the reasoner from terminal.&quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Run the FaCT++ reasoner on the given OWL file. &quot;</span>
         <span class="s2">&quot;Catalog files are used to load the import closure. &quot;</span>

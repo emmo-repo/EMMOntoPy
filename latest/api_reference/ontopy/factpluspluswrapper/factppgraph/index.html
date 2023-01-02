@@ -2385,7 +2385,7 @@ postprocessing the resulting inferred ontology.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">FaCTPPGraph</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Class for running the FaCT++ reasoner (using OwlApiInterface) and</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for running the FaCT++ reasoner (using OwlApiInterface) and</span>
 <span class="sd">    postprocessing the resulting inferred ontology.</span>
 
 <span class="sd">    Parameters</span>
@@ -2402,42 +2402,42 @@ postprocessing the resulting inferred ontology.</p>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">inferred</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The current inferred graph.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The current inferred graph.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inferred</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_inferred_graph</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inferred</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">base_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Base iri of inferred ontology.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Base iri of inferred ontology.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_iri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_base_iri</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">asserted_base_iri</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;-inferred&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_iri</span>
 
     <span class="nd">@base_iri</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">base_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Assign inferred base iri.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Assign inferred base iri.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_base_iri</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">namespaces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Namespaces defined in the original graph.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Namespaces defined in the original graph.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_namespaces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_namespaces</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">namespaces</span><span class="p">())</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_namespaces</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_namespaces</span>
 
     <span class="k">def</span> <span class="nf">asserted_base_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the base iri or the original graph.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the base iri or the original graph.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">URIRef</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">namespaces</span><span class="p">())</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">raw_inferred_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the raw non-postprocessed inferred ontology as a rdflib</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the raw non-postprocessed inferred ontology as a rdflib</span>
 <span class="sd">        graph.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">OwlApiInterface</span><span class="p">()</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">inferred_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the postprocessed inferred graph.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the postprocessed inferred graph.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_base_annotations</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_namespace</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clean_base</span><span class="p">()</span>
@@ -2446,7 +2446,7 @@ postprocessing the resulting inferred ontology.</p>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
 
     <span class="k">def</span> <span class="nf">add_base_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Copy base annotations from original graph to the inferred graph.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy base annotations from original graph to the inferred graph.&quot;&quot;&quot;</span>
         <span class="n">base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span>
         <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>
@@ -2458,7 +2458,7 @@ postprocessing the resulting inferred ontology.</p>
             <span class="n">inferred</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">base</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">set_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Override namespace of inferred graph with the namespace of the</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Override namespace of inferred graph with the namespace of the</span>
 <span class="sd">        original graph.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
@@ -2468,7 +2468,7 @@ postprocessing the resulting inferred ontology.</p>
             <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">clean_base</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Remove all relations `s? a owl:Ontology` where `s?` is not</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove all relations `s? a owl:Ontology` where `s?` is not</span>
 <span class="sd">        `base_iri`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
@@ -2483,7 +2483,7 @@ postprocessing the resulting inferred ontology.</p>
         <span class="n">inferred</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Ontology</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">remove_nothing_is_nothing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Remove superfluid relation in inferred graph:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove superfluid relation in inferred graph:</span>
 
 <span class="sd">        owl:Nothing rdfs:subClassOf owl:Nothing</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2493,7 +2493,7 @@ postprocessing the resulting inferred ontology.</p>
             <span class="n">inferred</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">clean_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Remove redundant rdfs:subClassOf relations in inferred graph.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove redundant rdfs:subClassOf relations in inferred graph.&quot;&quot;&quot;</span>
         <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
         <span class="k">for</span> <span class="p">(</span>  <span class="c1"># pylint: disable=too-many-nested-blocks</span>
             <span class="n">subject</span>
@@ -2616,7 +2616,7 @@ postprocessing the resulting inferred ontology.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_base_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Copy base annotations from original graph to the inferred graph.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Copy base annotations from original graph to the inferred graph.&quot;&quot;&quot;</span>
     <span class="n">base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span>
     <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>
@@ -2651,7 +2651,7 @@ postprocessing the resulting inferred ontology.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">asserted_base_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns the base iri or the original graph.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the base iri or the original graph.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">URIRef</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">namespaces</span><span class="p">())</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">))</span>
 </code></pre></div>
         </details>
@@ -2678,7 +2678,7 @@ postprocessing the resulting inferred ontology.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">clean_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Remove redundant rdfs:subClassOf relations in inferred graph.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove redundant rdfs:subClassOf relations in inferred graph.&quot;&quot;&quot;</span>
     <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
     <span class="k">for</span> <span class="p">(</span>  <span class="c1"># pylint: disable=too-many-nested-blocks</span>
         <span class="n">subject</span>
@@ -2725,7 +2725,7 @@ postprocessing the resulting inferred ontology.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">clean_base</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Remove all relations `s? a owl:Ontology` where `s?` is not</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove all relations `s? a owl:Ontology` where `s?` is not</span>
 <span class="sd">    `base_iri`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
@@ -2763,7 +2763,7 @@ postprocessing the resulting inferred ontology.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">inferred_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns the postprocessed inferred graph.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the postprocessed inferred graph.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">add_base_annotations</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">set_namespace</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clean_base</span><span class="p">()</span>
@@ -2796,7 +2796,7 @@ graph.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">raw_inferred_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns the raw non-postprocessed inferred ontology as a rdflib</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the raw non-postprocessed inferred ontology as a rdflib</span>
 <span class="sd">    graph.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">OwlApiInterface</span><span class="p">()</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
 </code></pre></div>
@@ -2825,7 +2825,7 @@ graph.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">remove_nothing_is_nothing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Remove superfluid relation in inferred graph:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove superfluid relation in inferred graph:</span>
 
 <span class="sd">    owl:Nothing rdfs:subClassOf owl:Nothing</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2859,7 +2859,7 @@ original graph.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Override namespace of inferred graph with the namespace of the</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Override namespace of inferred graph with the namespace of the</span>
 <span class="sd">    original graph.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">inferred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inferred</span>
@@ -2904,7 +2904,7 @@ FactPPError        </code>
         <details class="quote">
           <summary>Source code in <code>ontopy/factpluspluswrapper/factppgraph.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">FactPPError</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Postprocessing error after reasoning with FaCT++.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Postprocessing error after reasoning with FaCT++.&quot;&quot;&quot;</span>
 </code></pre></div>
         </details>
 
