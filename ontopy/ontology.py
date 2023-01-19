@@ -1167,9 +1167,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         )
         if name_policy == "uuid":
             for obj in chain:
-                obj.name = name_prefix + str(
-                    uuid.uuid5(uuid.NAMESPACE_DNS, obj.name)
-                )
+                try:
+                    # Passing the following means that the name is valid
+                    # and need not be regenerated.
+                    uuid.UUID(obj.name.lstrip(name_prefix), version=5)
+                except ValueError:
+                    obj.name = name_prefix + str(
+                        uuid.uuid5(uuid.NAMESPACE_DNS, obj.name)
+                    )
         elif name_policy == "sequential":
             for obj in chain:
                 counter = 0

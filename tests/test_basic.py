@@ -58,6 +58,9 @@ def test_basic(emmo: "Ontology") -> None:
     assert water.name.startswith("onto_")
     # A UUID is 32 chars long + 4 `-` chars = 36 chars
     assert len(water.name) == len(name_prefix) + 36
+    synced_uuid = water.name
+    onto.sync_attributes(name_policy="uuid", name_prefix=name_prefix)
+    assert synced_uuid == water.name
 
 
 def test_sync_reasoner(testonto: "Ontology") -> None:
