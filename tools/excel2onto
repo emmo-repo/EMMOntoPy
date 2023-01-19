@@ -51,7 +51,7 @@ def main(argv: list = None):
         "--update",
         "-u",
         default=True,
-        help="Whether to update the the ontology with new concepts or"
+        help="Whether to update the the ontology with new concepts "
         "or regenerate the full ontology."
         "Currently only supports adding new concepts"
         "Default is True.",
@@ -60,10 +60,10 @@ def main(argv: list = None):
     parser.add_argument(
         "--input_ontology",
         "-i",
-        default="ontology.ttl",
+        default=None,
         help="Path of previously generated ontology to update with"
         " new concepts."
-        "Deafult is the same 'output'(ontology.ttl).",
+        "Deafult is the same as 'output'.",
     )
 
     try:
@@ -73,7 +73,10 @@ def main(argv: list = None):
 
     if args.update:
         try:
-            input_ontology = get_ontology(args.input_ontology).load()
+            if args.input_ontology:
+                input_ontology = get_ontology(args.input_ontology).load()
+            else:
+                input_ontology = get_ontology(args.output).load()
         except FileNotFoundError as err:
             if args.force:
                 warnings.warn(
