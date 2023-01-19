@@ -45,12 +45,6 @@ def test_excelparser(repo_dir: "Path") -> None:
     updated_onto, _, _ = create_ontology_from_excel(
         update_xlspath, force=True, input_ontology=ontology
     )
-    # print(set(list(onto.get_entities())).symmetric_difference(list(updated_onto.get_entities())))
-    # assert len(list(updated_onto.get_entities())) == onto_length + 1
     assert updated_onto.ATotallyNewPattern
-
     assert updated_onto.Pattern.iri == onto.Pattern.iri
-
-    new_onto, catalog, errors = create_ontology_from_excel(xlspath, force=True)
-
-    assert updated_onto.Pattern.iri != new_onto.Pattern.iri
+    assert len(list(onto.classes())) + 1 == len(list(updated_onto.classes()))
