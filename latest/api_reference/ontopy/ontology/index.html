@@ -19,7 +19,7 @@
         <link rel="next" href="../patch/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.3">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.6b71719e.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.558e4712.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
@@ -146,7 +146,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -2963,6 +2963,8 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 <span class="sd">        should be updated.  Valid values are:</span>
 <span class="sd">          None          not changed</span>
 <span class="sd">          &quot;uuid&quot;        `name_prefix` followed by a global unique id (UUID).</span>
+<span class="sd">                        If the name is already valid accoridng to this standard</span>
+<span class="sd">                        it will not be regenerated.</span>
 <span class="sd">          &quot;sequential&quot;  `name_prefix` followed a sequantial number.</span>
 <span class="sd">        EMMO conventions imply ``name_policy==&#39;uuid&#39;``.</span>
 
@@ -3017,9 +3019,16 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">name_policy</span> <span class="o">==</span> <span class="s2">&quot;uuid&quot;</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">:</span>
-                <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name_prefix</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">uuid</span><span class="o">.</span><span class="n">uuid5</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">NAMESPACE_DNS</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                <span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># Passing the following means that the name is valid</span>
+                    <span class="c1"># and need not be regenerated.</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">name_prefix</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span>
+                    <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">name_prefix</span><span class="p">),</span> <span class="n">version</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name_prefix</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                        <span class="n">uuid</span><span class="o">.</span><span class="n">uuid5</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">NAMESPACE_DNS</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="p">)</span>
         <span class="k">elif</span> <span class="n">name_policy</span> <span class="o">==</span> <span class="s2">&quot;sequential&quot;</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">:</span>
                 <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
@@ -5696,6 +5705,8 @@ the corresponding Python class.</p>
 should be updated.  Valid values are:
   None          not changed
   "uuid"        <code>name_prefix</code> followed by a global unique id (UUID).
+                If the name is already valid accoridng to this standard
+                it will not be regenerated.
   "sequential"  <code>name_prefix</code> followed a sequantial number.
 EMMO conventions imply <code>name_policy=='uuid'</code>.</p>
 <p>If <code>sync_imported</code> is true, all imported ontologies are also
@@ -5728,6 +5739,8 @@ class docstrings are mapped to.  Defaults to "comment".</p>
 <span class="sd">    should be updated.  Valid values are:</span>
 <span class="sd">      None          not changed</span>
 <span class="sd">      &quot;uuid&quot;        `name_prefix` followed by a global unique id (UUID).</span>
+<span class="sd">                    If the name is already valid accoridng to this standard</span>
+<span class="sd">                    it will not be regenerated.</span>
 <span class="sd">      &quot;sequential&quot;  `name_prefix` followed a sequantial number.</span>
 <span class="sd">    EMMO conventions imply ``name_policy==&#39;uuid&#39;``.</span>
 
@@ -5782,9 +5795,16 @@ class docstrings are mapped to.  Defaults to "comment".</p>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">name_policy</span> <span class="o">==</span> <span class="s2">&quot;uuid&quot;</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">:</span>
-            <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name_prefix</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
-                <span class="n">uuid</span><span class="o">.</span><span class="n">uuid5</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">NAMESPACE_DNS</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Passing the following means that the name is valid</span>
+                <span class="c1"># and need not be regenerated.</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">name_prefix</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span>
+                <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">name_prefix</span><span class="p">),</span> <span class="n">version</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name_prefix</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                    <span class="n">uuid</span><span class="o">.</span><span class="n">uuid5</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">NAMESPACE_DNS</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="p">)</span>
     <span class="k">elif</span> <span class="n">name_policy</span> <span class="o">==</span> <span class="s2">&quot;sequential&quot;</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">:</span>
             <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
@@ -6310,7 +6330,7 @@ only matching triples will be returned.</p>
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.ba449ae6.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.51d95adb.min.js"></script>
       
     
   </body>
