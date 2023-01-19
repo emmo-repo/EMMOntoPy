@@ -1,8 +1,10 @@
 """Test the Excel parser module."""
+import pytest
 from typing import TYPE_CHECKING
 
 from ontopy import get_ontology
 from ontopy.excelparser import create_ontology_from_excel
+from ontopy.utils import NoSuchLabelError
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -14,6 +16,9 @@ def test_excelparser(repo_dir: "Path") -> None:
 
     onto = get_ontology(str(ontopath)).load()
     xlspath = repo_dir / "tests" / "test_excelparser" / "onto.xlsx"
+    update_xlspath = (
+        repo_dir / "tests" / "test_excelparser" / "onto_update.xlsx"
+    )
     ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
 
     assert onto == ontology
@@ -33,3 +38,19 @@ def test_excelparser(repo_dir: "Path") -> None:
     }
 
     assert len(ontology.get_by_label_all("Atom")) == 2
+    onto_length = len(list(onto.get_entities()))
+    with pytest.raises(NoSuchLabelError):
+        onto.ATotallyNewPattern
+
+    updated_onto, _, _ = create_ontology_from_excel(
+        update_xlspath, force=True, input_ontology=ontology
+    )
+    # print(set(list(onto.get_entities())).symmetric_difference(list(updated_onto.get_entities())))
+    # assert len(list(updated_onto.get_entities())) == onto_length + 1
+    assert updated_onto.ATotallyNewPattern
+
+    assert updated_onto.Pattern.iri == onto.Pattern.iri
+
+    new_onto, catalog, errors = create_ontology_from_excel(xlspath, force=True)
+
+    assert updated_onto.Pattern.iri != new_onto.Pattern.iri

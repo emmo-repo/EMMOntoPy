@@ -7,8 +7,10 @@ ontology_template.xlsx
 import argparse
 import sys
 import os
+import warnings
 from ontopy.excelparser import create_ontology_from_excel, ExcelError
 from ontopy.utils import write_catalog
+from ontopy import get_ontology
 import owlready2  # pylint: disable=C0411
 
 
@@ -37,21 +39,56 @@ def main():
         help="Whether to force generation of ontology on non-fatal error.",
     )
 
+    parser.add_argument(
+        "--update",
+        "-u",
+        default=True,
+        help="Whether to update the the ontology with new concepts or"
+        "or regenerate the full ontology."
+        "Currently only supports adding new concepts"
+        "Default is True.",
+    )
+
+    parser.add_argument(
+        "--input_ontology",
+        "-i",
+        default="ontology.ttl",
+        help="Path of previously generated ontology to update with"
+        " new concepts."
+        "Deafult is the same 'output'(ontology.ttl).",
+    )
+
     try:
         args = parser.parse_args()
     except SystemExit as exc:
         sys.exit(exc.code)  # Exit without traceback on invalid arguments
 
+    if args.update:
+        try:
+            input_ontology = get_ontology(args.input_ontology).load()
+        except FileNotFoundError as err:
+            if args.force:
+                warnings.warn(
+                    "Did not find the input ontology, "
+                    "will fully generate a new one."
+                )
+                input_ontology = None
+            else:
+                raise err
+
     try:
         ontology, catalog, _ = create_ontology_from_excel(
-            args.excelpath, force=args.force
+            args.excelpath,
+            force=args.force,
+            input_ontology=input_ontology,
         )
     except ExcelError as exc:
         parser.exit(1, f"ERROR: {exc}\n")
 
     # Save new ontology as turtle
     ontology.save(os.path.join(args.output), format="turtle", overwrite=True)
-    write_catalog(catalog)
+    if not args.update:
+        write_catalog(catalog)
 
 
 if __name__ == "__main__":
