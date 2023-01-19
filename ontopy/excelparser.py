@@ -73,7 +73,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
         catalog: Imported ontologies with (name, full path) key/value-pairs.
         force: Forcibly make an ontology by skipping concepts
             that are erroneously defined or other errors in the excel sheet.
-        input_ontolgy: Ontology that should be updated.
+        input_ontology: Ontology that should be updated.
             Default is None,
             which means that a completely new ontology is generated.
             If an input_ontology to be updated is provided,
