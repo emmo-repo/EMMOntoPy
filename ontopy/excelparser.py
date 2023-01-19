@@ -214,7 +214,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 name = row["prefLabel"]
                 try:
                     onto.get_by_label(name)
-                    print(onto.get_by_label(name).iri)
                     if onto.base_iri in [
                         a.namespace.base_iri
                         for a in onto.get_by_label_all(name)
@@ -278,7 +277,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     parents = [owlready2.Thing]
 
                 concept = onto.new_entity(name, parents)
-                print("baseiri_after_defintion:", onto.get_by_label(name).iri)
                 added_rows.add(index)
                 # Add elucidation
                 try:
@@ -393,13 +391,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     # Synchronise Python attributes to ontology
     onto.sync_attributes(
         name_policy="uuid", name_prefix="EMMO_", class_docstring="elucidation"
-    )
-    print(
-        [
-            a.iri
-            for a in onto.get_by_label_all("*")
-            if a.namespace.base_iri == onto.base_iri
-        ]
     )
     onto.dir_label = False
     concepts_with_errors = {
