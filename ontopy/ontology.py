@@ -1113,6 +1113,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         should be updated.  Valid values are:
           None          not changed
           "uuid"        `name_prefix` followed by a global unique id (UUID).
+                        If the name is already valid accoridng to this standard
+                        it will not be regenerated.
           "sequential"  `name_prefix` followed a sequantial number.
         EMMO conventions imply ``name_policy=='uuid'``.
 
@@ -1170,6 +1172,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 try:
                     # Passing the following means that the name is valid
                     # and need not be regenerated.
+                    if not obj.name.startswith(name_prefix):
+                        raise ValueError
                     uuid.UUID(obj.name.lstrip(name_prefix), version=5)
                 except ValueError:
                     obj.name = name_prefix + str(
