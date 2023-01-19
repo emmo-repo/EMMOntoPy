@@ -12,7 +12,13 @@ if TYPE_CHECKING:
 
 def test_excelparser(repo_dir: "Path") -> None:
     """Basic test for creating an ontology from an Excel file."""
-    ontopath = repo_dir / "tests" / "test_excelparser" / "fromexcelonto.ttl"
+    ontopath = (
+        repo_dir
+        / "tests"
+        / "test_excelparser"
+        / "result_ontology"
+        / "fromexcelonto.ttl"
+    )
 
     onto = get_ontology(str(ontopath)).load()
     xlspath = repo_dir / "tests" / "test_excelparser" / "onto.xlsx"
