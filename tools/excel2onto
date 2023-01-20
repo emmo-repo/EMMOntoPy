@@ -7,8 +7,10 @@ ontology_template.xlsx
 import argparse
 import sys
 import os
+import warnings
 from ontopy.excelparser import create_ontology_from_excel, ExcelError
 from ontopy.utils import write_catalog
+from ontopy import get_ontology
 import owlready2  # pylint: disable=C0411
 
 
@@ -17,8 +19,16 @@ def english(string):
     return owlready2.locstr(string, lang="en")
 
 
-def main():
-    """Main run function."""
+def main(argv: list = None):
+    """Main run function.
+
+    Parameters:
+        argv: List of arguments, similar to `sys.argv[1:]`.
+            Mainly for testing purposes, since it allows one to invoke the tool
+            manually / through Python.
+
+    """
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "excelpath",
@@ -37,21 +47,60 @@ def main():
         help="Whether to force generation of ontology on non-fatal error.",
     )
 
+    parser.add_argument(
+        "--update",
+        "-u",
+        default=True,
+        help="Whether to update the the ontology with new concepts "
+        "or regenerate the full ontology."
+        "Currently only supports adding new concepts"
+        "Default is True.",
+    )
+
+    parser.add_argument(
+        "--input_ontology",
+        "-i",
+        default=None,
+        help="Path of previously generated ontology to update with"
+        " new concepts."
+        "Deafult is the same as 'output'.",
+    )
+
     try:
-        args = parser.parse_args()
+        args = parser.parse_args(args=argv)
     except SystemExit as exc:
         sys.exit(exc.code)  # Exit without traceback on invalid arguments
 
+    if args.update:
+        try:
+            if args.input_ontology:
+                input_ontology = get_ontology(args.input_ontology).load()
+            else:
+                input_ontology = get_ontology(args.output).load()
+        except FileNotFoundError as err:
+            if args.force:
+                warnings.warn(
+                    "Did not find the input ontology, "
+                    "will fully generate a new one."
+                )
+                input_ontology = None
+            else:
+                raise err
+
     try:
         ontology, catalog, _ = create_ontology_from_excel(
-            args.excelpath, force=args.force
+            os.path.abspath(args.excelpath),
+            force=args.force,
+            input_ontology=input_ontology,
         )
     except ExcelError as exc:
         parser.exit(1, f"ERROR: {exc}\n")
 
     # Save new ontology as turtle
     ontology.save(os.path.join(args.output), format="turtle", overwrite=True)
-    write_catalog(catalog)
+    dirname = os.path.dirname(args.output)
+    if (not args.update) or (not os.path.exists(dirname + "/catalog-v001.xml")):
+        write_catalog(catalog, directory=dirname)
 
 
 if __name__ == "__main__":

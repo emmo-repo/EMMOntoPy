@@ -540,7 +540,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     ):
         """Help function for load()."""
         web_protocol = "http://", "https://", "ftp://"
-
         url = str(filename) if filename else self.base_iri.rstrip("/#")
         if url.startswith(web_protocol):
             baseurl = os.path.dirname(url)
@@ -594,7 +593,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     )
             self.world._iri_mappings.update(iris)
         resolved_url = self.world._iri_mappings.get(url, url)
-
         # Append paths from catalog file to onto_path
         for path in sorted(dirs, reverse=True):
             if path not in owlready2.onto_path:
