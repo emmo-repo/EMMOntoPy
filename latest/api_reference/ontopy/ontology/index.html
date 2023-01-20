@@ -19,7 +19,7 @@
         <link rel="next" href="../patch/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
     
     
       
@@ -2390,7 +2390,6 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Help function for load().&quot;&quot;&quot;</span>
         <span class="n">web_protocol</span> <span class="o">=</span> <span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="s2">&quot;ftp://&quot;</span>
-
         <span class="n">url</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">if</span> <span class="n">filename</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">web_protocol</span><span class="p">):</span>
             <span class="n">baseurl</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
@@ -2444,7 +2443,6 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                     <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_iri_mappings</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">iris</span><span class="p">)</span>
         <span class="n">resolved_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_iri_mappings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
-
         <span class="c1"># Append paths from catalog file to onto_path</span>
         <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">dirs</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">onto_path</span><span class="p">:</span>

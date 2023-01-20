@@ -19,7 +19,7 @@
         <link rel="next" href="../graph/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
     
     
       
@@ -1097,7 +1097,7 @@ ExcelError            (<a class="autorefs autorefs-internal" title="ontopy.utils
 
 
 <h2 class="doc doc-heading" id="ontopy.excelparser.create_ontology_from_excel">
-<code class="highlight language-python"><span class="n">create_ontology_from_excel</span><span class="p">(</span><span class="n">excelpath</span><span class="p">,</span> <span class="n">concept_sheet_name</span><span class="o">=</span><span class="s1">&#39;Concepts&#39;</span><span class="p">,</span> <span class="n">metadata_sheet_name</span><span class="o">=</span><span class="s1">&#39;Metadata&#39;</span><span class="p">,</span> <span class="n">imports_sheet_name</span><span class="o">=</span><span class="s1">&#39;ImportedOntologies&#39;</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo/domain/onto#&#39;</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">create_ontology_from_excel</span><span class="p">(</span><span class="n">excelpath</span><span class="p">,</span> <span class="n">concept_sheet_name</span><span class="o">=</span><span class="s1">&#39;Concepts&#39;</span><span class="p">,</span> <span class="n">metadata_sheet_name</span><span class="o">=</span><span class="s1">&#39;Metadata&#39;</span><span class="p">,</span> <span class="n">imports_sheet_name</span><span class="o">=</span><span class="s1">&#39;ImportedOntologies&#39;</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo/domain/onto#&#39;</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">input_ontology</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.excelparser.create_ontology_from_excel" title="Permanent link">&para;</a></h2>
@@ -1185,6 +1185,16 @@ per row.</p></td>
 that are erroneously defined or other errors in the excel sheet.</p></td>
         <td><code>False</code></td>
       </tr>
+      <tr>
+        <td><code>input_ontology</code></td>
+        <td><code>Optional[ontopy.ontology.Ontology]</code></td>
+        <td><p>Ontology that should be updated.
+Default is None,
+which means that a completely new ontology is generated.
+If an input_ontology to be updated is provided,
+the metadata sheet in the excel sheet will not be considered.</p></td>
+        <td><code>None</code></td>
+      </tr>
   </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -1242,6 +1252,7 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
     <span class="n">imports</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">catalog</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">input_ontology</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates an ontology from an Excel-file.</span>
@@ -1270,6 +1281,12 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
 <span class="sd">        catalog: Imported ontologies with (name, full path) key/value-pairs.</span>
 <span class="sd">        force: Forcibly make an ontology by skipping concepts</span>
 <span class="sd">            that are erroneously defined or other errors in the excel sheet.</span>
+<span class="sd">        input_ontology: Ontology that should be updated.</span>
+<span class="sd">            Default is None,</span>
+<span class="sd">            which means that a completely new ontology is generated.</span>
+<span class="sd">            If an input_ontology to be updated is provided,</span>
+<span class="sd">            the metadata sheet in the excel sheet will not be considered.</span>
+
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A tuple with the:</span>
@@ -1337,6 +1354,7 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
         <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="n">base_iri_from_metadata</span><span class="p">,</span>
         <span class="n">catalog</span><span class="o">=</span><span class="n">catalog</span><span class="p">,</span>
         <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
+        <span class="n">input_ontology</span><span class="o">=</span><span class="n">input_ontology</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre></div>
         </details>
@@ -1351,7 +1369,7 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
 
 
 <h2 class="doc doc-heading" id="ontopy.excelparser.create_ontology_from_pandas">
-<code class="highlight language-python"><span class="n">create_ontology_from_pandas</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">imports</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo/domain/onto#&#39;</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">create_ontology_from_pandas</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">imports</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo/domain/onto#&#39;</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">input_ontology</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.excelparser.create_ontology_from_pandas" title="Permanent link">&para;</a></h2>
@@ -1371,6 +1389,7 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
     <span class="n">base_iri_from_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">catalog</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">input_ontology</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create an ontology from a pandas DataFrame.</span>
@@ -1387,15 +1406,17 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
     <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="c1"># Make new ontology</span>
-    <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span> <span class="o">=</span> <span class="n">get_metadata_from_dataframe</span><span class="p">(</span>
-        <span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">imports</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">input_ontology</span><span class="p">:</span>
+        <span class="n">onto</span> <span class="o">=</span> <span class="n">input_ontology</span>
+        <span class="n">catalog</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># Create new ontology</span>
+        <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span> <span class="o">=</span> <span class="n">get_metadata_from_dataframe</span><span class="p">(</span>
+            <span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">imports</span>
+        <span class="p">)</span>
 
-    <span class="c1"># Set given or default base_iri if base_iri_from_metadata is False.</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">base_iri_from_metadata</span><span class="p">:</span>
-        <span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">=</span> <span class="n">base_iri</span>
-
+        <span class="c1"># Set given or default base_iri if base_iri_from_metadata is False.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">base_iri_from_metadata</span><span class="p">:</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">=</span> <span class="n">base_iri</span>
     <span class="n">labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">])</span>
     <span class="k">for</span> <span class="n">altlabel</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;altLabel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">altlabel</span> <span class="o">==</span> <span class="s2">&quot;nan&quot;</span><span class="p">:</span>
@@ -1413,6 +1434,7 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
     <span class="p">}</span>
 
     <span class="n">onto</span><span class="o">.</span><span class="n">sync_python_names</span><span class="p">()</span>
+
     <span class="k">with</span> <span class="n">onto</span><span class="p">:</span>
         <span class="n">remaining_rows</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
         <span class="n">all_added_rows</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1423,7 +1445,10 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
                 <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">]</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">onto</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">+</span> <span class="n">name</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span> <span class="ow">in</span> <span class="p">[</span>
+                        <span class="n">a</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">base_iri</span>
+                        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_by_label_all</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                    <span class="p">]:</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
                             <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span>
                                 <span class="sa">f</span><span class="s1">&#39;Concept &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; already in ontology&#39;</span>
@@ -1444,7 +1469,6 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
                     <span class="k">continue</span>
                 <span class="k">except</span> <span class="n">NoSuchLabelError</span><span class="p">:</span>
                     <span class="k">pass</span>
-
                 <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;subClassOf&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;nan&quot;</span><span class="p">:</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="n">ExcelError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> has no subClassOf&quot;</span><span class="p">)</span>
@@ -1452,7 +1476,6 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
                     <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;missing_parents&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">parent_names</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;subClassOf&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
-
                 <span class="n">parents</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="n">invalid_parent</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="k">for</span> <span class="n">parent_name</span> <span class="ow">in</span> <span class="n">parent_names</span><span class="p">:</span>
@@ -1604,7 +1627,6 @@ that are erroneously defined or other errors in the excel sheet.</p></td>
     <span class="n">concepts_with_errors</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">key</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">concepts_with_errors</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
     <span class="p">}</span>
-
     <span class="k">return</span> <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">concepts_with_errors</span>
 </code></pre></div>
         </details>
