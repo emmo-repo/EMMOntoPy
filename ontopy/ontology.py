@@ -540,7 +540,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     ):
         """Help function for load()."""
         web_protocol = "http://", "https://", "ftp://"
-
         url = str(filename) if filename else self.base_iri.rstrip("/#")
         if url.startswith(web_protocol):
             baseurl = os.path.dirname(url)
@@ -594,7 +593,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     )
             self.world._iri_mappings.update(iris)
         resolved_url = self.world._iri_mappings.get(url, url)
-
         # Append paths from catalog file to onto_path
         for path in sorted(dirs, reverse=True):
             if path not in owlready2.onto_path:
@@ -1113,6 +1111,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         should be updated.  Valid values are:
           None          not changed
           "uuid"        `name_prefix` followed by a global unique id (UUID).
+                        If the name is already valid accoridng to this standard
+                        it will not be regenerated.
           "sequential"  `name_prefix` followed a sequantial number.
         EMMO conventions imply ``name_policy=='uuid'``.
 
@@ -1167,9 +1167,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         )
         if name_policy == "uuid":
             for obj in chain:
-                obj.name = name_prefix + str(
-                    uuid.uuid5(uuid.NAMESPACE_DNS, obj.name)
-                )
+                try:
+                    # Passing the following means that the name is valid
+                    # and need not be regenerated.
+                    if not obj.name.startswith(name_prefix):
+                        raise ValueError
+                    uuid.UUID(obj.name.lstrip(name_prefix), version=5)
+                except ValueError:
+                    obj.name = name_prefix + str(
+                        uuid.uuid5(uuid.NAMESPACE_DNS, obj.name)
+                    )
         elif name_policy == "sequential":
             for obj in chain:
                 counter = 0
