@@ -52,7 +52,6 @@ onto.imported_ontologies.append(emmo)
 
 # Add new classes and object/data properties needed by the use case
 with onto:
-
     #
     # Relations
     # =========
