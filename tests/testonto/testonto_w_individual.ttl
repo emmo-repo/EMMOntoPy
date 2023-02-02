@@ -20,4 +20,5 @@ skos:altLabel rdf:type owl:AnnotationProperty .
 
 
 :testindividual rdf:type owl:NamedIndividual ,
-                           :testclass .
+                           :testclass ;
+		skos:prefLabel "testindividual"@en .
