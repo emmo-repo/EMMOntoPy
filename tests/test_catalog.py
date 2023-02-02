@@ -7,7 +7,6 @@ if TYPE_CHECKING:
 
 
 def test_catalog(repo_dir: "Path", tmpdir: "Path") -> None:
-
     ontodir = repo_dir / "tests" / "catalogs_for_testing"
     catalog_expected = {
         "http://emmo.info/testonto/0.1.0": str(ontodir / "testonto.ttl"),
