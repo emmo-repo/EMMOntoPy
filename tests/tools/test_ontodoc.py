@@ -36,7 +36,7 @@ def test_run_w_individual(tool, tmpdir: Path) -> None:
 @pytest.mark.filterwarnings(
     "ignore:Ignoring instance"
 )  # currently pytest is set to accept warnings, but this might change in the future
-def test_run(tool, tmpdir: Path) -> None:
+def test_run_w_punning(tool, tmpdir: Path) -> None:
     """Check that running `ontodoc` works even if there is a punned individual.
     This will throw and extra warning as the punned individual will be ignored.
     """
