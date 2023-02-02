@@ -1131,7 +1131,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             if not hasattr(cls, "prefLabel"):
                 # no prefLabel - create new annotation property..
                 with self:
-
                     # pylint: disable=invalid-name,missing-class-docstring
                     # pylint: disable=unused-variable
                     class prefLabel(owlready2.label):
