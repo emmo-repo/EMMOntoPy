@@ -26,12 +26,13 @@ def tool(request: "Dict[str, Any]") -> "ModuleType":
     assert (
         original_tool_path.exists()
     ), f"The requested tool ({request.param}) was not found in {original_tool_path.parent}"
+    tool_path = None
     try:
         tool_path = original_tool_path.rename(
-            original_tool_path.with_name(f"{request.param}.py")
+            original_tool_path.with_suffix(".py")
         )
         yield importlib.import_module(request.param)
     finally:
         if tool_path and tool_path.exists():
-            tool_path.rename(tool_path.with_name(request.param))
+            tool_path.rename(tool_path.with_suffix(""))
         sys.path = original_sys_path
