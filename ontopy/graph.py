@@ -264,7 +264,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             self.edges = set()
         else:
             if ontology != graph.ontology:
-                ValueError(
+                raise ValueError(
                     "the same ontology must be used when extending a graph"
                 )
             self.dot = graph.dot.copy()
