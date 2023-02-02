@@ -24,7 +24,9 @@ def tool(request: "Dict[str, Any]") -> "ModuleType":
     if str(original_tool_path.parent) not in sys.path:
         sys.path.append(str(original_tool_path.parent))
 
-    content_parent = "\n".join(os.walk(original_tool_path.parent))
+    content_parent = "\n".join(
+        str(_) for _ in os.walk(original_tool_path.parent)
+    )
     assert (
         original_tool_path.exists()
     ), f"The requested tool ({request.param}) was not found in {original_tool_path.parent}.\nContents:\n{content_parent}"
