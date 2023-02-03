@@ -392,28 +392,14 @@ class OntoDoc:
         # Instances (individuals)
         if hasattr(item, "instances"):
             points = []
-            for individual in item.instances():
-                print("item", item, "is a", item.is_a)
-                print(
-                    "individual",
-                    individual,
-                    "is instance of",
-                    individual.is_instance_of,
-                )
-
-                # print(item.individual.is_instance_of)
-
             for entity in [
                 _ for _ in item.instances() if item in _.is_instance_of
             ]:
-                print("entity", entity)
-                print("a", points)
                 points.append(
                     point_style.format(
                         point=asstring(entity, link_style), ontology=onto
                     )
                 )
-                print("b", points)
             if points:
                 value = points_style.format(
                     points="".join(points), ontology=onto
