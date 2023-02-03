@@ -10,7 +10,15 @@ if TYPE_CHECKING:
 
 
 def test_run(get_tool: "Callable[[str], ModuleType]", tmpdir: "Path") -> None:
-    """Check that running `ontodoc` works."""
+    """Check that running `ontodoc` works.
+
+    Parameters:
+        get_tool: Local module fixture to load a named tool as a module.
+            See the current folder's `conftest.py` file.
+        tmpdir: A generic pytest fixture to generate a temporary directory, which will
+            exist only for the lifetime of this test function.
+
+    """
     from pathlib import Path
 
     test_file = (
@@ -27,7 +35,15 @@ def test_run(get_tool: "Callable[[str], ModuleType]", tmpdir: "Path") -> None:
 def test_run_w_individual(
     get_tool: "Callable[[str], ModuleType]", tmpdir: "Path"
 ) -> None:
-    """Check that running `ontodoc` works when there is an individual."""
+    """Check that running `ontodoc` works when there is an individual.
+
+    Parameters:
+        get_tool: Local module fixture to load a named tool as a module.
+            See the current folder's `conftest.py` file.
+        tmpdir: A generic pytest fixture to generate a temporary directory, which will
+            exist only for the lifetime of this test function.
+
+    """
     from pathlib import Path
 
     test_file = (
@@ -51,6 +67,13 @@ def test_run_w_punning(
 ) -> None:
     """Check that running `ontodoc` works even if there is a punned individual.
     This will throw and extra warning as the punned individual will be ignored.
+
+    Parameters:
+        get_tool: Local module fixture to load a named tool as a module.
+            See the current folder's `conftest.py` file.
+        tmpdir: A generic pytest fixture to generate a temporary directory, which will
+            exist only for the lifetime of this test function.
+
     """
     from pathlib import Path
 

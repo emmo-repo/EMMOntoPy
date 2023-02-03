@@ -5,7 +5,7 @@ import pytest
 
 if TYPE_CHECKING:
     from types import ModuleType
-    from typing import Any, Callable, Dict
+    from typing import Callable
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -13,6 +13,13 @@ def rename_tools() -> None:
     """Add a `.py` extension to all tools.
 
     Run prior to all tests in this module.
+    First, rename all tools (adding a `.py` suffix) to make them importable as a
+    module. Then stop executing this fixture for a while (yield) and run all the tests
+    in the module. Then after they're done, rename the tools back (remove the `.py`
+    suffix) and also return `sys.path` to its original state prior to running the
+    tests.
+    To make the importability work, the `tools` folder had to be added to the
+    `sys.path`.
     """
     from copy import deepcopy
     import os
@@ -81,7 +88,10 @@ def rename_tools() -> None:
 
 @pytest.fixture
 def get_tool() -> "Callable[[str], ModuleType]":
-    """Import a tool as a module."""
+    """Import a tool as a module.
+
+    Requires the fixture `rename_tools` to have been run already.
+    """
     import importlib
     from pathlib import Path
     import sys
