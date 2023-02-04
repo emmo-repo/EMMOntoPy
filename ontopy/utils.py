@@ -57,6 +57,10 @@ class UnknownVersion(EMMOntoPyException):
     """Cannot retrieve version from a package."""
 
 
+class IndividualWarning(EMMOntoPyWarning):
+    """A warning related to an individual, e.g. punning."""
+
+
 class NoSuchLabelError(LookupError, AttributeError, EMMOntoPyException):
     """Error raised when a label cannot be found."""
 

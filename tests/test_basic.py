@@ -30,7 +30,6 @@ def test_basic(emmo: "Ontology") -> None:
         onto.new_entity("Hydr ogen", emmo.Atom)
 
     with onto:
-
         # Add entity using python classes
         class Oxygen(emmo.Atom):
             """Oxygen atom."""

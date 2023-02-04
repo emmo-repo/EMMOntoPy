@@ -220,8 +220,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             self.get_by_label(other)
         except NoSuchLabelError:
             return False
-        else:
-            return True
+        return True
 
     def __objclass__(self):
         # Play nice with inspect...
@@ -782,7 +781,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 fmt = revmap.get(format, format)
                 filename = f"{self.name}.{fmt}"
             else:
-                TypeError("`filename` and `format` cannot both be None.")
+                raise TypeError("`filename` and `format` cannot both be None.")
         filename = os.path.join(dir, filename)
         dir = Path(filename).resolve().parent
 
@@ -1131,7 +1130,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             if not hasattr(cls, "prefLabel"):
                 # no prefLabel - create new annotation property..
                 with self:
-
                     # pylint: disable=invalid-name,missing-class-docstring
                     # pylint: disable=unused-variable
                     class prefLabel(owlready2.label):
@@ -1466,7 +1464,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     return cur
                 if len(mro) == 0:
                     mros.remove(mro)
-        raise Exception("A closest common ancestor should always exist !")
+        raise EMMOntoPyException(
+            "A closest common ancestor should always exist !"
+        )
 
     def get_ancestors(self, classes, include="all", strict=True):
         """Return ancestors of all classes in `classes`.
