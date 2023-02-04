@@ -5,6 +5,7 @@ import types
 import owlready2
 from owlready2 import ThingClass, PropertyClass, Thing, Restriction, Namespace
 from owlready2 import Metadata
+from ontopy.utils import EMMOntoPyException
 
 
 def render_func(entity):
@@ -60,7 +61,9 @@ def get_parents(self, strict=False):
             for cls in self.is_a
             if isinstance(cls, owlready2.ObjectPropertyClass)
         }
-    raise Exception("self has no parents - this should not be possible!")
+    raise EMMOntoPyException(
+        "self has no parents - this should not be possible!"
+    )
 
 
 def _dir(self):

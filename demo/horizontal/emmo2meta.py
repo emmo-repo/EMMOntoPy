@@ -174,7 +174,7 @@ class EMMO2Meta:
         props = []
         dimindices = {}
         propnames = set()
-        types = dict(Integer="int", Real="double", String="string")
+        types = {"Integer": "int", "Real": "double", "String": "string"}
 
         def get_dim(restriction, name, descr=None):
             """Returns dimension index corresponding to dimension name `name`
