@@ -3911,23 +3911,32 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="c1"># Instances (individuals)</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;instances&quot;</span><span class="p">):</span>
             <span class="n">points</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="p">[</span>
-                <span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">instances</span><span class="p">()</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">_</span><span class="o">.</span><span class="n">is_instance_of</span>
-            <span class="p">]:</span>
-                <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="n">point</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">link_style</span><span class="p">),</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
+
+            <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">instances</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">is_instance_of</span><span class="p">,</span> <span class="nb">property</span><span class="p">):</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s1">&#39;Ignoring instance &quot;</span><span class="si">{</span><span class="n">instance</span><span class="si">}</span><span class="s1">&quot; which is both and &#39;</span>
+                        <span class="s2">&quot;indivudual and class. Ontodoc does not support &quot;</span>
+                        <span class="s2">&quot;punning at the present moment.&quot;</span>
                     <span class="p">)</span>
-                <span class="p">)</span>
-            <span class="k">if</span> <span class="n">points</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">points_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">points</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">points</span><span class="p">),</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
-                <span class="p">)</span>
-                <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">annotation_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="n">key</span><span class="o">=</span><span class="s2">&quot;Individuals&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">is_instance_of</span><span class="p">:</span>
+                    <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">point</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">link_style</span><span class="p">),</span>
+                            <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">,</span>
+                        <span class="p">)</span>
                     <span class="p">)</span>
-                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">points</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">points_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">points</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">points</span><span class="p">),</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
+                    <span class="p">)</span>
+                    <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">annotation_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">key</span><span class="o">=</span><span class="s2">&quot;Individuals&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">itemsdoc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
@@ -4271,23 +4280,32 @@ show_disjoints : Bool
     <span class="c1"># Instances (individuals)</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;instances&quot;</span><span class="p">):</span>
         <span class="n">points</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">instances</span><span class="p">()</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">_</span><span class="o">.</span><span class="n">is_instance_of</span>
-        <span class="p">]:</span>
-            <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">point</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">link_style</span><span class="p">),</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
+
+        <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">instances</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">is_instance_of</span><span class="p">,</span> <span class="nb">property</span><span class="p">):</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s1">&#39;Ignoring instance &quot;</span><span class="si">{</span><span class="n">instance</span><span class="si">}</span><span class="s1">&quot; which is both and &#39;</span>
+                    <span class="s2">&quot;indivudual and class. Ontodoc does not support &quot;</span>
+                    <span class="s2">&quot;punning at the present moment.&quot;</span>
                 <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="k">if</span> <span class="n">points</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">points_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">points</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">points</span><span class="p">),</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
-            <span class="p">)</span>
-            <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">annotation_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">key</span><span class="o">=</span><span class="s2">&quot;Individuals&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">is_instance_of</span><span class="p">:</span>
+                <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">point</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">link_style</span><span class="p">),</span>
+                        <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">,</span>
+                    <span class="p">)</span>
                 <span class="p">)</span>
-            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">points</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">points_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">points</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">points</span><span class="p">),</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
+                <span class="p">)</span>
+                <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">annotation_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">key</span><span class="o">=</span><span class="s2">&quot;Individuals&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
     <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 </code></pre></div>
         </details>
