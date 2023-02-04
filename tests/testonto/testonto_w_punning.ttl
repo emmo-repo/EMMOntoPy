@@ -1,0 +1,23 @@
+@prefix : <http://emmo.info/testonto#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@base <http://emmo.info/testonto> .
+
+<http://emmo.info/testonto> rdf:type owl:Ontology ;
+                             owl:versionIRI <http://emmo.info/testonto/0.1.0> ;
+			     owl:versionInfo "0.1.0" .
+
+skos:prefLabel rdf:type owl:AnnotationProperty .
+skos:altLabel rdf:type owl:AnnotationProperty .
+
+:testclass rdf:type owl:Class ;
+    rdfs:subClassOf owl:Thing ;
+    skos:prefLabel "TestClass"@en .
+
+
+:testclass rdf:type owl:NamedIndividual ,
+                           :testclass .

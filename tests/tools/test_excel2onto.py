@@ -1,12 +1,24 @@
 """Test the `ontograph` tool."""
-from pathlib import Path
-import os
-import pytest
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pathlib import Path
+    from types import ModuleType
+    from typing import Callable
 
 
-@pytest.mark.parametrize("tool", ["excel2onto"], indirect=True)
-def test_run(tool, tmpdir: Path) -> None:
-    """Check that running `excel2onto` works."""
+def test_run(get_tool: "Callable[[str], ModuleType]", tmpdir: "Path") -> None:
+    """Check that running `excel2onto` works.
+
+    Parameters:
+        get_tool: Local module fixture to load a named tool as a module.
+            See the current folder's `conftest.py` file.
+        tmpdir: A generic pytest fixture to generate a temporary directory, which will
+            exist only for the lifetime of this test function.
+
+    """
+    from pathlib import Path
+
     test_file = (
         Path(__file__).resolve().parent.parent
         / "test_excelparser"
@@ -17,10 +29,13 @@ def test_run(tool, tmpdir: Path) -> None:
         / "test_excelparser"
         / "onto_update.xlsx"
     )
+    excel2onto = get_tool("excel2onto")
 
-    tool.main([f"--output={str(tmpdir)}/onto.ttl", "--force", str(test_file)])
+    excel2onto.main(
+        [f"--output={str(tmpdir)}/onto.ttl", "--force", str(test_file)]
+    )
 
-    tool.main(
+    excel2onto.main(
         [
             f"--output={str(tmpdir)}/onto.ttl",
             "--force",
@@ -29,7 +44,7 @@ def test_run(tool, tmpdir: Path) -> None:
         ]
     )
 
-    tool.main(
+    excel2onto.main(
         [
             f"--output={str(tmpdir)}/ontology.ttl",
             "--force",

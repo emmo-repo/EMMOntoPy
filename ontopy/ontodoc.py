@@ -392,23 +392,32 @@ class OntoDoc:
         # Instances (individuals)
         if hasattr(item, "instances"):
             points = []
-            for entity in [
-                _ for _ in item.instances() if item in _.is_instance_of
-            ]:
-                points.append(
-                    point_style.format(
-                        point=asstring(entity, link_style), ontology=onto
+
+            for instance in item.instances():
+                if isinstance(instance.is_instance_of, property):
+                    warnings.warn(
+                        f'Ignoring instance "{instance}" which is both and '
+                        "indivudual and class. Ontodoc does not support "
+                        "punning at the present moment."
                     )
-                )
-            if points:
-                value = points_style.format(
-                    points="".join(points), ontology=onto
-                )
-                doc.append(
-                    annotation_style.format(
-                        key="Individuals", value=value, ontology=onto
+                    continue
+                if item in instance.is_instance_of:
+                    points.append(
+                        point_style.format(
+                            point=asstring(instance, link_style),
+                            ontology=onto,
+                        )
                     )
-                )
+                if points:
+                    value = points_style.format(
+                        points="".join(points), ontology=onto
+                    )
+                    doc.append(
+                        annotation_style.format(
+                            key="Individuals", value=value, ontology=onto
+                        )
+                    )
+
         return "\n".join(doc)
 
     def itemsdoc(self, items, header_level=3):
