@@ -407,7 +407,6 @@ class OntoDoc:
                             point=asstring(instance, link_style),
                             ontology=onto,
                         )
-
                     )
                 if points:
                     value = points_style.format(
