@@ -1,20 +1,21 @@
 # Changelog
 
-## [Unreleased](https://github.com/emmo-repo/EMMOntoPy/tree/HEAD)
+## [v0.5.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.1) (2023-02-06)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.0...HEAD)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.0...v0.5.1)
 
-**Fixed bugs:**
+**Merged pull requests:**
 
-- `LegacyVersion` does not exist in `packaging.version` [\#540](https://github.com/emmo-repo/EMMOntoPy/issues/540)
-- ontodoc: Expect `is_instance_of` property to be iterable [\#506](https://github.com/emmo-repo/EMMOntoPy/issues/506)
+- Fix ontodoc for bigmap [\#543](https://github.com/emmo-repo/EMMOntoPy/pull/543) ([jesper-friis](https://github.com/jesper-friis))
 
-## [v0.5.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.0) (2023-02-04)
+## [v0.5.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.0) (2023-02-06)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.4.0...v0.5.0)
 
 **Fixed bugs:**
 
+- `LegacyVersion` does not exist in `packaging.version` [\#540](https://github.com/emmo-repo/EMMOntoPy/issues/540)
+- ontodoc: Expect `is_instance_of` property to be iterable [\#506](https://github.com/emmo-repo/EMMOntoPy/issues/506)
 - Reinstate `images/material.png` [\#495](https://github.com/emmo-repo/EMMOntoPy/issues/495)
 
 **Closed issues:**
