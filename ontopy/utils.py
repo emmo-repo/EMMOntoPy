@@ -98,7 +98,7 @@ def get_label(entity):
     return repr(entity)
 
 
-def asstring(  # pylint: disable=too-many-return-statements,too-many-branches
+def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
     expr, link="{name}", recursion_depth=0, exclude_object=False
 ):
     """Returns a string representation of `expr`, which may be an entity,
@@ -120,7 +120,10 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches
                     name = name[0]
                 break
         if not name:
-            name = str(entity).replace(".", ":")
+            if entity.startswith("http://") or entity.startswith("https://"):
+                name = entity
+            else:
+                name = str(entity).replace(".", ":")
         url = name if re.match(r"^[a-z]+://", name) else "#" + name
         return link.format(name=name, url=url, lowerurl=url.lower())
 
