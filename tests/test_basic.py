@@ -30,7 +30,6 @@ def test_basic(emmo: "Ontology") -> None:
         onto.new_entity("Hydr ogen", emmo.Atom)
 
     with onto:
-
         # Add entity using python classes
         class Oxygen(emmo.Atom):
             """Oxygen atom."""
@@ -58,6 +57,15 @@ def test_basic(emmo: "Ontology") -> None:
     assert water.name.startswith("onto_")
     # A UUID is 32 chars long + 4 `-` chars = 36 chars
     assert len(water.name) == len(name_prefix) + 36
+    synced_uuid = water.name
+    onto.sync_attributes(name_policy="uuid", name_prefix=name_prefix)
+    assert synced_uuid == water.name
+
+    water.name = water.name[1:]
+    assert water.name.startswith("nto_")
+    onto.sync_attributes(name_policy="uuid", name_prefix=name_prefix)
+    assert synced_uuid != water.name
+    assert water.name.startswith("onto_")
 
 
 def test_sync_reasoner(testonto: "Ontology") -> None:

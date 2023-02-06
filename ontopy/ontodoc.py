@@ -49,20 +49,20 @@ class OntoDoc:
             annotation values.
     """
 
-    _markdown_style = dict(
-        sep="\n",
-        figwidth="{{ width={width:.0f}px }}",
-        figure="![{caption}]({path}){figwidth}\n",
-        header="\n{:#<{level}} {label}",
-        link="[{name}]({lowerurl})",
-        point="  - {point}\n",
-        points="\n\n{points}\n",
-        annotation="**{key}:** {value}\n",
-        substitutions=[],
-    )
+    _markdown_style = {
+        "sep": "\n",
+        "figwidth": "{{ width={width:.0f}px }}",
+        "figure": "![{caption}]({path}){figwidth}\n",
+        "header": "\n{:#<{level}} {label}",
+        "link": "[{name}]({lowerurl})",
+        "point": "  - {point}\n",
+        "points": "\n\n{points}\n",
+        "annotation": "**{key}:** {value}\n",
+        "substitutions": [],
+    }
     # Extra style settings for markdown+tex (e.g. pdf generation with pandoc)
-    _markdown_tex_extra_style = dict(
-        substitutions=[
+    _markdown_tex_extra_style = {
+        "substitutions": [
             # logic/math symbols
             ("\u2200", r"$\\forall$"),
             ("\u2203", r"$\\exists$"),
@@ -132,17 +132,17 @@ class OntoDoc:
             ("\u014d", r"$\\bar{\\mathrm{o}}$"),
             ("\u1f45", r"$\\acute{o}$"),  # no \omicron
         ],
-    )
-    _html_style = dict(
-        sep="<p>\n",
-        figwidth='width="{width:.0f}"',
-        figure='<img src="{path}" alt="{caption}"{figwidth}>',
-        header='<h{level} id="{lowerlabel}">{label}</h{level}>',
-        link='<a href="{lowerurl}">{name}</a>',
-        point="      <li>{point}</li>\n",
-        points="    <ul>\n      {points}\n    </ul>\n",
-        annotation="  <dd><strong>{key}:</strong>\n{value}  </dd>\n",
-        substitutions=[
+    }
+    _html_style = {
+        "sep": "<p>\n",
+        "figwidth": 'width="{width:.0f}"',
+        "figure": '<img src="{path}" alt="{caption}"{figwidth}>',
+        "header": '<h{level} id="{lowerlabel}">{label}</h{level}>',
+        "link": '<a href="{lowerurl}">{name}</a>',
+        "point": "      <li>{point}</li>\n",
+        "points": "    <ul>\n      {points}\n    </ul>\n",
+        "annotation": "  <dd><strong>{key}:</strong>\n{value}  </dd>\n",
+        "substitutions": [
             (r"&", r"&#8210;"),
             (r"<p>", r"<p>\n\n"),
             (r"\u2018([^\u2019]*)\u2019", r"<q>\1</q>"),
@@ -154,7 +154,7 @@ class OntoDoc:
             (r"\u226B", r"&x226B;"),
             (r'"Y$', r""),  # strange noice added by owlready2
         ],
-    )
+    }
 
     def __init__(self, onto, style="markdown"):
         if isinstance(style, str):
@@ -243,15 +243,15 @@ class OntoDoc:
         substitutions = self.style.get("substitutions", [])
 
         # Logical "sorting" of annotations
-        order = dict(
-            definition="00",
-            axiom="01",
-            theorem="02",
-            elucidation="03",
-            domain="04",
-            range="05",
-            example="06",
-        )
+        order = {
+            "definition": "00",
+            "axiom": "01",
+            "theorem": "02",
+            "elucidation": "03",
+            "domain": "04",
+            "range": "05",
+            "example": "06",
+        }
 
         doc = []
 
@@ -288,6 +288,7 @@ class OntoDoc:
             annotations.keys(), key=lambda key: order.get(key, key)
         ):
             for value in annotations[key]:
+                value = str(value)
                 if self.url_regex.match(value):
                     doc.append(
                         annotation_style.format(
@@ -391,23 +392,31 @@ class OntoDoc:
         # Instances (individuals)
         if hasattr(item, "instances"):
             points = []
-            for entity in [
-                _ for _ in item.instances() if item in _.is_instance_of
-            ]:
-                points.append(
-                    point_style.format(
-                        point=asstring(entity, link_style), ontology=onto
+
+            for instance in item.instances():
+                if isinstance(instance.is_instance_of, property):
+                    warnings.warn(
+                        f'Ignoring instance "{instance}" which is both and '
+                        "indivudual and class. Ontodoc does not support "
+                        "punning at the present moment."
                     )
-                )
-            if points:
-                value = points_style.format(
-                    points="".join(points), ontology=onto
-                )
-                doc.append(
-                    annotation_style.format(
-                        key="Individuals", value=value, ontology=onto
+                    continue
+                if item in instance.is_instance_of:
+                    points.append(
+                        point_style.format(
+                            point=asstring(instance, link_style),
+                            ontology=onto,
+                        )
                     )
-                )
+                if points:
+                    value = points_style.format(
+                        points="".join(points), ontology=onto
+                    )
+                    doc.append(
+                        annotation_style.format(
+                            key="Individuals", value=value, ontology=onto
+                        )
+                    )
 
         return "\n".join(doc)
 
