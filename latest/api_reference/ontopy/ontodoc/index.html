@@ -3572,7 +3572,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="s2">&quot;sep&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="s2">&quot;figwidth&quot;</span><span class="p">:</span> <span class="s2">&quot;{{ width=</span><span class="si">{width:.0f}</span><span class="s2">px }}&quot;</span><span class="p">,</span>
         <span class="s2">&quot;figure&quot;</span><span class="p">:</span> <span class="s2">&quot;![</span><span class="si">{caption}</span><span class="s2">](</span><span class="si">{path}</span><span class="s2">)</span><span class="si">{figwidth}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">{:#&lt;</span><span class="si">{level}</span><span class="s2">} </span><span class="si">{label}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">{:#&lt;</span><span class="si">{level}</span><span class="s2">} </span><span class="si">{label}</span><span class="s2">    {{#</span><span class="si">{anchor}</span><span class="s2">}}&quot;</span><span class="p">,</span>
         <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;[</span><span class="si">{name}</span><span class="s2">](</span><span class="si">{lowerurl}</span><span class="s2">)&quot;</span><span class="p">,</span>
         <span class="s2">&quot;point&quot;</span><span class="p">:</span> <span class="s2">&quot;  - </span><span class="si">{point}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="s2">&quot;points&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="si">{points}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -3656,7 +3656,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="s2">&quot;sep&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;p&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="s2">&quot;figwidth&quot;</span><span class="p">:</span> <span class="s1">&#39;width=&quot;</span><span class="si">{width:.0f}</span><span class="s1">&quot;&#39;</span><span class="p">,</span>
         <span class="s2">&quot;figure&quot;</span><span class="p">:</span> <span class="s1">&#39;&lt;img src=&quot;</span><span class="si">{path}</span><span class="s1">&quot; alt=&quot;</span><span class="si">{caption}</span><span class="s1">&quot;</span><span class="si">{figwidth}</span><span class="s1">&gt;&#39;</span><span class="p">,</span>
-        <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="s1">&#39;&lt;h</span><span class="si">{level}</span><span class="s1"> id=&quot;</span><span class="si">{lowerlabel}</span><span class="s1">&quot;&gt;</span><span class="si">{label}</span><span class="s1">&lt;/h</span><span class="si">{level}</span><span class="s1">&gt;&#39;</span><span class="p">,</span>
+        <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="s1">&#39;&lt;h</span><span class="si">{level}</span><span class="s1"> id=&quot;</span><span class="si">{anchor}</span><span class="s1">&quot;&gt;</span><span class="si">{label}</span><span class="s1">&lt;/h</span><span class="si">{level}</span><span class="s1">&gt;&#39;</span><span class="p">,</span>
         <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{lowerurl}</span><span class="s1">&quot;&gt;</span><span class="si">{name}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="p">,</span>
         <span class="s2">&quot;point&quot;</span><span class="p">:</span> <span class="s2">&quot;      &lt;li&gt;</span><span class="si">{point}</span><span class="s2">&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="s2">&quot;points&quot;</span><span class="p">:</span> <span class="s2">&quot;    &lt;ul&gt;</span><span class="se">\n</span><span class="s2">      </span><span class="si">{points}</span><span class="se">\n</span><span class="s2">    &lt;/ul&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -3720,11 +3720,14 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">irilink</span><span class="o">=</span><span class="n">irilink</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">template</span>
 
-    <span class="k">def</span> <span class="nf">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `label` formatted as a header of given level.&quot;&quot;&quot;</span>
         <span class="n">header_style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{label}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">header_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">header_level</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">lowerlabel</span><span class="o">=</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">level</span><span class="o">=</span><span class="n">header_level</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+            <span class="n">anchor</span><span class="o">=</span><span class="n">anchor</span> <span class="k">if</span> <span class="n">anchor</span> <span class="k">else</span> <span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">),</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -3776,9 +3779,14 @@ style : dict | "html" | "markdown" | "markdown_tex"
 
         <span class="c1"># Header</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="n">iriname</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">iri</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">anchor</span> <span class="o">=</span> <span class="n">iriname</span> <span class="k">if</span> <span class="n">iriname</span> <span class="k">else</span> <span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">header_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">header_level</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">lowerlabel</span><span class="o">=</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="n">header_level</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+                <span class="n">anchor</span><span class="o">=</span><span class="n">anchor</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
@@ -4057,7 +4065,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
 
 
 <h3 class="doc doc-heading" id="ontopy.ontodoc.OntoDoc.get_header">
-<code class="highlight language-python"><span class="n">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.ontodoc.OntoDoc.get_header" title="Permanent link">&para;</a></h3>
@@ -4068,11 +4076,14 @@ style : dict | "html" | "markdown" | "markdown_tex"
 
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns `label` formatted as a header of given level.&quot;&quot;&quot;</span>
     <span class="n">header_style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{label}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">header_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">header_level</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">lowerlabel</span><span class="o">=</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">level</span><span class="o">=</span><span class="n">header_level</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+        <span class="n">anchor</span><span class="o">=</span><span class="n">anchor</span> <span class="k">if</span> <span class="n">anchor</span> <span class="k">else</span> <span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">),</span>
     <span class="p">)</span>
 </code></pre></div>
         </details>
@@ -4145,9 +4156,14 @@ show_disjoints : Bool
 
     <span class="c1"># Header</span>
     <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="n">iriname</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">iri</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">anchor</span> <span class="o">=</span> <span class="n">iriname</span> <span class="k">if</span> <span class="n">iriname</span> <span class="k">else</span> <span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
         <span class="n">header_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">header_level</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">lowerlabel</span><span class="o">=</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">level</span><span class="o">=</span><span class="n">header_level</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+            <span class="n">anchor</span><span class="o">=</span><span class="n">anchor</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span>
 

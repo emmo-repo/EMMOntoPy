@@ -1622,7 +1622,7 @@ restrictions.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">asstring</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-return-statements,too-many-branches</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">asstring</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-return-statements,too-many-branches,too-many-statements</span>
     <span class="n">expr</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">recursion_depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_object</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a string representation of `expr`, which may be an entity,</span>
@@ -1644,7 +1644,10 @@ restrictions.</p>
                     <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">break</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">entity</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">):</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">entity</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">name</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[a-z]+://&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="n">name</span>
         <span class="k">return</span> <span class="n">link</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">lowerurl</span><span class="o">=</span><span class="n">url</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
 
