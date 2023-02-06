@@ -208,7 +208,7 @@ class OntoDoc:
             "",
             level=header_level,
             label=label,
-            anchor=anchor if anchor else label.lower(),
+            anchor=anchor if anchor else label.lower().replace(" ", "-"),
         )
 
     def get_figure(self, path, caption="", width=None):
