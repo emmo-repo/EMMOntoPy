@@ -1,11 +1,25 @@
 # Changelog
 
-## [v0.5.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.1) (2023-02-06)
+## [Unreleased](https://github.com/emmo-repo/EMMOntoPy/tree/HEAD)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.1...HEAD)
+
+**Fixed bugs:**
+
+- Use custom token for GitHub changelog generator [\#545](https://github.com/emmo-repo/EMMOntoPy/issues/545)
+
+## [v0.5.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.1) (2023-02-07)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.0...v0.5.1)
 
+**Fixed bugs:**
+
+- Avoid using Azure mirror for APT packages [\#541](https://github.com/emmo-repo/EMMOntoPy/issues/541)
+
 **Merged pull requests:**
 
+- Use SINTEF/ci-cd v2.1.0 in CI/CD workflows [\#546](https://github.com/emmo-repo/EMMOntoPy/pull/546) ([CasperWA](https://github.com/CasperWA))
+- Revert version to v0.5.0 [\#544](https://github.com/emmo-repo/EMMOntoPy/pull/544) ([CasperWA](https://github.com/CasperWA))
 - Fix ontodoc for bigmap [\#543](https://github.com/emmo-repo/EMMOntoPy/pull/543) ([jesper-friis](https://github.com/jesper-friis))
 
 ## [v0.5.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.0) (2023-02-06)
