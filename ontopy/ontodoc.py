@@ -53,7 +53,7 @@ class OntoDoc:
         "sep": "\n",
         "figwidth": "{{ width={width:.0f}px }}",
         "figure": "![{caption}]({path}){figwidth}\n",
-        "header": "\n{:#<{level}} {label}",
+        "header": "\n{:#<{level}} {label}    {{#{anchor}}}",
         "link": "[{label}]({ref})",
         "point": "  - {point}\n",
         "points": "\n\n{points}\n",
@@ -137,7 +137,7 @@ class OntoDoc:
         "sep": "<p>\n",
         "figwidth": 'width="{width:.0f}"',
         "figure": '<img src="{path}" alt="{caption}"{figwidth}>',
-        "header": '<h{level} id="{lowerlabel}">{label}</h{level}>',
+        "header": '<h{level} id="{anchor}">{label}</h{level}>',
         "link": '<a href="{ref}">{label}</a>',
         "point": "      <li>{point}</li>\n",
         "points": "    <ul>\n      {points}\n    </ul>\n",
@@ -201,11 +201,14 @@ class OntoDoc:
         ).format(ontology=self.onto, title=title, irilink=irilink)
         return template
 
-    def get_header(self, label, header_level=1):
+    def get_header(self, label, header_level=1, anchor=None):
         """Returns `label` formatted as a header of given level."""
         header_style = self.style.get("header", "{label}\n")
         return header_style.format(
-            "", level=header_level, label=label, lowerlabel=label.lower()
+            "",
+            level=header_level,
+            label=label,
+            anchor=anchor if anchor else label.lower().replace(" ", "-"),
         )
 
     def get_figure(self, path, caption="", width=None):
@@ -257,9 +260,14 @@ class OntoDoc:
 
         # Header
         label = get_label(item)
+        iriname = item.iri.partition("#")[2]
+        anchor = iriname if iriname else label.lower()
         doc.append(
             header_style.format(
-                "", level=header_level, label=label, lowerlabel=label.lower()
+                "",
+                level=header_level,
+                label=label,
+                anchor=anchor,
             )
         )
 

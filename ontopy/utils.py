@@ -141,7 +141,7 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
                 iri = entity.iri
                 label = get_label(entity)
                 name = getiriname(entity.iri)
-                ref = "#" + name
+                ref = f"#{name}" if name in ontology else iri
             elif re.match(r"^[a-z]+://", entity):
                 ref = iri = entity
                 label = name = getiriname(entity)
@@ -151,7 +151,7 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
             iri = entity.iri
             label = get_label(entity)
             name = getiriname(entity.iri)
-            ref = "#" + name
+            ref = f"#{name}" if name in ontology else iri
         return link.format(
             name=name,
             ref=ref,
