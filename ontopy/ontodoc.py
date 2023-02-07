@@ -346,7 +346,8 @@ class OntoDoc:
         for entity in item.equivalent_to:
             points.append(
                 point_style.format(
-                    point="equivalent_to " + asstring(entity, link_style)
+                    point="equivalent_to "
+                    + asstring(entity, link_style, ontology=onto)
                 )
             )
 
@@ -356,7 +357,9 @@ class OntoDoc:
             points.append(
                 point_style.format(
                     point="disjoint_with "
-                    + ", ".join(asstring(s, link_style) for s in subjects),
+                    + ", ".join(
+                        asstring(s, link_style, ontology=onto) for s in subjects
+                    ),
                     ontology=onto,
                 )
             )
@@ -386,7 +389,8 @@ class OntoDoc:
         for domain in getattr(item, "domain", ()):
             points.append(
                 point_style.format(
-                    point=f"domain {asstring(domain, link_style)}"
+                    point="domain "
+                    + asstring(domain, link_style, ontology=onto)
                 )
             )
 
@@ -394,7 +398,8 @@ class OntoDoc:
         for restriction in getattr(item, "range", ()):
             points.append(
                 point_style.format(
-                    point=f"range {asstring(restriction, link_style)}"
+                    point="range "
+                    + asstring(restriction, link_style, ontology=onto)
                 )
             )
 
@@ -1061,7 +1066,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
 
                 sec = []
                 for root in roots:
-                    name = asstring(root, ontology=onto)
+                    name = asstring(root, link="{label}", ontology=onto)
                     filepath, _, width = self._make_branchfig(
                         name,
                         opts.path,  # pylint: disable=no-member

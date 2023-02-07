@@ -299,7 +299,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 except ValueError:
                     pass
 
-        splitlabel = label.split(":")
+        splitlabel = label.split(":", 1)
         if len(splitlabel) > 2:
             raise ValueError(
                 f"Invalid label definition, {label!r}"

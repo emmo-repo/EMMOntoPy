@@ -149,8 +149,12 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
             elif re.match(r"^[a-z]+://", entity):
                 iri = entity
                 label = name = getiriname(entity)
+            elif re.match(r"^[a-z_+-]+:[a-zA-Z_][a-zA-Z0-9_-]*$", entity):
+                return entity.split(":", 1)[1]
+            elif re.match(r"^[a-z_+-]+\.[a-zA-Z_][a-zA-Z0-9_-]*$", entity):
+                return entity.split(".", 1)[1]
             else:
-                raise ValueError(f"not an IRI or in ontology: {entity}")
+                return entity
         else:
             iri = entity.iri
             label = get_label(entity)
@@ -158,6 +162,7 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
         start = iri.split("#", 1)[0] if "#" in iri else iri.rsplit("/", 1)[0]
         ref = f"#{name}" if ontology.base_iri.startswith(start) else iri
         return link.format(
+            entity=entity,
             name=name,
             ref=ref,
             iri=iri,
