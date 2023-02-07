@@ -118,7 +118,8 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
         link: A template for links.  May contain the following variables:
             - {iri}: The full IRI of the concept.
             - {name}: Name-part of IRI.
-            - {ref}: "#{name}" if the concept is in the ontology, else "{iri}".
+            - {ref}: "#{name}" if the base iri of hte ontology has the same
+              root as {iri}, otherwise "{iri}".
             - {label}: The label of the concept.
             - {lowerlabel}: The label of the concept in lower case and with
               spaces replaced with hyphens.
@@ -141,9 +142,8 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
                 iri = entity.iri
                 label = get_label(entity)
                 name = getiriname(entity.iri)
-                ref = f"#{name}" if name in ontology else iri
             elif re.match(r"^[a-z]+://", entity):
-                ref = iri = entity
+                iri = entity
                 label = name = getiriname(entity)
             else:
                 raise ValueError(f"not an IRI or in ontology: {entity}")
@@ -151,7 +151,8 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
             iri = entity.iri
             label = get_label(entity)
             name = getiriname(entity.iri)
-            ref = f"#{name}" if name in ontology else iri
+        start = iri.split("#", 1)[0] if "#" in iri else iri.rsplit("/", 1)[0]
+        ref = f"#{name}" if ontology.base_iri.startswith(start) else iri
         return link.format(
             name=name,
             ref=ref,
