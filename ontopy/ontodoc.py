@@ -174,9 +174,11 @@ class OntoDoc:
             os.path.basename(self.onto.base_iri.rstrip("/#"))
         )[0]
         irilink = self.style.get("link", "{name}").format(
+            iri=self.onto.base_iri,
             name=self.onto.base_iri,
-            url=self.onto.base_iri,
-            lowerurl=self.onto.base_iri,
+            ref=self.onto.base_iri,
+            label=self.onto.base_iri,
+            lowerlabel=self.onto.base_iri,
         )
         template = dedent(
             """\
@@ -362,7 +364,9 @@ class OntoDoc:
         # ...add disjoint_unions
         if hasattr(item, "disjoint_unions"):
             for unions in item.disjoint_unions:
-                string = ", ".join(asstring(u, link_style) for u in unions)
+                string = ", ".join(
+                    asstring(u, link_style, ontology=onto) for u in unions
+                )
                 points.append(
                     point_style.format(
                         point=f"disjoint_union_of {string}", ontology=onto
@@ -374,7 +378,7 @@ class OntoDoc:
             points.append(
                 point_style.format(
                     point="inverse_of "
-                    + asstring(item.inverse_property, link_style)
+                    + asstring(item.inverse_property, link_style, ontology=onto)
                 )
             )
 
@@ -418,7 +422,7 @@ class OntoDoc:
                 if item in instance.is_instance_of:
                     points.append(
                         point_style.format(
-                            point=asstring(instance, link_style),
+                            point=asstring(instance, link_style, ontology=onto),
                             ontology=onto,
                         )
                     )
@@ -1000,7 +1004,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     raise InvalidTemplateError(
                         f"Invalid argument to %%ALL: {token}"
                     )
-                items = sorted(items, key=asstring)
+                items = sorted(items, key=get_label)
                 del self.lines[i]
                 self.lines[i:i] = self.ontodoc.itemsdoc(
                     items, int(opts.header_level)  # pylint: disable=no-member

@@ -12,6 +12,7 @@ import urllib.request
 import urllib.parse
 import warnings
 import defusedxml.ElementTree as ET
+from packaging.version import parse as parse_version, Version
 
 from rdflib import Graph, URIRef
 from rdflib.util import guess_format
@@ -21,7 +22,6 @@ import owlready2
 
 
 if TYPE_CHECKING:
-    from packaging.version import Version, LegacyVersion
     from typing import Optional, Union
 
 
@@ -55,6 +55,10 @@ class IncompatibleVersion(EMMOntoPyWarning):
 
 class UnknownVersion(EMMOntoPyException):
     """Cannot retrieve version from a package."""
+
+
+class IndividualWarning(EMMOntoPyWarning):
+    """A warning related to an individual, e.g. punning."""
 
 
 class NoSuchLabelError(LookupError, AttributeError, EMMOntoPyException):
@@ -105,11 +109,11 @@ def getiriname(iri):
 
 def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
     expr,
-    link="{ref}",
+    link="{label}",
     recursion_depth=0,
     exclude_object=False,
     ontology=None,
-):
+) -> str:
     """Returns a string representation of `expr`.
 
     Arguments:
@@ -483,7 +487,7 @@ def write_catalog(
 
 
 def _validate_installed_version(
-    package: str, min_version: "Union[str, Version, LegacyVersion]"
+    package: str, min_version: "Union[str, Version]"
 ) -> bool:
     """Validate an installed package.
 
@@ -505,16 +509,15 @@ def _validate_installed_version(
     """
     # pylint: disable=import-outside-toplevel
     import importlib
-    from packaging.version import parse as parse_version, LegacyVersion, Version
 
     if isinstance(min_version, str):
         min_version = parse_version(min_version)
-    elif isinstance(min_version, (LegacyVersion, Version)):
+    elif isinstance(min_version, Version):
         # We have the format we want
         pass
     else:
         raise TypeError(
-            "min_version should be either a str, LegacyVersion or Version. "
+            "min_version should be either a str or packaging.Version. "
             "The latter classes being from the packaging.version module."
         )
 
