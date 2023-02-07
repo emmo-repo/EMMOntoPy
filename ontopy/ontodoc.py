@@ -54,7 +54,8 @@ class OntoDoc:
         "figwidth": "{{ width={width:.0f}px }}",
         "figure": "![{caption}]({path}){figwidth}\n",
         "header": "\n{:#<{level}} {label}    {{#{anchor}}}",
-        "link": "[{label}]({ref})",
+        # Use ref instead of iri for local references in links
+        "link": "[{label}]({iri})",
         "point": "  - {point}\n",
         "points": "\n\n{points}\n",
         "annotation": "**{key}:** {value}\n",
@@ -138,7 +139,7 @@ class OntoDoc:
         "figwidth": 'width="{width:.0f}"',
         "figure": '<img src="{path}" alt="{caption}"{figwidth}>',
         "header": '<h{level} id="{anchor}">{label}</h{level}>',
-        "link": '<a href="{ref}">{label}</a>',
+        "link": '<a href="{iri}">{label}</a>',
         "point": "      <li>{point}</li>\n",
         "points": "    <ul>\n      {points}\n    </ul>\n",
         "annotation": "  <dd><strong>{key}:</strong>\n{value}  </dd>\n",
