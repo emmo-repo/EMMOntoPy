@@ -141,7 +141,7 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
         """Returns the formatted label of an entity."""
         if isinstance(entity, str):
             ent = ontology.world[entity]
-            if ent or entity in ontology:
+            if ent or (" " not in entity and entity in ontology):
                 entity = ent if ent else ontology.get_by_label(entity)
                 iri = entity.iri
                 label = get_label(entity)
