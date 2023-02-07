@@ -12,7 +12,6 @@ import urllib.request
 import urllib.parse
 import warnings
 import defusedxml.ElementTree as ET
-from packaging.version import parse as parse_version, Version
 
 from rdflib import Graph, URIRef
 from rdflib.util import guess_format
@@ -22,6 +21,7 @@ import owlready2
 
 
 if TYPE_CHECKING:
+    from packaging.version import Version, LegacyVersion
     from typing import Optional, Union
 
 
@@ -55,10 +55,6 @@ class IncompatibleVersion(EMMOntoPyWarning):
 
 class UnknownVersion(EMMOntoPyException):
     """Cannot retrieve version from a package."""
-
-
-class IndividualWarning(EMMOntoPyWarning):
-    """A warning related to an individual, e.g. punning."""
 
 
 class NoSuchLabelError(LookupError, AttributeError, EMMOntoPyException):
@@ -98,31 +94,71 @@ def get_label(entity):
     return repr(entity)
 
 
-def asstring(  # pylint: disable=too-many-return-statements,too-many-branches
-    expr, link="{name}", recursion_depth=0, exclude_object=False
-):
-    """Returns a string representation of `expr`, which may be an entity,
-    restriction, or logical expression of these.  `link` is a format
-    string for formatting references to entities or relations.  It may
-    contain the keywords "name", "url" and "lowerurl".
-    `recursion_depth` is the recursion depth and only intended for internal
-    use. If `exclude_object` is true, the object will be excluded in
-    restrictions.
+def getiriname(iri):
+    """Return name part of an IRI.
+
+    The name part is what follows after the last slash or hash.
     """
+    res = urllib.parse.urlparse(iri)
+    return res.fragment if res.fragment else res.path.rsplit("/", 1)[-1]
+
+
+def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
+    expr,
+    link="{ref}",
+    recursion_depth=0,
+    exclude_object=False,
+    ontology=None,
+):
+    """Returns a string representation of `expr`.
+
+    Arguments:
+        expr: The entity, restriction or a logical expression or these
+            to represent.
+        link: A template for links.  May contain the following variables:
+            - {iri}: The full IRI of the concept.
+            - {name}: Name-part of IRI.
+            - {ref}: "#{name}" if the concept is in the ontology, else "{iri}".
+            - {label}: The label of the concept.
+            - {lowerlabel}: The label of the concept in lower case and with
+              spaces replaced with hyphens.
+        recursion_depth: Recursion depth. Only intended for internal use.
+        exclude_object: If true, the object will be excluded in restrictions.
+        ontology: Ontology object.
+
+    Returns:
+        String representation of `expr`.
+    """
+    if ontology is None:
+        ontology = expr.ontology
 
     def fmt(entity):
         """Returns the formatted label of an entity."""
-        name = None
-        for attr in ("prefLabel", "label", "__name__", "name"):
-            if hasattr(entity, attr) and getattr(entity, attr):
-                name = getattr(entity, attr)
-                if not isinstance(name, str) and hasattr(name, "__getitem__"):
-                    name = name[0]
-                break
-        if not name:
-            name = str(entity).replace(".", ":")
-        url = name if re.match(r"^[a-z]+://", name) else "#" + name
-        return link.format(name=name, url=url, lowerurl=url.lower())
+        if isinstance(entity, str):
+            ent = ontology.world[entity]
+            if ent or entity in ontology:
+                entity = ent if ent else ontology.get_by_label(entity)
+                iri = entity.iri
+                label = get_label(entity)
+                name = getiriname(entity.iri)
+                ref = "#" + name
+            elif re.match(r"^[a-z]+://", entity):
+                ref = iri = entity
+                label = name = getiriname(entity)
+            else:
+                raise ValueError(f"not an IRI or in ontology: {entity}")
+        else:
+            iri = entity.iri
+            label = get_label(entity)
+            name = getiriname(entity.iri)
+            ref = "#" + name
+        return link.format(
+            name=name,
+            ref=ref,
+            iri=iri,
+            label=label,
+            lowerlabel=label.lower().replace(" ", "-"),
+        )
 
     if isinstance(expr, str):
         # return link.format(name=expr)
@@ -136,7 +172,13 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches
         ):
             res = fmt(expr.property)
         elif isinstance(expr.property, owlready2.Inverse):
-            res = f"Inverse({asstring(expr.property.property, link, recursion_depth + 1)})"  # pylint: disable=line-too-long
+            string = asstring(
+                expr.property.property,
+                link,
+                recursion_depth + 1,
+                ontology=ontology,
+            )
+            res = f"Inverse({string})"
         else:
             print(
                 f"*** WARNING: unknown restriction property: {expr.property!r}"
@@ -159,23 +201,34 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches
             res += f" {rlabel}"
 
         if not exclude_object:
-            if isinstance(expr.value, str):
-                res += f" {asstring(expr.value, link, recursion_depth + 1)!r}"
-            else:
-                res += f" {asstring(expr.value, link, recursion_depth + 1)}"
+            string = asstring(
+                expr.value, link, recursion_depth + 1, ontology=ontology
+            )
+            res += (
+                f" {string!r}" if isinstance(expr.value, str) else f" {string}"
+            )
         return res
     if isinstance(expr, owlready2.Or):
         res = " or ".join(
-            [asstring(c, link, recursion_depth + 1) for c in expr.Classes]
+            [
+                asstring(c, link, recursion_depth + 1, ontology=ontology)
+                for c in expr.Classes
+            ]
         )
         return res if recursion_depth == 0 else f"({res})"
     if isinstance(expr, owlready2.And):
         res = " and ".join(
-            [asstring(c, link, recursion_depth + 1) for c in expr.Classes]
+            [
+                asstring(c, link, recursion_depth + 1, ontology=ontology)
+                for c in expr.Classes
+            ]
         )
         return res if recursion_depth == 0 else f"({res})"
     if isinstance(expr, owlready2.Not):
-        return f"not {asstring(expr.Class, link, recursion_depth + 1)}"
+        string = asstring(
+            expr.Class, link, recursion_depth + 1, ontology=ontology
+        )
+        return f"not {string}"
     if isinstance(expr, owlready2.ThingClass):
         return fmt(expr)
     if isinstance(expr, owlready2.PropertyClass):
@@ -429,7 +482,7 @@ def write_catalog(
 
 
 def _validate_installed_version(
-    package: str, min_version: "Union[str, Version]"
+    package: str, min_version: "Union[str, Version, LegacyVersion]"
 ) -> bool:
     """Validate an installed package.
 
@@ -451,15 +504,16 @@ def _validate_installed_version(
     """
     # pylint: disable=import-outside-toplevel
     import importlib
+    from packaging.version import parse as parse_version, LegacyVersion, Version
 
     if isinstance(min_version, str):
         min_version = parse_version(min_version)
-    elif isinstance(min_version, Version):
+    elif isinstance(min_version, (LegacyVersion, Version)):
         # We have the format we want
         pass
     else:
         raise TypeError(
-            "min_version should be either a str or packaging.Version. "
+            "min_version should be either a str, LegacyVersion or Version. "
             "The latter classes being from the packaging.version module."
         )
 
