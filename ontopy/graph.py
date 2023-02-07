@@ -264,7 +264,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             self.edges = set()
         else:
             if ontology != graph.ontology:
-                ValueError(
+                raise ValueError(
                     "the same ontology must be used when extending a graph"
                 )
             self.dot = graph.dot.copy()
@@ -479,7 +479,6 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             raise RuntimeError(f'`object` "{obj}" must have been added')
         key = (subject, predicate, obj)
         if key not in self.edges:
-
             if edgelabel is None:
                 edgelabel = self.edgelabels
 
@@ -531,7 +530,6 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         entity = self.ontology[source] if isinstance(source, str) else source
         label = get_label(entity)
         for relation in entity.is_a:
-
             # isA
             if isinstance(
                 relation, (owlready2.ThingClass, owlready2.ObjectPropertyClass)

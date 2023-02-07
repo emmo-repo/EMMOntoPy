@@ -44,6 +44,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     imports: list = None,
     catalog: dict = None,
     force: bool = False,
+    input_ontology: Union[ontopy.ontology.Ontology, None] = None,
 ) -> Tuple[ontopy.ontology.Ontology, dict, dict]:
     """
     Creates an ontology from an Excel-file.
@@ -72,6 +73,12 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
         catalog: Imported ontologies with (name, full path) key/value-pairs.
         force: Forcibly make an ontology by skipping concepts
             that are erroneously defined or other errors in the excel sheet.
+        input_ontology: Ontology that should be updated.
+            Default is None,
+            which means that a completely new ontology is generated.
+            If an input_ontology to be updated is provided,
+            the metadata sheet in the excel sheet will not be considered.
+
 
     Returns:
         A tuple with the:
@@ -82,12 +89,12 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
               following keys:
 
                 - "already_defined": These are concepts that are already in the
-                    ontology, either because they were already added in a
+                    ontology, because they were already added in a
                     previous line of the excelfile/pandas dataframe, or because
-                    it is already defined in the imported ontologies.
+                    it is already defined in an imported ontology with the same
+                    base_iri as the newly created ontology.
                 - "in_imported_ontologies": Concepts that are defined in the
                     excel, but already exist in the imported ontologies.
-                    This is a subset of the 'already_defined'.
                 - "wrongly_defined": Concepts that are given an invalid
                     prefLabel (e.g. with a space in the name).
                 - "missing_parents": Concepts that are missing parents.
@@ -139,6 +146,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
         base_iri_from_metadata=base_iri_from_metadata,
         catalog=catalog,
         force=force,
+        input_ontology=input_ontology,
     )
 
 
@@ -150,6 +158,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     base_iri_from_metadata: bool = True,
     catalog: dict = None,
     force: bool = False,
+    input_ontology: Union[ontopy.ontology.Ontology, None] = None,
 ) -> Tuple[ontopy.ontology.Ontology, dict]:
     """
     Create an ontology from a pandas DataFrame.
@@ -166,19 +175,17 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     data = data[data["prefLabel"].str.len() > 0]
     data.reset_index(drop=True, inplace=True)
 
-    # Make new ontology
-    onto, catalog = get_metadata_from_dataframe(
-        metadata, base_iri, imports=imports
-    )
-    # Get a set of imported concepts
-    imported_concepts = {
-        concept.prefLabel.first() for concept in onto.get_entities()
-    }
+    if input_ontology:
+        onto = input_ontology
+        catalog = {}
+    else:  # Create new ontology
+        onto, catalog = get_metadata_from_dataframe(
+            metadata, base_iri, imports=imports
+        )
 
-    # Set given or default base_iri if base_iri_from_metadata is False.
-    if not base_iri_from_metadata:
-        onto.base_iri = base_iri
-
+        # Set given or default base_iri if base_iri_from_metadata is False.
+        if not base_iri_from_metadata:
+            onto.base_iri = base_iri
     labels = set(data["prefLabel"])
     for altlabel in data["altLabel"].str.strip():
         if not altlabel == "nan":
@@ -196,6 +203,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     }
 
     onto.sync_python_names()
+
     with onto:
         remaining_rows = set(range(len(data)))
         all_added_rows = []
@@ -206,20 +214,21 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 name = row["prefLabel"]
                 try:
                     onto.get_by_label(name)
-                    if not force:
-                        raise ExcelError(
-                            f'Concept "{name}" already in ontology'
+                    if onto.base_iri in [
+                        a.namespace.base_iri
+                        for a in onto.get_by_label_all(name)
+                    ]:
+                        if not force:
+                            raise ExcelError(
+                                f'Concept "{name}" already in ontology'
+                            )
+                        warnings.warn(
+                            f'Ignoring concept "{name}" since it is already in '
+                            "the ontology."
                         )
-                    warnings.warn(
-                        f'Ignoring concept "{name}" since it is already in '
-                        "the ontology."
-                    )
-                    concepts_with_errors["already_defined"].append(name)
-                    # What to do if we want to add info to this concept?
-                    # Should that be not allowed?
-                    # If it should be allowed the index has to be added to
-                    # added_rows
-                    continue
+                        concepts_with_errors["already_defined"].append(name)
+                        continue
+                    concepts_with_errors["in_imported_ontologies"].append(name)
                 except (ValueError, TypeError) as err:
                     warnings.warn(
                         f'Ignoring concept "{name}". '
@@ -229,7 +238,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     continue
                 except NoSuchLabelError:
                     pass
-
                 if row["subClassOf"] == "nan":
                     if not force:
                         raise ExcelError(f"{row[0]} has no subClassOf")
@@ -237,7 +245,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     concepts_with_errors["missing_parents"].append(name)
                 else:
                     parent_names = str(row["subClassOf"]).split(";")
-
                 parents = []
                 invalid_parent = False
                 for parent_name in parent_names:
@@ -389,10 +396,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     concepts_with_errors = {
         key: set(value) for key, value in concepts_with_errors.items()
     }
-    concepts_with_errors["in_imported_ontologies"] = concepts_with_errors[
-        "already_defined"
-    ].intersection(imported_concepts)
-
     return onto, catalog, concepts_with_errors
 
 

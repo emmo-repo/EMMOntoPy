@@ -18,11 +18,18 @@ def test_basic(emmo: "Ontology") -> None:
     # Add entity directly
     onto.new_entity("Hydrogen", emmo.Atom)
 
+    # Test that new entity is found by both version of get_by_label
+    assert onto.get_by_label("Hydrogen") == onto.Hydrogen
+    assert onto.get_by_label_all("Hydrogen") == [onto.Hydrogen]
+
+    onto.sync_attributes()
+    # Test that after sync_attributes, the entity is not counted more than once
+    assert onto.get_by_label_all("Hydrogen") == [onto.Hydrogen]
+
     with pytest.raises(LabelDefinitionError):
         onto.new_entity("Hydr ogen", emmo.Atom)
 
     with onto:
-
         # Add entity using python classes
         class Oxygen(emmo.Atom):
             """Oxygen atom."""
@@ -40,8 +47,6 @@ def test_basic(emmo: "Ontology") -> None:
         water = H2O()
         water.hasSpatialDirectPart = [H1, H2, O]
 
-    print(onto.label_annotations)
-    print(onto._label_annotations)
     name_prefix = "myonto_"
     onto.sync_attributes(name_policy="sequential", name_prefix=name_prefix)
     assert f"{onto.base_iri}{name_prefix}0" in onto
@@ -52,6 +57,15 @@ def test_basic(emmo: "Ontology") -> None:
     assert water.name.startswith("onto_")
     # A UUID is 32 chars long + 4 `-` chars = 36 chars
     assert len(water.name) == len(name_prefix) + 36
+    synced_uuid = water.name
+    onto.sync_attributes(name_policy="uuid", name_prefix=name_prefix)
+    assert synced_uuid == water.name
+
+    water.name = water.name[1:]
+    assert water.name.startswith("nto_")
+    onto.sync_attributes(name_policy="uuid", name_prefix=name_prefix)
+    assert synced_uuid != water.name
+    assert water.name.startswith("onto_")
 
 
 def test_sync_reasoner(testonto: "Ontology") -> None:

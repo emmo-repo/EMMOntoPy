@@ -270,7 +270,6 @@ def main(argv: list = None):
             graph2.serialize(destination=args.output, format=fmt)
 
         else:
-
             onto.save(
                 args.output,
                 format=output_format,

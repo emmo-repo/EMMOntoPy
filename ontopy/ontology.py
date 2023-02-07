@@ -220,8 +220,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             self.get_by_label(other)
         except NoSuchLabelError:
             return False
-        else:
-            return True
+        return True
 
     def __objclass__(self):
         # Play nice with inspect...
@@ -377,8 +376,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         entity = self.world.search(**{next(annotations): label})
         for key in annotations:
             entity.extend(self.world.search(**{key: label}))
+
         if self._special_labels and label in self._special_labels:
             entity.append(self._special_labels[label])
+
+        entity_accessed_directly = self.world[self.base_iri + label]
+        if entity_accessed_directly and entity_accessed_directly not in entity:
+            entity.append(entity_accessed_directly)
+
         if prefix:
             return [_ for _ in entity if _.namespace.ontology.prefix == prefix]
         return entity
@@ -534,7 +539,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     ):
         """Help function for load()."""
         web_protocol = "http://", "https://", "ftp://"
-
         url = str(filename) if filename else self.base_iri.rstrip("/#")
         if url.startswith(web_protocol):
             baseurl = os.path.dirname(url)
@@ -588,7 +592,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     )
             self.world._iri_mappings.update(iris)
         resolved_url = self.world._iri_mappings.get(url, url)
-
         # Append paths from catalog file to onto_path
         for path in sorted(dirs, reverse=True):
             if path not in owlready2.onto_path:
@@ -778,7 +781,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 fmt = revmap.get(format, format)
                 filename = f"{self.name}.{fmt}"
             else:
-                TypeError("`filename` and `format` cannot both be None.")
+                raise TypeError("`filename` and `format` cannot both be None.")
         filename = os.path.join(dir, filename)
         dir = Path(filename).resolve().parent
 
@@ -1107,6 +1110,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         should be updated.  Valid values are:
           None          not changed
           "uuid"        `name_prefix` followed by a global unique id (UUID).
+                        If the name is already valid accoridng to this standard
+                        it will not be regenerated.
           "sequential"  `name_prefix` followed a sequantial number.
         EMMO conventions imply ``name_policy=='uuid'``.
 
@@ -1125,7 +1130,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             if not hasattr(cls, "prefLabel"):
                 # no prefLabel - create new annotation property..
                 with self:
-
                     # pylint: disable=invalid-name,missing-class-docstring
                     # pylint: disable=unused-variable
                     class prefLabel(owlready2.label):
@@ -1161,9 +1165,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         )
         if name_policy == "uuid":
             for obj in chain:
-                obj.name = name_prefix + str(
-                    uuid.uuid5(uuid.NAMESPACE_DNS, obj.name)
-                )
+                try:
+                    # Passing the following means that the name is valid
+                    # and need not be regenerated.
+                    if not obj.name.startswith(name_prefix):
+                        raise ValueError
+                    uuid.UUID(obj.name.lstrip(name_prefix), version=5)
+                except ValueError:
+                    obj.name = name_prefix + str(
+                        uuid.uuid5(uuid.NAMESPACE_DNS, obj.name)
+                    )
         elif name_policy == "sequential":
             for obj in chain:
                 counter = 0
@@ -1453,7 +1464,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     return cur
                 if len(mro) == 0:
                     mros.remove(mro)
-        raise Exception("A closest common ancestor should always exist !")
+        raise EMMOntoPyException(
+            "A closest common ancestor should always exist !"
+        )
 
     def get_ancestors(self, classes, include="all", strict=True):
         """Return ancestors of all classes in `classes`.

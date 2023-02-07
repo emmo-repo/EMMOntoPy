@@ -1,5 +1,58 @@
 # Changelog
 
+## [v0.5.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.1) (2023-02-06)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.0...v0.5.1)
+
+**Merged pull requests:**
+
+- Fix ontodoc for bigmap [\#543](https://github.com/emmo-repo/EMMOntoPy/pull/543) ([jesper-friis](https://github.com/jesper-friis))
+
+## [v0.5.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.0) (2023-02-06)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.4.0...v0.5.0)
+
+**Fixed bugs:**
+
+- `LegacyVersion` does not exist in `packaging.version` [\#540](https://github.com/emmo-repo/EMMOntoPy/issues/540)
+- ontodoc: Expect `is_instance_of` property to be iterable [\#506](https://github.com/emmo-repo/EMMOntoPy/issues/506)
+- Reinstate `images/material.png` [\#495](https://github.com/emmo-repo/EMMOntoPy/issues/495)
+
+**Closed issues:**
+
+- Newest pylint \(2.15.4\) has intriduced some new rules. [\#534](https://github.com/emmo-repo/EMMOntoPy/issues/534)
+- sync\_attributes according to emmo convention regenerates a new iri even if it already has a valid one [\#525](https://github.com/emmo-repo/EMMOntoPy/issues/525)
+- Remove dependency on LegacyVersion of packaging [\#514](https://github.com/emmo-repo/EMMOntoPy/issues/514)
+- pytests are importing packaging 22.0 even though it is not allowed in requirements [\#513](https://github.com/emmo-repo/EMMOntoPy/issues/513)
+- ontodoc: adding annotations that are not strings fail [\#510](https://github.com/emmo-repo/EMMOntoPy/issues/510)
+- get\_by\_label\_all only works after sync\_attributes [\#502](https://github.com/emmo-repo/EMMOntoPy/issues/502)
+- excel2onto: support updating ontology  [\#501](https://github.com/emmo-repo/EMMOntoPy/issues/501)
+- excel2onto: allow to use prefLabel already in imported ontologies [\#500](https://github.com/emmo-repo/EMMOntoPy/issues/500)
+- Drop Python 3.6 support - extend Python \>3.7 support [\#486](https://github.com/emmo-repo/EMMOntoPy/issues/486)
+- Update pypi-release github action [\#482](https://github.com/emmo-repo/EMMOntoPy/issues/482)
+- Make workflows dispatchable [\#481](https://github.com/emmo-repo/EMMOntoPy/issues/481)
+- excel2onto: Read catalog file for imported ontology [\#474](https://github.com/emmo-repo/EMMOntoPy/issues/474)
+- Give option to write\_catalog for writing relative paths [\#473](https://github.com/emmo-repo/EMMOntoPy/issues/473)
+- excel2onto: add choice of prefix for imported ontologies [\#467](https://github.com/emmo-repo/EMMOntoPy/issues/467)
+
+**Merged pull requests:**
+
+- Fix fixtures for Python3.7 [\#536](https://github.com/emmo-repo/EMMOntoPy/pull/536) ([CasperWA](https://github.com/CasperWA))
+- Flb/fix to pylint2.15.4 [\#535](https://github.com/emmo-repo/EMMOntoPy/pull/535) ([francescalb](https://github.com/francescalb))
+- Bypass punning in ontodoc. [\#532](https://github.com/emmo-repo/EMMOntoPy/pull/532) ([francescalb](https://github.com/francescalb))
+- Added possibility to update ontology.  [\#527](https://github.com/emmo-repo/EMMOntoPy/pull/527) ([francescalb](https://github.com/francescalb))
+- Only generate new uuid if not already a valid one [\#526](https://github.com/emmo-repo/EMMOntoPy/pull/526) ([francescalb](https://github.com/francescalb))
+- Removed LegacyVersion from ontopy.utils [\#515](https://github.com/emmo-repo/EMMOntoPy/pull/515) ([francescalb](https://github.com/francescalb))
+- Added fix for adding annotations that are not strings in ontodoc [\#512](https://github.com/emmo-repo/EMMOntoPy/pull/512) ([francescalb](https://github.com/francescalb))
+- Do not trigger an emmocheck failure for ontologies with a foaf:logo annotation [\#509](https://github.com/emmo-repo/EMMOntoPy/pull/509) ([jesper-friis](https://github.com/jesper-friis))
+- New concepts allowed even if name alrady exists in imported ontologies [\#504](https://github.com/emmo-repo/EMMOntoPy/pull/504) ([francescalb](https://github.com/francescalb))
+- Corrected so that get\_by\_label\_all also returns all concepts [\#503](https://github.com/emmo-repo/EMMOntoPy/pull/503) ([francescalb](https://github.com/francescalb))
+- Added correct material.png figure in tool-instructions [\#498](https://github.com/emmo-repo/EMMOntoPy/pull/498) ([francescalb](https://github.com/francescalb))
+- Updated logo [\#494](https://github.com/emmo-repo/EMMOntoPy/pull/494) ([jesper-friis](https://github.com/jesper-friis))
+- Makeover for CI/CD workflows, pre-commit & MkDocs [\#485](https://github.com/emmo-repo/EMMOntoPy/pull/485) ([CasperWA](https://github.com/CasperWA))
+- write catalog now writes relative paths per default [\#483](https://github.com/emmo-repo/EMMOntoPy/pull/483) ([francescalb](https://github.com/francescalb))
+- Setting prefix explicitly in excelparser [\#470](https://github.com/emmo-repo/EMMOntoPy/pull/470) ([francescalb](https://github.com/francescalb))
+
 ## [v0.4.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.4.0) (2022-10-04)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.3.1...v0.4.0)
@@ -30,34 +83,22 @@
 
 **Merged pull requests:**
 
-- \[Auto-generated\] Update dependencies [\#480](https://github.com/emmo-repo/EMMOntoPy/pull/480) ([TEAM4-0](https://github.com/TEAM4-0))
 - Update from 'EMMO-python' -\> 'EMMOntoPy' [\#477](https://github.com/emmo-repo/EMMOntoPy/pull/477) ([CasperWA](https://github.com/CasperWA))
-- \[Auto-generated\] Update dependencies [\#471](https://github.com/emmo-repo/EMMOntoPy/pull/471) ([TEAM4-0](https://github.com/TEAM4-0))
 - Allow for adding prefix in manchester notation. [\#469](https://github.com/emmo-repo/EMMOntoPy/pull/469) ([francescalb](https://github.com/francescalb))
-- \[Auto-generated\] Update dependencies [\#466](https://github.com/emmo-repo/EMMOntoPy/pull/466) ([TEAM4-0](https://github.com/TEAM4-0))
-- \[Auto-generated\] Update dependencies [\#461](https://github.com/emmo-repo/EMMOntoPy/pull/461) ([TEAM4-0](https://github.com/TEAM4-0))
 - Fixed issue with exel2onto: not all relations are included in the generated ontology [\#458](https://github.com/emmo-repo/EMMOntoPy/pull/458) ([jesper-friis](https://github.com/jesper-friis))
 - Added documentation of excel2onto [\#456](https://github.com/emmo-repo/EMMOntoPy/pull/456) ([jesper-friis](https://github.com/jesper-friis))
 - factpluspluswrapper README file [\#453](https://github.com/emmo-repo/EMMOntoPy/pull/453) ([jesper-friis](https://github.com/jesper-friis))
-- \[Auto-generated\] Update dependencies [\#452](https://github.com/emmo-repo/EMMOntoPy/pull/452) ([TEAM4-0](https://github.com/TEAM4-0))
 - Improved get\_unabbreviated\_triples\(\) [\#449](https://github.com/emmo-repo/EMMOntoPy/pull/449) ([jesper-friis](https://github.com/jesper-friis))
 - Fix loading in windows, url paths [\#446](https://github.com/emmo-repo/EMMOntoPy/pull/446) ([francescalb](https://github.com/francescalb))
 - Fixed reading web destinations defined in catalog [\#445](https://github.com/emmo-repo/EMMOntoPy/pull/445) ([francescalb](https://github.com/francescalb))
-- \[Auto-generated\] Update dependencies [\#443](https://github.com/emmo-repo/EMMOntoPy/pull/443) ([TEAM4-0](https://github.com/TEAM4-0))
 - SUPPORT EMMO-beta4.0 [\#441](https://github.com/emmo-repo/EMMOntoPy/pull/441) ([francescalb](https://github.com/francescalb))
 - Support for userdefined prefixes [\#439](https://github.com/emmo-repo/EMMOntoPy/pull/439) ([francescalb](https://github.com/francescalb))
 - Flb/issue421 [\#438](https://github.com/emmo-repo/EMMOntoPy/pull/438) ([francescalb](https://github.com/francescalb))
 - Update demo [\#437](https://github.com/emmo-repo/EMMOntoPy/pull/437) ([jesper-friis](https://github.com/jesper-friis))
 - Silence false negative from pylint on github [\#436](https://github.com/emmo-repo/EMMOntoPy/pull/436) ([jesper-friis](https://github.com/jesper-friis))
 - Better error messages [\#435](https://github.com/emmo-repo/EMMOntoPy/pull/435) ([jesper-friis](https://github.com/jesper-friis))
-- \[Auto-generated\] Update dependencies [\#434](https://github.com/emmo-repo/EMMOntoPy/pull/434) ([TEAM4-0](https://github.com/TEAM4-0))
-- \[Auto-generated\] Update dependencies [\#432](https://github.com/emmo-repo/EMMOntoPy/pull/432) ([TEAM4-0](https://github.com/TEAM4-0))
-- \[Auto-generated\] Update dependencies [\#430](https://github.com/emmo-repo/EMMOntoPy/pull/430) ([TEAM4-0](https://github.com/TEAM4-0))
-- \[Auto-generated\] Update dependencies [\#425](https://github.com/emmo-repo/EMMOntoPy/pull/425) ([TEAM4-0](https://github.com/TEAM4-0))
-- \[Auto-generated\] Update dependencies [\#420](https://github.com/emmo-repo/EMMOntoPy/pull/420) ([TEAM4-0](https://github.com/TEAM4-0))
 - Updated logo. [\#418](https://github.com/emmo-repo/EMMOntoPy/pull/418) ([jesper-friis](https://github.com/jesper-friis))
 - cytoscapegraph fails with missing edge labels [\#414](https://github.com/emmo-repo/EMMOntoPy/pull/414) ([francescalb](https://github.com/francescalb))
-- \[Auto-generated\] Update dependencies [\#413](https://github.com/emmo-repo/EMMOntoPy/pull/413) ([TEAM4-0](https://github.com/TEAM4-0))
 
 ## [v0.3.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.3.1) (2022-05-08)
 
@@ -91,15 +132,10 @@
 - Updated docs python handler [\#408](https://github.com/emmo-repo/EMMOntoPy/pull/408) ([CasperWA](https://github.com/CasperWA))
 - Flb/get descendants [\#405](https://github.com/emmo-repo/EMMOntoPy/pull/405) ([francescalb](https://github.com/francescalb))
 - Corrected expected number of returned arguments [\#404](https://github.com/emmo-repo/EMMOntoPy/pull/404) ([jesper-friis](https://github.com/jesper-friis))
-- \[Auto-generated\] Update dependencies [\#402](https://github.com/emmo-repo/EMMOntoPy/pull/402) ([TEAM4-0](https://github.com/TEAM4-0))
-- \[Auto-generated\] Update dependencies [\#400](https://github.com/emmo-repo/EMMOntoPy/pull/400) ([TEAM4-0](https://github.com/TEAM4-0))
 - Add functionality for setting name part of IRI to prefLabel [\#399](https://github.com/emmo-repo/EMMOntoPy/pull/399) ([jesper-friis](https://github.com/jesper-friis))
 - create\_from\_excel/pandas return as list of concepts that are worngly defined in the excelfile [\#396](https://github.com/emmo-repo/EMMOntoPy/pull/396) ([francescalb](https://github.com/francescalb))
-- \[Auto-generated\] Update dependencies [\#395](https://github.com/emmo-repo/EMMOntoPy/pull/395) ([TEAM4-0](https://github.com/TEAM4-0))
 - Download EMMO from raw.github deirectly as redirection is broken [\#392](https://github.com/emmo-repo/EMMOntoPy/pull/392) ([francescalb](https://github.com/francescalb))
-- \[Auto-generated\] Update dependencies [\#389](https://github.com/emmo-repo/EMMOntoPy/pull/389) ([TEAM4-0](https://github.com/TEAM4-0))
 - Workaround for failing test [\#385](https://github.com/emmo-repo/EMMOntoPy/pull/385) ([CasperWA](https://github.com/CasperWA))
-- \[Auto-generated\] Update dependencies [\#380](https://github.com/emmo-repo/EMMOntoPy/pull/380) ([TEAM4-0](https://github.com/TEAM4-0))
 - fix \#313 remove handle [\#315](https://github.com/emmo-repo/EMMOntoPy/pull/315) ([sygout](https://github.com/sygout))
 
 ## [v0.2.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.2.0) (2022-03-02)
@@ -114,22 +150,20 @@
 - Standard dunder/magic methods for `Ontology` [\#228](https://github.com/emmo-repo/EMMOntoPy/issues/228)
 - Update code styling and linting [\#223](https://github.com/emmo-repo/EMMOntoPy/issues/223)
 - Fix checking PR body & improve error message in CD [\#318](https://github.com/emmo-repo/EMMOntoPy/pull/318) ([CasperWA](https://github.com/CasperWA))
-- New workflows for dependabot automation [\#285](https://github.com/emmo-repo/EMMOntoPy/pull/285) ([CasperWA](https://github.com/CasperWA))
 
 **Fixed bugs:**
 
 - GH GraphQL type issue for auto-merge workflow [\#374](https://github.com/emmo-repo/EMMOntoPy/issues/374)
 - Missing warning for excel parser relations and problem with "nan" [\#365](https://github.com/emmo-repo/EMMOntoPy/issues/365)
-- Ignore NumPy `safety` warning [\#360](https://github.com/emmo-repo/EMMOntoPy/issues/360)
 - Seting metadata in excelparser fails if there are no imported ontologies. [\#331](https://github.com/emmo-repo/EMMOntoPy/issues/331)
 - Edge-case fails CD workflow for dependabot [\#319](https://github.com/emmo-repo/EMMOntoPy/issues/319)
 - Ontodoc failing due to wrong `rdflib` import [\#306](https://github.com/emmo-repo/EMMOntoPy/issues/306)
 - Overwriting `get_triples()` method [\#280](https://github.com/emmo-repo/EMMOntoPy/issues/280)
 - OpenModel logo not loading in README [\#278](https://github.com/emmo-repo/EMMOntoPy/issues/278)
+- Disable FOAF test as xmlns.com is down [\#276](https://github.com/emmo-repo/EMMOntoPy/issues/276)
 
 **Closed issues:**
 
-- Add NumPy as an explicit dependency [\#359](https://github.com/emmo-repo/EMMOntoPy/issues/359)
 - Use TEAM 4.0\[bot\] for GH Actions jobs [\#352](https://github.com/emmo-repo/EMMOntoPy/issues/352)
 - \_get\_triples\_spo take argumens s, and p, not subject and predicate [\#350](https://github.com/emmo-repo/EMMOntoPy/issues/350)
 - Add --force to excelparser [\#333](https://github.com/emmo-repo/EMMOntoPy/issues/333)
@@ -142,43 +176,33 @@
 - Let ontology.new\_entity acccept one or more parents directly [\#294](https://github.com/emmo-repo/EMMOntoPy/issues/294)
 - Make ManchesterSyntaxParser that returns Owlready2 [\#293](https://github.com/emmo-repo/EMMOntoPy/issues/293)
 - onto.new\_entity should throw Error if label name consists of more than one word [\#290](https://github.com/emmo-repo/EMMOntoPy/issues/290)
+- ReadTheDocs [\#288](https://github.com/emmo-repo/EMMOntoPy/issues/288)
 - Add logo to README [\#287](https://github.com/emmo-repo/EMMOntoPy/issues/287)
 - Write EMMO-python is deprecated and link to EMMOtopy on PyPi [\#269](https://github.com/emmo-repo/EMMOntoPy/issues/269)
+- Consider MarkDown header styling [\#231](https://github.com/emmo-repo/EMMOntoPy/issues/231)
 
 **Merged pull requests:**
 
-- \[Auto-generated\] Update dependencies [\#378](https://github.com/emmo-repo/EMMOntoPy/pull/378) ([TEAM4-0](https://github.com/TEAM4-0))
 - Use `ID!` type instead of `String!` [\#375](https://github.com/emmo-repo/EMMOntoPy/pull/375) ([CasperWA](https://github.com/CasperWA))
-- \[Auto-generated\] Update dependencies [\#371](https://github.com/emmo-repo/EMMOntoPy/pull/371) ([TEAM4-0](https://github.com/TEAM4-0))
 - Avoided infinite recursion when loading catalog files that recursively [\#370](https://github.com/emmo-repo/EMMOntoPy/pull/370) ([jesper-friis](https://github.com/jesper-friis))
-- \[Auto-generated\] Update dependencies [\#367](https://github.com/emmo-repo/EMMOntoPy/pull/367) ([TEAM4-0](https://github.com/TEAM4-0))
 - Warning relation excelparser [\#366](https://github.com/emmo-repo/EMMOntoPy/pull/366) ([sygout](https://github.com/sygout))
 - Close temporary file before reading it [\#364](https://github.com/emmo-repo/EMMOntoPy/pull/364) ([jesper-friis](https://github.com/jesper-friis))
 - Ignore safety ID 44715 + add numpy dependency [\#361](https://github.com/emmo-repo/EMMOntoPy/pull/361) ([CasperWA](https://github.com/CasperWA))
-- \[Auto-generated\] Update dependencies [\#358](https://github.com/emmo-repo/EMMOntoPy/pull/358) ([TEAM4-0](https://github.com/TEAM4-0))
-- \[Auto-generated\] Update dependencies [\#357](https://github.com/emmo-repo/EMMOntoPy/pull/357) ([TEAM4-0](https://github.com/TEAM4-0))
 - Use TEAM 4.0\[bot\] [\#353](https://github.com/emmo-repo/EMMOntoPy/pull/353) ([CasperWA](https://github.com/CasperWA))
 - Changed arguments in \_has\_obj\_triples\_spo [\#351](https://github.com/emmo-repo/EMMOntoPy/pull/351) ([francescalb](https://github.com/francescalb))
-- \[Auto-generated\] Update dependencies [\#349](https://github.com/emmo-repo/EMMOntoPy/pull/349) ([francescalb](https://github.com/francescalb))
 - Fix serialised ontology iri [\#341](https://github.com/emmo-repo/EMMOntoPy/pull/341) ([jesper-friis](https://github.com/jesper-friis))
 - Corrected parsing cardinality restrictions [\#340](https://github.com/emmo-repo/EMMOntoPy/pull/340) ([jesper-friis](https://github.com/jesper-friis))
 - When visualising restrictions, annotate the edges with the restriction type by default [\#339](https://github.com/emmo-repo/EMMOntoPy/pull/339) ([jesper-friis](https://github.com/jesper-friis))
-- \[Auto-generated\] Update dependencies [\#338](https://github.com/emmo-repo/EMMOntoPy/pull/338) ([francescalb](https://github.com/francescalb))
 - Flb/update excel parser accroding to thermodynamics example [\#336](https://github.com/emmo-repo/EMMOntoPy/pull/336) ([francescalb](https://github.com/francescalb))
-- \[Auto-generated\] Update dependencies [\#330](https://github.com/emmo-repo/EMMOntoPy/pull/330) ([francescalb](https://github.com/francescalb))
 - Added sconverting Posix to str in get\_ontology [\#327](https://github.com/emmo-repo/EMMOntoPy/pull/327) ([francescalb](https://github.com/francescalb))
-- \[Auto-generated\] Update dependencies [\#324](https://github.com/emmo-repo/EMMOntoPy/pull/324) ([francescalb](https://github.com/francescalb))
 - Added package specific base exception and base warning for EMMOntoPy [\#322](https://github.com/emmo-repo/EMMOntoPy/pull/322) ([francescalb](https://github.com/francescalb))
 - Added checking that label is string in get\_by\_label [\#312](https://github.com/emmo-repo/EMMOntoPy/pull/312) ([francescalb](https://github.com/francescalb))
 - Make excelparser that converts a filled excel sheet to an ontology [\#309](https://github.com/emmo-repo/EMMOntoPy/pull/309) ([francescalb](https://github.com/francescalb))
-- \[Auto-generated\] Update dependencies [\#308](https://github.com/emmo-repo/EMMOntoPy/pull/308) ([francescalb](https://github.com/francescalb))
 - Fix ontoconvert rdflib import [\#307](https://github.com/emmo-repo/EMMOntoPy/pull/307) ([CasperWA](https://github.com/CasperWA))
 - Check first versionIRI then versionInfo in ontology.get\_version\(\) [\#301](https://github.com/emmo-repo/EMMOntoPy/pull/301) ([francescalb](https://github.com/francescalb))
-- \[Auto-generated\] Update dependencies [\#300](https://github.com/emmo-repo/EMMOntoPy/pull/300) ([francescalb](https://github.com/francescalb))
 - Removed .readthedocs.yml [\#298](https://github.com/emmo-repo/EMMOntoPy/pull/298) ([jesper-friis](https://github.com/jesper-friis))
 - Added support for evaluating Manchester expression to owlready2 [\#296](https://github.com/emmo-repo/EMMOntoPy/pull/296) ([jesper-friis](https://github.com/jesper-friis))
 - Added functionality for more than one parent in new\_entity [\#295](https://github.com/emmo-repo/EMMOntoPy/pull/295) ([francescalb](https://github.com/francescalb))
-- \[Auto-generated\] Update dependencies [\#292](https://github.com/emmo-repo/EMMOntoPy/pull/292) ([francescalb](https://github.com/francescalb))
 - Added test for label name length in ontology.new\_entity [\#291](https://github.com/emmo-repo/EMMOntoPy/pull/291) ([francescalb](https://github.com/francescalb))
 - add logo to Readme and doc [\#289](https://github.com/emmo-repo/EMMOntoPy/pull/289) ([m-abdollahi](https://github.com/m-abdollahi))
 - Improved representation of blank nodes [\#283](https://github.com/emmo-repo/EMMOntoPy/pull/283) ([jesper-friis](https://github.com/jesper-friis))
@@ -243,12 +267,9 @@
 - Reset version to 0.1.0 [\#271](https://github.com/emmo-repo/EMMOntoPy/pull/271) ([CasperWA](https://github.com/CasperWA))
 - Update README with PyPI and deprecation msgs [\#270](https://github.com/emmo-repo/EMMOntoPy/pull/270) ([CasperWA](https://github.com/CasperWA))
 - Added option: EMMObased = False in ontology.load\(\) [\#262](https://github.com/emmo-repo/EMMOntoPy/pull/262) ([francescalb](https://github.com/francescalb))
-- Update pyyaml requirement from \<6,\>=5.4.1 to \>=5.4.1,\<7 [\#260](https://github.com/emmo-repo/EMMOntoPy/pull/260) ([dependabot[bot]](https://github.com/apps/dependabot))
-- Update owlready2 requirement from !=0.32,!=0.34,\<0.35,\>=0.28 to \>=0.28,!=0.32,!=0.34,\<0.36 [\#259](https://github.com/emmo-repo/EMMOntoPy/pull/259) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Added new test "test\_physical\_quantity\_dimension" [\#258](https://github.com/emmo-repo/EMMOntoPy/pull/258) ([jesper-friis](https://github.com/jesper-friis))
 - Add `packaging` to list of requirements [\#256](https://github.com/emmo-repo/EMMOntoPy/pull/256) ([CasperWA](https://github.com/CasperWA))
 - Fix MkDocs build warnings and CI job [\#254](https://github.com/emmo-repo/EMMOntoPy/pull/254) ([CasperWA](https://github.com/CasperWA))
-- Update mkdocstrings requirement from ~=0.16.1 to ~=0.16.2 [\#253](https://github.com/emmo-repo/EMMOntoPy/pull/253) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Update dependencies [\#252](https://github.com/emmo-repo/EMMOntoPy/pull/252) ([CasperWA](https://github.com/CasperWA))
 - Add OpenModel contributing project [\#247](https://github.com/emmo-repo/EMMOntoPy/pull/247) ([francescalb](https://github.com/francescalb))
 - Automate documentation releases [\#242](https://github.com/emmo-repo/EMMOntoPy/pull/242) ([CasperWA](https://github.com/CasperWA))
@@ -256,7 +277,6 @@
 - Ensure all produced files from tests are in a temp dir [\#239](https://github.com/emmo-repo/EMMOntoPy/pull/239) ([CasperWA](https://github.com/CasperWA))
 - Changed EMMO to be acronym for Elemental Multiperspective Material Ontology [\#238](https://github.com/emmo-repo/EMMOntoPy/pull/238) ([francescalb](https://github.com/francescalb))
 - Use width in img HTML [\#235](https://github.com/emmo-repo/EMMOntoPy/pull/235) ([CasperWA](https://github.com/CasperWA))
-- Update graphviz requirement from \<0.17,\>=0.16 to \>=0.16,\<0.18 [\#229](https://github.com/emmo-repo/EMMOntoPy/pull/229) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Added function to load the emmo \(the ontology\) directly [\#226](https://github.com/emmo-repo/EMMOntoPy/pull/226) ([francescalb](https://github.com/francescalb))
 - Created pull request template [\#225](https://github.com/emmo-repo/EMMOntoPy/pull/225) ([francescalb](https://github.com/francescalb))
 - Setup new documentation framework [\#222](https://github.com/emmo-repo/EMMOntoPy/pull/222) ([CasperWA](https://github.com/CasperWA))
@@ -286,10 +306,6 @@
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v1.0.0...v1.0.1)
 
-**Implemented enhancements:**
-
-- Specify version ranges for dependencies [\#155](https://github.com/emmo-repo/EMMOntoPy/issues/155)
-
 **Fixed bugs:**
 
 - Windows paths are not handled properly [\#147](https://github.com/emmo-repo/EMMOntoPy/issues/147)
@@ -317,12 +333,8 @@
 - Changed requirements to greater than [\#179](https://github.com/emmo-repo/EMMOntoPy/pull/179) ([francescalb](https://github.com/francescalb))
 - Owread2-0.32 not accepted die to error in owlready2 triplelite [\#178](https://github.com/emmo-repo/EMMOntoPy/pull/178) ([francescalb](https://github.com/francescalb))
 - Fixed import of defaultstyle in ontograph-tool [\#177](https://github.com/emmo-repo/EMMOntoPy/pull/177) ([francescalb](https://github.com/francescalb))
-- Update pyyaml requirement from ~=5.4.0 to ~=5.4.1 [\#171](https://github.com/emmo-repo/EMMOntoPy/pull/171) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Updated pygments req to at least 2.7.4 because of high seq alert [\#168](https://github.com/emmo-repo/EMMOntoPy/pull/168) ([francescalb](https://github.com/francescalb))
 - Owlready requirement \>0.28 [\#167](https://github.com/emmo-repo/EMMOntoPy/pull/167) ([francescalb](https://github.com/francescalb))
-- Bump actions/setup-python from 2 to 2.2.2 [\#166](https://github.com/emmo-repo/EMMOntoPy/pull/166) ([dependabot[bot]](https://github.com/apps/dependabot))
-- Bump actions/checkout from 2 to 2.3.4 [\#165](https://github.com/emmo-repo/EMMOntoPy/pull/165) ([dependabot[bot]](https://github.com/apps/dependabot))
-- Bump owlready2 from 0.30 to 0.31 [\#164](https://github.com/emmo-repo/EMMOntoPy/pull/164) ([dependabot[bot]](https://github.com/apps/dependabot))
 - WIP: Ipycytoscape [\#163](https://github.com/emmo-repo/EMMOntoPy/pull/163) ([francescalb](https://github.com/francescalb))
 - Made it possible to load other ontologies like foaf [\#162](https://github.com/emmo-repo/EMMOntoPy/pull/162) ([jesper-friis](https://github.com/jesper-friis))
 - Added get\_label instead of asstring [\#160](https://github.com/emmo-repo/EMMOntoPy/pull/160) ([francescalb](https://github.com/francescalb))
@@ -331,7 +343,6 @@
 - Make one get label [\#154](https://github.com/emmo-repo/EMMOntoPy/pull/154) ([francescalb](https://github.com/francescalb))
 - Issue150 ontograph cannotload emmo inferred directly [\#151](https://github.com/emmo-repo/EMMOntoPy/pull/151) ([francescalb](https://github.com/francescalb))
 - Added Fact++ in tools documentation [\#149](https://github.com/emmo-repo/EMMOntoPy/pull/149) ([francescalb](https://github.com/francescalb))
-- Bump owlready2 from 0.29 to 0.30 [\#148](https://github.com/emmo-repo/EMMOntoPy/pull/148) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Improved issue reporting in emmocheck [\#146](https://github.com/emmo-repo/EMMOntoPy/pull/146) ([jesper-friis](https://github.com/jesper-friis))
 
 ## [v1.0.0](https://github.com/emmo-repo/EMMOntoPy/tree/v1.0.0) (2021-03-25)
@@ -371,7 +382,6 @@
 **Merged pull requests:**
 
 - Fixed reading xml as 'rdfxml' [\#139](https://github.com/emmo-repo/EMMOntoPy/pull/139) ([francescalb](https://github.com/francescalb))
-- Bump owlready2 from 0.28 to 0.29 [\#136](https://github.com/emmo-repo/EMMOntoPy/pull/136) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Added wu\_palmer\_measure for semantic similarity [\#135](https://github.com/emmo-repo/EMMOntoPy/pull/135) ([francescalb](https://github.com/francescalb))
 
 ## [v1.0.0-alpha-28](https://github.com/emmo-repo/EMMOntoPy/tree/v1.0.0-alpha-28) (2021-03-09)
@@ -386,7 +396,6 @@
 **Merged pull requests:**
 
 - Version updated for rel of v0.28 [\#133](https://github.com/emmo-repo/EMMOntoPy/pull/133) ([francescalb](https://github.com/francescalb))
-- Bump owlready2 from 0.27 to 0.28 [\#132](https://github.com/emmo-repo/EMMOntoPy/pull/132) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Load ontology [\#131](https://github.com/emmo-repo/EMMOntoPy/pull/131) ([jesper-friis](https://github.com/jesper-friis))
 - Optimised label lookup in ontology and dir listing. It is now much faster [\#127](https://github.com/emmo-repo/EMMOntoPy/pull/127) ([jesper-friis](https://github.com/jesper-friis))
 - Use catalog by default [\#126](https://github.com/emmo-repo/EMMOntoPy/pull/126) ([jesper-friis](https://github.com/jesper-friis))
@@ -413,7 +422,6 @@
 **Merged pull requests:**
 
 - Added functionality to document domain ontologies [\#124](https://github.com/emmo-repo/EMMOntoPy/pull/124) ([jesper-friis](https://github.com/jesper-friis))
-- Bump owlready2 from 0.25 to 0.27 [\#121](https://github.com/emmo-repo/EMMOntoPy/pull/121) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Made ontoconvert and ontograph tools executable in linux [\#120](https://github.com/emmo-repo/EMMOntoPy/pull/120) ([jesper-friis](https://github.com/jesper-friis))
 - Update CI  [\#119](https://github.com/emmo-repo/EMMOntoPy/pull/119) ([CasperWA](https://github.com/CasperWA))
 - Update publish workflow + add dependabot [\#116](https://github.com/emmo-repo/EMMOntoPy/pull/116) ([CasperWA](https://github.com/CasperWA))
@@ -467,7 +475,6 @@
 
 - Release 1.0.0-alpha-23 [\#104](https://github.com/emmo-repo/EMMOntoPy/pull/104) ([jesper-friis](https://github.com/jesper-friis))
 - Allow to load turtle ontologies without catalog file. [\#102](https://github.com/emmo-repo/EMMOntoPy/pull/102) ([jesper-friis](https://github.com/jesper-friis))
-- Bump junit from 4.11 to 4.13.1 in /emmo/factpluspluswrapper/java [\#101](https://github.com/emmo-repo/EMMOntoPy/pull/101) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Updated README file [\#100](https://github.com/emmo-repo/EMMOntoPy/pull/100) ([jesper-friis](https://github.com/jesper-friis))
 - Changed the sync\_reasoner\(\) method to use FaCT++ as the default reasoner [\#94](https://github.com/emmo-repo/EMMOntoPy/pull/94) ([jesper-friis](https://github.com/jesper-friis))
 - Add reasoning [\#93](https://github.com/emmo-repo/EMMOntoPy/pull/93) ([jesper-friis](https://github.com/jesper-friis))

@@ -200,7 +200,7 @@ optional arguments:
 The figure below is generated with the following command:
 
 ```console
-ontograph --root=Material --relations=all --legend emmo-inferred material.png
+ontograph --root=Material --relations=all --legend --format=png emmo-inferred material.png
 ```
 
 ![Graph generated with the ontograph tool.](images/material.png)
