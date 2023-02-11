@@ -140,25 +140,22 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
     def fmt(entity):
         """Returns the formatted label of an entity."""
         if isinstance(entity, str):
-            ent = ontology.world[entity]
-            if ent or (" " not in entity and entity in ontology):
-                entity = ent if ent else ontology.get_by_label(entity)
-                iri = entity.iri
-                label = get_label(entity)
-                name = getiriname(entity.iri)
-            elif re.match(r"^[a-z]+://", entity):
-                iri = entity
-                label = name = getiriname(entity)
-            elif re.match(r"^[a-z_+-]+:[a-zA-Z_][a-zA-Z0-9_-]*$", entity):
-                return entity.split(":", 1)[1]
-            elif re.match(r"^[a-z_+-]+\.[a-zA-Z_][a-zA-Z0-9_-]*$", entity):
-                return entity.split(".", 1)[1]
+            if ontology and ontology.world[entity]:
+                iri = ontology.world[entity].iri
+            elif (
+                ontology
+                and re.match("^[a-zA-Z0-9_+-]+$", entity)
+                and entity in ontology
+            ):
+                iri = ontology[entity].iri
             else:
-                return entity
+                # This may not be a valid IRI, but the best we can do
+                iri = entity
+            label = entity
         else:
             iri = entity.iri
             label = get_label(entity)
-            name = getiriname(entity.iri)
+        name = getiriname(iri)
         start = iri.split("#", 1)[0] if "#" in iri else iri.rsplit("/", 1)[0]
         ref = f"#{name}" if ontology.base_iri.startswith(start) else iri
         return link.format(
