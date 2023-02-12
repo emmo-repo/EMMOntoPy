@@ -19,7 +19,7 @@
         <link rel="next" href="../factpluspluswrapper/factppgraph/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.11">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.12">
     
     
       
@@ -916,6 +916,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.utils.getiriname" class="md-nav__link">
+    getiriname()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.utils.infer_version" class="md-nav__link">
     infer_version()
   </a>
@@ -1182,6 +1189,13 @@
         <li class="md-nav__item">
   <a href="#ontopy.utils.get_label" class="md-nav__link">
     get_label()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.getiriname" class="md-nav__link">
+    getiriname()
   </a>
   
 </li>
@@ -1605,51 +1619,142 @@ is squashed and/or inferred.</p>
 
 
 <h2 class="doc doc-heading" id="ontopy.utils.asstring">
-<code class="highlight language-python"><span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">recursion_depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_object</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{lowerlabel}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">recursion_depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_object</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.utils.asstring" title="Permanent link">&para;</a></h2>
 
     <div class="doc doc-contents ">
 
-      <p>Returns a string representation of <code>expr</code>, which may be an entity,
-restriction, or logical expression of these.  <code>link</code> is a format
-string for formatting references to entities or relations.  It may
-contain the keywords "name", "url" and "lowerurl".
-<code>recursion_depth</code> is the recursion depth and only intended for internal
-use. If <code>exclude_object</code> is true, the object will be excluded in
-restrictions.</p>
+      <p>Returns a string representation of <code>expr</code>.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>expr</code></td>
+        <td></td>
+        <td><p>The entity, restriction or a logical expression or these
+to represent.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>link</code></td>
+        <td></td>
+        <td><p>A template for links.  May contain the following variables:
+- {iri}: The full IRI of the concept.
+- {name}: Name-part of IRI.
+- {ref}: "#{name}" if the base iri of hte ontology has the same
+  root as {iri}, otherwise "{iri}".
+- {label}: The label of the concept.
+- {lowerlabel}: The label of the concept in lower case and with
+  spaces replaced with hyphens.</p></td>
+        <td><code>&#39;{lowerlabel}&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>recursion_depth</code></td>
+        <td></td>
+        <td><p>Recursion depth. Only intended for internal use.</p></td>
+        <td><code>0</code></td>
+      </tr>
+      <tr>
+        <td><code>exclude_object</code></td>
+        <td></td>
+        <td><p>If true, the object will be excluded in restrictions.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>ontology</code></td>
+        <td></td>
+        <td><p>Ontology object.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>str</code></td>
+      <td><p>String representation of <code>expr</code>.</p></td>
+    </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">asstring</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-return-statements,too-many-branches,too-many-statements</span>
-    <span class="n">expr</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">recursion_depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_object</span><span class="o">=</span><span class="kc">False</span>
-<span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a string representation of `expr`, which may be an entity,</span>
-<span class="sd">    restriction, or logical expression of these.  `link` is a format</span>
-<span class="sd">    string for formatting references to entities or relations.  It may</span>
-<span class="sd">    contain the keywords &quot;name&quot;, &quot;url&quot; and &quot;lowerurl&quot;.</span>
-<span class="sd">    `recursion_depth` is the recursion depth and only intended for internal</span>
-<span class="sd">    use. If `exclude_object` is true, the object will be excluded in</span>
-<span class="sd">    restrictions.</span>
+    <span class="n">expr</span><span class="p">,</span>
+    <span class="n">link</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{lowerlabel}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">recursion_depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">exclude_object</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">ontology</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a string representation of `expr`.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        expr: The entity, restriction or a logical expression or these</span>
+<span class="sd">            to represent.</span>
+<span class="sd">        link: A template for links.  May contain the following variables:</span>
+<span class="sd">            - {iri}: The full IRI of the concept.</span>
+<span class="sd">            - {name}: Name-part of IRI.</span>
+<span class="sd">            - {ref}: &quot;#{name}&quot; if the base iri of hte ontology has the same</span>
+<span class="sd">              root as {iri}, otherwise &quot;{iri}&quot;.</span>
+<span class="sd">            - {label}: The label of the concept.</span>
+<span class="sd">            - {lowerlabel}: The label of the concept in lower case and with</span>
+<span class="sd">              spaces replaced with hyphens.</span>
+<span class="sd">        recursion_depth: Recursion depth. Only intended for internal use.</span>
+<span class="sd">        exclude_object: If true, the object will be excluded in restrictions.</span>
+<span class="sd">        ontology: Ontology object.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        String representation of `expr`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">ontology</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ontology</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">ontology</span>
 
     <span class="k">def</span> <span class="nf">fmt</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the formatted label of an entity.&quot;&quot;&quot;</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;__getitem__&quot;</span><span class="p">):</span>
-                    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">break</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">entity</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">):</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">entity</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">ontology</span> <span class="ow">and</span> <span class="n">ontology</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">entity</span><span class="p">]:</span>
+                <span class="n">iri</span> <span class="o">=</span> <span class="n">ontology</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span><span class="o">.</span><span class="n">iri</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">ontology</span>
+                <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^[a-zA-Z0-9_+-]+$&quot;</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">ontology</span>
+            <span class="p">):</span>
+                <span class="n">iri</span> <span class="o">=</span> <span class="n">ontology</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span><span class="o">.</span><span class="n">iri</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="n">name</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[a-z]+://&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="n">name</span>
-        <span class="k">return</span> <span class="n">link</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">lowerurl</span><span class="o">=</span><span class="n">url</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+                <span class="c1"># This may not be a valid IRI, but the best we can do</span>
+                <span class="n">iri</span> <span class="o">=</span> <span class="n">entity</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">entity</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">iri</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">iri</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">getiriname</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">iri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;#&quot;</span> <span class="ow">in</span> <span class="n">iri</span> <span class="k">else</span> <span class="n">iri</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">ontology</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="k">else</span> <span class="n">iri</span>
+        <span class="k">return</span> <span class="n">link</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">ref</span><span class="o">=</span><span class="n">ref</span><span class="p">,</span>
+            <span class="n">iri</span><span class="o">=</span><span class="n">iri</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+            <span class="n">lowerlabel</span><span class="o">=</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="c1"># return link.format(name=expr)</span>
@@ -1663,7 +1768,13 @@ restrictions.</p>
         <span class="p">):</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Inverse</span><span class="p">):</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Inverse(</span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="o">.</span><span class="n">property</span><span class="p">,</span><span class="w"> </span><span class="n">link</span><span class="p">,</span><span class="w"> </span><span class="n">recursion_depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>  <span class="c1"># pylint: disable=line-too-long</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span>
+                <span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="o">.</span><span class="n">property</span><span class="p">,</span>
+                <span class="n">link</span><span class="p">,</span>
+                <span class="n">recursion_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="n">ontology</span><span class="o">=</span><span class="n">ontology</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Inverse(</span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2">)&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;*** WARNING: unknown restriction property: </span><span class="si">{</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="si">!r}</span><span class="s2">&quot;</span>
@@ -1686,23 +1797,34 @@ restrictions.</p>
             <span class="n">res</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">rlabel</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">exclude_object</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="n">res</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">link</span><span class="p">,</span><span class="w"> </span><span class="n">recursion_depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">!r}</span><span class="s2">&quot;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">res</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">link</span><span class="p">,</span><span class="w"> </span><span class="n">recursion_depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span>
+                <span class="n">expr</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">recursion_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">ontology</span>
+            <span class="p">)</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">string</span><span class="si">!r}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Or</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="s2">&quot; or &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">asstring</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">recursion_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">Classes</span><span class="p">]</span>
+            <span class="p">[</span>
+                <span class="n">asstring</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">recursion_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">ontology</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">Classes</span>
+            <span class="p">]</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span> <span class="k">if</span> <span class="n">recursion_depth</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">)&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">And</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="s2">&quot; and &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">asstring</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">recursion_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">Classes</span><span class="p">]</span>
+            <span class="p">[</span>
+                <span class="n">asstring</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">recursion_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">ontology</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">Classes</span>
+            <span class="p">]</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span> <span class="k">if</span> <span class="n">recursion_depth</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">)&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Not</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;not </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">Class</span><span class="p">,</span><span class="w"> </span><span class="n">link</span><span class="p">,</span><span class="w"> </span><span class="n">recursion_depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span>
+            <span class="n">expr</span><span class="o">.</span><span class="n">Class</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">recursion_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">ontology</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;not </span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">PropertyClass</span><span class="p">):</span>
@@ -2017,6 +2139,38 @@ local file names</p></td>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">entity</span>
     <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 class="doc doc-heading" id="ontopy.utils.getiriname">
+<code class="highlight language-python"><span class="n">getiriname</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#ontopy.utils.getiriname" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Return name part of an IRI.</p>
+<p>The name part is what follows after the last slash or hash.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">getiriname</span><span class="p">(</span><span class="n">iri</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return name part of an IRI.</span>
+
+<span class="sd">    The name part is what follows after the last slash or hash.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">fragment</span> <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">fragment</span> <span class="k">else</span> <span class="n">res</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </code></pre></div>
         </details>
     </div>
@@ -2552,7 +2706,7 @@ If false, an existing file will be overwritten.</p></td>
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.db81ec45.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.6df46069.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.4b2c34cd.min.js"></script>
       
     
   </body>

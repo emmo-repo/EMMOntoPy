@@ -19,7 +19,7 @@
         <link rel="next" href="../ontology/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.11">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.12">
     
     
       
@@ -2359,7 +2359,7 @@ imported : bool
                     <span class="k">raise</span> <span class="n">InvalidTemplateError</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;Invalid argument to %%ALL: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span>
                     <span class="p">)</span>
-                <span class="n">items</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">asstring</span><span class="p">)</span>
+                <span class="n">items</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">get_label</span><span class="p">)</span>
                 <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="o">.</span><span class="n">itemsdoc</span><span class="p">(</span>
                     <span class="n">items</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">header_level</span><span class="p">)</span>  <span class="c1"># pylint: disable=no-member</span>
@@ -2416,7 +2416,7 @@ imported : bool
 
                 <span class="n">sec</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">roots</span><span class="p">:</span>
-                    <span class="n">name</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{label}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span>
                     <span class="n">filepath</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_branchfig</span><span class="p">(</span>
                         <span class="n">name</span><span class="p">,</span>
                         <span class="n">opts</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
@@ -2784,7 +2784,7 @@ processing branches.</p>
 
             <span class="n">sec</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">roots</span><span class="p">:</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{label}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span>
                 <span class="n">filepath</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_branchfig</span><span class="p">(</span>
                     <span class="n">name</span><span class="p">,</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
@@ -2858,7 +2858,7 @@ processing branches.</p>
                 <span class="k">raise</span> <span class="n">InvalidTemplateError</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Invalid argument to %%ALL: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
-            <span class="n">items</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">asstring</span><span class="p">)</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">get_label</span><span class="p">)</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="o">.</span><span class="n">itemsdoc</span><span class="p">(</span>
                 <span class="n">items</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">header_level</span><span class="p">)</span>  <span class="c1"># pylint: disable=no-member</span>
@@ -3573,7 +3573,8 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="s2">&quot;figwidth&quot;</span><span class="p">:</span> <span class="s2">&quot;{{ width=</span><span class="si">{width:.0f}</span><span class="s2">px }}&quot;</span><span class="p">,</span>
         <span class="s2">&quot;figure&quot;</span><span class="p">:</span> <span class="s2">&quot;![</span><span class="si">{caption}</span><span class="s2">](</span><span class="si">{path}</span><span class="s2">)</span><span class="si">{figwidth}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">{:#&lt;</span><span class="si">{level}</span><span class="s2">} </span><span class="si">{label}</span><span class="s2">    {{#</span><span class="si">{anchor}</span><span class="s2">}}&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;[</span><span class="si">{name}</span><span class="s2">](</span><span class="si">{lowerurl}</span><span class="s2">)&quot;</span><span class="p">,</span>
+        <span class="c1"># Use ref instead of iri for local references in links</span>
+        <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;[</span><span class="si">{label}</span><span class="s2">](</span><span class="si">{ref}</span><span class="s2">)&quot;</span><span class="p">,</span>
         <span class="s2">&quot;point&quot;</span><span class="p">:</span> <span class="s2">&quot;  - </span><span class="si">{point}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="s2">&quot;points&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="si">{points}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="s2">&quot;annotation&quot;</span><span class="p">:</span> <span class="s2">&quot;**</span><span class="si">{key}</span><span class="s2">:** </span><span class="si">{value}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -3657,7 +3658,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="s2">&quot;figwidth&quot;</span><span class="p">:</span> <span class="s1">&#39;width=&quot;</span><span class="si">{width:.0f}</span><span class="s1">&quot;&#39;</span><span class="p">,</span>
         <span class="s2">&quot;figure&quot;</span><span class="p">:</span> <span class="s1">&#39;&lt;img src=&quot;</span><span class="si">{path}</span><span class="s1">&quot; alt=&quot;</span><span class="si">{caption}</span><span class="s1">&quot;</span><span class="si">{figwidth}</span><span class="s1">&gt;&#39;</span><span class="p">,</span>
         <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="s1">&#39;&lt;h</span><span class="si">{level}</span><span class="s1"> id=&quot;</span><span class="si">{anchor}</span><span class="s1">&quot;&gt;</span><span class="si">{label}</span><span class="s1">&lt;/h</span><span class="si">{level}</span><span class="s1">&gt;&#39;</span><span class="p">,</span>
-        <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{lowerurl}</span><span class="s1">&quot;&gt;</span><span class="si">{name}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="p">,</span>
+        <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{ref}</span><span class="s1">&quot;&gt;</span><span class="si">{label}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="p">,</span>
         <span class="s2">&quot;point&quot;</span><span class="p">:</span> <span class="s2">&quot;      &lt;li&gt;</span><span class="si">{point}</span><span class="s2">&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="s2">&quot;points&quot;</span><span class="p">:</span> <span class="s2">&quot;    &lt;ul&gt;</span><span class="se">\n</span><span class="s2">      </span><span class="si">{points}</span><span class="se">\n</span><span class="s2">    &lt;/ul&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="s2">&quot;annotation&quot;</span><span class="p">:</span> <span class="s2">&quot;  &lt;dd&gt;&lt;strong&gt;</span><span class="si">{key}</span><span class="s2">:&lt;/strong&gt;</span><span class="se">\n</span><span class="si">{value}</span><span class="s2">  &lt;/dd&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -3692,9 +3693,11 @@ style : dict | "html" | "markdown" | "markdown_tex"
             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">))</span>
         <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">irilink</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;link&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">iri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
-            <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
-            <span class="n">lowerurl</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
+            <span class="n">ref</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
+            <span class="n">lowerlabel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">template</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;\</span>
@@ -3801,7 +3804,9 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="c1"># Add iri</span>
         <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">annotation_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">key</span><span class="o">=</span><span class="s2">&quot;IRI&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="n">link_style</span><span class="p">),</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
+                <span class="n">key</span><span class="o">=</span><span class="s2">&quot;IRI&quot;</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">),</span>
+                <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
@@ -3819,7 +3824,8 @@ style : dict | "html" | "markdown" | "markdown_tex"
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
                     <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                         <span class="n">annotation_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                            <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span>
+                            <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+                            <span class="n">value</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">),</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -3842,14 +3848,16 @@ style : dict | "html" | "markdown" | "markdown_tex"
             <span class="p">):</span>
                 <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="n">point</span><span class="o">=</span><span class="s2">&quot;is_a &quot;</span> <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">link_style</span><span class="p">),</span>
+                        <span class="n">point</span><span class="o">=</span><span class="s2">&quot;is_a &quot;</span>
+                        <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">),</span>
                         <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="n">point</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">link_style</span><span class="p">),</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
+                        <span class="n">point</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">),</span>
+                        <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
 
@@ -3857,7 +3865,8 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">:</span>
             <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">point</span><span class="o">=</span><span class="s2">&quot;equivalent_to &quot;</span> <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span>
+                    <span class="n">point</span><span class="o">=</span><span class="s2">&quot;equivalent_to &quot;</span>
+                    <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
@@ -3867,7 +3876,9 @@ style : dict | "html" | "markdown" | "markdown_tex"
             <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">point</span><span class="o">=</span><span class="s2">&quot;disjoint_with &quot;</span>
-                    <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">asstring</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">subjects</span><span class="p">),</span>
+                    <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="n">asstring</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">subjects</span>
+                    <span class="p">),</span>
                     <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
@@ -3875,7 +3886,9 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="c1"># ...add disjoint_unions</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;disjoint_unions&quot;</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">unions</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">disjoint_unions</span><span class="p">:</span>
-                <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">asstring</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">unions</span><span class="p">)</span>
+                <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">asstring</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">unions</span>
+                <span class="p">)</span>
                 <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;disjoint_union_of </span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
@@ -3887,7 +3900,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
             <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">point</span><span class="o">=</span><span class="s2">&quot;inverse_of &quot;</span>
-                    <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">inverse_property</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">inverse_property</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
@@ -3895,7 +3908,8 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="k">for</span> <span class="n">domain</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">,</span> <span class="p">()):</span>
             <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;domain </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span><span class="w"> </span><span class="n">link_style</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">point</span><span class="o">=</span><span class="s2">&quot;domain &quot;</span>
+                    <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
@@ -3903,7 +3917,8 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="k">for</span> <span class="n">restriction</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="p">()):</span>
             <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;range </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">restriction</span><span class="p">,</span><span class="w"> </span><span class="n">link_style</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">point</span><span class="o">=</span><span class="s2">&quot;range &quot;</span>
+                    <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">restriction</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
@@ -3931,7 +3946,7 @@ style : dict | "html" | "markdown" | "markdown_tex"
                 <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">is_instance_of</span><span class="p">:</span>
                     <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                         <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                            <span class="n">point</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">link_style</span><span class="p">),</span>
+                            <span class="n">point</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">),</span>
                             <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">,</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
@@ -3993,9 +4008,11 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">))</span>
     <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">irilink</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;link&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">iri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
         <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
-        <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
-        <span class="n">lowerurl</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
+        <span class="n">ref</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
+        <span class="n">lowerlabel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">template</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;\</span>
@@ -4178,7 +4195,9 @@ show_disjoints : Bool
     <span class="c1"># Add iri</span>
     <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
         <span class="n">annotation_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">key</span><span class="o">=</span><span class="s2">&quot;IRI&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="n">link_style</span><span class="p">),</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
+            <span class="n">key</span><span class="o">=</span><span class="s2">&quot;IRI&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">),</span>
+            <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span>
 
@@ -4196,7 +4215,8 @@ show_disjoints : Bool
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
                 <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">annotation_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span>
+                        <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+                        <span class="n">value</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">),</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -4219,14 +4239,16 @@ show_disjoints : Bool
         <span class="p">):</span>
             <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">point</span><span class="o">=</span><span class="s2">&quot;is_a &quot;</span> <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">link_style</span><span class="p">),</span>
+                    <span class="n">point</span><span class="o">=</span><span class="s2">&quot;is_a &quot;</span>
+                    <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">),</span>
                     <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">point</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">link_style</span><span class="p">),</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
+                    <span class="n">point</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">),</span>
+                    <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
@@ -4234,7 +4256,8 @@ show_disjoints : Bool
     <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">:</span>
         <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">point</span><span class="o">=</span><span class="s2">&quot;equivalent_to &quot;</span> <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span>
+                <span class="n">point</span><span class="o">=</span><span class="s2">&quot;equivalent_to &quot;</span>
+                <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
@@ -4244,7 +4267,9 @@ show_disjoints : Bool
         <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">point</span><span class="o">=</span><span class="s2">&quot;disjoint_with &quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">asstring</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">subjects</span><span class="p">),</span>
+                <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">asstring</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">subjects</span>
+                <span class="p">),</span>
                 <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
@@ -4252,7 +4277,9 @@ show_disjoints : Bool
     <span class="c1"># ...add disjoint_unions</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;disjoint_unions&quot;</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">unions</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">disjoint_unions</span><span class="p">:</span>
-            <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">asstring</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">unions</span><span class="p">)</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">asstring</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">unions</span>
+            <span class="p">)</span>
             <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;disjoint_union_of </span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span>
@@ -4264,7 +4291,7 @@ show_disjoints : Bool
         <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">point</span><span class="o">=</span><span class="s2">&quot;inverse_of &quot;</span>
-                <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">inverse_property</span><span class="p">,</span> <span class="n">link_style</span><span class="p">)</span>
+                <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">inverse_property</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
@@ -4272,7 +4299,8 @@ show_disjoints : Bool
     <span class="k">for</span> <span class="n">domain</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">,</span> <span class="p">()):</span>
         <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;domain </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span><span class="w"> </span><span class="n">link_style</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">point</span><span class="o">=</span><span class="s2">&quot;domain &quot;</span>
+                <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
@@ -4280,7 +4308,8 @@ show_disjoints : Bool
     <span class="k">for</span> <span class="n">restriction</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="p">()):</span>
         <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">point</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;range </span><span class="si">{</span><span class="n">asstring</span><span class="p">(</span><span class="n">restriction</span><span class="p">,</span><span class="w"> </span><span class="n">link_style</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">point</span><span class="o">=</span><span class="s2">&quot;range &quot;</span>
+                <span class="o">+</span> <span class="n">asstring</span><span class="p">(</span><span class="n">restriction</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
@@ -4308,7 +4337,7 @@ show_disjoints : Bool
             <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">is_instance_of</span><span class="p">:</span>
                 <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">point_style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="n">point</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">link_style</span><span class="p">),</span>
+                        <span class="n">point</span><span class="o">=</span><span class="n">asstring</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">link_style</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">),</span>
                         <span class="n">ontology</span><span class="o">=</span><span class="n">onto</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
@@ -4989,7 +5018,7 @@ verbose : bool
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.db81ec45.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.6df46069.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.4b2c34cd.min.js"></script>
       
     
   </body>
