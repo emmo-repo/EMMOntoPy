@@ -567,7 +567,9 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                         obj = self.add_class_construct(relation.value)
                     else:
                         continue
-                    pred = asstring(relation, exclude_object=True)
+                    pred = asstring(
+                        relation, exclude_object=True, ontology=self.ontology
+                    )
                     self.add_edge(
                         label, pred, obj, edgelabel=edgelabels, **attrs
                     )

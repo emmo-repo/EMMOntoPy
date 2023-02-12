@@ -209,8 +209,9 @@ def main(argv: list = None):
                 onto_path.append(path)
 
     # Load ontology
+    iri = args.iri if args.iri[-1] in "#/" else f"{args.iri}#"
     world = World(filename=args.database)
-    if args.database != ":memory:" and args.iri not in world.ontologies:
+    if args.database != ":memory:" and iri not in world.ontologies:
         parser.error(
             "The IRI argument should be one of the ontologies in the database:"
             "\n  " + "\n  ".join(world.ontologies.keys())

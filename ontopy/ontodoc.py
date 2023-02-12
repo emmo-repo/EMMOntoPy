@@ -54,7 +54,8 @@ class OntoDoc:
         "figwidth": "{{ width={width:.0f}px }}",
         "figure": "![{caption}]({path}){figwidth}\n",
         "header": "\n{:#<{level}} {label}    {{#{anchor}}}",
-        "link": "[{name}]({lowerurl})",
+        # Use ref instead of iri for local references in links
+        "link": "[{label}]({ref})",
         "point": "  - {point}\n",
         "points": "\n\n{points}\n",
         "annotation": "**{key}:** {value}\n",
@@ -138,7 +139,7 @@ class OntoDoc:
         "figwidth": 'width="{width:.0f}"',
         "figure": '<img src="{path}" alt="{caption}"{figwidth}>',
         "header": '<h{level} id="{anchor}">{label}</h{level}>',
-        "link": '<a href="{lowerurl}">{name}</a>',
+        "link": '<a href="{ref}">{label}</a>',
         "point": "      <li>{point}</li>\n",
         "points": "    <ul>\n      {points}\n    </ul>\n",
         "annotation": "  <dd><strong>{key}:</strong>\n{value}  </dd>\n",
@@ -173,9 +174,11 @@ class OntoDoc:
             os.path.basename(self.onto.base_iri.rstrip("/#"))
         )[0]
         irilink = self.style.get("link", "{name}").format(
+            iri=self.onto.base_iri,
             name=self.onto.base_iri,
-            url=self.onto.base_iri,
-            lowerurl=self.onto.base_iri,
+            ref=self.onto.base_iri,
+            label=self.onto.base_iri,
+            lowerlabel=self.onto.base_iri,
         )
         template = dedent(
             """\
@@ -282,7 +285,9 @@ class OntoDoc:
         # Add iri
         doc.append(
             annotation_style.format(
-                key="IRI", value=asstring(item.iri, link_style), ontology=onto
+                key="IRI",
+                value=asstring(item.iri, link_style, ontology=onto),
+                ontology=onto,
             )
         )
 
@@ -300,7 +305,8 @@ class OntoDoc:
                 if self.url_regex.match(value):
                     doc.append(
                         annotation_style.format(
-                            key=key, value=asstring(value, link_style)
+                            key=key,
+                            value=asstring(value, link_style, ontology=onto),
                         )
                     )
                 else:
@@ -323,14 +329,16 @@ class OntoDoc:
             ):
                 points.append(
                     point_style.format(
-                        point="is_a " + asstring(prop, link_style),
+                        point="is_a "
+                        + asstring(prop, link_style, ontology=onto),
                         ontology=onto,
                     )
                 )
             else:
                 points.append(
                     point_style.format(
-                        point=asstring(prop, link_style), ontology=onto
+                        point=asstring(prop, link_style, ontology=onto),
+                        ontology=onto,
                     )
                 )
 
@@ -338,7 +346,8 @@ class OntoDoc:
         for entity in item.equivalent_to:
             points.append(
                 point_style.format(
-                    point="equivalent_to " + asstring(entity, link_style)
+                    point="equivalent_to "
+                    + asstring(entity, link_style, ontology=onto)
                 )
             )
 
@@ -348,7 +357,9 @@ class OntoDoc:
             points.append(
                 point_style.format(
                     point="disjoint_with "
-                    + ", ".join(asstring(_, link_style) for _ in subjects),
+                    + ", ".join(
+                        asstring(s, link_style, ontology=onto) for s in subjects
+                    ),
                     ontology=onto,
                 )
             )
@@ -356,7 +367,9 @@ class OntoDoc:
         # ...add disjoint_unions
         if hasattr(item, "disjoint_unions"):
             for unions in item.disjoint_unions:
-                string = ", ".join(asstring(_, link_style) for _ in unions)
+                string = ", ".join(
+                    asstring(u, link_style, ontology=onto) for u in unions
+                )
                 points.append(
                     point_style.format(
                         point=f"disjoint_union_of {string}", ontology=onto
@@ -368,7 +381,7 @@ class OntoDoc:
             points.append(
                 point_style.format(
                     point="inverse_of "
-                    + asstring(item.inverse_property, link_style)
+                    + asstring(item.inverse_property, link_style, ontology=onto)
                 )
             )
 
@@ -376,7 +389,8 @@ class OntoDoc:
         for domain in getattr(item, "domain", ()):
             points.append(
                 point_style.format(
-                    point=f"domain {asstring(domain, link_style)}"
+                    point="domain "
+                    + asstring(domain, link_style, ontology=onto)
                 )
             )
 
@@ -384,7 +398,8 @@ class OntoDoc:
         for restriction in getattr(item, "range", ()):
             points.append(
                 point_style.format(
-                    point=f"range {asstring(restriction, link_style)}"
+                    point="range "
+                    + asstring(restriction, link_style, ontology=onto)
                 )
             )
 
@@ -412,7 +427,7 @@ class OntoDoc:
                 if item in instance.is_instance_of:
                     points.append(
                         point_style.format(
-                            point=asstring(instance, link_style),
+                            point=asstring(instance, link_style, ontology=onto),
                             ontology=onto,
                         )
                     )
@@ -994,7 +1009,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     raise InvalidTemplateError(
                         f"Invalid argument to %%ALL: {token}"
                     )
-                items = sorted(items, key=asstring)
+                items = sorted(items, key=get_label)
                 del self.lines[i]
                 self.lines[i:i] = self.ontodoc.itemsdoc(
                     items, int(opts.header_level)  # pylint: disable=no-member
@@ -1051,7 +1066,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
 
                 sec = []
                 for root in roots:
-                    name = asstring(root)
+                    name = asstring(root, link="{label}", ontology=onto)
                     filepath, _, width = self._make_branchfig(
                         name,
                         opts.path,  # pylint: disable=no-member
