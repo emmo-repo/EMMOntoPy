@@ -724,3 +724,47 @@ def normalise_url(url):
     components = list(splitted)
     components[2] = os.path.normpath(splitted.path)
     return urllib.parse.urlunsplit(components)
+
+
+def add_redirection(htmlfile, target, outfile=None):
+    """Add a javascript header of `htmlfile` that redirects to `target`
+    if the page is requested without a fragment.
+
+    If `outfile` is given, the output is written to this file, otherwise
+    `htmlfile` is overwritten.
+
+    Nothing is added if `htmlfile` already contains such a redirection.
+    """
+    added = False
+    lines = []
+    with open(htmlfile, "rt") as f:  # pylint:disable=invalid-name
+        while True:
+            line = f.readline()
+            if not line:
+                break
+            lines.append(line)
+            if not added and "<head>" in line:
+                line = f.readline()
+                comment = (
+                    f"<!-- ontodoc: without fragment, redirect to {target} -->"
+                )
+                if comment not in line:
+                    lines.extend(
+                        f"  {ln}\n"
+                        for ln in [
+                            comment,
+                            "<script>",
+                            '  if (window.location.hash == "") {',
+                            f'    window.location.href = "{target}";',
+                            "  }",
+                            "</script>",
+                        ]
+                    )
+                lines.append(line)
+                added = True
+
+    with open(
+        outfile if outfile else htmlfile, "wt"
+    ) as f:  # pylint:disable=invalid-name
+        for line in lines:
+            f.write(line)

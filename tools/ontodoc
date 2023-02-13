@@ -5,6 +5,7 @@ import os
 import sys
 import argparse
 import subprocess  # nosec
+from pathlib import Path
 
 # Support running from uninstalled package by adding parent dir to sys path
 rootdir = os.path.abspath(
@@ -22,11 +23,14 @@ from ontopy.ontodoc import (  # pylint: disable=import-error
     get_maxwidth,
     get_docpp,
 )
+from ontopy.utils import add_redirection
 
 import owlready2
 
 
-def main(argv: list = None):
+def main(
+    argv: list = None,
+):  # pylint: disable=too-many-locals,too-many-statements
     """Main run function.
 
     Parameters:
@@ -109,7 +113,7 @@ def main(argv: list = None):
         "--reasoner",
         nargs="?",
         const="HermiT",
-        choices=["HermiT", "Pellet"],
+        choices=["HermiT", "FaCT++", "Pellet"],
         help=(
             'Run given reasoner on the ontology. Valid reasoners are "HermiT" '
             '(default) and "Pellet". Note: these reasoners doesn\'t work well '
@@ -200,7 +204,37 @@ def main(argv: list = None):
             "debugging)."
         ),
     )
+    parser.add_argument(
+        "--redirect",
+        "-r",
+        metavar="FILE",
+        nargs="?",
+        const="",
+        help=(
+            "Add a redirection to generated html file that redirects to "
+            "FILE if no fragment is provided.  If no argument is given, "
+            "it will redirect to the name of the generated html file with "
+            "the file extension replaced with `.ttl`."
+        ),
+    )
+    parser.add_argument(
+        "--update-redirect",
+        "-R",
+        action="store_true",
+        help=(
+            "Read html file from IRI and write it to `OUTFILE` with a "
+            "redirection script added.  Implies --redirect."
+        ),
+    )
     args = parser.parse_args(args=argv)
+
+    if args.update_redirect:
+        target = (
+            args.redirect
+            if args.redirect
+            else str(Path(args.outfile).with_suffix(".ttl"))
+        )
+        return add_redirection(args.iri, target, args.outfile)
 
     # Append to onto_path
     for paths in args.path:
@@ -256,6 +290,20 @@ def main(argv: list = None):
         )
     except subprocess.CalledProcessError as exc:
         sys.exit(exc.returncode)  # Exit without traceback on pandoc errors
+
+    if args.redirect is not None:
+        if (args.format and args.format not in ("html", "simple-html")) or (
+            Path(args.outfile).suffix not in (".html", ".htm")
+        ):
+            parser.error(
+                "The --redirect option requires that the output is a html file"
+            )
+        target = (
+            args.redirect
+            if args.redirect
+            else str(Path(args.outfile).with_suffix(".ttl"))
+        )
+        add_redirection(args.outfile, target)
 
     return res
 
