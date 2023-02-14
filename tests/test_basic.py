@@ -37,8 +37,8 @@ def test_basic(emmo: "Ontology") -> None:
         class H2O(emmo.Molecule):
             """Water molecule."""
 
-            emmo.hasSpatialDirectPart.exactly(2, onto.Hydrogen)
-            emmo.hasSpatialDirectPart.exactly(1, Oxygen)
+            emmo.hasSpatialTile.exactly(2, onto.Hydrogen)
+            emmo.hasSpatialTile.exactly(1, Oxygen)
 
         # Create some
         H1 = onto.Hydrogen()
