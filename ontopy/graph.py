@@ -714,7 +714,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                     self.ontology[_] for _ in relations if _ in self.ontology
                 )
                 for relation in entity.mro():
-                    if relation in rels:
+                    if relation in relations:
                         rattrs = (
                             relations[get_label(relation)]
                             if relation in rels
