@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 )  # currently pytest is set to accept warnings, but this might change in the future
 def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
     with testonto:
-
+        # Add a relation that does not have a default style in OntoGraph
         class hasSpecialRelation(owlready2.ObjectProperty):
             "New special relation"
             domain = list(testonto.classes())
@@ -176,5 +176,3 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
     )
     graph.add_legend()
     graph.save(tmpdir / "Reductionistic.png")
-
-    # Add a relation that does not have a default
