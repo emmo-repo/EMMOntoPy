@@ -1,4 +1,7 @@
 from typing import TYPE_CHECKING
+import owlready2
+import pytest
+from ontopy.graph import OntoGraph
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -6,9 +9,35 @@ if TYPE_CHECKING:
     from ontopy.ontology import Ontology
 
 
-def test_graph2(emmo: "Ontology", tmpdir: "Path") -> None:
-    from ontopy.graph import OntoGraph
+@pytest.mark.filterwarnings(
+    "ignore:Style not defined for relation hasSpecialRelation."
+)  # currently pytest is set to accept warnings, but this might change in the future
+def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
+    with testonto:
 
+        class hasSpecialRelation(owlready2.ObjectProperty):
+            "New special relation"
+            domain = list(testonto.classes())
+            range = list(testonto.classes())
+
+        class NewSpecialClass(owlready2.Thing):
+            "New class"
+
+    testonto.sync_attributes()
+
+    testonto.TestClass.hasSpecialRelation.append(testonto.NewSpecialClass)
+    graph = OntoGraph(
+        testonto,
+        testonto.TestClass,
+        relations="all",
+        addnodes=True,
+        edgelabels=None,
+    )
+    graph.add_legend()
+    graph.save(tmpdir / "testonto.png")
+
+
+def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
     graph = OntoGraph(
         emmo,
         emmo.hasPart,
@@ -147,3 +176,5 @@ def test_graph2(emmo: "Ontology", tmpdir: "Path") -> None:
     )
     graph.add_legend()
     graph.save(tmpdir / "Reductionistic.png")
+
+    # Add a relation that does not have a default
