@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from ontopy.ontology import Ontology
 
 
-def test_graph(testonto: "Ontology", repo_dir: "Path") -> None:
+def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
     """Testing OntoGraph on a small ontology
 
     Two relations in addition to isA are used,
@@ -23,8 +23,6 @@ def test_graph(testonto: "Ontology", repo_dir: "Path") -> None:
     """
     import owlready2
     from ontopy.graph import OntoGraph
-
-    tmpdir = repo_dir
 
     with testonto:
         # Add a relation that does not have a default style in OntoGraph
