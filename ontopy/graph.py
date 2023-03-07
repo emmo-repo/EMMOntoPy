@@ -691,6 +691,27 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         kwargs.update(attrs)
         return kwargs
 
+    def _relation_styles(self, entity, relations, rels, name):
+        """Helper function that returns the styles of the relations
+        to be used.
+        """
+        for relation in entity.mro():
+            if relation in rels:
+                if get_label(relation) in relations:
+                    rattrs = relations[get_label(relation)]
+                else:
+                    for alt_label in relation.get_annotations()["altLabel"]:
+                        rattrs = relations[alt_label]
+
+                break
+        else:
+            warnings.warn(
+                f"Style not defined for relation {name}. "
+                "Resorting to default style."
+            )
+            rattrs = self.style.get("default_relation", {})
+        return rattrs
+
     def get_edge_attrs(self, predicate, attrs):
         """Returns attributes for node or edge `name`.  `attrs` overrides
         the default style."""
@@ -713,20 +734,8 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                 rels = set(
                     self.ontology[_] for _ in relations if _ in self.ontology
                 )
-                for relation in entity.mro():
-                    if relation in relations:
-                        rattrs = (
-                            relations[get_label(relation)]
-                            if relation in rels
-                            else {}
-                        )
-                        break
-                else:
-                    warnings.warn(
-                        f"Style not defined for relation {name}. "
-                        "Resorting to default style."
-                    )
-                    rattrs = self.style.get("default_relation", {})
+                rattrs = self._relation_styles(entity, relations, rels, name)
+
                 # object property
                 if isinstance(
                     entity,

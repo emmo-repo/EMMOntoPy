@@ -1,7 +1,5 @@
 from typing import TYPE_CHECKING
-import owlready2
 import pytest
-from ontopy.graph import OntoGraph
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -13,19 +11,59 @@ if TYPE_CHECKING:
     "ignore:Style not defined for relation hasSpecialRelation."
 )  # currently pytest is set to accept warnings, but this might change in the future
 def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
+    """Testing OntoGraph on a small ontology
+
+    Two relations in addition to isA are used,
+    one that has a default style and one that does not.
+    This should give one warning, and with the defined filterwarnings
+    the test should pass also when running `pytest -Werror`
+
+    Parameters:
+        testonto: A local fixture from the root `conftest.py`.
+            Return a local ontology used for testing.
+        tmpdir: A built in pytest fixture to get a function-scoped
+            temporary directory'
+    """
+    import owlready2
+    from ontopy.graph import OntoGraph
+
     with testonto:
         # Add a relation that does not have a default style in OntoGraph
         class hasSpecialRelation(owlready2.ObjectProperty):
-            "New special relation"
+            """New special relation"""
+
             domain = list(testonto.classes())
             range = list(testonto.classes())
 
         class NewSpecialClass(owlready2.Thing):
-            "New class"
+            """New class"""
+
+        # Add a relation that has a default style
+        class hasProperty(owlready2.ObjectProperty):
+            """hasProperty relation"""
+
+            domain = list(testonto.classes())
+            range = list(testonto.classes())
+
+        class NewSpecialPropertyClass(owlready2.Thing):
+            """New property class"""
+
+        class NewSpecialPartClass(owlready2.Thing):
+            """New class"""
+
+        class hasPartRenamed(owlready2.ObjectProperty):
+            """Renamed property class"""
+
+            domain = list(testonto.classes())
+            range = list(testonto.classes())
+            altLabel = "hasPart"
 
     testonto.sync_attributes()
 
     testonto.TestClass.hasSpecialRelation.append(testonto.NewSpecialClass)
+    testonto.TestClass.hasProperty.append(testonto.NewSpecialPropertyClass)
+    testonto.TestClass.hasPartRenamed.append(testonto.NewSpecialPartClass)
+
     graph = OntoGraph(
         testonto,
         testonto.TestClass,
@@ -38,6 +76,17 @@ def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
 
 
 def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
+    """Testing OntoGraph on various aspects of EMMO.
+
+    Parameters:
+        testonto: A local fixture from the root `conftest.py`.
+            Return a local ontology used for testing.
+        tmpdir: A built in pytest fixture to get a function-scoped
+            temporary directory'
+    """
+    import owlready2
+    from ontopy.graph import OntoGraph
+
     graph = OntoGraph(
         emmo,
         emmo.hasPart,
