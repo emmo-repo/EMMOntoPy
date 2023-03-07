@@ -10,6 +10,7 @@ import warnings
 from typing import Optional, TYPE_CHECKING
 import defusedxml.ElementTree as ET
 import owlready2
+from owlready2.entity import ThingClass
 import graphviz
 
 from ontopy.utils import asstring, get_label
@@ -691,7 +692,9 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         kwargs.update(attrs)
         return kwargs
 
-    def _relation_styles(self, entity, relations, rels):
+    def _relation_styles(
+        self, entity: ThingClass, relations: dict, rels: set
+    ) -> dict:
         """Helper function that returns the styles of the relations
         to be used.
 
@@ -700,7 +703,6 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             relations: relations with default styles
             rels: relations to be considered that have default styles,
                 either for the prefLab or one of the altLabels
-            name:
         """
         for relation in entity.mro():
             if relation in rels:
@@ -719,9 +721,14 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             rattrs = self.style.get("default_relation", {})
         return rattrs
 
-    def get_edge_attrs(self, predicate, attrs):
-        """Returns attributes for node or edge `name`.  `attrs` overrides
-        the default style."""
+    def get_edge_attrs(self, predicate: str, attrs: dict) -> dict:
+        """Returns attributes for node or edge `predicate`.  `attrs` overrides
+        the default style.
+
+        Parameters:
+            predicate: predicate to get attributes for
+            attrs: desired attributes to override default
+        """
         # given type
         types = ("isA", "equivalent_to", "disjoint_with", "inverse_of")
         if predicate in types:
