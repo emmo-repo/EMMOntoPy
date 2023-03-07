@@ -691,9 +691,16 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         kwargs.update(attrs)
         return kwargs
 
-    def _relation_styles(self, entity, relations, rels, name):
+    def _relation_styles(self, entity, relations, rels):
         """Helper function that returns the styles of the relations
         to be used.
+
+        Parameters:
+            entity: the entity of the parent relation
+            relations: relations with default styles
+            rels: relations to be considered that have default styles,
+                either for the prefLab or one of the altLabels
+            name:
         """
         for relation in entity.mro():
             if relation in rels:
@@ -706,7 +713,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                 break
         else:
             warnings.warn(
-                f"Style not defined for relation {name}. "
+                f"Style not defined for relation {get_label(entity)}. "
                 "Resorting to default style."
             )
             rattrs = self.style.get("default_relation", {})
@@ -734,7 +741,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                 rels = set(
                     self.ontology[_] for _ in relations if _ in self.ontology
                 )
-                rattrs = self._relation_styles(entity, relations, rels, name)
+                rattrs = self._relation_styles(entity, relations, rels)
 
                 # object property
                 if isinstance(

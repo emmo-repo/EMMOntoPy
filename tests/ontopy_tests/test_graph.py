@@ -7,10 +7,7 @@ if TYPE_CHECKING:
     from ontopy.ontology import Ontology
 
 
-@pytest.mark.filterwarnings(
-    "ignore:Style not defined for relation hasSpecialRelation."
-)  # currently pytest is set to accept warnings, but this might change in the future
-def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
+def test_graph(testonto: "Ontology", repo_dir: "Path") -> None:
     """Testing OntoGraph on a small ontology
 
     Two relations in addition to isA are used,
@@ -26,6 +23,8 @@ def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
     """
     import owlready2
     from ontopy.graph import OntoGraph
+
+    tmpdir = repo_dir
 
     with testonto:
         # Add a relation that does not have a default style in OntoGraph
@@ -64,13 +63,18 @@ def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
     testonto.TestClass.hasProperty.append(testonto.NewSpecialPropertyClass)
     testonto.TestClass.hasPartRenamed.append(testonto.NewSpecialPartClass)
 
-    graph = OntoGraph(
-        testonto,
-        testonto.TestClass,
-        relations="all",
-        addnodes=True,
-        edgelabels=None,
-    )
+    with pytest.warns() as record:
+        graph = OntoGraph(
+            testonto,
+            testonto.TestClass,
+            relations="all",
+            addnodes=True,
+            edgelabels=None,
+        )
+        assert str(record[0].message) == (
+            "Style not defined for relation hasSpecialRelation. "
+            "Resorting to default style."
+        )
     graph.add_legend()
     graph.save(tmpdir / "testonto.png")
 
