@@ -167,9 +167,9 @@ optional arguments:
                         Note: FaCT++ is preferred with EMMO.
   --root ROOT, -r ROOT  Name of root node in the graph. Defaults to all
                         classes.
-  --leafs LEAFS         Leafs nodes for plotting sub-graphs. May be provided
+  --leaves LEAVES       Leaf nodes for plotting sub-graphs. May be provided
                         as a comma-separated string and/or with multiple
-                        --leafs options.
+                        --leaves options.
   --exclude EXCLUDE, -E EXCLUDE
                         Nodes, including their subclasses, to exclude from
                         sub-graphs. May be provided as a comma-separated

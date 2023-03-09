@@ -20,6 +20,7 @@ from ontopy.graph import (  # pylint: disable=import-error
     _default_style,
 )
 from ontopy.utils import get_label  # pylint: disable=import-error
+import warnings
 import owlready2
 
 
@@ -113,13 +114,19 @@ def main(
         help="Name of root node in the graph. Defaults to all classes.",
     )
     parser.add_argument(
-        "--leafs",
+        "--leaves",
         action="append",
         default=[],
         help=(
-            "Leafs nodes for plotting sub-graphs. May be provided as a "
-            "comma-separated string and/or with multiple --leafs options."
+            "Leaf nodes for plotting sub-graphs. May be provided as a "
+            "comma-separated string and/or with multiple --leaves options."
         ),
+    )
+    parser.add_argument(
+        "--leafs",
+        action="append",
+        default=[],
+        help=("This argument is deprecated, plaese use `--leaves` instead"),
     )
     parser.add_argument(
         "--exclude",
@@ -209,6 +216,13 @@ def main(
     )
     args = parser.parse_args(args=argv)
 
+    if args.leafs:
+        warnings.warn(
+            "The `--leafs` option is deprecated and will soon be removed."
+            "Please use `--leaves` instead."
+        )
+        args.leaves = args.leafs
+
     # Append to onto_path
     for paths in args.path:
         for path in paths.split(","):
@@ -229,13 +243,13 @@ def main(
         with open(args.generate_style_file, "wt") as handle:
             json.dump(style, handle, indent=4)
 
-    # Join all --leafs options
-    leafs = set()
-    for leaf in args.leafs:
+    # Join all --leaves options
+    leaves = set()
+    for leaf in args.leaves:
         if "," in leaf:
-            leafs.update(leaf.split(","))
+            leaves.update(leaf.split(","))
         else:
-            leafs.add(leaf)
+            leaves.add(leaf)
 
     # Join all --exclude options
     exclude = set()
@@ -298,7 +312,7 @@ def main(
         graph = OntoGraph(onto, style=style)
         graph.add_branch(
             root=root,
-            leafs=leafs,
+            leaves=leaves,
             exclude=exclude,
             relations=relations,
             edgelabels=args.edgelabels,

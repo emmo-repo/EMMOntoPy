@@ -518,9 +518,9 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
           - header_level: Header level.
           - terminated: Whether to branch should be terminated at all branch
             names in the final document.
-          - include_leafs: Whether to include leaf.
+          - include_leaves: Whether to include leaf.
 
-            %BRANCH name [header_level=3 terminated=1 include_leafs=0
+            %BRANCH name [header_level=3 terminated=1 include_leaves=0
                           namespaces='' ontologies='']
 
       * Insert generated figure of ontology branch `name`.  The figure
@@ -528,17 +528,17 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         where `figdir` is given at class initiation. It is recommended
         to exclude the file extension from `path`.  In this case, the
         default figformat will be used (and easily adjusted to the
-        correct format required by the backend). `leafs` may be a comma-
+        correct format required by the backend). `leaves` may be a comma-
         separated list of leaf node names.
 
-            %BRANCHFIG name [path='' caption='' terminated=1 include_leafs=1
-                             strict_leafs=1, width=0px leafs='' relations=all
+            %BRANCHFIG name [path='' caption='' terminated=1 include_leaves=1
+                             strict_leaves=1, width=0px leaves='' relations=all
                              edgelabels=0 namespaces='' ontologies='']
 
       * This is a combination of the %HEADER and %BRANCHFIG directives.
 
             %BRANCHHEAD name [level=2  path='' caption='' terminated=1
-                              include_leafs=1 width=0px leafs='']
+                              include_leaves=1 width=0px leaves='']
 
       * This is a combination of the %HEADER, %BRANCHFIG and %BRANCH
         directives. It inserts documentation of branch `name`, with a
@@ -546,7 +546,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         element.
 
             %BRANCHDOC name [level=2  path='' title='' caption='' terminated=1
-                             strict_leafs=1 width=0px leafs='' relations='all'
+                             strict_leaves=1 width=0px leaves='' relations='all'
                              rankdir='BT' legend=1 namespaces='' ontologies='']
 
       * Insert generated documentation for all entities of the given type.
@@ -723,11 +723,11 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     tokens[2:],
                     header_level=3,
                     terminated=1,
-                    include_leafs=0,
+                    include_leaves=0,
                     namespaces="",
                     ontologies="",
                 )
-                leafs = (
+                leaves = (
                     names if opts.terminated else ()
                 )  # pylint: disable=no-member
 
@@ -744,7 +744,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
 
                 branch = filter_classes(
                     onto.get_branch(
-                        name, leafs, opts.include_leafs
+                        name, leaves, opts.include_leaves
                     ),  # pylint: disable=no-member
                     included_namespaces=included_namespaces,
                     included_ontologies=included_ontologies,
@@ -760,10 +760,10 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         name: str,
         path: "Union[Path, str]",
         terminated: bool,
-        include_leafs: bool,
-        strict_leafs: bool,
+        include_leaves: bool,
+        strict_leaves: bool,
         width: float,
-        leafs: "Union[str, list[str]]",
+        leaves: "Union[str, list[str]]",
         relations: str,
         edgelabels: str,
         rankdir: str,
@@ -776,11 +776,11 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         Args:
             name: name of branch root
             path: optional figure path name
-            include_leafs: whether to include leafs
-            strict_leafs: whether strictly exclude leafs descendants
+            include_leaves: whether to include leaves
+            strict_leaves: whether strictly exclude leaves descendants
             terminated: whether the graph should be terminated at leaf nodes
             width: optional figure width
-            leafs: optional leafs node names for graph termination
+            leaves: optional leaves node names for graph termination
             relations: comma-separated list of relations to include
             edgelabels: whether to include edgelabels
             rankdir: graph direction (BT, TB, RL, LR)
@@ -790,19 +790,19 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
 
         Returns:
             filepath: path to generated figure
-            leafs: used list of leaf node names
+            leaves: used list of leaf node names
             width: actual figure width
 
         """
         onto = self.ontodoc.onto
-        if leafs:
-            if isinstance(leafs, str):
-                leafs = leafs.split(",")
+        if leaves:
+            if isinstance(leaves, str):
+                leaves = leaves.split(",")
         elif terminated:
-            leafs = set(self.get_branches())
-            leafs.discard(name)
+            leaves = set(self.get_branches())
+            leaves.discard(name)
         else:
-            leafs = None
+            leaves = None
         if path:
             figdir = os.path.dirname(path)
             formatext = os.path.splitext(path)[1]
@@ -821,9 +821,9 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         graph = OntoGraph(onto, graph_attr={"rankdir": rankdir})
         graph.add_branch(
             root=name,
-            leafs=leafs,
-            include_leafs=include_leafs,
-            strict_leafs=strict_leafs,
+            leaves=leaves,
+            include_leaves=include_leaves,
+            strict_leaves=strict_leaves,
             relations=relations,
             edgelabels=edgelabels,
             included_namespaces=included_namespaces,
@@ -843,7 +843,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         if not os.path.exists(destdir):
             os.makedirs(destdir)
         graph.save(filepath, fmt=fmt)
-        return filepath, leafs, width
+        return filepath, leaves, width
 
     def process_branchfigs(self):
         """Process all %BRANCHFIG directives."""
@@ -856,10 +856,10 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     path="",
                     caption="",
                     terminated=1,
-                    include_leafs=1,
-                    strict_leafs=1,
+                    include_leaves=1,
+                    strict_leaves=1,
                     width=0,
-                    leafs="",
+                    leaves="",
                     relations="all",
                     edgelabels=0,
                     rankdir="BT",
@@ -883,10 +883,10 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     name,
                     opts.path,  # pylint: disable=no-member
                     opts.terminated,  # pylint: disable=no-member
-                    opts.include_leafs,  # pylint: disable=no-member
-                    opts.strict_leafs,  # pylint: disable=no-member
+                    opts.include_leaves,  # pylint: disable=no-member
+                    opts.strict_leaves,  # pylint: disable=no-member
                     opts.width,  # pylint: disable=no-member
-                    opts.leafs,  # pylint: disable=no-member
+                    opts.leaves,  # pylint: disable=no-member
                     opts.relations,  # pylint: disable=no-member
                     opts.edgelabels,  # pylint: disable=no-member
                     opts.rankdir,  # pylint: disable=no-member
@@ -921,9 +921,9 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     title=title,
                     caption=title + ".",
                     terminated=1,
-                    strict_leafs=1,
+                    strict_leaves=1,
                     width=0,
-                    leafs="",
+                    leaves="",
                     relations="all",
                     edgelabels=0,
                     rankdir="BT",
@@ -943,15 +943,15 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     else ()  # pylint: disable=no-member
                 )
 
-                include_leafs = 1
-                filepath, leafs, width = self._make_branchfig(
+                include_leaves = 1
+                filepath, leaves, width = self._make_branchfig(
                     name,
                     opts.path,  # pylint: disable=no-member
                     opts.terminated,  # pylint: disable=no-member
-                    include_leafs,
-                    opts.strict_leafs,  # pylint: disable=no-member
+                    include_leaves,
+                    opts.strict_leaves,  # pylint: disable=no-member
                     opts.width,  # pylint: disable=no-member
-                    opts.leafs,  # pylint: disable=no-member
+                    opts.leaves,  # pylint: disable=no-member
                     opts.relations,  # pylint: disable=no-member
                     opts.edgelabels,  # pylint: disable=no-member
                     opts.rankdir,  # pylint: disable=no-member
@@ -972,9 +972,9 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     )
                 )
                 if with_branch:
-                    include_leafs = 0
+                    include_leaves = 0
                     branch = filter_classes(
-                        onto.get_branch(name, leafs, include_leafs),
+                        onto.get_branch(name, leaves, include_leaves),
                         included_namespaces=included_namespaces,
                         included_ontologies=included_ontologies,
                     )
@@ -1027,10 +1027,10 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     path="",
                     level=3,
                     terminated=0,
-                    include_leafs=1,
-                    strict_leafs=1,
+                    include_leaves=1,
+                    strict_leaves=1,
                     width=0,
-                    leafs="",
+                    leaves="",
                     relations="isA",
                     edgelabels=0,
                     rankdir="BT",
@@ -1071,10 +1071,10 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                         name,
                         opts.path,  # pylint: disable=no-member
                         opts.terminated,  # pylint: disable=no-member
-                        opts.include_leafs,  # pylint: disable=no-member
-                        opts.strict_leafs,  # pylint: disable=no-member
+                        opts.include_leaves,  # pylint: disable=no-member
+                        opts.strict_leaves,  # pylint: disable=no-member
                         opts.width,  # pylint: disable=no-member
-                        opts.leafs,  # pylint: disable=no-member
+                        opts.leaves,  # pylint: disable=no-member
                         opts.relations,  # pylint: disable=no-member
                         opts.edgelabels,  # pylint: disable=no-member
                         opts.rankdir,  # pylint: disable=no-member
