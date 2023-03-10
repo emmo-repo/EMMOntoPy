@@ -776,11 +776,11 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         Args:
             name: name of branch root
             path: optional figure path name
-            include_leaves: whether to include leaves
-            strict_leaves: whether strictly exclude leaves descendants
+            include_leaves: whether to include leaves as end points to the branch.
+            strict_leaves: whether to strictly exclude leave descendants
             terminated: whether the graph should be terminated at leaf nodes
             width: optional figure width
-            leaves: optional leaves node names for graph termination
+            leaves: optional leaf node names for graph termination
             relations: comma-separated list of relations to include
             edgelabels: whether to include edgelabels
             rankdir: graph direction (BT, TB, RL, LR)
