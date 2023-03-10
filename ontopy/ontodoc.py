@@ -518,7 +518,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
           - header_level: Header level.
           - terminated: Whether to branch should be terminated at all branch
             names in the final document.
-          - include_leaves: Whether to include leaf.
+          - include_leaves: Whether to include leaves as end points to the branch.
 
             %BRANCH name [header_level=3 terminated=1 include_leaves=0
                           namespaces='' ontologies='']
