@@ -1766,8 +1766,9 @@ DocPP        </code>
 <li>terminated: Whether to branch should be terminated at all branch
     names in the final document.</li>
 <li>
-<p>include_leafs: Whether to include leaf.</p>
-<p>%BRANCH name [header_level=3 terminated=1 include_leafs=0
+<p>include_leaves: Whether to include leaves as end points
+    to the branch.</p>
+<p>%BRANCH name [header_level=3 terminated=1 include_leaves=0
               namespaces='' ontologies='']</p>
 </li>
 </ul>
@@ -1778,17 +1779,17 @@ DocPP        </code>
     where <code>figdir</code> is given at class initiation. It is recommended
     to exclude the file extension from <code>path</code>.  In this case, the
     default figformat will be used (and easily adjusted to the
-    correct format required by the backend). <code>leafs</code> may be a comma-
+    correct format required by the backend). <code>leaves</code> may be a comma-
     separated list of leaf node names.</p>
-<div class="highlight"><pre><span></span><code>%BRANCHFIG name [path=&#39;&#39; caption=&#39;&#39; terminated=1 include_leafs=1
-                 strict_leafs=1, width=0px leafs=&#39;&#39; relations=all
+<div class="highlight"><pre><span></span><code>%BRANCHFIG name [path=&#39;&#39; caption=&#39;&#39; terminated=1 include_leaves=1
+                 strict_leaves=1, width=0px leaves=&#39;&#39; relations=all
                  edgelabels=0 namespaces=&#39;&#39; ontologies=&#39;&#39;]
 </code></pre></div>
 </li>
 <li>
 <p>This is a combination of the %HEADER and %BRANCHFIG directives.</p>
 <div class="highlight"><pre><span></span><code>%BRANCHHEAD name [level=2  path=&#39;&#39; caption=&#39;&#39; terminated=1
-                  include_leafs=1 width=0px leafs=&#39;&#39;]
+                  include_leaves=1 width=0px leaves=&#39;&#39;]
 </code></pre></div>
 </li>
 <li>
@@ -1797,7 +1798,7 @@ DocPP        </code>
     header followed by a figure and then documentation of each
     element.</p>
 <div class="highlight"><pre><span></span><code>%BRANCHDOC name [level=2  path=&#39;&#39; title=&#39;&#39; caption=&#39;&#39; terminated=1
-                 strict_leafs=1 width=0px leafs=&#39;&#39; relations=&#39;all&#39;
+                 strict_leaves=1 width=0px leaves=&#39;&#39; relations=&#39;all&#39;
                  rankdir=&#39;BT&#39; legend=1 namespaces=&#39;&#39; ontologies=&#39;&#39;]
 </code></pre></div>
 </li>
@@ -1869,9 +1870,10 @@ imported : bool
 <span class="sd">          - header_level: Header level.</span>
 <span class="sd">          - terminated: Whether to branch should be terminated at all branch</span>
 <span class="sd">            names in the final document.</span>
-<span class="sd">          - include_leafs: Whether to include leaf.</span>
+<span class="sd">          - include_leaves: Whether to include leaves as end points</span>
+<span class="sd">            to the branch.</span>
 
-<span class="sd">            %BRANCH name [header_level=3 terminated=1 include_leafs=0</span>
+<span class="sd">            %BRANCH name [header_level=3 terminated=1 include_leaves=0</span>
 <span class="sd">                          namespaces=&#39;&#39; ontologies=&#39;&#39;]</span>
 
 <span class="sd">      * Insert generated figure of ontology branch `name`.  The figure</span>
@@ -1879,17 +1881,17 @@ imported : bool
 <span class="sd">        where `figdir` is given at class initiation. It is recommended</span>
 <span class="sd">        to exclude the file extension from `path`.  In this case, the</span>
 <span class="sd">        default figformat will be used (and easily adjusted to the</span>
-<span class="sd">        correct format required by the backend). `leafs` may be a comma-</span>
+<span class="sd">        correct format required by the backend). `leaves` may be a comma-</span>
 <span class="sd">        separated list of leaf node names.</span>
 
-<span class="sd">            %BRANCHFIG name [path=&#39;&#39; caption=&#39;&#39; terminated=1 include_leafs=1</span>
-<span class="sd">                             strict_leafs=1, width=0px leafs=&#39;&#39; relations=all</span>
+<span class="sd">            %BRANCHFIG name [path=&#39;&#39; caption=&#39;&#39; terminated=1 include_leaves=1</span>
+<span class="sd">                             strict_leaves=1, width=0px leaves=&#39;&#39; relations=all</span>
 <span class="sd">                             edgelabels=0 namespaces=&#39;&#39; ontologies=&#39;&#39;]</span>
 
 <span class="sd">      * This is a combination of the %HEADER and %BRANCHFIG directives.</span>
 
 <span class="sd">            %BRANCHHEAD name [level=2  path=&#39;&#39; caption=&#39;&#39; terminated=1</span>
-<span class="sd">                              include_leafs=1 width=0px leafs=&#39;&#39;]</span>
+<span class="sd">                              include_leaves=1 width=0px leaves=&#39;&#39;]</span>
 
 <span class="sd">      * This is a combination of the %HEADER, %BRANCHFIG and %BRANCH</span>
 <span class="sd">        directives. It inserts documentation of branch `name`, with a</span>
@@ -1897,7 +1899,7 @@ imported : bool
 <span class="sd">        element.</span>
 
 <span class="sd">            %BRANCHDOC name [level=2  path=&#39;&#39; title=&#39;&#39; caption=&#39;&#39; terminated=1</span>
-<span class="sd">                             strict_leafs=1 width=0px leafs=&#39;&#39; relations=&#39;all&#39;</span>
+<span class="sd">                             strict_leaves=1 width=0px leaves=&#39;&#39; relations=&#39;all&#39;</span>
 <span class="sd">                             rankdir=&#39;BT&#39; legend=1 namespaces=&#39;&#39; ontologies=&#39;&#39;]</span>
 
 <span class="sd">      * Insert generated documentation for all entities of the given type.</span>
@@ -2074,11 +2076,11 @@ imported : bool
                     <span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
                     <span class="n">header_level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                     <span class="n">terminated</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                    <span class="n">include_leafs</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="n">include_leaves</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                     <span class="n">namespaces</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="n">ontologies</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
-                <span class="n">leafs</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">leaves</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="n">names</span> <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">terminated</span> <span class="k">else</span> <span class="p">()</span>
                 <span class="p">)</span>  <span class="c1"># pylint: disable=no-member</span>
 
@@ -2095,7 +2097,7 @@ imported : bool
 
                 <span class="n">branch</span> <span class="o">=</span> <span class="n">filter_classes</span><span class="p">(</span>
                     <span class="n">onto</span><span class="o">.</span><span class="n">get_branch</span><span class="p">(</span>
-                        <span class="n">name</span><span class="p">,</span> <span class="n">leafs</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">include_leafs</span>
+                        <span class="n">name</span><span class="p">,</span> <span class="n">leaves</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">include_leaves</span>
                     <span class="p">),</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">included_namespaces</span><span class="o">=</span><span class="n">included_namespaces</span><span class="p">,</span>
                     <span class="n">included_ontologies</span><span class="o">=</span><span class="n">included_ontologies</span><span class="p">,</span>
@@ -2111,10 +2113,10 @@ imported : bool
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">path</span><span class="p">:</span> <span class="s2">&quot;Union[Path, str]&quot;</span><span class="p">,</span>
         <span class="n">terminated</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-        <span class="n">include_leafs</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-        <span class="n">strict_leafs</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">include_leaves</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">strict_leaves</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
         <span class="n">width</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">leafs</span><span class="p">:</span> <span class="s2">&quot;Union[str, list[str]]&quot;</span><span class="p">,</span>
+        <span class="n">leaves</span><span class="p">:</span> <span class="s2">&quot;Union[str, list[str]]&quot;</span><span class="p">,</span>
         <span class="n">relations</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">edgelabels</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">rankdir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2127,11 +2129,12 @@ imported : bool
 <span class="sd">        Args:</span>
 <span class="sd">            name: name of branch root</span>
 <span class="sd">            path: optional figure path name</span>
-<span class="sd">            include_leafs: whether to include leafs</span>
-<span class="sd">            strict_leafs: whether strictly exclude leafs descendants</span>
+<span class="sd">            include_leaves: whether to include leaves as end points</span>
+<span class="sd">                to the branch.</span>
+<span class="sd">            strict_leaves: whether to strictly exclude leave descendants</span>
 <span class="sd">            terminated: whether the graph should be terminated at leaf nodes</span>
 <span class="sd">            width: optional figure width</span>
-<span class="sd">            leafs: optional leafs node names for graph termination</span>
+<span class="sd">            leaves: optional leaf node names for graph termination</span>
 <span class="sd">            relations: comma-separated list of relations to include</span>
 <span class="sd">            edgelabels: whether to include edgelabels</span>
 <span class="sd">            rankdir: graph direction (BT, TB, RL, LR)</span>
@@ -2141,19 +2144,19 @@ imported : bool
 
 <span class="sd">        Returns:</span>
 <span class="sd">            filepath: path to generated figure</span>
-<span class="sd">            leafs: used list of leaf node names</span>
+<span class="sd">            leaves: used list of leaf node names</span>
 <span class="sd">            width: actual figure width</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">onto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontodoc</span><span class="o">.</span><span class="n">onto</span>
-        <span class="k">if</span> <span class="n">leafs</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">leafs</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="n">leafs</span> <span class="o">=</span> <span class="n">leafs</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">leaves</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">leaves</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">leaves</span> <span class="o">=</span> <span class="n">leaves</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">terminated</span><span class="p">:</span>
-            <span class="n">leafs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_branches</span><span class="p">())</span>
-            <span class="n">leafs</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">leaves</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_branches</span><span class="p">())</span>
+            <span class="n">leaves</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">leafs</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">leaves</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">path</span><span class="p">:</span>
             <span class="n">figdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
             <span class="n">formatext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
@@ -2172,9 +2175,9 @@ imported : bool
         <span class="n">graph</span> <span class="o">=</span> <span class="n">OntoGraph</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">graph_attr</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rankdir&quot;</span><span class="p">:</span> <span class="n">rankdir</span><span class="p">})</span>
         <span class="n">graph</span><span class="o">.</span><span class="n">add_branch</span><span class="p">(</span>
             <span class="n">root</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-            <span class="n">leafs</span><span class="o">=</span><span class="n">leafs</span><span class="p">,</span>
-            <span class="n">include_leafs</span><span class="o">=</span><span class="n">include_leafs</span><span class="p">,</span>
-            <span class="n">strict_leafs</span><span class="o">=</span><span class="n">strict_leafs</span><span class="p">,</span>
+            <span class="n">leaves</span><span class="o">=</span><span class="n">leaves</span><span class="p">,</span>
+            <span class="n">include_leaves</span><span class="o">=</span><span class="n">include_leaves</span><span class="p">,</span>
+            <span class="n">strict_leaves</span><span class="o">=</span><span class="n">strict_leaves</span><span class="p">,</span>
             <span class="n">relations</span><span class="o">=</span><span class="n">relations</span><span class="p">,</span>
             <span class="n">edgelabels</span><span class="o">=</span><span class="n">edgelabels</span><span class="p">,</span>
             <span class="n">included_namespaces</span><span class="o">=</span><span class="n">included_namespaces</span><span class="p">,</span>
@@ -2194,7 +2197,7 @@ imported : bool
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">destdir</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">destdir</span><span class="p">)</span>
         <span class="n">graph</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">leafs</span><span class="p">,</span> <span class="n">width</span>
+        <span class="k">return</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">leaves</span><span class="p">,</span> <span class="n">width</span>
 
     <span class="k">def</span> <span class="nf">process_branchfigs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Process all %BRANCHFIG directives.&quot;&quot;&quot;</span>
@@ -2207,10 +2210,10 @@ imported : bool
                     <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="n">terminated</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                    <span class="n">include_leafs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                    <span class="n">strict_leafs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">include_leaves</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">strict_leaves</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                     <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                    <span class="n">leafs</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">leaves</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
                     <span class="n">edgelabels</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                     <span class="n">rankdir</span><span class="o">=</span><span class="s2">&quot;BT&quot;</span><span class="p">,</span>
@@ -2234,10 +2237,10 @@ imported : bool
                     <span class="n">name</span><span class="p">,</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">terminated</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                    <span class="n">opts</span><span class="o">.</span><span class="n">include_leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                    <span class="n">opts</span><span class="o">.</span><span class="n">strict_leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                    <span class="n">opts</span><span class="o">.</span><span class="n">include_leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                    <span class="n">opts</span><span class="o">.</span><span class="n">strict_leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                    <span class="n">opts</span><span class="o">.</span><span class="n">leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                    <span class="n">opts</span><span class="o">.</span><span class="n">leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">relations</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">edgelabels</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">rankdir</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
@@ -2272,9 +2275,9 @@ imported : bool
                     <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
                     <span class="n">caption</span><span class="o">=</span><span class="n">title</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
                     <span class="n">terminated</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                    <span class="n">strict_leafs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">strict_leaves</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                     <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                    <span class="n">leafs</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">leaves</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
                     <span class="n">edgelabels</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                     <span class="n">rankdir</span><span class="o">=</span><span class="s2">&quot;BT&quot;</span><span class="p">,</span>
@@ -2294,15 +2297,15 @@ imported : bool
                     <span class="k">else</span> <span class="p">()</span>  <span class="c1"># pylint: disable=no-member</span>
                 <span class="p">)</span>
 
-                <span class="n">include_leafs</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="n">filepath</span><span class="p">,</span> <span class="n">leafs</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_branchfig</span><span class="p">(</span>
+                <span class="n">include_leaves</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">filepath</span><span class="p">,</span> <span class="n">leaves</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_branchfig</span><span class="p">(</span>
                     <span class="n">name</span><span class="p">,</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">terminated</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                    <span class="n">include_leafs</span><span class="p">,</span>
-                    <span class="n">opts</span><span class="o">.</span><span class="n">strict_leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                    <span class="n">include_leaves</span><span class="p">,</span>
+                    <span class="n">opts</span><span class="o">.</span><span class="n">strict_leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                    <span class="n">opts</span><span class="o">.</span><span class="n">leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                    <span class="n">opts</span><span class="o">.</span><span class="n">leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">relations</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">edgelabels</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">rankdir</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
@@ -2323,9 +2326,9 @@ imported : bool
                     <span class="p">)</span>
                 <span class="p">)</span>
                 <span class="k">if</span> <span class="n">with_branch</span><span class="p">:</span>
-                    <span class="n">include_leafs</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">include_leaves</span> <span class="o">=</span> <span class="mi">0</span>
                     <span class="n">branch</span> <span class="o">=</span> <span class="n">filter_classes</span><span class="p">(</span>
-                        <span class="n">onto</span><span class="o">.</span><span class="n">get_branch</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">leafs</span><span class="p">,</span> <span class="n">include_leafs</span><span class="p">),</span>
+                        <span class="n">onto</span><span class="o">.</span><span class="n">get_branch</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">leaves</span><span class="p">,</span> <span class="n">include_leaves</span><span class="p">),</span>
                         <span class="n">included_namespaces</span><span class="o">=</span><span class="n">included_namespaces</span><span class="p">,</span>
                         <span class="n">included_ontologies</span><span class="o">=</span><span class="n">included_ontologies</span><span class="p">,</span>
                     <span class="p">)</span>
@@ -2378,10 +2381,10 @@ imported : bool
                     <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                     <span class="n">terminated</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                    <span class="n">include_leafs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                    <span class="n">strict_leafs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">include_leaves</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">strict_leaves</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                     <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                    <span class="n">leafs</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">leaves</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;isA&quot;</span><span class="p">,</span>
                     <span class="n">edgelabels</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                     <span class="n">rankdir</span><span class="o">=</span><span class="s2">&quot;BT&quot;</span><span class="p">,</span>
@@ -2422,10 +2425,10 @@ imported : bool
                         <span class="n">name</span><span class="p">,</span>
                         <span class="n">opts</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                         <span class="n">opts</span><span class="o">.</span><span class="n">terminated</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                        <span class="n">opts</span><span class="o">.</span><span class="n">include_leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                        <span class="n">opts</span><span class="o">.</span><span class="n">strict_leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                        <span class="n">opts</span><span class="o">.</span><span class="n">include_leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                        <span class="n">opts</span><span class="o">.</span><span class="n">strict_leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                         <span class="n">opts</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                        <span class="n">opts</span><span class="o">.</span><span class="n">leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                        <span class="n">opts</span><span class="o">.</span><span class="n">leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                         <span class="n">opts</span><span class="o">.</span><span class="n">relations</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                         <span class="n">opts</span><span class="o">.</span><span class="n">edgelabels</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                         <span class="n">opts</span><span class="o">.</span><span class="n">rankdir</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
@@ -2746,10 +2749,10 @@ processing branches.</p>
                 <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                 <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                 <span class="n">terminated</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="n">include_leafs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="n">strict_leafs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">include_leaves</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">strict_leaves</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                 <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="n">leafs</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="n">leaves</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                 <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;isA&quot;</span><span class="p">,</span>
                 <span class="n">edgelabels</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                 <span class="n">rankdir</span><span class="o">=</span><span class="s2">&quot;BT&quot;</span><span class="p">,</span>
@@ -2790,10 +2793,10 @@ processing branches.</p>
                     <span class="n">name</span><span class="p">,</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">terminated</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                    <span class="n">opts</span><span class="o">.</span><span class="n">include_leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                    <span class="n">opts</span><span class="o">.</span><span class="n">strict_leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                    <span class="n">opts</span><span class="o">.</span><span class="n">include_leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                    <span class="n">opts</span><span class="o">.</span><span class="n">strict_leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                    <span class="n">opts</span><span class="o">.</span><span class="n">leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                    <span class="n">opts</span><span class="o">.</span><span class="n">leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">relations</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">edgelabels</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                     <span class="n">opts</span><span class="o">.</span><span class="n">rankdir</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
@@ -2907,9 +2910,9 @@ processing branches.</p>
                 <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
                 <span class="n">caption</span><span class="o">=</span><span class="n">title</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
                 <span class="n">terminated</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="n">strict_leafs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">strict_leaves</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                 <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="n">leafs</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="n">leaves</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                 <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
                 <span class="n">edgelabels</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                 <span class="n">rankdir</span><span class="o">=</span><span class="s2">&quot;BT&quot;</span><span class="p">,</span>
@@ -2929,15 +2932,15 @@ processing branches.</p>
                 <span class="k">else</span> <span class="p">()</span>  <span class="c1"># pylint: disable=no-member</span>
             <span class="p">)</span>
 
-            <span class="n">include_leafs</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">filepath</span><span class="p">,</span> <span class="n">leafs</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_branchfig</span><span class="p">(</span>
+            <span class="n">include_leaves</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">filepath</span><span class="p">,</span> <span class="n">leaves</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_branchfig</span><span class="p">(</span>
                 <span class="n">name</span><span class="p">,</span>
                 <span class="n">opts</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                 <span class="n">opts</span><span class="o">.</span><span class="n">terminated</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                <span class="n">include_leafs</span><span class="p">,</span>
-                <span class="n">opts</span><span class="o">.</span><span class="n">strict_leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                <span class="n">include_leaves</span><span class="p">,</span>
+                <span class="n">opts</span><span class="o">.</span><span class="n">strict_leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                 <span class="n">opts</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                <span class="n">opts</span><span class="o">.</span><span class="n">leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                <span class="n">opts</span><span class="o">.</span><span class="n">leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                 <span class="n">opts</span><span class="o">.</span><span class="n">relations</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                 <span class="n">opts</span><span class="o">.</span><span class="n">edgelabels</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                 <span class="n">opts</span><span class="o">.</span><span class="n">rankdir</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
@@ -2958,9 +2961,9 @@ processing branches.</p>
                 <span class="p">)</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">with_branch</span><span class="p">:</span>
-                <span class="n">include_leafs</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">include_leaves</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="n">branch</span> <span class="o">=</span> <span class="n">filter_classes</span><span class="p">(</span>
-                    <span class="n">onto</span><span class="o">.</span><span class="n">get_branch</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">leafs</span><span class="p">,</span> <span class="n">include_leafs</span><span class="p">),</span>
+                    <span class="n">onto</span><span class="o">.</span><span class="n">get_branch</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">leaves</span><span class="p">,</span> <span class="n">include_leaves</span><span class="p">),</span>
                     <span class="n">included_namespaces</span><span class="o">=</span><span class="n">included_namespaces</span><span class="p">,</span>
                     <span class="n">included_ontologies</span><span class="o">=</span><span class="n">included_ontologies</span><span class="p">,</span>
                 <span class="p">)</span>
@@ -3010,11 +3013,11 @@ processing branches.</p>
                 <span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
                 <span class="n">header_level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                 <span class="n">terminated</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="n">include_leafs</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">include_leaves</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                 <span class="n">namespaces</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                 <span class="n">ontologies</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">leafs</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">leaves</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">names</span> <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">terminated</span> <span class="k">else</span> <span class="p">()</span>
             <span class="p">)</span>  <span class="c1"># pylint: disable=no-member</span>
 
@@ -3031,7 +3034,7 @@ processing branches.</p>
 
             <span class="n">branch</span> <span class="o">=</span> <span class="n">filter_classes</span><span class="p">(</span>
                 <span class="n">onto</span><span class="o">.</span><span class="n">get_branch</span><span class="p">(</span>
-                    <span class="n">name</span><span class="p">,</span> <span class="n">leafs</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">include_leafs</span>
+                    <span class="n">name</span><span class="p">,</span> <span class="n">leaves</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">include_leaves</span>
                 <span class="p">),</span>  <span class="c1"># pylint: disable=no-member</span>
                 <span class="n">included_namespaces</span><span class="o">=</span><span class="n">included_namespaces</span><span class="p">,</span>
                 <span class="n">included_ontologies</span><span class="o">=</span><span class="n">included_ontologies</span><span class="p">,</span>
@@ -3076,10 +3079,10 @@ processing branches.</p>
                 <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                 <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                 <span class="n">terminated</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="n">include_leafs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="n">strict_leafs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">include_leaves</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">strict_leaves</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                 <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="n">leafs</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="n">leaves</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                 <span class="n">relations</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
                 <span class="n">edgelabels</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                 <span class="n">rankdir</span><span class="o">=</span><span class="s2">&quot;BT&quot;</span><span class="p">,</span>
@@ -3103,10 +3106,10 @@ processing branches.</p>
                 <span class="n">name</span><span class="p">,</span>
                 <span class="n">opts</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                 <span class="n">opts</span><span class="o">.</span><span class="n">terminated</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                <span class="n">opts</span><span class="o">.</span><span class="n">include_leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                <span class="n">opts</span><span class="o">.</span><span class="n">strict_leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                <span class="n">opts</span><span class="o">.</span><span class="n">include_leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                <span class="n">opts</span><span class="o">.</span><span class="n">strict_leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                 <span class="n">opts</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
-                <span class="n">opts</span><span class="o">.</span><span class="n">leafs</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                <span class="n">opts</span><span class="o">.</span><span class="n">leaves</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                 <span class="n">opts</span><span class="o">.</span><span class="n">relations</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                 <span class="n">opts</span><span class="o">.</span><span class="n">edgelabels</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
                 <span class="n">opts</span><span class="o">.</span><span class="n">rankdir</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
