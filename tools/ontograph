@@ -126,7 +126,7 @@ def main(
         "--leafs",
         action="append",
         default=[],
-        help=("This argument is deprecated, plaese use `--leaves` instead"),
+        help=("This argument is deprecated, please use `--leaves` instead"),
     )
     parser.add_argument(
         "--exclude",
