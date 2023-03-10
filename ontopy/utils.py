@@ -109,7 +109,7 @@ def getiriname(iri):
 
 def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
     expr,
-    link="{lowerlabel}",
+    link="{label}",
     recursion_depth=0,
     exclude_object=False,
     ontology=None,
