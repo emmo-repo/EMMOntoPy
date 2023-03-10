@@ -702,7 +702,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             entity: the entity of the parent relation
             relations: relations with default styles
             rels: relations to be considered that have default styles,
-                either for the prefLab or one of the altLabels
+                either for the prefLabel or one of the altLabels
         """
         for relation in entity.mro():
             if relation in rels:
