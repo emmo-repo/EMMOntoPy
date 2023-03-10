@@ -75,7 +75,7 @@ For instance, in the graph of the top-level entity branch below, The root `EMMO`
 Non-defined classes are defined as an abstract group of objects, whose members are defined as belonging to the class.
 They are yellow in the graphical representations.
 
-%BRANCHFIG EMMO leafs=Perspective,Elementary caption='Example of the top-level branch of EMMO showing some classes and relationships between them.' width=460
+%BRANCHFIG EMMO leaves=Perspective,Elementary caption='Example of the top-level branch of EMMO showing some classes and relationships between them.' width=460
 
 ### Axioms
 

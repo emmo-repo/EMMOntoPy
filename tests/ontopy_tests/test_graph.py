@@ -92,7 +92,7 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
     graph = OntoGraph(
         emmo,
         emmo.hasPart,
-        leafs=("mereological", "semiotical", "causal"),
+        leaves=("mereological", "semiotical", "causal"),
     )
     graph.save(tmpdir / "hasPart.svg")
 
@@ -128,7 +128,7 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
     graph = OntoGraph(
         emmo,
         emmo.Quantity,
-        leafs=[emmo.DerivedQuantity, emmo.BaseQuantity, emmo.PhysicalConstant],
+        leaves=[emmo.DerivedQuantity, emmo.BaseQuantity, emmo.PhysicalConstant],
         relations="all",
         edgelabels=None,
         addnodes=True,
@@ -145,17 +145,17 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
     graph.save(tmpdir / "legend.png")
 
     graph = OntoGraph(
-        emmo, emmo.EMMO, leafs=[emmo.Perspective, emmo.Elementary]
+        emmo, emmo.EMMO, leaves=[emmo.Perspective, emmo.Elementary]
     )
     graph.save(tmpdir / "top.png")
 
-    leafs = set()
+    leaves = set()
     for s in emmo.Perspective.subclasses():
-        leafs.update(s.subclasses())
-    graph = OntoGraph(emmo, emmo.Perspective, leafs=leafs, parents=1)
+        leaves.update(s.subclasses())
+    graph = OntoGraph(emmo, emmo.Perspective, leaves=leaves, parents=1)
     graph.save(tmpdir / "Perspectives.png")
 
-    leafs = {
+    leaves = {
         emmo.Interpreter,
         emmo.Conventional,
         emmo.Icon,
@@ -169,7 +169,7 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
         emmo.Engineered,
         emmo.PhysicalPhenomenon,
     }
-    semiotic = emmo.get_branch(emmo.Holistic, leafs=leafs.union(hidden))
+    semiotic = emmo.get_branch(emmo.Holistic, leaves=leaves.union(hidden))
     semiotic.difference_update(hidden)
     graph = OntoGraph(emmo)
     graph.add_entities(semiotic, relations="all", edgelabels=False)
@@ -182,7 +182,7 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
     legend.save(tmpdir / "Semiotic-legend.png")
 
     # Measurement
-    leafs = {emmo.Object}
+    leaves = {emmo.Object}
 
     hidden = {
         emmo.SIUnitSymbol,
@@ -202,7 +202,7 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
         emmo.Theory,
         emmo.Variable,
     }
-    semiotic = emmo.get_branch(emmo.Holistic, leafs=leafs.union(hidden))
+    semiotic = emmo.get_branch(emmo.Holistic, leaves=leaves.union(hidden))
     semiotic.difference_update(hidden)
     graph = OntoGraph(emmo)
     graph.add_entities(semiotic, relations="all", edgelabels=False)
@@ -215,7 +215,7 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
         emmo.Reductionistic,
         relations="all",
         addnodes=False,
-        leafs=[
+        leaves=[
             emmo.Quantity,
             emmo.String,
             emmo.PrefixedUnit,
