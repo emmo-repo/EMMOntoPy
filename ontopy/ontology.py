@@ -1221,25 +1221,25 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def get_branch(  # pylint: disable=too-many-arguments
         self,
         root,
-        leafs=(),
-        include_leafs=True,
-        strict_leafs=False,
+        leaves=(),
+        include_leaves=True,
+        strict_leaves=False,
         exclude=None,
         sort=False,
     ):
         """Returns a set with all direct and indirect subclasses of `root`.
-        Any subclass found in the sequence `leafs` will be included in
+        Any subclass found in the sequence `leaves` will be included in
         the returned list, but its subclasses will not.  The elements
-        of `leafs` may be ThingClass objects or labels.
+        of `leaves` may be ThingClass objects or labels.
 
-        Subclasses of any subclass found in the sequence `leafs` will
-        be excluded from the returned list, where the elements of `leafs`
+        Subclasses of any subclass found in the sequence `leaves` will
+        be excluded from the returned list, where the elements of `leaves`
         may be ThingClass objects or labels.
 
-        If `include_leafs` is true, the leafs are included in the returned
+        If `include_leaves` is true, the leaves are included in the returned
         list, otherwise they are not.
 
-        If `strict_leafs` is true, any descendant of a leaf will be excluded
+        If `strict_leaves` is true, any descendant of a leaf will be excluded
         in the returned set.
 
         If given, `exclude` may be a sequence of classes, including
@@ -1249,8 +1249,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         will be returned instead of a set.
         """
 
-        def _branch(root, leafs):
-            if root not in leafs:
+        def _branch(root, leaves):
+            if root not in leaves:
                 branch = {
                     root,
                 }
@@ -1269,13 +1269,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     # include it.  Requireing that the R should be a strict
                     # parent of A solves this.
                     if root in cls.get_parents(strict=True):
-                        branch.update(_branch(cls, leafs))
+                        branch.update(_branch(cls, leaves))
             else:
                 branch = (
                     {
                         root,
                     }
-                    if include_leafs
+                    if include_leaves
                     else set()
                 )
             return branch
@@ -1283,25 +1283,25 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         if isinstance(root, str):
             root = self.get_by_label(root)
 
-        leafs = set(
+        leaves = set(
             self.get_by_label(leaf) if isinstance(leaf, str) else leaf
-            for leaf in leafs
+            for leaf in leaves
         )
-        leafs.discard(root)
+        leaves.discard(root)
 
         if exclude:
             exclude = set(
                 self.get_by_label(e) if isinstance(e, str) else e
                 for e in exclude
             )
-            leafs.update(exclude)
+            leaves.update(exclude)
 
-        branch = _branch(root, leafs)
+        branch = _branch(root, leaves)
 
         # Exclude all descendants of any leaf
-        if strict_leafs:
+        if strict_leaves:
             descendants = root.descendants()
-            for leaf in leafs:
+            for leaf in leaves:
                 if leaf in descendants:
                     branch.difference_update(
                         leaf.descendants(include_self=False)

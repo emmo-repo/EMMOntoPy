@@ -166,7 +166,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         Name or owlready2 entity of root node to plot subgraph
         below.  If `root` is `graph.ALL`, all classes will be included
         in the subgraph.
-    leafs : None | sequence
+    leaves : None | sequence
         A sequence of leaf node names for generating sub-graphs.
     entities : None | sequence
         A sequence of entities to add to the graph.
@@ -236,7 +236,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         self,
         ontology,
         root=None,
-        leafs=None,
+        leaves=None,
         entities=None,
         relations="isA",
         style=None,
@@ -293,7 +293,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         elif root:
             self.add_branch(
                 root,
-                leafs,
+                leaves,
                 relations=relations,
                 edgelabels=edgelabels,
                 addnodes=addnodes,
@@ -350,9 +350,9 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
     def add_branch(  # pylint: disable=too-many-arguments,too-many-locals
         self,
         root,
-        leafs=None,
-        include_leafs=True,
-        strict_leafs=False,
+        leaves=None,
+        include_leaves=True,
+        strict_leaves=False,
         exclude=None,
         relations="isA",
         edgelabels=None,
@@ -363,17 +363,17 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         include_parents="closest",
         **attrs,
     ):
-        """Adds branch under `root` ending at any entiry included in the
-        sequence `leafs`.  If `include_leafs` is true, leafs classes are
+        """Adds branch under `root` ending at any entity included in the
+        sequence `leaves`.  If `include_leaves` is true, leaf classes are
         also included."""
-        if leafs is None:
-            leafs = ()
+        if leaves is None:
+            leaves = ()
 
         classes = self.ontology.get_branch(
             root=root,
-            leafs=leafs,
-            include_leafs=include_leafs,
-            strict_leafs=strict_leafs,
+            leaves=leaves,
+            include_leaves=include_leaves,
+            strict_leaves=strict_leaves,
             exclude=exclude,
         )
 
@@ -385,7 +385,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
 
         nodeattrs = {}
         nodeattrs[get_label(root)] = self.style.get("root", {})
-        for leaf in leafs:
+        for leaf in leaves:
             nodeattrs[get_label(leaf)] = self.style.get("leaf", {})
 
         self.add_entities(
