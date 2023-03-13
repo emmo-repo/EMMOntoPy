@@ -77,7 +77,7 @@ def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
     graph.save(tmpdir / "testonto.png")
 
 
-def test_emmo_graphs(emmo: "Ontology", repo_dir: "Path") -> None:
+def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
     """Testing OntoGraph on various aspects of EMMO.
 
     Parameters:
@@ -86,7 +86,6 @@ def test_emmo_graphs(emmo: "Ontology", repo_dir: "Path") -> None:
         tmpdir: A built in pytest fixture to get a function-scoped
             temporary directory'
     """
-    tmpdir = repo_dir
     import owlready2
     from ontopy.graph import OntoGraph
     import warnings
