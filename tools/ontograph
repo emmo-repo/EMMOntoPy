@@ -321,7 +321,7 @@ def main(
             addconstructs=args.addconstructs,
         )
         if args.parents:
-            graph.add_parents(args.parents)
+            graph.add_parents(root, levels=args.parents)
 
         if args.legend:
             graph.add_legend()

@@ -106,6 +106,9 @@ _default_style = {
         "hasSign": {"color": "orange"},
         "hasConvention": {"color": "orange", "style": "dashed"},
         "hasProperty": {"color": "orange", "style": "dotted"},
+        "hasOutput": {"color": "darkviolet", "style": "dotted"},
+        "hasInput": {"color": "darkviolet"},
+        "hasTemporaryParticipant": {"color": "darkviolet", "style": "dashed"},
     },
     "inverse": {"arrowhead": "inv"},
     "default_dataprop": {"color": "green", "constraint": "false"},
@@ -1092,7 +1095,7 @@ def cytoscapegraph(
             onto: ontology to be used for mouse actions.
             infobox: "left" or "right". Placement of infbox with
                      respect to graph.
-            force: force generate graph withour correct edgelabels.
+            force: force generate graph without correct edgelabels.
     Returns:
             cytoscapewidget with graph and infobox to be visualized
             in jupyter lab.
