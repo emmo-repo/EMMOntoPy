@@ -15,7 +15,7 @@ import graphviz
 
 from ontopy.utils import asstring, get_label
 from ontopy.ontology import Ontology
-from ontopy.utils import EMMOntoPyException
+from ontopy.utils import EMMOntoPyException, get_format
 
 if TYPE_CHECKING:
     from ipywidgets.widgets.widget_templates import GridspecLayout
@@ -209,7 +209,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         Whether to add labels to the edges of the generated graph.
         It is also possible to provide a dict mapping the
         full labels (with cardinality stripped off for restrictions)
-        to some abbriviations.
+        to some abbreviations.
     addnodes : bool
         Whether to add missing target nodes in relations.
     addconstructs : bool
@@ -707,6 +707,10 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             rels: relations to be considered that have default styles,
                 either for the prefLabel or one of the altLabels
         """
+        print("entity", entity)
+        print("relations", relations)
+        print("rels", rels)
+        print("entity.mro", list(entity.mro()))
         for relation in entity.mro():
             if relation in rels:
                 if get_label(relation) in relations:
@@ -868,9 +872,8 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
     def save(self, filename, fmt=None, **kwargs):
         """Saves graph to `filename`.  If format is not given, it is
         inferred from `filename`."""
-        base, ext = os.path.splitext(filename)
-        if fmt is None:
-            fmt = ext.lstrip(".")
+        base = os.path.splitext(filename)[0]
+        fmt = get_format(filename, default="svg", fmt=fmt)
         kwargs.setdefault("cleanup", True)
         if fmt in ("graphviz", "gv"):
             if "dictionary" in kwargs:
