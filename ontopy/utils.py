@@ -732,6 +732,4 @@ def get_format(outfile: str, default: str, fmt: str = None):
         fmt = os.path.splitext(outfile)[1]
     if not fmt:
         fmt = default
-    if fmt.startswith("."):
-        fmt = fmt[1:]
-    return fmt
+    return fmt.lstrip(".")
