@@ -485,7 +485,6 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         if key not in self.edges:
             if edgelabel is None:
                 edgelabel = self.edgelabels
-
             label = None
             if edgelabel is None:
                 tokens = predicate.split()
@@ -503,7 +502,6 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                 label = edgelabel.get(predicate, predicate)
             elif edgelabel:
                 label = predicate
-
             kwargs = self.get_edge_attrs(predicate, attrs=attrs)
             self.dot.edge(subject, obj, label=label, **kwargs)
             self.edges.add(key)
@@ -707,10 +705,6 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             rels: relations to be considered that have default styles,
                 either for the prefLabel or one of the altLabels
         """
-        print("entity", entity)
-        print("relations", relations)
-        print("rels", rels)
-        print("entity.mro", list(entity.mro()))
         for relation in entity.mro():
             if relation in rels:
                 if get_label(relation) in relations:
