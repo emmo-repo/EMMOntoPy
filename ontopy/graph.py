@@ -810,7 +810,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         label1 = [table]
         label2 = [table]
         for index, relation in enumerate(relations):
-            if relation in rels:
+            if (relation in rels) or (relation == "isA"):
                 label1.append(
                     f'<tr><td align="right" '
                     f'port="i{index}"><b>{relation}</b></td></tr>'
