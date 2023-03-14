@@ -87,7 +87,8 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
             temporary directory'
     """
     import owlready2
-    from ontopy.graph import OntoGraph
+    from ontopy.graph import OntoGraph, plot_modules
+    from ontopy import get_ontology
     import warnings
 
     with warnings.catch_warnings():
@@ -118,7 +119,7 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
             emmo.SIBaseUnit,
             relations="all",
             addnodes=True,
-            edgelabels=True,
+            edgelabels=False,
             addconstructs=False,
             graph_attr={"rankdir": "RL"},
         )
@@ -139,7 +140,7 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
                 emmo.PhysicalConstant,
             ],
             relations="all",
-            edgelabels=None,
+            edgelabels=True,
             addnodes=True,
             addconstructs=True,
             graph_attr={"rankdir": "RL"},
@@ -181,7 +182,7 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
         semiotic = emmo.get_branch(emmo.Holistic, leaves=leaves.union(hidden))
         semiotic.difference_update(hidden)
         graph = OntoGraph(emmo)
-        graph.add_entities(semiotic, relations="all", edgelabels=False)
+        graph.add_entities(semiotic, relations="all", edgelabels=None)
         graph.save(tmpdir / "Semiotic.png")
         graph.add_legend()
         graph.save(tmpdir / "Semiotic+legend.png")
@@ -235,4 +236,11 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
             edgelabels=None,
         )
         graph.add_legend()
-        graph.save(tmpdir / "Reductionistic.png")
+        graph.save(tmpdir / "Reductionistic.png", fmt="graphviz")
+
+        # View modules
+
+        onto = get_ontology(
+            "https://raw.githubusercontent.com/emmo-repo/EMMO/1.0.0-beta4/emmo.ttl"
+        ).load()
+        plot_modules(onto, tmpdir / "modules.png", ignore_redundant=True)

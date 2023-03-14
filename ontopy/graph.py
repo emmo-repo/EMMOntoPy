@@ -483,19 +483,25 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             raise RuntimeError(f'`object` "{obj}" must have been added')
         key = (subject, predicate, obj)
         if key not in self.edges:
-            if edgelabel is None:
+            relations = self.style.get("relations", {})
+            rels = set(
+                self.ontology[_] for _ in relations if _ in self.ontology
+            )
+            if (edgelabel is None) and (
+                (predicate in rels) or (predicate == "isA")
+            ):
                 edgelabel = self.edgelabels
             label = None
             if edgelabel is None:
                 tokens = predicate.split()
                 if len(tokens) == 2 and tokens[1] in ("some", "only"):
-                    label = tokens[1]
+                    label = f"{tokens[0]} {tokens[1]}"
                 elif len(tokens) == 3 and tokens[1] in (
                     "exactly",
                     "min",
                     "max",
                 ):
-                    label = f"{tokens[1]} {tokens[2]}"
+                    label = f"{tokens[0]} {tokens[1]} {tokens[2]}"
             elif isinstance(edgelabel, str):
                 label = edgelabel
             elif isinstance(edgelabel, dict):
