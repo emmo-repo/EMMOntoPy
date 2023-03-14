@@ -160,6 +160,7 @@ def main(
         "--edgelabels",
         "-e",
         action="store_true",
+        default=None,
         help="Whether to add labels to edges.",
     )
     parser.add_argument(
