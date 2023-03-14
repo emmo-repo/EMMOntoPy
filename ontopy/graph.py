@@ -102,7 +102,7 @@ _default_style = {
         "hasSpatialDirectPart": {"color": "darkgreen", "style": "dashed"},
         "hasTemporalPart": {"color": "magenta"},
         "hasTemporalDirectPart": {"color": "magenta", "style": "dashed"},
-        "hasReferenceUnit": {"color": "darkgreen", "style": "dashed"},
+        "hasReferenceUnit": {"color": "cornflowerblue", "style": "dashed"},
         "hasSign": {"color": "orange"},
         "hasConvention": {"color": "orange", "style": "dashed"},
         "hasProperty": {"color": "orange", "style": "dotted"},
@@ -787,6 +787,10 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
 
         Hence, you usually want to call add_legend() as the last method
         before saving or displaying.
+
+        Relations with defined style will be bold in legend.
+        Relations that have inherited style from parent relation
+        will not be bold.
         """
         rels = self.style.get("relations", {})
         if relations is None:
@@ -806,9 +810,16 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         label1 = [table]
         label2 = [table]
         for index, relation in enumerate(relations):
-            label1.append(
-                f'<tr><td align="right" port="i{index}">{relation}</td></tr>'
-            )
+            if relation in rels:
+                label1.append(
+                    f'<tr><td align="right" '
+                    f'port="i{index}"><b>{relation}</b></td></tr>'
+                )
+            else:
+                label1.append(
+                    f'<tr><td align="right" '
+                    f'port="i{index}">{relation}</td></tr>'
+                )
             label2.append(f'<tr><td port="i{index}">&nbsp;</td></tr>')
         label1.append("</table>>")
         label2.append("</table>>")
