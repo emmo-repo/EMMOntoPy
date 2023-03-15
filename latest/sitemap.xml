@@ -2,162 +2,162 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/CHANGELOG/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/LICENSE/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/docker-instructions/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/tools-instructions/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/emmopy/emmocheck/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/emmopy/emmopy/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/colortest/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/excelparser/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/graph/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/manchester/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/nadict/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/ontodoc/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/ontology/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/patch/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/utils/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/factpluspluswrapper/factppgraph/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/factpluspluswrapper/owlapi_interface/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/factpluspluswrapper/sync_factpp/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/demo/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/demo/horizontal/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/demo/vertical/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/developers/release-instructions/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/developers/setup/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/developers/testing/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/examples/emmodoc/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/examples/emmodoc/classes/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/examples/emmodoc/emmo/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/examples/emmodoc/important_concepts/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/examples/emmodoc/introduction/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/examples/emmodoc/relations/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://emmo-repo.github.io/EMMOntoPy/latest/examples/jupyter-visualization/</loc>
-         <lastmod>2023-03-10</lastmod>
+         <lastmod>2023-03-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
