@@ -19,7 +19,7 @@ from ontopy.graph import (  # pylint: disable=import-error
     plot_modules,
     _default_style,
 )
-from ontopy.utils import get_label  # pylint: disable=import-error
+from ontopy.utils import get_label, get_format  # pylint: disable=import-error
 import warnings
 import owlready2
 
@@ -160,6 +160,7 @@ def main(
         "--edgelabels",
         "-e",
         action="store_true",
+        default=None,
         help="Whether to add labels to edges.",
     )
     parser.add_argument(
@@ -321,19 +322,21 @@ def main(
             addconstructs=args.addconstructs,
         )
         if args.parents:
-            graph.add_parents(args.parents)
+            graph.add_parents(root, levels=args.parents)
 
         if args.legend:
             graph.add_legend()
 
         # Plot and display
+        fmt = get_format(args.output, default="svg", fmt=args.format)
+
         if args.output:
             if len(roots) > 1:
                 head, tail = args.output.rsplit(".", maxsplit=1)
                 output = ".".join((head, get_label(root), tail))
             else:
                 output = args.output
-            graph.save(output, format=args.format)
+            graph.save(output, fmt=fmt)
 
         if not args.output or args.display:
             graph.view()

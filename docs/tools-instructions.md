@@ -197,12 +197,13 @@ optional arguments:
 
 ### Examples
 
-The figure below is generated with the following command:
 
 ```console
+ontograph --relations=all --legend --format=pdf emmo-inferred emmo.pdf # complete ontology
+ontograph --root=Holistic --relations=hasInput,hasOutput,hasTemporaryParticipant,hasAgent --parents=2 --legend --leaves=Measurement,Manufacturing,CompleteManufacturing,ManufacturedProduct,CommercialProduct,Manufacturer --format=png --exclude=Task,Workflow,Computation,MaterialTreatment emmo-inferred measurement.png
 ontograph --root=Material --relations=all --legend --format=png emmo-inferred material.png
 ```
-
+The figure below is generated with the last command in the list above.
 ![Graph generated with the ontograph tool.](images/material.png)
 
 ---

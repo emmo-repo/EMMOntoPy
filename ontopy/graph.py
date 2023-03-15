@@ -15,7 +15,7 @@ import graphviz
 
 from ontopy.utils import asstring, get_label
 from ontopy.ontology import Ontology
-from ontopy.utils import EMMOntoPyException
+from ontopy.utils import EMMOntoPyException, get_format
 
 if TYPE_CHECKING:
     from ipywidgets.widgets.widget_templates import GridspecLayout
@@ -102,10 +102,13 @@ _default_style = {
         "hasSpatialDirectPart": {"color": "darkgreen", "style": "dashed"},
         "hasTemporalPart": {"color": "magenta"},
         "hasTemporalDirectPart": {"color": "magenta", "style": "dashed"},
-        "hasReferenceUnit": {"color": "darkgreen", "style": "dashed"},
+        "hasReferenceUnit": {"color": "cornflowerblue", "style": "dashed"},
         "hasSign": {"color": "orange"},
         "hasConvention": {"color": "orange", "style": "dashed"},
         "hasProperty": {"color": "orange", "style": "dotted"},
+        "hasOutput": {"color": "darkviolet", "style": "dotted"},
+        "hasInput": {"color": "darkviolet"},
+        "hasTemporaryParticipant": {"color": "darkviolet", "style": "dashed"},
     },
     "inverse": {"arrowhead": "inv"},
     "default_dataprop": {"color": "green", "constraint": "false"},
@@ -206,7 +209,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         Whether to add labels to the edges of the generated graph.
         It is also possible to provide a dict mapping the
         full labels (with cardinality stripped off for restrictions)
-        to some abbriviations.
+        to some abbreviations.
     addnodes : bool
         Whether to add missing target nodes in relations.
     addconstructs : bool
@@ -480,27 +483,31 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             raise RuntimeError(f'`object` "{obj}" must have been added')
         key = (subject, predicate, obj)
         if key not in self.edges:
-            if edgelabel is None:
+            relations = self.style.get("relations", {})
+            rels = set(
+                self.ontology[_] for _ in relations if _ in self.ontology
+            )
+            if (edgelabel is None) and (
+                (predicate in rels) or (predicate == "isA")
+            ):
                 edgelabel = self.edgelabels
-
             label = None
             if edgelabel is None:
                 tokens = predicate.split()
                 if len(tokens) == 2 and tokens[1] in ("some", "only"):
-                    label = tokens[1]
+                    label = f"{tokens[0]} {tokens[1]}"
                 elif len(tokens) == 3 and tokens[1] in (
                     "exactly",
                     "min",
                     "max",
                 ):
-                    label = f"{tokens[1]} {tokens[2]}"
+                    label = f"{tokens[0]} {tokens[1]} {tokens[2]}"
             elif isinstance(edgelabel, str):
                 label = edgelabel
             elif isinstance(edgelabel, dict):
                 label = edgelabel.get(predicate, predicate)
             elif edgelabel:
                 label = predicate
-
             kwargs = self.get_edge_attrs(predicate, attrs=attrs)
             self.dot.edge(subject, obj, label=label, **kwargs)
             self.edges.add(key)
@@ -780,6 +787,10 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
 
         Hence, you usually want to call add_legend() as the last method
         before saving or displaying.
+
+        Relations with defined style will be bold in legend.
+        Relations that have inherited style from parent relation
+        will not be bold.
         """
         rels = self.style.get("relations", {})
         if relations is None:
@@ -799,9 +810,16 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         label1 = [table]
         label2 = [table]
         for index, relation in enumerate(relations):
-            label1.append(
-                f'<tr><td align="right" port="i{index}">{relation}</td></tr>'
-            )
+            if (relation in rels) or (relation == "isA"):
+                label1.append(
+                    f'<tr><td align="right" '
+                    f'port="i{index}"><b>{relation}</b></td></tr>'
+                )
+            else:
+                label1.append(
+                    f'<tr><td align="right" '
+                    f'port="i{index}">{relation}</td></tr>'
+                )
             label2.append(f'<tr><td port="i{index}">&nbsp;</td></tr>')
         label1.append("</table>>")
         label2.append("</table>>")
@@ -865,9 +883,8 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
     def save(self, filename, fmt=None, **kwargs):
         """Saves graph to `filename`.  If format is not given, it is
         inferred from `filename`."""
-        base, ext = os.path.splitext(filename)
-        if fmt is None:
-            fmt = ext.lstrip(".")
+        base = os.path.splitext(filename)[0]
+        fmt = get_format(filename, default="svg", fmt=fmt)
         kwargs.setdefault("cleanup", True)
         if fmt in ("graphviz", "gv"):
             if "dictionary" in kwargs:
@@ -1092,7 +1109,7 @@ def cytoscapegraph(
             onto: ontology to be used for mouse actions.
             infobox: "left" or "right". Placement of infbox with
                      respect to graph.
-            force: force generate graph withour correct edgelabels.
+            force: force generate graph without correct edgelabels.
     Returns:
             cytoscapewidget with graph and infobox to be visualized
             in jupyter lab.
