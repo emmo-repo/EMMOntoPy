@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING
 import yaml
 import owlready2
 
-from ontopy.utils import asstring, camelsplit, get_label
+from ontopy.utils import asstring, camelsplit, get_label, get_format
 from ontopy.graph import OntoGraph, filter_classes
 
 if TYPE_CHECKING:
@@ -1177,7 +1177,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         for reg, sub in substitutions:
             content = re.sub(reg, sub, content)
 
-        fmt = get_format(outfile, fmt)
+        fmt = get_format(outfile, default="html", fmt=fmt)
         if fmt not in ("simple-html", "markdown", "md"):  # Run pandoc
             if not genfile:
                 with NamedTemporaryFile(mode="w+t", suffix=".md") as temp_file:
@@ -1408,17 +1408,6 @@ def run_pandoc_pdf(latex_dir, pdf_engine, outfile, args, verbose=True):
             print()
             print(f"move {pdffile} to {outfile}")
         shutil.move(pdffile, outfile)
-
-
-def get_format(outfile, fmt=None):
-    """Infer format from outfile and format."""
-    if fmt is None:
-        fmt = os.path.splitext(outfile)[1]
-    if not fmt:
-        fmt = "html"
-    if fmt.startswith("."):
-        fmt = fmt[1:]
-    return fmt
 
 
 def get_style(fmt):
