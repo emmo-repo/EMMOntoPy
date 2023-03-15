@@ -16,12 +16,12 @@ if rootdir not in sys.path:
 from ontopy import World, onto_path  # pylint: disable=import-error
 from ontopy.ontodoc import (  # pylint: disable=import-error
     OntoDoc,
-    get_format,
     get_style,
     get_figformat,
     get_maxwidth,
     get_docpp,
 )
+from ontopy.utils import get_format
 
 import owlready2
 
@@ -231,7 +231,7 @@ def main(argv: list = None):
         onto.sync_reasoner(reasoner=args.reasoner)
 
     # Instantiate ontodoc instance
-    fmt = get_format(args.outfile, args.format)
+    fmt = get_format(args.outfile, default="html", fmt=args.format)
     style = get_style(fmt)
     figformat = args.figformat if args.figformat else get_figformat(fmt)
     maxwidth = args.max_figwidth if args.max_figwidth else get_maxwidth(fmt)

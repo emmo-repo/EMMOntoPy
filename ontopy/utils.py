@@ -724,3 +724,12 @@ def normalise_url(url):
     components = list(splitted)
     components[2] = os.path.normpath(splitted.path)
     return urllib.parse.urlunsplit(components)
+
+
+def get_format(outfile: str, default: str, fmt: str = None):
+    """Infer format from outfile and format."""
+    if fmt is None:
+        fmt = os.path.splitext(outfile)[1]
+    if not fmt:
+        fmt = default
+    return fmt.lstrip(".")
