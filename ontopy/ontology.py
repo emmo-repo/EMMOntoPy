@@ -1471,18 +1471,20 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def get_ancestors(
         self,
         classes: "Union[List, ThingClass]",
-        common: bool = False,
+        closest: bool = False,
         generations: int = None,
         strict: bool = True,
     ) -> set:
         """Return ancestors of all classes in `classes`.
         Args:
-            classes: class(es) for which ancestors are desired.
-            common: whether to only return the closest common ancestor.
+            classes: class(es) for which ancestors should be returned.
             generations: Include this number of generations, default is all.
-            strict: only return real ancestors if True.
+            closest: If True, return all ancestors up to and including the
+                closest common ancestor. Return all if False.
+            strict: If True returns only real ancestors, i.e. `classes` are
+                are not included in the returned set.
         Returns:
-            A set of ancestors for given number of generations.
+            Set of ancestors to `classes`.
         """
         if not isinstance(classes, Iterable):
             classes = [classes]
@@ -1497,11 +1499,11 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     subject.add(parent)
                     addancestors(parent, counter - 1, subject)
 
-        if sum(map(bool, [common, generations])) > 1:
+        if sum(map(bool, [closest, generations])) > 1:
             raise ValueError(
-                "Only one of `generations` or `common` may be specified."
+                "Only one of `generations` or `closest` may be specified."
             )
-        if common:
+        if closest:
             closest_ancestor = self.closest_common_ancestor(*classes)
             for cls in classes:
                 ancestors.update(
@@ -1522,8 +1524,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def get_descendants(
         self,
         classes: "Union[List, ThingClass]",
-        common: bool = False,
         generations: int = None,
+        common: bool = False,
     ) -> set:
         """Return descendants/subclasses of all classes in `classes`.
         Args:

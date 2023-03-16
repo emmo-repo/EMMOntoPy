@@ -127,19 +127,19 @@ def test_ancestors(emmo: "Ontology", repo_dir: "Path") -> None:
     # Check that classes up to closest common ancestor are returned
 
     assert onto.get_ancestors(
-        [onto.NorwaySpruce, onto.Avocado], common=True
+        [onto.NorwaySpruce, onto.Avocado], closest=True
     ) == {
         onto.EvergreenTree,
         onto.Spruce,
     }
 
     with pytest.raises(ValueError):
-        onto.get_ancestors(onto.NorwaySpruce, common=True, generations=4)
+        onto.get_ancestors(onto.NorwaySpruce, closest=True, generations=4)
 
     # Test strict == False
     assert onto.get_ancestors(
         [onto.NorwaySpruce, onto.Avocado],
-        common=True,
+        closest=True,
         strict=False,
     ) == {
         onto.EvergreenTree,
