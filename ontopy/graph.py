@@ -400,9 +400,17 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             nodeattrs=nodeattrs,
             **attrs,
         )
-
+        common_ancestors = False
+        ancestor_generations = None
+        if include_parents in ("common", "closest"):
+            common_ancestors = True
+        elif isinstance(include_parents, int):
+            ancestor_generations = include_parents
         parents = self.ontology.get_ancestors(
-            classes, include=include_parents, strict=True
+            classes,
+            common=common_ancestors,
+            generations=ancestor_generations,
+            strict=True,
         )
         if parents:
             for parent in parents:
