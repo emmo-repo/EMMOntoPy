@@ -135,3 +135,15 @@ def test_ancestors(emmo: "Ontology", repo_dir: "Path") -> None:
 
     with pytest.raises(ValueError):
         onto.get_ancestors(onto.NorwaySpruce, common=True, generations=4)
+
+    # Test strict == False
+    assert onto.get_ancestors(
+        [onto.NorwaySpruce, onto.Avocado],
+        common=True,
+        strict=False,
+    ) == {
+        onto.EvergreenTree,
+        onto.Spruce,
+        onto.NorwaySpruce,
+        onto.Avocado,
+    }
