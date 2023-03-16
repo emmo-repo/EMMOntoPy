@@ -7,7 +7,7 @@ on:
 jobs:
   publish:
     name: External
-    uses: SINTEF/ci-cd/.github/workflows/cd_release.yml@v2.2.0
+    uses: SINTEF/ci-cd/.github/workflows/cd_release.yml@v2.2.1
     if: github.repository == 'emmo-repo/EMMOntoPy' && startsWith(github.ref, 'refs/tags/v')
     with:
       git_username: EMMOntoPy Developers
