@@ -371,7 +371,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         also included."""
         if leaves is None:
             leaves = ()
-
+        print(leaves)
         classes = self.ontology.get_branch(
             root=root,
             leaves=leaves,
