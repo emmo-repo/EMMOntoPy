@@ -283,15 +283,24 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         The current implementation also supports "*" as a wildcard
         matching any number of characters. This may change in the future.
         """
-        # pylint: disable=too-many-arguments,too-many-branches
+        # pylint: disable=too-many-arguments,too-many-branches,invalid-name
         if not isinstance(label, str):
             raise TypeError(
                 f"Invalid label definition, must be a string: {label!r}"
             )
+
+        # Comment to reviewer:
+        # Do we really want to disallow space in label?
+        # I think we wanted ontopy to work with any ontology, also ontologies
+        # having space in their labels.
+        # Rather than enforcing EMMO conventions here, I think the user should
+        # run emmocheck on the ontology - it will alert about labels with
+        # spaces
         if " " in label:
             raise ValueError(
                 f"Invalid label definition, {label!r} contains spaces."
             )
+
         if self._label_annotations is None:
             for iri in DEFAULT_LABEL_ANNOTATIONS:
                 try:
@@ -299,23 +308,20 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 except ValueError:
                     pass
 
+        # Comment to reviewer:
+        # Since providing the prefix as argument is more explicit, I think
+        # that should take precedence.  Changed it below...
         splitlabel = label.split(":", 1)
-        if len(splitlabel) > 2:
-            raise ValueError(
-                f"Invalid label definition, {label!r}"
-                " contains more than one ':' ."
-                "The string before ':' indicates the prefix. "
-                "The string after ':' indicates the label."
-            )
-        if len(splitlabel) == 2:
+        if len(splitlabel) == 2 and not splitlabel[1].startswith("//"):
             label = splitlabel[1]
             if prefix and prefix != splitlabel[0]:
                 warnings.warn(
                     f"Prefix given both as argument ({prefix}) "
                     f"and in label ({splitlabel[0]}). "
-                    "Prefix given in label takes presendence "
+                    "Prefix given in argument takes presendence "
                 )
-            prefix = splitlabel[0]
+            if not prefix:
+                prefix = splitlabel[0]
 
         if prefix:
             entitylist = self.get_by_label_all(
@@ -327,31 +333,43 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 return entitylist[0]
 
             raise NoSuchLabelError(
-                f"No label annotations matches {label!r}  with prefix "
+                f"No label annotations matches {label!r} with prefix "
                 f"{prefix!r}"
             )
-            # if label in self._namespaces:
-            #    return self._namespaces[label]
 
-        if label_annotations is None:
-            annotations = (a.name for a in self.label_annotations)
-        else:
-            annotations = (
-                a.name if hasattr(a, "storid") else a for a in label_annotations
-            )
-        for key in annotations:
-            entity = self.search_one(**{key: label})
-            if entity:
-                return entity
+        # Label is a full IRI
+        entity = self.world[label]
+        if entity:
+            return entity
 
+        # First entity with matching label annotation
+        annotation_ids = (
+            (self._abbreviate(a, False) for a in label_annotations)
+            if label_annotations
+            else (a.storid for a in self.label_annotations)
+        )
+        for annotation_id in annotation_ids:
+            for s, _, _, _ in self._get_data_triples_spod_spod(
+                None, annotation_id, label, None
+            ):
+                return self.world[self._unabbreviate(s)]
+
+        # Special labels
         if self._special_labels and label in self._special_labels:
             return self._special_labels[label]
 
+        # Check if label is a name under base_iri
         entity = self.world[self.base_iri + label]
         if entity:
             return entity
 
-        raise NoSuchLabelError(f"No label annotations matches {label!r}")
+        # Check if label is a name in any namespace
+        for namespace in self._namespaces.keys():
+            entity = self.world[namespace + label]
+            if entity:
+                return entity
+
+        raise NoSuchLabelError(f"No label annotations matches '{label}'")
 
     def get_by_label_all(self, label, label_annotations=None, prefix=None):
         """Like get_by_label(), but returns a list with all matching labels.
@@ -1684,7 +1702,7 @@ def _get_unabbreviated_triples(
             _unabbreviate(self, p, blank=blank),
             _unabbreviate(self, o, blank=blank),
         )
-    for s, p, o, d in self._get_data_triples_spod_spod(*abb, d=""):
+    for s, p, o, d in self._get_data_triples_spod_spod(*abb, d=None):
         yield (
             _unabbreviate(self, s, blank=blank),
             _unabbreviate(self, p, blank=blank),
