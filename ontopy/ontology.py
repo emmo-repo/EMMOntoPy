@@ -197,7 +197,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             dirset.update(_.label.first() for _ in lst if hasattr(_, "label"))
         if self._dir_name:
             dirset.update(_.name for _ in lst if hasattr(_, "name"))
-
         dirset.difference_update({None})  # get rid of possible None
         return sorted(dirset)
 
