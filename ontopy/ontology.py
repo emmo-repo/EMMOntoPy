@@ -276,12 +276,17 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         If several entities have the same label, only the one which is
         found first is returned.Use get_by_label_all() to get all matches.
 
+        Note, if different prefixes are provided in the label and via
+        the `prefix` argument a warning will be issued and the
+        `prefix` argument will take precedence.
+
         A NoSuchLabelError is raised if `label` cannot be found.
 
         Note
         ----
         The current implementation also supports "*" as a wildcard
         matching any number of characters. This may change in the future.
+
         """
         # pylint: disable=too-many-arguments,too-many-branches,invalid-name
         if not isinstance(label, str):
@@ -308,9 +313,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 except ValueError:
                     pass
 
-        # Comment to reviewer:
-        # Since providing the prefix as argument is more explicit, I think
-        # that should take precedence.  Changed it below...
         splitlabel = label.split(":", 1)
         if len(splitlabel) == 2 and not splitlabel[1].startswith("//"):
             label = splitlabel[1]
