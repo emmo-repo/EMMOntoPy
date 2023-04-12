@@ -187,19 +187,19 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     )
 
     def __dir__(self):
-        set_dir = set(super().__dir__())
+        dirset = set(super().__dir__())
         lst = list(self.get_entities(imported=self._dir_imported))
         if self._dir_preflabel:
-            set_dir.update(
+            dirset.update(
                 _.prefLabel.first() for _ in lst if hasattr(_, "prefLabel")
             )
         if self._dir_label:
-            set_dir.update(_.label.first() for _ in lst if hasattr(_, "label"))
+            dirset.update(_.label.first() for _ in lst if hasattr(_, "label"))
         if self._dir_name:
-            set_dir.update(_.name for _ in lst if hasattr(_, "name"))
+            dirset.update(_.name for _ in lst if hasattr(_, "name"))
 
-        set_dir.difference_update({None})  # get rid of possible None
-        return sorted(set_dir)
+        dirset.difference_update({None})  # get rid of possible None
+        return sorted(dirset)
 
     def __getitem__(self, name):
         item = super().__getitem__(name)
@@ -349,7 +349,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             else (a.storid for a in self.label_annotations)
         )
         for annotation_id in annotation_ids:
-            for s, _, _, _ in self._get_data_triples_spod_spod(
+            #
+            # Question to reviewer:
+            # Should we make it an option (turned off by default) to search
+            # only the current ontology?
+            # I have sometimes been wishing for that. It is easily implemented,
+            # just remove ".world" in the line below.
+            for s, _, _, _ in self.world._get_data_triples_spod_spod(
                 None, annotation_id, label, None
             ):
                 return self.world[self._unabbreviate(s)]
