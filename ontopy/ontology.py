@@ -280,29 +280,11 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         `prefix` argument will take precedence.
 
         A NoSuchLabelError is raised if `label` cannot be found.
-
-        Note
-        ----
-        The current implementation also supports "*" as a wildcard
-        matching any number of characters. This may change in the future.
-
         """
         # pylint: disable=too-many-arguments,too-many-branches,invalid-name
         if not isinstance(label, str):
             raise TypeError(
                 f"Invalid label definition, must be a string: {label!r}"
-            )
-
-        # Comment to reviewer:
-        # Do we really want to disallow space in label?
-        # I think we wanted ontopy to work with any ontology, also ontologies
-        # having space in their labels.
-        # Rather than enforcing EMMO conventions here, I think the user should
-        # run emmocheck on the ontology - it will alert about labels with
-        # spaces
-        if " " in label:
-            raise ValueError(
-                f"Invalid label definition, {label!r} contains spaces."
             )
 
         if self._label_annotations is None:
@@ -382,6 +364,11 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """Like get_by_label(), but returns a list with all matching labels.
 
         Returns an empty list if no matches could be found.
+
+        Note
+        ----
+        The current implementation also supports "*" as a wildcard
+        matching any number of characters. This may change in the future.
         """
         if not isinstance(label, str):
             raise TypeError(
