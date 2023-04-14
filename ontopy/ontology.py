@@ -353,9 +353,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         # First entity with matching label annotation
         annotation_ids = (
-            (self._abbreviate(a, False) for a in label_annotations)
+            (self._abbreviate(ann, False) for ann in label_annotations)
             if label_annotations
-            else (a.storid for a in self.label_annotations)
+            else (ann.storid for ann in self.label_annotations)
         )
         get_triples = (
             self.world._get_data_triples_spod_spod
