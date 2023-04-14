@@ -186,6 +186,15 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         doc="Whether to include imported ontologies in dir() listing.",
     )
 
+    # Other settings
+    _colon_in_name = False
+    colon_in_name = property(
+        fget=lambda self: self._colon_in_name,
+        fset=lambda self, v: setattr(self, "_colon_in_name", bool(v)),
+        doc="Whether to accept colon in name-part of IRI.  "
+        "If true, the name cannot be prefixed.",
+    )
+
     def __dir__(self):
         dirset = set(super().__dir__())
         lst = list(self.get_entities(imported=self._dir_imported))
@@ -256,7 +265,12 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         )
 
     def get_by_label(
-        self, label: str, label_annotations: str = None, prefix: str = None
+        self,
+        label: str,
+        label_annotations: str = None,
+        prefix: str = None,
+        imported: bool = True,
+        colon_in_name: bool = None,
     ):
         """Returns entity with label annotation `label`.
 
@@ -271,6 +285,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                the base iri of an ontology (with trailing slash (/) or hash
                (#) stripped off).  The search for a matching label will be
                limited to this namespace.
+           imported: Whether to also look for `label` in imported ontologies.
+           colon_in_name: Whether to accept colon (:) in name-part of IRI.
+               Defaults to the `colon_in_name` property of `self`.
+               A true value cannot be combined with `prefix`.
 
         If several entities have the same label, only the one which is
         found first is returned.Use get_by_label_all() to get all matches.
@@ -294,17 +312,25 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 except ValueError:
                     pass
 
-        splitlabel = label.split(":", 1)
-        if len(splitlabel) == 2 and not splitlabel[1].startswith("//"):
-            label = splitlabel[1]
-            if prefix and prefix != splitlabel[0]:
-                warnings.warn(
-                    f"Prefix given both as argument ({prefix}) "
-                    f"and in label ({splitlabel[0]}). "
-                    "Prefix given in argument takes presendence "
+        if colon_in_name is None:
+            colon_in_name = self._colon_in_name
+        if colon_in_name:
+            if prefix:
+                raise ValueError(
+                    "`prefix` cannot be combined with `colon_in_name`"
                 )
-            if not prefix:
-                prefix = splitlabel[0]
+        else:
+            splitlabel = label.split(":", 1)
+            if len(splitlabel) == 2 and not splitlabel[1].startswith("//"):
+                label = splitlabel[1]
+                if prefix and prefix != splitlabel[0]:
+                    warnings.warn(
+                        f"Prefix given both as argument ({prefix}) "
+                        f"and in label ({splitlabel[0]}). "
+                        "Prefix given in argument takes presendence "
+                    )
+                if not prefix:
+                    prefix = splitlabel[0]
 
         if prefix:
             entitylist = self.get_by_label_all(
@@ -331,16 +357,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             if label_annotations
             else (a.storid for a in self.label_annotations)
         )
+        get_triples = (
+            self.world._get_data_triples_spod_spod
+            if imported
+            else self._get_data_triples_spod_spod
+        )
         for annotation_id in annotation_ids:
-            #
-            # Question to reviewer:
-            # Should we make it an option (turned off by default) to search
-            # only the current ontology?
-            # I have sometimes been wishing for that. It is easily implemented,
-            # just remove ".world" in the line below.
-            for s, _, _, _ in self.world._get_data_triples_spod_spod(
-                None, annotation_id, label, None
-            ):
+            for s, _, _, _ in get_triples(None, annotation_id, label, None):
                 return self.world[self._unabbreviate(s)]
 
         # Special labels
@@ -1594,7 +1617,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         Throws exception if name consists of more than one word.
         """
-        if len(name.split(" ")) > 1:
+        if " " in name:
             raise LabelDefinitionError(
                 f"Error in label name definition '{name}': "
                 f"Label consists of more than one word."
