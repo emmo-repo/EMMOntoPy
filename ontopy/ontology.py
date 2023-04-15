@@ -187,10 +187,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     )
 
     # Other settings
-    _colon_in_name = False
-    colon_in_name = property(
-        fget=lambda self: self._colon_in_name,
-        fset=lambda self, v: setattr(self, "_colon_in_name", bool(v)),
+    _colon_in_label = False
+    colon_in_label = property(
+        fget=lambda self: self._colon_in_label,
+        fset=lambda self, v: setattr(self, "_colon_in_label", bool(v)),
         doc="Whether to accept colon in name-part of IRI.  "
         "If true, the name cannot be prefixed.",
     )
@@ -270,7 +270,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         label_annotations: str = None,
         prefix: str = None,
         imported: bool = True,
-        colon_in_name: bool = None,
+        colon_in_label: bool = None,
     ):
         """Returns entity with label annotation `label`.
 
@@ -286,9 +286,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                (#) stripped off).  The search for a matching label will be
                limited to this namespace.
            imported: Whether to also look for `label` in imported ontologies.
-           colon_in_name: Whether to accept colon (:) in name-part of IRI.
-               Defaults to the `colon_in_name` property of `self`.
-               A true value cannot be combined with `prefix`.
+           colon_in_label: Whether to accept colon (:) in a label or name-part
+               of IRI.  Defaults to the `colon_in_label` property of `self`.
+               Setting this true cannot be combined with `prefix`.
 
         If several entities have the same label, only the one which is
         found first is returned.Use get_by_label_all() to get all matches.
@@ -312,12 +312,12 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 except ValueError:
                     pass
 
-        if colon_in_name is None:
-            colon_in_name = self._colon_in_name
-        if colon_in_name:
+        if colon_in_label is None:
+            colon_in_label = self._colon_in_label
+        if colon_in_label:
             if prefix:
                 raise ValueError(
-                    "`prefix` cannot be combined with `colon_in_name`"
+                    "`prefix` cannot be combined with `colon_in_label`"
                 )
         else:
             splitlabel = label.split(":", 1)
