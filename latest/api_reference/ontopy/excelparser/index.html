@@ -1508,7 +1508,12 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">parents</span><span class="p">:</span>
                     <span class="n">parents</span> <span class="o">=</span> <span class="p">[</span><span class="n">owlready2</span><span class="o">.</span><span class="n">Thing</span><span class="p">]</span>
 
-                <span class="n">concept</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">concept</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">LabelDefinitionError</span><span class="p">:</span>
+                    <span class="n">concepts_with_errors</span><span class="p">[</span><span class="s2">&quot;wrongly_defined&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
                 <span class="n">added_rows</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
                 <span class="c1"># Add elucidation</span>
                 <span class="k">try</span><span class="p">:</span>
