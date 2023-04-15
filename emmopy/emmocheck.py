@@ -120,7 +120,6 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                 "2-manifold",
                 "3-manifold",
                 "C++",
-                "3DPrinting",
             )
         )
         exceptions.update(self.get_config("test_class_label.exceptions", ()))
