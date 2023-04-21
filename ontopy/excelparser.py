@@ -21,6 +21,7 @@ import ontopy
 from ontopy import get_ontology
 from ontopy.utils import EMMOntoPyException, NoSuchLabelError
 from ontopy.utils import ReadCatalogError, read_catalog
+from ontopy.ontology import LabelDefinitionError
 from ontopy.manchester import evaluate
 import owlready2  # pylint: disable=C0411
 
@@ -276,7 +277,12 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                 if not parents:
                     parents = [owlready2.Thing]
 
-                concept = onto.new_entity(name, parents)
+                try:
+                    concept = onto.new_entity(name, parents)
+                except LabelDefinitionError:
+                    concepts_with_errors["wrongly_defined"].append(name)
+                    continue
+
                 added_rows.add(index)
                 # Add elucidation
                 try:
