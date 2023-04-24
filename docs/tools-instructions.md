@@ -395,6 +395,8 @@ options:
                         error.
 ```
 
+See [the documentation of the python api](api_reference/ontopy/excelparser.md) for an through description of the requirements on the Excel workbook.
+
 ### Examples
 
 Create a `new_ontology.ttl` turtle file from the Excel file `new_ontology.xlsx`:
