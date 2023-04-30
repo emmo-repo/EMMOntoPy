@@ -142,12 +142,13 @@ is_defined = property(
     ),
     doc="""Is true if this class is a defined class.
 
-    A defined class is that is defined purely from its logical
-    relations to other classes, not by its elucidation.  Hence,
-    classes declared with `owl:equivalentTo` are defined classes.
+    A defined class is defined purely from its logical relations to
+    other classes, not by its elucidation.  Hence, classes declared
+    with `owl:equivalentTo` are defined classes.
 
-    Note that this method is different from the `defined_class` property
-    provided by Owlready2, who's boolean value is set by the user.
+    Note that this method is different from the `defined_class`
+    property provided by Owlready2, who's boolean value is set by the
+    user.
     """,
 )
 
