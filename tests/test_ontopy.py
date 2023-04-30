@@ -1,6 +1,6 @@
 """Some generic tests for ontopy.
 
-Implemented as a script, such that it easy to use for debugging as well.
+Implemented as a script, such that it easy to understand and use for debugging.
 """
 from ontopy import get_ontology
 
@@ -29,7 +29,7 @@ assert set(emmo.Atom.get_annotations().keys()) == {
 # It seems not to take into account disjoint unions.
 # assert set(emmo.Collection.disjoint_with()) == {emmo.Item}
 
-assert sorted(str(s) for s in emmo.CausalChain.get_indirect_is_a()) == sorted(
+assert set(str(s) for s in emmo.CausalChain.get_indirect_is_a()) == set(
     str(s)
     for s in {
         Inverse(emmo.hasPart).value(emmo.universe),
@@ -40,9 +40,9 @@ assert sorted(str(s) for s in emmo.CausalChain.get_indirect_is_a()) == sorted(
         emmo.hasTemporalPart.some(emmo.CausalChain | emmo.Quantum),
     }
 )
-assert sorted(
+assert set(
     str(s) for s in emmo.CausalChain.get_indirect_is_a(skip_classes=False)
-) == sorted(
+) == set(
     str(s)
     for s in {
         Inverse(emmo.hasPart).value(emmo.universe),
