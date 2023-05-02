@@ -186,20 +186,28 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         doc="Whether to include imported ontologies in dir() listing.",
     )
 
+    # Other settings
+    _colon_in_label = False
+    colon_in_label = property(
+        fget=lambda self: self._colon_in_label,
+        fset=lambda self, v: setattr(self, "_colon_in_label", bool(v)),
+        doc="Whether to accept colon in name-part of IRI.  "
+        "If true, the name cannot be prefixed.",
+    )
+
     def __dir__(self):
-        set_dir = set(super().__dir__())
+        dirset = set(super().__dir__())
         lst = list(self.get_entities(imported=self._dir_imported))
         if self._dir_preflabel:
-            set_dir.update(
+            dirset.update(
                 _.prefLabel.first() for _ in lst if hasattr(_, "prefLabel")
             )
         if self._dir_label:
-            set_dir.update(_.label.first() for _ in lst if hasattr(_, "label"))
+            dirset.update(_.label.first() for _ in lst if hasattr(_, "label"))
         if self._dir_name:
-            set_dir.update(_.name for _ in lst if hasattr(_, "name"))
-
-        set_dir.difference_update({None})  # get rid of possible None
-        return sorted(set_dir)
+            dirset.update(_.name for _ in lst if hasattr(_, "name"))
+        dirset.difference_update({None})  # get rid of possible None
+        return sorted(dirset)
 
     def __getitem__(self, name):
         item = super().__getitem__(name)
@@ -257,7 +265,12 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         )
 
     def get_by_label(
-        self, label: str, label_annotations: str = None, prefix: str = None
+        self,
+        label: str,
+        label_annotations: str = None,
+        prefix: str = None,
+        imported: bool = True,
+        colon_in_label: bool = None,
     ):
         """Returns entity with label annotation `label`.
 
@@ -272,26 +285,26 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                the base iri of an ontology (with trailing slash (/) or hash
                (#) stripped off).  The search for a matching label will be
                limited to this namespace.
+           imported: Whether to also look for `label` in imported ontologies.
+           colon_in_label: Whether to accept colon (:) in a label or name-part
+               of IRI.  Defaults to the `colon_in_label` property of `self`.
+               Setting this true cannot be combined with `prefix`.
 
         If several entities have the same label, only the one which is
         found first is returned.Use get_by_label_all() to get all matches.
 
-        A NoSuchLabelError is raised if `label` cannot be found.
+        Note, if different prefixes are provided in the label and via
+        the `prefix` argument a warning will be issued and the
+        `prefix` argument will take precedence.
 
-        Note
-        ----
-        The current implementation also supports "*" as a wildcard
-        matching any number of characters. This may change in the future.
+        A NoSuchLabelError is raised if `label` cannot be found.
         """
-        # pylint: disable=too-many-arguments,too-many-branches
+        # pylint: disable=too-many-arguments,too-many-branches,invalid-name
         if not isinstance(label, str):
             raise TypeError(
                 f"Invalid label definition, must be a string: {label!r}"
             )
-        if " " in label:
-            raise ValueError(
-                f"Invalid label definition, {label!r} contains spaces."
-            )
+
         if self._label_annotations is None:
             for iri in DEFAULT_LABEL_ANNOTATIONS:
                 try:
@@ -299,23 +312,25 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 except ValueError:
                     pass
 
-        splitlabel = label.split(":", 1)
-        if len(splitlabel) > 2:
-            raise ValueError(
-                f"Invalid label definition, {label!r}"
-                " contains more than one ':' ."
-                "The string before ':' indicates the prefix. "
-                "The string after ':' indicates the label."
-            )
-        if len(splitlabel) == 2:
-            label = splitlabel[1]
-            if prefix and prefix != splitlabel[0]:
-                warnings.warn(
-                    f"Prefix given both as argument ({prefix}) "
-                    f"and in label ({splitlabel[0]}). "
-                    "Prefix given in label takes presendence "
+        if colon_in_label is None:
+            colon_in_label = self._colon_in_label
+        if colon_in_label:
+            if prefix:
+                raise ValueError(
+                    "`prefix` cannot be combined with `colon_in_label`"
                 )
-            prefix = splitlabel[0]
+        else:
+            splitlabel = label.split(":", 1)
+            if len(splitlabel) == 2 and not splitlabel[1].startswith("//"):
+                label = splitlabel[1]
+                if prefix and prefix != splitlabel[0]:
+                    warnings.warn(
+                        f"Prefix given both as argument ({prefix}) "
+                        f"and in label ({splitlabel[0]}). "
+                        "Prefix given in argument takes presendence "
+                    )
+                if not prefix:
+                    prefix = splitlabel[0]
 
         if prefix:
             entitylist = self.get_by_label_all(
@@ -327,36 +342,56 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 return entitylist[0]
 
             raise NoSuchLabelError(
-                f"No label annotations matches {label!r}  with prefix "
+                f"No label annotations matches {label!r} with prefix "
                 f"{prefix!r}"
             )
-            # if label in self._namespaces:
-            #    return self._namespaces[label]
 
-        if label_annotations is None:
-            annotations = (a.name for a in self.label_annotations)
-        else:
-            annotations = (
-                a.name if hasattr(a, "storid") else a for a in label_annotations
-            )
-        for key in annotations:
-            entity = self.search_one(**{key: label})
-            if entity:
-                return entity
+        # Label is a full IRI
+        entity = self.world[label]
+        if entity:
+            return entity
 
+        # First entity with matching label annotation
+        annotation_ids = (
+            (self._abbreviate(ann, False) for ann in label_annotations)
+            if label_annotations
+            else (ann.storid for ann in self.label_annotations)
+        )
+        get_triples = (
+            self.world._get_data_triples_spod_spod
+            if imported
+            else self._get_data_triples_spod_spod
+        )
+        for annotation_id in annotation_ids:
+            for s, _, _, _ in get_triples(None, annotation_id, label, None):
+                return self.world[self._unabbreviate(s)]
+
+        # Special labels
         if self._special_labels and label in self._special_labels:
             return self._special_labels[label]
 
+        # Check if label is a name under base_iri
         entity = self.world[self.base_iri + label]
         if entity:
             return entity
 
-        raise NoSuchLabelError(f"No label annotations matches {label!r}")
+        # Check if label is a name in any namespace
+        for namespace in self._namespaces.keys():
+            entity = self.world[namespace + label]
+            if entity:
+                return entity
+
+        raise NoSuchLabelError(f"No label annotations matches '{label}'")
 
     def get_by_label_all(self, label, label_annotations=None, prefix=None):
         """Like get_by_label(), but returns a list with all matching labels.
 
         Returns an empty list if no matches could be found.
+
+        Note
+        ----
+        The current implementation also supports "*" as a wildcard
+        matching any number of characters. This may change in the future.
         """
         if not isinstance(label, str):
             raise TypeError(
@@ -1592,7 +1627,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         Throws exception if name consists of more than one word.
         """
-        if len(name.split(" ")) > 1:
+        if " " in name:
             raise LabelDefinitionError(
                 f"Error in label name definition '{name}': "
                 f"Label consists of more than one word."
@@ -1694,7 +1729,7 @@ def _get_unabbreviated_triples(
             _unabbreviate(self, p, blank=blank),
             _unabbreviate(self, o, blank=blank),
         )
-    for s, p, o, d in self._get_data_triples_spod_spod(*abb, d=""):
+    for s, p, o, d in self._get_data_triples_spod_spod(*abb, d=None):
         yield (
             _unabbreviate(self, s, blank=blank),
             _unabbreviate(self, p, blank=blank),
