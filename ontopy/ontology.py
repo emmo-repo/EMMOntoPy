@@ -1534,23 +1534,24 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     subject.add(parent)
                     addancestors(parent, counter - 1, subject)
 
-        if sum(map(bool, [closest, generations])) > 1:
-            raise ValueError(
-                "Only one of `generations` or `closest` may be specified."
-            )
         if closest:
+            if generations is not None:
+                raise ValueError(
+                    "Only one of `generations` or `closest` may be specified."
+                )
+
             closest_ancestor = self.closest_common_ancestor(*classes)
             for cls in classes:
                 ancestors.update(
-                    _
-                    for _ in cls.ancestors()
-                    if closest_ancestor in _.ancestors()
+                    anc
+                    for anc in cls.ancestors()
+                    if closest_ancestor in anc.ancestors()
                 )
         elif isinstance(generations, int):
             for entity in classes:
                 addancestors(entity, generations, ancestors)
         else:
-            ancestors.update(*(_.ancestors() for _ in classes))
+            ancestors.update(*(cls.ancestors() for cls in classes))
 
         if strict:
             return ancestors.difference(classes)
