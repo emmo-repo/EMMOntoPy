@@ -1,4 +1,4 @@
-"""Some generic tests for ontopy.
+"""Tests Owlready2 patches implemented in ontopy/patch.py
 
 Implemented as a script, such that it easy to understand and use for debugging.
 """
