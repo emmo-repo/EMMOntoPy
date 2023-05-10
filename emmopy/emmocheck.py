@@ -82,6 +82,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                 "core.prefLabel",
                 "core.altLabel",
                 "core.hiddenLabel",
+                "foaf.logo",
                 "0.1.logo",  # foaf.logo
             )
         )
