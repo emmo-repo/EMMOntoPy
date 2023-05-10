@@ -136,6 +136,23 @@ def get_indirect_is_a(self, skip_classes=True):
     return subclass_relations
 
 
+is_defined = property(
+    fget=lambda self: (
+        hasattr(self, "equivalent_to") and bool(self.equivalent_to)
+    ),
+    doc="""Is true if this class is a defined class.
+
+    For a "defined class" both necessary and sufficient conditions for
+    membership in that class are given.  Hence, classes declared with
+    `owl:equivalentTo` are defined classes.
+
+    Note that this method is different from the `defined_class`
+    property provided by Owlready2, who's boolean value is set by the
+    user.
+    """,
+)
+
+
 # Inject methods into ThingClass
 setattr(ThingClass, "__dir__", _dir)
 setattr(ThingClass, "get_preferred_label", get_preferred_label)
@@ -143,6 +160,7 @@ setattr(ThingClass, "get_parents", get_parents)
 setattr(ThingClass, "get_annotations", get_annotations)
 setattr(ThingClass, "disjoint_with", disjoint_with)
 setattr(ThingClass, "get_indirect_is_a", get_indirect_is_a)
+setattr(ThingClass, "is_defined", is_defined)
 
 
 #

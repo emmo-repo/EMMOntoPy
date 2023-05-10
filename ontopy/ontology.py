@@ -1363,7 +1363,17 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     # FIXME - deprecate this method as soon the ThingClass property
     #         `defined_class` works correct in Owlready2
     def is_defined(self, entity):
-        """Returns true if the entity is a defined class."""
+        """Returns true if the entity is a defined class.
+
+        Deprecated, use the `is_defined` property of the classes
+        (ThingClass subclasses) instead.
+        """
+        warnings.warn(
+            "This method is deprecated.  Use the `is_defined` property of "
+            "the classes instad.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         if isinstance(entity, str):
             entity = self.get_by_label(entity)
         return hasattr(entity, "equivalent_to") and bool(entity.equivalent_to)
