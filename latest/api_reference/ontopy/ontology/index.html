@@ -3230,7 +3230,17 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
     <span class="c1"># FIXME - deprecate this method as soon the ThingClass property</span>
     <span class="c1">#         `defined_class` works correct in Owlready2</span>
     <span class="k">def</span> <span class="nf">is_defined</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns true if the entity is a defined class.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns true if the entity is a defined class.</span>
+
+<span class="sd">        Deprecated, use the `is_defined` property of the classes</span>
+<span class="sd">        (ThingClass subclasses) instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;This method is deprecated.  Use the `is_defined` property of &quot;</span>
+            <span class="s2">&quot;the classes instad.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;equivalent_to&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">)</span>
@@ -5020,11 +5030,23 @@ Association for Computational Linguistics, June 1994.</p>
     <div class="doc doc-contents ">
 
       <p>Returns true if the entity is a defined class.</p>
+<p>Deprecated, use the <code>is_defined</code> property of the classes
+(ThingClass subclasses) instead.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_defined</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns true if the entity is a defined class.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns true if the entity is a defined class.</span>
+
+<span class="sd">    Deprecated, use the `is_defined` property of the classes</span>
+<span class="sd">    (ThingClass subclasses) instead.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;This method is deprecated.  Use the `is_defined` property of &quot;</span>
+        <span class="s2">&quot;the classes instad.&quot;</span><span class="p">,</span>
+        <span class="ne">DeprecationWarning</span><span class="p">,</span>
+        <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;equivalent_to&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">)</span>
