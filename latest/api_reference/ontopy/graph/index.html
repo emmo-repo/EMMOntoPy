@@ -1653,7 +1653,6 @@ kwargs :
 <span class="sd">        also included.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">leaves</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">leaves</span> <span class="o">=</span> <span class="p">()</span>
-
         <span class="n">classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">get_branch</span><span class="p">(</span>
             <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
             <span class="n">leaves</span><span class="o">=</span><span class="n">leaves</span><span class="p">,</span>
@@ -1682,9 +1681,17 @@ kwargs :
             <span class="n">nodeattrs</span><span class="o">=</span><span class="n">nodeattrs</span><span class="p">,</span>
             <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
         <span class="p">)</span>
-
+        <span class="n">closest_ancestors</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">ancestor_generations</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">include_parents</span> <span class="o">==</span> <span class="s2">&quot;closest&quot;</span><span class="p">:</span>
+            <span class="n">closest_ancestors</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">include_parents</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">ancestor_generations</span> <span class="o">=</span> <span class="n">include_parents</span>
         <span class="n">parents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">get_ancestors</span><span class="p">(</span>
-            <span class="n">classes</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="n">include_parents</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span>
+            <span class="n">classes</span><span class="p">,</span>
+            <span class="n">closest</span><span class="o">=</span><span class="n">closest_ancestors</span><span class="p">,</span>
+            <span class="n">generations</span><span class="o">=</span><span class="n">ancestor_generations</span><span class="p">,</span>
+            <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">parents</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
@@ -2256,7 +2263,6 @@ also included.</p>
 <span class="sd">    also included.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">leaves</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">leaves</span> <span class="o">=</span> <span class="p">()</span>
-
     <span class="n">classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">get_branch</span><span class="p">(</span>
         <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
         <span class="n">leaves</span><span class="o">=</span><span class="n">leaves</span><span class="p">,</span>
@@ -2285,9 +2291,17 @@ also included.</p>
         <span class="n">nodeattrs</span><span class="o">=</span><span class="n">nodeattrs</span><span class="p">,</span>
         <span class="o">**</span><span class="n">attrs</span><span class="p">,</span>
     <span class="p">)</span>
-
+    <span class="n">closest_ancestors</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">ancestor_generations</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">include_parents</span> <span class="o">==</span> <span class="s2">&quot;closest&quot;</span><span class="p">:</span>
+        <span class="n">closest_ancestors</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">include_parents</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">ancestor_generations</span> <span class="o">=</span> <span class="n">include_parents</span>
     <span class="n">parents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">get_ancestors</span><span class="p">(</span>
-        <span class="n">classes</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="n">include_parents</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">classes</span><span class="p">,</span>
+        <span class="n">closest</span><span class="o">=</span><span class="n">closest_ancestors</span><span class="p">,</span>
+        <span class="n">generations</span><span class="o">=</span><span class="n">ancestor_generations</span><span class="p">,</span>
+        <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">parents</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>

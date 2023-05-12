@@ -3380,18 +3380,27 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
             <span class="s2">&quot;A closest common ancestor should always exist !&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_ancestors</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">classes</span><span class="p">:</span> <span class="s2">&quot;Union[List, ThingClass]&quot;</span><span class="p">,</span>
+        <span class="n">closest</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">generations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return ancestors of all classes in `classes`.</span>
-<span class="sd">        classes to be provided as list</span>
-
-<span class="sd">        The values of `include` may be:</span>
-<span class="sd">          - None: ignore this argument</span>
-<span class="sd">          - &quot;all&quot;: Include all ancestors.</span>
-<span class="sd">          - &quot;closest&quot;: Include all ancestors up to the closest common</span>
-<span class="sd">            ancestor of all classes.</span>
-<span class="sd">          - int: Include this number of ancestor levels.  Here `include`</span>
-<span class="sd">            may be an integer or a string that can be converted to int.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            classes: class(es) for which ancestors should be returned.</span>
+<span class="sd">            generations: Include this number of generations, default is all.</span>
+<span class="sd">            closest: If True, return all ancestors up to and including the</span>
+<span class="sd">                closest common ancestor. Return all if False.</span>
+<span class="sd">            strict: If True returns only real ancestors, i.e. `classes` are</span>
+<span class="sd">                are not included in the returned set.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Set of ancestors to `classes`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">classes</span><span class="p">]</span>
+
         <span class="n">ancestors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">classes</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ancestors</span>
@@ -3402,22 +3411,24 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                     <span class="n">subject</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
                     <span class="n">addancestors</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">counter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">subject</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">include</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">include</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
-            <span class="n">include</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">include</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">closest</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">generations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Only one of `generations` or `closest` may be specified.&quot;</span>
+                <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">include</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
-            <span class="n">ancestors</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">))</span>
-        <span class="k">elif</span> <span class="n">include</span> <span class="o">==</span> <span class="s2">&quot;closest&quot;</span><span class="p">:</span>
-            <span class="n">closest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">closest_common_ancestor</span><span class="p">(</span><span class="o">*</span><span class="n">classes</span><span class="p">)</span>
+            <span class="n">closest_ancestor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">closest_common_ancestor</span><span class="p">(</span><span class="o">*</span><span class="n">classes</span><span class="p">)</span>
             <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
                 <span class="n">ancestors</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                    <span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span> <span class="k">if</span> <span class="n">closest</span> <span class="ow">in</span> <span class="n">_</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span>
+                    <span class="n">anc</span>
+                    <span class="k">for</span> <span class="n">anc</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">closest_ancestor</span> <span class="ow">in</span> <span class="n">anc</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span>
                 <span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">include</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">generations</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
-                <span class="n">addancestors</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">include</span><span class="p">),</span> <span class="n">ancestors</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">include</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;include must be &quot;all&quot;, &quot;closest&quot; or None&#39;</span><span class="p">)</span>
+                <span class="n">addancestors</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">generations</span><span class="p">,</span> <span class="n">ancestors</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ancestors</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ancestors</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
@@ -3426,12 +3437,12 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
     <span class="k">def</span> <span class="nf">get_descendants</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">classes</span><span class="p">:</span> <span class="s2">&quot;Union[List, ThingClass]&quot;</span><span class="p">,</span>
-        <span class="n">common</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">generations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">common</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return descendants/subclasses of all classes in `classes`.</span>
 <span class="sd">        Args:</span>
-<span class="sd">            classes: to be provided as list.</span>
+<span class="sd">            classes: class(es) for which descendants are desired.</span>
 <span class="sd">            common: whether to only return descendants common to all classes.</span>
 <span class="sd">            generations: Include this number of generations, default is all.</span>
 <span class="sd">        Returns:</span>
@@ -3441,7 +3452,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 <span class="sd">            &#39;generations&#39; defaults to all.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
             <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">classes</span><span class="p">]</span>
 
         <span class="n">descendants</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">}</span>
@@ -3925,37 +3936,92 @@ returned.</p>
 
 
 <h3 class="doc doc-heading" id="ontopy.ontology.Ontology.get_ancestors">
-<code class="highlight language-python"><span class="n">get_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">get_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">closest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">generations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.ontology.Ontology.get_ancestors" title="Permanent link">&para;</a></h3>
 
     <div class="doc doc-contents ">
 
-      <p>Return ancestors of all classes in <code>classes</code>.
-classes to be provided as list</p>
-<p>The values of <code>include</code> may be:
-  - None: ignore this argument
-  - "all": Include all ancestors.
-  - "closest": Include all ancestors up to the closest common
-    ancestor of all classes.
-  - int: Include this number of ancestor levels.  Here <code>include</code>
-    may be an integer or a string that can be converted to int.</p>
+      <p>Return ancestors of all classes in <code>classes</code>.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>classes</code></td>
+        <td><code>Union[List, ThingClass]</code></td>
+        <td><p>class(es) for which ancestors should be returned.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>generations</code></td>
+        <td><code>int</code></td>
+        <td><p>Include this number of generations, default is all.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>closest</code></td>
+        <td><code>bool</code></td>
+        <td><p>If True, return all ancestors up to and including the
+closest common ancestor. Return all if False.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>strict</code></td>
+        <td><code>bool</code></td>
+        <td><p>If True returns only real ancestors, i.e. <code>classes</code> are
+are not included in the returned set.</p></td>
+        <td><code>True</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>set</code></td>
+      <td><p>Set of ancestors to <code>classes</code>.</p></td>
+    </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_ancestors</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">classes</span><span class="p">:</span> <span class="s2">&quot;Union[List, ThingClass]&quot;</span><span class="p">,</span>
+    <span class="n">closest</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">generations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ancestors of all classes in `classes`.</span>
-<span class="sd">    classes to be provided as list</span>
-
-<span class="sd">    The values of `include` may be:</span>
-<span class="sd">      - None: ignore this argument</span>
-<span class="sd">      - &quot;all&quot;: Include all ancestors.</span>
-<span class="sd">      - &quot;closest&quot;: Include all ancestors up to the closest common</span>
-<span class="sd">        ancestor of all classes.</span>
-<span class="sd">      - int: Include this number of ancestor levels.  Here `include`</span>
-<span class="sd">        may be an integer or a string that can be converted to int.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        classes: class(es) for which ancestors should be returned.</span>
+<span class="sd">        generations: Include this number of generations, default is all.</span>
+<span class="sd">        closest: If True, return all ancestors up to and including the</span>
+<span class="sd">            closest common ancestor. Return all if False.</span>
+<span class="sd">        strict: If True returns only real ancestors, i.e. `classes` are</span>
+<span class="sd">            are not included in the returned set.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Set of ancestors to `classes`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+        <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">classes</span><span class="p">]</span>
+
     <span class="n">ancestors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">classes</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">ancestors</span>
@@ -3966,22 +4032,24 @@ classes to be provided as list</p>
                 <span class="n">subject</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
                 <span class="n">addancestors</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">counter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">subject</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">include</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">include</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
-        <span class="n">include</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">include</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">closest</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">generations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Only one of `generations` or `closest` may be specified.&quot;</span>
+            <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">include</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
-        <span class="n">ancestors</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">))</span>
-    <span class="k">elif</span> <span class="n">include</span> <span class="o">==</span> <span class="s2">&quot;closest&quot;</span><span class="p">:</span>
-        <span class="n">closest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">closest_common_ancestor</span><span class="p">(</span><span class="o">*</span><span class="n">classes</span><span class="p">)</span>
+        <span class="n">closest_ancestor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">closest_common_ancestor</span><span class="p">(</span><span class="o">*</span><span class="n">classes</span><span class="p">)</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
             <span class="n">ancestors</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                <span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span> <span class="k">if</span> <span class="n">closest</span> <span class="ow">in</span> <span class="n">_</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span>
+                <span class="n">anc</span>
+                <span class="k">for</span> <span class="n">anc</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">closest_ancestor</span> <span class="ow">in</span> <span class="n">anc</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span>
             <span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">include</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">generations</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
-            <span class="n">addancestors</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">include</span><span class="p">),</span> <span class="n">ancestors</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">include</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;include must be &quot;all&quot;, &quot;closest&quot; or None&#39;</span><span class="p">)</span>
+            <span class="n">addancestors</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">generations</span><span class="p">,</span> <span class="n">ancestors</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ancestors</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">ancestors</span><span class="p">()</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">ancestors</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
@@ -4449,7 +4517,7 @@ matching any number of characters. This may change in the future.</p>
 
 
 <h3 class="doc doc-heading" id="ontopy.ontology.Ontology.get_descendants">
-<code class="highlight language-python"><span class="n">get_descendants</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">common</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">generations</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">get_descendants</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">generations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">common</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.ontology.Ontology.get_descendants" title="Permanent link">&para;</a></h3>
@@ -4472,7 +4540,7 @@ matching any number of characters. This may change in the future.</p>
       <tr>
         <td><code>classes</code></td>
         <td><code>Union[List, ThingClass]</code></td>
-        <td><p>to be provided as list.</p></td>
+        <td><p>class(es) for which descendants are desired.</p></td>
         <td><em>required</em></td>
       </tr>
       <tr>
@@ -4512,12 +4580,12 @@ within the specified number of generations.
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_descendants</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">classes</span><span class="p">:</span> <span class="s2">&quot;Union[List, ThingClass]&quot;</span><span class="p">,</span>
-    <span class="n">common</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">generations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">common</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return descendants/subclasses of all classes in `classes`.</span>
 <span class="sd">    Args:</span>
-<span class="sd">        classes: to be provided as list.</span>
+<span class="sd">        classes: class(es) for which descendants are desired.</span>
 <span class="sd">        common: whether to only return descendants common to all classes.</span>
 <span class="sd">        generations: Include this number of generations, default is all.</span>
 <span class="sd">    Returns:</span>
@@ -4527,7 +4595,7 @@ within the specified number of generations.
 <span class="sd">        &#39;generations&#39; defaults to all.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
         <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">classes</span><span class="p">]</span>
 
     <span class="n">descendants</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">}</span>
