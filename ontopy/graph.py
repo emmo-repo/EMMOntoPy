@@ -678,7 +678,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         label = get_label(entity)
         # class
         if isinstance(entity, owlready2.ThingClass):
-            if self.ontology.is_defined(entity):
+            if entity.is_defined:
                 kwargs = self.style.get("defined_class", {})
             else:
                 kwargs = self.style.get("class", {})
