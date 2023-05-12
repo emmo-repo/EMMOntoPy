@@ -76,6 +76,21 @@ def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
     graph.add_legend()
     graph.save(tmpdir / "testonto.png")
 
+    with pytest.warns() as record:
+        graph2 = OntoGraph(
+            testonto,
+            testonto.TestClass,
+            relations="all",
+            addnodes=True,
+            edgelabels=None,
+        )
+        assert str(record[0].message) == (
+            "Style not defined for relation hasSpecialRelation. "
+            "Resorting to default style."
+        )
+    graph2.add_legend()
+    graph2.save(tmpdir / "testonto2.png")
+
 
 def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
     """Testing OntoGraph on various aspects of EMMO.
@@ -217,8 +232,8 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
         graph = OntoGraph(emmo)
         graph.add_entities(semiotic, relations="all", edgelabels=False)
         graph.add_legend()
-        graph.save(tmpdir / "measurement.png")
-
+        graph.save(tmpdir / "measurement.png", fmt="graphviz")
+        print("reductionistc")
         # Reductionistic perspective
         graph = OntoGraph(
             emmo,
@@ -236,7 +251,53 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
             edgelabels=None,
         )
         graph.add_legend()
-        graph.save(tmpdir / "Reductionistic.png", fmt="graphviz")
+        graph.save(tmpdir / "Reductionistic.png")
+
+        # Reductionistic perspective, choose leaf_generations
+        graph = OntoGraph(
+            emmo,
+            emmo.Reductionistic,
+            relations="all",
+            addnodes=False,
+            parents=2,
+            edgelabels=None,
+        )
+        graph.add_branch(
+            emmo.Reductionistic,
+            leaves=[
+                emmo.Quantity,
+                emmo.String,
+                emmo.PrefixedUnit,
+                emmo.SymbolicConstruct,
+                emmo.Matter,
+            ],
+        )
+
+        graph.add_legend()
+        graph.save(tmpdir / "Reductionistic_addbranch.png")
+
+        graph2 = OntoGraph(
+            emmo,
+            emmo.Reductionistic,
+            relations="all",
+            addnodes=False,
+            # parents=2,
+            edgelabels=None,
+        )
+        graph2.add_branch(
+            emmo.Reductionistic,
+            leaves=[
+                emmo.Quantity,
+                emmo.String,
+                emmo.PrefixedUnit,
+                emmo.SymbolicConstruct,
+                emmo.Matter,
+            ],
+            include_parents=2,
+        )
+
+        graph2.add_legend()
+        graph2.save(tmpdir / "Reductionistic_addbranch_2.png")
 
         # View modules
 

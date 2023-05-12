@@ -371,7 +371,6 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         also included."""
         if leaves is None:
             leaves = ()
-
         classes = self.ontology.get_branch(
             root=root,
             leaves=leaves,
@@ -400,9 +399,17 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             nodeattrs=nodeattrs,
             **attrs,
         )
-
+        closest_ancestors = False
+        ancestor_generations = None
+        if include_parents == "closest":
+            closest_ancestors = True
+        elif isinstance(include_parents, int):
+            ancestor_generations = include_parents
         parents = self.ontology.get_ancestors(
-            classes, include=include_parents, strict=True
+            classes,
+            closest=closest_ancestors,
+            generations=ancestor_generations,
+            strict=True,
         )
         if parents:
             for parent in parents:

@@ -4,7 +4,7 @@
 If desirable some of these additions may be moved back into owlready2.
 """
 # pylint: disable=too-many-lines,fixme,arguments-differ,protected-access
-from typing import TYPE_CHECKING, Optional, Union, Sequence
+from typing import TYPE_CHECKING, Optional, Union
 import os
 import itertools
 import inspect
@@ -1513,18 +1513,27 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             "A closest common ancestor should always exist !"
         )
 
-    def get_ancestors(self, classes, include="all", strict=True):
+    def get_ancestors(
+        self,
+        classes: "Union[List, ThingClass]",
+        closest: bool = False,
+        generations: int = None,
+        strict: bool = True,
+    ) -> set:
         """Return ancestors of all classes in `classes`.
-        classes to be provided as list
-
-        The values of `include` may be:
-          - None: ignore this argument
-          - "all": Include all ancestors.
-          - "closest": Include all ancestors up to the closest common
-            ancestor of all classes.
-          - int: Include this number of ancestor levels.  Here `include`
-            may be an integer or a string that can be converted to int.
+        Args:
+            classes: class(es) for which ancestors should be returned.
+            generations: Include this number of generations, default is all.
+            closest: If True, return all ancestors up to and including the
+                closest common ancestor. Return all if False.
+            strict: If True returns only real ancestors, i.e. `classes` are
+                are not included in the returned set.
+        Returns:
+            Set of ancestors to `classes`.
         """
+        if not isinstance(classes, Iterable):
+            classes = [classes]
+
         ancestors = set()
         if not classes:
             return ancestors
@@ -1535,22 +1544,24 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     subject.add(parent)
                     addancestors(parent, counter - 1, subject)
 
-        if isinstance(include, str) and include.isdigit():
-            include = int(include)
+        if closest:
+            if generations is not None:
+                raise ValueError(
+                    "Only one of `generations` or `closest` may be specified."
+                )
 
-        if include == "all":
-            ancestors.update(*(_.ancestors() for _ in classes))
-        elif include == "closest":
-            closest = self.closest_common_ancestor(*classes)
+            closest_ancestor = self.closest_common_ancestor(*classes)
             for cls in classes:
                 ancestors.update(
-                    _ for _ in cls.ancestors() if closest in _.ancestors()
+                    anc
+                    for anc in cls.ancestors()
+                    if closest_ancestor in anc.ancestors()
                 )
-        elif isinstance(include, int):
+        elif isinstance(generations, int):
             for entity in classes:
-                addancestors(entity, int(include), ancestors)
-        elif include not in (None, "None", "none", ""):
-            raise ValueError('include must be "all", "closest" or None')
+                addancestors(entity, generations, ancestors)
+        else:
+            ancestors.update(*(cls.ancestors() for cls in classes))
 
         if strict:
             return ancestors.difference(classes)
@@ -1559,12 +1570,12 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def get_descendants(
         self,
         classes: "Union[List, ThingClass]",
-        common: bool = False,
         generations: int = None,
+        common: bool = False,
     ) -> set:
         """Return descendants/subclasses of all classes in `classes`.
         Args:
-            classes: to be provided as list.
+            classes: class(es) for which descendants are desired.
             common: whether to only return descendants common to all classes.
             generations: Include this number of generations, default is all.
         Returns:
@@ -1574,7 +1585,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             'generations' defaults to all.
         """
 
-        if not isinstance(classes, Sequence):
+        if not isinstance(classes, Iterable):
             classes = [classes]
 
         descendants = {name: [] for name in classes}
