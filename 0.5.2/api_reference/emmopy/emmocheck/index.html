@@ -1,0 +1,2734 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the EMMOntoPy library">
+      
+      
+      
+        <link rel="canonical" href="https://emmo-repo.github.io/EMMOntoPy/0.5.2/api_reference/emmopy/emmocheck/">
+      
+      
+        <link rel="prev" href="../../../CHANGELOG/">
+      
+      
+        <link rel="next" href="../emmopy/">
+      
+      <link rel="icon" href="../../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.14">
+    
+    
+      
+        <title>emmocheck - EMMOntoPy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.85bb2934.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a6bdf11c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../css/reference.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="light-green">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#emmocheck" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="EMMOntoPy" class="md-header__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
+      
+  <img src="../../../images/emmontopy-logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            EMMOntoPy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              emmocheck
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/emmo-repo/EMMOntoPy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EMMOntoPy
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="EMMOntoPy" class="md-nav__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
+      
+  <img src="../../../images/emmontopy-logo.svg" alt="logo">
+
+    </a>
+    EMMOntoPy
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/emmo-repo/EMMOntoPy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EMMOntoPy
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools-instructions/" class="md-nav__link">
+        Tools
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docker-instructions/" class="md-nav__link">
+        Docker
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../LICENSE/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          Examples and demonstrations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Examples and demonstrations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+          Demo
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Demo
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../demo/" class="md-nav__link">
+        EMMO use cases
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../demo/horizontal/" class="md-nav__link">
+        EMMO use case for horizontal interoperability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../demo/vertical/" class="md-nav__link">
+        EMMO use case for vertical interoperability
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/emmodoc/" class="md-nav__link">
+        EMMOdoc
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/jupyter-visualization/" class="md-nav__link">
+        Jupyter visualization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          Developers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Developers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/release-instructions/" class="md-nav__link">
+        Steps for creating a new release
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/setup/" class="md-nav__link">
+        Development environment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/testing/" class="md-nav__link">
+        Testing and tooling
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CHANGELOG/" class="md-nav__link">
+        Changelog
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+          emmopy
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_8_1">
+          <span class="md-nav__icon md-icon"></span>
+          emmopy
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          emmocheck
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        emmocheck
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#emmopy.emmocheck" class="md-nav__link">
+    emmopy.emmocheck
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestEMMOConventions" class="md-nav__link">
+    TestEMMOConventions
+  </a>
+  
+    <nav class="md-nav" aria-label="TestEMMOConventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestEMMOConventions.get_config" class="md-nav__link">
+    get_config()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions" class="md-nav__link">
+    TestFunctionalEMMOConventions
+  </a>
+  
+    <nav class="md-nav" aria-label="TestFunctionalEMMOConventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_namespace" class="md-nav__link">
+    test_namespace()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_physical_quantity_dimension" class="md-nav__link">
+    test_physical_quantity_dimension()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_quantity_dimension" class="md-nav__link">
+    test_quantity_dimension()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_unit_dimension" class="md-nav__link">
+    test_unit_dimension()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions" class="md-nav__link">
+    TestSyntacticEMMOConventions
+  </a>
+  
+    <nav class="md-nav" aria-label="TestSyntacticEMMOConventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_class_label" class="md-nav__link">
+    test_class_label()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_number_of_labels" class="md-nav__link">
+    test_number_of_labels()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_object_property_label" class="md-nav__link">
+    test_object_property_label()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.main" class="md-nav__link">
+    main()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../emmopy/" class="md-nav__link">
+        emmopy
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+          ontopy
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8_2">
+          <span class="md-nav__icon md-icon"></span>
+          ontopy
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ontopy/colortest/" class="md-nav__link">
+        colortest
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ontopy/excelparser/" class="md-nav__link">
+        excelparser
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ontopy/graph/" class="md-nav__link">
+        graph
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ontopy/manchester/" class="md-nav__link">
+        manchester
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ontopy/nadict/" class="md-nav__link">
+        nadict
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ontopy/ontodoc/" class="md-nav__link">
+        ontodoc
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ontopy/ontology/" class="md-nav__link">
+        ontology
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ontopy/patch/" class="md-nav__link">
+        patch
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ontopy/utils/" class="md-nav__link">
+        utils
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_2_10" id="__nav_8_2_10_label" tabindex="0">
+          factpluspluswrapper
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_8_2_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8_2_10">
+          <span class="md-nav__icon md-icon"></span>
+          factpluspluswrapper
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ontopy/factpluspluswrapper/factppgraph/" class="md-nav__link">
+        factppgraph
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ontopy/factpluspluswrapper/owlapi_interface/" class="md-nav__link">
+        owlapi_interface
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ontopy/factpluspluswrapper/sync_factpp/" class="md-nav__link">
+        sync_factpp
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#emmopy.emmocheck" class="md-nav__link">
+    emmopy.emmocheck
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestEMMOConventions" class="md-nav__link">
+    TestEMMOConventions
+  </a>
+  
+    <nav class="md-nav" aria-label="TestEMMOConventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestEMMOConventions.get_config" class="md-nav__link">
+    get_config()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions" class="md-nav__link">
+    TestFunctionalEMMOConventions
+  </a>
+  
+    <nav class="md-nav" aria-label="TestFunctionalEMMOConventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_namespace" class="md-nav__link">
+    test_namespace()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_physical_quantity_dimension" class="md-nav__link">
+    test_physical_quantity_dimension()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_quantity_dimension" class="md-nav__link">
+    test_quantity_dimension()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_unit_dimension" class="md-nav__link">
+    test_unit_dimension()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions" class="md-nav__link">
+    TestSyntacticEMMOConventions
+  </a>
+  
+    <nav class="md-nav" aria-label="TestSyntacticEMMOConventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_class_label" class="md-nav__link">
+    test_class_label()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_number_of_labels" class="md-nav__link">
+    test_number_of_labels()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_object_property_label" class="md-nav__link">
+    test_object_property_label()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.main" class="md-nav__link">
+    main()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="emmocheck">emmocheck<a class="headerlink" href="#emmocheck" title="Permanent link">&para;</a></h1>
+
+
+  <div class="doc doc-object doc-module">
+
+<a id="emmopy.emmocheck"></a>
+    <div class="doc doc-contents first">
+
+      <p>A module for testing an ontology against conventions defined for EMMO.</p>
+<p>A YAML file can be provided with additional test configurations.</p>
+<p>Example configuration file:</p>
+<div class="highlight"><pre><span></span><code>test_unit_dimensions:
+  exceptions:
+    - myunits.MyUnitCategory1
+    - myunits.MyUnitCategory2
+
+skip:
+  - name_of_test_to_skip
+
+enable:
+  - name_of_test_to_enable
+</code></pre></div>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 class="doc doc-heading" id="emmopy.emmocheck.TestEMMOConventions">
+        <code>
+TestEMMOConventions        </code>
+
+
+
+<a class="headerlink" href="#emmopy.emmocheck.TestEMMOConventions" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Base class for testing an ontology against EMMO conventions.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">TestEMMOConventions</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for testing an ontology against EMMO conventions.&quot;&quot;&quot;</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># configurations</span>
+
+    <span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the configuration specified by `string`.</span>
+
+<span class="sd">        If configuration is not found in the configuration file, `default` is</span>
+<span class="sd">        returned.</span>
+
+<span class="sd">        Sub-configurations can be accessed by separating the components with</span>
+<span class="sd">        dots, like &quot;test_namespace.exceptions&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">token</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">default</span>
+        <span class="k">return</span> <span class="n">result</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="emmopy.emmocheck.TestEMMOConventions.get_config">
+<code class="highlight language-python"><span class="n">get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#emmopy.emmocheck.TestEMMOConventions.get_config" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns the configuration specified by <code>string</code>.</p>
+<p>If configuration is not found in the configuration file, <code>default</code> is
+returned.</p>
+<p>Sub-configurations can be accessed by separating the components with
+dots, like "test_namespace.exceptions".</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the configuration specified by `string`.</span>
+
+<span class="sd">    If configuration is not found in the configuration file, `default` is</span>
+<span class="sd">    returned.</span>
+
+<span class="sd">    Sub-configurations can be accessed by separating the components with</span>
+<span class="sd">    dots, like &quot;test_namespace.exceptions&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">token</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">default</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 class="doc doc-heading" id="emmopy.emmocheck.TestFunctionalEMMOConventions">
+        <code>
+TestFunctionalEMMOConventions        </code>
+
+
+
+<a class="headerlink" href="#emmopy.emmocheck.TestFunctionalEMMOConventions" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Test functional EMMO conventions.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">TestFunctionalEMMOConventions</span><span class="p">(</span><span class="n">TestEMMOConventions</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test functional EMMO conventions.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">test_unit_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all measurement units have a physical dimension.</span>
+
+<span class="sd">        Configurations:</span>
+<span class="sd">            exceptions - full class names of classes to ignore.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;metrology.MultipleUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.SubMultipleUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.OffSystemUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.PrefixedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.NonPrefixedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.SpecialUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.DerivedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.BaseUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.UnitSymbol&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;siunits.SICoherentDerivedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;siunits.SINonCoherentDerivedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;siunits.SISpecialUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;siunits.SICoherentUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;siunits.SIPrefixedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;siunits.SIBaseUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;siunits.SIUnitSymbol&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;siunits.SIUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.MultipleUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SubMultipleUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.OffSystemUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.PrefixedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.NonPrefixedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SpecialUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.DerivedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.BaseUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.UnitSymbol&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SICoherentDerivedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SINonCoherentDerivedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SISpecialUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SICoherentUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIPrefixedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIBaseUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIUnitSymbol&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIUnit&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="s2">&quot;MeasurementUnit&quot;</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_unit_dimension.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;^(emmo|metrology).hasPhysicalDimension.some\(.*\)$&quot;</span>
+        <span class="p">)</span>
+        <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">MeasurementUnit</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># Assume that actual units are not subclassed</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">subclasses</span><span class="p">())</span> <span class="ow">and</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                        <span class="nb">any</span><span class="p">(</span>
+                            <span class="n">regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
+                            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_indirect_is_a</span><span class="p">()</span>
+                        <span class="p">),</span>
+                        <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all quantities have a physicalDimension annotation.</span>
+
+<span class="sd">        Note: this test will be deprecated when isq is moved to emmo/domain.</span>
+
+<span class="sd">        Configurations:</span>
+<span class="sd">            exceptions - full class names of classes to ignore.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;properties.ModelledQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties.MeasuredQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties.ConventionalQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.QuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.Quantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.OrdinalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.BaseQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.PhysicalConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.PhysicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.ExactConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.MeasuredConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.DerivedQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;isq.ISQBaseQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;isq.InternationalSystemOfQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;isq.ISQDerivedQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;isq.SIExactConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ModelledQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.MeasuredQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ConventionalQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.QuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.Quantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.OrdinalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.BaseQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.PhysicalConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.PhysicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ExactConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.MeasuredConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.DerivedQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ISQBaseQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.InternationalSystemOfQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ISQDerivedQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIExactConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.NonSIUnits&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.StandardizedPhysicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.CategorizedPhysicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.AtomicAndNuclear&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.Defined&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.Electromagnetic&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.FrequentlyUsed&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.PhysicoChemical&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ChemicalCompositionQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.Universal&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="s2">&quot;PhysicalQuantity&quot;</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_quantity_dimension.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+        <span class="p">)</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="s2">&quot;^T([+-][1-9]|0) L([+-][1-9]|0) M([+-][1-9]|0) I([+-][1-9]|0) &quot;</span>
+            <span class="s2">&quot;(H|Θ)([+-][1-9]|0) N([+-][1-9]|0) J([+-][1-9]|0)$&quot;</span>
+        <span class="p">)</span>
+        <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
+                    <span class="n">anno</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_annotations</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;physicalDimension&quot;</span><span class="p">,</span> <span class="n">anno</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">)</span>
+                    <span class="n">physdim</span> <span class="o">=</span> <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;physicalDimension&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertRegex</span><span class="p">(</span><span class="n">physdim</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_physical_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all physical quantities have `hasPhysicalDimension`.</span>
+
+<span class="sd">        Note: this test will fail before isq is moved to emmo/domain.</span>
+
+<span class="sd">        Configurations:</span>
+<span class="sd">            exceptions - full class names of classes to ignore.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;emmo.ModelledQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.MeasuredQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ConventionalQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.QuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.BaseQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.PhysicalConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.PhysicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ExactConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.MeasuredConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.DerivedQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ISQBaseQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.InternationalSystemOfQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ISQDerivedQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIExactConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.NonSIUnits&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.StandardizedPhysicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.CategorizedPhysicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.AtomicAndNuclearPhysicsQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ThermodynamicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.LightAndRadiationQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SpaceAndTimeQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.AcousticQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.PhysioChememicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ElectromagneticQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.MechanicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.CondensedMatterPhysicsQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ChemicalCompositionQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.Extensive&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.Intensive&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="s2">&quot;PhysicalQuantity&quot;</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_physical_quantity_dimension.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+        <span class="p">)</span>
+        <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">class_props</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">INDIRECT_get_class_properties</span><span class="p">()</span>
+                    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                        <span class="c1"># The INDIRECT_get_class_properties() method</span>
+                        <span class="c1"># does not support inverse properties.  Build</span>
+                        <span class="c1"># class_props manually...</span>
+                        <span class="n">class_props</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">mro</span><span class="p">():</span>
+                            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="s2">&quot;is_a&quot;</span><span class="p">):</span>
+                                <span class="n">class_props</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                                    <span class="p">[</span>
+                                        <span class="n">restriction</span><span class="o">.</span><span class="n">property</span>
+                                        <span class="k">for</span> <span class="n">restriction</span> <span class="ow">in</span> <span class="n">_</span><span class="o">.</span><span class="n">is_a</span>
+                                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+                                            <span class="n">restriction</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Restriction</span>
+                                        <span class="p">)</span>
+                                    <span class="p">]</span>
+                                <span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">hasPhysicalDimension</span><span class="p">,</span> <span class="n">class_props</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span>
+                    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all IRIs are namespaced after their (sub)ontology.</span>
+
+<span class="sd">        Configurations:</span>
+<span class="sd">            exceptions - full name of entities to ignore.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;owl.qualifiedCardinality&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;owl.minQualifiedCardinality&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;terms.creator&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;terms.contributor&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;terms.publisher&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;terms.title&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;terms.license&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;terms.abstract&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;core.prefLabel&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;core.altLabel&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;core.hiddenLabel&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;mereotopology.Item&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;manufacturing.EngineeredMaterial&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_namespace.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
+
+        <span class="k">def</span> <span class="nf">checker</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">ignore_namespace</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="nb">filter</span><span class="p">(</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_namespace</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping namespace: </span><span class="si">{</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="n">entities</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(),</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">(),</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">data_properties</span><span class="p">(),</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">individuals</span><span class="p">(),</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">(),</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">entity</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span> <span class="ow">and</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                    <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span>
+                        <span class="n">iri</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span>
+                        <span class="n">base_iri</span><span class="o">=</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
+                        <span class="n">entity</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">),</span>
+                    <span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                            <span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                            <span class="n">msg</span><span class="o">=</span><span class="p">(</span>
+                                <span class="s2">&quot;the final part of entity IRIs must be their &quot;</span>
+                                <span class="s2">&quot;name&quot;</span>
+                            <span class="p">),</span>
+                        <span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+                            <span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span>
+                            <span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">+</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                            <span class="n">msg</span><span class="o">=</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;IRI </span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="si">!r}</span><span class="s2"> does not correspond to &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;module namespace: </span><span class="si">{</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="si">!r}</span><span class="s2">&quot;</span>
+                            <span class="p">),</span>
+                        <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">imp_onto</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">imp_onto</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited_onto</span><span class="p">:</span>
+                        <span class="n">visited_onto</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">imp_onto</span><span class="p">)</span>
+                        <span class="n">checker</span><span class="p">(</span><span class="n">imp_onto</span><span class="p">,</span> <span class="n">ignore_namespace</span><span class="p">)</span>
+
+        <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">visited_onto</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">checker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_namespace</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="emmopy.emmocheck.TestFunctionalEMMOConventions.test_namespace">
+<code class="highlight language-python"><span class="n">test_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_namespace" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that all IRIs are namespaced after their (sub)ontology.</p>
+<div class="admonition configurations">
+<p class="admonition-title">Configurations</p>
+<p>exceptions - full name of entities to ignore.</p>
+</div>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all IRIs are namespaced after their (sub)ontology.</span>
+
+<span class="sd">    Configurations:</span>
+<span class="sd">        exceptions - full name of entities to ignore.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;owl.qualifiedCardinality&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;owl.minQualifiedCardinality&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;terms.creator&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;terms.contributor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;terms.publisher&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;terms.title&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;terms.license&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;terms.abstract&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;core.prefLabel&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;core.altLabel&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;core.hiddenLabel&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mereotopology.Item&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;manufacturing.EngineeredMaterial&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_namespace.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
+
+    <span class="k">def</span> <span class="nf">checker</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">ignore_namespace</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">filter</span><span class="p">(</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_namespace</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping namespace: </span><span class="si">{</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(),</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">(),</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">data_properties</span><span class="p">(),</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">individuals</span><span class="p">(),</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entity</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span> <span class="ow">and</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span>
+                    <span class="n">iri</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span>
+                    <span class="n">base_iri</span><span class="o">=</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
+                    <span class="n">entity</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">),</span>
+                <span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                        <span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                        <span class="n">msg</span><span class="o">=</span><span class="p">(</span>
+                            <span class="s2">&quot;the final part of entity IRIs must be their &quot;</span>
+                            <span class="s2">&quot;name&quot;</span>
+                        <span class="p">),</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+                        <span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span>
+                        <span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">+</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="n">msg</span><span class="o">=</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;IRI </span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="si">!r}</span><span class="s2"> does not correspond to &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;module namespace: </span><span class="si">{</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="si">!r}</span><span class="s2">&quot;</span>
+                        <span class="p">),</span>
+                    <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">imp_onto</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">imp_onto</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited_onto</span><span class="p">:</span>
+                    <span class="n">visited_onto</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">imp_onto</span><span class="p">)</span>
+                    <span class="n">checker</span><span class="p">(</span><span class="n">imp_onto</span><span class="p">,</span> <span class="n">ignore_namespace</span><span class="p">)</span>
+
+    <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">visited_onto</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">checker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_namespace</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="emmopy.emmocheck.TestFunctionalEMMOConventions.test_physical_quantity_dimension">
+<code class="highlight language-python"><span class="n">test_physical_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_physical_quantity_dimension" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that all physical quantities have <code>hasPhysicalDimension</code>.</p>
+<p>Note: this test will fail before isq is moved to emmo/domain.</p>
+<div class="admonition configurations">
+<p class="admonition-title">Configurations</p>
+<p>exceptions - full class names of classes to ignore.</p>
+</div>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_physical_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all physical quantities have `hasPhysicalDimension`.</span>
+
+<span class="sd">    Note: this test will fail before isq is moved to emmo/domain.</span>
+
+<span class="sd">    Configurations:</span>
+<span class="sd">        exceptions - full class names of classes to ignore.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;emmo.ModelledQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.MeasuredQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ConventionalQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.QuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.BaseQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.PhysicalConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.PhysicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ExactConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.MeasuredConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.DerivedQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ISQBaseQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.InternationalSystemOfQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ISQDerivedQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIExactConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.NonSIUnits&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.StandardizedPhysicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.CategorizedPhysicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.AtomicAndNuclearPhysicsQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ThermodynamicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.LightAndRadiationQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SpaceAndTimeQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.AcousticQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.PhysioChememicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ElectromagneticQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.MechanicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.CondensedMatterPhysicsQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ChemicalCompositionQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.Extensive&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.Intensive&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="s2">&quot;PhysicalQuantity&quot;</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_physical_quantity_dimension.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+    <span class="p">)</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
+    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">class_props</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">INDIRECT_get_class_properties</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                    <span class="c1"># The INDIRECT_get_class_properties() method</span>
+                    <span class="c1"># does not support inverse properties.  Build</span>
+                    <span class="c1"># class_props manually...</span>
+                    <span class="n">class_props</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">mro</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="s2">&quot;is_a&quot;</span><span class="p">):</span>
+                            <span class="n">class_props</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">restriction</span><span class="o">.</span><span class="n">property</span>
+                                    <span class="k">for</span> <span class="n">restriction</span> <span class="ow">in</span> <span class="n">_</span><span class="o">.</span><span class="n">is_a</span>
+                                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+                                        <span class="n">restriction</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Restriction</span>
+                                    <span class="p">)</span>
+                                <span class="p">]</span>
+                            <span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">hasPhysicalDimension</span><span class="p">,</span> <span class="n">class_props</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span>
+                <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="emmopy.emmocheck.TestFunctionalEMMOConventions.test_quantity_dimension">
+<code class="highlight language-python"><span class="n">test_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_quantity_dimension" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that all quantities have a physicalDimension annotation.</p>
+<p>Note: this test will be deprecated when isq is moved to emmo/domain.</p>
+<div class="admonition configurations">
+<p class="admonition-title">Configurations</p>
+<p>exceptions - full class names of classes to ignore.</p>
+</div>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all quantities have a physicalDimension annotation.</span>
+
+<span class="sd">    Note: this test will be deprecated when isq is moved to emmo/domain.</span>
+
+<span class="sd">    Configurations:</span>
+<span class="sd">        exceptions - full class names of classes to ignore.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;properties.ModelledQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties.MeasuredQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties.ConventionalQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.QuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.Quantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.OrdinalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.BaseQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.PhysicalConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.PhysicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.ExactConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.MeasuredConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.DerivedQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;isq.ISQBaseQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;isq.InternationalSystemOfQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;isq.ISQDerivedQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;isq.SIExactConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ModelledQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.MeasuredQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ConventionalQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.QuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.Quantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.OrdinalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.BaseQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.PhysicalConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.PhysicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ExactConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.MeasuredConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.DerivedQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ISQBaseQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.InternationalSystemOfQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ISQDerivedQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIExactConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.NonSIUnits&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.StandardizedPhysicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.CategorizedPhysicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.AtomicAndNuclear&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.Defined&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.Electromagnetic&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.FrequentlyUsed&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.PhysicoChemical&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ChemicalCompositionQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.Universal&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="s2">&quot;PhysicalQuantity&quot;</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_quantity_dimension.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+    <span class="p">)</span>
+    <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="s2">&quot;^T([+-][1-9]|0) L([+-][1-9]|0) M([+-][1-9]|0) I([+-][1-9]|0) &quot;</span>
+        <span class="s2">&quot;(H|Θ)([+-][1-9]|0) N([+-][1-9]|0) J([+-][1-9]|0)$&quot;</span>
+    <span class="p">)</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
+    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
+                <span class="n">anno</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_annotations</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;physicalDimension&quot;</span><span class="p">,</span> <span class="n">anno</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">)</span>
+                <span class="n">physdim</span> <span class="o">=</span> <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;physicalDimension&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertRegex</span><span class="p">(</span><span class="n">physdim</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="emmopy.emmocheck.TestFunctionalEMMOConventions.test_unit_dimension">
+<code class="highlight language-python"><span class="n">test_unit_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_unit_dimension" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that all measurement units have a physical dimension.</p>
+<div class="admonition configurations">
+<p class="admonition-title">Configurations</p>
+<p>exceptions - full class names of classes to ignore.</p>
+</div>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_unit_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all measurement units have a physical dimension.</span>
+
+<span class="sd">    Configurations:</span>
+<span class="sd">        exceptions - full class names of classes to ignore.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;metrology.MultipleUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.SubMultipleUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.OffSystemUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.PrefixedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.NonPrefixedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.SpecialUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.DerivedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.BaseUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.UnitSymbol&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;siunits.SICoherentDerivedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;siunits.SINonCoherentDerivedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;siunits.SISpecialUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;siunits.SICoherentUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;siunits.SIPrefixedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;siunits.SIBaseUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;siunits.SIUnitSymbol&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;siunits.SIUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.MultipleUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SubMultipleUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.OffSystemUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.PrefixedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.NonPrefixedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SpecialUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.DerivedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.BaseUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.UnitSymbol&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SICoherentDerivedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SINonCoherentDerivedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SISpecialUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SICoherentUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIPrefixedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIBaseUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIUnitSymbol&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIUnit&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="s2">&quot;MeasurementUnit&quot;</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_unit_dimension.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
+    <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s2">&quot;^(emmo|metrology).hasPhysicalDimension.some\(.*\)$&quot;</span>
+    <span class="p">)</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
+    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">MeasurementUnit</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="c1"># Assume that actual units are not subclassed</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">subclasses</span><span class="p">())</span> <span class="ow">and</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                    <span class="nb">any</span><span class="p">(</span>
+                        <span class="n">regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
+                        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_indirect_is_a</span><span class="p">()</span>
+                    <span class="p">),</span>
+                    <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span>
+                <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 class="doc doc-heading" id="emmopy.emmocheck.TestSyntacticEMMOConventions">
+        <code>
+TestSyntacticEMMOConventions        </code>
+
+
+
+<a class="headerlink" href="#emmopy.emmocheck.TestSyntacticEMMOConventions" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Test syntactic EMMO conventions.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">TestSyntacticEMMOConventions</span><span class="p">(</span><span class="n">TestEMMOConventions</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test syntactic EMMO conventions.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">test_number_of_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all entities have one and only one prefLabel.</span>
+
+<span class="sd">        Use &quot;altLabel&quot; for synonyms.</span>
+
+<span class="sd">        The only allowed exception is entities who&#39;s representation</span>
+<span class="sd">        starts with &quot;owl.&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;terms.license&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;terms.abstract&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;terms.contributor&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;terms.creator&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;terms.publisher&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;terms.title&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;core.prefLabel&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;core.altLabel&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;core.hiddenLabel&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;foaf.logo&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;0.1.logo&quot;</span><span class="p">,</span>  <span class="c1"># foaf.logo</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_number_of_labels.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="s2">&quot;prefLabel&quot;</span>
+            <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
+        <span class="p">):</span>
+            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">get_entities</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span>
+                        <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
+                        <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">),</span>
+                        <span class="n">prefLabels</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">,</span>
+                    <span class="p">):</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;owl.&quot;</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ontology has no prefLabel&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_class_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that class labels are CamelCase and valid identifiers.</span>
+
+<span class="sd">        For CamelCase, we are currently only checking that the labels</span>
+<span class="sd">        start with upper case.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;0-manifold&quot;</span><span class="p">,</span>  <span class="c1"># not needed in 1.0.0-beta</span>
+                <span class="s2">&quot;1-manifold&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;2-manifold&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;3-manifold&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;C++&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_class_label.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
+
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">label</span> <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">())</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">test_object_property_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that object property labels are lowerCamelCase.</span>
+
+<span class="sd">        Allowed exceptions: &quot;EMMORelation&quot;</span>
+
+<span class="sd">        If they start with &quot;has&quot; or &quot;is&quot; they should be followed by a</span>
+<span class="sd">        upper case letter.</span>
+
+<span class="sd">        If they start with &quot;is&quot; they should also end with &quot;Of&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">((</span><span class="s2">&quot;EMMORelation&quot;</span><span class="p">,))</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_object_property_label.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">obj_prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">obj_prop</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">obj_prop</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                            <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">(),</span> <span class="s2">&quot;label start with lowercase&quot;</span>
+                        <span class="p">)</span>
+                        <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;has&quot;</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                                <span class="n">label</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
+                                <span class="s1">&#39;what follows &quot;has&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
+                            <span class="p">)</span>
+                        <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;is&quot;</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                                <span class="n">label</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
+                                <span class="s1">&#39;what follows &quot;is&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                                <span class="n">label</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;Of&quot;</span><span class="p">,</span> <span class="s2">&quot;With&quot;</span><span class="p">)),</span>
+                                <span class="s1">&#39;should end with &quot;Of&quot; or &quot;With&quot;&#39;</span><span class="p">,</span>
+                            <span class="p">)</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="emmopy.emmocheck.TestSyntacticEMMOConventions.test_class_label">
+<code class="highlight language-python"><span class="n">test_class_label</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_class_label" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that class labels are CamelCase and valid identifiers.</p>
+<p>For CamelCase, we are currently only checking that the labels
+start with upper case.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_class_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that class labels are CamelCase and valid identifiers.</span>
+
+<span class="sd">    For CamelCase, we are currently only checking that the labels</span>
+<span class="sd">    start with upper case.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;0-manifold&quot;</span><span class="p">,</span>  <span class="c1"># not needed in 1.0.0-beta</span>
+            <span class="s2">&quot;1-manifold&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;2-manifold&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;3-manifold&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;C++&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_class_label.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
+
+    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">label</span> <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">())</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">())</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="emmopy.emmocheck.TestSyntacticEMMOConventions.test_number_of_labels">
+<code class="highlight language-python"><span class="n">test_number_of_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_number_of_labels" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that all entities have one and only one prefLabel.</p>
+<p>Use "altLabel" for synonyms.</p>
+<p>The only allowed exception is entities who's representation
+starts with "owl.".</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_number_of_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all entities have one and only one prefLabel.</span>
+
+<span class="sd">    Use &quot;altLabel&quot; for synonyms.</span>
+
+<span class="sd">    The only allowed exception is entities who&#39;s representation</span>
+<span class="sd">    starts with &quot;owl.&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;terms.license&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;terms.abstract&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;terms.contributor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;terms.creator&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;terms.publisher&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;terms.title&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;core.prefLabel&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;core.altLabel&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;core.hiddenLabel&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;foaf.logo&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;0.1.logo&quot;</span><span class="p">,</span>  <span class="c1"># foaf.logo</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_number_of_labels.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="s2">&quot;prefLabel&quot;</span>
+        <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
+    <span class="p">):</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">get_entities</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span>
+                    <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
+                    <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">),</span>
+                    <span class="n">prefLabels</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">,</span>
+                <span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;owl.&quot;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ontology has no prefLabel&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="emmopy.emmocheck.TestSyntacticEMMOConventions.test_object_property_label">
+<code class="highlight language-python"><span class="n">test_object_property_label</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_object_property_label" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that object property labels are lowerCamelCase.</p>
+<p>Allowed exceptions: "EMMORelation"</p>
+<p>If they start with "has" or "is" they should be followed by a
+upper case letter.</p>
+<p>If they start with "is" they should also end with "Of".</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_object_property_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that object property labels are lowerCamelCase.</span>
+
+<span class="sd">    Allowed exceptions: &quot;EMMORelation&quot;</span>
+
+<span class="sd">    If they start with &quot;has&quot; or &quot;is&quot; they should be followed by a</span>
+<span class="sd">    upper case letter.</span>
+
+<span class="sd">    If they start with &quot;is&quot; they should also end with &quot;Of&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">((</span><span class="s2">&quot;EMMORelation&quot;</span><span class="p">,))</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_object_property_label.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">obj_prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">obj_prop</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">obj_prop</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                        <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">(),</span> <span class="s2">&quot;label start with lowercase&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;has&quot;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                            <span class="n">label</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
+                            <span class="s1">&#39;what follows &quot;has&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;is&quot;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                            <span class="n">label</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
+                            <span class="s1">&#39;what follows &quot;is&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                            <span class="n">label</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;Of&quot;</span><span class="p">,</span> <span class="s2">&quot;With&quot;</span><span class="p">)),</span>
+                            <span class="s1">&#39;should end with &quot;Of&quot; or &quot;With&quot;&#39;</span><span class="p">,</span>
+                        <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 class="doc doc-heading" id="emmopy.emmocheck.main">
+<code class="highlight language-python"><span class="n">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#emmopy.emmocheck.main" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Run all checks on ontology <code>iri</code>.</p>
+<p>Default is 'http://emmo.info/emmo'.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>argv</code></td>
+        <td><code>list</code></td>
+        <td><p>List of arguments, similar to <code>sys.argv[1:]</code>.
+Mainly for testing purposes, since it allows one to invoke the tool
+manually / through Python.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">(</span>
+    <span class="n">argv</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-branches,too-many-statements</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run all checks on ontology `iri`.</span>
+
+<span class="sd">    Default is &#39;http://emmo.info/emmo&#39;.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        argv: List of arguments, similar to `sys.argv[1:]`.</span>
+<span class="sd">            Mainly for testing purposes, since it allows one to invoke the tool</span>
+<span class="sd">            manually / through Python.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="vm">__doc__</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;iri&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;File name or URI to the ontology to test.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--database&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-d&quot;</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILENAME&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;:memory:&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Load ontology from Owlready2 sqlite3 database. The `iri` argument&quot;</span>
+            <span class="s2">&quot; should in this case be the IRI of the ontology you want to &quot;</span>
+            <span class="s2">&quot;check.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--local&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-l&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Load imported ontologies locally.  Their paths are specified in &quot;</span>
+            <span class="s2">&quot;Protègè catalog files or via the --path option.  The IRI should &quot;</span>
+            <span class="s2">&quot;be a file name.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--catalog-file&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;catalog-v001.xml&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Name of Protègè catalog file in the same folder as the ontology. &quot;</span>
+            <span class="s2">&quot;This option is used together with --local and defaults to &quot;</span>
+            <span class="s1">&#39;&quot;catalog-v001.xml&quot;.&#39;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--path&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Paths where imported ontologies can be found. May be provided as &quot;</span>
+            <span class="s2">&quot;a comma-separated string and/or with multiple --path options.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--check-imported&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-i&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Whether to check imported ontologies.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Verbosity level.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--configfile&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-c&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;A yaml file with additional test configurations.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--skip&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-s&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Shell pattern matching tests to skip.  This option may be &quot;</span>
+            <span class="s2">&quot;provided multiple times.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--enable&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-e&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Shell pattern matching tests to enable that have been skipped by &quot;</span>
+            <span class="s2">&quot;default or in the config file.  This option may be provided &quot;</span>
+            <span class="s2">&quot;multiple times.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>  <span class="c1"># deprecated, replaced by --no-catalog</span>
+        <span class="s2">&quot;--url-from-catalog&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-u&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get url from catalog file&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--no-catalog&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_false&quot;</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;url_from_catalog&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Whether to not read catalog file even if it exists.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--ignore-namespace&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-n&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Namespace to be ignored. Can be given multiple times&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Options to pass forward to unittest</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--buffer&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-b&quot;</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;unittest&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;append_const&quot;</span><span class="p">,</span>
+        <span class="n">const</span><span class="o">=</span><span class="s2">&quot;-b&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;The standard output and standard error streams are buffered &quot;</span>
+            <span class="s2">&quot;during the test run. Output during a passing test is discarded. &quot;</span>
+            <span class="s2">&quot;Output is echoed normally on test fail or error and is added to &quot;</span>
+            <span class="s2">&quot;the failure messages.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--catch&quot;</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;unittest&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;append_const&quot;</span><span class="p">,</span>
+        <span class="n">const</span><span class="o">=</span><span class="s2">&quot;-c&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Control-C during the test run waits for the current test to end &quot;</span>
+            <span class="s2">&quot;and then reports all the results so far. A second control-C &quot;</span>
+            <span class="s2">&quot;raises the normal KeyboardInterrupt exception&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--failfast&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;unittest&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;append_const&quot;</span><span class="p">,</span>
+        <span class="n">const</span><span class="o">=</span><span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Stop the test run on the first error or failure.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">argv</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">unittest</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">unittest</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">SystemExit</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>  <span class="c1"># Exit without traceback on invalid arguments</span>
+
+    <span class="c1"># Append to onto_path</span>
+    <span class="k">for</span> <span class="n">paths</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">onto_path</span><span class="p">:</span>
+                <span class="n">onto_path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="c1"># Load ontology</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">World</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">database</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">database</span> <span class="o">!=</span> <span class="s2">&quot;:memory:&quot;</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">iri</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">ontologies</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+            <span class="s2">&quot;The IRI argument should be one of the ontologies in &quot;</span>
+            <span class="s2">&quot;the database:</span><span class="se">\n</span><span class="s2">  &quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">ontologies</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">)</span>
+
+    <span class="n">onto</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_ontology</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">iri</span><span class="p">)</span>
+    <span class="n">onto</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+        <span class="n">only_local</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">local</span><span class="p">,</span>
+        <span class="n">url_from_catalog</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">url_from_catalog</span><span class="p">,</span>
+        <span class="n">catalog_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">catalog_file</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Store settings TestEMMOConventions</span>
+    <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">onto</span> <span class="o">=</span> <span class="n">onto</span>
+    <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">check_imported</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">check_imported</span>
+    <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">ignore_namespace</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">ignore_namespace</span>
+
+    <span class="c1"># Configure tests</span>
+    <span class="n">verbosity</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="k">else</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">configfile</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">yaml</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">configfile</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+            <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">SafeLoader</span><span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="c1"># Run all subclasses of TestEMMOConventions as test suites</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">():</span>
+        <span class="c1"># pylint: disable=cell-var-from-loop,undefined-loop-variable</span>
+
+        <span class="n">suite</span> <span class="o">=</span> <span class="n">unittest</span><span class="o">.</span><span class="n">TestLoader</span><span class="p">()</span><span class="o">.</span><span class="n">loadTestsFromTestCase</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+
+        <span class="c1"># Mark tests to be skipped</span>
+        <span class="k">for</span> <span class="n">test</span> <span class="ow">in</span> <span class="n">suite</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">id</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">skipped</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>  <span class="c1"># skipped by default</span>
+                <span class="p">[</span>
+                    <span class="s2">&quot;test_namespace&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;test_physical_quantity_dimension&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;skipped by default&quot;</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">skipped</span><span class="p">}</span>
+
+            <span class="c1"># enable/skip tests from config file</span>
+            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">test</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;enable&quot;</span><span class="p">,</span> <span class="p">()):</span>
+                <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatchcase</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+                    <span class="n">skipped</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">test</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span> <span class="p">()):</span>
+                <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatchcase</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+                    <span class="n">skipped</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">msg</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;skipped from config file&quot;</span>
+
+            <span class="c1"># enable/skip from command line</span>
+            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">enable</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatchcase</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+                    <span class="n">skipped</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">skip</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatchcase</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+                    <span class="n">skipped</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">msg</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;skipped from command line&quot;</span>
+
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">skipped</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="s2">&quot;setUp&quot;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">test</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
+
+        <span class="n">runner</span> <span class="o">=</span> <span class="n">TextTestRunner</span><span class="p">(</span><span class="n">verbosity</span><span class="o">=</span><span class="n">verbosity</span><span class="p">)</span>
+        <span class="n">runner</span><span class="o">.</span><span class="n">resultclass</span><span class="o">.</span><span class="n">checkmode</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">suite</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">failures</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">status</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2019-2022 SINTEF
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/emmo-repo" target="_blank" rel="noopener" title="EMMO on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.b4d07000.min.js"></script>
+      
+    
+  </body>
+</html>
