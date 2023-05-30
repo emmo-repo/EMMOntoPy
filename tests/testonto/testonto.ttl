@@ -16,3 +16,18 @@
 :testclass rdf:type owl:Class ;
     rdfs:subClassOf owl:Thing ;
     skos:prefLabel "TestClass"@en .
+
+:testobjectproperty rdf:type owl:ObjectProperty ;
+    rdfs:domain :testclass ;
+    rdfs:range :testclass ;
+    skos:prefLabel "hasObjectProperty"@en .
+
+:testannotationproperty rdf:type owl:AnnotationProperty ;
+    rdfs:domain :testclass ;
+    rdfs:range rdfs:Literal ;
+    skos:prefLabel "hasAnnotationProperty"@en .
+
+:testdatatypeproperty rdf:type owl:DatatypeProperty ;
+    rdfs:domain :testclass ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "hasDataProperty"@en .

@@ -23,6 +23,8 @@ from rdflib.util import guess_format
 import owlready2
 from owlready2 import locstr
 from owlready2.entity import ThingClass
+from owlready2.prop import ObjectPropertyClass, DataPropertyClass
+from owlready2 import AnnotationPropertyClass
 
 from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 from ontopy.utils import (
@@ -39,7 +41,7 @@ from ontopy.utils import (
     ReadCatalogError,
     _validate_installed_version,
     LabelDefinitionError,
-    ThingClassDefinitionError,
+    EntityClassDefinitionError,
     EMMOntoPyException,
 )
 
@@ -1629,14 +1631,38 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         return 2 * ccadepth / (generations1 + generations2 + 2 * ccadepth)
 
     def new_entity(
-        self, name: str, parent: Union[ThingClass, Iterable]
+        self,
+        name: str,
+        parent: Union[
+            ThingClass,
+            ObjectPropertyClass,
+            DataPropertyClass,
+            AnnotationPropertyClass,
+            Iterable,
+        ],
+        entitytype: Optional[
+            Union[
+                str,
+                ThingClass,
+                ObjectPropertyClass,
+                DataPropertyClass,
+                AnnotationPropertyClass,
+            ]
+        ] = "class",
     ) -> ThingClass:
         """Create and return new entity
 
-        Makes a new entity in the ontology with given parent(s).
-        Return the new entity.
+        Args:
+            name: name of the entity
+            parent: parent(s) of the entity
+            entitytype: type of the entity, default is 'class'.Other options
+            are data_property, object_property, annotation_property.
 
-        Throws exception if name consists of more than one word.
+        Returns:
+            the new entity.
+
+        Throws exception if name consists of more than one word, if type is not
+        one of the allowed types, or if parent is not of the correct type.
         """
         if " " in name:
             raise LabelDefinitionError(
@@ -1644,11 +1670,33 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 f"Label consists of more than one word."
             )
         parents = tuple(parent) if isinstance(parent, Iterable) else (parent,)
+
+        if entitytype == "class":
+            parenttype = owlready2.ThingClass
+        elif entitytype == "data_property":
+            parenttype = owlready2.DataPropertyClass
+        elif entitytype == "object_property":
+            parenttype = owlready2.ObjectPropertyClass
+        elif entitytype == "annotation_property":
+            parenttype = owlready2.AnnotationPropertyClass
+        elif entitytype in [
+            ThingClass,
+            ObjectPropertyClass,
+            DataPropertyClass,
+            AnnotationPropertyClass,
+        ]:
+            parenttype = entitytype
+        else:
+            raise EntityClassDefinitionError(
+                f"Error in entity type definition: "
+                f"'{entitytype}' is not a valid entity type."
+            )
+
         for thing in parents:
-            if not isinstance(thing, owlready2.ThingClass):
-                raise ThingClassDefinitionError(
+            if not isinstance(thing, parenttype):
+                raise EntityClassDefinitionError(
                     f"Error in parent definition: "
-                    f"'{thing}' is not an owlready2.ThingClass."
+                    f"'{thing}' is not an {parenttype}."
                 )
 
         with self:
