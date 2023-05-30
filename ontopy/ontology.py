@@ -1649,17 +1649,22 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 AnnotationPropertyClass,
             ]
         ] = "class",
-    ) -> ThingClass:
+    ) -> Union[
+        ThingClass,
+        ObjectPropertyClass,
+        DataPropertyClass,
+        AnnotationPropertyClass,
+    ]:
         """Create and return new entity
 
         Args:
             name: name of the entity
             parent: parent(s) of the entity
             entitytype: type of the entity,
-            default is 'class/ThingClass'. Other options
-            are data_property, object_property,
-            annotation_property or ObjectPropertyClass,
-            DataPropertyClass and AnnotationProperty classes.
+                default is 'class/ThingClass'. Other options
+                are data_property, object_property,
+                annotation_property or ObjectPropertyClass,
+                DataPropertyClass and AnnotationProperty classes.
 
         Returns:
             the new entity.
@@ -1707,6 +1712,66 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         with self:
             entity = types.new_class(name, parents)
         return entity
+
+    # Method that creates new ThingClass using new_entity
+    def new_class(
+        self, name: str, parent: Union[ThingClass, Iterable]
+    ) -> ThingClass:
+        """Create and return new class.
+
+        Args:
+            name: name of the class
+            parent: parent(s) of the class
+
+        Returns:
+            the new class.
+        """
+        return self.new_entity(name, parent, "class")
+
+    # Method that creates new ObjectPropertyClass using new_entity
+    def new_object_property(
+        self, name: str, parent: Union[ObjectPropertyClass, Iterable]
+    ) -> ObjectPropertyClass:
+        """Create and return new object property.
+
+        Args:
+            name: name of the object property
+            parent: parent(s) of the object property
+
+        Returns:
+            the new object property.
+        """
+        return self.new_entity(name, parent, "object_property")
+
+    # Method that creates new DataPropertyClass using new_entity
+    def new_data_property(
+        self, name: str, parent: Union[DataPropertyClass, Iterable]
+    ) -> DataPropertyClass:
+        """Create and return new data property.
+
+        Args:
+            name: name of the data property
+            parent: parent(s) of the data property
+
+        Returns:
+            the new data property.
+        """
+        return self.new_entity(name, parent, "data_property")
+
+    # Method that creates new AnnotationPropertyClass using new_entity
+    def new_annotation_property(
+        self, name: str, parent: Union[AnnotationPropertyClass, Iterable]
+    ) -> AnnotationPropertyClass:
+        """Create and return new annotation property.
+
+        Args:
+            name: name of the annotation property
+            parent: parent(s) of the annotation property
+
+        Returns:
+            the new annotation property.
+        """
+        return self.new_entity(name, parent, "annotation_property")
 
 
 class BlankNode:
