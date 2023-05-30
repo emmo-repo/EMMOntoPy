@@ -92,3 +92,11 @@ def test_new_entity(testonto: "Ontology") -> None:
             testonto.hasObjectProperty,
             entitytype="nonexistingpropertytype",
         )
+    testonto.new_class("AnotherClass3", (testonto.AnotherClass,))
+    testonto.new_object_property(
+        "hasSubObjectProperty3", testonto.hasObjectProperty
+    )
+    testonto.new_data_property("hasSubDataProperty3", testonto.hasDataProperty)
+    testonto.new_annotation_property(
+        "hasSubAnnotationProperty3", testonto.hasAnnotationProperty
+    )

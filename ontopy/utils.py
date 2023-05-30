@@ -248,7 +248,7 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
         return f"inverse({fmt(expr.property)})"
     if isinstance(expr, owlready2.disjoint.AllDisjoint):
         return fmt(expr)
-    print("expr1", expr)
+
     if isinstance(expr, (bool, int, float)):
         return repr(expr)
     # Check for subclasses
