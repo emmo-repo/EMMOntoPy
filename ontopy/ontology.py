@@ -1655,14 +1655,19 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         Args:
             name: name of the entity
             parent: parent(s) of the entity
-            entitytype: type of the entity, default is 'class'.Other options
-            are data_property, object_property, annotation_property.
+            entitytype: type of the entity,
+            default is 'class/ThingClass'. Other options
+            are data_property, object_property,
+            annotation_property or ObjectPropertyClass,
+            DataPropertyClass and AnnotationProperty classes.
 
         Returns:
             the new entity.
 
         Throws exception if name consists of more than one word, if type is not
         one of the allowed types, or if parent is not of the correct type.
+        By default, the parent is Thing.
+
         """
         if " " in name:
             raise LabelDefinitionError(
