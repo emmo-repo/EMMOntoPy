@@ -5,6 +5,7 @@ import os
 import sys
 import re
 import datetime
+import inspect
 import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -69,7 +70,7 @@ class LabelDefinitionError(EMMOntoPyException):
     """Error in label definition."""
 
 
-class ThingClassDefinitionError(EMMOntoPyException):
+class EntityClassDefinitionError(EMMOntoPyException):
     """Error in ThingClass definition."""
 
 
@@ -246,17 +247,19 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
         return f"inverse({fmt(expr.property)})"
     if isinstance(expr, owlready2.disjoint.AllDisjoint):
         return fmt(expr)
+
     if isinstance(expr, (bool, int, float)):
         return repr(expr)
     # Check for subclasses
-    if issubclass(expr, (bool, int, float, str)):
-        return fmt(expr.__class__.__name__)
-    if issubclass(expr, datetime.date):
-        return "date"
-    if issubclass(expr, datetime.time):
-        return "datetime"
-    if issubclass(expr, datetime.datetime):
-        return "datetime"
+    if inspect.isclass(expr):
+        if issubclass(expr, (bool, int, float, str)):
+            return fmt(expr.__class__.__name__)
+        if issubclass(expr, datetime.date):
+            return "date"
+        if issubclass(expr, datetime.time):
+            return "datetime"
+        if issubclass(expr, datetime.datetime):
+            return "datetime"
 
     raise RuntimeError(f"Unknown expression: {expr!r} (type: {type(expr)!r})")
 
