@@ -23,6 +23,8 @@ from rdflib.util import guess_format
 import owlready2
 from owlready2 import locstr
 from owlready2.entity import ThingClass
+from owlready2.prop import ObjectPropertyClass, DataPropertyClass
+from owlready2 import AnnotationPropertyClass
 
 from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 from ontopy.utils import (
@@ -39,7 +41,7 @@ from ontopy.utils import (
     ReadCatalogError,
     _validate_installed_version,
     LabelDefinitionError,
-    ThingClassDefinitionError,
+    EntityClassDefinitionError,
     EMMOntoPyException,
 )
 
@@ -1629,14 +1631,50 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         return 2 * ccadepth / (generations1 + generations2 + 2 * ccadepth)
 
     def new_entity(
-        self, name: str, parent: Union[ThingClass, Iterable]
-    ) -> ThingClass:
+        self,
+        name: str,
+        parent: Union[
+            ThingClass,
+            ObjectPropertyClass,
+            DataPropertyClass,
+            AnnotationPropertyClass,
+            Iterable,
+        ],
+        entitytype: Optional[
+            Union[
+                str,
+                ThingClass,
+                ObjectPropertyClass,
+                DataPropertyClass,
+                AnnotationPropertyClass,
+            ]
+        ] = "class",
+    ) -> Union[
+        ThingClass,
+        ObjectPropertyClass,
+        DataPropertyClass,
+        AnnotationPropertyClass,
+    ]:
         """Create and return new entity
 
-        Makes a new entity in the ontology with given parent(s).
-        Return the new entity.
+        Args:
+            name: name of the entity
+            parent: parent(s) of the entity
+            entitytype: type of the entity,
+                default is 'class' (str) 'ThingClass' (owlready2 Python class).
+                Other options
+                are 'data_property', 'object_property',
+                'annotation_property' (strings) or the
+                Python classes ObjectPropertyClass,
+                DataPropertyClass and AnnotationProperty classes.
 
-        Throws exception if name consists of more than one word.
+        Returns:
+            the new entity.
+
+        Throws exception if name consists of more than one word, if type is not
+        one of the allowed types, or if parent is not of the correct type.
+        By default, the parent is Thing.
+
         """
         if " " in name:
             raise LabelDefinitionError(
@@ -1644,16 +1682,98 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 f"Label consists of more than one word."
             )
         parents = tuple(parent) if isinstance(parent, Iterable) else (parent,)
+
+        if entitytype == "class":
+            parenttype = owlready2.ThingClass
+        elif entitytype == "data_property":
+            parenttype = owlready2.DataPropertyClass
+        elif entitytype == "object_property":
+            parenttype = owlready2.ObjectPropertyClass
+        elif entitytype == "annotation_property":
+            parenttype = owlready2.AnnotationPropertyClass
+        elif entitytype in [
+            ThingClass,
+            ObjectPropertyClass,
+            DataPropertyClass,
+            AnnotationPropertyClass,
+        ]:
+            parenttype = entitytype
+        else:
+            raise EntityClassDefinitionError(
+                f"Error in entity type definition: "
+                f"'{entitytype}' is not a valid entity type."
+            )
+
         for thing in parents:
-            if not isinstance(thing, owlready2.ThingClass):
-                raise ThingClassDefinitionError(
+            if not isinstance(thing, parenttype):
+                raise EntityClassDefinitionError(
                     f"Error in parent definition: "
-                    f"'{thing}' is not an owlready2.ThingClass."
+                    f"'{thing}' is not an {parenttype}."
                 )
 
         with self:
             entity = types.new_class(name, parents)
         return entity
+
+    # Method that creates new ThingClass using new_entity
+    def new_class(
+        self, name: str, parent: Union[ThingClass, Iterable]
+    ) -> ThingClass:
+        """Create and return new class.
+
+        Args:
+            name: name of the class
+            parent: parent(s) of the class
+
+        Returns:
+            the new class.
+        """
+        return self.new_entity(name, parent, "class")
+
+    # Method that creates new ObjectPropertyClass using new_entity
+    def new_object_property(
+        self, name: str, parent: Union[ObjectPropertyClass, Iterable]
+    ) -> ObjectPropertyClass:
+        """Create and return new object property.
+
+        Args:
+            name: name of the object property
+            parent: parent(s) of the object property
+
+        Returns:
+            the new object property.
+        """
+        return self.new_entity(name, parent, "object_property")
+
+    # Method that creates new DataPropertyClass using new_entity
+    def new_data_property(
+        self, name: str, parent: Union[DataPropertyClass, Iterable]
+    ) -> DataPropertyClass:
+        """Create and return new data property.
+
+        Args:
+            name: name of the data property
+            parent: parent(s) of the data property
+
+        Returns:
+            the new data property.
+        """
+        return self.new_entity(name, parent, "data_property")
+
+    # Method that creates new AnnotationPropertyClass using new_entity
+    def new_annotation_property(
+        self, name: str, parent: Union[AnnotationPropertyClass, Iterable]
+    ) -> AnnotationPropertyClass:
+        """Create and return new annotation property.
+
+        Args:
+            name: name of the annotation property
+            parent: parent(s) of the annotation property
+
+        Returns:
+            the new annotation property.
+        """
+        return self.new_entity(name, parent, "annotation_property")
 
 
 class BlankNode:
