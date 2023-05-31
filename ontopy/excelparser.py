@@ -250,12 +250,13 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     concept.is_a.append(evaluate(onto, prop.strip()))
                 except pyparsing.ParseException as exc:
                     warnings.warn(
+                        # This is currently not tested
                         f"Error in Property assignment for: '{concept}'. "
                         f"Property to be Evaluated: '{prop}'. "
                         f"{exc}"
                     )
                     concepts_with_errors["errors_in_properties"].append(
-                        concept.prefLabel
+                        concept.name
                     )
                 except NoSuchLabelError as exc:
                     msg = (
@@ -266,7 +267,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                     if force is True:
                         warnings.warn(msg)
                         concepts_with_errors["errors_in_properties"].append(
-                            concept.prefLabel
+                            concept.name
                         )
                     else:
                         raise ExcelError(msg) from exc
@@ -567,10 +568,6 @@ def _add_concepts(
                     parents = [owlready2.Thing]
 
                 # Add concept
-                print("entitytype", entitytype)
-                print("parents", parents)
-                print("name", name)
-
                 try:
                     concept = onto.new_entity(
                         name, parents, entitytype=entitytype
@@ -578,7 +575,6 @@ def _add_concepts(
                 except LabelDefinitionError:
                     concepts_with_errors["wrongly_defined"].append(name)
                     continue
-                print(concept)
                 added_rows.add(index)
                 # Add elucidation
                 try:
@@ -654,4 +650,4 @@ def _add_concepts(
                     )
             all_added_rows.extend(added_rows)
 
-    return onto, concepts_with_errors, added_rows
+    return onto, concepts_with_errors, all_added_rows
