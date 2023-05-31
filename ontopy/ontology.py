@@ -1661,9 +1661,11 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             name: name of the entity
             parent: parent(s) of the entity
             entitytype: type of the entity,
-                default is 'class/ThingClass'. Other options
-                are data_property, object_property,
-                annotation_property or ObjectPropertyClass,
+                default is 'class' (str) 'ThingClass' (owlready2 Python class).
+                Other options
+                are 'data_property', 'object_property',
+                'annotation_property' (strings) or the
+                Python classes ObjectPropertyClass,
                 DataPropertyClass and AnnotationProperty classes.
 
         Returns:
