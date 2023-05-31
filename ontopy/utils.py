@@ -253,7 +253,6 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
         return repr(expr)
     # Check for subclasses
     if inspect.isclass(expr):
-        print("expr", expr, type(expr))
         if issubclass(expr, (bool, int, float, str)):
             return fmt(expr.__class__.__name__)
         if issubclass(expr, datetime.date):
