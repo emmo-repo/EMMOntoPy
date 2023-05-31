@@ -137,7 +137,6 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
     """
     if ontology is None:
         ontology = expr.ontology
-    print("exprtio", expr)
 
     def fmt(entity):
         """Returns the formatted label of an entity."""
