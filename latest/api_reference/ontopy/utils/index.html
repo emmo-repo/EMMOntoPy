@@ -19,7 +19,7 @@
         <link rel="next" href="../factpluspluswrapper/factppgraph/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.14">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
     
     
       
@@ -27,10 +27,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.85bb2934.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.26e3688c.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a6bdf11c.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ecc896b0.min.css">
       
       
 
@@ -836,6 +836,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.utils.EntityClassDefinitionError" class="md-nav__link">
+    EntityClassDefinitionError
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.utils.IncompatibleVersion" class="md-nav__link">
     IncompatibleVersion
   </a>
@@ -866,13 +873,6 @@
         <li class="md-nav__item">
   <a href="#ontopy.utils.ReadCatalogError" class="md-nav__link">
     ReadCatalogError
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ontopy.utils.ThingClassDefinitionError" class="md-nav__link">
-    ThingClassDefinitionError
   </a>
   
 </li>
@@ -1121,6 +1121,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.utils.EntityClassDefinitionError" class="md-nav__link">
+    EntityClassDefinitionError
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.utils.IncompatibleVersion" class="md-nav__link">
     IncompatibleVersion
   </a>
@@ -1151,13 +1158,6 @@
         <li class="md-nav__item">
   <a href="#ontopy.utils.ReadCatalogError" class="md-nav__link">
     ReadCatalogError
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ontopy.utils.ThingClassDefinitionError" class="md-nav__link">
-    ThingClassDefinitionError
   </a>
   
 </li>
@@ -1363,6 +1363,37 @@ EMMOntoPyWarning            (<span title="Warning">Warning</span>)
 
 
 
+<h2 class="doc doc-heading" id="ontopy.utils.EntityClassDefinitionError">
+        <code>
+EntityClassDefinitionError            (<a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a>)
+        </code>
+
+
+
+<a class="headerlink" href="#ontopy.utils.EntityClassDefinitionError" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Error in ThingClass definition.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">EntityClassDefinitionError</span><span class="p">(</span><span class="n">EMMOntoPyException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Error in ThingClass definition.&quot;&quot;&quot;</span>
+</code></pre></div>
+        </details>
+
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
 <h2 class="doc doc-heading" id="ontopy.utils.IncompatibleVersion">
         <code>
 IncompatibleVersion            (<a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyWarning" href="#ontopy.utils.EMMOntoPyWarning">EMMOntoPyWarning</a>)
@@ -1508,37 +1539,6 @@ ReadCatalogError            (<span title="OSError">OSError</span>)
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ReadCatalogError</span><span class="p">(</span><span class="ne">IOError</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Error reading catalog file.&quot;&quot;&quot;</span>
-</code></pre></div>
-        </details>
-
-
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-class">
-
-
-
-<h2 class="doc doc-heading" id="ontopy.utils.ThingClassDefinitionError">
-        <code>
-ThingClassDefinitionError            (<a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a>)
-        </code>
-
-
-
-<a class="headerlink" href="#ontopy.utils.ThingClassDefinitionError" title="Permanent link">&para;</a></h2>
-
-    <div class="doc doc-contents ">
-
-      <p>Error in ThingClass definition.</p>
-
-        <details class="quote">
-          <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ThingClassDefinitionError</span><span class="p">(</span><span class="n">EMMOntoPyException</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Error in ThingClass definition.&quot;&quot;&quot;</span>
 </code></pre></div>
         </details>
 
@@ -1852,17 +1852,19 @@ to represent.</p></td>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;inverse(</span><span class="si">{</span><span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">disjoint</span><span class="o">.</span><span class="n">AllDisjoint</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
     <span class="c1"># Check for subclasses</span>
-    <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
-        <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;date&quot;</span>
-    <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">time</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;datetime&quot;</span>
-    <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;datetime&quot;</span>
+    <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;date&quot;</span>
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">time</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;datetime&quot;</span>
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;datetime&quot;</span>
 
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown expression: </span><span class="si">{</span><span class="n">expr</span><span class="si">!r}</span><span class="s2"> (type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="si">!r}</span><span class="s2">)&quot;</span><span class="p">)</span>
 </code></pre></div>

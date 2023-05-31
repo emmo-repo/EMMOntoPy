@@ -19,7 +19,7 @@
         <link rel="next" href="../patch/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.14">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
     
     
       
@@ -27,10 +27,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.85bb2934.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.26e3688c.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a6bdf11c.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ecc896b0.min.css">
       
       
 
@@ -1086,8 +1086,36 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.new_annotation_property" class="md-nav__link">
+    new_annotation_property()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.new_class" class="md-nav__link">
+    new_class()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.new_data_property" class="md-nav__link">
+    new_data_property()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#ontopy.ontology.Ontology.new_entity" class="md-nav__link">
     new_entity()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.new_object_property" class="md-nav__link">
+    new_object_property()
   </a>
   
 </li>
@@ -1673,8 +1701,36 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.new_annotation_property" class="md-nav__link">
+    new_annotation_property()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.new_class" class="md-nav__link">
+    new_class()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.new_data_property" class="md-nav__link">
+    new_data_property()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#ontopy.ontology.Ontology.new_entity" class="md-nav__link">
     new_entity()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.new_object_property" class="md-nav__link">
+    new_object_property()
   </a>
   
 </li>
@@ -3496,14 +3552,50 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ccadepth</span> <span class="o">/</span> <span class="p">(</span><span class="n">generations1</span> <span class="o">+</span> <span class="n">generations2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ccadepth</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">new_entity</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ThingClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThingClass</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+            <span class="n">ThingClass</span><span class="p">,</span>
+            <span class="n">ObjectPropertyClass</span><span class="p">,</span>
+            <span class="n">DataPropertyClass</span><span class="p">,</span>
+            <span class="n">AnnotationPropertyClass</span><span class="p">,</span>
+            <span class="n">Iterable</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="n">entitytype</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
+            <span class="n">Union</span><span class="p">[</span>
+                <span class="nb">str</span><span class="p">,</span>
+                <span class="n">ThingClass</span><span class="p">,</span>
+                <span class="n">ObjectPropertyClass</span><span class="p">,</span>
+                <span class="n">DataPropertyClass</span><span class="p">,</span>
+                <span class="n">AnnotationPropertyClass</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="n">ThingClass</span><span class="p">,</span>
+        <span class="n">ObjectPropertyClass</span><span class="p">,</span>
+        <span class="n">DataPropertyClass</span><span class="p">,</span>
+        <span class="n">AnnotationPropertyClass</span><span class="p">,</span>
+    <span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return new entity</span>
 
-<span class="sd">        Makes a new entity in the ontology with given parent(s).</span>
-<span class="sd">        Return the new entity.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            name: name of the entity</span>
+<span class="sd">            parent: parent(s) of the entity</span>
+<span class="sd">            entitytype: type of the entity,</span>
+<span class="sd">                default is &#39;class&#39; (str) &#39;ThingClass&#39; (owlready2 Python class).</span>
+<span class="sd">                Other options</span>
+<span class="sd">                are &#39;data_property&#39;, &#39;object_property&#39;,</span>
+<span class="sd">                &#39;annotation_property&#39; (strings) or the</span>
+<span class="sd">                Python classes ObjectPropertyClass,</span>
+<span class="sd">                DataPropertyClass and AnnotationProperty classes.</span>
 
-<span class="sd">        Throws exception if name consists of more than one word.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            the new entity.</span>
+
+<span class="sd">        Throws exception if name consists of more than one word, if type is not</span>
+<span class="sd">        one of the allowed types, or if parent is not of the correct type.</span>
+<span class="sd">        By default, the parent is Thing.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot; &quot;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">LabelDefinitionError</span><span class="p">(</span>
@@ -3511,16 +3603,98 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                 <span class="sa">f</span><span class="s2">&quot;Label consists of more than one word.&quot;</span>
             <span class="p">)</span>
         <span class="n">parents</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="n">parent</span><span class="p">,)</span>
+
+        <span class="k">if</span> <span class="n">entitytype</span> <span class="o">==</span> <span class="s2">&quot;class&quot;</span><span class="p">:</span>
+            <span class="n">parenttype</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span>
+        <span class="k">elif</span> <span class="n">entitytype</span> <span class="o">==</span> <span class="s2">&quot;data_property&quot;</span><span class="p">:</span>
+            <span class="n">parenttype</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">DataPropertyClass</span>
+        <span class="k">elif</span> <span class="n">entitytype</span> <span class="o">==</span> <span class="s2">&quot;object_property&quot;</span><span class="p">:</span>
+            <span class="n">parenttype</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ObjectPropertyClass</span>
+        <span class="k">elif</span> <span class="n">entitytype</span> <span class="o">==</span> <span class="s2">&quot;annotation_property&quot;</span><span class="p">:</span>
+            <span class="n">parenttype</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">AnnotationPropertyClass</span>
+        <span class="k">elif</span> <span class="n">entitytype</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">ThingClass</span><span class="p">,</span>
+            <span class="n">ObjectPropertyClass</span><span class="p">,</span>
+            <span class="n">DataPropertyClass</span><span class="p">,</span>
+            <span class="n">AnnotationPropertyClass</span><span class="p">,</span>
+        <span class="p">]:</span>
+            <span class="n">parenttype</span> <span class="o">=</span> <span class="n">entitytype</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EntityClassDefinitionError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Error in entity type definition: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">entitytype</span><span class="si">}</span><span class="s2">&#39; is not a valid entity type.&quot;</span>
+            <span class="p">)</span>
+
         <span class="k">for</span> <span class="n">thing</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="n">ThingClassDefinitionError</span><span class="p">(</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span> <span class="n">parenttype</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">EntityClassDefinitionError</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Error in parent definition: &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">thing</span><span class="si">}</span><span class="s2">&#39; is not an owlready2.ThingClass.&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">thing</span><span class="si">}</span><span class="s2">&#39; is not an </span><span class="si">{</span><span class="n">parenttype</span><span class="si">}</span><span class="s2">.&quot;</span>
                 <span class="p">)</span>
 
         <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">entity</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">new_class</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">entity</span>
+
+    <span class="c1"># Method that creates new ThingClass using new_entity</span>
+    <span class="k">def</span> <span class="nf">new_class</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ThingClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThingClass</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return new class.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: name of the class</span>
+<span class="sd">            parent: parent(s) of the class</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the new class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Method that creates new ObjectPropertyClass using new_entity</span>
+    <span class="k">def</span> <span class="nf">new_object_property</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ObjectPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObjectPropertyClass</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return new object property.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: name of the object property</span>
+<span class="sd">            parent: parent(s) of the object property</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the new object property.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;object_property&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Method that creates new DataPropertyClass using new_entity</span>
+    <span class="k">def</span> <span class="nf">new_data_property</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataPropertyClass</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return new data property.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: name of the data property</span>
+<span class="sd">            parent: parent(s) of the data property</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the new data property.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;data_property&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Method that creates new AnnotationPropertyClass using new_entity</span>
+    <span class="k">def</span> <span class="nf">new_annotation_property</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnnotationPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnotationPropertyClass</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return new annotation property.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: name of the annotation property</span>
+<span class="sd">            parent: parent(s) of the annotation property</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the new annotation property.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;annotation_property&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
 
@@ -5327,8 +5501,239 @@ owlready2.Ontology.load().</p>
 
 
 
+<h3 class="doc doc-heading" id="ontopy.ontology.Ontology.new_annotation_property">
+<code class="highlight language-python"><span class="n">new_annotation_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#ontopy.ontology.Ontology.new_annotation_property" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Create and return new annotation property.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>name</code></td>
+        <td><code>str</code></td>
+        <td><p>name of the annotation property</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>parent</code></td>
+        <td><code>Union[owlready2.annotation.AnnotationPropertyClass, collections.abc.Iterable]</code></td>
+        <td><p>parent(s) of the annotation property</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>AnnotationPropertyClass</code></td>
+      <td><p>the new annotation property.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontology.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">new_annotation_property</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnnotationPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnotationPropertyClass</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and return new annotation property.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name: name of the annotation property</span>
+<span class="sd">        parent: parent(s) of the annotation property</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the new annotation property.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;annotation_property&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="ontopy.ontology.Ontology.new_class">
+<code class="highlight language-python"><span class="n">new_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#ontopy.ontology.Ontology.new_class" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Create and return new class.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>name</code></td>
+        <td><code>str</code></td>
+        <td><p>name of the class</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>parent</code></td>
+        <td><code>Union[owlready2.entity.ThingClass, collections.abc.Iterable]</code></td>
+        <td><p>parent(s) of the class</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ThingClass</code></td>
+      <td><p>the new class.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontology.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">new_class</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ThingClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThingClass</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and return new class.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name: name of the class</span>
+<span class="sd">        parent: parent(s) of the class</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the new class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="ontopy.ontology.Ontology.new_data_property">
+<code class="highlight language-python"><span class="n">new_data_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#ontopy.ontology.Ontology.new_data_property" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Create and return new data property.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>name</code></td>
+        <td><code>str</code></td>
+        <td><p>name of the data property</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>parent</code></td>
+        <td><code>Union[owlready2.prop.DataPropertyClass, collections.abc.Iterable]</code></td>
+        <td><p>parent(s) of the data property</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>DataPropertyClass</code></td>
+      <td><p>the new data property.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontology.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">new_data_property</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataPropertyClass</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and return new data property.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name: name of the data property</span>
+<span class="sd">        parent: parent(s) of the data property</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the new data property.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;data_property&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="ontopy.ontology.Ontology.new_entity">
-<code class="highlight language-python"><span class="n">new_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">new_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">entitytype</span><span class="o">=</span><span class="s1">&#39;class&#39;</span><span class="p">)</span></code>
 
 
 <a class="headerlink" href="#ontopy.ontology.Ontology.new_entity" title="Permanent link">&para;</a></h3>
@@ -5336,21 +5741,109 @@ owlready2.Ontology.load().</p>
     <div class="doc doc-contents ">
 
       <p>Create and return new entity</p>
-<p>Makes a new entity in the ontology with given parent(s).
-Return the new entity.</p>
-<p>Throws exception if name consists of more than one word.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>name</code></td>
+        <td><code>str</code></td>
+        <td><p>name of the entity</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>parent</code></td>
+        <td><code>Union[owlready2.entity.ThingClass, owlready2.prop.ObjectPropertyClass, owlready2.prop.DataPropertyClass, owlready2.annotation.AnnotationPropertyClass, collections.abc.Iterable]</code></td>
+        <td><p>parent(s) of the entity</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>entitytype</code></td>
+        <td><code>Union[str, owlready2.entity.ThingClass, owlready2.prop.ObjectPropertyClass, owlready2.prop.DataPropertyClass, owlready2.annotation.AnnotationPropertyClass]</code></td>
+        <td><p>type of the entity,
+default is 'class' (str) 'ThingClass' (owlready2 Python class).
+Other options
+are 'data_property', 'object_property',
+'annotation_property' (strings) or the
+Python classes ObjectPropertyClass,
+DataPropertyClass and AnnotationProperty classes.</p></td>
+        <td><code>&#39;class&#39;</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Union[owlready2.entity.ThingClass, owlready2.prop.ObjectPropertyClass, owlready2.prop.DataPropertyClass, owlready2.annotation.AnnotationPropertyClass]</code></td>
+      <td><p>the new entity.</p></td>
+    </tr>
+  </tbody>
+</table>      <p>Throws exception if name consists of more than one word, if type is not
+one of the allowed types, or if parent is not of the correct type.
+By default, the parent is Thing.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">new_entity</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ThingClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThingClass</span><span class="p">:</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="n">ThingClass</span><span class="p">,</span>
+        <span class="n">ObjectPropertyClass</span><span class="p">,</span>
+        <span class="n">DataPropertyClass</span><span class="p">,</span>
+        <span class="n">AnnotationPropertyClass</span><span class="p">,</span>
+        <span class="n">Iterable</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">entitytype</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
+        <span class="n">Union</span><span class="p">[</span>
+            <span class="nb">str</span><span class="p">,</span>
+            <span class="n">ThingClass</span><span class="p">,</span>
+            <span class="n">ObjectPropertyClass</span><span class="p">,</span>
+            <span class="n">DataPropertyClass</span><span class="p">,</span>
+            <span class="n">AnnotationPropertyClass</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
+    <span class="n">ThingClass</span><span class="p">,</span>
+    <span class="n">ObjectPropertyClass</span><span class="p">,</span>
+    <span class="n">DataPropertyClass</span><span class="p">,</span>
+    <span class="n">AnnotationPropertyClass</span><span class="p">,</span>
+<span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and return new entity</span>
 
-<span class="sd">    Makes a new entity in the ontology with given parent(s).</span>
-<span class="sd">    Return the new entity.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        name: name of the entity</span>
+<span class="sd">        parent: parent(s) of the entity</span>
+<span class="sd">        entitytype: type of the entity,</span>
+<span class="sd">            default is &#39;class&#39; (str) &#39;ThingClass&#39; (owlready2 Python class).</span>
+<span class="sd">            Other options</span>
+<span class="sd">            are &#39;data_property&#39;, &#39;object_property&#39;,</span>
+<span class="sd">            &#39;annotation_property&#39; (strings) or the</span>
+<span class="sd">            Python classes ObjectPropertyClass,</span>
+<span class="sd">            DataPropertyClass and AnnotationProperty classes.</span>
 
-<span class="sd">    Throws exception if name consists of more than one word.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        the new entity.</span>
+
+<span class="sd">    Throws exception if name consists of more than one word, if type is not</span>
+<span class="sd">    one of the allowed types, or if parent is not of the correct type.</span>
+<span class="sd">    By default, the parent is Thing.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="s2">&quot; &quot;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">LabelDefinitionError</span><span class="p">(</span>
@@ -5358,16 +5851,115 @@ Return the new entity.</p>
             <span class="sa">f</span><span class="s2">&quot;Label consists of more than one word.&quot;</span>
         <span class="p">)</span>
     <span class="n">parents</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="n">parent</span><span class="p">,)</span>
+
+    <span class="k">if</span> <span class="n">entitytype</span> <span class="o">==</span> <span class="s2">&quot;class&quot;</span><span class="p">:</span>
+        <span class="n">parenttype</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span>
+    <span class="k">elif</span> <span class="n">entitytype</span> <span class="o">==</span> <span class="s2">&quot;data_property&quot;</span><span class="p">:</span>
+        <span class="n">parenttype</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">DataPropertyClass</span>
+    <span class="k">elif</span> <span class="n">entitytype</span> <span class="o">==</span> <span class="s2">&quot;object_property&quot;</span><span class="p">:</span>
+        <span class="n">parenttype</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ObjectPropertyClass</span>
+    <span class="k">elif</span> <span class="n">entitytype</span> <span class="o">==</span> <span class="s2">&quot;annotation_property&quot;</span><span class="p">:</span>
+        <span class="n">parenttype</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">AnnotationPropertyClass</span>
+    <span class="k">elif</span> <span class="n">entitytype</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="n">ThingClass</span><span class="p">,</span>
+        <span class="n">ObjectPropertyClass</span><span class="p">,</span>
+        <span class="n">DataPropertyClass</span><span class="p">,</span>
+        <span class="n">AnnotationPropertyClass</span><span class="p">,</span>
+    <span class="p">]:</span>
+        <span class="n">parenttype</span> <span class="o">=</span> <span class="n">entitytype</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">EntityClassDefinitionError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Error in entity type definition: &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">entitytype</span><span class="si">}</span><span class="s2">&#39; is not a valid entity type.&quot;</span>
+        <span class="p">)</span>
+
     <span class="k">for</span> <span class="n">thing</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">ThingClassDefinitionError</span><span class="p">(</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span> <span class="n">parenttype</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">EntityClassDefinitionError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Error in parent definition: &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">thing</span><span class="si">}</span><span class="s2">&#39; is not an owlready2.ThingClass.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">thing</span><span class="si">}</span><span class="s2">&#39; is not an </span><span class="si">{</span><span class="n">parenttype</span><span class="si">}</span><span class="s2">.&quot;</span>
             <span class="p">)</span>
 
     <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">new_class</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">entity</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="ontopy.ontology.Ontology.new_object_property">
+<code class="highlight language-python"><span class="n">new_object_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#ontopy.ontology.Ontology.new_object_property" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Create and return new object property.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>name</code></td>
+        <td><code>str</code></td>
+        <td><p>name of the object property</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>parent</code></td>
+        <td><code>Union[owlready2.prop.ObjectPropertyClass, collections.abc.Iterable]</code></td>
+        <td><p>parent(s) of the object property</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ObjectPropertyClass</code></td>
+      <td><p>the new object property.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontology.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">new_object_property</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ObjectPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObjectPropertyClass</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and return new object property.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name: name of the object property</span>
+<span class="sd">        parent: parent(s) of the object property</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the new object property.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;object_property&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
