@@ -25,6 +25,20 @@ assert set(emmo.Atom.get_annotations().keys()) == {
     "elucidation",
 }
 
+
+# Test item access/assignment/deletion for ThingClass
+assert emmo.Atom["altLabel"] == ["ChemicalElement"]
+
+emmo.Atom["altLabel"] = "Element"
+assert emmo.Atom["altLabel"] == ["ChemicalElement", "Element"]
+
+del emmo.Atom["altLabel"]
+assert emmo.Atom["altLabel"] == []
+
+emmo.Atom["altLabel"] = "ChemicalElement"
+assert emmo.Atom["altLabel"] == ["ChemicalElement"]
+
+
 # TODO: Fix disjoint_with().
 # It seems not to take into account disjoint unions.
 # assert set(emmo.Collection.disjoint_with()) == {emmo.Item}
