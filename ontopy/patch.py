@@ -5,7 +5,7 @@ import types
 import owlready2
 from owlready2 import ThingClass, PropertyClass, Thing, Restriction, Namespace
 from owlready2 import Metadata
-from ontopy.utils import EMMOntoPyException, get_label
+from ontopy.utils import EMMOntoPyException
 
 
 def render_func(entity):
@@ -76,10 +76,8 @@ def _dir(self):
 
 def _getitem(self, name):
     """Provide item access to properties."""
-    onto = self.namespace.ontology
-    labels = {get_label(prop) for prop in onto.properties()}
-    # labels.update(('is_a', 'equivalent_to', 'disjoint_unions'))
-    if name in labels:
+    prop = self.namespace.ontology.get_by_label(name)
+    if isinstance(prop, PropertyClass):
         return getattr(self, name)
     raise KeyError(f"no such property: {name}")
 
