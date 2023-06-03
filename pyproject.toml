@@ -12,4 +12,4 @@ disable = [
 max-line-length = "80"
 
 [tool.pytest.ini_options]
-addopts = "--doctest-modules"
+addopts = "--doctest-modules --ignore=demo --ignore=docs/demo --ignore=examples --ignore=docs/examples --ignore=site"
