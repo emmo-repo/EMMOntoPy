@@ -2,6 +2,8 @@
 
 Implemented as a script, such that it easy to understand and use for debugging.
 """
+import pytest
+
 from ontopy import get_ontology
 
 from owlready2 import owl, Inverse
@@ -26,8 +28,11 @@ assert set(emmo.Atom.get_annotations().keys()) == {
 }
 
 
-# Test item access/assignment/deletion for ThingClass
+# Test item access/assignment/deletion for classes
 assert emmo.Atom["altLabel"] == ["ChemicalElement"]
+
+with pytest.raises(KeyError):
+    emmo.Atom["hasPart"]
 
 emmo.Atom["altLabel"] = "Element"
 assert emmo.Atom["altLabel"] == ["ChemicalElement", "Element"]
