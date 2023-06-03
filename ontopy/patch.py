@@ -3,8 +3,8 @@
 import types
 
 import owlready2
-from owlready2 import ThingClass, PropertyClass, Thing, Restriction, Namespace
-from owlready2 import Metadata
+from owlready2 import AnnotationPropertyClass, ThingClass, PropertyClass
+from owlready2 import Metadata, Thing, Restriction, Namespace
 from ontopy.utils import EMMOntoPyException
 
 
@@ -75,15 +75,15 @@ def _dir(self):
 
 
 def _getitem(self, name):
-    """Provide item access to properties."""
+    """Provide item access to annotation properties."""
     prop = self.namespace.ontology.get_by_label(name)
-    if isinstance(prop, PropertyClass):
+    if isinstance(prop, AnnotationPropertyClass):
         return getattr(self, name)
-    raise KeyError(f"no such property: {name}")
+    raise KeyError(f"no such annotation property: {name}")
 
 
 def _setitem(self, name, value):
-    """Provide item asignment for properties.
+    """Provide item asignment for annotation properties.
 
     Note, this appends `value` to the property instead of replacing the
     property.  This is consistent with Owlready2, but may be little
@@ -104,7 +104,7 @@ def _setitem(self, name, value):
 
 
 def _delitem(self, name):
-    """Provide item deletion for properties.
+    """Provide item deletion for annotation properties.
 
     Note, this simply clears the named property.
     """
