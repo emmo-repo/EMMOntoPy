@@ -1,12 +1,15 @@
 """Test the `ontograph` tool."""
 from typing import TYPE_CHECKING
 
+import pytest
+
 if TYPE_CHECKING:
     from pathlib import Path
     from types import ModuleType
     from typing import Callable
 
 
+@pytest.mark.filterwarnings("ignore::UserWarning")
 def test_run(get_tool: "Callable[[str], ModuleType]", tmpdir: "Path") -> None:
     """Check that running `excel2onto` works.
 
