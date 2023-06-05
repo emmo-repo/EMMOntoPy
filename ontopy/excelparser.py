@@ -40,9 +40,9 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-
     concept_sheet_name: str = "Concepts",
     metadata_sheet_name: str = "Metadata",
     imports_sheet_name: str = "ImportedOntologies",
-    # dataproperties_sheet_name: str = "DataProperties",
-    # objectproperties_sheet_name: str = "ObjectProperties",
-    # annotationproperties_sheet_name: str = "AnnotationProperties",
+    dataproperties_sheet_name: str = "DataProperties",
+    objectproperties_sheet_name: str = "ObjectProperties",
+    annotationproperties_sheet_name: str = "AnnotationProperties",
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
     imports: list = None,
@@ -156,26 +156,43 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-
     conceptdata = pd.read_excel(
         excelpath, sheet_name=concept_sheet_name, skiprows=[0, 2]
     )
-    # try:
-    #    objectproperties = pd.read_excel(
-    #        excelpath, sheet_name=objectproperties_sheet_name, skiprows=[0, 2]
-    #    )
-    # except Exception as err:
-    #    print(err)
+    try:
+        objectproperties = pd.read_excel(
+            excelpath, sheet_name=objectproperties_sheet_name, skiprows=[0, 2]
+        )
+    except ValueError:
+        warnings.warn(
+            f"No sheet named {objectproperties_sheet_name} found in {excelpath}. New object properties will not be added to the ontology."
+        )
+        objectproperties = None
+    try:
+        annotationproperties = pd.read_excel(
+            excelpath,
+            sheet_name=annotationproperties_sheet_name,
+            skiprows=[0, 2],
+        )
+    except ValueError:
+        warnings.warn(
+            f"No sheet named {annotationproperties_sheet_name} found in {excelpath}. New annotation properties will not be added to the ontology."
+        )
+        annotationproperties = None
 
-    # annotationproperties = pd.read_excel(
-    #    excelpath, sheet_name=annotationproperties_sheet_name, skiprows=[0, 2]
-    # )
-    # dataproperties = pd.read_excel(
-    #    excelpath, sheet_name=dataproperties_sheet_name, skiprows=[0, 2]
-    # )
+    try:
+        dataproperties = pd.read_excel(
+            excelpath, sheet_name=dataproperties_sheet_name, skiprows=[0, 2]
+        )
+    except ValueError:
+        warnings.warn(
+            f"No sheet named {dataproperties_sheet_name} found in {excelpath}. New data properties will not be added to the ontology."
+        )
+        dataproperties = None
 
     metadata = pd.read_excel(excelpath, sheet_name=metadata_sheet_name)
     return create_ontology_from_pandas(
         data=conceptdata,
-        # objectproperties=objectproperties,
-        # dataproperties=dataproperties,
-        # annotationproperties=annotationproperties,
+        objectproperties=objectproperties,
+        dataproperties=dataproperties,
+        annotationproperties=annotationproperties,
         metadata=metadata,
         imports=imports,
         base_iri=base_iri,
@@ -188,9 +205,9 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-
 
 def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments
     data: pd.DataFrame,
-    # objectproperties: pd.DataFrame,
-    # annotationproperties: pd.DataFrame,
-    # dataproperties: pd.DataFrame,
+    objectproperties: pd.DataFrame,
+    annotationproperties: pd.DataFrame,
+    dataproperties: pd.DataFrame,
     metadata: pd.DataFrame,
     imports: pd.DataFrame,
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
@@ -204,12 +221,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
 
     Check 'create_ontology_from_excel' for complete documentation.
     """
-    # Clean up data frames with new concepts and properties
-    data = _clean_dataframe(data)
-    # objectproperties = _clean_dataframe(objectproperties)
-    # annotationproperties = _clean_dataframe(annotationproperties)
-    # dataproperties = _clean_dataframe(dataproperties)
-
+    # Get ontology to which new concepts should be added
     if input_ontology:
         onto = input_ontology
         catalog = {}
@@ -224,16 +236,54 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
 
     onto.sync_python_names()
 
+    # Add object properties
+    if objectproperties is not None:
+        objectproperties = _clean_dataframe(objectproperties)
+        (
+            onto,
+            objectproperties_with_errors,
+            added_objprop_indices,
+        ) = _add_concepts(
+            onto=onto,
+            data=objectproperties,
+            entitytype=owlready2.ObjectPropertyClass,
+            force=force,
+        )
+
+    if annotationproperties is not None:
+        annotationproperties = _clean_dataframe(annotationproperties)
+        (
+            onto,
+            annotationproperties_with_errors,
+            added_annotprop_indices,
+        ) = _add_concepts(
+            onto=onto,
+            data=annotationproperties,
+            entitytype=owlready2.AnnotationPropertyClass,
+            force=force,
+        )
+
+    if dataproperties is not None:
+        dataproperties = _clean_dataframe(dataproperties)
+        (
+            onto,
+            dataproperties_with_errors,
+            added_dataprop_indices,
+        ) = _add_concepts(
+            onto=onto,
+            data=dataproperties,
+            entitytype=owlready2.DataPropertyClass,
+            force=force,
+        )
+
+    # Clean up data frame with new concepts
+    data = _clean_dataframe(data)
     # Add concepts
     onto, concepts_with_errors, added_concept_indices = _add_concepts(
         onto=onto, data=data, entitytype=owlready2.ThingClass, force=force
     )
 
-    # Add object properties
-    # onto, objectproperties_with_errors, added_objprop_indices
-    # = _add_concepts(onto=onto, data=data, type='ObjectProperty' force=force)
-
-    # Add properties in a second loop
+    # Add concept properties in a second loop
     for index in added_concept_indices:
         row = data.loc[index]
         properties = row["Relations"]
@@ -271,6 +321,34 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
                         )
                     else:
                         raise ExcelError(msg) from exc
+
+    # Add range and domain for object properties
+    if objectproperties is not None:
+        onto, objectproperties_with_errors = _add_range_domain(
+            onto=onto,
+            properties=objectproperties,
+            added_prop_indices=added_objprop_indices,
+            properties_with_errors=objectproperties_with_errors,
+            force=force,
+        )
+    # Add range and domain for annotation properties
+    if annotationproperties is not None:
+        onto, annotationproperties_with_errors = _add_range_domain(
+            onto=onto,
+            properties=annotationproperties,
+            added_prop_indices=added_annotprop_indices,
+            properties_with_errors=annotationproperties_with_errors,
+            force=force,
+        )
+    # Add range and domain for data properties
+    if dataproperties is not None:
+        onto, dataproperties_with_errors = _add_range_domain(
+            onto=onto,
+            properties=dataproperties,
+            added_prop_indices=added_dataprop_indices,
+            properties_with_errors=dataproperties_with_errors,
+            force=force,
+        )
 
     # Synchronise Python attributes to ontology
     onto.sync_attributes(
@@ -469,14 +547,24 @@ def _add_concepts(
     for altlabel in data["altLabel"].str.strip():
         if not altlabel == "nan":
             labels.update(altlabel.split(";"))
+    # Find column name depending on entitytype
+    if entitytype is owlready2.ThingClass:
+        rowheader = "subClassOf"
+    # If entitytype is a subclass of owlready2.PropertyClass
+    elif entitytype in [
+        owlready2.AnnotationPropertyClass,
+        owlready2.ObjectPropertyClass,
+        owlready2.DataPropertyClass,
+    ]:
+        rowheader = "subPropertyOf"
 
     # Dictionary with lists of concepts that raise errors
     concepts_with_errors = {
         "already_defined": [],
         "in_imported_ontologies": [],
         "wrongly_defined": [],
-        "missing_parents": [],
-        "invalid_parents": [],
+        f"missing_{rowheader}": [],
+        f"invalid_{rowheader}": [],
         "nonadded_concepts": [],
         "errors_in_properties": [],
     }
@@ -528,44 +616,26 @@ def _add_concepts(
                     owlready2.DataPropertyClass,
                 ]:
                     rowheader = "subPropertyOf"
-                if row[rowheader] == "nan":
-                    if not force:
-                        raise ExcelError(f"{row[0]} has no {rowheader}")
-                    parent_names = []
-                    concepts_with_errors["missing_parents"].append(name)
-                else:
-                    parent_names = str(row[rowheader]).split(";")
 
-                parents = []
-                invalid_parent = False
-                for parent_name in parent_names:
-                    try:
-                        parent = onto.get_by_label(parent_name.strip())
-                    except (NoSuchLabelError, ValueError) as exc:
-                        if parent_name not in labels:
-                            if force:
-                                warnings.warn(
-                                    f'Invalid parents for "{name}": '
-                                    f'"{parent_name}".'
-                                )
-                                concepts_with_errors["invalid_parents"].append(
-                                    name
-                                )
-                                break
-                            raise ExcelError(
-                                f'Invalid parents for "{name}": {exc}\n'
-                                "Have you forgotten an imported ontology?"
-                            ) from exc
-                        invalid_parent = True
-                        break
-                    else:
-                        parents.append(parent)
-
+                (
+                    parents,
+                    invalid_parent,
+                    concepts_with_errors,
+                ) = _make_concept_list(
+                    onto, row, rowheader, force, concepts_with_errors, name
+                )
                 if invalid_parent:
                     continue
 
                 if not parents:
-                    parents = [owlready2.Thing]
+                    if entitytype == owlready2.ThingClass:
+                        parents = [owlready2.Thing]
+                    elif entitytype == owlready2.AnnotationPropertyClass:
+                        parents = [owlready2.AnnotationProperty]
+                    elif entitytype == owlready2.ObjectPropertyClass:
+                        parents = [owlready2.ObjectProperty]
+                    elif entitytype == owlready2.DataPropertyClass:
+                        parents = [owlready2.DataProperty]
 
                 # Add concept
                 try:
@@ -651,3 +721,95 @@ def _add_concepts(
             all_added_rows.extend(added_rows)
 
     return onto, concepts_with_errors, all_added_rows
+
+
+# Helper function for adding range and domain to properties
+def _add_range_domain(
+    onto: owlready2.Ontology,
+    properties: pd.DataFrame,
+    added_prop_indices: list,
+    properties_with_errors: dict,
+    force: bool = False,
+):
+    """Add range and domain to properties."""
+    # check if both 'Ranges' and 'Domains' columns are present in dataframe
+    if (
+        "Ranges" not in properties.columns
+        or "Domains" not in properties.columns
+    ):
+        return onto, properties_with_errors
+    for index in added_prop_indices:
+        row = properties.loc[index]
+        try:
+            prop = onto.get_by_label(row["prefLabel"].strip())
+        except NoSuchLabelError:
+            pass
+        if row["Ranges"] != "nan":
+            try:
+                prop.range = [onto.get_by_label(row["Ranges"].strip())]
+            except NoSuchLabelError as exc:
+                msg = (
+                    f"Error in range assignment for: {prop}. "
+                    f"Range to be Evaluated: {row['range']}. "
+                    f"{exc}"
+                )
+                if force is True:
+                    warnings.warn(msg)
+                    properties_with_errors["errors_in_range"].append(prop.name)
+                else:
+                    raise ExcelError(msg) from exc
+        if row["Domains"] != "nan":
+            try:
+                prop.domain = [onto.get_by_label(row["Domains"].strip())]
+            except NoSuchLabelError as exc:
+                msg = (
+                    f"Error in domain assignment for: {prop}. "
+                    f"Domain to be Evaluated: {row['domain']}. "
+                    f"{exc}"
+                )
+                if force is True:
+                    warnings.warn(msg)
+                    properties_with_errors["errors_in_domain"].append(prop.name)
+                else:
+                    raise ExcelError(msg) from exc
+    return onto, properties_with_errors
+
+
+def _make_concept_list(
+    onto: owlready2.Ontology,
+    row: pd.Series,
+    rowheader: str,
+    force: bool,
+    concepts_with_errors: dict,
+    label: str,
+):
+    if row[rowheader] == "nan":
+        if not force:
+            raise ExcelError(f"{row[0]} has no {rowheader}")
+        name_list = []
+        concepts_with_errors[f"missing_{rowheader}"].append(label)
+    else:
+        name_list = str(row[rowheader]).split(";")
+    concepts = []
+    invalid_concept = False
+    for name in name_list:
+        try:
+            concept = onto.get_by_label(name.strip())
+        except (NoSuchLabelError, ValueError) as exc:
+            # if name not in labels:
+            if force:
+                warnings.warn(
+                    f'Invalid {rowheader} for "{label}": ' f'"{name}".'
+                )
+                concepts_with_errors[f"invalid_{rowheader}"].append(label)
+                break
+            raise ExcelError(
+                f'Invalid {rowheader} for "{label}": {exc}\n'
+                "Have you forgotten an imported ontology?"
+            ) from exc
+            invalid_concept = True
+            break
+        else:
+            concepts.append(concept)
+
+    return concepts, invalid_concept, concepts_with_errors

@@ -1703,7 +1703,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 f"Error in entity type definition: "
                 f"'{entitytype}' is not a valid entity type."
             )
-
         for thing in parents:
             if not isinstance(thing, parenttype):
                 raise EntityClassDefinitionError(
