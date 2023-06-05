@@ -13,7 +13,7 @@ assert emmo[emmo.Atom.iri] == emmo.Atom
 onto = get_ontology(
     "https://raw.githubusercontent.com/BIG-MAP/BattINFO/master/battinfo.ttl"
 ).load()
-assert onto.Electrolyte.prefLabel.first() == "Electrolyte"
+assert onto.Electrolyte.prefLabel.en.first() == "Electrolyte"
 
 
 # Check colon_in_name argument

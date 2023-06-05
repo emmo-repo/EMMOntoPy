@@ -720,10 +720,12 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         """
         for relation in entity.mro():
             if relation in rels:
+                print(relation)
+                print(get_label(relation))
                 if get_label(relation) in relations:
                     rattrs = relations[get_label(relation)]
                 else:
-                    for alt_label in relation.get_annotations()["altLabel"]:
+                    for alt_label in relation.get_annotations()["altLabel"].en:
                         rattrs = relations[alt_label]
 
                 break

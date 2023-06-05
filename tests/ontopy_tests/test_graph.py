@@ -53,7 +53,7 @@ def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
 
             domain = list(testonto.classes())
             range = list(testonto.classes())
-            altLabel = "hasPart"
+            altLabel = owlready2.locstr("hasPart", "en")
 
     testonto.sync_attributes()
 

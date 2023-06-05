@@ -86,9 +86,9 @@ def isinteractive():
 def get_label(entity):
     """Returns the label of an entity."""
     if hasattr(entity, "prefLabel") and entity.prefLabel:
-        return entity.prefLabel.first()
+        return entity.prefLabel.en.first()
     if hasattr(entity, "label") and entity.label:
-        return entity.label.first()
+        return entity.label.en.first()
     if hasattr(entity, "__name__"):
         return entity.__name__
     if hasattr(entity, "name"):

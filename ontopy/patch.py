@@ -36,9 +36,9 @@ def get_preferred_label(self):
       - otherwise return the name
     """
     if hasattr(self, "prefLabel") and self.prefLabel:
-        return self.prefLabel[0]
+        return self.prefLabel.en[0]
     if hasattr(self, "label") and self.label:
-        return self.label.first()
+        return self.label.en.first()
     return self.name
 
 
