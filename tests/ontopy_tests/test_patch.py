@@ -2,6 +2,8 @@
 
 Implemented as a script, such that it easy to understand and use for debugging.
 """
+import pytest
+
 from ontopy import get_ontology
 
 from owlready2 import owl, Inverse
@@ -24,6 +26,23 @@ assert set(emmo.Atom.get_annotations().keys()) == {
     "altLabel",
     "elucidation",
 }
+
+
+# Test item access/assignment/deletion for classes
+assert emmo.Atom["altLabel"] == ["ChemicalElement"]
+
+with pytest.raises(KeyError):
+    emmo.Atom["hasPart"]
+
+emmo.Atom["altLabel"] = "Element"
+assert emmo.Atom["altLabel"] == ["ChemicalElement", "Element"]
+
+del emmo.Atom["altLabel"]
+assert emmo.Atom["altLabel"] == []
+
+emmo.Atom["altLabel"] = "ChemicalElement"
+assert emmo.Atom["altLabel"] == ["ChemicalElement"]
+
 
 # TODO: Fix disjoint_with().
 # It seems not to take into account disjoint unions.
