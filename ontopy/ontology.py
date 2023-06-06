@@ -395,6 +395,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         The current implementation also supports "*" as a wildcard
         matching any number of characters. This may change in the future.
         """
+        if self._label_annotations is None:
+            for iri in DEFAULT_LABEL_ANNOTATIONS:
+                try:
+                    self.add_label_annotation(iri)
+                except ValueError:
+                    pass
+
         if not isinstance(label, str):
             raise TypeError(
                 f"Invalid label definition, " f"must be a string: {label!r}"
