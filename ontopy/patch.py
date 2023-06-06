@@ -94,7 +94,7 @@ def _setitem(self, name, value):
     >>> emmo = get_emmo()
     >>> emmo.Atom['altLabel']
     ['ChemicalElement']
-    emmo.Atom['altLabel'] = 'Element'
+    >>> emmo.Atom['altLabel'] = 'Element'
     >>> emmo.Atom['altLabel']
     ['ChemicalElement', 'Element']
 

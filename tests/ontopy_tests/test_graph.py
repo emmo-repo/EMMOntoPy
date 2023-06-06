@@ -7,6 +7,9 @@ if TYPE_CHECKING:
     from ontopy.ontology import Ontology
 
 
+@pytest.mark.filterwarnings(
+    "ignore:Style not defined for relation hasSpecialRelation:UserWarning"
+)
 def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
     """Testing OntoGraph on a small ontology
 
