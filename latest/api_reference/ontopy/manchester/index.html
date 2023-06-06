@@ -1127,7 +1127,7 @@ ManchesterError            (<a class="autorefs autorefs-internal" title="ontopy.
 <blockquote>
 <p>from ontopy.manchester import evaluate
 from ontopy import get_ontology
-emmo = get_ontology.load()</p>
+emmo = get_ontology().load()</p>
 <p>restriction = evaluate(emmo, 'hasPart some Atom')
 cls = evaluate(emmo, 'Atom')
 expr = evaluate(emmo, 'Atom or Molecule')</p>
@@ -1156,7 +1156,7 @@ only value restrictions supported so far.</p>
 <span class="sd">    Example:</span>
 <span class="sd">    &gt;&gt;&gt; from ontopy.manchester import evaluate</span>
 <span class="sd">    &gt;&gt;&gt; from ontopy import get_ontology</span>
-<span class="sd">    &gt;&gt;&gt; emmo = get_ontology.load()</span>
+<span class="sd">    &gt;&gt;&gt; emmo = get_ontology().load()</span>
 
 <span class="sd">    &gt;&gt;&gt; restriction = evaluate(emmo, &#39;hasPart some Atom&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; cls = evaluate(emmo, &#39;Atom&#39;)</span>
