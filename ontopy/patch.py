@@ -3,8 +3,8 @@
 import types
 
 import owlready2
-from owlready2 import ThingClass, PropertyClass, Thing, Restriction, Namespace
-from owlready2 import Metadata
+from owlready2 import AnnotationPropertyClass, ThingClass, PropertyClass
+from owlready2 import Metadata, Thing, Restriction, Namespace
 from ontopy.utils import EMMOntoPyException
 
 
@@ -67,11 +67,49 @@ def get_parents(self, strict=False):
 
 
 def _dir(self):
-    """Extend in dir() listing of ontology classes."""
+    """Extend dir() listing of ontology classes."""
     set_dir = set(object.__dir__(self))
     props = self.namespace.world._props.keys()
     set_dir.update(props)
     return sorted(set_dir)
+
+
+def _getitem(self, name):
+    """Provide item access to annotation properties."""
+    prop = self.namespace.ontology.get_by_label(name)
+    if isinstance(prop, AnnotationPropertyClass):
+        return getattr(self, name)
+    raise KeyError(f"no such annotation property: {name}")
+
+
+def _setitem(self, name, value):
+    """Provide item asignment for annotation properties.
+
+    Note, this appends `value` to the property instead of replacing the
+    property.  This is consistent with Owlready2, but may be little
+    unintuitive.
+
+    Example:
+    >>> from emmopy import get_emmo
+    >>> emmo = get_emmo()
+    >>> emmo.Atom['altLabel']
+    ['ChemicalElement']
+    emmo.Atom['altLabel'] = 'Element'
+    >>> emmo.Atom['altLabel']
+    ['ChemicalElement', 'Element']
+
+    """
+    item = _getitem(self, name)
+    item.append(value)
+
+
+def _delitem(self, name):
+    """Provide item deletion for annotation properties.
+
+    Note, this simply clears the named property.
+    """
+    item = _getitem(self, name)
+    item.clear()
 
 
 def get_annotations(
@@ -155,6 +193,9 @@ is_defined = property(
 
 # Inject methods into ThingClass
 setattr(ThingClass, "__dir__", _dir)
+setattr(ThingClass, "__getitem__", _getitem)
+setattr(ThingClass, "__setitem__", _setitem)
+setattr(ThingClass, "__delitem__", _delitem)
 setattr(ThingClass, "get_preferred_label", get_preferred_label)
 setattr(ThingClass, "get_parents", get_parents)
 setattr(ThingClass, "get_annotations", get_annotations)
