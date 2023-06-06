@@ -1,6 +1,7 @@
 """Test the Excel parser module."""
-import pytest
 from typing import TYPE_CHECKING
+
+import pytest
 
 from ontopy import get_ontology
 from ontopy.excelparser import create_ontology_from_excel
@@ -10,6 +11,11 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
+@pytest.mark.filterwarnings("ignore:Ignoring concept :UserWarning")
+@pytest.mark.filterwarnings("ignore:Invalid parents for :UserWarning")
+@pytest.mark.filterwarnings(
+    "ignore:Not able to add the following concepts :UserWarning"
+)
 def test_excelparser(repo_dir: "Path") -> None:
     """Basic test for creating an ontology from an Excel file."""
     ontopath = (

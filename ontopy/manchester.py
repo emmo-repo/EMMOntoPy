@@ -94,7 +94,7 @@ def evaluate(ontology: owlready2.Ontology, expr: str) -> owlready2.Construct:
     Example:
     >>> from ontopy.manchester import evaluate
     >>> from ontopy import get_ontology
-    >>> emmo = get_ontology.load()
+    >>> emmo = get_ontology().load()
 
     >>> restriction = evaluate(emmo, 'hasPart some Atom')
     >>> cls = evaluate(emmo, 'Atom')
