@@ -266,6 +266,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             self, subject=subject, predicate=predicate, obj=obj, blank=blank
         )
 
+    def _set_label_annotations(self):
+        if self._label_annotations is None:
+            for iri in DEFAULT_LABEL_ANNOTATIONS:
+                try:
+                    self.add_label_annotation(iri)
+                except ValueError:
+                    pass
+
     def get_by_label(
         self,
         label: str,
@@ -307,12 +315,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 f"Invalid label definition, must be a string: {label!r}"
             )
 
-        if self._label_annotations is None:
-            for iri in DEFAULT_LABEL_ANNOTATIONS:
-                try:
-                    self.add_label_annotation(iri)
-                except ValueError:
-                    pass
+        self._set_label_annotations()
 
         if colon_in_label is None:
             colon_in_label = self._colon_in_label
@@ -395,12 +398,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         The current implementation also supports "*" as a wildcard
         matching any number of characters. This may change in the future.
         """
-        if self._label_annotations is None:
-            for iri in DEFAULT_LABEL_ANNOTATIONS:
-                try:
-                    self.add_label_annotation(iri)
-                except ValueError:
-                    pass
+        self._set_label_annotations()
 
         if not isinstance(label, str):
             raise TypeError(

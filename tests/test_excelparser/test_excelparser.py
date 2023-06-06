@@ -87,21 +87,25 @@ def test_excelparser(repo_dir: "Path") -> None:
     assert len(list(onto.classes())) + 1 == len(list(updated_onto.classes()))
 
 
-def test_old_excelparser(repo_dir: "Path") -> None:
+def test_excelparser_only_classes(repo_dir: "Path") -> None:
     """This loads the excelfile used and tests that the resulting ontology prior
-    to version 0.XX is the same as the current one."""
+    to version 0.5.2 in which only classes where considered, but with empty sheets
+    for properties."""
     ontopath = (
         repo_dir
         / "tests"
         / "test_excelparser"
         / "result_ontology"
-        / "fromexcelonto_old.ttl"
+        / "fromexcelonto_only_classes.ttl"
     )
 
     onto = get_ontology(str(ontopath)).load()
-    xlspath = repo_dir / "tests" / "test_excelparser" / "onto_old.xlsx"
+    xlspath = repo_dir / "tests" / "test_excelparser" / "onto_only_classes.xlsx"
     update_xlspath = (
-        repo_dir / "tests" / "test_excelparser" / "onto_update_old.xlsx"
+        repo_dir
+        / "tests"
+        / "test_excelparser"
+        / "onto_update_only_classes.xlsx"
     )
     ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
     assert onto == ontology
