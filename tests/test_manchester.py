@@ -58,16 +58,16 @@ def test_manchester():
         Inverse(emmo.hasPart).value(emmo.universe),
     )
     # literal data restriction
-    check('hasSymbolData value "hello"', emmo.hasSymbolData.value("hello"))
-    check("hasSymbolData value 42", emmo.hasSymbolData.value(42))
-    check("hasSymbolData value 3.14", emmo.hasSymbolData.value(3.14))
+    check('hasSymbolValue value "hello"', emmo.hasSymbolValue.value("hello"))
+    check("hasSymbolValue value 42", emmo.hasSymbolValue.value(42))
+    check("hasSymbolValue value 3.14", emmo.hasSymbolValue.value(3.14))
     check(
-        'hasSymbolData value "abc"^^xsd:string',
-        emmo.hasSymbolData.value("abc"),
+        'hasSymbolValue value "abc"^^xsd:string',
+        emmo.hasSymbolValue.value("abc"),
     )
     check(
-        'hasSymbolData value "hello"@en',
-        emmo.hasSymbolData.value(locstr("hello", "en")),
+        'hasSymbolValue value "hello"@en',
+        emmo.hasSymbolValue.value(locstr("hello", "en")),
     )
     check("emmo:hasPart some emmo:Atom", emmo.hasPart.some(emmo.Atom))
 
