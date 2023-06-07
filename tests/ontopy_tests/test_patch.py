@@ -52,8 +52,9 @@ assert emmo.Holistic.is_defined == True
 # Comment out these tests for now because Owlready2 automatically converts
 # `Inverse(emmo.hasPart)` to `emmo.isPartOf`.
 #
-# Also, decide whether we really want to keep get_indirect_is_a() - it
-# very much dublicates what ancestors() already does.
+# Also, check whether ancestors() does any inferences from disjoint unions, etc.
+# If it does, it might be better to reley on ancestors() instead of implementing
+# get_indirect_is_a() as a separate method
 # assert emmo.CausalChain.get_indirect_is_a() == {
 #    Inverse(emmo.hasPart).value(emmo.universe),
 #    emmo.CausalParticle,
