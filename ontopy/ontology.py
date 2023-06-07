@@ -29,6 +29,7 @@ from owlready2 import AnnotationPropertyClass
 from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 from ontopy.utils import (
     asstring,
+    english,
     read_catalog,
     write_catalog,
     infer_version,
@@ -267,12 +268,25 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         )
 
     def _set_label_annotations(self):
+        # Enable optimised search by get_by_label()
+        """
+        if self._special_labels is None:
+            for iri in DEFAULT_LABEL_ANNOTATIONS:
+                self.add_label_annotation(iri)
+            top = self.world["http://www.w3.org/2002/07/owl#topObjectProperty"]
+            self._special_labels = {
+                "Thing": owlready2.Thing,
+                "Nothing": owlready2.Nothing,
+                "topObjectProperty": top,
+                "owl:Thing": owlready2.Thing,
+                "owl:Nothing": owlready2.Nothing,
+                "owl:topObjectProperty": top,
+            }
+        """
         if self._label_annotations is None:
             for iri in DEFAULT_LABEL_ANNOTATIONS:
-                try:
+                if not self._abbreviate(iri, create_if_missing=False):
                     self.add_label_annotation(iri)
-                except ValueError:
-                    pass
 
     def get_by_label(
         self,
@@ -315,7 +329,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 f"Invalid label definition, must be a string: {label!r}"
             )
 
-        self._set_label_annotations()
+        # self._set_label_annotations()
 
         if colon_in_label is None:
             colon_in_label = self._colon_in_label
@@ -357,11 +371,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             return entity
 
         # First entity with matching label annotation
-        annotation_ids = (
-            (self._abbreviate(ann, False) for ann in label_annotations)
-            if label_annotations
-            else (ann.storid for ann in self.label_annotations)
-        )
+
+        if label_annotations:
+            annotation_ids = (
+                self._abbreviate(ann, False) for ann in label_annotations
+            )
+        elif self._label_annotations:
+            annotation_ids = (ann.storid for ann in self._label_annotations)
+        else:
+            annotation_ids = []
+
         get_triples = (
             self.world._get_data_triples_spod_spod
             if imported
@@ -398,7 +417,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         The current implementation also supports "*" as a wildcard
         matching any number of characters. This may change in the future.
         """
-        self._set_label_annotations()
+        # self._set_label_annotations()
 
         if not isinstance(label, str):
             raise TypeError(
@@ -408,14 +427,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             raise ValueError(
                 f"Invalid label definition, {label!r} contains spaces."
             )
-
-        if label_annotations is None:
-            annotations = (_.name for _ in self.label_annotations)
-        else:
+        if label_annotations:
             annotations = (
                 _.name if hasattr(_, "storid") else _ for _ in label_annotations
             )
+        elif self._label_annotations:
+            annotations = (_.name for _ in self.label_annotations)
+        else:
+            annotations = iter([])
         entity = self.world.search(**{next(annotations): label})
+        print("entity", entity)
         for key in annotations:
             entity.extend(self.world.search(**{key: label}))
 
@@ -438,12 +459,17 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         if self._label_annotations is None:
             self._label_annotations = []
         label_annotation = iri if hasattr(iri, "storid") else self.world[iri]
+        print("label_annotation", label_annotation)
         if label_annotation is None:
             warnings.warn(f"adding new IRI to ontology: {iri}")
             name = iri.rsplit("/")[-1].rsplit("#")[-1]
+            print("name", name)
+            print("iri", iri)
             bases = (owlready2.AnnotationProperty,)
             with self:
                 label_annotation = types.new_class(name, bases)
+                label_annotation.iri = iri
+                print("label_annotation_added", label_annotation)
         if label_annotation not in self._label_annotations:
             self._label_annotations.append(label_annotation)
 
@@ -1177,7 +1203,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     class prefLabel(owlready2.label):
                         pass
 
-                cls.prefLabel = [locstr(cls.__name__, lang="en")]
+                cls.prefLabel = [english(cls.__name__)]
             elif not cls.prefLabel:
                 cls.prefLabel.append(locstr(cls.__name__, lang="en"))
             if class_docstring and hasattr(cls, "__doc__") and cls.__doc__:
@@ -1686,8 +1712,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 f"Error in label name definition '{name}': "
                 f"Label consists of more than one word."
             )
+        print(f"Method for creating new entity '{name}'")
         parents = tuple(parent) if isinstance(parent, Iterable) else (parent,)
-
+        print(f"Parents: {parents}")
         if entitytype == "class":
             parenttype = owlready2.ThingClass
         elif entitytype == "data_property":
@@ -1708,15 +1735,20 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 f"Error in entity type definition: "
                 f"'{entitytype}' is not a valid entity type."
             )
+        print(f"Parent type: {parenttype}")
         for thing in parents:
             if not isinstance(thing, parenttype):
                 raise EntityClassDefinitionError(
                     f"Error in parent definition: "
                     f"'{thing}' is not an {parenttype}."
                 )
-
+        print(f"Creating new entity '{name}'")
         with self:
             entity = types.new_class(name, parents)
+            print(f"Created new entity '{name}'")
+            # if self.prefLabel:
+            #    print(f"Setting prefLabel of '{name}' to '{self.prefLabel}'")
+            #    entity.prefLabel = english(name)
         return entity
 
     # Method that creates new ThingClass using new_entity

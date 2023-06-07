@@ -40,6 +40,11 @@ FMAP = {
 OWLREADY2_FORMATS = "rdfxml", "owl", "xml", "ntriples"
 
 
+def english(string):
+    """Returns `string` as an English location string."""
+    return owlready2.locstr(string, lang="en")
+
+
 class EMMOntoPyException(Exception):
     """A BaseException class for EMMOntoPy"""
 

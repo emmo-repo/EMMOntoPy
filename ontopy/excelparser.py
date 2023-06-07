@@ -20,7 +20,8 @@ import pyparsing
 import ontopy
 from ontopy import get_ontology
 from ontopy.utils import EMMOntoPyException, NoSuchLabelError
-from ontopy.utils import ReadCatalogError, read_catalog
+from ontopy.utils import ReadCatalogError
+from ontopy.utils import english, read_catalog
 from ontopy.ontology import LabelDefinitionError
 from ontopy.manchester import evaluate
 import owlready2  # pylint: disable=C0411
@@ -28,11 +29,6 @@ import owlready2  # pylint: disable=C0411
 
 class ExcelError(EMMOntoPyException):
     """Raised on errors in Excel file."""
-
-
-def english(string):
-    """Returns `string` as an English location string."""
-    return owlready2.locstr(string, lang="en")
 
 
 def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-locals
