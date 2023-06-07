@@ -92,11 +92,11 @@ def _setitem(self, name, value):
     Example:
     >>> from emmopy import get_emmo
     >>> emmo = get_emmo()
-    >>> set(emmo.Atom['altLabel'])
-    {'ChemicalElement'}
+    >>> emmo.Atom['altLabel']
+    ['ChemicalElement']
     >>> emmo.Atom['altLabel'] = 'Element'
-    >>> set(emmo.Atom['altLabel'])
-    {'ChemicalElement', 'Element'}
+    >>> emmo.Atom['altLabel']
+    ['ChemicalElement', 'Element']
 
     """
     item = _getitem(self, name)
