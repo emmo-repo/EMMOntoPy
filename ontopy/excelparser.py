@@ -269,7 +269,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             onto,
             objectproperties_with_errors,
             added_objprop_indices,
-        ) = _add_concepts(
+        ) = _add_entities(
             onto=onto,
             data=objectproperties,
             entitytype=owlready2.ObjectPropertyClass,
@@ -282,7 +282,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             onto,
             annotationproperties_with_errors,
             added_annotprop_indices,
-        ) = _add_concepts(
+        ) = _add_entities(
             onto=onto,
             data=annotationproperties,
             entitytype=owlready2.AnnotationPropertyClass,
@@ -295,7 +295,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             onto,
             dataproperties_with_errors,
             added_dataprop_indices,
-        ) = _add_concepts(
+        ) = _add_entities(
             onto=onto,
             data=dataproperties,
             entitytype=owlready2.DataPropertyClass,
@@ -308,12 +308,12 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
 
     # Clean up data frame with new concepts
     data = _clean_dataframe(data)
-    # Add concepts
-    onto, concepts_with_errors, added_concept_indices = _add_concepts(
+    # Add entities
+    onto, entities_with_errors, added_concept_indices = _add_entities(
         onto=onto, data=data, entitytype=owlready2.ThingClass, force=force
     )
 
-    # Add concept properties in a second loop
+    # Add entity properties in a second loop
     for index in added_concept_indices:
         row = data.loc[index]
         properties = row["Relations"]
@@ -321,33 +321,33 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             properties = None
         if isinstance(properties, str):
             try:
-                concept = onto.get_by_label(row["prefLabel"].strip())
+                entity = onto.get_by_label(row["prefLabel"].strip())
             except NoSuchLabelError:
                 pass
             props = properties.split(";")
             for prop in props:
                 try:
-                    concept.is_a.append(evaluate(onto, prop.strip()))
+                    entity.is_a.append(evaluate(onto, prop.strip()))
                 except pyparsing.ParseException as exc:
                     warnings.warn(
                         # This is currently not tested
-                        f"Error in Property assignment for: '{concept}'. "
+                        f"Error in Property assignment for: '{entity}'. "
                         f"Property to be Evaluated: '{prop}'. "
                         f"{exc}"
                     )
-                    concepts_with_errors["errors_in_properties"].append(
-                        concept.name
+                    entities_with_errors["errors_in_properties"].append(
+                        entity.name
                     )
                 except NoSuchLabelError as exc:
                     msg = (
-                        f"Error in Property assignment for: {concept}. "
+                        f"Error in Property assignment for: {entity}. "
                         f"Property to be Evaluated: {prop}. "
                         f"{exc}"
                     )
                     if force is True:
                         warnings.warn(msg)
-                        concepts_with_errors["errors_in_properties"].append(
-                            concept.name
+                        entities_with_errors["errors_in_properties"].append(
+                            entity.name
                         )
                     else:
                         raise ExcelError(msg) from exc
@@ -362,7 +362,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             force=force,
         )
         for key, value in objectproperties_with_errors.items():
-            concepts_with_errors["obj_prop_" + key] = value
+            entities_with_errors["obj_prop_" + key] = value
     # Add range and domain for annotation properties
     if annotationproperties is not None:
         onto, annotationproperties_with_errors = _add_range_domain(
@@ -373,7 +373,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             force=force,
         )
         for key, value in annotationproperties_with_errors.items():
-            concepts_with_errors["annot_prop_" + key] = value
+            entities_with_errors["annot_prop_" + key] = value
 
     # Add range and domain for data properties
     if dataproperties is not None:
@@ -385,17 +385,17 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             force=force,
         )
         for key, value in dataproperties_with_errors.items():
-            concepts_with_errors["data_prop_" + key] = value
+            entities_with_errors["data_prop_" + key] = value
 
     # Synchronise Python attributes to ontology
     onto.sync_attributes(
         name_policy="uuid", name_prefix="EMMO_", class_docstring="elucidation"
     )
     onto.dir_label = False
-    concepts_with_errors = {
-        key: set(value) for key, value in concepts_with_errors.items()
+    entities_with_errors = {
+        key: set(value) for key, value in entities_with_errors.items()
     }
-    return onto, catalog, concepts_with_errors
+    return onto, catalog, entities_with_errors
 
 
 def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
@@ -564,7 +564,7 @@ def _clean_dataframe(
     return data
 
 
-def _add_concepts(
+def _add_entities(
     # pylint: disable=too-many-statements,too-many-branches, too-many-locals
     onto: ontopy.ontology.Ontology,
     data: pd.DataFrame,
@@ -576,8 +576,8 @@ def _add_concepts(
     ],
     force: bool = False,
 ) -> Tuple[ontopy.ontology.Ontology, dict, list]:
-    """Add concepts to ontology.
-    Returns ontology, dictionary with lists of concepts that raise errors,
+    """Add entities to ontology.
+    Returns ontology, dictionary with lists of entities that raise errors,
     and a list with indices of added rows."""
     labels = set(data["prefLabel"])
     for altlabel in data["altLabel"].str.strip():
@@ -594,14 +594,14 @@ def _add_concepts(
     ]:
         rowheader = "subPropertyOf"
 
-    # Dictionary with lists of concepts that raise errors
-    concepts_with_errors = {
+    # Dictionary with lists of entities that raise errors
+    entities_with_errors = {
         "already_defined": [],
         "in_imported_ontologies": [],
         "wrongly_defined": [],
         f"missing_{rowheader}": [],
         f"invalid_{rowheader}": [],
-        "nonadded_concepts": [],
+        "nonadded_entities": [],
         "errors_in_properties": [],
     }
 
@@ -613,7 +613,7 @@ def _add_concepts(
             for index in remaining_rows:
                 row = data.loc[index]
                 name = row["prefLabel"]
-                # Check if concept is already in ontology
+                # Check if entity is already in ontology
                 try:
                     onto.get_by_label(name)
                     if onto.base_iri in [
@@ -628,15 +628,15 @@ def _add_concepts(
                             f'Ignoring concept "{name}" since it is already in '
                             "the ontology."
                         )
-                        concepts_with_errors["already_defined"].append(name)
+                        entities_with_errors["already_defined"].append(name)
                         continue
-                    concepts_with_errors["in_imported_ontologies"].append(name)
+                    entities_with_errors["in_imported_ontologies"].append(name)
                 except (ValueError, TypeError) as err:
                     warnings.warn(
                         f'Ignoring concept "{name}". '
                         f'The following error was raised: "{err}"'
                     )
-                    concepts_with_errors["wrongly_defined"].append(name)
+                    entities_with_errors["wrongly_defined"].append(name)
                     continue
                 except NoSuchLabelError:
                     pass
@@ -655,13 +655,13 @@ def _add_concepts(
                 (
                     parents,
                     invalid_parent,
-                    concepts_with_errors,
-                ) = _make_concept_list(
+                    entities_with_errors,
+                ) = _make_entity_list(
                     onto,
                     row,
                     rowheader,
                     force,
-                    concepts_with_errors,
+                    entities_with_errors,
                     name,
                     labels,
                 )
@@ -677,20 +677,20 @@ def _add_concepts(
                     elif entitytype == owlready2.DataPropertyClass:
                         parents = [owlready2.DataProperty]
 
-                # Add concept
+                # Add entity
                 try:
-                    concept = onto.new_entity(
+                    entity = onto.new_entity(
                         name, parents, entitytype=entitytype
                     )
                 except LabelDefinitionError:
-                    concepts_with_errors["wrongly_defined"].append(name)
+                    entities_with_errors["wrongly_defined"].append(name)
                     continue
                 added_rows.add(index)
                 # Add elucidation
                 try:
                     _add_literal(
                         row,
-                        concept.elucidation,
+                        entity.elucidation,
                         "Elucidation",
                         only_one=True,
                     )
@@ -698,7 +698,7 @@ def _add_concepts(
                     if force:
                         _add_literal(
                             row,
-                            concept.comment,
+                            entity.comment,
                             "Elucidation",
                             only_one=True,
                         )
@@ -711,7 +711,7 @@ def _add_concepts(
                 # Add examples
                 try:
                     _add_literal(
-                        row, concept.example, "Examples", expected=False
+                        row, entity.example, "Examples", expected=False
                     )
                 except AttributeError:
                     if force:
@@ -721,18 +721,18 @@ def _add_concepts(
                         )
 
                 # Add comments
-                _add_literal(row, concept.comment, "Comments", expected=False)
+                _add_literal(row, entity.comment, "Comments", expected=False)
 
                 # Add altLabels
                 try:
                     _add_literal(
-                        row, concept.altLabel, "altLabel", expected=False
+                        row, entity.altLabel, "altLabel", expected=False
                     )
                 except AttributeError as err:
                     if force is True:
                         _add_literal(
                             row,
-                            concept.label,
+                            entity.label,
                             "altLabel",
                             expected=False,
                         )
@@ -750,7 +750,7 @@ def _add_concepts(
                 ):
                     for annotation in row["Other annotations"].split(";"):
                         key, value = annotation.split("=")
-                        concept[key.strip(" ")] = english(value.strip(" "))
+                        entity[key.strip(" ")] = english(value.strip(" "))
 
             remaining_rows.difference_update(added_rows)
             # Detect infinite loop...
@@ -762,14 +762,14 @@ def _add_concepts(
                         " Will continue without these."
                     )
                     remaining_rows = False
-                    concepts_with_errors["nonadded_concepts"] = unadded
+                    entities_with_errors["nonadded_concepts"] = unadded
                 else:
                     raise ExcelError(
                         f"Not able to add the following concepts: {unadded}."
                     )
             all_added_rows.extend(added_rows)
 
-    return onto, concepts_with_errors, all_added_rows
+    return onto, entities_with_errors, all_added_rows
 
 
 # Helper function for adding range and domain to properties
@@ -827,12 +827,12 @@ def _add_range_domain(
     return onto, properties_with_errors
 
 
-def _make_concept_list(  # pylint: disable=too-many-arguments
+def _make_entity_list(  # pylint: disable=too-many-arguments
     onto: owlready2.Ontology,
     row: pd.Series,
     rowheader: str,
     force: bool,
-    concepts_with_errors: dict,
+    entities_with_errors: dict,
     label: str,
     valid_labels: list,
 ):
@@ -840,7 +840,7 @@ def _make_concept_list(  # pylint: disable=too-many-arguments
         if not force:
             raise ExcelError(f"{row[0]} has no {rowheader}")
         name_list = []
-        concepts_with_errors[f"missing_{rowheader}"].append(label)
+        entities_with_errors[f"missing_{rowheader}"].append(label)
     else:
         name_list = str(row[rowheader]).split(";")
     concepts = []
@@ -854,7 +854,7 @@ def _make_concept_list(  # pylint: disable=too-many-arguments
                     warnings.warn(
                         f'Invalid {rowheader} for "{label}": ' f'"{name}".'
                     )
-                    concepts_with_errors[f"invalid_{rowheader}"].append(label)
+                    entities_with_errors[f"invalid_{rowheader}"].append(label)
                     break
                 raise ExcelError(
                     f'Invalid {rowheader} for "{label}": {exc}\n'
@@ -865,4 +865,4 @@ def _make_concept_list(  # pylint: disable=too-many-arguments
         else:
             concepts.append(concept)
 
-    return concepts, invalid_concept, concepts_with_errors
+    return concepts, invalid_concept, entities_with_errors
