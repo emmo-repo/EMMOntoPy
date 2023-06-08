@@ -29,6 +29,7 @@ jobs:
       python_version_docs: "3.7"
       doc_extras: "[docs]"
       changelog_exclude_labels: dependencies
+      warnings_as_errors: false
 
     secrets:
       PyPI_token: ${{ secrets.PYPI_TOKEN }}
