@@ -87,6 +87,8 @@ def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
             addnodes=True,
             edgelabels=None,
         )
+        print(record)
+        print(record[0])
         assert str(record[0].message) == (
             "Style not defined for relation hasSpecialRelation. "
             "Resorting to default style."

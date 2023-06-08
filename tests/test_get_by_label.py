@@ -25,7 +25,7 @@ def test_get_by_label_all_onto() -> None:
     testonto = get_ontology("http://domain_ontology/new_ontology")
     testonto.new_entity("Class", owlready2.Thing)
     assert testonto._label_annotations == None
-    assert testonto.get_by_label_all("*") == [testonto.Class]
+    assert testonto.get_by_label_all("*") == {testonto.Class}
 
 
 def test_get_by_label_emmo(emmo: "Ontology") -> None:

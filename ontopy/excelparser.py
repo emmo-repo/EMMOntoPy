@@ -256,8 +256,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
         if not base_iri_from_metadata:
             onto.base_iri = base_iri
 
-    onto.sync_python_names()
-
+    # onto.sync_python_names()
     # Add object properties
     if objectproperties is not None:
         objectproperties = _clean_dataframe(objectproperties)
@@ -297,10 +296,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             entitytype=owlready2.DataPropertyClass,
             force=force,
         )
-
-    onto.sync_attributes(
-        name_policy="uuid", name_prefix="EMMO_", class_docstring="elucidation"
-    )
 
     # Clean up data frame with new classes
     data = _clean_dataframe(data)
@@ -434,6 +429,8 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
             except ReadCatalogError:
                 warnings.warn(f"Catalog for {imported} not found.")
             locations.add(location)
+        print("imported", onto.imported_ontologies, onto.get_by_label_all("*"))
+
         # set defined prefix
         if not pd.isna(row["prefix"]):
             # set prefix for all ontologies with same 'base_iri_root'
@@ -600,7 +597,10 @@ def _add_entities(
         "nonadded_entities": [],
         "errors_in_properties": [],
     }
-
+    print("serachin for htings in emmo")
+    print(onto.get_by_label_all("*Atom"), onto.get_by_label_all("has*"))
+    print("clalalal", onto.get_by_label_all("*ntry"))
+    print("wikipedianetry", onto.wikipediaEntry, onto["wikipediaEntry"])
     with onto:
         remaining_rows = set(range(len(data)))
         all_added_rows = []
@@ -741,7 +741,6 @@ def _add_entities(
                             f"Not able to add altLabels. " f"{err}."
                         ) from err
                 # Add other annotations if any
-
                 if not (
                     pd.isna(row["Other annotations"])
                     or row["Other annotations"] == ""
@@ -749,6 +748,8 @@ def _add_entities(
                 ):
                     for annotation in row["Other annotations"].split(";"):
                         key, value = annotation.split("=")
+                        print('key.strip(" ")', key.strip(" "))
+                        print('value.strip(" ")', value.strip(" "))
                         entity[key.strip(" ")] = english(value.strip(" "))
 
             remaining_rows.difference_update(added_rows)
@@ -767,7 +768,6 @@ def _add_entities(
                         f"Not able to add the following entities: {unadded}."
                     )
             all_added_rows.extend(added_rows)
-
     return onto, entities_with_errors, all_added_rows
 
 
@@ -807,10 +807,11 @@ def _add_range_domain(
         try:
             prop = onto.get_by_label(row["prefLabel"].strip())
         except NoSuchLabelError:
-            pass
+            continue
         if row["Ranges"] != "nan":
             try:
-                prop.range = [onto.get_by_label(row["Ranges"].strip())]
+                for rng in row["Ranges"].split(";"):
+                    prop.range = [onto.get_by_label(rng.strip())]
             except NoSuchLabelError as exc:
                 msg = (
                     f"Error in range assignment for: {prop}. "

@@ -8,9 +8,8 @@ if TYPE_CHECKING:
 
 def test_prefix(testonto: "Ontology", emmo: "Ontology") -> None:
     """Test prefix in ontology"""
-
-    assert len(testonto.get_by_label_all("*")) == 6
-    assert set(testonto.get_by_label_all("*", prefix="testonto")) == set(
+    assert len(testonto.get_by_label_all("*")) == 7
+    assert testonto.get_by_label_all("*", prefix="testonto") == set(
         [
             testonto.hasObjectProperty,
             testonto.TestClass,
@@ -18,6 +17,13 @@ def test_prefix(testonto: "Ontology", emmo: "Ontology") -> None:
             testonto.hasDataProperty,
         ]
     )
+    with pytest.warns() as record:
+        testonto.get_by_label("*Property", prefix="testonto")
+        assert str(record[0].message) == (
+            "Several entities with label '*Property' and prefix 'testonto' "
+            "found. Only the first one is returned."
+        )
+
     assert (
         testonto.get_by_label("TestClass", prefix="testonto")
         == testonto.TestClass
