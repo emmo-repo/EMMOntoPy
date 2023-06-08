@@ -2,11 +2,55 @@
 
 ## [Unreleased](https://github.com/emmo-repo/EMMOntoPy/tree/HEAD)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.1...HEAD)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.2...HEAD)
+
+**Closed issues:**
+
+- Harmonize get\_descendants and get\_ancestors [\#406](https://github.com/emmo-repo/EMMOntoPy/issues/406)
+
+## [v0.5.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.2) (2023-05-12)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.1...v0.5.2)
 
 **Fixed bugs:**
 
-- Use custom token for GitHub changelog generator [\#545](https://github.com/emmo-repo/EMMOntoPy/issues/545)
+- Auto-merge dependabot PRs workflow invalid [\#566](https://github.com/emmo-repo/EMMOntoPy/issues/566)
+
+**Closed issues:**
+
+- Point to excelparser api from the tools-page [\#593](https://github.com/emmo-repo/EMMOntoPy/issues/593)
+- BUG: pytest - missing remote file /0.5.0/electrochemicalquantities / ontology [\#589](https://github.com/emmo-repo/EMMOntoPy/issues/589)
+- Owlready 0.41 support ? [\#588](https://github.com/emmo-repo/EMMOntoPy/issues/588)
+- Allow space in labels [\#583](https://github.com/emmo-repo/EMMOntoPy/issues/583)
+- is\_defined needs a better description  [\#563](https://github.com/emmo-repo/EMMOntoPy/issues/563)
+- utils line 112 in get\_iri\_name link = "{lowerlabel}" vs "{label}" [\#562](https://github.com/emmo-repo/EMMOntoPy/issues/562)
+- ontograph - update colour deafults [\#559](https://github.com/emmo-repo/EMMOntoPy/issues/559)
+- ontograph - argument leafs should be leaves [\#558](https://github.com/emmo-repo/EMMOntoPy/issues/558)
+- ontograph - write out more examples on how to use it [\#557](https://github.com/emmo-repo/EMMOntoPy/issues/557)
+- ontograph --parents not working [\#556](https://github.com/emmo-repo/EMMOntoPy/issues/556)
+- test\_graph2 is failing  [\#555](https://github.com/emmo-repo/EMMOntoPy/issues/555)
+- Add client side redirection in generated html documentation [\#552](https://github.com/emmo-repo/EMMOntoPy/issues/552)
+- Typos in PR template [\#523](https://github.com/emmo-repo/EMMOntoPy/issues/523)
+- ontograph, read format from name [\#497](https://github.com/emmo-repo/EMMOntoPy/issues/497)
+- Review default colours and style in ontopy/graph.py [\#345](https://github.com/emmo-repo/EMMOntoPy/issues/345)
+
+**Merged pull requests:**
+
+- Add links to the original FaCT++ repo, GitHub profiles, etc. [\#600](https://github.com/emmo-repo/EMMOntoPy/pull/600) ([blokhin](https://github.com/blokhin))
+- Added test update to PR template. [\#598](https://github.com/emmo-repo/EMMOntoPy/pull/598) ([jesper-friis](https://github.com/jesper-friis))
+- Changed `is_defined` into a ThingClass property and improved its documentation. [\#597](https://github.com/emmo-repo/EMMOntoPy/pull/597) ([jesper-friis](https://github.com/jesper-friis))
+- Added link to excelparser from tools for documentation of excel sheet. [\#594](https://github.com/emmo-repo/EMMOntoPy/pull/594) ([francescalb](https://github.com/francescalb))
+- Bump SINTEF/ci-cd from 2.3.0 to 2.3.1 [\#584](https://github.com/emmo-repo/EMMOntoPy/pull/584) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Updated get\_by\_label\(\) so that it now accepts label, name and full iri [\#582](https://github.com/emmo-repo/EMMOntoPy/pull/582) ([jesper-friis](https://github.com/jesper-friis))
+- Added two additional exceptions to emmocheck [\#577](https://github.com/emmo-repo/EMMOntoPy/pull/577) ([jesper-friis](https://github.com/jesper-friis))
+- Bump SINTEF/ci-cd from 2.2.1 to 2.3.0 [\#575](https://github.com/emmo-repo/EMMOntoPy/pull/575) ([dependabot[bot]](https://github.com/apps/dependabot))
+- get\_ancestors and get\_descendants have the same arguments. [\#572](https://github.com/emmo-repo/EMMOntoPy/pull/572) ([francescalb](https://github.com/francescalb))
+- Bump SINTEF/ci-cd from 2.2.0 to 2.2.1 [\#571](https://github.com/emmo-repo/EMMOntoPy/pull/571) ([dependabot[bot]](https://github.com/apps/dependabot))
+- ontograph: colour updates, examples, bugfix [\#569](https://github.com/emmo-repo/EMMOntoPy/pull/569) ([francescalb](https://github.com/francescalb))
+- Bump SINTEF/ci-cd from 2.1.0 to 2.2.0 [\#567](https://github.com/emmo-repo/EMMOntoPy/pull/567) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Changed argument leafs to leaves, with deprecation warning in ontograph [\#564](https://github.com/emmo-repo/EMMOntoPy/pull/564) ([francescalb](https://github.com/francescalb))
+- Corrected bug on getting default relation style. [\#561](https://github.com/emmo-repo/EMMOntoPy/pull/561) ([francescalb](https://github.com/francescalb))
+- Fix internal links in generated documentation generated with ontodoc [\#548](https://github.com/emmo-repo/EMMOntoPy/pull/548) ([jesper-friis](https://github.com/jesper-friis))
 
 ## [v0.5.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.1) (2023-02-07)
 
@@ -14,6 +58,7 @@
 
 **Fixed bugs:**
 
+- Use custom token for GitHub changelog generator [\#545](https://github.com/emmo-repo/EMMOntoPy/issues/545)
 - Avoid using Azure mirror for APT packages [\#541](https://github.com/emmo-repo/EMMOntoPy/issues/541)
 
 **Merged pull requests:**

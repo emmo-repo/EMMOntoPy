@@ -67,7 +67,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
     steps:
     - name: Checkout repository
@@ -88,7 +88,7 @@ jobs:
         pip install -U -e .[dev]
 
     - name: Test
-      run: pytest -vvv --cov=ontopy --cov=emmopy --cov-report=xml --cov-report=term
+      run: pytest -vvv --cov=ontopy --cov=emmopy --cov-report=xml --cov-report=term --doctest-modules
 
     - name: Upload coverage to Codecov
       if: matrix.python-version == '3.7' && github.repository == 'emmo-repo/EMMOntoPy'

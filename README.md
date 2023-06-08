@@ -7,6 +7,7 @@
 
 ![CI tests](https://github.com/emmo-repo/EMMOntoPy/workflows/CI%20Tests/badge.svg)
 [![PyPI version](https://badge.fury.io/py/EMMOntoPy.svg)](https://badge.fury.io/py/EMMOntoPy)
+[![DOI](https://zenodo.org/badge/190286064.svg)](https://zenodo.org/badge/latestdoi/190286064)
 
 > ***Note**: EMMOntoPy is a continuation of the EMMO-python project and the associated `emmo` Python package.
 > To see the legacy versions go to [PyPI](https://pypi.org/project/EMMO/).*
