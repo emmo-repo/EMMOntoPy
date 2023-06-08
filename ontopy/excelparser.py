@@ -779,8 +779,22 @@ def _add_range_domain(
     added_prop_indices: list,
     properties_with_errors: dict,
     force: bool = False,
-):
-    """Add range and domain to properties."""
+) -> Tuple[owlready2.Ontology, dict]:
+    """Add range and domain to properties.
+
+    Arguments:
+        onto: ontology with properties already added,
+        properties: properties to whcih range and domain are to be added,
+        added_prop_indices: indices in properties dataframe describing
+            properties that have been added,
+        properties_with_errors: dictionary to store properties with errors,
+        force: if True, will skip properties with errors and add them to
+            the dictionary. If False errors will cause eception.
+
+    Returns:
+        onto: ontology with range and domain added to properties,
+        properties_with_errors: dictionary with properties with errors.
+    """
     # check if both 'Ranges' and 'Domains' columns are present in dataframe
     if (
         "Ranges" not in properties.columns
@@ -836,6 +850,8 @@ def _make_entity_list(  # pylint: disable=too-many-arguments
     label: str,
     valid_labels: list,
 ):
+    """Help function to create a list of entities
+    from a pd.DataFrame wcich is a str."""
     if row[rowheader] == "nan":
         if not force:
             raise ExcelError(f"{row[0]} has no {rowheader}")
