@@ -612,6 +612,9 @@ def _add_entities(
                 # Check if entity is already in ontology
                 try:
                     onto.get_by_label(name)
+                    # If the new entity is given a name(prefLabel)
+                    # and base_iri that
+                    # already exists in the ontology, it cannot be added.
                     if onto.base_iri in [
                         a.namespace.base_iri
                         for a in onto.get_by_label_all(name)
@@ -776,7 +779,20 @@ def _add_range_domain(
     properties_with_errors: dict,
     force: bool = False,
 ):
-    """Add range and domain to properties."""
+    """Add range and domain to properties.
+    Args:
+        onto: the ontology
+        properties: the properties dataframe
+        added_prop_indices: the indices of the properties that were added
+            previously and that now should get range and domain added if
+            specified.
+        properties_with_errors: the properties with errors dictionary
+            which will be updated with the errors that occur when adding
+            range and domain.
+        force: if True, will add info to the properties_with_errors
+            and continue to the next property. If False, will raise an
+            error.
+    """
     # check if both 'Ranges' and 'Domains' columns are present in dataframe
     if (
         "Ranges" not in properties.columns
