@@ -2187,6 +2187,14 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
             <span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="n">obj</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="n">blank</span>
         <span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">_set_label_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_annotations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">iri</span> <span class="ow">in</span> <span class="n">DEFAULT_LABEL_ANNOTATIONS</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">add_label_annotation</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">get_by_label</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2228,12 +2236,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                 <span class="sa">f</span><span class="s2">&quot;Invalid label definition, must be a string: </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_annotations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">iri</span> <span class="ow">in</span> <span class="n">DEFAULT_LABEL_ANNOTATIONS</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">add_label_annotation</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span>
-                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                    <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_label_annotations</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">colon_in_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">colon_in_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colon_in_label</span>
@@ -2316,6 +2319,8 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 <span class="sd">        The current implementation also supports &quot;*&quot; as a wildcard</span>
 <span class="sd">        matching any number of characters. This may change in the future.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_label_annotations</span><span class="p">()</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Invalid label definition, &quot;</span> <span class="sa">f</span><span class="s2">&quot;must be a string: </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2">&quot;</span>
@@ -3624,7 +3629,6 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                 <span class="sa">f</span><span class="s2">&quot;Error in entity type definition: &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">entitytype</span><span class="si">}</span><span class="s2">&#39; is not a valid entity type.&quot;</span>
             <span class="p">)</span>
-
         <span class="k">for</span> <span class="n">thing</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span> <span class="n">parenttype</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="n">EntityClassDefinitionError</span><span class="p">(</span>
@@ -4534,12 +4538,7 @@ the <code>prefix</code> argument a warning will be issued and the
             <span class="sa">f</span><span class="s2">&quot;Invalid label definition, must be a string: </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_annotations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">iri</span> <span class="ow">in</span> <span class="n">DEFAULT_LABEL_ANNOTATIONS</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_label_annotation</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                <span class="k">pass</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_set_label_annotations</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">colon_in_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">colon_in_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colon_in_label</span>
@@ -4649,6 +4648,8 @@ matching any number of characters. This may change in the future.</p>
 <span class="sd">    The current implementation also supports &quot;*&quot; as a wildcard</span>
 <span class="sd">    matching any number of characters. This may change in the future.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_set_label_annotations</span><span class="p">()</span>
+
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Invalid label definition, &quot;</span> <span class="sa">f</span><span class="s2">&quot;must be a string: </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2">&quot;</span>
@@ -5872,7 +5873,6 @@ By default, the parent is Thing.</p>
             <span class="sa">f</span><span class="s2">&quot;Error in entity type definition: &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">entitytype</span><span class="si">}</span><span class="s2">&#39; is not a valid entity type.&quot;</span>
         <span class="p">)</span>
-
     <span class="k">for</span> <span class="n">thing</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span> <span class="n">parenttype</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">EntityClassDefinitionError</span><span class="p">(</span>
