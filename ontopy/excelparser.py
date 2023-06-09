@@ -20,7 +20,8 @@ import pyparsing
 import ontopy
 from ontopy import get_ontology
 from ontopy.utils import EMMOntoPyException, NoSuchLabelError
-from ontopy.utils import ReadCatalogError, read_catalog
+from ontopy.utils import ReadCatalogError
+from ontopy.utils import read_catalog, english
 from ontopy.ontology import LabelDefinitionError
 from ontopy.manchester import evaluate
 import owlready2  # pylint: disable=C0411
@@ -28,11 +29,6 @@ import owlready2  # pylint: disable=C0411
 
 class ExcelError(EMMOntoPyException):
     """Raised on errors in Excel file."""
-
-
-def english(string):
-    """Returns `string` as an English location string."""
-    return owlready2.locstr(string, lang="en")
 
 
 def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-locals
@@ -261,6 +257,9 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             onto.base_iri = base_iri
 
     onto.sync_python_names()
+    # prefLabel, label, and altLabel
+    # are default label annotations
+    onto.set_default_label_annotations()
 
     # Add object properties
     if objectproperties is not None:
@@ -301,7 +300,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             entitytype=owlready2.DataPropertyClass,
             force=force,
         )
-
     onto.sync_attributes(
         name_policy="uuid", name_prefix="EMMO_", class_docstring="elucidation"
     )
