@@ -1248,23 +1248,87 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
 <p>a dictionary with lists of concepts that raise errors, with the
   following keys:</p>
 <ul>
-<li>"already_defined": These are concepts that are already in the
+<li>"already_defined": These are concepts (classes)
+    that are already in the
     ontology, because they were already added in a
     previous line of the excelfile/pandas dataframe, or because
     it is already defined in an imported ontology with the same
     base_iri as the newly created ontology.</li>
-<li>"in_imported_ontologies": Concepts that are defined in the
+<li>"in_imported_ontologies": Concepts (classes)
+    that are defined in the
     excel, but already exist in the imported ontologies.</li>
-<li>"wrongly_defined": Concepts that are given an invalid
-    prefLabel (e.g. with a space in the name).</li>
-<li>"missing_parents": Concepts that are missing parents.
+<li>"wrongly_defined": Concepts (classes) that are given an
+    invalid prefLabel (e.g. with a space in the name).</li>
+<li>"missing_subClassOf": Concepts (classes) that are missing
+    parents. These concepts are added directly under owl:Thing.</li>
+<li>"invalid_subClassOf": Concepts (classes) with invalidly
+    defined parents.
     These concepts are added directly under owl:Thing.</li>
-<li>"invalid_parents": Concepts with invalidly defined parents.
-    These concepts are added directly under owl:Thing.</li>
-<li>"nonadded_concepts": List of all concepts that are not added,
+<li>"nonadded_concepts": List of all concepts (classes) that are
+    not added,
     either because the prefLabel is invalid, or because the
     concept has already been added once or already exists in an
     imported ontology.</li>
+<li>"obj_prop_already_defined": Object properties that are already
+    defined in the ontology.</li>
+<li>"obj_prop_in_imported_ontologies": Object properties that are
+    defined in the excel, but already exist in the imported
+    ontologies.</li>
+<li>"obj_prop_wrongly_defined": Object properties that are given
+    an invalid prefLabel (e.g. with a space in the name).</li>
+<li>"obj_prop_missing_subPropertyOf": Object properties that are
+    missing parents.</li>
+<li>"obj_prop_invalid_subPropertyOf": Object properties with
+    invalidly defined parents.</li>
+<li>"obj_prop_nonadded_entities": List of all object properties
+    that are not added, either because the prefLabel is invalid,
+    or because the concept has already been added once or
+    already exists in an imported ontology.</li>
+<li>"obj_prop_errors_in_properties": Object properties with
+    invalidly defined properties.</li>
+<li>"obj_prop_errors_in_range": Object properties with invalidly
+    defined range.</li>
+<li>"obj_prop_errors_in_domain": Object properties with invalidly
+    defined domain.</li>
+<li>"annot_prop_already_defined": Annotation properties that are
+    already defined in the ontology.</li>
+<li>"annot_prop_in_imported_ontologies":  Annotation properties
+    that
+    are defined in the excel, but already exist in the imported
+    ontologies.</li>
+<li>"annot_prop_wrongly_defined": Annotation properties that are
+    given an invalid prefLabel (e.g. with a space in the name).</li>
+<li>"annot_prop_missing_subPropertyOf": Annotation properties that
+    are missing parents.</li>
+<li>"annot_prop_invalid_subPropertyOf": Annotation properties with
+    invalidly defined parents.</li>
+<li>"annot_prop_nonadded_entities": List of all annotation
+    properties that are not added, either because the prefLabel
+    is invalid, or because the concept has already been added
+    once or already exists in an imported ontology.</li>
+<li>"annot_prop_errors_in_properties": Annotation properties with
+    invalidly defined properties.</li>
+<li>"data_prop_already_defined": Data properties that are already
+    defined in the ontology.</li>
+<li>"data_prop_in_imported_ontologies": Data properties that are
+    defined in the excel, but already exist in the imported
+    ontologies.</li>
+<li>"data_prop_wrongly_defined":  Data properties that are given
+    an invalid prefLabel (e.g. with a space in the name).</li>
+<li>"data_prop_missing_subPropertyOf": Data properties that are
+    missing parents.</li>
+<li>"data_prop_invalid_subPropertyOf": Data properties with
+    invalidly defined parents.</li>
+<li>"data_prop_nonadded_entities": List of all data properties
+    that are not added, either because the prefLabel is invalid,
+    or because the concept has already been added once or
+    already exists in an imported ontology.</li>
+<li>"data_prop_errors_in_properties": Data properties with
+    invalidly defined properties.</li>
+<li>"data_prop_errors_in_range": Data properties with invalidly
+    defined range.</li>
+<li>"data_prop_errors_in_domain": Data properties with invalidly
+    defined domain.</li>
 </ul>
 </li>
 </ul>
@@ -1347,23 +1411,87 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
 <span class="sd">            * a dictionary with lists of concepts that raise errors, with the</span>
 <span class="sd">              following keys:</span>
 
-<span class="sd">                - &quot;already_defined&quot;: These are concepts that are already in the</span>
+<span class="sd">                - &quot;already_defined&quot;: These are concepts (classes)</span>
+<span class="sd">                    that are already in the</span>
 <span class="sd">                    ontology, because they were already added in a</span>
 <span class="sd">                    previous line of the excelfile/pandas dataframe, or because</span>
 <span class="sd">                    it is already defined in an imported ontology with the same</span>
 <span class="sd">                    base_iri as the newly created ontology.</span>
-<span class="sd">                - &quot;in_imported_ontologies&quot;: Concepts that are defined in the</span>
+<span class="sd">                - &quot;in_imported_ontologies&quot;: Concepts (classes)</span>
+<span class="sd">                    that are defined in the</span>
 <span class="sd">                    excel, but already exist in the imported ontologies.</span>
-<span class="sd">                - &quot;wrongly_defined&quot;: Concepts that are given an invalid</span>
-<span class="sd">                    prefLabel (e.g. with a space in the name).</span>
-<span class="sd">                - &quot;missing_parents&quot;: Concepts that are missing parents.</span>
+<span class="sd">                - &quot;wrongly_defined&quot;: Concepts (classes) that are given an</span>
+<span class="sd">                    invalid prefLabel (e.g. with a space in the name).</span>
+<span class="sd">                - &quot;missing_subClassOf&quot;: Concepts (classes) that are missing</span>
+<span class="sd">                    parents. These concepts are added directly under owl:Thing.</span>
+<span class="sd">                - &quot;invalid_subClassOf&quot;: Concepts (classes) with invalidly</span>
+<span class="sd">                    defined parents.</span>
 <span class="sd">                    These concepts are added directly under owl:Thing.</span>
-<span class="sd">                - &quot;invalid_parents&quot;: Concepts with invalidly defined parents.</span>
-<span class="sd">                    These concepts are added directly under owl:Thing.</span>
-<span class="sd">                - &quot;nonadded_concepts&quot;: List of all concepts that are not added,</span>
+<span class="sd">                - &quot;nonadded_concepts&quot;: List of all concepts (classes) that are</span>
+<span class="sd">                    not added,</span>
 <span class="sd">                    either because the prefLabel is invalid, or because the</span>
 <span class="sd">                    concept has already been added once or already exists in an</span>
 <span class="sd">                    imported ontology.</span>
+<span class="sd">                - &quot;obj_prop_already_defined&quot;: Object properties that are already</span>
+<span class="sd">                    defined in the ontology.</span>
+<span class="sd">                - &quot;obj_prop_in_imported_ontologies&quot;: Object properties that are</span>
+<span class="sd">                    defined in the excel, but already exist in the imported</span>
+<span class="sd">                    ontologies.</span>
+<span class="sd">                - &quot;obj_prop_wrongly_defined&quot;: Object properties that are given</span>
+<span class="sd">                    an invalid prefLabel (e.g. with a space in the name).</span>
+<span class="sd">                - &quot;obj_prop_missing_subPropertyOf&quot;: Object properties that are</span>
+<span class="sd">                    missing parents.</span>
+<span class="sd">                - &quot;obj_prop_invalid_subPropertyOf&quot;: Object properties with</span>
+<span class="sd">                    invalidly defined parents.</span>
+<span class="sd">                - &quot;obj_prop_nonadded_entities&quot;: List of all object properties</span>
+<span class="sd">                    that are not added, either because the prefLabel is invalid,</span>
+<span class="sd">                    or because the concept has already been added once or</span>
+<span class="sd">                    already exists in an imported ontology.</span>
+<span class="sd">                - &quot;obj_prop_errors_in_properties&quot;: Object properties with</span>
+<span class="sd">                    invalidly defined properties.</span>
+<span class="sd">                - &quot;obj_prop_errors_in_range&quot;: Object properties with invalidly</span>
+<span class="sd">                    defined range.</span>
+<span class="sd">                - &quot;obj_prop_errors_in_domain&quot;: Object properties with invalidly</span>
+<span class="sd">                    defined domain.</span>
+<span class="sd">                - &quot;annot_prop_already_defined&quot;: Annotation properties that are</span>
+<span class="sd">                    already defined in the ontology.</span>
+<span class="sd">                - &quot;annot_prop_in_imported_ontologies&quot;:  Annotation properties</span>
+<span class="sd">                    that</span>
+<span class="sd">                    are defined in the excel, but already exist in the imported</span>
+<span class="sd">                    ontologies.</span>
+<span class="sd">                - &quot;annot_prop_wrongly_defined&quot;: Annotation properties that are</span>
+<span class="sd">                    given an invalid prefLabel (e.g. with a space in the name).</span>
+<span class="sd">                - &quot;annot_prop_missing_subPropertyOf&quot;: Annotation properties that</span>
+<span class="sd">                    are missing parents.</span>
+<span class="sd">                - &quot;annot_prop_invalid_subPropertyOf&quot;: Annotation properties with</span>
+<span class="sd">                    invalidly defined parents.</span>
+<span class="sd">                - &quot;annot_prop_nonadded_entities&quot;: List of all annotation</span>
+<span class="sd">                    properties that are not added, either because the prefLabel</span>
+<span class="sd">                    is invalid, or because the concept has already been added</span>
+<span class="sd">                    once or already exists in an imported ontology.</span>
+<span class="sd">                - &quot;annot_prop_errors_in_properties&quot;: Annotation properties with</span>
+<span class="sd">                    invalidly defined properties.</span>
+<span class="sd">                - &quot;data_prop_already_defined&quot;: Data properties that are already</span>
+<span class="sd">                    defined in the ontology.</span>
+<span class="sd">                - &quot;data_prop_in_imported_ontologies&quot;: Data properties that are</span>
+<span class="sd">                    defined in the excel, but already exist in the imported</span>
+<span class="sd">                    ontologies.</span>
+<span class="sd">                - &quot;data_prop_wrongly_defined&quot;:  Data properties that are given</span>
+<span class="sd">                    an invalid prefLabel (e.g. with a space in the name).</span>
+<span class="sd">                - &quot;data_prop_missing_subPropertyOf&quot;: Data properties that are</span>
+<span class="sd">                    missing parents.</span>
+<span class="sd">                - &quot;data_prop_invalid_subPropertyOf&quot;: Data properties with</span>
+<span class="sd">                    invalidly defined parents.</span>
+<span class="sd">                - &quot;data_prop_nonadded_entities&quot;: List of all data properties</span>
+<span class="sd">                    that are not added, either because the prefLabel is invalid,</span>
+<span class="sd">                    or because the concept has already been added once or</span>
+<span class="sd">                    already exists in an imported ontology.</span>
+<span class="sd">                - &quot;data_prop_errors_in_properties&quot;: Data properties with</span>
+<span class="sd">                    invalidly defined properties.</span>
+<span class="sd">                - &quot;data_prop_errors_in_range&quot;: Data properties with invalidly</span>
+<span class="sd">                    defined range.</span>
+<span class="sd">                - &quot;data_prop_errors_in_domain&quot;: Data properties with invalidly</span>
+<span class="sd">                    defined domain.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">web_protocol</span> <span class="o">=</span> <span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="s2">&quot;ftp://&quot;</span>
