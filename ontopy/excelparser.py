@@ -107,23 +107,87 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-
             * a dictionary with lists of concepts that raise errors, with the
               following keys:
 
-                - "already_defined": These are concepts that are already in the
+                - "already_defined": These are concepts (classes)
+                    that are already in the
                     ontology, because they were already added in a
                     previous line of the excelfile/pandas dataframe, or because
                     it is already defined in an imported ontology with the same
                     base_iri as the newly created ontology.
-                - "in_imported_ontologies": Concepts that are defined in the
+                - "in_imported_ontologies": Concepts (classes)
+                    that are defined in the
                     excel, but already exist in the imported ontologies.
-                - "wrongly_defined": Concepts that are given an invalid
-                    prefLabel (e.g. with a space in the name).
-                - "missing_parents": Concepts that are missing parents.
+                - "wrongly_defined": Concepts (classes) that are given an
+                    invalid prefLabel (e.g. with a space in the name).
+                - "missing_subClassOf": Concepts (classes) that are missing
+                    parents. These concepts are added directly under owl:Thing.
+                - "invalid_subClassOf": Concepts (classes) with invalidly
+                    defined parents.
                     These concepts are added directly under owl:Thing.
-                - "invalid_parents": Concepts with invalidly defined parents.
-                    These concepts are added directly under owl:Thing.
-                - "nonadded_concepts": List of all concepts that are not added,
+                - "nonadded_concepts": List of all concepts (classes) that are
+                    not added,
                     either because the prefLabel is invalid, or because the
                     concept has already been added once or already exists in an
                     imported ontology.
+                - "obj_prop_already_defined": Object properties that are already
+                    defined in the ontology.
+                - "obj_prop_in_imported_ontologies": Object properties that are
+                    defined in the excel, but already exist in the imported
+                    ontologies.
+                - "obj_prop_wrongly_defined": Object properties that are given
+                    an invalid prefLabel (e.g. with a space in the name).
+                - "obj_prop_missing_subPropertyOf": Object properties that are
+                    missing parents.
+                - "obj_prop_invalid_subPropertyOf": Object properties with
+                    invalidly defined parents.
+                - "obj_prop_nonadded_entities": List of all object properties
+                    that are not added, either because the prefLabel is invalid,
+                    or because the concept has already been added once or
+                    already exists in an imported ontology.
+                - "obj_prop_errors_in_properties": Object properties with
+                    invalidly defined properties.
+                - "obj_prop_errors_in_range": Object properties with invalidly
+                    defined range.
+                - "obj_prop_errors_in_domain": Object properties with invalidly
+                    defined domain.
+                - "annot_prop_already_defined": Annotation properties that are
+                    already defined in the ontology.
+                - "annot_prop_in_imported_ontologies":  Annotation properties
+                    that
+                    are defined in the excel, but already exist in the imported
+                    ontologies.
+                - "annot_prop_wrongly_defined": Annotation properties that are
+                    given an invalid prefLabel (e.g. with a space in the name).
+                - "annot_prop_missing_subPropertyOf": Annotation properties that
+                    are missing parents.
+                - "annot_prop_invalid_subPropertyOf": Annotation properties with
+                    invalidly defined parents.
+                - "annot_prop_nonadded_entities": List of all annotation
+                    properties that are not added, either because the prefLabel
+                    is invalid, or because the concept has already been added
+                    once or already exists in an imported ontology.
+                - "annot_prop_errors_in_properties": Annotation properties with
+                    invalidly defined properties.
+                - "data_prop_already_defined": Data properties that are already
+                    defined in the ontology.
+                - "data_prop_in_imported_ontologies": Data properties that are
+                    defined in the excel, but already exist in the imported
+                    ontologies.
+                - "data_prop_wrongly_defined":  Data properties that are given
+                    an invalid prefLabel (e.g. with a space in the name).
+                - "data_prop_missing_subPropertyOf": Data properties that are
+                    missing parents.
+                - "data_prop_invalid_subPropertyOf": Data properties with
+                    invalidly defined parents.
+                - "data_prop_nonadded_entities": List of all data properties
+                    that are not added, either because the prefLabel is invalid,
+                    or because the concept has already been added once or
+                    already exists in an imported ontology.
+                - "data_prop_errors_in_properties": Data properties with
+                    invalidly defined properties.
+                - "data_prop_errors_in_range": Data properties with invalidly
+                    defined range.
+                - "data_prop_errors_in_domain": Data properties with invalidly
+                    defined domain.
 
     """
     web_protocol = "http://", "https://", "ftp://"
