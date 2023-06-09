@@ -318,8 +318,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 f"Invalid label definition, must be a string: {label!r}"
             )
 
-        # self._set_label_annotations()
-
         if colon_in_label is None:
             colon_in_label = self._colon_in_label
         if colon_in_label:
@@ -408,7 +406,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         The current implementation also supports "*" as a wildcard
         matching any number of characters. This may change in the future.
         """
-        # self._set_label_annotations()
 
         if not isinstance(label, str):
             raise TypeError(
@@ -1745,10 +1742,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 ann.name for ann in self.label_annotations
             ]:
                 entity.prefLabel = english(name)
-            # if (self.label_annotations and
-            #    'prefLabel' in [
-            #        ann.name for ann in self.label_annotations]:
-            #    entity.prefLabel = name
         return entity
 
     # Method that creates new ThingClass using new_entity
