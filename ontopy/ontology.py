@@ -6,6 +6,7 @@ If desirable some of these additions may be moved back into owlready2.
 # pylint: disable=too-many-lines,fixme,arguments-differ,protected-access
 from typing import TYPE_CHECKING, Optional, Union
 import os
+import fnmatch
 import itertools
 import inspect
 import warnings
@@ -28,6 +29,7 @@ from owlready2 import AnnotationPropertyClass
 
 from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 from ontopy.utils import (
+    english,
     asstring,
     read_catalog,
     write_catalog,
@@ -266,7 +268,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             self, subject=subject, predicate=predicate, obj=obj, blank=blank
         )
 
-    def _set_label_annotations(self):
+    def set_default_label_annotations(self):
+        """Sets the default label annotations."""
         if self._label_annotations is None:
             for iri in DEFAULT_LABEL_ANNOTATIONS:
                 try:
@@ -315,7 +318,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 f"Invalid label definition, must be a string: {label!r}"
             )
 
-        self._set_label_annotations()
+        # self._set_label_annotations()
 
         if colon_in_label is None:
             colon_in_label = self._colon_in_label
@@ -332,7 +335,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     warnings.warn(
                         f"Prefix given both as argument ({prefix}) "
                         f"and in label ({splitlabel[0]}). "
-                        "Prefix given in argument takes presendence "
+                        "Prefix given in argument takes precedence. "
                     )
                 if not prefix:
                     prefix = splitlabel[0]
@@ -343,12 +346,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 label_annotations=label_annotations,
                 prefix=prefix,
             )
-            if len(entitylist) > 0:
-                return entitylist[0]
+            if len(entitylist) == 1:
+                return next(iter(entitylist))
 
             raise NoSuchLabelError(
-                f"No label annotations matches {label!r} with prefix "
-                f"{prefix!r}"
+                f"Either no label annotations matches for {label!r} "
+                f"with prefix {prefix!r} or several entities have "
+                "the same label and prefix."
             )
 
         # Label is a full IRI
@@ -357,19 +361,25 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             return entity
 
         # First entity with matching label annotation
-        annotation_ids = (
-            (self._abbreviate(ann, False) for ann in label_annotations)
-            if label_annotations
-            else (ann.storid for ann in self.label_annotations)
-        )
+
+        if label_annotations:
+            annotation_ids = (
+                self._abbreviate(ann, False) for ann in label_annotations
+            )
+        elif self._label_annotations:
+            annotation_ids = (ann.storid for ann in self._label_annotations)
+        else:
+            annotation_ids = None
+
         get_triples = (
             self.world._get_data_triples_spod_spod
             if imported
             else self._get_data_triples_spod_spod
         )
-        for annotation_id in annotation_ids:
-            for s, _, _, _ in get_triples(None, annotation_id, label, None):
-                return self.world[self._unabbreviate(s)]
+        if annotation_ids:
+            for annotation_id in annotation_ids:
+                for s, _, _, _ in get_triples(None, annotation_id, label, None):
+                    return self.world[self._unabbreviate(s)]
 
         # Special labels
         if self._special_labels and label in self._special_labels:
@@ -398,7 +408,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         The current implementation also supports "*" as a wildcard
         matching any number of characters. This may change in the future.
         """
-        self._set_label_annotations()
+        # self._set_label_annotations()
 
         if not isinstance(label, str):
             raise TypeError(
@@ -409,26 +419,38 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 f"Invalid label definition, {label!r} contains spaces."
             )
 
-        if label_annotations is None:
-            annotations = (_.name for _ in self.label_annotations)
-        else:
+        if label_annotations:
             annotations = (
                 _.name if hasattr(_, "storid") else _ for _ in label_annotations
             )
-        entity = self.world.search(**{next(annotations): label})
-        for key in annotations:
-            entity.extend(self.world.search(**{key: label}))
+        elif self._label_annotations:
+            annotations = (_.name for _ in self.label_annotations)
+
+        else:
+            annotations = None
+        entities = set()
+        if annotations:
+            # entity = self.world.search(**{next(annotations): label})
+            for key in annotations:
+                entities.update(self.world.search(**{key: label}))
 
         if self._special_labels and label in self._special_labels:
-            entity.append(self._special_labels[label])
+            entities.update(self._special_labels[label])
 
-        entity_accessed_directly = self.world[self.base_iri + label]
-        if entity_accessed_directly and entity_accessed_directly not in entity:
-            entity.append(entity_accessed_directly)
+        # Find existence in get_entities
+        matches = fnmatch.filter(
+            (ent.name for ent in self.get_entities()), label
+        )
+
+        entities.update(
+            ent for ent in self.get_entities() if ent.name in matches
+        )
 
         if prefix:
-            return [_ for _ in entity if _.namespace.ontology.prefix == prefix]
-        return entity
+            return set(
+                _ for _ in entities if _.namespace.ontology.prefix == prefix
+            )
+        return entities
 
     def add_label_annotation(self, iri):
         """Adds label annotation used by get_by_label().
@@ -1717,6 +1739,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         with self:
             entity = types.new_class(name, parents)
+            # Set prefLabel to name if label_annotations is set
+            # and prefLabel is one of the annotations
+            if self.label_annotations and "prefLabel" in [
+                ann.name for ann in self.label_annotations
+            ]:
+                entity.prefLabel = english(name)
+            # if (self.label_annotations and
+            #    'prefLabel' in [
+            #        ann.name for ann in self.label_annotations]:
+            #    entity.prefLabel = name
         return entity
 
     # Method that creates new ThingClass using new_entity

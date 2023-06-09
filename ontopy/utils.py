@@ -74,6 +74,11 @@ class EntityClassDefinitionError(EMMOntoPyException):
     """Error in ThingClass definition."""
 
 
+def english(string):
+    """Returns `string` as an English location string."""
+    return owlready2.locstr(string, lang="en")
+
+
 def isinteractive():
     """Returns true if we are running from an interactive interpreater,
     false otherwise."""

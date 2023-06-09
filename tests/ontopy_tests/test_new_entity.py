@@ -21,11 +21,12 @@ def test_new_entity(testonto: "Ontology") -> None:
 
     # Test that new entity is found by both version of get_by_label
     assert testonto.get_by_label("FantasyClass") == testonto.FantasyClass
-    assert testonto.get_by_label_all("FantasyClass") == [testonto.FantasyClass]
+    print(testonto.get_by_label_all("*"))
+    assert testonto.get_by_label_all("FantasyClass") == {testonto.FantasyClass}
 
     testonto.sync_attributes()
     # Test that after sync_attributes, the entity is not counted more than once
-    assert testonto.get_by_label_all("FantasyClass") == [testonto.FantasyClass]
+    assert testonto.get_by_label_all("FantasyClass") == {testonto.FantasyClass}
 
     with pytest.raises(LabelDefinitionError):
         testonto.new_entity("Fantasy Class", testonto.TestClass)

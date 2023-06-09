@@ -32,6 +32,7 @@ def test_excelparser(repo_dir: "Path") -> None:
         repo_dir / "tests" / "test_excelparser" / "onto_update.xlsx"
     )
     ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
+    ontology.save("test.ttl")
     assert onto == ontology
     assert errors.keys() == {
         "already_defined",
