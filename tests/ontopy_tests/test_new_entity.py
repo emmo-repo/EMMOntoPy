@@ -21,7 +21,6 @@ def test_new_entity(testonto: "Ontology") -> None:
 
     # Test that new entity is found by both version of get_by_label
     assert testonto.get_by_label("FantasyClass") == testonto.FantasyClass
-    print(testonto.get_by_label_all("*"))
     assert testonto.get_by_label_all("FantasyClass") == {testonto.FantasyClass}
 
     testonto.sync_attributes()

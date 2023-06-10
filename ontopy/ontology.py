@@ -43,6 +43,7 @@ from ontopy.utils import (
     ReadCatalogError,
     _validate_installed_version,
     LabelDefinitionError,
+    AmbiguousLabelError,
     EntityClassDefinitionError,
     EMMOntoPyException,
 )
@@ -204,12 +205,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         lst = list(self.get_entities(imported=self._dir_imported))
         if self._dir_preflabel:
             dirset.update(
-                _.prefLabel.first() for _ in lst if hasattr(_, "prefLabel")
+                dir.prefLabel.first()
+                for dir in lst
+                if hasattr(dir, "prefLabel")
             )
         if self._dir_label:
-            dirset.update(_.label.first() for _ in lst if hasattr(_, "label"))
+            dirset.update(
+                dir.label.first() for dir in lst if hasattr(dir, "label")
+            )
         if self._dir_name:
-            dirset.update(_.name for _ in lst if hasattr(_, "name"))
+            dirset.update(dir.name for dir in lst if hasattr(dir, "name"))
         dirset.difference_update({None})  # get rid of possible None
         return sorted(dirset)
 
@@ -339,18 +344,21 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     prefix = splitlabel[0]
 
         if prefix:
-            entitylist = self.get_by_label_all(
+            entityset = self.get_by_label_all(
                 label,
                 label_annotations=label_annotations,
                 prefix=prefix,
             )
-            if len(entitylist) == 1:
-                return next(iter(entitylist))
-
+            if len(entityset) == 1:
+                return entityset.pop()
+            if len(entityset) > 1:
+                raise AmbiguousLabelError(
+                    f"Several entities have the same label {label!r} "
+                    f"with prefix {prefix!r}."
+                )
             raise NoSuchLabelError(
-                f"Either no label annotations matches for {label!r} "
-                f"with prefix {prefix!r} or several entities have "
-                "the same label and prefix."
+                f"No label annotations matches for {label!r} "
+                f"with prefix {prefix!r}."
             )
 
         # Label is a full IRI
@@ -418,16 +426,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         if label_annotations:
             annotations = (
-                _.name if hasattr(_, "storid") else _ for _ in label_annotations
+                ann.name if hasattr(ann, "storid") else ann
+                for ann in label_annotations
             )
         elif self._label_annotations:
-            annotations = (_.name for _ in self.label_annotations)
+            annotations = (ann.name for ann in self.label_annotations)
 
         else:
             annotations = None
         entities = set()
         if annotations:
-            # entity = self.world.search(**{next(annotations): label})
             for key in annotations:
                 entities.update(self.world.search(**{key: label}))
 
@@ -445,7 +453,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         if prefix:
             return set(
-                _ for _ in entities if _.namespace.ontology.prefix == prefix
+                ent
+                for ent in entities
+                if ent.namespace.ontology.prefix == prefix
             )
         return entities
 
