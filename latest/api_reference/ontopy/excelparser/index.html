@@ -745,13 +745,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ontopy.excelparser.english" class="md-nav__link">
-    english()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ontopy.excelparser.get_metadata_from_dataframe" class="md-nav__link">
     get_metadata_from_dataframe()
   </a>
@@ -1004,13 +997,6 @@
         <li class="md-nav__item">
   <a href="#ontopy.excelparser.create_ontology_from_pandas" class="md-nav__link">
     create_ontology_from_pandas()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ontopy.excelparser.english" class="md-nav__link">
-    english()
   </a>
   
 </li>
@@ -1652,6 +1638,9 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
             <span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">=</span> <span class="n">base_iri</span>
 
     <span class="n">onto</span><span class="o">.</span><span class="n">sync_python_names</span><span class="p">()</span>
+    <span class="c1"># prefLabel, label, and altLabel</span>
+    <span class="c1"># are default label annotations</span>
+    <span class="n">onto</span><span class="o">.</span><span class="n">set_default_label_annotations</span><span class="p">()</span>
 
     <span class="c1"># Add object properties</span>
     <span class="k">if</span> <span class="n">objectproperties</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1692,7 +1681,6 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
             <span class="n">entitytype</span><span class="o">=</span><span class="n">owlready2</span><span class="o">.</span><span class="n">DataPropertyClass</span><span class="p">,</span>
             <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
         <span class="p">)</span>
-
     <span class="n">onto</span><span class="o">.</span><span class="n">sync_attributes</span><span class="p">(</span>
         <span class="n">name_policy</span><span class="o">=</span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span> <span class="n">name_prefix</span><span class="o">=</span><span class="s2">&quot;EMMO_&quot;</span><span class="p">,</span> <span class="n">class_docstring</span><span class="o">=</span><span class="s2">&quot;elucidation&quot;</span>
     <span class="p">)</span>
@@ -1787,33 +1775,6 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
         <span class="n">key</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">entities_with_errors</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">entities_with_errors</span>
-</code></pre></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-function">
-
-
-
-<h2 class="doc doc-heading" id="ontopy.excelparser.english">
-<code class="highlight language-python"><span class="n">english</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></code>
-
-
-<a class="headerlink" href="#ontopy.excelparser.english" title="Permanent link">&para;</a></h2>
-
-    <div class="doc doc-contents ">
-
-      <p>Returns <code>string</code> as an English location string.</p>
-
-        <details class="quote">
-          <summary>Source code in <code>ontopy/excelparser.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">english</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns `string` as an English location string.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">locstr</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>

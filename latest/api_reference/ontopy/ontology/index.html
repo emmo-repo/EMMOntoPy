@@ -1176,6 +1176,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.set_default_label_annotations" class="md-nav__link">
+    set_default_label_annotations()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#ontopy.ontology.Ontology.set_version" class="md-nav__link">
     set_version()
   </a>
@@ -1791,6 +1798,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.set_default_label_annotations" class="md-nav__link">
+    set_default_label_annotations()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#ontopy.ontology.Ontology.set_version" class="md-nav__link">
     set_version()
   </a>
@@ -2123,12 +2137,16 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="n">lst</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_entities</span><span class="p">(</span><span class="n">imported</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dir_imported</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dir_preflabel</span><span class="p">:</span>
             <span class="n">dirset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                <span class="n">_</span><span class="o">.</span><span class="n">prefLabel</span><span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">)</span>
+                <span class="nb">dir</span><span class="o">.</span><span class="n">prefLabel</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+                <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">lst</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dir_label</span><span class="p">:</span>
-            <span class="n">dirset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">))</span>
+            <span class="n">dirset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="nb">dir</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dir_name</span><span class="p">:</span>
-            <span class="n">dirset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">))</span>
+            <span class="n">dirset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dir</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">))</span>
         <span class="n">dirset</span><span class="o">.</span><span class="n">difference_update</span><span class="p">({</span><span class="kc">None</span><span class="p">})</span>  <span class="c1"># get rid of possible None</span>
         <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">dirset</span><span class="p">)</span>
 
@@ -2187,7 +2205,8 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
             <span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="n">obj</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="n">blank</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_set_label_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_default_label_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the default label annotations.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_annotations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">iri</span> <span class="ow">in</span> <span class="n">DEFAULT_LABEL_ANNOTATIONS</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -2236,8 +2255,6 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                 <span class="sa">f</span><span class="s2">&quot;Invalid label definition, must be a string: </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_label_annotations</span><span class="p">()</span>
-
         <span class="k">if</span> <span class="n">colon_in_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">colon_in_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colon_in_label</span>
         <span class="k">if</span> <span class="n">colon_in_label</span><span class="p">:</span>
@@ -2253,23 +2270,27 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;Prefix given both as argument (</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">) &quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;and in label (</span><span class="si">{</span><span class="n">splitlabel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">). &quot;</span>
-                        <span class="s2">&quot;Prefix given in argument takes presendence &quot;</span>
+                        <span class="s2">&quot;Prefix given in argument takes precedence. &quot;</span>
                     <span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">prefix</span><span class="p">:</span>
                     <span class="n">prefix</span> <span class="o">=</span> <span class="n">splitlabel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">prefix</span><span class="p">:</span>
-            <span class="n">entitylist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_by_label_all</span><span class="p">(</span>
+            <span class="n">entityset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_by_label_all</span><span class="p">(</span>
                 <span class="n">label</span><span class="p">,</span>
                 <span class="n">label_annotations</span><span class="o">=</span><span class="n">label_annotations</span><span class="p">,</span>
                 <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">entitylist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">entitylist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">entityset</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">entityset</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">entityset</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">AmbiguousLabelError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Several entities have the same label </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2"> &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;with prefix </span><span class="si">{</span><span class="n">prefix</span><span class="si">!r}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
             <span class="k">raise</span> <span class="n">NoSuchLabelError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;No label annotations matches </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2"> with prefix &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">!r}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;No label annotations matches for </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;with prefix </span><span class="si">{</span><span class="n">prefix</span><span class="si">!r}</span><span class="s2">.&quot;</span>
             <span class="p">)</span>
 
         <span class="c1"># Label is a full IRI</span>
@@ -2278,19 +2299,25 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
             <span class="k">return</span> <span class="n">entity</span>
 
         <span class="c1"># First entity with matching label annotation</span>
-        <span class="n">annotation_ids</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">label_annotations</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">label_annotations</span>
-            <span class="k">else</span> <span class="p">(</span><span class="n">ann</span><span class="o">.</span><span class="n">storid</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_annotations</span><span class="p">)</span>
-        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">label_annotations</span><span class="p">:</span>
+            <span class="n">annotation_ids</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">label_annotations</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_annotations</span><span class="p">:</span>
+            <span class="n">annotation_ids</span> <span class="o">=</span> <span class="p">(</span><span class="n">ann</span><span class="o">.</span><span class="n">storid</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_annotations</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">annotation_ids</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="n">get_triples</span> <span class="o">=</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_get_data_triples_spod_spod</span>
             <span class="k">if</span> <span class="n">imported</span>
             <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_data_triples_spod_spod</span>
         <span class="p">)</span>
-        <span class="k">for</span> <span class="n">annotation_id</span> <span class="ow">in</span> <span class="n">annotation_ids</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">get_triples</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">annotation_id</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">s</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">annotation_ids</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">annotation_id</span> <span class="ow">in</span> <span class="n">annotation_ids</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">get_triples</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">annotation_id</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">s</span><span class="p">)]</span>
 
         <span class="c1"># Special labels</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span> <span class="ow">and</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span><span class="p">:</span>
@@ -2319,7 +2346,6 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 <span class="sd">        The current implementation also supports &quot;*&quot; as a wildcard</span>
 <span class="sd">        matching any number of characters. This may change in the future.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_label_annotations</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
@@ -2330,26 +2356,40 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                 <span class="sa">f</span><span class="s2">&quot;Invalid label definition, </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2"> contains spaces.&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">label_annotations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">annotations</span> <span class="o">=</span> <span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_annotations</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">label_annotations</span><span class="p">:</span>
             <span class="n">annotations</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">_</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="s2">&quot;storid&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">label_annotations</span>
+                <span class="n">ann</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="s2">&quot;storid&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ann</span>
+                <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">label_annotations</span>
             <span class="p">)</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="nb">next</span><span class="p">(</span><span class="n">annotations</span><span class="p">):</span> <span class="n">label</span><span class="p">})</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
-            <span class="n">entity</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">label</span><span class="p">}))</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_annotations</span><span class="p">:</span>
+            <span class="n">annotations</span> <span class="o">=</span> <span class="p">(</span><span class="n">ann</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_annotations</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">annotations</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">annotations</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
+                <span class="n">entities</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">label</span><span class="p">}))</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span> <span class="ow">and</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span><span class="p">:</span>
-            <span class="n">entity</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span><span class="p">[</span><span class="n">label</span><span class="p">])</span>
+            <span class="n">entities</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span><span class="p">[</span><span class="n">label</span><span class="p">])</span>
 
-        <span class="n">entity_accessed_directly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">+</span> <span class="n">label</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">entity_accessed_directly</span> <span class="ow">and</span> <span class="n">entity_accessed_directly</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">entity</span><span class="p">:</span>
-            <span class="n">entity</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entity_accessed_directly</span><span class="p">)</span>
+        <span class="c1"># Find existence in get_entities</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">ent</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_entities</span><span class="p">()),</span> <span class="n">label</span>
+        <span class="p">)</span>
+
+        <span class="n">entities</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">ent</span> <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_entities</span><span class="p">()</span> <span class="k">if</span> <span class="n">ent</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">matches</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">prefix</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">entity</span> <span class="k">if</span> <span class="n">_</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">prefix</span> <span class="o">==</span> <span class="n">prefix</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">entity</span>
+            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span>
+                <span class="n">ent</span>
+                <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">entities</span>
+                <span class="k">if</span> <span class="n">ent</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">prefix</span> <span class="o">==</span> <span class="n">prefix</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">entities</span>
 
     <span class="k">def</span> <span class="nf">add_label_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iri</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds label annotation used by get_by_label().</span>
@@ -3638,6 +3678,12 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 
         <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">entity</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">new_class</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+            <span class="c1"># Set prefLabel to name if label_annotations is set</span>
+            <span class="c1"># and prefLabel is one of the annotations</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_annotations</span> <span class="ow">and</span> <span class="s2">&quot;prefLabel&quot;</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="n">ann</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_annotations</span>
+            <span class="p">]:</span>
+                <span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span> <span class="o">=</span> <span class="n">english</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">entity</span>
 
     <span class="c1"># Method that creates new ThingClass using new_entity</span>
@@ -4538,8 +4584,6 @@ the <code>prefix</code> argument a warning will be issued and the
             <span class="sa">f</span><span class="s2">&quot;Invalid label definition, must be a string: </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">_set_label_annotations</span><span class="p">()</span>
-
     <span class="k">if</span> <span class="n">colon_in_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">colon_in_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colon_in_label</span>
     <span class="k">if</span> <span class="n">colon_in_label</span><span class="p">:</span>
@@ -4555,23 +4599,27 @@ the <code>prefix</code> argument a warning will be issued and the
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Prefix given both as argument (</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">) &quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;and in label (</span><span class="si">{</span><span class="n">splitlabel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">). &quot;</span>
-                    <span class="s2">&quot;Prefix given in argument takes presendence &quot;</span>
+                    <span class="s2">&quot;Prefix given in argument takes precedence. &quot;</span>
                 <span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">prefix</span><span class="p">:</span>
                 <span class="n">prefix</span> <span class="o">=</span> <span class="n">splitlabel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">prefix</span><span class="p">:</span>
-        <span class="n">entitylist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_by_label_all</span><span class="p">(</span>
+        <span class="n">entityset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_by_label_all</span><span class="p">(</span>
             <span class="n">label</span><span class="p">,</span>
             <span class="n">label_annotations</span><span class="o">=</span><span class="n">label_annotations</span><span class="p">,</span>
             <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">entitylist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">entitylist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">entityset</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">entityset</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">entityset</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AmbiguousLabelError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Several entities have the same label </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;with prefix </span><span class="si">{</span><span class="n">prefix</span><span class="si">!r}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
         <span class="k">raise</span> <span class="n">NoSuchLabelError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;No label annotations matches </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2"> with prefix &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">!r}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;No label annotations matches for </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;with prefix </span><span class="si">{</span><span class="n">prefix</span><span class="si">!r}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
 
     <span class="c1"># Label is a full IRI</span>
@@ -4580,19 +4628,25 @@ the <code>prefix</code> argument a warning will be issued and the
         <span class="k">return</span> <span class="n">entity</span>
 
     <span class="c1"># First entity with matching label annotation</span>
-    <span class="n">annotation_ids</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">label_annotations</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">label_annotations</span>
-        <span class="k">else</span> <span class="p">(</span><span class="n">ann</span><span class="o">.</span><span class="n">storid</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_annotations</span><span class="p">)</span>
-    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">label_annotations</span><span class="p">:</span>
+        <span class="n">annotation_ids</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">label_annotations</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_annotations</span><span class="p">:</span>
+        <span class="n">annotation_ids</span> <span class="o">=</span> <span class="p">(</span><span class="n">ann</span><span class="o">.</span><span class="n">storid</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_annotations</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">annotation_ids</span> <span class="o">=</span> <span class="kc">None</span>
+
     <span class="n">get_triples</span> <span class="o">=</span> <span class="p">(</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_get_data_triples_spod_spod</span>
         <span class="k">if</span> <span class="n">imported</span>
         <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_data_triples_spod_spod</span>
     <span class="p">)</span>
-    <span class="k">for</span> <span class="n">annotation_id</span> <span class="ow">in</span> <span class="n">annotation_ids</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">get_triples</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">annotation_id</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">s</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">annotation_ids</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">annotation_id</span> <span class="ow">in</span> <span class="n">annotation_ids</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">get_triples</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">annotation_id</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">s</span><span class="p">)]</span>
 
     <span class="c1"># Special labels</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span> <span class="ow">and</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span><span class="p">:</span>
@@ -4648,7 +4702,6 @@ matching any number of characters. This may change in the future.</p>
 <span class="sd">    The current implementation also supports &quot;*&quot; as a wildcard</span>
 <span class="sd">    matching any number of characters. This may change in the future.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_set_label_annotations</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
@@ -4659,26 +4712,40 @@ matching any number of characters. This may change in the future.</p>
             <span class="sa">f</span><span class="s2">&quot;Invalid label definition, </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2"> contains spaces.&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">label_annotations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">annotations</span> <span class="o">=</span> <span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_annotations</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">label_annotations</span><span class="p">:</span>
         <span class="n">annotations</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">_</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="s2">&quot;storid&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">label_annotations</span>
+            <span class="n">ann</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="s2">&quot;storid&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ann</span>
+            <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">label_annotations</span>
         <span class="p">)</span>
-    <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="nb">next</span><span class="p">(</span><span class="n">annotations</span><span class="p">):</span> <span class="n">label</span><span class="p">})</span>
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
-        <span class="n">entity</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">label</span><span class="p">}))</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_annotations</span><span class="p">:</span>
+        <span class="n">annotations</span> <span class="o">=</span> <span class="p">(</span><span class="n">ann</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_annotations</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">annotations</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">entities</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">annotations</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
+            <span class="n">entities</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">label</span><span class="p">}))</span>
 
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span> <span class="ow">and</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span><span class="p">:</span>
-        <span class="n">entity</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span><span class="p">[</span><span class="n">label</span><span class="p">])</span>
+        <span class="n">entities</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_special_labels</span><span class="p">[</span><span class="n">label</span><span class="p">])</span>
 
-    <span class="n">entity_accessed_directly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">+</span> <span class="n">label</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">entity_accessed_directly</span> <span class="ow">and</span> <span class="n">entity_accessed_directly</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">entity</span><span class="p">:</span>
-        <span class="n">entity</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entity_accessed_directly</span><span class="p">)</span>
+    <span class="c1"># Find existence in get_entities</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">ent</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_entities</span><span class="p">()),</span> <span class="n">label</span>
+    <span class="p">)</span>
+
+    <span class="n">entities</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">ent</span> <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_entities</span><span class="p">()</span> <span class="k">if</span> <span class="n">ent</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">matches</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">prefix</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">entity</span> <span class="k">if</span> <span class="n">_</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">prefix</span> <span class="o">==</span> <span class="n">prefix</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">entity</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="n">ent</span>
+            <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">entities</span>
+            <span class="k">if</span> <span class="n">ent</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">prefix</span> <span class="o">==</span> <span class="n">prefix</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">entities</span>
 </code></pre></div>
         </details>
     </div>
@@ -5882,6 +5949,12 @@ By default, the parent is Thing.</p>
 
     <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">new_class</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+        <span class="c1"># Set prefLabel to name if label_annotations is set</span>
+        <span class="c1"># and prefLabel is one of the annotations</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_annotations</span> <span class="ow">and</span> <span class="s2">&quot;prefLabel&quot;</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">ann</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_annotations</span>
+        <span class="p">]:</span>
+            <span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span> <span class="o">=</span> <span class="n">english</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">entity</span>
 </code></pre></div>
         </details>
@@ -6413,6 +6486,38 @@ the emmo base_iri http://emmo.info/emmo</p></td>
         <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
     <span class="k">for</span> <span class="n">onto</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">:</span>
         <span class="n">onto</span><span class="o">.</span><span class="n">set_common_prefix</span><span class="p">(</span><span class="n">iri_base</span><span class="o">=</span><span class="n">iri_base</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="ontopy.ontology.Ontology.set_default_label_annotations">
+<code class="highlight language-python"><span class="n">set_default_label_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#ontopy.ontology.Ontology.set_default_label_annotations" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Sets the default label annotations.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontology.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_default_label_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the default label annotations.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_annotations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">iri</span> <span class="ow">in</span> <span class="n">DEFAULT_LABEL_ANNOTATIONS</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_label_annotation</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">pass</span>
 </code></pre></div>
         </details>
     </div>

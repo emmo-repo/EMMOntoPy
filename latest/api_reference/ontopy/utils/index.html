@@ -822,6 +822,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.utils.AmbiguousLabelError" class="md-nav__link">
+    AmbiguousLabelError
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.utils.EMMOntoPyException" class="md-nav__link">
     EMMOntoPyException
   </a>
@@ -908,6 +915,13 @@
         <li class="md-nav__item">
   <a href="#ontopy.utils.convert_imported" class="md-nav__link">
     convert_imported()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.english" class="md-nav__link">
+    english()
   </a>
   
 </li>
@@ -1107,6 +1121,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.utils.AmbiguousLabelError" class="md-nav__link">
+    AmbiguousLabelError
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.utils.EMMOntoPyException" class="md-nav__link">
     EMMOntoPyException
   </a>
@@ -1193,6 +1214,13 @@
         <li class="md-nav__item">
   <a href="#ontopy.utils.convert_imported" class="md-nav__link">
     convert_imported()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.english" class="md-nav__link">
+    english()
   </a>
   
 </li>
@@ -1294,6 +1322,37 @@
 
 
 
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 class="doc doc-heading" id="ontopy.utils.AmbiguousLabelError">
+        <code>
+AmbiguousLabelError            (<span title="LookupError">LookupError</span>, <span title="AttributeError">AttributeError</span>, <a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a>)
+        </code>
+
+
+
+<a class="headerlink" href="#ontopy.utils.AmbiguousLabelError" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Error raised when a label is ambiguous.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">AmbiguousLabelError</span><span class="p">(</span><span class="ne">LookupError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="n">EMMOntoPyException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Error raised when a label is ambiguous.&quot;&quot;&quot;</span>
+</code></pre></div>
+        </details>
+
+
+    </div>
+
+  </div>
 
 
 
@@ -2121,6 +2180,33 @@ local file names</p></td>
         <span class="p">)</span><span class="o">.</span><span class="n">with_traceback</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">__traceback__</span><span class="p">)</span>
     <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">output_ontology</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">output_format</span><span class="p">)</span>
     <span class="n">recur</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">outext</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 class="doc doc-heading" id="ontopy.utils.english">
+<code class="highlight language-python"><span class="n">english</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#ontopy.utils.english" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns <code>string</code> as an English location string.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">english</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns `string` as an English location string.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">locstr</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
