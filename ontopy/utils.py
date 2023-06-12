@@ -66,12 +66,21 @@ class NoSuchLabelError(LookupError, AttributeError, EMMOntoPyException):
     """Error raised when a label cannot be found."""
 
 
+class AmbiguousLabelError(LookupError, AttributeError, EMMOntoPyException):
+    """Error raised when a label is ambiguous."""
+
+
 class LabelDefinitionError(EMMOntoPyException):
     """Error in label definition."""
 
 
 class EntityClassDefinitionError(EMMOntoPyException):
     """Error in ThingClass definition."""
+
+
+def english(string):
+    """Returns `string` as an English location string."""
+    return owlready2.locstr(string, lang="en")
 
 
 def isinteractive():
