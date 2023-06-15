@@ -1,14 +1,46 @@
 # Changelog
 
-## [Unreleased](https://github.com/emmo-repo/EMMOntoPy/tree/HEAD)
+## [v0.5.3.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.2) (2023-06-15)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.2...HEAD)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.4...v0.5.3.2)
+
+## [v0.5.4](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.4) (2023-06-15)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3...v0.5.4)
+
+**Merged pull requests:**
+
+- remove warnings\_as\_errors in cd workflow introduced in 0.5.3 [\#625](https://github.com/emmo-repo/EMMOntoPy/pull/625) ([francescalb](https://github.com/francescalb))
+
+## [v0.5.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3) (2023-06-12)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3.1...v0.5.3)
+
+## [v0.5.3.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.1) (2023-06-12)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.2...v0.5.3.1)
 
 **Closed issues:**
 
-- Harmonize get\_descendants and get\_ancestors [\#406](https://github.com/emmo-repo/EMMOntoPy/issues/406)
+- Extend new\_entity to include properties [\#609](https://github.com/emmo-repo/EMMOntoPy/issues/609)
+- Add support for Python 3.11 [\#599](https://github.com/emmo-repo/EMMOntoPy/issues/599)
+- excelparser - enable object properties creation [\#587](https://github.com/emmo-repo/EMMOntoPy/issues/587)
+- If there are altLabels that match, get\_by\_label\_all returns only the prefLabels. [\#511](https://github.com/emmo-repo/EMMOntoPy/issues/511)
+- excel2onto: implement other annotations [\#462](https://github.com/emmo-repo/EMMOntoPy/issues/462)
 
-## [v0.5.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.2) (2023-05-12)
+**Merged pull requests:**
+
+- default\_annotations no longer forced in get\_by\_label [\#623](https://github.com/emmo-repo/EMMOntoPy/pull/623) ([francescalb](https://github.com/francescalb))
+- Updated documentation and excel sheet in example. [\#622](https://github.com/emmo-repo/EMMOntoPy/pull/622) ([francescalb](https://github.com/francescalb))
+- Flb/excel2onto properties [\#620](https://github.com/emmo-repo/EMMOntoPy/pull/620) ([francescalb](https://github.com/francescalb))
+- Fixed failing tests in test\_patch.py [\#618](https://github.com/emmo-repo/EMMOntoPy/pull/618) ([jesper-friis](https://github.com/jesper-friis))
+- Add test for Python 3.11 and support it officially [\#615](https://github.com/emmo-repo/EMMOntoPy/pull/615) ([jesper-friis](https://github.com/jesper-friis))
+- Added doctest [\#614](https://github.com/emmo-repo/EMMOntoPy/pull/614) ([jesper-friis](https://github.com/jesper-friis))
+- Item access to classes [\#613](https://github.com/emmo-repo/EMMOntoPy/pull/613) ([jesper-friis](https://github.com/jesper-friis))
+- Change ontology.new\_entity to also allow adding properties [\#610](https://github.com/emmo-repo/EMMOntoPy/pull/610) ([francescalb](https://github.com/francescalb))
+- Added DOI badge [\#606](https://github.com/emmo-repo/EMMOntoPy/pull/606) ([jesper-friis](https://github.com/jesper-friis))
+
+## [v0.5.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.2) (2023-05-24)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.1...v0.5.2)
 
@@ -32,6 +64,7 @@
 - Add client side redirection in generated html documentation [\#552](https://github.com/emmo-repo/EMMOntoPy/issues/552)
 - Typos in PR template [\#523](https://github.com/emmo-repo/EMMOntoPy/issues/523)
 - ontograph, read format from name [\#497](https://github.com/emmo-repo/EMMOntoPy/issues/497)
+- Harmonize get\_descendants and get\_ancestors [\#406](https://github.com/emmo-repo/EMMOntoPy/issues/406)
 - Review default colours and style in ontopy/graph.py [\#345](https://github.com/emmo-repo/EMMOntoPy/issues/345)
 
 **Merged pull requests:**
