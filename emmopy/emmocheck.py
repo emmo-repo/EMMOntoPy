@@ -89,12 +89,11 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         exceptions.update(
             self.get_config("test_number_of_labels.exceptions", ())
         )
-
         if (
             "prefLabel"
             in self.onto.world._props  # pylint: disable=protected-access
         ):
-            for entity in self.onto.get_entities():
+            for entity in self.onto.classes(self.check_imported):
                 if repr(entity) not in exceptions:
                     with self.subTest(
                         entity=entity,
