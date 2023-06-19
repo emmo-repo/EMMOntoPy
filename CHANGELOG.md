@@ -1,24 +1,40 @@
 # Changelog
 
-## [v0.5.3.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.2) (2023-06-15)
+## [Unreleased](https://github.com/emmo-repo/EMMOntoPy/tree/HEAD)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.4...v0.5.3.2)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.6.0...HEAD)
+
+**Closed issues:**
+
+- pyparsing has been updated [\#629](https://github.com/emmo-repo/EMMOntoPy/issues/629)
+
+## [v0.6.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.6.0) (2023-06-19)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.4...v0.6.0)
+
+**Merged pull requests:**
+
+- Check prefLabels in imported ontologies only if asked for. [\#628](https://github.com/emmo-repo/EMMOntoPy/pull/628) ([francescalb](https://github.com/francescalb))
 
 ## [v0.5.4](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.4) (2023-06-15)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3...v0.5.4)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3.2...v0.5.4)
+
+## [v0.5.3.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.2) (2023-06-15)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3.1...v0.5.3.2)
 
 **Merged pull requests:**
 
 - remove warnings\_as\_errors in cd workflow introduced in 0.5.3 [\#625](https://github.com/emmo-repo/EMMOntoPy/pull/625) ([francescalb](https://github.com/francescalb))
 
-## [v0.5.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3) (2023-06-12)
-
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3.1...v0.5.3)
-
 ## [v0.5.3.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.1) (2023-06-12)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.2...v0.5.3.1)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3...v0.5.3.1)
+
+## [v0.5.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3) (2023-06-12)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.2...v0.5.3)
 
 **Closed issues:**
 
