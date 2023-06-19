@@ -19,7 +19,7 @@
         <link rel="next" href="../emmopy/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.16">
     
     
       
@@ -2089,12 +2089,11 @@ TestSyntacticEMMOConventions        </code>
         <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_number_of_labels.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
         <span class="p">)</span>
-
         <span class="k">if</span> <span class="p">(</span>
             <span class="s2">&quot;prefLabel&quot;</span>
             <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
         <span class="p">):</span>
-            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">get_entities</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
                 <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
                     <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span>
                         <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
@@ -2276,12 +2275,11 @@ starts with "owl.".</p>
     <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_number_of_labels.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
     <span class="p">)</span>
-
     <span class="k">if</span> <span class="p">(</span>
         <span class="s2">&quot;prefLabel&quot;</span>
         <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
     <span class="p">):</span>
-        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">get_entities</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
                 <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span>
                     <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
@@ -2727,7 +2725,7 @@ manually / through Python.</p></td>
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.b4d07000.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a51614de.min.js"></script>
       
     
   </body>

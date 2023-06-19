@@ -19,7 +19,7 @@
         <link rel="next" href="../nadict/">
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.16">
     
     
       
@@ -1306,11 +1306,11 @@ only value restrictions supported so far.</p>
     <span class="n">literal</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">typedLiteral</span> <span class="o">|</span> <span class="n">stringLanguageLiteral</span> <span class="o">|</span> <span class="n">stringLiteral</span> <span class="o">|</span> <span class="n">numberLiteral</span>
     <span class="p">)</span>
-    <span class="n">logOp</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">oneOf</span><span class="p">([</span><span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="s2">&quot;or&quot;</span><span class="p">],</span> <span class="n">asKeyword</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">logOp</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">one_of</span><span class="p">([</span><span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="s2">&quot;or&quot;</span><span class="p">],</span> <span class="n">asKeyword</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">expr</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Forward</span><span class="p">()</span>
     <span class="n">restriction</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Forward</span><span class="p">()</span>
     <span class="n">primary</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;not&quot;</span><span class="p">)[</span><span class="o">...</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span>
-        <span class="n">restriction</span> <span class="o">|</span> <span class="n">ident</span><span class="p">(</span><span class="s2">&quot;cls&quot;</span><span class="p">)</span> <span class="o">|</span> <span class="n">pp</span><span class="o">.</span><span class="n">nestedExpr</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="n">expr</span><span class="p">)</span>
+        <span class="n">restriction</span> <span class="o">|</span> <span class="n">ident</span><span class="p">(</span><span class="s2">&quot;cls&quot;</span><span class="p">)</span> <span class="o">|</span> <span class="n">pp</span><span class="o">.</span><span class="n">nested_expr</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="n">expr</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="n">objPropExpr</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">pp</span><span class="o">.</span><span class="n">Literal</span><span class="p">(</span><span class="s2">&quot;inverse&quot;</span><span class="p">)</span>
@@ -1414,7 +1414,7 @@ only value restrictions supported so far.</p>
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.b4d07000.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a51614de.min.js"></script>
       
     
   </body>
