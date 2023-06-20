@@ -90,7 +90,7 @@ nav:
     - Examples:
       - EMMOdoc: examples/emmodoc/README.md
       - Jupyter visualization: examples/jupyter-visualization/README.md
-      - Ontology generation from Excel: examples/
+      - Ontology generation from Excel: examples/ontology-from-excel/README.md
   - ... | developers/**
   - Changelog: CHANGELOG.md
   - ... | api_reference/**
