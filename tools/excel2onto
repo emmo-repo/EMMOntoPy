@@ -80,12 +80,17 @@ def main(argv: list = None):
         except FileNotFoundError as err:
             if args.force:
                 warnings.warn(
-                    "Did not find the input ontology, "
+                    "Did not find the output ontology to be updated, "
                     "will fully generate a new one."
                 )
                 input_ontology = None
             else:
-                raise err
+                raise FileNotFoundError(
+                    "The output ontology to be updated "
+                    "does not exist. Missing file is: ",
+                    args.output,
+                    err,
+                ) from err
 
     try:
         ontology, catalog, _ = create_ontology_from_excel(
