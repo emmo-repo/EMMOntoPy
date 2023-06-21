@@ -89,7 +89,6 @@ def main(argv: list = None):
                     "The output ontology to be updated "
                     "does not exist. Missing file is: ",
                     args.output,
-                    err,
                 ) from err
 
     try:
