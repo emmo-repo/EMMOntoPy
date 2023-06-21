@@ -12,6 +12,7 @@ and generate the ontology with what is availble.
 
 To run the tool directly
 ```console
+cd tool # Since the excel file provides a relative path to an imported ontology
 excel2onto onto.xlsx # This will fail
 excel2onto --force onto.xlsx
 ```
