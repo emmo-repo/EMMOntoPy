@@ -10,20 +10,20 @@
       
       
       
-        <link rel="canonical" href="https://emmo-repo.github.io/EMMOntoPy/latest/examples/jupyter-visualization/">
+        <link rel="canonical" href="https://emmo-repo.github.io/EMMOntoPy/latest/examples/ontology-from-excel/">
       
       
-        <link rel="prev" href="../emmodoc/">
+        <link rel="prev" href="../jupyter-visualization/">
       
       
-        <link rel="next" href="../ontology-from-excel/">
+        <link rel="next" href="../../developers/release-instructions/">
       
       <link rel="icon" href="../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.16">
     
     
       
-        <title>Jupyter visualization - EMMOntoPy</title>
+        <title>Ontology generation from Excel - EMMOntoPy</title>
       
     
     
@@ -75,7 +75,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#visualise-an-ontology-using-pyctoscape-in-jupyter-notebook" class="md-skip">
+        <a href="#generate-an-ontology-from-excel" class="md-skip">
           Skip to content
         </a>
       
@@ -113,7 +113,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Jupyter visualization
+              Ontology generation from Excel
             
           </span>
         </div>
@@ -430,6 +430,20 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="../jupyter-visualization/" class="md-nav__link">
+        Jupyter visualization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -441,62 +455,10 @@
         
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Jupyter visualization
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
-        Jupyter visualization
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#installation-instructions" class="md-nav__link">
-    Installation instructions
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#test-the-notebook" class="md-nav__link">
-    Test the notebook
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../ontology-from-excel/" class="md-nav__link">
         Ontology generation from Excel
       </a>
+      
     </li>
   
 
@@ -960,28 +922,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#installation-instructions" class="md-nav__link">
-    Installation instructions
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#test-the-notebook" class="md-nav__link">
-    Test the notebook
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -995,28 +935,24 @@
                   
 
 
-<h1 id="visualise-an-ontology-using-pyctoscape-in-jupyter-notebook">Visualise an ontology using pyctoscape in Jupyter Notebook<a class="headerlink" href="#visualise-an-ontology-using-pyctoscape-in-jupyter-notebook" title="Permanent link">&para;</a></h1>
-<h2 id="installation-instructions">Installation instructions<a class="headerlink" href="#installation-instructions" title="Permanent link">&para;</a></h2>
-<p>In a terminal, run:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/path/to/env/dirs
-python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>cytopy<span class="w">  </span><span class="c1"># cytopy is my name, you can choose what ouy want</span>
-<span class="nb">source</span><span class="w"> </span>cytopy/bin/activate
-<span class="nb">cd</span><span class="w"> </span>/dir/to/EMMOntoPy/
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-pip<span class="w"> </span>install<span class="w"> </span>jupyterlab
-python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>cytopy
-pip<span class="w"> </span>install<span class="w"> </span>ipywidgets
-pip<span class="w"> </span>install<span class="w"> </span>nodejs<span class="w"> </span><span class="c1"># Note requires that node.js and npm has already been isntalled!</span>
-pip<span class="w"> </span>install<span class="w"> </span>ipycytoscape<span class="w"> </span>pydotplus<span class="w"> </span>networkx
-pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>setuptools
-jupyter<span class="w"> </span>labextension<span class="w"> </span>install<span class="w"> </span>@jupyter-widgets/jupyterlab-manager
+<h1 id="generate-an-ontology-from-excel">Generate an ontology from excel<a class="headerlink" href="#generate-an-ontology-from-excel" title="Permanent link">&para;</a></h1>
+<p>This directory contains an example xlsx-file for how to document ontology entities (classes, object properties, annotation properties and data properties) in an Excel workbook.
+This workbook can then be used to generate a new ontology or update an already existing ontology with new entities (existing entities are not updated).</p>
+<p>Please refer to the (documentation)[https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/excelparser/] for full explanation of capabilities.</p>
+<p>The file <code>tool/onto.xlsx</code> contains examples on how to do things correctly as well as incorrectly.
+The tool will by default exit without generating the ontology if it detects concepts defined incorrectly.
+However, if the argument force is set to True, it will skip concepts that are erroneously defined
+and generate the ontology with what is availble.</p>
+<p>To run the tool directly
+<div class="highlight"><pre><span></span><code><span class="go">cd tool # Since the excel file provides a relative path to an imported ontology</span>
+<span class="go">excel2onto onto.xlsx # This will fail</span>
+<span class="go">excel2onto --force onto.xlsx</span>
 </code></pre></div>
-<h2 id="test-the-notebook">Test the notebook<a class="headerlink" href="#test-the-notebook" title="Permanent link">&para;</a></h2>
-<p>In a terminal, run:</p>
-<div class="highlight"><pre><span></span><code>jupyter-lab
-</code></pre></div>
-<p>That should start jupyter kernel and open a new tab in your browser.
-In the side pane, select <code>team40.ipynb</code> and run the notebook.</p>
+We suggest developing your excelsheet without fails as once it starts getting big it is difficult to see what is wrong or correct.</p>
+<p>It is also possible to generate the ontology in python.
+Look at the script make_onto.py for an example.</p>
+<p>That should be it.
+Good luck!</p>
 
 
 
