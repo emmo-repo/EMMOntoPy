@@ -1,5 +1,5 @@
 blessings>=1.7,<2
-Cython>=0.29.21,<0.30
+Cython>=0.29.21,<3.1
 defusedxml>=0.7.1,<1
 graphviz>=0.16,<0.21
 numpy>=1.19.5,<2
