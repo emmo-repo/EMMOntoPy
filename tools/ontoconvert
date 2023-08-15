@@ -209,10 +209,10 @@ def main(argv: list = None):
             import rdflib
             from rdflib import OWL, RDF, URIRef
 
-            if args.reasoner != "FaCT++":
-                raise NotImplementedError(
-                    "Only FaCT++ is currently supported..."
-                )
+            # if args.reasoner != "FaCT++":
+            #    raise NotImplementedError(
+            #        "Only FaCT++ is currently supported..."
+            #    )
             if args.output_dir != ".":
                 raise NotImplementedError(
                     "The --output-dir option is currently not supported "
@@ -229,12 +229,22 @@ def main(argv: list = None):
                     "supported together with --reasoner."
                 )
 
-            graph0 = onto.world.as_rdflib_graph()
-            graph1 = rdflib.Graph()
-            for s, p, o in graph0.triples((None, None, None)):
-                if p != OWL.imports:
-                    graph1.add((s, p, o))
-            graph2 = FaCTPPGraph(graph1).inferred_graph()
+            if args.reasoner == "FaCT++":
+                graph0 = onto.world.as_rdflib_graph()
+                graph1 = rdflib.Graph()
+                for s, p, o in graph0.triples((None, None, None)):
+                    if p != OWL.imports:
+                        graph1.add((s, p, o))
+                graph2 = FaCTPPGraph(graph1).inferred_graph()
+            else:
+                onto.sync_reasoner(
+                    reasoner=args.reasoner, include_imported=True
+                )  # TO DO: make_include_imported an option
+                graph0 = onto.world.as_rdflib_graph()
+                graph2 = rdflib.Graph()
+                for s, p, o in graph0.triples((None, None, None)):
+                    if p != OWL.imports:
+                        graph2.add((s, p, o))
 
             # Remove existing ontology(ies)
             remove = list(graph2.triples((None, RDF.type, OWL.Ontology)))
