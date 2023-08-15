@@ -69,7 +69,7 @@ def get_parents(self, strict=False):
 def _dir(self):
     """Extend dir() listing of ontology classes."""
     set_dir = set(object.__dir__(self))
-    props = self.namespace.world._props.keys()
+    props = [str(key) for key in self.namespace.world._props.keys()]
     set_dir.update(props)
     return sorted(set_dir)
 
@@ -91,13 +91,14 @@ def _setitem(self, name, value):
 
     Example:
     >>> from emmopy import get_emmo
+    >>> from owlready2 import locstr
     >>> emmo = get_emmo()
     >>> emmo.Atom['altLabel']
-    ['ChemicalElement']
+    [locstr('ChemicalElement', 'en')]
     >>> emmo.Atom['altLabel'] = 'Element'
+    >>> emmo.Atom['altLabel'] = locstr('Atomo', 'it')
     >>> emmo.Atom['altLabel']
-    ['ChemicalElement', 'Element']
-
+    [locstr('ChemicalElement', 'en'), 'Element', locstr('Atomo', 'it')]
     """
     item = _getitem(self, name)
     item.append(value)

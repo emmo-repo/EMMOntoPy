@@ -205,13 +205,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         lst = list(self.get_entities(imported=self._dir_imported))
         if self._dir_preflabel:
             dirset.update(
-                dir.prefLabel.first()
+                str(dir.prefLabel.first())
                 for dir in lst
                 if hasattr(dir, "prefLabel")
             )
         if self._dir_label:
             dirset.update(
-                dir.label.first() for dir in lst if hasattr(dir, "label")
+                str(dir.label.first()) for dir in lst if hasattr(dir, "label")
             )
         if self._dir_name:
             dirset.update(dir.name for dir in lst if hasattr(dir, "name"))

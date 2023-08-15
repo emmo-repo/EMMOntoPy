@@ -8,36 +8,40 @@ from ontopy import get_ontology
 
 from owlready2 import owl, Inverse
 
+from utilities import setassert
 
 emmo = get_ontology().load()
 
 
 # Test some ThingClass extensions implemented in patch.py
-assert emmo.Atom.get_preferred_label() == "Atom"
+assert str(emmo.Atom.get_preferred_label()) == "Atom"
 
 assert emmo.Atom.get_parents() == {emmo.MolecularEntity}
 
-assert set(emmo.Atom.get_annotations().keys()) == {
-    "prefLabel",
-    "altLabel",
-    "elucidation",
-    "comment",
-}
+setassert(
+    emmo.Atom.get_annotations().keys(),
+    {
+        "prefLabel",
+        "altLabel",
+        "elucidation",
+        "comment",
+    },
+)
 
 
 # Test item access/assignment/deletion for classes
-assert set(emmo.Atom["altLabel"]) == {"ChemicalElement"}
+setassert(emmo.Atom["altLabel"], {"ChemicalElement"})
 
 with pytest.raises(KeyError):
     emmo.Atom["hasPart"]
 
 emmo.Atom["altLabel"] = "Element"
-assert set(emmo.Atom["altLabel"]) == {"ChemicalElement", "Element"}
+setassert(emmo.Atom["altLabel"], {"ChemicalElement", "Element"})
 
 del emmo.Atom["altLabel"]
 assert emmo.Atom["altLabel"] == []
 
-emmo.Atom["altLabel"] = "ChemicalElement"
+emmo.Atom.altLabel = "ChemicalElement"
 assert emmo.Atom["altLabel"] == ["ChemicalElement"]
 
 

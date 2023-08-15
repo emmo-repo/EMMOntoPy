@@ -6,6 +6,10 @@ import pytest
 
 if TYPE_CHECKING:
     from ontopy.ontology import Ontology
+    from typing import Sequence
+import sys, os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "utilities"))
 
 
 @pytest.fixture(scope="session")

@@ -21,6 +21,7 @@ def test_get_by_label_all_onto() -> None:
     using get_by_label_all
     """
     import owlready2
+    from utilities import setassert
 
     testonto = get_ontology("http://domain_ontology/new_ontology")
     testonto.new_entity("Class", owlready2.Thing)
@@ -34,20 +35,26 @@ def test_get_by_label_all_onto() -> None:
 
     testonto.new_entity("Klasse", testonto.Class)
 
-    assert testonto.Klasse.prefLabel == ["Klasse"]
+    setassert(testonto.Klasse.prefLabel, ["Klasse"])
 
     testonto.Klasse.altLabel = "Class2"
-    assert testonto.get_by_label_all("*") == {
-        testonto.prefLabel,
-        testonto.altLabel,
-        testonto.Class,
-        testonto.SpecialAnnotation,
-        testonto.Klasse,
-    }
-    assert testonto.get_by_label_all("Class*") == {
-        testonto.Class,
-        testonto.Klasse,
-    }
+    setassert(
+        testonto.get_by_label_all("*"),
+        {
+            testonto.prefLabel,
+            testonto.altLabel,
+            testonto.Class,
+            testonto.SpecialAnnotation,
+            testonto.Klasse,
+        },
+    )
+    setassert(
+        testonto.get_by_label_all("Class*"),
+        {
+            testonto.Class,
+            testonto.Klasse,
+        },
+    )
 
 
 def test_get_by_label_emmo(emmo: "Ontology") -> None:
@@ -60,7 +67,7 @@ def test_get_by_label_emmo(emmo: "Ontology") -> None:
     onto = get_ontology(
         "https://raw.githubusercontent.com/BIG-MAP/BattINFO/master/battinfo.ttl"
     ).load()
-    assert onto.Electrolyte.prefLabel.first() == "Electrolyte"
+    assert str(onto.Electrolyte.prefLabel.first()) == "Electrolyte"
 
     # Check colon_in_name argument
     onto.Atom.altLabel.append("Element:X")
@@ -85,7 +92,7 @@ assert emmo[emmo.Atom.iri] == emmo.Atom
 onto = get_ontology(
     "https://raw.githubusercontent.com/BIG-MAP/BattINFO/master/battinfo.ttl"
 ).load()
-assert onto.Electrolyte.prefLabel.first() == "Electrolyte"
+assert str(onto.Electrolyte.prefLabel.first()) == "Electrolyte"
 
 
 # Check colon_in_name argument

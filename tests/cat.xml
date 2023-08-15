@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <group id="Folder Repository, directory=, recursive=true, Auto-Update=false, version=2" prefer="public" xml:base="">
+        <uri name="http://emmo.info/testonto/0.1.0" uri="catalogs_for_testing/testonto.ttl"/>
+        <uri name="http://emmo.info/testonto/0.1.0/models" uri="catalogs_for_testing/models.ttl"/>
+    </group>
+</catalog>
