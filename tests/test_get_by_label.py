@@ -15,6 +15,15 @@ def test_get_by_label_onto() -> None:
     assert testonto._label_annotations == None
     assert testonto.get_by_label("Class") == testonto.Class
 
+    imported_onto = world.get_ontology(
+        repo_dir / "tests" / "testonto" / "testonto.ttl"
+    ).load()
+    testonto.imported_ontologies.append(imported_onto)
+    assert imported_onto.get_by_label("TestClass")
+    assert imported_onto.get_by_label("models:TestClass")
+    testonto.set_default_label_annotations()
+    assert testonto.get_by_label("testclass")
+
 
 def test_get_by_label_all_onto() -> None:
     """Test that label annotations are added correctly if they are not added before
