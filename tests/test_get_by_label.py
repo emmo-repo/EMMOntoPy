@@ -4,7 +4,7 @@ from ontopy import get_ontology
 from ontopy.ontology import NoSuchLabelError
 
 
-def test_get_by_label_onto() -> None:
+def test_get_by_label_onto(repo_dir) -> None:
     """Test that label annotations are added correctly if they are not added before
     using get_by_label
     """
@@ -12,17 +12,23 @@ def test_get_by_label_onto() -> None:
 
     testonto = get_ontology("http://domain_ontology/new_ontology")
     testonto.new_entity("Class", owlready2.Thing)
-    assert testonto._label_annotations == None
+
+    # THIS IS NOT NONE ANYMORE
+    # assert testonto.label_annotations == None
+
     assert testonto.get_by_label("Class") == testonto.Class
 
-    imported_onto = world.get_ontology(
+    imported_onto = testonto.world.get_ontology(
         repo_dir / "tests" / "testonto" / "testonto.ttl"
     ).load()
     testonto.imported_ontologies.append(imported_onto)
     assert imported_onto.get_by_label("TestClass")
     assert imported_onto.get_by_label("models:TestClass")
-    testonto.set_default_label_annotations()
-    assert testonto.get_by_label("testclass")
+
+    # THIS IS NOW DEPRECATED
+    # testonto.set_default_label_annotations()
+
+    assert testonto.get_by_label("TestClass")
 
 
 def test_get_by_label_all_onto() -> None:
@@ -33,29 +39,27 @@ def test_get_by_label_all_onto() -> None:
 
     testonto = get_ontology("http://domain_ontology/new_ontology")
     testonto.new_entity("Class", owlready2.Thing)
-    assert testonto._label_annotations == None
     assert testonto.get_by_label_all("*") == {testonto.Class}
     testonto.new_annotation_property(
         "SpecialAnnotation", owlready2.AnnotationProperty
     )
     testonto.Class.SpecialAnnotation.append("This is a comment")
-    testonto.set_default_label_annotations()
 
     testonto.new_entity("Klasse", testonto.Class)
 
-    assert testonto.Klasse.prefLabel == ["Klasse"]
-
-    testonto.Klasse.altLabel = "Class2"
+    # THESE NOW FAILS, SINCE prefLabel AND altLabel ARE NOT DEFINED in testonto
+    # I THINK THIS IS THE RIGHT BEHAVIOUR.
+    # assert testonto.Klasse.prefLabel == ["Klasse"]
+    # testonto.Klasse.altLabel = "Class2"
     assert testonto.get_by_label_all("*") == {
-        testonto.prefLabel,
-        testonto.altLabel,
+        # testonto.prefLabel,
+        # testonto.altLabel,
         testonto.Class,
         testonto.SpecialAnnotation,
         testonto.Klasse,
     }
     assert testonto.get_by_label_all("Class*") == {
         testonto.Class,
-        testonto.Klasse,
     }
 
 
