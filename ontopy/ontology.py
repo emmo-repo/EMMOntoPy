@@ -98,9 +98,10 @@ class World(owlready2.World):
             OntologyClass: If given and `base_iri` doesn't correspond
                 to an existing ontology, a new ontology is created of
                 this Ontology subclass.
-            label_annotations: Sequence of IRIs used for accessing
-                classes in the ontology.  The default correspond to
-                skos:prefLabel, rdfs:label and skos:altLabel.
+            label_annotations: Sequence of label IRIs used for accessing
+                entities in the ontology given that they are in the ontology.
+                Label IRIs not in the ontology will simply be ignored.
+                Detault to DEFAULT_LABEL_ANNOTATIONS module variable.
         """
         base_iri = base_iri.as_uri() if isinstance(base_iri, Path) else base_iri
 
@@ -494,6 +495,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     storids.append(storid)
         return storids
 
+    # REMOVE - NOT CURRENTLY USED...
     def _to_entities(self, sequence, create_if_missing=False):
         """Like _to_storids(), but return a list of entities corresponding
         to the elements in `sequence`.
