@@ -9,13 +9,12 @@ def test_get_by_label_onto(repo_dir) -> None:
     using get_by_label
     """
     import owlready2
+    from ontopy.ontology import DEFAULT_LABEL_ANNOTATIONS
 
     testonto = get_ontology("http://domain_ontology/new_ontology")
     testonto.new_entity("Class", owlready2.Thing)
 
-    # THIS IS NOT NONE ANYMORE
-    # assert testonto.label_annotations == None
-
+    assert testonto.label_annotations == DEFAULT_LABEL_ANNOTATIONS
     assert testonto.get_by_label("Class") == testonto.Class
 
     imported_onto = testonto.world.get_ontology(
@@ -24,9 +23,6 @@ def test_get_by_label_onto(repo_dir) -> None:
     testonto.imported_ontologies.append(imported_onto)
     assert imported_onto.get_by_label("TestClass")
     assert imported_onto.get_by_label("models:TestClass")
-
-    # THIS IS NOW DEPRECATED
-    # testonto.set_default_label_annotations()
 
     assert testonto.get_by_label("TestClass")
 
@@ -47,10 +43,18 @@ def test_get_by_label_all_onto() -> None:
 
     testonto.new_entity("Klasse", testonto.Class)
 
-    # THESE NOW FAILS, SINCE prefLabel AND altLabel ARE NOT DEFINED in testonto
-    # I THINK THIS IS THE RIGHT BEHAVIOUR.
+    with pytest.raises(AttributeError):
+        assert testonto.Klasse.prefLabel == ["Klasse"]
+
+    # Add prefLabel to ontology
+    # preflabel = testonto.new_annotation_property(
+    #    "prefLabel", parent=[owlready2.AnnotationPropertyClass],
+    # )
+    # preflabel.iri = "http://www.w3.org/2004/02/skos/core#prefLabel"
+    # assert testonto.prefLabel.prefLabel == ["prefLabel"]
+    #
     # assert testonto.Klasse.prefLabel == ["Klasse"]
-    # testonto.Klasse.altLabel = "Class2"
+
     assert testonto.get_by_label_all("*") == {
         # testonto.prefLabel,
         # testonto.altLabel,

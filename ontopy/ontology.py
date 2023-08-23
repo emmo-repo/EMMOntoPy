@@ -97,7 +97,7 @@ class World(owlready2.World):
                   emmo-inferred and emmo-development will be the same.
             OntologyClass: If given and `base_iri` doesn't correspond
                 to an existing ontology, a new ontology is created of
-                this Ontology subclass.
+                this Ontology subclass.  Defaults to `ontopy.Ontology`.
             label_annotations: Sequence of label IRIs used for accessing
                 entities in the ontology given that they are in the ontology.
                 Label IRIs not in the ontology will simply be ignored.
@@ -305,7 +305,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     ):
         """Returns entity with label annotation `label`.
 
-        Args:
+        Arguments:
            label: label so serach for.
                May be written as 'label' or 'prefix:label'.
                get_by_label('prefix:label') ==
@@ -408,17 +408,34 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         raise NoSuchLabelError(f"No label annotations matches '{label}'")
 
-    def get_by_label_all(self, label, label_annotations=None, prefix=None):
+    def get_by_label_all(
+        self,
+        label,
+        label_annotations=None,
+        prefix=None,
+        exact_match=False,
+    ):
         """Like get_by_label(), but returns a list with all matching labels.
 
-        Returns an empty list if no matches could be found.
+        Arguments:
+           label: label so serach for.
+               May be written as 'label' or 'prefix:label'.  Wildcard matching
+               using glob pattern is also supported if `exact_match` is set to
+               false.
+           label_annotations: a sequence of label annotation names to look up.
+               Defaults to the `label_annotations` property.
+           prefix: if provided, it should be the last component of
+               the base iri of an ontology (with trailing slash (/) or hash
+               (#) stripped off).  The search for a matching label will be
+               limited to this namespace.
+           exact_match: Do not treat "*" and brackets as special characters
+               when matching.  May be useful if your ontology has labels
+               containing such labels.
 
-        Note
-        ----
-        The current implementation also supports "*" as a wildcard
-        matching any number of characters. This may change in the future.
+        Returns:
+            List of all matching entities or an empty list if no matches
+            could be found.
         """
-
         if not isinstance(label, str):
             raise TypeError(
                 f"Invalid label definition, " f"must be a string: {label!r}"
@@ -432,24 +449,23 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             label_annotations = self.label_annotations
 
         entities = set()
-        for storid in self._to_storids(label_annotations):
-            label_entity = self._unabbreviate(storid)
-            key = (
-                label_entity.name
-                if hasattr(label_entity, "name")
-                else label_entity
-            )
-            entities.update(self.world.search(**{key: label}))
-
-        # ALTERNATIVE IMPLEMENTATION THAT DOESN'T INVOLVE search().
-        # IT IS FASTER AND MIGHT AVOID SURPRICES.  SHOULD WE ADD AN
-        # OPTION TO CHOOSE BETWEEN SEARCH() AND THIS IMPLEMENTATION?
-        # entities = set()
-        # for storid in self._to_storids(label_annotations):
-        #    entities.update(
-        #        self.world[self._unabbreviate(s)]
-        #        for s, _, _, _ in get_triples(None, storid, label, None)
-        #    )
+        if not exact_match:
+            for storid in self._to_storids(label_annotations):
+                label_entity = self._unabbreviate(storid)
+                key = (
+                    label_entity.name
+                    if hasattr(label_entity, "name")
+                    else label_entity
+                )
+                entities.update(self.world.search(**{key: label}))
+        else:
+            for storid in self._to_storids(label_annotations):
+                entities.update(
+                    self.world._get_by_storid(s)
+                    for s, _, _ in self.world._get_data_triples_spod_spod(
+                        None, storid, str(label), None
+                    )
+                )
 
         if self._special_labels and label in self._special_labels:
             entities.update(self._special_labels[label])
@@ -494,21 +510,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 if storid:
                     storids.append(storid)
         return storids
-
-    # REMOVE - NOT CURRENTLY USED...
-    def _to_entities(self, sequence, create_if_missing=False):
-        """Like _to_storids(), but return a list of entities corresponding
-        to the elements in `sequence`.
-        """
-        entities = []
-        for storid in self._to_storids(sequence, create_if_missing):
-            entity = self.world._get_by_storid(
-                storid,
-                # full_iri=self.world._unabbreviate(storid),
-            )
-            if entity:
-                entities.append(entity)
-        return entities
 
     def add_label_annotation(self, iri):
         """Adds label annotation used by get_by_label()."""
@@ -572,8 +573,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     ):
         """Load the ontology.
 
-        Parameters
-        ----------
+        Arguments
+        ---------
         only_local: bool
             Whether to only read local files.  This requires that you
             have appended the path to the ontology to owlready2.onto_path.
@@ -1194,7 +1195,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             sync = owlready2.sync_reasoner_hermit
         else:
             raise ValueError(
-                f"unknown reasoner {reasoner!r}. Supported reasoners "
+                f"unknown reasoner '{reasoner}'. Supported reasoners "
                 'are "Pellet", "HermiT" and "FaCT++".'
             )
 
@@ -1735,6 +1736,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 AnnotationPropertyClass,
             ]
         ] = "class",
+        preflabel: Optional[str] = None,
     ) -> Union[
         ThingClass,
         ObjectPropertyClass,
@@ -1753,6 +1755,11 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 'annotation_property' (strings) or the
                 Python classes ObjectPropertyClass,
                 DataPropertyClass and AnnotationProperty classes.
+            preflabel: if given, add this as a skos:prefLabel annotation
+                to the new entity.  If None (default), `name` will
+                be added as prefLabel if skos:prefLabel is in the ontology
+                and listed in `self.label_annotations`.  Set `preflabel` to
+                False, to avoid assigning a prefLabel.
 
         Returns:
             the new entity.
@@ -1762,6 +1769,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         By default, the parent is Thing.
 
         """
+        # pylint: disable=invalid-name
         if " " in name:
             raise LabelDefinitionError(
                 f"Error in label name definition '{name}': "
@@ -1799,11 +1807,19 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         with self:
             entity = types.new_class(name, parents)
 
-            # AREN'T WE LITTLE TOO SMART HERE?
-            # Set prefLabel to name if label_annotations is set
-            # and prefLabel is one of the annotations
-            preflabel = "http://www.w3.org/2004/02/skos/core#prefLabel"
-            if preflabel in self.label_annotations and self.world[preflabel]:
+            preflabel_iri = "http://www.w3.org/2004/02/skos/core#prefLabel"
+            if preflabel:
+                if not self.world[preflabel_iri]:
+                    prefLabel = types.new_class(
+                        "prefLabel", [owlready2.AnnotationProperty]
+                    )
+                    prefLabel.iri = preflabel_iri
+                entity.prefLabel = english(preflabel)
+            elif (
+                preflabel is None
+                and preflabel_iri in self.label_annotations
+                and self.world[preflabel_iri]
+            ):
                 entity.prefLabel = english(name)
 
         return entity
