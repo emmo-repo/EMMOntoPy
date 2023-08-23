@@ -14,7 +14,10 @@ def test_get_by_label_onto(repo_dir) -> None:
     world = ontopy.World()
     testonto = world.get_ontology("http://domain_ontology/new_ontology")
     testonto.new_entity("Class", owlready2.Thing)
-    assert testonto._label_annotations == None
+
+    # THIS IS NOT NONE ANYMORE
+    # assert testonto._label_annotations == None
+
     assert testonto.get_by_label("Class") == testonto.Class
 
     imported_onto = world.get_ontology(

@@ -4,25 +4,27 @@ from ontopy import get_ontology
 from ontopy.ontology import NoSuchLabelError
 
 
-def test_get_by_label_onto() -> None:
+def test_get_by_label_onto(repo_dir) -> None:
     """Test that label annotations are added correctly if they are not added before
     using get_by_label
     """
     import owlready2
+    from ontopy.ontology import DEFAULT_LABEL_ANNOTATIONS
 
     testonto = get_ontology("http://domain_ontology/new_ontology")
     testonto.new_entity("Class", owlready2.Thing)
-    assert testonto._label_annotations == None
+
+    assert testonto.label_annotations == DEFAULT_LABEL_ANNOTATIONS
     assert testonto.get_by_label("Class") == testonto.Class
 
-    imported_onto = world.get_ontology(
+    imported_onto = testonto.world.get_ontology(
         repo_dir / "tests" / "testonto" / "testonto.ttl"
     ).load()
     testonto.imported_ontologies.append(imported_onto)
     assert imported_onto.get_by_label("TestClass")
     assert imported_onto.get_by_label("models:TestClass")
-    testonto.set_default_label_annotations()
-    assert testonto.get_by_label("testclass")
+
+    assert testonto.get_by_label("TestClass")
 
 
 def test_get_by_label_all_onto() -> None:
@@ -33,29 +35,35 @@ def test_get_by_label_all_onto() -> None:
 
     testonto = get_ontology("http://domain_ontology/new_ontology")
     testonto.new_entity("Class", owlready2.Thing)
-    assert testonto._label_annotations == None
     assert testonto.get_by_label_all("*") == {testonto.Class}
     testonto.new_annotation_property(
         "SpecialAnnotation", owlready2.AnnotationProperty
     )
     testonto.Class.SpecialAnnotation.append("This is a comment")
-    testonto.set_default_label_annotations()
 
     testonto.new_entity("Klasse", testonto.Class)
 
-    assert testonto.Klasse.prefLabel == ["Klasse"]
+    with pytest.raises(AttributeError):
+        assert testonto.Klasse.prefLabel == ["Klasse"]
 
-    testonto.Klasse.altLabel = "Class2"
+    # Add prefLabel to ontology
+    # preflabel = testonto.new_annotation_property(
+    #    "prefLabel", parent=[owlready2.AnnotationPropertyClass],
+    # )
+    # preflabel.iri = "http://www.w3.org/2004/02/skos/core#prefLabel"
+    # assert testonto.prefLabel.prefLabel == ["prefLabel"]
+    #
+    # assert testonto.Klasse.prefLabel == ["Klasse"]
+
     assert testonto.get_by_label_all("*") == {
-        testonto.prefLabel,
-        testonto.altLabel,
+        # testonto.prefLabel,
+        # testonto.altLabel,
         testonto.Class,
         testonto.SpecialAnnotation,
         testonto.Klasse,
     }
     assert testonto.get_by_label_all("Class*") == {
         testonto.Class,
-        testonto.Klasse,
     }
 
 
