@@ -414,8 +414,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         label_annotations=None,
         prefix=None,
         exact_match=False,
-    ):
-        """Returns list of entities with label annotation `label`.
+    ) -> "Set[Optional[owlready2.entity.EntityClass]]":
+        """Returns set of entities with label annotation `label`.
 
         Arguments:
            label: label so search for.
@@ -433,7 +433,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                containing such labels.
 
         Returns:
-            List of all matching entities or an empty list if no matches
+            Set of all matching entities or an empty set if no matches
             could be found.
         """
         if not isinstance(label, str):
