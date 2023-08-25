@@ -415,7 +415,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         prefix=None,
         exact_match=False,
     ):
-        """Like get_by_label(), but returns a list with all matching labels.
+        """Returns list of entities with label annotation `label`.
 
         Arguments:
            label: label so search for.
