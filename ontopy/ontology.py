@@ -418,7 +418,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """Like get_by_label(), but returns a list with all matching labels.
 
         Arguments:
-           label: label so serach for.
+           label: label so search for.
                May be written as 'label' or 'prefix:label'.  Wildcard matching
                using glob pattern is also supported if `exact_match` is set to
                false.
