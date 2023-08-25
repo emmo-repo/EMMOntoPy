@@ -11,14 +11,14 @@ def test_get_by_label_onto(repo_dir) -> None:
     import owlready2
     from ontopy.ontology import DEFAULT_LABEL_ANNOTATIONS
 
-    # create ontology with one class and check that it is found 
+    # create ontology with one class and check that it is found
     testonto = get_ontology("http://domain_ontology/new_ontology")
     testonto.new_entity("Class", owlready2.Thing)
 
     assert testonto.label_annotations == DEFAULT_LABEL_ANNOTATIONS
     assert testonto.get_by_label("Class") == testonto.Class
     assert testonto.get_by_label_all("*") == {testonto.Class}
-    
+
     testonto.new_annotation_property(
         "SpecialAnnotation", owlready2.AnnotationProperty
     )
@@ -37,7 +37,8 @@ def test_get_by_label_onto(repo_dir) -> None:
 
     # Add prefLabel to ontology
     preflabel = testonto.new_annotation_property(
-       "prefLabel", parent=[owlready2.AnnotationProperty],
+        "prefLabel",
+        parent=[owlready2.AnnotationProperty],
     )
     preflabel.iri = "http://www.w3.org/2004/02/skos/core#prefLabel"
 
@@ -46,24 +47,23 @@ def test_get_by_label_onto(repo_dir) -> None:
         assert testonto.prefLabel.prefLabel == ["prefLabel"]
     testonto.prefLabel.prefLabel = "prefLabel"
     assert testonto.prefLabel.prefLabel == ["prefLabel"]
- 
+
     with pytest.raises(AssertionError):
         assert testonto.Klasse.prefLabel == ["Klasse"]
 
     testonto.new_entity("UnderKlasse", testonto.Klasse)
-    assert testonto.UnderKlasse.prefLabel == ["UnderKlasse"]    
+    assert testonto.UnderKlasse.prefLabel == ["UnderKlasse"]
 
     assert testonto.get_by_label_all("*") == {
         testonto.prefLabel,
         testonto.Class,
         testonto.SpecialAnnotation,
         testonto.Klasse,
-        testonto.UnderKlasse
+        testonto.UnderKlasse,
     }
     assert testonto.get_by_label_all("Class*") == {
         testonto.Class,
     }
-    
 
     # Check that imported ontologies are searched
     imported_onto = testonto.world.get_ontology(
@@ -74,6 +74,9 @@ def test_get_by_label_onto(repo_dir) -> None:
     assert imported_onto.get_by_label("models:TestClass")
 
     assert testonto.get_by_label("TestClass")
+
+    assert testonto.get_by_label_all("Clas*", exact_match=True) == {}
+
 
 def test_get_by_label_emmo(emmo: "Ontology") -> None:
     # Loading emmo-inferred where everything is sqashed into one ontology
@@ -93,4 +96,3 @@ def test_get_by_label_emmo(emmo: "Ontology") -> None:
         onto.get_by_label("Element:X")
 
     assert onto.get_by_label("Element:X", colon_in_label=True) == onto.Atom
-
