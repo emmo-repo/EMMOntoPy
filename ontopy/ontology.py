@@ -306,7 +306,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """Returns entity with label annotation `label`.
 
         Arguments:
-           label: label so serach for.
+           label: label so search for.
                May be written as 'label' or 'prefix:label'.
                get_by_label('prefix:label') ==
                get_by_label('label', prefix='prefix').
