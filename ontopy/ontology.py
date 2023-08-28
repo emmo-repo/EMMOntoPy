@@ -449,7 +449,17 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             label_annotations = self.label_annotations
 
         entities = set()
-        if not exact_match:
+
+        # Check label annotations
+        if exact_match:
+            for storid in self._to_storids(label_annotations):
+                entities.update(
+                    self.world._get_by_storid(s)
+                    for s, _, _ in self.world._get_data_triples_spod_spod(
+                        None, storid, str(label), None
+                    )
+                )
+        else:
             for storid in self._to_storids(label_annotations):
                 label_entity = self._unabbreviate(storid)
                 key = (
@@ -458,26 +468,22 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     else label_entity
                 )
                 entities.update(self.world.search(**{key: label}))
-        else:
-            for storid in self._to_storids(label_annotations):
-                entities.update(
-                    self.world._get_by_storid(s)
-                    for s, _, _ in self.world._get_data_triples_spod_spod(
-                        None, storid, str(label), None
-                    )
-                )
 
         if self._special_labels and label in self._special_labels:
             entities.update(self._special_labels[label])
 
-        # Find existence in get_entities
-        matches = fnmatch.filter(
-            (ent.name for ent in self.get_entities()), label
-        )
-
-        entities.update(
-            ent for ent in self.get_entities() if ent.name in matches
-        )
+        # Check name-part of IRI
+        if exact_match:
+            entities.update(
+                ent for ent in self.get_entities() if ent.name == str(label)
+            )
+        else:
+            matches = fnmatch.filter(
+                (ent.name for ent in self.get_entities()), label
+            )
+            entities.update(
+                ent for ent in self.get_entities() if ent.name in matches
+            )
 
         if prefix:
             return set(

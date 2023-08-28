@@ -75,7 +75,12 @@ def test_get_by_label_onto(repo_dir) -> None:
 
     assert testonto.get_by_label("TestClass")
 
-    assert testonto.get_by_label_all("Clas*", exact_match=True) == {}
+    # Check exact_match=True in get_by_label_all()
+    assert testonto.get_by_label_all("*", exact_match=True) == set()
+    assert testonto.get_by_label_all("Clas*", exact_match=True) == set()
+    assert testonto.get_by_label_all("Class", exact_match=True) == {
+        testonto.Class,
+    }
 
 
 def test_get_by_label_emmo(emmo: "Ontology") -> None:
