@@ -33,6 +33,14 @@ def test_new_entity(testonto: "Ontology") -> None:
     testonto.new_entity(
         "AnotherClass", testonto.TestClass, entitytype=ThingClass
     )
+
+    testonto.new_entity(
+        "YetAnotherClass",
+        testonto.TestClass,
+        entitytype=ThingClass,
+        preflabel="YetAnotherClass",
+    )
+
     testonto.new_entity(
         "hasSubObjectProperty",
         testonto.hasObjectProperty,
@@ -99,4 +107,15 @@ def test_new_entity(testonto: "Ontology") -> None:
     testonto.new_data_property("hasSubDataProperty3", testonto.hasDataProperty)
     testonto.new_annotation_property(
         "hasSubAnnotationProperty3", testonto.hasAnnotationProperty
+    )
+
+    from ontopy import get_ontology
+    from ontopy.ontology import DEFAULT_LABEL_ANNOTATIONS
+
+    testonto2 = get_ontology("http://domain_ontology/new_ontology")
+    testonto2.new_entity(
+        "NewClass",
+        testonto.TestClass,
+        entitytype=ThingClass,
+        preflabel="NewClass",
     )

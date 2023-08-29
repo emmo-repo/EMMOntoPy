@@ -82,6 +82,23 @@ def test_get_by_label_onto(repo_dir) -> None:
         testonto.Class,
     }
 
+    # Test with label annotations given directly when creating the ontology
+    testonto2 = get_ontology(
+        "http://domain_ontology/new_ontology",
+        label_annotations=[
+            "http://www.w3.org/2004/02/skos/core#prefLabel",
+            "http://www.w3.org/2004/02/skos/core#altLabel",
+        ],
+    )
+
+    testonto2.new_annotation_property(
+        "prefLabel",
+        parent=[owlready2.AnnotationProperty],
+    )
+    testonto2.new_entity("Class", owlready2.Thing, preflabel="Klasse")
+
+    assert testonto2.get_by_label("Klasse") == testonto2.Class
+
 
 def test_get_by_label_emmo(emmo: "Ontology") -> None:
     # Loading emmo-inferred where everything is sqashed into one ontology

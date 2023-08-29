@@ -100,8 +100,9 @@ class World(owlready2.World):
                 this Ontology subclass.  Defaults to `ontopy.Ontology`.
             label_annotations: Sequence of label IRIs used for accessing
                 entities in the ontology given that they are in the ontology.
-                Label IRIs not in the ontology will simply be ignored.
-                Detault to DEFAULT_LABEL_ANNOTATIONS module variable.
+                Label IRIs not in the ontology will need to be added to
+                ontologies in order to be accessible.
+                Default is None.
         """
         base_iri = base_iri.as_uri() if isinstance(base_iri, Path) else base_iri
 
@@ -533,7 +534,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def remove_label_annotation(self, iri):
         """Removes label annotation used by get_by_label()."""
         warnings.warn(
-            "Ontology.add_label_annotations() is deprecated. "
+            "Ontology.remove_label_annotations() is deprecated. "
             "Direct modify the `label_annotations` attribute instead.",
             DeprecationWarning,
             stacklevel=2,
