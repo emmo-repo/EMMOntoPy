@@ -1783,7 +1783,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 f"Label consists of more than one word."
             )
         parents = tuple(parent) if isinstance(parent, Iterable) else (parent,)
-
         if entitytype == "class":
             parenttype = owlready2.ThingClass
         elif entitytype == "data_property":
@@ -1817,10 +1816,11 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             preflabel_iri = "http://www.w3.org/2004/02/skos/core#prefLabel"
             if preflabel:
                 if not self.world[preflabel_iri]:
-                    prefLabel = types.new_class(
-                        "prefLabel", [owlready2.AnnotationProperty]
+                    pref_label = self.new_annotation_property(
+                        "prefLabel",
+                        parent=[owlready2.AnnotationProperty],
                     )
-                    prefLabel.iri = preflabel_iri
+                    pref_label.iri = preflabel_iri
                 entity.prefLabel = english(preflabel)
             elif (
                 preflabel is None

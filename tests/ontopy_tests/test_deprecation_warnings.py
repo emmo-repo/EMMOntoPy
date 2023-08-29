@@ -1,8 +1,5 @@
 from typing import TYPE_CHECKING
 import pytest
-from owlready2.entity import ThingClass
-from owlready2.prop import ObjectPropertyClass, DataPropertyClass
-from owlready2 import AnnotationPropertyClass
 
 if TYPE_CHECKING:
     from pathlib import Path

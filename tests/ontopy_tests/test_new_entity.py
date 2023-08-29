@@ -1,13 +1,5 @@
 from typing import TYPE_CHECKING
 import pytest
-from ontopy.utils import (
-    NoSuchLabelError,
-    LabelDefinitionError,
-    EntityClassDefinitionError,
-)
-from owlready2.entity import ThingClass
-from owlready2.prop import ObjectPropertyClass, DataPropertyClass
-from owlready2 import AnnotationPropertyClass
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -15,6 +7,14 @@ if TYPE_CHECKING:
 
 def test_new_entity(testonto: "Ontology") -> None:
     """Test adding entities to ontology"""
+    from ontopy.utils import (
+        NoSuchLabelError,
+        LabelDefinitionError,
+        EntityClassDefinitionError,
+    )
+    from owlready2.entity import ThingClass
+    from owlready2.prop import ObjectPropertyClass, DataPropertyClass
+    from owlready2 import AnnotationPropertyClass
 
     # Add entity directly
     testonto.new_entity("FantasyClass", testonto.TestClass)
@@ -109,13 +109,17 @@ def test_new_entity(testonto: "Ontology") -> None:
         "hasSubAnnotationProperty3", testonto.hasAnnotationProperty
     )
 
+
+def test_new_entity_w_preflabel() -> None:
+    """Test adding entities to ontology"""
     from ontopy import get_ontology
-    from ontopy.ontology import DEFAULT_LABEL_ANNOTATIONS
+    import owlready2
 
     testonto2 = get_ontology("http://domain_ontology/new_ontology")
     testonto2.new_entity(
         "NewClass",
-        testonto.TestClass,
-        entitytype=ThingClass,
+        owlready2.Thing,
         preflabel="NewClass",
     )
+
+    # assert testonto2.NewClass.preflabel == "NewClass"
