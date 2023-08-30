@@ -102,7 +102,7 @@ class World(owlready2.World):
                 entities in the ontology given that they are in the ontology.
                 Label IRIs not in the ontology will need to be added to
                 ontologies in order to be accessible.
-                Default is None.
+                Defaults to DEFAULT_LABEL_ANNOTATIONS if set to None.
         """
         base_iri = base_iri.as_uri() if isinstance(base_iri, Path) else base_iri
 
