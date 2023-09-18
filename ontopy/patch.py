@@ -124,6 +124,7 @@ def get_annotations(
     ontologies.
     """
     onto = self.namespace.ontology
+
     annotations = {
         get_preferred_label(_): _._get_values_for_class(self)
         for _ in onto.annotation_properties(imported=imported)
