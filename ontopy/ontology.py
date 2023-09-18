@@ -218,13 +218,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         lst = list(self.get_entities(imported=self._dir_imported))
         if self._dir_preflabel:
             dirset.update(
-                dir.prefLabel.first()
+                str(dir.prefLabel.first())
                 for dir in lst
                 if hasattr(dir, "prefLabel")
             )
         if self._dir_label:
             dirset.update(
-                dir.label.first() for dir in lst if hasattr(dir, "label")
+                str(dir.label.first()) for dir in lst if hasattr(dir, "label")
             )
         if self._dir_name:
             dirset.update(dir.name for dir in lst if hasattr(dir, "name"))
@@ -1062,51 +1062,87 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def classes(self, imported=False):
         """Returns an generator over all classes.
 
-        If `imported` is `True`, will imported classes are also returned.
+        If `imported` is `True`, classes in imported ontologies
+        are also returned.
         """
+        return self._entities("classes", imported=imported)
+
+    def _entities(
+        self, entity_type, imported=False
+    ):  # pylint: disable=too-many-branches
+        """Returns an generator over all entities of the desired type.
+
+        If `imported` is `True`, enities in imported ontologies
+        are also returned.
+        This is a helper function for 'classes', 'individuals',
+        'object_properties', 'data_properties' and 'annotation_properties'.
+        """
+        generator = []
         if imported:
-            return self.world.classes()
-        return super().classes()
+            ontologies = self.get_imported_ontologies(recursive=True)
+            ontologies.append(self)
+            for onto in ontologies:
+                if entity_type == "classes":
+                    for cls in list(onto.classes()):
+                        generator.append(cls)
+                elif entity_type == "individuals":
+                    for ind in list(onto.individuals()):
+                        generator.append(ind)
+                elif entity_type == "object_properties":
+                    for prop in list(onto.object_properties()):
+                        generator.append(prop)
+                elif entity_type == "data_properties":
+                    for prop in list(onto.data_properties()):
+                        generator.append(prop)
+                elif entity_type == "annotation_properties":
+                    for prop in list(onto.annotation_properties()):
+                        generator.append(prop)
+        else:
+            if entity_type == "classes":
+                generator = super().classes()
+            elif entity_type == "individuals":
+                generator = super().individuals()
+            elif entity_type == "object_properties":
+                generator = super().object_properties()
+            elif entity_type == "data_properties":
+                generator = super().data_properties()
+            elif entity_type == "annotation_properties":
+                generator = super().annotation_properties()
+
+        for entity in generator:
+            yield entity
 
     def individuals(self, imported=False):
         """Returns an generator over all individuals.
 
-        If `imported` is `True`, will imported individuals are also returned.
+        If `imported` is `True`, individuals in imported ontologies
+        are also returned.
         """
-        if imported:
-            return self.world.individuals()
-        return super().individuals()
+        return self._entities("individuals", imported=imported)
 
     def object_properties(self, imported=False):
-        """Returns an generator over all object properties.
+        """Returns an generator over all object_properties.
 
-        If `imported` is true, will imported object properties are also
-        returned.
+        If `imported` is `True`, object properties in imported ontologies
+        are also returned.
         """
-        if imported:
-            return self.world.object_properties()
-        return super().object_properties()
+        return self._entities("object_properties", imported=imported)
 
     def data_properties(self, imported=False):
-        """Returns an generator over all data properties.
+        """Returns an generator over all data_properties.
 
-        If `imported` is true, will imported data properties are also
-        returned.
+        If `imported` is `True`, data properties in imported ontologies
+        are also returned.
         """
-        if imported:
-            return self.world.data_properties()
-        return super().data_properties()
+        return self._entities("data_properties", imported=imported)
 
     def annotation_properties(self, imported=False):
-        """Returns a generator iterating over all annotation properties
-        defined in the current ontology.
+        """Returns an generator over all annotation_properties.
 
-        If `imported` is true, annotation properties in imported ontologies
-        will also be included.
+        If `imported` is `True`, annotation properties in imported ontologies
+        are also returned.
         """
-        if imported:
-            return self.world.annotation_properties()
-        return super().annotation_properties()
+        return self._entities("annotation_properties", imported=imported)
 
     def get_root_classes(self, imported=False):
         """Returns a list or root classes."""
