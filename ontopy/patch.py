@@ -77,7 +77,11 @@ def _dir(self):
 def _getitem(self, name):
     """Provide item access to annotation properties."""
     prop = self.namespace.ontology.get_by_label(name)
+    # print(prop)
+    # print(type(prop))
+    # print(isinstance(prop, AnnotationPropertyClass))
     if isinstance(prop, AnnotationPropertyClass):
+        # print('name',name)
         return getattr(self, name)
     raise KeyError(f"no such annotation property: {name}")
 
@@ -97,8 +101,9 @@ def _setitem(self, name, value):
     [locstr('ChemicalElement', 'en')]
     >>> emmo.Atom['altLabel'] = 'Element'
     >>> emmo.Atom['altLabel'] = locstr('Atomo', 'it')
-    >>> emmo.Atom['altLabel']
+    >>> emmo.Atom.altLabel
     [locstr('ChemicalElement', 'en'), 'Element', locstr('Atomo', 'it')]
+    >>> emmo.Atom['wikipediaReference'] = 'https://en.wikipedia.org/wiki/Atom'
     """
     item = _getitem(self, name)
     item.append(value)

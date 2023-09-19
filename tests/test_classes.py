@@ -48,6 +48,8 @@ def test_classes(repo_dir) -> None:
         testonto.altLabel,
         testonto.hasAnnotationProperty,
     }
+    print(dir(testonto.Class))
+    testonto.Class.hasAnnotationProperty = "blabla"
     assert set(testonto.annotation_properties(imported=False)) == set()
 
     assert set(testonto.data_properties(imported=True)) == {

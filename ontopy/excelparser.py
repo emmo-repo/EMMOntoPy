@@ -812,6 +812,10 @@ def _add_entities(
                 ):
                     for annotation in row["Other annotations"].split(";"):
                         key, value = annotation.split("=")
+                        print(english(value.strip(" ")))
+                        print(key.strip(" "))
+                        print(entity)
+                        print(list(onto.annotation_properties(imported=True)))
                         entity[key.strip(" ")] = english(value.strip(" "))
 
             remaining_rows.difference_update(added_rows)
