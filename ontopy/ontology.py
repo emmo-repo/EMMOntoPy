@@ -1062,8 +1062,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def classes(self, imported=False):
         """Returns an generator over all classes.
 
-        If `imported` is `True`, classes in imported ontologies
-        are also returned.
+        Arguments:
+            imported: if `True`, entities in imported ontologies
+                are also returned.
         """
         return self._entities("classes", imported=imported)
 
@@ -1071,12 +1072,19 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         self, entity_type, imported=False
     ):  # pylint: disable=too-many-branches
         """Returns an generator over all entities of the desired type.
+        This is a helper function for `classes()`, `individuals()`,
+        `object_properties()`, `data_properties()` and
+        `annotation_properties()`.
 
-        If `imported` is `True`, enities in imported ontologies
-        are also returned.
-        This is a helper function for `classes()`, `individuals()`, `object_properties()`, `data_properties()` and `annotation_properties()`.
-        'object_properties', 'data_properties' and 'annotation_properties'.
+        Arguments:
+            entity_type: The type of entity desired given as a string.
+                Can be any of `classes`, `individuals`,
+                `object_properties`, `data_properties` and
+                `annotation_properties`.
+            imported: if `True`, entities in imported ontologies
+                are also returned.
         """
+
         generator = []
         if imported:
             ontologies = self.get_imported_ontologies(recursive=True)
@@ -1115,32 +1123,37 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def individuals(self, imported=False):
         """Returns an generator over all individuals.
 
-        If `imported` is `True`, individuals in imported ontologies
-        are also returned.
+        Arguments:
+            imported: if `True`, entities in imported ontologies
+                are also returned.
         """
         return self._entities("individuals", imported=imported)
 
     def object_properties(self, imported=False):
         """Returns an generator over all object_properties.
 
-        If `imported` is `True`, object properties in imported ontologies
-        are also returned.
+        Arguments:
+            imported: if `True`, entities in imported ontologies
+                are also returned.
         """
         return self._entities("object_properties", imported=imported)
 
     def data_properties(self, imported=False):
         """Returns an generator over all data_properties.
 
-        If `imported` is `True`, data properties in imported ontologies
-        are also returned.
+        Arguments:
+            imported: if `True`, entities in imported ontologies
+                are also returned.
         """
         return self._entities("data_properties", imported=imported)
 
     def annotation_properties(self, imported=False):
         """Returns an generator over all annotation_properties.
 
-        If `imported` is `True`, annotation properties in imported ontologies
-        are also returned.
+        Arguments:
+            imported: if `True`, entities in imported ontologies
+                are also returned.
+
         """
         return self._entities("annotation_properties", imported=imported)
 
@@ -1239,7 +1252,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         else:
             raise ValueError(
                 f"unknown reasoner '{reasoner}'. Supported reasoners "
-                'are "Pellet", "HermiT" and "FaCT++".'
+                "are 'Pellet', 'HermiT' and 'FaCT++'."
             )
 
         # For some reason we must visit all entities once before running
