@@ -1074,7 +1074,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         If `imported` is `True`, enities in imported ontologies
         are also returned.
-        This is a helper function for 'classes', 'individuals',
+        This is a helper function for `classes()`, `individuals()`, `object_properties()`, `data_properties()` and `annotation_properties()`.
         'object_properties', 'data_properties' and 'annotation_properties'.
         """
         generator = []
