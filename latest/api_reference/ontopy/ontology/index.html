@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.5">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.2.7">
     
     
       
@@ -28,7 +28,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.0e669242.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.046329b4.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.85d0ee34.min.css">
@@ -2334,13 +2334,13 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="n">lst</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_entities</span><span class="p">(</span><span class="n">imported</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dir_imported</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dir_preflabel</span><span class="p">:</span>
             <span class="n">dirset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                <span class="nb">dir</span><span class="o">.</span><span class="n">prefLabel</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+                <span class="nb">str</span><span class="p">(</span><span class="nb">dir</span><span class="o">.</span><span class="n">prefLabel</span><span class="o">.</span><span class="n">first</span><span class="p">())</span>
                 <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">lst</span>
                 <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dir_label</span><span class="p">:</span>
             <span class="n">dirset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                <span class="nb">dir</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">)</span>
+                <span class="nb">str</span><span class="p">(</span><span class="nb">dir</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">first</span><span class="p">())</span> <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dir_name</span><span class="p">:</span>
             <span class="n">dirset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dir</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">))</span>
@@ -3178,51 +3178,100 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
     <span class="k">def</span> <span class="nf">classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an generator over all classes.</span>
 
-<span class="sd">        If `imported` is `True`, will imported classes are also returned.</span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            imported: if `True`, entities in imported ontologies</span>
+<span class="sd">                are also returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;classes&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_entities</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">entity_type</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>  <span class="c1"># pylint: disable=too-many-branches</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an generator over all entities of the desired type.</span>
+<span class="sd">        This is a helper function for `classes()`, `individuals()`,</span>
+<span class="sd">        `object_properties()`, `data_properties()` and</span>
+<span class="sd">        `annotation_properties()`.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            entity_type: The type of entity desired given as a string.</span>
+<span class="sd">                Can be any of `classes`, `individuals`,</span>
+<span class="sd">                `object_properties`, `data_properties` and</span>
+<span class="sd">                `annotation_properties`.</span>
+<span class="sd">            imported: if `True`, entities in imported ontologies</span>
+<span class="sd">                are also returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">generator</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">imported</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">classes</span><span class="p">()</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">classes</span><span class="p">()</span>
+            <span class="n">ontologies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_imported_ontologies</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">ontologies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">onto</span> <span class="ow">in</span> <span class="n">ontologies</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;classes&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">()):</span>
+                        <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;individuals&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">onto</span><span class="o">.</span><span class="n">individuals</span><span class="p">()):</span>
+                        <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;object_properties&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">()):</span>
+                        <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;data_properties&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">onto</span><span class="o">.</span><span class="n">data_properties</span><span class="p">()):</span>
+                        <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;annotation_properties&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">onto</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">()):</span>
+                        <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;classes&quot;</span><span class="p">:</span>
+                <span class="n">generator</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">classes</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;individuals&quot;</span><span class="p">:</span>
+                <span class="n">generator</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">individuals</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;object_properties&quot;</span><span class="p">:</span>
+                <span class="n">generator</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">object_properties</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;data_properties&quot;</span><span class="p">:</span>
+                <span class="n">generator</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">data_properties</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;annotation_properties&quot;</span><span class="p">:</span>
+                <span class="n">generator</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">generator</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">entity</span>
 
     <span class="k">def</span> <span class="nf">individuals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an generator over all individuals.</span>
 
-<span class="sd">        If `imported` is `True`, will imported individuals are also returned.</span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            imported: if `True`, entities in imported ontologies</span>
+<span class="sd">                are also returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">imported</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">individuals</span><span class="p">()</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">individuals</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;individuals&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">object_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an generator over all object properties.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an generator over all object_properties.</span>
 
-<span class="sd">        If `imported` is true, will imported object properties are also</span>
-<span class="sd">        returned.</span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            imported: if `True`, entities in imported ontologies</span>
+<span class="sd">                are also returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">imported</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">object_properties</span><span class="p">()</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">object_properties</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;object_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">data_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an generator over all data properties.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an generator over all data_properties.</span>
 
-<span class="sd">        If `imported` is true, will imported data properties are also</span>
-<span class="sd">        returned.</span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            imported: if `True`, entities in imported ontologies</span>
+<span class="sd">                are also returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">imported</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">data_properties</span><span class="p">()</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">data_properties</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;data_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">annotation_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a generator iterating over all annotation properties</span>
-<span class="sd">        defined in the current ontology.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an generator over all annotation_properties.</span>
 
-<span class="sd">        If `imported` is true, annotation properties in imported ontologies</span>
-<span class="sd">        will also be included.</span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            imported: if `True`, entities in imported ontologies</span>
+<span class="sd">                are also returned.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">imported</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">()</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;annotation_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_root_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a list or root classes.&quot;&quot;&quot;</span>
@@ -3319,7 +3368,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;unknown reasoner &#39;</span><span class="si">{</span><span class="n">reasoner</span><span class="si">}</span><span class="s2">&#39;. Supported reasoners &quot;</span>
-                <span class="s1">&#39;are &quot;Pellet&quot;, &quot;HermiT&quot; and &quot;FaCT++&quot;.&#39;</span>
+                <span class="s2">&quot;are &#39;Pellet&#39;, &#39;HermiT&#39; and &#39;FaCT++&#39;.&quot;</span>
             <span class="p">)</span>
 
         <span class="c1"># For some reason we must visit all entities once before running</span>
@@ -4185,23 +4234,39 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 
     <div class="doc doc-contents ">
 
-      <p>Returns a generator iterating over all annotation properties
-defined in the current ontology.</p>
-<p>If <code>imported</code> is true, annotation properties in imported ontologies
-will also be included.</p>
+      <p>Returns an generator over all annotation_properties.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>imported</code></td>
+        <td></td>
+        <td><p>if <code>True</code>, entities in imported ontologies
+are also returned.</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">annotation_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a generator iterating over all annotation properties</span>
-<span class="sd">    defined in the current ontology.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an generator over all annotation_properties.</span>
 
-<span class="sd">    If `imported` is true, annotation properties in imported ontologies</span>
-<span class="sd">    will also be included.</span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        imported: if `True`, entities in imported ontologies</span>
+<span class="sd">            are also returned.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">imported</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">()</span>
-    <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;annotation_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -4223,18 +4288,37 @@ will also be included.</p>
     <div class="doc doc-contents ">
 
       <p>Returns an generator over all classes.</p>
-<p>If <code>imported</code> is <code>True</code>, will imported classes are also returned.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>imported</code></td>
+        <td></td>
+        <td><p>if <code>True</code>, entities in imported ontologies
+are also returned.</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an generator over all classes.</span>
 
-<span class="sd">    If `imported` is `True`, will imported classes are also returned.</span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        imported: if `True`, entities in imported ontologies</span>
+<span class="sd">            are also returned.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">imported</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">classes</span><span class="p">()</span>
-    <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">classes</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;classes&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -4365,21 +4449,38 @@ will also be included.</p>
 
     <div class="doc doc-contents ">
 
-      <p>Returns an generator over all data properties.</p>
-<p>If <code>imported</code> is true, will imported data properties are also
-returned.</p>
+      <p>Returns an generator over all data_properties.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>imported</code></td>
+        <td></td>
+        <td><p>if <code>True</code>, entities in imported ontologies
+are also returned.</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">data_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an generator over all data properties.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an generator over all data_properties.</span>
 
-<span class="sd">    If `imported` is true, will imported data properties are also</span>
-<span class="sd">    returned.</span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        imported: if `True`, entities in imported ontologies</span>
+<span class="sd">            are also returned.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">imported</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">data_properties</span><span class="p">()</span>
-    <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">data_properties</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;data_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -5621,18 +5722,37 @@ Association for Computational Linguistics, June 1994.</p>
     <div class="doc doc-contents ">
 
       <p>Returns an generator over all individuals.</p>
-<p>If <code>imported</code> is <code>True</code>, will imported individuals are also returned.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>imported</code></td>
+        <td></td>
+        <td><p>if <code>True</code>, entities in imported ontologies
+are also returned.</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">individuals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an generator over all individuals.</span>
 
-<span class="sd">    If `imported` is `True`, will imported individuals are also returned.</span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        imported: if `True`, entities in imported ontologies</span>
+<span class="sd">            are also returned.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">imported</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">individuals</span><span class="p">()</span>
-    <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">individuals</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;individuals&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -6421,21 +6541,38 @@ By default, the parent is Thing.</p>
 
     <div class="doc doc-contents ">
 
-      <p>Returns an generator over all object properties.</p>
-<p>If <code>imported</code> is true, will imported object properties are also
-returned.</p>
+      <p>Returns an generator over all object_properties.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>imported</code></td>
+        <td></td>
+        <td><p>if <code>True</code>, entities in imported ontologies
+are also returned.</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">object_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an generator over all object properties.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an generator over all object_properties.</span>
 
-<span class="sd">    If `imported` is true, will imported object properties are also</span>
-<span class="sd">    returned.</span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        imported: if `True`, entities in imported ontologies</span>
+<span class="sd">            are also returned.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">imported</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">object_properties</span><span class="p">()</span>
-    <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">object_properties</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;object_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -7172,7 +7309,7 @@ with Pellet and HermiT.</p>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;unknown reasoner &#39;</span><span class="si">{</span><span class="n">reasoner</span><span class="si">}</span><span class="s2">&#39;. Supported reasoners &quot;</span>
-            <span class="s1">&#39;are &quot;Pellet&quot;, &quot;HermiT&quot; and &quot;FaCT++&quot;.&#39;</span>
+            <span class="s2">&quot;are &#39;Pellet&#39;, &#39;HermiT&#39; and &#39;FaCT++&#39;.&quot;</span>
         <span class="p">)</span>
 
     <span class="c1"># For some reason we must visit all entities once before running</span>
@@ -7662,7 +7799,7 @@ only matching triples will be returned.</p>
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.78eede0e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.dff1b7c8.min.js"></script>
       
     
   </body>
