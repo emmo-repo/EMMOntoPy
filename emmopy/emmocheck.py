@@ -119,6 +119,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                 "2-manifold",
                 "3-manifold",
                 "C++",
+                "3DPrinting",
             )
         )
         exceptions.update(self.get_config("test_class_label.exceptions", ()))
@@ -236,7 +237,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                         msg=cls,
                     )
 
-    def test_quantity_dimension(self):
+    def test_quantity_dimension_beta3(self):
         """Check that all quantities have a physicalDimension annotation.
 
         Note: this test will be deprecated when isq is moved to emmo/domain.
@@ -309,6 +310,113 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                     self.assertIn("physicalDimension", anno, msg=cls)
                     physdim = anno["physicalDimension"].first()
                     self.assertRegex(physdim, regex, msg=cls)
+
+    def test_quantity_dimension(self):
+        """Check that all quantities have a physicalDimension.
+
+        Note: this test will be deprecated when isq is moved to emmo/domain.
+
+        Configurations:
+            exceptions - full class names of classes to ignore.
+        """
+        # pylint: disable=invalid-name
+        exceptions = set(
+            (
+                "properties.ModelledQuantitativeProperty",
+                "properties.MeasuredQuantitativeProperty",
+                "properties.ConventionalQuantitativeProperty",
+                "metrology.QuantitativeProperty",
+                "metrology.Quantity",
+                "metrology.OrdinalQuantity",
+                "metrology.BaseQuantity",
+                "metrology.PhysicalConstant",
+                "metrology.PhysicalQuantity",
+                "metrology.ExactConstant",
+                "metrology.MeasuredConstant",
+                "metrology.DerivedQuantity",
+                "isq.ISQBaseQuantity",
+                "isq.InternationalSystemOfQuantity",
+                "isq.ISQDerivedQuantity",
+                "isq.SIExactConstant",
+                "emmo.ModelledQuantitativeProperty",
+                "emmo.MeasuredQuantitativeProperty",
+                "emmo.ConventionalQuantitativeProperty",
+                "emmo.QuantitativeProperty",
+                "emmo.Quantity",
+                "emmo.OrdinalQuantity",
+                "emmo.BaseQuantity",
+                "emmo.PhysicalConstant",
+                "emmo.PhysicalQuantity",
+                "emmo.ExactConstant",
+                "emmo.MeasuredConstant",
+                "emmo.DerivedQuantity",
+                "emmo.ISQBaseQuantity",
+                "emmo.InternationalSystemOfQuantity",
+                "emmo.ISQDerivedQuantity",
+                "emmo.SIExactConstant",
+                "emmo.NonSIUnits",
+                "emmo.StandardizedPhysicalQuantity",
+                "emmo.CategorizedPhysicalQuantity",
+                "emmo.ISO80000Categorised",
+                "emmo.AtomicAndNuclear",
+                "emmo.Defined",
+                "emmo.Electromagnetic",
+                "emmo.FrequentlyUsed",
+                "emmo.ChemicalCompositionQuantity",
+                "emmo.EquilibriumConstant",  # physical dimension may change
+                "emmo.Solubility",
+                "emmo.Universal",
+                "emmo.Intensive",
+                "emmo.Extensive",
+                "emmo.Concentration",
+            )
+        )
+        if not hasattr(self.onto, "PhysicalQuantity"):
+            return
+        exceptions.update(
+            self.get_config("test_quantity_dimension.exceptions", ())
+        )
+        classes = set(self.onto.classes(self.check_imported))
+        for cls in self.onto.PhysicalQuantity.descendants():
+            if not self.check_imported and cls not in classes:
+                continue
+            if issubclass(cls, self.onto.ISO80000Categorised):
+                continue
+            if repr(cls) not in exceptions:
+                with self.subTest(cls=cls, label=get_label(cls)):
+                    for r in cls.get_indirect_is_a():
+                        if isinstance(r, owlready2.Restriction) and repr(
+                            r
+                        ).startswith("emmo.hasMeasurementUnit.some"):
+                            self.assertTrue(
+                                issubclass(
+                                    r.value,
+                                    (
+                                        self.onto.DimensionalUnit,
+                                        self.onto.DimensionlessUnit,
+                                    ),
+                                )
+                            )
+                            break
+                    else:
+                        self.assertTrue(
+                            issubclass(cls, self.onto.ISQDimensionlessQuantity)
+                        )
+
+    def test_dimensional_unit(self):
+        """Check correct syntax of dimension string of dimensional units."""
+        # pylint: disable=invalid-name
+        regex = re.compile(
+            "^T([+-][1-9][0-9]*|0) L([+-][1-9]|0) M([+-][1-9]|0) "
+            "I([+-][1-9]|0) (H|Θ)([+-][1-9]|0) N([+-][1-9]|0) "
+            "J([+-][1-9]|0)$"
+        )
+        for cls in self.onto.SIDimensionalUnit.__subclasses__():
+            with self.subTest(cls=cls, label=get_label(cls)):
+                self.assertEqual(len(cls.equivalent_to), 1)
+                r = cls.equivalent_to[0]
+                self.assertIsInstance(r, owlready2.Restriction)
+                self.assertRegex(r.value, regex)
 
     def test_physical_quantity_dimension(self):
         """Check that all physical quantities have `hasPhysicalDimension`.
@@ -660,6 +768,8 @@ def main(
             skipped = set(  # skipped by default
                 [
                     "test_namespace",
+                    "test_physical_quantity_dimension_annotation",
+                    "test_quantity_dimension_beta3",
                     "test_physical_quantity_dimension",
                 ]
             )
