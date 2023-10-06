@@ -27,6 +27,10 @@ owlready2.set_render_func(render_func)
 #
 # Extending ThingClass (classes)
 # ==============================
+
+save_getattr = ThingClass.__getattr__
+
+
 def get_preferred_label(self):
     """Returns the preferred label as a string (not list).
 
@@ -100,6 +104,7 @@ def _setitem(self, name, value):
     >>> emmo.Atom['altLabel']
     [locstr('ChemicalElement', 'en'), 'Element', locstr('Atomo', 'it')]
     """
+
     item = _getitem(self, name)
     item.append(value)
 
@@ -111,6 +116,21 @@ def _delitem(self, name):
     """
     item = _getitem(self, name)
     item.clear()
+
+
+def _getattr(self, name):
+    """Provide attribute access to annotation properties.
+
+    This upates __getattr__ in owlready2. If name is not found as
+    attribute it tries using the iriname of the annotation property.
+    """
+    try:
+        return save_getattr(self, name)
+    except AttributeError:
+        entity = self.namespace.ontology.get_by_label(name)
+        # add annotation property to world._props for faster access next time
+        self.namespace.world._props[name] = entity
+        return save_getattr(self, entity.name)
 
 
 def get_annotations(
@@ -126,7 +146,7 @@ def get_annotations(
     onto = self.namespace.ontology
 
     annotations = {
-        get_preferred_label(_): _._get_values_for_class(self)
+        str(get_preferred_label(_)): _._get_values_for_class(self)
         for _ in onto.annotation_properties(imported=imported)
     }
     if all:
@@ -198,6 +218,7 @@ setattr(ThingClass, "__dir__", _dir)
 setattr(ThingClass, "__getitem__", _getitem)
 setattr(ThingClass, "__setitem__", _setitem)
 setattr(ThingClass, "__delitem__", _delitem)
+setattr(ThingClass, "__getattr__", _getattr)
 setattr(ThingClass, "get_preferred_label", get_preferred_label)
 setattr(ThingClass, "get_parents", get_parents)
 setattr(ThingClass, "get_annotations", get_annotations)
@@ -253,7 +274,7 @@ setattr(Namespace, "__init__", namespace_init)
 # Extending Metadata
 # ==================
 def keys(self):
-    """Return a generator over annotation property names associates
+    """Return a generator over annotation property names associated
     with this ontology."""
     namespace = self.namespace
     for annotation in namespace.annotation_properties():

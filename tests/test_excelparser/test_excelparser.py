@@ -32,7 +32,7 @@ def test_excelparser(repo_dir: "Path") -> None:
         repo_dir / "tests" / "test_excelparser" / "onto_update.xlsx"
     )
     ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
-    ontology.save("test.ttl")
+    # ontology.save("test.ttl") # used for printing new ontology when debugging
     assert onto == ontology
     assert errors.keys() == {
         "already_defined",
@@ -69,7 +69,7 @@ def test_excelparser(repo_dir: "Path") -> None:
         "data_prop_errors_in_range",
         "data_prop_errors_in_domain",
     }
-    assert errors["already_defined"] == {"Pattern"}
+    assert errors["already_defined"] == {"SpecialPattern"}
     assert errors["in_imported_ontologies"] == {"Atom"}
     assert errors["wrongly_defined"] == {"Temporal Boundary"}
     assert errors["missing_subClassOf"] == {"SpatioTemporalBoundary"}
@@ -79,7 +79,7 @@ def test_excelparser(repo_dir: "Path") -> None:
         "SubgrainBoundary",
     }
     assert errors["nonadded_concepts"] == {
-        "Pattern",
+        "SpecialPattern",
         "Temporal Boundary",
     }
 
@@ -116,8 +116,12 @@ def test_excelparser_only_classes(repo_dir: "Path") -> None:
         / "onto_update_only_classes.xlsx"
     )
     ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
+    ontology.save(
+        "test_only_classes.ttl"
+    )  # used for printing new ontology when debugging
+
     assert onto == ontology
-    assert errors["already_defined"] == {"Pattern"}
+    assert errors["already_defined"] == {"SpecialPattern"}
     assert errors["in_imported_ontologies"] == {"Atom"}
     assert errors["wrongly_defined"] == {"Temporal Boundary"}
     assert errors["missing_subClassOf"] == {"SpatioTemporalBoundary"}
@@ -127,7 +131,7 @@ def test_excelparser_only_classes(repo_dir: "Path") -> None:
         "SubgrainBoundary",
     }
     assert errors["nonadded_concepts"] == {
-        "Pattern",
+        "SpecialPattern",
         "Temporal Boundary",
     }
 
