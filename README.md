@@ -14,7 +14,7 @@ EMMOntoPy extends Owlready2 and adds additional functionality, like accessing en
 It also includes a set of tools, like creating an ontology from an Excel sheet, generation of reference documentation of ontologies and visualisation of ontologies graphically. 
 EMMOntoPy is freely available for on GitHub and on PyPI under the permissive open source [BSD 3-Clause license](LICENSE.txt).
 
-EMMOntoPy was originally developed to work effectively with Elemental Multiperspective Material Ontology ([EMMO]) and EMMO-based domain ontologies.  
+EMMOntoPy was originally developed to work effectively with the Elemental Multiperspective Material Ontology ([EMMO]) and EMMO-based domain ontologies.  
 It has now two sub-packages, `ontopy` and `emmopy`, where `ontopy` is a general package to work with any OWL ontology, while `emmopy` provides extra features that are specific to [EMMO].
 
 Owlready2, and thereby also EMMOntoPy, represents OWL classes and individuals in Python as classes and instances.
