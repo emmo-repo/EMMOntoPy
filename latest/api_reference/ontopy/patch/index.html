@@ -1391,6 +1391,7 @@
 
 
 
+
   <div class="doc doc-object doc-function">
 
 
@@ -1468,7 +1469,7 @@ ontologies.</p>
     <span class="n">onto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">ontology</span>
 
     <span class="n">annotations</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">get_preferred_label</span><span class="p">(</span><span class="n">_</span><span class="p">):</span> <span class="n">_</span><span class="o">.</span><span class="n">_get_values_for_class</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">get_preferred_label</span><span class="p">(</span><span class="n">_</span><span class="p">)):</span> <span class="n">_</span><span class="o">.</span><span class="n">_get_values_for_class</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">(</span><span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="nb">all</span><span class="p">:</span>
@@ -1716,13 +1717,13 @@ pairs associates with this ontology.</p>
 
     <div class="doc doc-contents ">
 
-      <p>Return a generator over annotation property names associates
+      <p>Return a generator over annotation property names associated
 with this ontology.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/patch.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a generator over annotation property names associates</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a generator over annotation property names associated</span>
 <span class="sd">    with this ontology.&quot;&quot;&quot;</span>
     <span class="n">namespace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span>
     <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">namespace</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">():</span>

@@ -1882,12 +1882,10 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
         <span class="c1"># Set given or default base_iri if base_iri_from_metadata is False.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">base_iri_from_metadata</span><span class="p">:</span>
             <span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">=</span> <span class="n">base_iri</span>
-
-    <span class="n">onto</span><span class="o">.</span><span class="n">sync_python_names</span><span class="p">()</span>
+    <span class="c1"># onto.sync_python_names()</span>
     <span class="c1"># prefLabel, label, and altLabel</span>
     <span class="c1"># are default label annotations</span>
     <span class="n">onto</span><span class="o">.</span><span class="n">set_default_label_annotations</span><span class="p">()</span>
-
     <span class="c1"># Add object properties</span>
     <span class="k">if</span> <span class="n">objectproperties</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">objectproperties</span> <span class="o">=</span> <span class="n">_clean_dataframe</span><span class="p">(</span><span class="n">objectproperties</span><span class="p">)</span>
@@ -1930,7 +1928,6 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
     <span class="n">onto</span><span class="o">.</span><span class="n">sync_attributes</span><span class="p">(</span>
         <span class="n">name_policy</span><span class="o">=</span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span> <span class="n">name_prefix</span><span class="o">=</span><span class="s2">&quot;EMMO_&quot;</span><span class="p">,</span> <span class="n">class_docstring</span><span class="o">=</span><span class="s2">&quot;elucidation&quot;</span>
     <span class="p">)</span>
-
     <span class="c1"># Clean up data frame with new concepts</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">_clean_dataframe</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="c1"># Add entities</span>
@@ -2147,7 +2144,6 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">pass</span>
-
     <span class="k">return</span> <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span>
 </code></pre></div>
         </details>
