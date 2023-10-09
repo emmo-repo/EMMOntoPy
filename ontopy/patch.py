@@ -6,6 +6,7 @@ import owlready2
 from owlready2 import AnnotationPropertyClass, ThingClass, PropertyClass
 from owlready2 import Metadata, Thing, Restriction, Namespace
 from ontopy.utils import EMMOntoPyException
+from ontopy.ontology import Ontology as OntopyOntology
 
 
 def render_func(entity):
@@ -126,11 +127,14 @@ def _getattr(self, name):
     """
     try:
         return save_getattr(self, name)
-    except AttributeError:
-        entity = self.namespace.ontology.get_by_label(name)
-        # add annotation property to world._props for faster access next time
-        self.namespace.world._props[name] = entity
-        return save_getattr(self, entity.name)
+    except AttributeError as err:
+        # make sure we are using and ontopy Ontology which has get_by_label
+        if isinstance(self.namespace.ontology, OntopyOntology):
+            entity = self.namespace.ontology.get_by_label(name)
+            # add annotation property to world._props for faster access later
+            self.namespace.world._props[name] = entity
+            return save_getattr(self, entity.name)
+        raise err
 
 
 def get_annotations(
