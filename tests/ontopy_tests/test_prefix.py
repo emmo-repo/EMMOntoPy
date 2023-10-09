@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 import pytest
 from ontopy.utils import NoSuchLabelError
+import warnings
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -36,6 +37,12 @@ def test_prefix(testonto: "Ontology", emmo: "Ontology") -> None:
     assert testonto.get_by_label("models:TestClass") == testonto.get_by_label(
         "TestClass", prefix="models"
     )
+
+    with pytest.raises(ValueError):
+        testonto.get_by_label_all(" ")
+
+    with pytest.raises(TypeError):
+        testonto.get_by_label(1)
 
 
 def test_prefix_emmo(emmo: "Ontology") -> None:

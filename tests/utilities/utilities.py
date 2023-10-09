@@ -1,6 +1,15 @@
-"""Test utility functions."""
+from pathlib import Path
+
+from typing import TYPE_CHECKING
+
+import pytest
+
+if TYPE_CHECKING:
+    from ontopy.ontology import Ontology
+    from typing import Sequence
 
 
+# Utilities
 def abbreviate(onto, iri, must_exist=True):
     """Returns existing Owlready2 storid for `iri`."""
     if iri is None:
@@ -38,3 +47,7 @@ def has_triple(onto, s=None, p=None, o=None) -> bool:
         return bool(get_triples(onto, s, p, o))
     except ValueError:
         return False
+
+
+def setassert(values: "Sequence(str)", expected: "Sequence(str)") -> None:
+    assert set(str(val) for val in values) == set(str(val) for val in expected)

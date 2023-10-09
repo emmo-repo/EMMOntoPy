@@ -1,5 +1,5 @@
 import ontopy.utils as utils
-from testutils import get_triples, has_triple
+from utilities import get_triples, has_triple
 
 
 def test_annotate_source(testonto: "Ontology"):
