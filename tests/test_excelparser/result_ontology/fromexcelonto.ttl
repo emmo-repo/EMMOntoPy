@@ -61,11 +61,11 @@
     emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "Spatial pattern localized in a volume of space"@en ;
     emmo:EMMO_b432d2d5_25f4_4165_99c5_5935a7763c1a "Textured surface after etching"@en ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:onProperty emmo:EMMO_e1097637_70d2_4895_973f_2396f04fa204 ;
-            owl:someValuesFrom emmo:EMMO_f1a51559_aa3d_43a0_9327_918039f0dfed ],
-        [ a owl:Restriction ;
             owl:onProperty emmo:EMMO_17e27c22_37e1_468c_9dd7_95e137f73e7f ;
             owl:someValuesFrom :EMMO_472ed27e-ce08-53cb-8453-56ab363275c4 ],
+        [ a owl:Restriction ;
+            owl:onProperty emmo:EMMO_e1097637_70d2_4895_973f_2396f04fa204 ;
+            owl:someValuesFrom emmo:EMMO_f1a51559_aa3d_43a0_9327_918039f0dfed ],
         :EMMO_4b32833e-0833-56a7-903c-28a6a8191fe8,
         :EMMO_5f50f77e-f321-53e3-af76-fe5b0a347479 ;
     skos:prefLabel "FiniteSpatialPattern"@en .
@@ -142,13 +142,13 @@
     skos:prefLabel "Atom"@en .
 
 :EMMO_98871837-aa90-5eef-9a56-926ae8beebbb a owl:AnnotationProperty ;
-    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "Where to find the entry in the \"book of boundaries\""@en ;
+    rdfs:comment "Where to find the entry in the \"book of boundaries\""@en ;
     rdfs:subPropertyOf emmo:EMMO_c7b62dd7_063a_4c2a_8504_42f7264ba83f ;
     skos:prefLabel "bookOfBoundariesEntry"@en .
 
 :EMMO_a14817a8-a449-5115-8924-b90833317d02 a owl:ObjectProperty ;
-    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "has a part that is a boundary"@en ;
-    rdfs:comment "This definition is humbug"@en ;
+    rdfs:comment "This definition is humbug"@en,
+        "has a part that is a boundary"@en ;
     rdfs:domain :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ;
     rdfs:subPropertyOf emmo:EMMO_17e27c22_37e1_468c_9dd7_95e137f73e7f ;
     skos:prefLabel "hasBoundaryPart"@en .

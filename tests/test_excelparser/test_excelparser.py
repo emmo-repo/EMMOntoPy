@@ -116,9 +116,8 @@ def test_excelparser_only_classes(repo_dir: "Path") -> None:
         / "onto_update_only_classes.xlsx"
     )
     ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
-    ontology.save(
-        "test_only_classes.ttl"
-    )  # used for printing new ontology when debugging
+    # Used for printing new ontology when debugging
+    # ontology.save("test_only_classes.ttl")
 
     assert onto == ontology
     assert errors["already_defined"] == {"SpecialPattern"}
