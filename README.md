@@ -9,42 +9,42 @@
 [![PyPI version](https://badge.fury.io/py/EMMOntoPy.svg)](https://badge.fury.io/py/EMMOntoPy)
 [![DOI](https://zenodo.org/badge/190286064.svg)](https://zenodo.org/badge/latestdoi/190286064)
 
-EMMOntoPy is a Python package based on the excellent [Owlready2], which provides a natural and intuitive representation of ontologies in Python. 
-EMMOntoPy extends Owlready2 and adds additional functionality, like accessing entities by label, reasoning with FaCT++ and parsing logical expressions in Manchester syntax. 
-It also includes a set of tools, like creating an ontology from an Excel sheet, generation of reference documentation of ontologies and visualisation of ontologies graphically. 
+EMMOntoPy is a Python package based on the excellent [Owlready2], which provides a natural and intuitive representation of ontologies in Python.
+EMMOntoPy extends Owlready2 and adds additional functionality, like accessing entities by label, reasoning with FaCT++ and parsing logical expressions in Manchester syntax.
+It also includes a set of tools, like creating an ontology from an Excel sheet, generation of reference documentation of ontologies and visualisation of ontologies graphically.
 EMMOntoPy is freely available for on GitHub and on PyPI under the permissive open source [BSD 3-Clause license](LICENSE.txt).
 
 EMMOntoPy was originally developed to work effectively with the Elemental Multiperspective Material Ontology ([EMMO]) and EMMO-based domain ontologies.  
 It has now two sub-packages, `ontopy` and `emmopy`, where `ontopy` is a general package to work with any OWL ontology, while `emmopy` provides extra features that are specific to [EMMO].
 
 Owlready2, and thereby also EMMOntoPy, represents OWL classes and individuals in Python as classes and instances.
-OWL properties are represented as Python attributes. 
-Hence, it provides a new *dot* notation for representing ontologies as valid Python code. 
-The notation is simple and easy to understand and write for people with some knowledge of OWL and Python. 
-Since Python is a versatile programming language, Owlready2 does not only allow for representation of OWL ontologies, but also to work with them programmatically, including interpretation, modification and generation. 
+OWL properties are represented as Python attributes.
+Hence, it provides a new *dot* notation for representing ontologies as valid Python code.
+The notation is simple and easy to understand and write for people with some knowledge of OWL and Python.
+Since Python is a versatile programming language, Owlready2 does not only allow for representation of OWL ontologies, but also to work with them programmatically, including interpretation, modification and generation.
 Some of the additional features provided by EMMOntoPy are are listed below:
 
 ## Access by label
-In Owlready2 ontological entities, like classes, properties and individuals are accessed by the name-part of their IRI (i.e. everything that follows after the final slash or hash in the IRI). 
-This is very inconvenient for ontologies like EMMO or Wikidata, that identify ontological entities by long numerical names. 
-For instance, the name-part of the IRI of the Atom class in EMMO is ‘EMMO_eb77076b_a104_42ac_a065_798b2d2809ad’, which is neither human readable nor easy to write. 
+In Owlready2 ontological entities, like classes, properties and individuals are accessed by the name-part of their IRI (i.e. everything that follows after the final slash or hash in the IRI).
+This is very inconvenient for ontologies like EMMO or Wikidata, that identify ontological entities by long numerical names.
+For instance, the name-part of the IRI of the Atom class in EMMO is ‘EMMO_eb77076b_a104_42ac_a065_798b2d2809ad’, which is neither human readable nor easy to write.
 EMMOntoPy allows to access the entity via its label (or rather skos:prefLabel) ‘Atom’, which is much more user friendly.
 
 ## Turtle serialisation/deserialisation
-The Terse RDF Triple Language (Turtle) is a common syntax and file format for representing ontologies. 
+The Terse RDF Triple Language (Turtle) is a common syntax and file format for representing ontologies.
 EMMOntoPy adds support for reading and writing ontologies in turtle format.
 
 ## FaCT++ reasoning
-Owlready2 has only support for reasoning with HermiT and Pellet. 
+Owlready2 has only support for reasoning with HermiT and Pellet.
 EMMOntoPy adds additional support for the fast tableaux-based [FaCT++ reasoner] for description logics.
 
 ## Manchester syntax
-Even though the Owlready2 dot notation is clear and easy to read and understand for people who know Python, it is a new syntax that may look foreign for people that are used to working with Protégé. 
-EMMOntoPy provides support to parse and serialise logical expressions in [Manchester syntax], making it possible to create tools that will be much more familiar to work with for people used to working with Protégé. 
+Even though the Owlready2 dot notation is clear and easy to read and understand for people who know Python, it is a new syntax that may look foreign for people that are used to working with Protégé.
+EMMOntoPy provides support to parse and serialise logical expressions in [Manchester syntax], making it possible to create tools that will be much more familiar to work with for people used to working with Protégé.
 
 ## Visualisation
-EMMOntoPy provides a Python module for graphical visualisation of ontologies. 
-This module allows to graphically represent not only the taxonomy, but also restrictions and logical constructs. 
+EMMOntoPy provides a Python module for graphical visualisation of ontologies.
+This module allows to graphically represent not only the taxonomy, but also restrictions and logical constructs.
 The classes to include in the graph, can either be specified manually or inferred from the taxonomy (like all subclasses of a give class that are not a subclass of any class in a set of other classes).
 
 ## Tools
