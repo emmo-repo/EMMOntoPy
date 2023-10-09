@@ -276,6 +276,55 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#access-by-label" class="md-nav__link">
+    Access by label
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#turtle-serialisationdeserialisation" class="md-nav__link">
+    Turtle serialisation/deserialisation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fact-reasoning" class="md-nav__link">
+    FaCT++ reasoning
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manchester-syntax" class="md-nav__link">
+    Manchester syntax
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualisation" class="md-nav__link">
+    Visualisation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools" class="md-nav__link">
+    Tools
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#some-examples-of-what-you-can-do-with-emmontopy-includes" class="md-nav__link">
+    Some examples of what you can do with EMMOntoPy includes:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#documentation-and-examples" class="md-nav__link">
     Documentation and examples
   </a>
@@ -1234,6 +1283,55 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#access-by-label" class="md-nav__link">
+    Access by label
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#turtle-serialisationdeserialisation" class="md-nav__link">
+    Turtle serialisation/deserialisation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fact-reasoning" class="md-nav__link">
+    FaCT++ reasoning
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manchester-syntax" class="md-nav__link">
+    Manchester syntax
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualisation" class="md-nav__link">
+    Visualisation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools" class="md-nav__link">
+    Tools
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#some-examples-of-what-you-can-do-with-emmontopy-includes" class="md-nav__link">
+    Some examples of what you can do with EMMOntoPy includes:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#documentation-and-examples" class="md-nav__link">
     Documentation and examples
   </a>
@@ -1306,42 +1404,57 @@
 <!-- markdownlint-disable MD033 MD041 -->
 <p><img src="images/emmontopy-logo.png" width="40%" align="right"></p>
 <h1 id="emmontopy">EMMOntoPy<a class="headerlink" href="#emmontopy" title="Permanent link">&para;</a></h1>
-<p><em>Python API for the Elemental Multiperspective Material Ontology (<a href="https://emmo-repo.github.io">EMMO</a>).</em></p>
+<p><em>Library for representing and working with ontologies in Python.</em></p>
 <p><img alt="CI tests" src="https://github.com/emmo-repo/EMMOntoPy/workflows/CI%20Tests/badge.svg" />
 <a href="https://badge.fury.io/py/EMMOntoPy"><img alt="PyPI version" src="https://badge.fury.io/py/EMMOntoPy.svg" /></a>
 <a href="https://zenodo.org/badge/latestdoi/190286064"><img alt="DOI" src="https://zenodo.org/badge/190286064.svg" /></a></p>
-<blockquote>
-<p><em><strong>Note</strong>: EMMOntoPy is a continuation of the EMMO-python project and the associated <code>emmo</code> Python package.
-To see the legacy versions go to <a href="https://pypi.org/project/EMMO/">PyPI</a>.</em></p>
-</blockquote>
-<p>This package is based on <a href="https://pypi.org/project/Owlready2/">Owlready2</a> and provides an intuitive representation of <a href="https://emmo-repo.github.io">EMMO</a> in Python.
-It is available on <a href="https://github.com/emmo-repo/EMMOntoPy/">GitHub</a> and on <a href="https://pypi.org/project/EMMOntoPy/">PyPI</a> under the open source <a href="LICENSE/">BSD 3-Clause license</a>.</p>
-<p>The Elemental Multiperspective Material Ontology (EMMO) is an ongoing effort to create an ontology that takes into account fundamental concepts of physics, chemistry and materials science and is designed to pave the road for semantic interoperability.
-The aim of EMMO is to be generic and provide a common ground for describing materials, models and data that can be adapted by all domains.</p>
-<p>EMMO is formulated using OWL.
-EMMOntoPy is a Python API for using EMMO to solving real problems.
-By using the excellent Python package <a href="https://pypi.org/project/Owlready2/">Owlready2</a>, EMMOntoPy provides a natural representation of EMMO in Python.
-On top of that EMMOntoPy provides:</p>
-<ul>
-<li>Access by label (as well as by names, important since class and property names in EMMO are based on UUIDs).</li>
-<li>Test suite for EMMO-based ontologies.</li>
-<li>Generation of graphs.</li>
-<li>Generation of documentation.</li>
-<li>Command-line tools:</li>
-<li><a href="tools-instructions/#emmocheck"><code>emmocheck</code></a>:
-    Checks an ontology against EMMO conventions.</li>
-<li><a href="tools-instructions/#ontoversion"><code>ontoversion</code></a>:
-    Prints ontology version number.</li>
-<li><a href="tools-instructions/#ontograph"><code>ontograph</code></a>:
-    Vertasile tool for visualising (parts of) an ontology.</li>
-<li><a href="tools-instructions/#ontodoc"><code>ontodoc</code></a>:
-    Documents an ontology.</li>
-<li><a href="tools-instructions/#ontoconvert"><code>ontoconvert</code></a>:
-    Converts between ontology formats.</li>
-<li><a href="tools-instructions/#excel2onto"><code>excel2onto</code></a>:
-    Generate an EMMO-based ontology from an excel file.</li>
-</ul>
-<p>Some examples of what you can do with EMMOntoPy includes:</p>
+<p>EMMOntoPy is a Python package based on the excellent <a href="https://pypi.org/project/Owlready2/">Owlready2</a>, which provides a natural and intuitive representation of ontologies in Python.
+EMMOntoPy extends Owlready2 and adds additional functionality, like accessing entities by label, reasoning with FaCT++ and parsing logical expressions in Manchester syntax.
+It also includes a set of tools, like creating an ontology from an Excel sheet, generation of reference documentation of ontologies and visualisation of ontologies graphically.
+EMMOntoPy is freely available for on GitHub and on PyPI under the permissive open source <a href="LICENSE/">BSD 3-Clause license</a>.</p>
+<p>EMMOntoPy was originally developed to work effectively with the Elemental Multiperspective Material Ontology (<a href="https://emmo-repo.github.io">EMMO</a>) and EMMO-based domain ontologies.<br />
+It has now two sub-packages, <code>ontopy</code> and <code>emmopy</code>, where <code>ontopy</code> is a general package to work with any OWL ontology, while <code>emmopy</code> provides extra features that are specific to <a href="https://emmo-repo.github.io">EMMO</a>.</p>
+<p>Owlready2, and thereby also EMMOntoPy, represents OWL classes and individuals in Python as classes and instances.
+OWL properties are represented as Python attributes.
+Hence, it provides a new <em>dot</em> notation for representing ontologies as valid Python code.
+The notation is simple and easy to understand and write for people with some knowledge of OWL and Python.
+Since Python is a versatile programming language, Owlready2 does not only allow for representation of OWL ontologies, but also to work with them programmatically, including interpretation, modification and generation.
+Some of the additional features provided by EMMOntoPy are are listed below:</p>
+<h2 id="access-by-label">Access by label<a class="headerlink" href="#access-by-label" title="Permanent link">&para;</a></h2>
+<p>In Owlready2 ontological entities, like classes, properties and individuals are accessed by the name-part of their IRI (i.e. everything that follows after the final slash or hash in the IRI).
+This is very inconvenient for ontologies like EMMO or Wikidata, that identify ontological entities by long numerical names.
+For instance, the name-part of the IRI of the Atom class in EMMO is ‘EMMO_eb77076b_a104_42ac_a065_798b2d2809ad’, which is neither human readable nor easy to write.
+EMMOntoPy allows to access the entity via its label (or rather skos:prefLabel) ‘Atom’, which is much more user friendly.</p>
+<h2 id="turtle-serialisationdeserialisation">Turtle serialisation/deserialisation<a class="headerlink" href="#turtle-serialisationdeserialisation" title="Permanent link">&para;</a></h2>
+<p>The Terse RDF Triple Language (Turtle) is a common syntax and file format for representing ontologies.
+EMMOntoPy adds support for reading and writing ontologies in turtle format.</p>
+<h2 id="fact-reasoning">FaCT++ reasoning<a class="headerlink" href="#fact-reasoning" title="Permanent link">&para;</a></h2>
+<p>Owlready2 has only support for reasoning with HermiT and Pellet.
+EMMOntoPy adds additional support for the fast tableaux-based [FaCT++ reasoner] for description logics.</p>
+<h2 id="manchester-syntax">Manchester syntax<a class="headerlink" href="#manchester-syntax" title="Permanent link">&para;</a></h2>
+<p>Even though the Owlready2 dot notation is clear and easy to read and understand for people who know Python, it is a new syntax that may look foreign for people that are used to working with Protégé.
+EMMOntoPy provides support to parse and serialise logical expressions in <a href="https://www.w3.org/TR/owl2-manchester-syntax/">Manchester syntax</a>, making it possible to create tools that will be much more familiar to work with for people used to working with Protégé.</p>
+<h2 id="visualisation">Visualisation<a class="headerlink" href="#visualisation" title="Permanent link">&para;</a></h2>
+<p>EMMOntoPy provides a Python module for graphical visualisation of ontologies.
+This module allows to graphically represent not only the taxonomy, but also restrictions and logical constructs.
+The classes to include in the graph, can either be specified manually or inferred from the taxonomy (like all subclasses of a give class that are not a subclass of any class in a set of other classes).</p>
+<h2 id="tools">Tools<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h2>
+<p>EMMOntoPy includes a small set of command-line tools implemented as Python scripts:
+  - <a href="tools-instructions/#ontoconvert"><code>ontoconvert</code></a>:
+    Converts ontologies between different file formats.
+    It also supports some additional transformation during conversion, like running a reasoner, merging several ontological modules together (squashing), rename IRIs, generate catalogue file and automatic annotation of entities with their source IRI.
+  - <a href="tools-instructions/#ontograph"><code>ontograph</code></a>:
+    Vertasile tool for visualising (parts of) an ontology, utilising the visualisation features mention above.
+  - <a href="tools-instructions/#ontodoc"><code>ontodoc</code></a>:
+    Documents an ontology.
+  - <a href="tools-instructions/#excel2onto"><code>excel2onto</code></a>:
+    Generate an EMMO-based ontology from an excel file.
+    It is useful for domain experts with limited knowledge of ontologies and that are not used to tools like Protégé.
+  - <a href="tools-instructions/#ontoversion"><code>ontoversion</code></a>:
+    Prints ontology version number.
+  - <a href="tools-instructions/#emmocheck"><code>emmocheck</code></a>:
+    A small test framework for checking the consistency of EMMO and EMMO-based domain ontologies and whether they confirm to the EMMO conventions.</p>
+<h2 id="some-examples-of-what-you-can-do-with-emmontopy-includes">Some examples of what you can do with EMMOntoPy includes:<a class="headerlink" href="#some-examples-of-what-you-can-do-with-emmontopy-includes" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Access and query RDF-based ontologies from your application.
   This includes several different flavors of RDF (OWL, <strong>Turtle (<code>ttl</code>)</strong>, and more).</li>
