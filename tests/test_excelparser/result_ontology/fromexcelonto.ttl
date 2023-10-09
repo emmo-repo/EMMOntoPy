@@ -12,8 +12,8 @@
         "Jesper Friis"@en,
         "Sylvain Gouttebroze"@en ;
     dcterms:title "A test domain ontology"@en ;
-    owl:imports <http://ontology.info/ontology>,
-        <https://raw.githubusercontent.com/emmo-repo/emmo-repo.github.io/master/versions/1.0.0-beta/emmo-inferred-chemistry> ;
+    owl:imports <http://emmo.info/emmo-inferred>,
+        <http://ontology.info/ontology> ;
     owl:versionInfo "0.01"@en .
 
 :EMMO_0264be35-e8ad-5b35-a1a3-84b37bde22d1 a owl:Class ;
@@ -40,7 +40,7 @@
     skos:prefLabel "GrainBoundary"@en .
 
 :EMMO_41808a43-529f-5798-b0ed-71ddcb2c5456 a owl:Class ;
-    emmo:EMMO_c84c6752_6d64_48cc_9500_e54a3c34898d "\"A very secure source\""@en ;
+    emmo:EMMO_c84c6752_6d64_48cc_9500_e54a3c34898d "\"http at wikipedia\""@en ;
     :EMMO_0ec801a2-7da4-55ff-906b-c5ccc905bb8d "\"Another thing\""@en ;
     :EMMO_98871837-aa90-5eef-9a56-926ae8beebbb "\"A text about this type of boundary\""@en ;
     rdfs:subClassOf :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ;
@@ -142,12 +142,13 @@
     skos:prefLabel "Atom"@en .
 
 :EMMO_98871837-aa90-5eef-9a56-926ae8beebbb a owl:AnnotationProperty ;
-    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "Where to find the entry in the \"book of boundaries\""@en ;
+    rdfs:comment "Where to find the entry in the \"book of boundaries\""@en ;
+    rdfs:subPropertyOf emmo:EMMO_c7b62dd7_063a_4c2a_8504_42f7264ba83f ;
     skos:prefLabel "bookOfBoundariesEntry"@en .
 
 :EMMO_a14817a8-a449-5115-8924-b90833317d02 a owl:ObjectProperty ;
-    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "has a part that is a boundary"@en ;
-    rdfs:comment "This definition is humbug"@en ;
+    rdfs:comment "This definition is humbug"@en,
+        "has a part that is a boundary"@en ;
     rdfs:domain :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ;
     rdfs:subPropertyOf emmo:EMMO_17e27c22_37e1_468c_9dd7_95e137f73e7f ;
     skos:prefLabel "hasBoundaryPart"@en .
@@ -157,20 +158,21 @@
     rdfs:subClassOf :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ;
     skos:prefLabel "SpatialBoundary"@en .
 
-:EMMO_9fa9ca88-2891-538a-a8dd-ccb8a08b9890 a owl:Class ;
-    emmo:EMMO_21ae69b4_235e_479d_8dd8_4f756f694c1b "A"@en,
-        "Just"@en,
-        "Test"@en ;
-    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "NEED elucidation"@en ;
-    rdfs:subClassOf :EMMO_cd254842-c697-55f6-917d-9805c77b9187 ;
-    skos:prefLabel "SpatioTemporalPattern"@en .
-
-:EMMO_cd254842-c697-55f6-917d-9805c77b9187 a owl:Class ;
+:EMMO_80bf0979-a0ec-529c-b9a1-d4aa3032e037 a owl:Class ;
     emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "everything that can be perceived or measured"@en ;
-    rdfs:comment " this definition is much broader than definition of pattern such as \"the regular and repeated way in which something happens or is\""@en,
+    rdfs:comment " note that this is changed from pattern as Pattern is from emmo-beta4 an altLabel for Data"@en,
+        " this definition is much broader than definition of pattern such as \"the regular and repeated way in which something happens or is\""@en,
         "a pattern is defined from a contrast"@en ;
     rdfs:subClassOf emmo:EMMO_649bf97b_4397_4005_90d9_219755d92e34 ;
-    skos:prefLabel "Pattern"@en .
+    skos:prefLabel "SpecialPattern"@en .
+
+:EMMO_9fa9ca88-2891-538a-a8dd-ccb8a08b9890 a owl:Class ;
+    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "NEED elucidation"@en ;
+    rdfs:subClassOf :EMMO_80bf0979-a0ec-529c-b9a1-d4aa3032e037 ;
+    skos:altLabel "A"@en,
+        "Just"@en,
+        "Test"@en ;
+    skos:prefLabel "SpatioTemporalPattern"@en .
 
 :EMMO_4b32833e-0833-56a7-903c-28a6a8191fe8 a owl:Class ;
     emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "Pattern occuring within a boundary in the 4D space"@en ;
@@ -178,7 +180,7 @@
     rdfs:subClassOf [ a owl:Restriction ;
             owl:onProperty emmo:EMMO_17e27c22_37e1_468c_9dd7_95e137f73e7f ;
             owl:someValuesFrom :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ],
-        :EMMO_cd254842-c697-55f6-917d-9805c77b9187 ;
+        :EMMO_80bf0979-a0ec-529c-b9a1-d4aa3032e037 ;
     skos:prefLabel "FinitePattern"@en .
 
 :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 a owl:Class ;

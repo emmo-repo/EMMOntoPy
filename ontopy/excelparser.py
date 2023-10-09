@@ -319,12 +319,10 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
         # Set given or default base_iri if base_iri_from_metadata is False.
         if not base_iri_from_metadata:
             onto.base_iri = base_iri
-
-    onto.sync_python_names()
+    # onto.sync_python_names()
     # prefLabel, label, and altLabel
     # are default label annotations
     onto.set_default_label_annotations()
-
     # Add object properties
     if objectproperties is not None:
         objectproperties = _clean_dataframe(objectproperties)
@@ -367,7 +365,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     onto.sync_attributes(
         name_policy="uuid", name_prefix="EMMO_", class_docstring="elucidation"
     )
-
     # Clean up data frame with new concepts
     data = _clean_dataframe(data)
     # Add entities
@@ -562,7 +559,6 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
             )
         except AttributeError:
             pass
-
     return onto, catalog
 
 

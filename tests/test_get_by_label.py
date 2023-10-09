@@ -1,15 +1,13 @@
 import pytest
 
-from ontopy import get_ontology
-from ontopy.ontology import NoSuchLabelError
-
 
 def test_get_by_label_onto(repo_dir) -> None:
     """Test that label annotations are added correctly if they are not added before
     using get_by_label
     """
+    from ontopy import get_ontology
+    from ontopy.ontology import NoSuchLabelError, DEFAULT_LABEL_ANNOTATIONS
     import owlready2
-    from ontopy.ontology import DEFAULT_LABEL_ANNOTATIONS
 
     # create ontology with one class and check that it is found
     testonto = get_ontology("http://domain_ontology/new_ontology")
@@ -52,7 +50,7 @@ def test_get_by_label_onto(repo_dir) -> None:
         assert testonto.Klasse.prefLabel == ["Klasse"]
 
     testonto.new_entity("UnderKlasse", testonto.Klasse)
-    assert testonto.UnderKlasse.prefLabel == ["UnderKlasse"]
+    assert testonto.UnderKlasse.prefLabel.en == ["UnderKlasse"]
 
     assert testonto.get_by_label_all("*") == {
         testonto.prefLabel,
@@ -102,7 +100,11 @@ def test_get_by_label_onto(repo_dir) -> None:
 
 def test_get_by_label_emmo(emmo: "Ontology") -> None:
     # Loading emmo-inferred where everything is sqashed into one ontology
-    emmo = get_ontology().load()
+    from emmopy import get_emmo
+    from ontopy import get_ontology
+    from ontopy.ontology import NoSuchLabelError
+
+    emmo = get_emmo()
     assert emmo[emmo.Atom.name] == emmo.Atom
     assert emmo[emmo.Atom.iri] == emmo.Atom
 
@@ -110,7 +112,7 @@ def test_get_by_label_emmo(emmo: "Ontology") -> None:
     onto = get_ontology(
         "https://raw.githubusercontent.com/BIG-MAP/BattINFO/master/battinfo.ttl"
     ).load()
-    assert onto.Electrolyte.prefLabel.first() == "Electrolyte"
+    assert onto.Electrolyte.prefLabel.en.first() == "Electrolyte"
 
     # Check colon_in_name argument
     onto.Atom.altLabel.append("Element:X")

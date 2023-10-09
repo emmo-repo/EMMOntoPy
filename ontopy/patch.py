@@ -6,6 +6,7 @@ import owlready2
 from owlready2 import AnnotationPropertyClass, ThingClass, PropertyClass
 from owlready2 import Metadata, Thing, Restriction, Namespace
 from ontopy.utils import EMMOntoPyException
+from ontopy.ontology import Ontology as OntopyOntology
 
 
 def render_func(entity):
@@ -27,6 +28,10 @@ owlready2.set_render_func(render_func)
 #
 # Extending ThingClass (classes)
 # ==============================
+
+save_getattr = ThingClass.__getattr__
+
+
 def get_preferred_label(self):
     """Returns the preferred label as a string (not list).
 
@@ -69,7 +74,7 @@ def get_parents(self, strict=False):
 def _dir(self):
     """Extend dir() listing of ontology classes."""
     set_dir = set(object.__dir__(self))
-    props = self.namespace.world._props.keys()
+    props = [str(key) for key in self.namespace.world._props.keys()]
     set_dir.update(props)
     return sorted(set_dir)
 
@@ -91,14 +96,16 @@ def _setitem(self, name, value):
 
     Example:
     >>> from emmopy import get_emmo
+    >>> from owlready2 import locstr
     >>> emmo = get_emmo()
     >>> emmo.Atom['altLabel']
-    ['ChemicalElement']
+    [locstr('ChemicalElement', 'en')]
     >>> emmo.Atom['altLabel'] = 'Element'
+    >>> emmo.Atom['altLabel'] = locstr('Atomo', 'it')
     >>> emmo.Atom['altLabel']
-    ['ChemicalElement', 'Element']
-
+    [locstr('ChemicalElement', 'en'), 'Element', locstr('Atomo', 'it')]
     """
+
     item = _getitem(self, name)
     item.append(value)
 
@@ -110,6 +117,24 @@ def _delitem(self, name):
     """
     item = _getitem(self, name)
     item.clear()
+
+
+def _getattr(self, name):
+    """Provide attribute access to annotation properties.
+
+    This upates __getattr__ in owlready2. If name is not found as
+    attribute it tries using the iriname of the annotation property.
+    """
+    try:
+        return save_getattr(self, name)
+    except AttributeError as err:
+        # make sure we are using and ontopy Ontology which has get_by_label
+        if isinstance(self.namespace.ontology, OntopyOntology):
+            entity = self.namespace.ontology.get_by_label(name)
+            # add annotation property to world._props for faster access later
+            self.namespace.world._props[name] = entity
+            return save_getattr(self, entity.name)
+        raise err
 
 
 def get_annotations(
@@ -125,7 +150,7 @@ def get_annotations(
     onto = self.namespace.ontology
 
     annotations = {
-        get_preferred_label(_): _._get_values_for_class(self)
+        str(get_preferred_label(_)): _._get_values_for_class(self)
         for _ in onto.annotation_properties(imported=imported)
     }
     if all:
@@ -197,6 +222,7 @@ setattr(ThingClass, "__dir__", _dir)
 setattr(ThingClass, "__getitem__", _getitem)
 setattr(ThingClass, "__setitem__", _setitem)
 setattr(ThingClass, "__delitem__", _delitem)
+setattr(ThingClass, "__getattr__", _getattr)
 setattr(ThingClass, "get_preferred_label", get_preferred_label)
 setattr(ThingClass, "get_parents", get_parents)
 setattr(ThingClass, "get_annotations", get_annotations)
@@ -252,7 +278,7 @@ setattr(Namespace, "__init__", namespace_init)
 # Extending Metadata
 # ==================
 def keys(self):
-    """Return a generator over annotation property names associates
+    """Return a generator over annotation property names associated
     with this ontology."""
     namespace = self.namespace
     for annotation in namespace.annotation_properties():
