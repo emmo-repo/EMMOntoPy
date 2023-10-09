@@ -826,6 +826,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_dimensional_unit" class="md-nav__link">
+    test_dimensional_unit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_namespace" class="md-nav__link">
     test_namespace()
   </a>
@@ -842,6 +849,13 @@
           <li class="md-nav__item">
   <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_quantity_dimension" class="md-nav__link">
     test_quantity_dimension()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_quantity_dimension_beta3" class="md-nav__link">
+    test_quantity_dimension_beta3()
   </a>
   
 </li>
@@ -1329,6 +1343,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_dimensional_unit" class="md-nav__link">
+    test_dimensional_unit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_namespace" class="md-nav__link">
     test_namespace()
   </a>
@@ -1345,6 +1366,13 @@
           <li class="md-nav__item">
   <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_quantity_dimension" class="md-nav__link">
     test_quantity_dimension()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_quantity_dimension_beta3" class="md-nav__link">
+    test_quantity_dimension_beta3()
   </a>
   
 </li>
@@ -1645,7 +1673,7 @@ TestFunctionalEMMOConventions        </code>
                         <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span>
                     <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">test_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_quantity_dimension_beta3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all quantities have a physicalDimension annotation.</span>
 
 <span class="sd">        Note: this test will be deprecated when isq is moved to emmo/domain.</span>
@@ -1718,6 +1746,113 @@ TestFunctionalEMMOConventions        </code>
                     <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;physicalDimension&quot;</span><span class="p">,</span> <span class="n">anno</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">)</span>
                     <span class="n">physdim</span> <span class="o">=</span> <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;physicalDimension&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">assertRegex</span><span class="p">(</span><span class="n">physdim</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all quantities have a physicalDimension.</span>
+
+<span class="sd">        Note: this test will be deprecated when isq is moved to emmo/domain.</span>
+
+<span class="sd">        Configurations:</span>
+<span class="sd">            exceptions - full class names of classes to ignore.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pylint: disable=invalid-name</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;properties.ModelledQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties.MeasuredQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties.ConventionalQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.QuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.Quantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.OrdinalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.BaseQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.PhysicalConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.PhysicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.ExactConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.MeasuredConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;metrology.DerivedQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;isq.ISQBaseQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;isq.InternationalSystemOfQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;isq.ISQDerivedQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;isq.SIExactConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ModelledQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.MeasuredQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ConventionalQuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.QuantitativeProperty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.Quantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.OrdinalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.BaseQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.PhysicalConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.PhysicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ExactConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.MeasuredConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.DerivedQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ISQBaseQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.InternationalSystemOfQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ISQDerivedQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIExactConstant&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.NonSIUnits&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.StandardizedPhysicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.CategorizedPhysicalQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ISO80000Categorised&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.AtomicAndNuclear&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.Defined&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.Electromagnetic&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.FrequentlyUsed&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.ChemicalCompositionQuantity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.EquilibriumConstant&quot;</span><span class="p">,</span>  <span class="c1"># physical dimension may change</span>
+                <span class="s2">&quot;emmo.Solubility&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.Universal&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.Intensive&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.Extensive&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.Concentration&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="s2">&quot;PhysicalQuantity&quot;</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_quantity_dimension.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+        <span class="p">)</span>
+        <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">ISO80000Categorised</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
+                    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_indirect_is_a</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Restriction</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">repr</span><span class="p">(</span>
+                            <span class="n">r</span>
+                        <span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;emmo.hasMeasurementUnit.some&quot;</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                                <span class="nb">issubclass</span><span class="p">(</span>
+                                    <span class="n">r</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                    <span class="p">(</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">DimensionalUnit</span><span class="p">,</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">DimensionlessUnit</span><span class="p">,</span>
+                                    <span class="p">),</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                            <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                            <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">ISQDimensionlessQuantity</span><span class="p">)</span>
+                        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_dimensional_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check correct syntax of dimension string of dimensional units.&quot;&quot;&quot;</span>
+        <span class="c1"># pylint: disable=invalid-name</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="s2">&quot;^T([+-][1-9][0-9]*|0) L([+-][1-9]|0) M([+-][1-9]|0) &quot;</span>
+            <span class="s2">&quot;I([+-][1-9]|0) (H|Θ)([+-][1-9]|0) N([+-][1-9]|0) &quot;</span>
+            <span class="s2">&quot;J([+-][1-9]|0)$&quot;</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">SIDimensionalUnit</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">():</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Restriction</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertRegex</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">regex</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">test_physical_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all physical quantities have `hasPhysicalDimension`.</span>
@@ -1878,6 +2013,44 @@ TestFunctionalEMMOConventions        </code>
 
 
 
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="emmopy.emmocheck.TestFunctionalEMMOConventions.test_dimensional_unit">
+<code class="highlight language-python"><span class="n">test_dimensional_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_dimensional_unit" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check correct syntax of dimension string of dimensional units.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_dimensional_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check correct syntax of dimension string of dimensional units.&quot;&quot;&quot;</span>
+    <span class="c1"># pylint: disable=invalid-name</span>
+    <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="s2">&quot;^T([+-][1-9][0-9]*|0) L([+-][1-9]|0) M([+-][1-9]|0) &quot;</span>
+        <span class="s2">&quot;I([+-][1-9]|0) (H|Θ)([+-][1-9]|0) N([+-][1-9]|0) &quot;</span>
+        <span class="s2">&quot;J([+-][1-9]|0)$&quot;</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">SIDimensionalUnit</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">():</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Restriction</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertRegex</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">regex</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
 
 
 
@@ -2096,7 +2269,7 @@ TestFunctionalEMMOConventions        </code>
 
     <div class="doc doc-contents ">
 
-      <p>Check that all quantities have a physicalDimension annotation.</p>
+      <p>Check that all quantities have a physicalDimension.</p>
 <p>Note: this test will be deprecated when isq is moved to emmo/domain.</p>
 <div class="admonition configurations">
 <p class="admonition-title">Configurations</p>
@@ -2106,6 +2279,126 @@ TestFunctionalEMMOConventions        </code>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_quantity_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all quantities have a physicalDimension.</span>
+
+<span class="sd">    Note: this test will be deprecated when isq is moved to emmo/domain.</span>
+
+<span class="sd">    Configurations:</span>
+<span class="sd">        exceptions - full class names of classes to ignore.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># pylint: disable=invalid-name</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;properties.ModelledQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties.MeasuredQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties.ConventionalQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.QuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.Quantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.OrdinalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.BaseQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.PhysicalConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.PhysicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.ExactConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.MeasuredConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrology.DerivedQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;isq.ISQBaseQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;isq.InternationalSystemOfQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;isq.ISQDerivedQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;isq.SIExactConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ModelledQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.MeasuredQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ConventionalQuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.QuantitativeProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.Quantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.OrdinalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.BaseQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.PhysicalConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.PhysicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ExactConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.MeasuredConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.DerivedQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ISQBaseQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.InternationalSystemOfQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ISQDerivedQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIExactConstant&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.NonSIUnits&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.StandardizedPhysicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.CategorizedPhysicalQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ISO80000Categorised&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.AtomicAndNuclear&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.Defined&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.Electromagnetic&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.FrequentlyUsed&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.ChemicalCompositionQuantity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.EquilibriumConstant&quot;</span><span class="p">,</span>  <span class="c1"># physical dimension may change</span>
+            <span class="s2">&quot;emmo.Solubility&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.Universal&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.Intensive&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.Extensive&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.Concentration&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="s2">&quot;PhysicalQuantity&quot;</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_quantity_dimension.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+    <span class="p">)</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
+    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">ISO80000Categorised</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_indirect_is_a</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Restriction</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">repr</span><span class="p">(</span>
+                        <span class="n">r</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;emmo.hasMeasurementUnit.some&quot;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                            <span class="nb">issubclass</span><span class="p">(</span>
+                                <span class="n">r</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                <span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">DimensionalUnit</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">DimensionlessUnit</span><span class="p">,</span>
+                                <span class="p">),</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                        <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">ISQDimensionlessQuantity</span><span class="p">)</span>
+                    <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="emmopy.emmocheck.TestFunctionalEMMOConventions.test_quantity_dimension_beta3">
+<code class="highlight language-python"><span class="n">test_quantity_dimension_beta3</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_quantity_dimension_beta3" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that all quantities have a physicalDimension annotation.</p>
+<p>Note: this test will be deprecated when isq is moved to emmo/domain.</p>
+<div class="admonition configurations">
+<p class="admonition-title">Configurations</p>
+<p>exceptions - full class names of classes to ignore.</p>
+</div>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_quantity_dimension_beta3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all quantities have a physicalDimension annotation.</span>
 
 <span class="sd">    Note: this test will be deprecated when isq is moved to emmo/domain.</span>
@@ -2365,6 +2658,7 @@ TestSyntacticEMMOConventions        </code>
                 <span class="s2">&quot;2-manifold&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;3-manifold&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;C++&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;3DPrinting&quot;</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
         <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_class_label.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
@@ -2458,6 +2752,7 @@ start with upper case.</p>
             <span class="s2">&quot;2-manifold&quot;</span><span class="p">,</span>
             <span class="s2">&quot;3-manifold&quot;</span><span class="p">,</span>
             <span class="s2">&quot;C++&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;3DPrinting&quot;</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span>
     <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_class_label.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
@@ -2859,6 +3154,8 @@ manually / through Python.</p></td>
             <span class="n">skipped</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>  <span class="c1"># skipped by default</span>
                 <span class="p">[</span>
                     <span class="s2">&quot;test_namespace&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;test_physical_quantity_dimension_annotation&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;test_quantity_dimension_beta3&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;test_physical_quantity_dimension&quot;</span><span class="p">,</span>
                 <span class="p">]</span>
             <span class="p">)</span>
