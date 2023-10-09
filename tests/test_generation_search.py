@@ -147,3 +147,8 @@ def test_ancestors(emmo: "Ontology", repo_dir: "Path") -> None:
         onto.NorwaySpruce,
         onto.Avocado,
     }
+
+    assert (
+        onto.get_wu_palmer_measure(onto.NorwaySpruce, onto.Avocado)
+        == 0.5714285714285714
+    )
