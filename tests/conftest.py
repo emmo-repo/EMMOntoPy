@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from typing import Sequence
 import sys, os
 
+# Add test-specific utilities to path
 sys.path.append(os.path.join(os.path.dirname(__file__), "utilities"))
 
 

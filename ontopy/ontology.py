@@ -904,7 +904,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             )
 
         revmap = {value: key for key, value in FMAP.items()}
-
+        print(filename)
         if filename is None:
             if format:
                 fmt = revmap.get(format, format)

@@ -39,10 +39,10 @@ def test_prefix(testonto: "Ontology", emmo: "Ontology") -> None:
     )
 
     with pytest.raises(ValueError):
-        assert testonto.get_by_label_all(" ")
+        testonto.get_by_label_all(" ")
 
     with pytest.raises(TypeError):
-        assert testonto.get_by_label(1)
+        testonto.get_by_label(1)
 
 
 def test_prefix_emmo(emmo: "Ontology") -> None:

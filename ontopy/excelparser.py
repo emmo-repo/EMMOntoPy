@@ -559,7 +559,6 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
             )
         except AttributeError:
             pass
-    print("************", onto.elucidation, onto.Atom.elucidation)
     return onto, catalog
 
 
