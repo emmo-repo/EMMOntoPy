@@ -49,7 +49,7 @@ from ontopy.utils import (
 )
 
 if TYPE_CHECKING:
-    from typing import List
+    from typing import List, Sequence
 
 
 # Default annotations to look up
@@ -76,18 +76,33 @@ class World(owlready2.World):
         self._iri_mappings = {}  # all iri mappings loaded so far
         super().__init__(*args, **kwargs)
 
-    def get_ontology(self, base_iri="emmo-inferred"):
+    def get_ontology(
+        self,
+        base_iri: str = "emmo-inferred",
+        OntologyClass: "owlready2.Ontology" = None,
+        label_annotations: "Sequence" = None,
+    ) -> "Ontology":
+        # pylint: disable=too-many-branches
         """Returns a new Ontology from `base_iri`.
 
-        The `base_iri` argument may be one of:
-          - valid URL (possible excluding final .owl or .ttl)
-          - file name (possible excluding final .owl or .ttl)
-          - "emmo": load latest version of asserted EMMO
-          - "emmo-inferred": load latest version of inferred EMMO
-            (default)
-          - "emmo-development": load latest inferred development version
-            of EMMO. Until first stable release emmo-inferred and
-            emmo-development will be the same.
+        Arguments:
+            base_iri: The base IRI of the ontology. May be one of:
+                - valid URL (possible excluding final .owl or .ttl)
+                - file name (possible excluding final .owl or .ttl)
+                - "emmo": load latest version of asserted EMMO
+                - "emmo-inferred": load latest version of inferred EMMO
+                  (default)
+                - "emmo-development": load latest inferred development
+                  version of EMMO. Until first stable release
+                  emmo-inferred and emmo-development will be the same.
+            OntologyClass: If given and `base_iri` doesn't correspond
+                to an existing ontology, a new ontology is created of
+                this Ontology subclass.  Defaults to `ontopy.Ontology`.
+            label_annotations: Sequence of label IRIs used for accessing
+                entities in the ontology given that they are in the ontology.
+                Label IRIs not in the ontology will need to be added to
+                ontologies in order to be accessible.
+                Defaults to DEFAULT_LABEL_ANNOTATIONS if set to None.
         """
         base_iri = base_iri.as_uri() if isinstance(base_iri, Path) else base_iri
 
@@ -124,7 +139,14 @@ class World(owlready2.World):
 
             if iri[-1] not in "/#":
                 iri += "#"
-            onto = Ontology(self, iri)
+
+            if OntologyClass is None:
+                OntologyClass = Ontology
+
+            onto = OntologyClass(self, iri)
+
+        if label_annotations:
+            onto.label_annotations = list(label_annotations)
 
         return onto
 
@@ -148,18 +170,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     """A generic class extending owlready2.Ontology."""
 
     def __init__(self, *args, **kwargs):
-        # Properties controlling what annotations that are considered by
-        # get_by_label()
         super().__init__(*args, **kwargs)
-        self._label_annotations = None
+        self.label_annotations = DEFAULT_LABEL_ANNOTATIONS[:]
         self.prefix = None
-
-    # Properties controlling what annotations that are considered by
-    # get_by_label()
-    label_annotations = property(
-        fget=lambda self: self._label_annotations,
-        doc="List of label annotation searched for by get_by_label().",
-    )
 
     # Name of special unlabeled entities, like Thing, Nothing, etc...
     _special_labels = None
@@ -205,13 +218,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         lst = list(self.get_entities(imported=self._dir_imported))
         if self._dir_preflabel:
             dirset.update(
-                dir.prefLabel.first()
+                str(dir.prefLabel.first())
                 for dir in lst
                 if hasattr(dir, "prefLabel")
             )
         if self._dir_label:
             dirset.update(
-                dir.label.first() for dir in lst if hasattr(dir, "label")
+                str(dir.label.first()) for dir in lst if hasattr(dir, "label")
             )
         if self._dir_name:
             dirset.update(dir.name for dir in lst if hasattr(dir, "name"))
@@ -275,12 +288,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
     def set_default_label_annotations(self):
         """Sets the default label annotations."""
-        if self._label_annotations is None:
-            for iri in DEFAULT_LABEL_ANNOTATIONS:
-                try:
-                    self.add_label_annotation(iri)
-                except ValueError:
-                    pass
+        warnings.warn(
+            "Ontology.set_default_label_annotations() is deprecated. "
+            "Default label annotations are set by Ontology.__init__(). ",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        self.label_annotations = DEFAULT_LABEL_ANNOTATIONS[:]
 
     def get_by_label(
         self,
@@ -292,8 +306,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     ):
         """Returns entity with label annotation `label`.
 
-        Args:
-           label: label so serach for.
+        Arguments:
+           label: label so search for.
                May be written as 'label' or 'prefix:label'.
                get_by_label('prefix:label') ==
                get_by_label('label', prefix='prefix').
@@ -320,8 +334,11 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         # pylint: disable=too-many-arguments,too-many-branches,invalid-name
         if not isinstance(label, str):
             raise TypeError(
-                f"Invalid label definition, must be a string: {label!r}"
+                f"Invalid label definition, must be a string: '{label}'"
             )
+
+        if label_annotations is None:
+            label_annotations = self.label_annotations
 
         if colon_in_label is None:
             colon_in_label = self._colon_in_label
@@ -353,12 +370,12 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 return entityset.pop()
             if len(entityset) > 1:
                 raise AmbiguousLabelError(
-                    f"Several entities have the same label {label!r} "
-                    f"with prefix {prefix!r}."
+                    f"Several entities have the same label '{label}' "
+                    f"with prefix '{prefix}'."
                 )
             raise NoSuchLabelError(
-                f"No label annotations matches for {label!r} "
-                f"with prefix {prefix!r}."
+                f"No label annotations matches for '{label}' "
+                f"with prefix '{prefix}'."
             )
 
         # Label is a full IRI
@@ -366,26 +383,15 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         if entity:
             return entity
 
-        # First entity with matching label annotation
-
-        if label_annotations:
-            annotation_ids = (
-                self._abbreviate(ann, False) for ann in label_annotations
-            )
-        elif self._label_annotations:
-            annotation_ids = (ann.storid for ann in self._label_annotations)
-        else:
-            annotation_ids = None
-
         get_triples = (
             self.world._get_data_triples_spod_spod
             if imported
             else self._get_data_triples_spod_spod
         )
-        if annotation_ids:
-            for annotation_id in annotation_ids:
-                for s, _, _, _ in get_triples(None, annotation_id, label, None):
-                    return self.world[self._unabbreviate(s)]
+
+        for storid in self._to_storids(label_annotations):
+            for s, _, _, _ in get_triples(None, storid, label, None):
+                return self.world[self._unabbreviate(s)]
 
         # Special labels
         if self._special_labels and label in self._special_labels:
@@ -396,25 +402,41 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         if entity:
             return entity
 
-        # Check if label is a name in any namespace
-        for namespace in self._namespaces.keys():
-            entity = self.world[namespace + label]
-            if entity:
+        # Check label is the name of an entity
+        for entity in self.get_entities(imported=imported):
+            if label == entity.name:
                 return entity
 
         raise NoSuchLabelError(f"No label annotations matches '{label}'")
 
-    def get_by_label_all(self, label, label_annotations=None, prefix=None):
-        """Like get_by_label(), but returns a list with all matching labels.
+    def get_by_label_all(
+        self,
+        label,
+        label_annotations=None,
+        prefix=None,
+        exact_match=False,
+    ) -> "Set[Optional[owlready2.entity.EntityClass]]":
+        """Returns set of entities with label annotation `label`.
 
-        Returns an empty list if no matches could be found.
+        Arguments:
+           label: label so search for.
+               May be written as 'label' or 'prefix:label'.  Wildcard matching
+               using glob pattern is also supported if `exact_match` is set to
+               false.
+           label_annotations: a sequence of label annotation names to look up.
+               Defaults to the `label_annotations` property.
+           prefix: if provided, it should be the last component of
+               the base iri of an ontology (with trailing slash (/) or hash
+               (#) stripped off).  The search for a matching label will be
+               limited to this namespace.
+           exact_match: Do not treat "*" and brackets as special characters
+               when matching.  May be useful if your ontology has labels
+               containing such labels.
 
-        Note
-        ----
-        The current implementation also supports "*" as a wildcard
-        matching any number of characters. This may change in the future.
+        Returns:
+            Set of all matching entities or an empty set if no matches
+            could be found.
         """
-
         if not isinstance(label, str):
             raise TypeError(
                 f"Invalid label definition, " f"must be a string: {label!r}"
@@ -424,32 +446,45 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 f"Invalid label definition, {label!r} contains spaces."
             )
 
-        if label_annotations:
-            annotations = (
-                ann.name if hasattr(ann, "storid") else ann
-                for ann in label_annotations
-            )
-        elif self._label_annotations:
-            annotations = (ann.name for ann in self.label_annotations)
+        if label_annotations is None:
+            label_annotations = self.label_annotations
 
-        else:
-            annotations = None
         entities = set()
-        if annotations:
-            for key in annotations:
+
+        # Check label annotations
+        if exact_match:
+            for storid in self._to_storids(label_annotations):
+                entities.update(
+                    self.world._get_by_storid(s)
+                    for s, _, _ in self.world._get_data_triples_spod_spod(
+                        None, storid, str(label), None
+                    )
+                )
+        else:
+            for storid in self._to_storids(label_annotations):
+                label_entity = self._unabbreviate(storid)
+                key = (
+                    label_entity.name
+                    if hasattr(label_entity, "name")
+                    else label_entity
+                )
                 entities.update(self.world.search(**{key: label}))
 
         if self._special_labels and label in self._special_labels:
             entities.update(self._special_labels[label])
 
-        # Find existence in get_entities
-        matches = fnmatch.filter(
-            (ent.name for ent in self.get_entities()), label
-        )
-
-        entities.update(
-            ent for ent in self.get_entities() if ent.name in matches
-        )
+        # Check name-part of IRI
+        if exact_match:
+            entities.update(
+                ent for ent in self.get_entities() if ent.name == str(label)
+            )
+        else:
+            matches = fnmatch.filter(
+                (ent.name for ent in self.get_entities()), label
+            )
+            entities.update(
+                ent for ent in self.get_entities() if ent.name in matches
+            )
 
         if prefix:
             return set(
@@ -459,32 +494,57 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             )
         return entities
 
-    def add_label_annotation(self, iri):
-        """Adds label annotation used by get_by_label().
+    def _to_storids(self, sequence, create_if_missing=False):
+        """Return a list of storid's corresponding to the elements in the
+        sequence `sequence`.
 
-        May be provided either as an IRI or as its owlready2 representation.
+        The elements may be either be full IRIs (strings) or Owlready2
+        entities with an associated storid.
+
+        If `create_if_missing` is true, new Owlready2 entities will be
+        created for IRIs that not already are associated with an
+        entity.  Otherwise such IRIs will be skipped in the returned
+        list.
         """
-        if self._label_annotations is None:
-            self._label_annotations = []
-        label_annotation = iri if hasattr(iri, "storid") else self.world[iri]
-        if label_annotation is None:
-            warnings.warn(f"adding new IRI to ontology: {iri}")
-            name = iri.rsplit("/")[-1].rsplit("#")[-1]
-            bases = (owlready2.AnnotationProperty,)
-            with self:
-                label_annotation = types.new_class(name, bases)
-        if label_annotation not in self._label_annotations:
-            self._label_annotations.append(label_annotation)
+        if not sequence:
+            return []
+        storids = []
+        for element in sequence:
+            if hasattr(element, "storid"):
+                storids.append(element.storid)
+            else:
+                storid = self.world._abbreviate(element, create_if_missing)
+                if storid:
+                    storids.append(storid)
+        return storids
+
+    def add_label_annotation(self, iri):
+        """Adds label annotation used by get_by_label()."""
+        warnings.warn(
+            "Ontology.add_label_annotations() is deprecated. "
+            "Direct modify the `label_annotations` attribute instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        if hasattr(iri, "iri"):
+            iri = iri.iri
+        if iri not in self.label_annotations:
+            self.label_annotations.append(iri)
 
     def remove_label_annotation(self, iri):
-        """Removes label annotation used by get_by_label().
-
-        May be provided either as an IRI or as its owlready2 representation.
-        """
-        label_annotation = iri if hasattr(iri, "storid") else self.world[iri]
-        if not label_annotation:
-            raise ValueError(f"IRI not in ontology: {iri}")
-        self._label_annotations.remove(label_annotation)
+        """Removes label annotation used by get_by_label()."""
+        warnings.warn(
+            "Ontology.remove_label_annotations() is deprecated. "
+            "Direct modify the `label_annotations` attribute instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        if hasattr(iri, "iri"):
+            iri = iri.iri
+        try:
+            self.label_annotations.remove(iri)
+        except ValueError:
+            pass
 
     def set_common_prefix(
         self,
@@ -520,8 +580,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     ):
         """Load the ontology.
 
-        Parameters
-        ----------
+        Arguments
+        ---------
         only_local: bool
             Whether to only read local files.  This requires that you
             have appended the path to the ontology to owlready2.onto_path.
@@ -571,8 +631,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         # Enable optimised search by get_by_label()
         if self._special_labels is None and emmo_based:
-            for iri in DEFAULT_LABEL_ANNOTATIONS:
-                self.add_label_annotation(iri)
             top = self.world["http://www.w3.org/2002/07/owl#topObjectProperty"]
             self._special_labels = {
                 "Thing": owlready2.Thing,
@@ -846,7 +904,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             )
 
         revmap = {value: key for key, value in FMAP.items()}
-
         if filename is None:
             if format:
                 fmt = revmap.get(format, format)
@@ -1004,51 +1061,100 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def classes(self, imported=False):
         """Returns an generator over all classes.
 
-        If `imported` is `True`, will imported classes are also returned.
+        Arguments:
+            imported: if `True`, entities in imported ontologies
+                are also returned.
         """
+        return self._entities("classes", imported=imported)
+
+    def _entities(
+        self, entity_type, imported=False
+    ):  # pylint: disable=too-many-branches
+        """Returns an generator over all entities of the desired type.
+        This is a helper function for `classes()`, `individuals()`,
+        `object_properties()`, `data_properties()` and
+        `annotation_properties()`.
+
+        Arguments:
+            entity_type: The type of entity desired given as a string.
+                Can be any of `classes`, `individuals`,
+                `object_properties`, `data_properties` and
+                `annotation_properties`.
+            imported: if `True`, entities in imported ontologies
+                are also returned.
+        """
+
+        generator = []
         if imported:
-            return self.world.classes()
-        return super().classes()
+            ontologies = self.get_imported_ontologies(recursive=True)
+            ontologies.append(self)
+            for onto in ontologies:
+                if entity_type == "classes":
+                    for cls in list(onto.classes()):
+                        generator.append(cls)
+                elif entity_type == "individuals":
+                    for ind in list(onto.individuals()):
+                        generator.append(ind)
+                elif entity_type == "object_properties":
+                    for prop in list(onto.object_properties()):
+                        generator.append(prop)
+                elif entity_type == "data_properties":
+                    for prop in list(onto.data_properties()):
+                        generator.append(prop)
+                elif entity_type == "annotation_properties":
+                    for prop in list(onto.annotation_properties()):
+                        generator.append(prop)
+        else:
+            if entity_type == "classes":
+                generator = super().classes()
+            elif entity_type == "individuals":
+                generator = super().individuals()
+            elif entity_type == "object_properties":
+                generator = super().object_properties()
+            elif entity_type == "data_properties":
+                generator = super().data_properties()
+            elif entity_type == "annotation_properties":
+                generator = super().annotation_properties()
+
+        for entity in generator:
+            yield entity
 
     def individuals(self, imported=False):
         """Returns an generator over all individuals.
 
-        If `imported` is `True`, will imported individuals are also returned.
+        Arguments:
+            imported: if `True`, entities in imported ontologies
+                are also returned.
         """
-        if imported:
-            return self.world.individuals()
-        return super().individuals()
+        return self._entities("individuals", imported=imported)
 
     def object_properties(self, imported=False):
-        """Returns an generator over all object properties.
+        """Returns an generator over all object_properties.
 
-        If `imported` is true, will imported object properties are also
-        returned.
+        Arguments:
+            imported: if `True`, entities in imported ontologies
+                are also returned.
         """
-        if imported:
-            return self.world.object_properties()
-        return super().object_properties()
+        return self._entities("object_properties", imported=imported)
 
     def data_properties(self, imported=False):
-        """Returns an generator over all data properties.
+        """Returns an generator over all data_properties.
 
-        If `imported` is true, will imported data properties are also
-        returned.
+        Arguments:
+            imported: if `True`, entities in imported ontologies
+                are also returned.
         """
-        if imported:
-            return self.world.data_properties()
-        return super().data_properties()
+        return self._entities("data_properties", imported=imported)
 
     def annotation_properties(self, imported=False):
-        """Returns a generator iterating over all annotation properties
-        defined in the current ontology.
+        """Returns an generator over all annotation_properties.
 
-        If `imported` is true, annotation properties in imported ontologies
-        will also be included.
+        Arguments:
+            imported: if `True`, entities in imported ontologies
+                are also returned.
+
         """
-        if imported:
-            return self.world.annotation_properties()
-        return super().annotation_properties()
+        return self._entities("annotation_properties", imported=imported)
 
     def get_root_classes(self, imported=False):
         """Returns a list or root classes."""
@@ -1144,8 +1250,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             sync = owlready2.sync_reasoner_hermit
         else:
             raise ValueError(
-                f"unknown reasoner {reasoner!r}. Supported reasoners "
-                'are "Pellet", "HermiT" and "FaCT++".'
+                f"unknown reasoner '{reasoner}'. Supported reasoners "
+                "are 'Pellet', 'HermiT' and 'FaCT++'."
             )
 
         # For some reason we must visit all entities once before running
@@ -1265,6 +1371,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             "Ontology.get_relations() is deprecated. Use "
             "onto.object_properties() instead.",
             DeprecationWarning,
+            stacklevel=2,
         )
         return self.object_properties()
 
@@ -1275,6 +1382,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             "Ontology.get_annotations(entity) is deprecated. Use "
             "entity.get_annotations() instead.",
             DeprecationWarning,
+            stacklevel=2,
         )
 
         if isinstance(entity, str):
@@ -1683,6 +1791,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 AnnotationPropertyClass,
             ]
         ] = "class",
+        preflabel: Optional[str] = None,
     ) -> Union[
         ThingClass,
         ObjectPropertyClass,
@@ -1701,6 +1810,11 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 'annotation_property' (strings) or the
                 Python classes ObjectPropertyClass,
                 DataPropertyClass and AnnotationProperty classes.
+            preflabel: if given, add this as a skos:prefLabel annotation
+                to the new entity.  If None (default), `name` will
+                be added as prefLabel if skos:prefLabel is in the ontology
+                and listed in `self.label_annotations`.  Set `preflabel` to
+                False, to avoid assigning a prefLabel.
 
         Returns:
             the new entity.
@@ -1710,13 +1824,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         By default, the parent is Thing.
 
         """
+        # pylint: disable=invalid-name
         if " " in name:
             raise LabelDefinitionError(
                 f"Error in label name definition '{name}': "
                 f"Label consists of more than one word."
             )
         parents = tuple(parent) if isinstance(parent, Iterable) else (parent,)
-
         if entitytype == "class":
             parenttype = owlready2.ThingClass
         elif entitytype == "data_property":
@@ -1746,12 +1860,23 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         with self:
             entity = types.new_class(name, parents)
-            # Set prefLabel to name if label_annotations is set
-            # and prefLabel is one of the annotations
-            if self.label_annotations and "prefLabel" in [
-                ann.name for ann in self.label_annotations
-            ]:
+
+            preflabel_iri = "http://www.w3.org/2004/02/skos/core#prefLabel"
+            if preflabel:
+                if not self.world[preflabel_iri]:
+                    pref_label = self.new_annotation_property(
+                        "prefLabel",
+                        parent=[owlready2.AnnotationProperty],
+                    )
+                    pref_label.iri = preflabel_iri
+                entity.prefLabel = english(preflabel)
+            elif (
+                preflabel is None
+                and preflabel_iri in self.label_annotations
+                and self.world[preflabel_iri]
+            ):
                 entity.prefLabel = english(name)
+
         return entity
 
     # Method that creates new ThingClass using new_entity

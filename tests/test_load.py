@@ -12,28 +12,28 @@ def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
 
     # Check that the defaults works
     emmo = get_ontology("emmo").load()  # ttl format
-    assert emmo.Atom.prefLabel.first() == "Atom"
+    assert str(emmo.Atom.prefLabel.first()) == "Atom"
 
     emmo = get_ontology("emmo-inferred").load()
-    assert emmo.Atom.prefLabel.first() == "Atom"
+    assert str(emmo.Atom.prefLabel.first()) == "Atom"
 
     emmo = get_ontology("emmo-development").load()  # ttl format
-    assert emmo.Atom.prefLabel.first() == "Atom"
+    assert str(emmo.Atom.prefLabel.first()) == "Atom"
 
     emmo = get_ontology(
         "https://emmo-repo.github.io/latest-stable/" "emmo-inferred.owl"
     ).load()  # owl format
-    assert emmo.Atom.prefLabel.first() == "Atom"
+    assert str(emmo.Atom.prefLabel.first()) == "Atom"
 
     # Load a local ontology with catalog
-    assert testonto.TestClass.prefLabel.first() == "TestClass"
+    assert str(testonto.TestClass.prefLabel.first()) == "TestClass"
 
     # Use catalog file when downloading from web
     onto = get_ontology(
         "https://raw.githubusercontent.com/BIG-MAP/BattINFO/master/"
         "battinfo.ttl"
     ).load()
-    assert onto.Electrolyte.prefLabel.first() == "Electrolyte"
+    assert str(onto.Electrolyte.prefLabel.first()) == "Electrolyte"
 
     with pytest.raises(
         EMMOntoPyException,
