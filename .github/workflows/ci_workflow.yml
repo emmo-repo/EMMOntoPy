@@ -17,12 +17,12 @@ jobs:
 
       # pre-commit
       run_pre-commit: true
-      python_version_pre-commit: "3.8"
+      python_version_pre-commit: "3.9"
       skip_pre-commit_hooks: pylint
 
       # pylint
       run_pylint: true
-      python_version_pylint_safety: "3.7"
+      python_version_pylint_safety: "3.9"
       pylint_options: "--rcfile=pyproject.toml"
       pylint_targets: "*.py tools emmopy ontopy"
 
@@ -42,13 +42,13 @@ jobs:
 
       # Build distribution
       run_build_package: true
-      python_version_package: "3.7"
+      python_version_package: "3.9"
       build_cmd: "python -m build"
 
       # Build documentation
       # Exclude base classes in emmopy.emmocheck
       run_build_docs: true
-      python_version_docs: "3.7"
+      python_version_docs: "3.9"
       update_python_api_ref: true
       update_docs_landing_page: true
       package_dirs: |
@@ -91,7 +91,7 @@ jobs:
       run: pytest -vvv --cov=ontopy --cov=emmopy --cov-report=xml --cov-report=term --doctest-modules
 
     - name: Upload coverage to Codecov
-      if: matrix.python-version == '3.7' && github.repository == 'emmo-repo/EMMOntoPy'
+      if: matrix.python-version == '3.9' && github.repository == 'emmo-repo/EMMOntoPy'
       uses: codecov/codecov-action@v3
 
     # - name: Run vertical demo
@@ -117,10 +117,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python 3.7
+    - name: Set up Python 3.9
       uses: actions/setup-python@v4
       with:
-        python-version: "3.7"
+        python-version: "3.9"
 
     - name: Check Ubuntu version we are running under
       run: |
