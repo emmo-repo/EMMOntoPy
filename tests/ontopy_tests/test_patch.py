@@ -1,48 +1,91 @@
 """Tests Owlready2 patches implemented in ontopy/patch.py
 
-Implemented as a script, such that it easy to understand and use for debugging.
 """
+
 import pytest
 
 from ontopy import get_ontology
 
 from owlready2 import owl, Inverse
 
-
-emmo = get_ontology().load()
-
-
-# Test some ThingClass extensions implemented in patch.py
-assert emmo.Atom.get_preferred_label() == "Atom"
-
-assert emmo.Atom.get_parents() == {emmo.MolecularEntity}
-
-assert set(emmo.Atom.get_annotations().keys()) == {
-    "prefLabel",
-    "altLabel",
-    "elucidation",
-    "comment",
-}
+from utilities import setassert
 
 
-# Test item access/assignment/deletion for classes
-assert set(emmo.Atom["altLabel"]) == {"ChemicalElement"}
+def test_get_by_label_onto(emmo: "Ontology") -> None:
+    # Test some ThingClass extensions implemented in patch.py
+    assert str(emmo.Atom.get_preferred_label()) == "Atom"
 
-with pytest.raises(KeyError):
-    emmo.Atom["hasPart"]
+    assert emmo.Atom.get_parents() == {emmo.MolecularEntity}
 
-emmo.Atom["altLabel"] = "Element"
-assert set(emmo.Atom["altLabel"]) == {"ChemicalElement", "Element"}
+    setassert(
+        emmo.Atom.get_annotations().keys(),
+        {
+            "prefLabel",
+            "altLabel",
+            "elucidation",
+            "comment",
+        },
+    )
+    setassert(
+        emmo.Atom.get_annotations(all=True).keys(),
+        {
+            "qualifiedCardinality",
+            "minQualifiedCardinality",
+            "prefLabel",
+            "abstract",
+            "hiddenLabel",
+            "etymology",
+            "altLabel",
+            "example",
+            "elucidation",
+            "OWLDLRestrictedAxiom",
+            "wikipediaReference",
+            "conceptualisation",
+            "logo",
+            "comment",
+            "dbpediaReference",
+            "definition",
+            "VIMTerm",
+            "creator",
+            "iupacReference",
+            "contact",
+            "omReference",
+            "ISO9000Reference",
+            "ISO80000Reference",
+            "qudtReference",
+            "contributor",
+            "license",
+            "ISO14040Reference",
+            "figure",
+            "title",
+            "publisher",
+        },
+    )
 
-del emmo.Atom["altLabel"]
-assert emmo.Atom["altLabel"] == []
+    # Test item access/assignment/deletion for classes
+    setassert(emmo.Atom["altLabel"], {"ChemicalElement"})
 
-emmo.Atom["altLabel"] = "ChemicalElement"
-assert emmo.Atom["altLabel"] == ["ChemicalElement"]
+    with pytest.raises(KeyError):
+        emmo.Atom["hasPart"]
 
+    emmo.Atom["altLabel"] = "Element"
+    setassert(emmo.Atom["altLabel"], {"ChemicalElement", "Element"})
 
-assert emmo.Atom.is_defined == False
-assert emmo.Holistic.is_defined == True
+    del emmo.Atom["altLabel"]
+    assert emmo.Atom["altLabel"] == []
+
+    emmo.Atom.altLabel = "ChemicalElement"
+    assert emmo.Atom["altLabel"] == ["ChemicalElement"]
+
+    assert emmo.Atom.is_defined == False
+    assert emmo.Holistic.is_defined == True
+    assert (
+        emmo.wikipediaReference
+    )  # Check that wikipediaReference is in ontology
+    assert (
+        emmo.Atom.wikipediaReference == []
+    )  # Check that wikipediaReference can be acceses as attribute
+
 
 # TODO: Fix disjoint_with().
 # It seems not to take into account disjoint unions.

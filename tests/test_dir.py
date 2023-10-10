@@ -2,7 +2,6 @@ from pathlib import Path
 
 from ontopy import get_ontology
 
-
 thisdir = Path(__file__).resolve().parent
 
 onto = get_ontology(

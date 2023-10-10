@@ -6,6 +6,11 @@ import pytest
 
 if TYPE_CHECKING:
     from ontopy.ontology import Ontology
+    from typing import Sequence
+import sys, os
+
+# Add test-specific utilities to path
+sys.path.append(os.path.join(os.path.dirname(__file__), "utilities"))
 
 
 @pytest.fixture(scope="session")
@@ -16,7 +21,14 @@ def repo_dir() -> Path:
 
 @pytest.fixture
 def emmo() -> "Ontology":
-    """Load and return EMMO."""
+    """Load and return EMMO.
+
+    Note that this loads the version of EMMO that is
+    the current defailt in ontopy.
+
+    When updating the defeault EMMO for ontopy,
+    tests might need to be updated.
+    """
     from emmopy import get_emmo
 
     emmo = get_emmo()
