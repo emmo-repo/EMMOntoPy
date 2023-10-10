@@ -393,7 +393,7 @@ class EMMO2Meta:
         """Returns description for OWL class `cls` by combining its
         annotations."""
         if isinstance(cls, str):
-            cls = onto[cls]
+            cls = self.onto[cls]
         descr = []
         annotations = self.onto.get_annotations(cls)
         if "definition" in annotations:
