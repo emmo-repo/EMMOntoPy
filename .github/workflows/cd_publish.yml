@@ -7,7 +7,7 @@ on:
 jobs:
   publish:
     name: External
-    uses: SINTEF/ci-cd/.github/workflows/cd_release.yml@v1
+    uses: SINTEF/ci-cd/.github/workflows/cd_release.yml@v2.5.2
     if: github.repository == 'emmo-repo/EMMOntoPy' && startsWith(github.ref, 'refs/tags/v')
     with:
       git_username: EMMOntoPy Developers
@@ -16,7 +16,7 @@ jobs:
 
       # Publish package
       python_package: true
-      python_version_build: "3.7"
+      python_version_build: "3.9"
       # We're mentioning only 'ontopy', since the version is set statically only in
       # ontopy/__init__.py
       package_dirs: ontopy
@@ -26,7 +26,7 @@ jobs:
 
       # Update documentation
       update_docs: true
-      python_version_docs: "3.7"
+      python_version_docs: "3.9"
       doc_extras: "[docs]"
       changelog_exclude_labels: dependencies
 

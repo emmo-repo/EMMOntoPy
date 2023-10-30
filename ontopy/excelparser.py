@@ -20,7 +20,9 @@ import pyparsing
 import ontopy
 from ontopy import get_ontology
 from ontopy.utils import EMMOntoPyException, NoSuchLabelError
-from ontopy.utils import ReadCatalogError, read_catalog
+from ontopy.utils import ReadCatalogError
+from ontopy.utils import read_catalog, english
+from ontopy.ontology import LabelDefinitionError
 from ontopy.manchester import evaluate
 import owlready2  # pylint: disable=C0411
 
@@ -29,16 +31,14 @@ class ExcelError(EMMOntoPyException):
     """Raised on errors in Excel file."""
 
 
-def english(string):
-    """Returns `string` as an English location string."""
-    return owlready2.locstr(string, lang="en")
-
-
-def create_ontology_from_excel(  # pylint: disable=too-many-arguments
+def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-locals
     excelpath: str,
     concept_sheet_name: str = "Concepts",
     metadata_sheet_name: str = "Metadata",
     imports_sheet_name: str = "ImportedOntologies",
+    dataproperties_sheet_name: str = "DataProperties",
+    objectproperties_sheet_name: str = "ObjectProperties",
+    annotationproperties_sheet_name: str = "AnnotationProperties",
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
     imports: list = None,
@@ -67,6 +67,21 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
             Column name is 'Imported ontologies'.
             Fully resolvable URL or path to imported ontologies provided one
             per row.
+        dataproperties_sheet_name: Name of sheet where data properties are
+            defined. The second row of this sheet should contain column names
+            that are supported. Currently these are 'prefLabel','altLabel',
+            'Elucidation', 'Comments', 'Examples', 'subPropertyOf',
+            'Domain', 'Range', 'dijointWith', 'equivalentTo'.
+        annotationproperties_sheet_name: Name of sheet where annotation
+            properties are defined. The second row of this sheet should contain
+            column names that are supported. Currently these are 'prefLabel',
+            'altLabel', 'Elucidation', 'Comments', 'Examples', 'subPropertyOf',
+            'Domain', 'Range'.
+        objectproperties_sheet_name: Name of sheet where object properties are
+            defined.The second row of this sheet should contain column names
+            that are supported. Currently these are 'prefLabel','altLabel',
+            'Elucidation', 'Comments', 'Examples', 'subPropertyOf',
+            'Domain', 'Range', 'inverseOf', 'dijointWith', 'equivalentTo'.
         base_iri: Base IRI of the new ontology.
         base_iri_from_metadata: Whether to use base IRI defined from metadata.
         imports: List of imported ontologies.
@@ -88,23 +103,87 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
             * a dictionary with lists of concepts that raise errors, with the
               following keys:
 
-                - "already_defined": These are concepts that are already in the
+                - "already_defined": These are concepts (classes)
+                    that are already in the
                     ontology, because they were already added in a
                     previous line of the excelfile/pandas dataframe, or because
                     it is already defined in an imported ontology with the same
                     base_iri as the newly created ontology.
-                - "in_imported_ontologies": Concepts that are defined in the
+                - "in_imported_ontologies": Concepts (classes)
+                    that are defined in the
                     excel, but already exist in the imported ontologies.
-                - "wrongly_defined": Concepts that are given an invalid
-                    prefLabel (e.g. with a space in the name).
-                - "missing_parents": Concepts that are missing parents.
+                - "wrongly_defined": Concepts (classes) that are given an
+                    invalid prefLabel (e.g. with a space in the name).
+                - "missing_subClassOf": Concepts (classes) that are missing
+                    parents. These concepts are added directly under owl:Thing.
+                - "invalid_subClassOf": Concepts (classes) with invalidly
+                    defined parents.
                     These concepts are added directly under owl:Thing.
-                - "invalid_parents": Concepts with invalidly defined parents.
-                    These concepts are added directly under owl:Thing.
-                - "nonadded_concepts": List of all concepts that are not added,
+                - "nonadded_concepts": List of all concepts (classes) that are
+                    not added,
                     either because the prefLabel is invalid, or because the
                     concept has already been added once or already exists in an
                     imported ontology.
+                - "obj_prop_already_defined": Object properties that are already
+                    defined in the ontology.
+                - "obj_prop_in_imported_ontologies": Object properties that are
+                    defined in the excel, but already exist in the imported
+                    ontologies.
+                - "obj_prop_wrongly_defined": Object properties that are given
+                    an invalid prefLabel (e.g. with a space in the name).
+                - "obj_prop_missing_subPropertyOf": Object properties that are
+                    missing parents.
+                - "obj_prop_invalid_subPropertyOf": Object properties with
+                    invalidly defined parents.
+                - "obj_prop_nonadded_entities": List of all object properties
+                    that are not added, either because the prefLabel is invalid,
+                    or because the concept has already been added once or
+                    already exists in an imported ontology.
+                - "obj_prop_errors_in_properties": Object properties with
+                    invalidly defined properties.
+                - "obj_prop_errors_in_range": Object properties with invalidly
+                    defined range.
+                - "obj_prop_errors_in_domain": Object properties with invalidly
+                    defined domain.
+                - "annot_prop_already_defined": Annotation properties that are
+                    already defined in the ontology.
+                - "annot_prop_in_imported_ontologies":  Annotation properties
+                    that
+                    are defined in the excel, but already exist in the imported
+                    ontologies.
+                - "annot_prop_wrongly_defined": Annotation properties that are
+                    given an invalid prefLabel (e.g. with a space in the name).
+                - "annot_prop_missing_subPropertyOf": Annotation properties that
+                    are missing parents.
+                - "annot_prop_invalid_subPropertyOf": Annotation properties with
+                    invalidly defined parents.
+                - "annot_prop_nonadded_entities": List of all annotation
+                    properties that are not added, either because the prefLabel
+                    is invalid, or because the concept has already been added
+                    once or already exists in an imported ontology.
+                - "annot_prop_errors_in_properties": Annotation properties with
+                    invalidly defined properties.
+                - "data_prop_already_defined": Data properties that are already
+                    defined in the ontology.
+                - "data_prop_in_imported_ontologies": Data properties that are
+                    defined in the excel, but already exist in the imported
+                    ontologies.
+                - "data_prop_wrongly_defined":  Data properties that are given
+                    an invalid prefLabel (e.g. with a space in the name).
+                - "data_prop_missing_subPropertyOf": Data properties that are
+                    missing parents.
+                - "data_prop_invalid_subPropertyOf": Data properties with
+                    invalidly defined parents.
+                - "data_prop_nonadded_entities": List of all data properties
+                    that are not added, either because the prefLabel is invalid,
+                    or because the concept has already been added once or
+                    already exists in an imported ontology.
+                - "data_prop_errors_in_properties": Data properties with
+                    invalidly defined properties.
+                - "data_prop_errors_in_range": Data properties with invalidly
+                    defined range.
+                - "data_prop_errors_in_domain": Data properties with invalidly
+                    defined domain.
 
     """
     web_protocol = "http://", "https://", "ftp://"
@@ -137,9 +216,69 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
     conceptdata = pd.read_excel(
         excelpath, sheet_name=concept_sheet_name, skiprows=[0, 2]
     )
+    try:
+        objectproperties = pd.read_excel(
+            excelpath, sheet_name=objectproperties_sheet_name, skiprows=[0, 2]
+        )
+        if "prefLabel" not in objectproperties.columns:
+            warnings.warn(
+                "The 'prefLabel' column is missing in "
+                f"{objectproperties_sheet_name}. "
+                "New object properties will not be added to the ontology."
+            )
+            objectproperties = None
+    except ValueError:
+        warnings.warn(
+            f"No sheet named {objectproperties_sheet_name} found "
+            f"in {excelpath}. "
+            "New object properties will not be added to the ontology."
+        )
+        objectproperties = None
+    try:
+        annotationproperties = pd.read_excel(
+            excelpath,
+            sheet_name=annotationproperties_sheet_name,
+            skiprows=[0, 2],
+        )
+        if "prefLabel" not in annotationproperties.columns:
+            warnings.warn(
+                "The 'prefLabel' column is missing in "
+                f"{annotationproperties_sheet_name}. "
+                "New annotation properties will not be added to the ontology."
+            )
+            annotationproperties = None
+    except ValueError:
+        warnings.warn(
+            f"No sheet named {annotationproperties_sheet_name} "
+            f"found in {excelpath}. "
+            "New annotation properties will not be added to the ontology."
+        )
+        annotationproperties = None
+
+    try:
+        dataproperties = pd.read_excel(
+            excelpath, sheet_name=dataproperties_sheet_name, skiprows=[0, 2]
+        )
+        if "prefLabel" not in dataproperties.columns:
+            warnings.warn(
+                "The 'prefLabel' column is missing in "
+                f"{dataproperties_sheet_name}. "
+                "New data properties will not be added to the ontology."
+            )
+            dataproperties = None
+    except ValueError:
+        warnings.warn(
+            f"No sheet named {dataproperties_sheet_name} found in {excelpath}. "
+            "New data properties will not be added to the ontology."
+        )
+        dataproperties = None
+
     metadata = pd.read_excel(excelpath, sheet_name=metadata_sheet_name)
     return create_ontology_from_pandas(
         data=conceptdata,
+        objectproperties=objectproperties,
+        dataproperties=dataproperties,
+        annotationproperties=annotationproperties,
         metadata=metadata,
         imports=imports,
         base_iri=base_iri,
@@ -152,6 +291,9 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments
 
 def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments
     data: pd.DataFrame,
+    objectproperties: pd.DataFrame,
+    annotationproperties: pd.DataFrame,
+    dataproperties: pd.DataFrame,
     metadata: pd.DataFrame,
     imports: pd.DataFrame,
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
@@ -165,16 +307,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
 
     Check 'create_ontology_from_excel' for complete documentation.
     """
-
-    # Remove lines with empty prefLabel
-    data = data[data["prefLabel"].notna()]
-    # Convert all data to string, remove spaces, and finally remove
-    # additional rows with empty prefLabel.
-    data = data.astype(str)
-    data["prefLabel"] = data["prefLabel"].str.strip()
-    data = data[data["prefLabel"].str.len() > 0]
-    data.reset_index(drop=True, inplace=True)
-
+    # Get ontology to which new concepts should be added
     if input_ontology:
         onto = input_ontology
         catalog = {}
@@ -186,217 +319,142 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
         # Set given or default base_iri if base_iri_from_metadata is False.
         if not base_iri_from_metadata:
             onto.base_iri = base_iri
-    labels = set(data["prefLabel"])
-    for altlabel in data["altLabel"].str.strip():
-        if not altlabel == "nan":
-            labels.update(altlabel.split(";"))
+    # onto.sync_python_names()
+    # prefLabel, label, and altLabel
+    # are default label annotations
+    onto.set_default_label_annotations()
+    # Add object properties
+    if objectproperties is not None:
+        objectproperties = _clean_dataframe(objectproperties)
+        (
+            onto,
+            objectproperties_with_errors,
+            added_objprop_indices,
+        ) = _add_entities(
+            onto=onto,
+            data=objectproperties,
+            entitytype=owlready2.ObjectPropertyClass,
+            force=force,
+        )
 
-    # Dictionary with lists of concepts that raise errors
-    concepts_with_errors = {
-        "already_defined": [],
-        "in_imported_ontologies": [],
-        "wrongly_defined": [],
-        "missing_parents": [],
-        "invalid_parents": [],
-        "nonadded_concepts": [],
-        "errors_in_properties": [],
-    }
+    if annotationproperties is not None:
+        annotationproperties = _clean_dataframe(annotationproperties)
+        (
+            onto,
+            annotationproperties_with_errors,
+            added_annotprop_indices,
+        ) = _add_entities(
+            onto=onto,
+            data=annotationproperties,
+            entitytype=owlready2.AnnotationPropertyClass,
+            force=force,
+        )
 
-    onto.sync_python_names()
+    if dataproperties is not None:
+        dataproperties = _clean_dataframe(dataproperties)
+        (
+            onto,
+            dataproperties_with_errors,
+            added_dataprop_indices,
+        ) = _add_entities(
+            onto=onto,
+            data=dataproperties,
+            entitytype=owlready2.DataPropertyClass,
+            force=force,
+        )
+    onto.sync_attributes(
+        name_policy="uuid", name_prefix="EMMO_", class_docstring="elucidation"
+    )
+    # Clean up data frame with new concepts
+    data = _clean_dataframe(data)
+    # Add entities
+    onto, entities_with_errors, added_concept_indices = _add_entities(
+        onto=onto, data=data, entitytype=owlready2.ThingClass, force=force
+    )
 
-    with onto:
-        remaining_rows = set(range(len(data)))
-        all_added_rows = []
-        while remaining_rows:
-            added_rows = set()
-            for index in remaining_rows:
-                row = data.loc[index]
-                name = row["prefLabel"]
-                try:
-                    onto.get_by_label(name)
-                    if onto.base_iri in [
-                        a.namespace.base_iri
-                        for a in onto.get_by_label_all(name)
-                    ]:
-                        if not force:
-                            raise ExcelError(
-                                f'Concept "{name}" already in ontology'
-                            )
-                        warnings.warn(
-                            f'Ignoring concept "{name}" since it is already in '
-                            "the ontology."
-                        )
-                        concepts_with_errors["already_defined"].append(name)
-                        continue
-                    concepts_with_errors["in_imported_ontologies"].append(name)
-                except (ValueError, TypeError) as err:
-                    warnings.warn(
-                        f'Ignoring concept "{name}". '
-                        f'The following error was raised: "{err}"'
-                    )
-                    concepts_with_errors["wrongly_defined"].append(name)
-                    continue
-                except NoSuchLabelError:
-                    pass
-                if row["subClassOf"] == "nan":
-                    if not force:
-                        raise ExcelError(f"{row[0]} has no subClassOf")
-                    parent_names = []  # Should be "owl:Thing"
-                    concepts_with_errors["missing_parents"].append(name)
-                else:
-                    parent_names = str(row["subClassOf"]).split(";")
-                parents = []
-                invalid_parent = False
-                for parent_name in parent_names:
-                    try:
-                        parent = onto.get_by_label(parent_name.strip())
-                    except (NoSuchLabelError, ValueError) as exc:
-                        if parent_name not in labels:
-                            if force:
-                                warnings.warn(
-                                    f'Invalid parents for "{name}": '
-                                    f'"{parent_name}".'
-                                )
-                                concepts_with_errors["invalid_parents"].append(
-                                    name
-                                )
-                                break
-                            raise ExcelError(
-                                f'Invalid parents for "{name}": {exc}\n'
-                                "Have you forgotten an imported ontology?"
-                            ) from exc
-                        invalid_parent = True
-                        break
-                    else:
-                        parents.append(parent)
-
-                if invalid_parent:
-                    continue
-
-                if not parents:
-                    parents = [owlready2.Thing]
-
-                concept = onto.new_entity(name, parents)
-                added_rows.add(index)
-                # Add elucidation
-                try:
-                    _add_literal(
-                        row,
-                        concept.elucidation,
-                        "Elucidation",
-                        only_one=True,
-                    )
-                except AttributeError as err:
-                    if force:
-                        _add_literal(
-                            row,
-                            concept.comment,
-                            "Elucidation",
-                            only_one=True,
-                        )
-                        warnings.warn("Elucidation added as comment.")
-                    else:
-                        raise ExcelError(
-                            f"Not able to add elucidations. {err}."
-                        ) from err
-
-                # Add examples
-                try:
-                    _add_literal(
-                        row, concept.example, "Examples", expected=False
-                    )
-                except AttributeError:
-                    if force:
-                        warnings.warn(
-                            "Not able to add examples. "
-                            "Did you forget to import an ontology?."
-                        )
-
-                # Add comments
-                _add_literal(row, concept.comment, "Comments", expected=False)
-
-                # Add altLabels
-                try:
-                    _add_literal(
-                        row, concept.altLabel, "altLabel", expected=False
-                    )
-                except AttributeError as err:
-                    if force is True:
-                        _add_literal(
-                            row,
-                            concept.label,
-                            "altLabel",
-                            expected=False,
-                        )
-                        warnings.warn("altLabel added as rdfs.label.")
-                    else:
-                        raise ExcelError(
-                            f"Not able to add altLabels. " f"{err}."
-                        ) from err
-
-            remaining_rows.difference_update(added_rows)
-
-            # Detect infinite loop...
-            if not added_rows and remaining_rows:
-                unadded = [data.loc[i].prefLabel for i in remaining_rows]
-                if force is True:
-                    warnings.warn(
-                        f"Not able to add the following concepts: {unadded}."
-                        " Will continue without these."
-                    )
-                    remaining_rows = False
-                    concepts_with_errors["nonadded_concepts"] = unadded
-                else:
-                    raise ExcelError(
-                        f"Not able to add the following concepts: {unadded}."
-                    )
-            all_added_rows.extend(added_rows)
-
-    # Add properties in a second loop
-    for index in all_added_rows:
+    # Add entity properties in a second loop
+    for index in added_concept_indices:
         row = data.loc[index]
         properties = row["Relations"]
         if properties == "nan":
             properties = None
         if isinstance(properties, str):
             try:
-                concept = onto.get_by_label(row["prefLabel"].strip())
+                entity = onto.get_by_label(row["prefLabel"].strip())
             except NoSuchLabelError:
                 pass
             props = properties.split(";")
             for prop in props:
                 try:
-                    concept.is_a.append(evaluate(onto, prop.strip()))
+                    entity.is_a.append(evaluate(onto, prop.strip()))
                 except pyparsing.ParseException as exc:
                     warnings.warn(
-                        f"Error in Property assignment for: '{concept}'. "
+                        # This is currently not tested
+                        f"Error in Property assignment for: '{entity}'. "
                         f"Property to be Evaluated: '{prop}'. "
                         f"{exc}"
                     )
-                    concepts_with_errors["errors_in_properties"].append(name)
+                    entities_with_errors["errors_in_properties"].append(
+                        entity.name
+                    )
                 except NoSuchLabelError as exc:
                     msg = (
-                        f"Error in Property assignment for: {concept}. "
+                        f"Error in Property assignment for: {entity}. "
                         f"Property to be Evaluated: {prop}. "
                         f"{exc}"
                     )
                     if force is True:
                         warnings.warn(msg)
-                        concepts_with_errors["errors_in_properties"].append(
-                            name
+                        entities_with_errors["errors_in_properties"].append(
+                            entity.name
                         )
                     else:
                         raise ExcelError(msg) from exc
+
+    # Add range and domain for object properties
+    if objectproperties is not None:
+        onto, objectproperties_with_errors = _add_range_domain(
+            onto=onto,
+            properties=objectproperties,
+            added_prop_indices=added_objprop_indices,
+            properties_with_errors=objectproperties_with_errors,
+            force=force,
+        )
+        for key, value in objectproperties_with_errors.items():
+            entities_with_errors["obj_prop_" + key] = value
+    # Add range and domain for annotation properties
+    if annotationproperties is not None:
+        onto, annotationproperties_with_errors = _add_range_domain(
+            onto=onto,
+            properties=annotationproperties,
+            added_prop_indices=added_annotprop_indices,
+            properties_with_errors=annotationproperties_with_errors,
+            force=force,
+        )
+        for key, value in annotationproperties_with_errors.items():
+            entities_with_errors["annot_prop_" + key] = value
+
+    # Add range and domain for data properties
+    if dataproperties is not None:
+        onto, dataproperties_with_errors = _add_range_domain(
+            onto=onto,
+            properties=dataproperties,
+            added_prop_indices=added_dataprop_indices,
+            properties_with_errors=dataproperties_with_errors,
+            force=force,
+        )
+        for key, value in dataproperties_with_errors.items():
+            entities_with_errors["data_prop_" + key] = value
 
     # Synchronise Python attributes to ontology
     onto.sync_attributes(
         name_policy="uuid", name_prefix="EMMO_", class_docstring="elucidation"
     )
     onto.dir_label = False
-    concepts_with_errors = {
-        key: set(value) for key, value in concepts_with_errors.items()
+    entities_with_errors = {
+        key: set(value) for key, value in entities_with_errors.items()
     }
-    return onto, catalog, concepts_with_errors
+    return onto, catalog, entities_with_errors
 
 
 def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
@@ -501,7 +559,6 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
             )
         except AttributeError:
             pass
-
     return onto, catalog
 
 
@@ -514,7 +571,6 @@ def _parse_literal(
     """Helper function to make list ouf strings from ';'-delimited
     strings in one string.
     """
-
     if metadata is True:
         values = data.loc[data["Metadata name"] == name]["Value"].item()
     else:
@@ -549,3 +605,338 @@ def _add_literal(  # pylint: disable=too-many-arguments
                 warnings.warn(f"Missing metadata {name}")
             else:
                 warnings.warn(f"{data[0]} has no {name}")
+
+
+def _clean_dataframe(
+    data: pd.DataFrame,
+) -> pd.DataFrame:
+    """Remove lines with empty prefLabel,
+    convert all data to strings, remove spaces, and finally remove
+    additional rows with 0-length prefLabel.
+    """
+    data = data[data["prefLabel"].notna()]
+    data = data.astype(str)
+    data["prefLabel"] = data["prefLabel"].str.strip()
+    data = data[data["prefLabel"].str.len() > 0]
+    data.reset_index(drop=True, inplace=True)
+    return data
+
+
+def _add_entities(
+    # pylint: disable=too-many-statements,too-many-branches, too-many-locals
+    onto: ontopy.ontology.Ontology,
+    data: pd.DataFrame,
+    entitytype: Union[
+        owlready2.ThingClass,
+        owlready2.AnnotationPropertyClass,
+        owlready2.ObjectPropertyClass,
+        owlready2.DataPropertyClass,
+    ],
+    force: bool = False,
+) -> Tuple[ontopy.ontology.Ontology, dict, list]:
+    """Add entities to ontology.
+    Returns ontology, dictionary with lists of entities that raise errors,
+    and a list with indices of added rows."""
+    labels = set(data["prefLabel"])
+    for altlabel in data["altLabel"].str.strip():
+        if not altlabel == "nan":
+            labels.update(altlabel.split(";"))
+    # Find column name depending on entitytype
+    if entitytype is owlready2.ThingClass:
+        rowheader = "subClassOf"
+    # If entitytype is a subclass of owlready2.PropertyClass
+    elif entitytype in [
+        owlready2.AnnotationPropertyClass,
+        owlready2.ObjectPropertyClass,
+        owlready2.DataPropertyClass,
+    ]:
+        rowheader = "subPropertyOf"
+
+    # Dictionary with lists of entities that raise errors
+    entities_with_errors = {
+        "already_defined": [],
+        "in_imported_ontologies": [],
+        "wrongly_defined": [],
+        f"missing_{rowheader}": [],
+        f"invalid_{rowheader}": [],
+        "nonadded_entities": [],
+        "errors_in_properties": [],
+    }
+
+    with onto:
+        remaining_rows = set(range(len(data)))
+        all_added_rows = []
+        while remaining_rows:
+            added_rows = set()
+            for index in remaining_rows:
+                row = data.loc[index]
+                name = row["prefLabel"]
+                # Check if entity is already in ontology
+                try:
+                    onto.get_by_label(name)
+                    if onto.base_iri in [
+                        a.namespace.base_iri
+                        for a in onto.get_by_label_all(name)
+                    ]:
+                        if not force:
+                            raise ExcelError(
+                                f'Concept "{name}" already in ontology'
+                            )
+                        warnings.warn(
+                            f'Ignoring concept "{name}" since it is already in '
+                            "the ontology."
+                        )
+                        entities_with_errors["already_defined"].append(name)
+                        continue
+                    entities_with_errors["in_imported_ontologies"].append(name)
+                except (ValueError, TypeError) as err:
+                    warnings.warn(
+                        f'Ignoring concept "{name}". '
+                        f'The following error was raised: "{err}"'
+                    )
+                    entities_with_errors["wrongly_defined"].append(name)
+                    continue
+                except NoSuchLabelError:
+                    pass
+
+                # Find parents
+                if entitytype is owlready2.ThingClass:
+                    rowheader = "subClassOf"
+                # If entitytype is a subclass of owlready2.PropertyClass
+                elif entitytype in [
+                    owlready2.AnnotationPropertyClass,
+                    owlready2.ObjectPropertyClass,
+                    owlready2.DataPropertyClass,
+                ]:
+                    rowheader = "subPropertyOf"
+
+                (
+                    parents,
+                    invalid_parent,
+                    entities_with_errors,
+                ) = _make_entity_list(
+                    onto,
+                    row,
+                    rowheader,
+                    force,
+                    entities_with_errors,
+                    name,
+                    labels,
+                )
+                if invalid_parent:
+                    continue
+                if not parents:
+                    if entitytype == owlready2.ThingClass:
+                        parents = [owlready2.Thing]
+                    elif entitytype == owlready2.AnnotationPropertyClass:
+                        parents = [owlready2.AnnotationProperty]
+                    elif entitytype == owlready2.ObjectPropertyClass:
+                        parents = [owlready2.ObjectProperty]
+                    elif entitytype == owlready2.DataPropertyClass:
+                        parents = [owlready2.DataProperty]
+
+                # Add entity
+                try:
+                    entity = onto.new_entity(
+                        name, parents, entitytype=entitytype
+                    )
+                except LabelDefinitionError:
+                    entities_with_errors["wrongly_defined"].append(name)
+                    continue
+                added_rows.add(index)
+                # Add elucidation
+                try:
+                    _add_literal(
+                        row,
+                        entity.elucidation,
+                        "Elucidation",
+                        only_one=True,
+                    )
+                except AttributeError as err:
+                    if force:
+                        _add_literal(
+                            row,
+                            entity.comment,
+                            "Elucidation",
+                            only_one=True,
+                        )
+                        warnings.warn("Elucidation added as comment.")
+                    else:
+                        raise ExcelError(
+                            f"Not able to add elucidations. {err}."
+                        ) from err
+
+                # Add examples
+                try:
+                    _add_literal(
+                        row, entity.example, "Examples", expected=False
+                    )
+                except AttributeError:
+                    if force:
+                        warnings.warn(
+                            "Not able to add examples. "
+                            "Did you forget to import an ontology?."
+                        )
+
+                # Add comments
+                _add_literal(row, entity.comment, "Comments", expected=False)
+
+                # Add altLabels
+                try:
+                    _add_literal(
+                        row, entity.altLabel, "altLabel", expected=False
+                    )
+                except AttributeError as err:
+                    if force is True:
+                        _add_literal(
+                            row,
+                            entity.label,
+                            "altLabel",
+                            expected=False,
+                        )
+                        warnings.warn("altLabel added as rdfs.label.")
+                    else:
+                        raise ExcelError(
+                            f"Not able to add altLabels. " f"{err}."
+                        ) from err
+                # Add other annotations if any
+
+                if not (
+                    pd.isna(row["Other annotations"])
+                    or row["Other annotations"] == ""
+                    or row["Other annotations"] == "nan"
+                ):
+                    for annotation in row["Other annotations"].split(";"):
+                        key, value = annotation.split("=")
+                        entity[key.strip(" ")] = english(value.strip(" "))
+
+            remaining_rows.difference_update(added_rows)
+            # Detect infinite loop...
+            if not added_rows and remaining_rows:
+                unadded = [data.loc[i].prefLabel for i in remaining_rows]
+                if force is True:
+                    warnings.warn(
+                        f"Not able to add the following concepts: {unadded}."
+                        " Will continue without these."
+                    )
+                    remaining_rows = False
+                    entities_with_errors["nonadded_concepts"] = unadded
+                else:
+                    raise ExcelError(
+                        f"Not able to add the following concepts: {unadded}."
+                    )
+            all_added_rows.extend(added_rows)
+
+    return onto, entities_with_errors, all_added_rows
+
+
+# Helper function for adding range and domain to properties
+def _add_range_domain(
+    onto: owlready2.Ontology,
+    properties: pd.DataFrame,
+    added_prop_indices: list,
+    properties_with_errors: dict,
+    force: bool = False,
+) -> Tuple[owlready2.Ontology, dict]:
+    """Add range and domain to properties.
+
+    Arguments:
+        onto: ontology with properties already added,
+        properties: properties to whcih range and domain are to be added,
+        added_prop_indices: indices in properties dataframe describing
+            properties that have been added,
+        properties_with_errors: dictionary to store properties with errors,
+        force: if True, will skip properties with errors and add them to
+            the dictionary. If False errors will cause eception.
+
+    Returns:
+        onto: ontology with range and domain added to properties,
+        properties_with_errors: dictionary with properties with errors.
+    """
+    # check if both 'Ranges' and 'Domains' columns are present in dataframe
+    if (
+        "Ranges" not in properties.columns
+        or "Domains" not in properties.columns
+    ):
+        return onto, properties_with_errors
+
+    properties_with_errors["errors_in_range"] = []
+    properties_with_errors["errors_in_domain"] = []
+    for index in added_prop_indices:
+        row = properties.loc[index]
+        try:
+            prop = onto.get_by_label(row["prefLabel"].strip())
+        except NoSuchLabelError:
+            pass
+        if row["Ranges"] != "nan":
+            try:
+                prop.range = [onto.get_by_label(row["Ranges"].strip())]
+            except NoSuchLabelError as exc:
+                msg = (
+                    f"Error in range assignment for: {prop}. "
+                    f"Range to be Evaluated: {row['Ranges']}. "
+                    f"{exc}"
+                )
+                if force is True:
+                    warnings.warn(msg)
+                    properties_with_errors["errors_in_range"].append(prop.name)
+                else:
+                    raise ExcelError(msg) from exc
+        if row["Domains"] != "nan":
+            try:
+                prop.domain = [onto.get_by_label(row["Domains"].strip())]
+            except NoSuchLabelError as exc:
+                msg = (
+                    f"Error in domain assignment for: {prop}. "
+                    f"Domain to be Evaluated: {row['Domains']}. "
+                    f"{exc}"
+                )
+                if force is True:
+                    warnings.warn(msg)
+                    properties_with_errors["errors_in_domain"].append(prop.name)
+                else:
+                    raise ExcelError(msg) from exc
+    return onto, properties_with_errors
+
+
+def _make_entity_list(  # pylint: disable=too-many-arguments
+    onto: owlready2.Ontology,
+    row: pd.Series,
+    rowheader: str,
+    force: bool,
+    entities_with_errors: dict,
+    label: str,
+    valid_labels: list,
+):
+    """Help function to create a list of entities
+    from a pd.DataFrame wcich is a str."""
+    if row[rowheader] == "nan":
+        if not force:
+            raise ExcelError(f"{row[0]} has no {rowheader}")
+        name_list = []
+        entities_with_errors[f"missing_{rowheader}"].append(label)
+    else:
+        name_list = str(row[rowheader]).split(";")
+    concepts = []
+    invalid_concept = False
+    for name in name_list:
+        try:
+            concept = onto.get_by_label(name.strip())
+        except (NoSuchLabelError, ValueError) as exc:
+            if name not in valid_labels:
+                if force:
+                    warnings.warn(
+                        f'Invalid {rowheader} for "{label}": ' f'"{name}".'
+                    )
+                    entities_with_errors[f"invalid_{rowheader}"].append(label)
+                    break
+                raise ExcelError(
+                    f'Invalid {rowheader} for "{label}": {exc}\n'
+                    "Have you forgotten an imported ontology?"
+                ) from exc
+            invalid_concept = True
+            break
+        else:
+            concepts.append(concept)
+
+    return concepts, invalid_concept, entities_with_errors

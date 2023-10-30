@@ -3,44 +3,68 @@
 
 # EMMOntoPy
 
-*Python API for the Elemental Multiperspective Material Ontology ([EMMO]).*
+*Library for representing and working with ontologies in Python.*
 
 ![CI tests](https://github.com/emmo-repo/EMMOntoPy/workflows/CI%20Tests/badge.svg)
 [![PyPI version](https://badge.fury.io/py/EMMOntoPy.svg)](https://badge.fury.io/py/EMMOntoPy)
+[![DOI](https://zenodo.org/badge/190286064.svg)](https://zenodo.org/badge/latestdoi/190286064)
 
-> ***Note**: EMMOntoPy is a continuation of the EMMO-python project and the associated `emmo` Python package.
-> To see the legacy versions go to [PyPI](https://pypi.org/project/EMMO/).*
+EMMOntoPy is a Python package based on the excellent [Owlready2], which provides a natural and intuitive representation of ontologies in Python.
+EMMOntoPy extends Owlready2 and adds additional functionality, like accessing entities by label, reasoning with FaCT++ and parsing logical expressions in Manchester syntax.
+It also includes a set of tools, like creating an ontology from an Excel sheet, generation of reference documentation of ontologies and visualisation of ontologies graphically.
+EMMOntoPy is freely available for on GitHub and on PyPI under the permissive open source [BSD 3-Clause license](LICENSE.txt).
 
-This package is based on [Owlready2] and provides an intuitive representation of [EMMO] in Python.
-It is available on [GitHub][EMMOntoPy] and on [PyPI][PyPI:EMMOntoPy] under the open source [BSD 3-Clause license](LICENSE.txt).
+EMMOntoPy was originally developed to work effectively with the Elemental Multiperspective Material Ontology ([EMMO]) and EMMO-based domain ontologies.  
+It has now two sub-packages, `ontopy` and `emmopy`, where `ontopy` is a general package to work with any OWL ontology, while `emmopy` provides extra features that are specific to [EMMO].
 
-The Elemental Multiperspective Material Ontology (EMMO) is an ongoing effort to create an ontology that takes into account fundamental concepts of physics, chemistry and materials science and is designed to pave the road for semantic interoperability.
-The aim of EMMO is to be generic and provide a common ground for describing materials, models and data that can be adapted by all domains.
+Owlready2, and thereby also EMMOntoPy, represents OWL classes and individuals in Python as classes and instances.
+OWL properties are represented as Python attributes.
+Hence, it provides a new *dot* notation for representing ontologies as valid Python code.
+The notation is simple and easy to understand and write for people with some knowledge of OWL and Python.
+Since Python is a versatile programming language, Owlready2 does not only allow for representation of OWL ontologies, but also to work with them programmatically, including interpretation, modification and generation.
+Some of the additional features provided by EMMOntoPy are are listed below:
 
-EMMO is formulated using OWL.
-EMMOntoPy is a Python API for using EMMO to solving real problems.
-By using the excellent Python package [Owlready2], EMMOntoPy provides a natural representation of EMMO in Python.
-On top of that EMMOntoPy provides:
+## Access by label
+In Owlready2 ontological entities, like classes, properties and individuals are accessed by the name-part of their IRI (i.e. everything that follows after the final slash or hash in the IRI).
+This is very inconvenient for ontologies like EMMO or Wikidata, that identify ontological entities by long numerical names.
+For instance, the name-part of the IRI of the Atom class in EMMO is ‘EMMO_eb77076b_a104_42ac_a065_798b2d2809ad’, which is neither human readable nor easy to write.
+EMMOntoPy allows to access the entity via its label (or rather skos:prefLabel) ‘Atom’, which is much more user friendly.
 
-- Access by label (as well as by names, important since class and property names in EMMO are based on UUIDs).
-- Test suite for EMMO-based ontologies.
-- Generation of graphs.
-- Generation of documentation.
-- Command-line tools:
-  - [`emmocheck`](docs/tools-instructions.md#emmocheck):
-    Checks an ontology against EMMO conventions.
-  - [`ontoversion`](docs/tools-instructions.md#ontoversion):
-    Prints ontology version number.
+## Turtle serialisation/deserialisation
+The Terse RDF Triple Language (Turtle) is a common syntax and file format for representing ontologies.
+EMMOntoPy adds support for reading and writing ontologies in turtle format.
+
+## FaCT++ reasoning
+Owlready2 has only support for reasoning with HermiT and Pellet.
+EMMOntoPy adds additional support for the fast tableaux-based [FaCT++ reasoner] for description logics.
+
+## Manchester syntax
+Even though the Owlready2 dot notation is clear and easy to read and understand for people who know Python, it is a new syntax that may look foreign for people that are used to working with Protégé.
+EMMOntoPy provides support to parse and serialise logical expressions in [Manchester syntax], making it possible to create tools that will be much more familiar to work with for people used to working with Protégé.
+
+## Visualisation
+EMMOntoPy provides a Python module for graphical visualisation of ontologies.
+This module allows to graphically represent not only the taxonomy, but also restrictions and logical constructs.
+The classes to include in the graph, can either be specified manually or inferred from the taxonomy (like all subclasses of a give class that are not a subclass of any class in a set of other classes).
+
+## Tools
+EMMOntoPy includes a small set of command-line tools implemented as Python scripts:
+  - [`ontoconvert`](docs/tools-instructions.md#ontoconvert):
+    Converts ontologies between different file formats.
+    It also supports some additional transformation during conversion, like running a reasoner, merging several ontological modules together (squashing), rename IRIs, generate catalogue file and automatic annotation of entities with their source IRI.
   - [`ontograph`](docs/tools-instructions.md#ontograph):
-    Vertasile tool for visualising (parts of) an ontology.
+    Vertasile tool for visualising (parts of) an ontology, utilising the visualisation features mention above.
   - [`ontodoc`](docs/tools-instructions.md#ontodoc):
     Documents an ontology.
-  - [`ontoconvert`](docs/tools-instructions.md#ontoconvert):
-    Converts between ontology formats.
   - [`excel2onto`](docs/tools-instructions.md#excel2onto):
     Generate an EMMO-based ontology from an excel file.
+    It is useful for domain experts with limited knowledge of ontologies and that are not used to tools like Protégé.
+  - [`ontoversion`](docs/tools-instructions.md#ontoversion):
+    Prints ontology version number.
+  - [`emmocheck`](docs/tools-instructions.md#emmocheck):
+    A small test framework for checking the consistency of EMMO and EMMO-based domain ontologies and whether they confirm to the EMMO conventions.
 
-Some examples of what you can do with EMMOntoPy includes:
+## Some examples of what you can do with EMMOntoPy includes:
 
 - Access and query RDF-based ontologies from your application.
   This includes several different flavors of RDF (OWL, **Turtle (`ttl`)**, and more).
@@ -180,3 +204,5 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/), specifically:
 [Pygments]: https://pypi.org/project/Pygments/
 [semver]: https://pypi.org/project/semver/
 [rdflib]: https://pypi.org/project/rdflib/
+[FaCT++]: http://owl.cs.manchester.ac.uk/tools/fact/
+[Manchester syntax]: https://www.w3.org/TR/owl2-manchester-syntax/

@@ -7,9 +7,10 @@ if TYPE_CHECKING:
     from ontopy.ontology import Ontology
 
 
+@pytest.mark.filterwarnings("ignore:adding new IRI to ontology:UserWarning")
 def test_basic(emmo: "Ontology") -> None:
     from ontopy import get_ontology
-    from ontopy.utils import LabelDefinitionError
+    from ontopy.utils import LabelDefinitionError, EntityClassDefinitionError
 
     onto = get_ontology("onto.owl")
     onto.imported_ontologies.append(emmo)
@@ -20,14 +21,17 @@ def test_basic(emmo: "Ontology") -> None:
 
     # Test that new entity is found by both version of get_by_label
     assert onto.get_by_label("Hydrogen") == onto.Hydrogen
-    assert onto.get_by_label_all("Hydrogen") == [onto.Hydrogen]
+    assert onto.get_by_label_all("Hydrogen") == {onto.Hydrogen}
 
     onto.sync_attributes()
     # Test that after sync_attributes, the entity is not counted more than once
-    assert onto.get_by_label_all("Hydrogen") == [onto.Hydrogen]
+    assert onto.get_by_label_all("Hydrogen") == {onto.Hydrogen}
 
     with pytest.raises(LabelDefinitionError):
         onto.new_entity("Hydr ogen", emmo.Atom)
+
+    with pytest.raises(EntityClassDefinitionError):
+        onto.new_entity("Hydrogen", emmo.hasPart)
 
     with onto:
         # Add entity using python classes

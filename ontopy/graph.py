@@ -10,11 +10,12 @@ import warnings
 from typing import Optional, TYPE_CHECKING
 import defusedxml.ElementTree as ET
 import owlready2
+from owlready2.entity import ThingClass
 import graphviz
 
 from ontopy.utils import asstring, get_label
 from ontopy.ontology import Ontology
-from ontopy.utils import EMMOntoPyException
+from ontopy.utils import EMMOntoPyException, get_format
 
 if TYPE_CHECKING:
     from ipywidgets.widgets.widget_templates import GridspecLayout
@@ -101,10 +102,13 @@ _default_style = {
         "hasSpatialDirectPart": {"color": "darkgreen", "style": "dashed"},
         "hasTemporalPart": {"color": "magenta"},
         "hasTemporalDirectPart": {"color": "magenta", "style": "dashed"},
-        "hasReferenceUnit": {"color": "darkgreen", "style": "dashed"},
+        "hasReferenceUnit": {"color": "cornflowerblue", "style": "dashed"},
         "hasSign": {"color": "orange"},
         "hasConvention": {"color": "orange", "style": "dashed"},
         "hasProperty": {"color": "orange", "style": "dotted"},
+        "hasOutput": {"color": "darkviolet", "style": "dotted"},
+        "hasInput": {"color": "darkviolet"},
+        "hasTemporaryParticipant": {"color": "darkviolet", "style": "dashed"},
     },
     "inverse": {"arrowhead": "inv"},
     "default_dataprop": {"color": "green", "constraint": "false"},
@@ -165,7 +169,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         Name or owlready2 entity of root node to plot subgraph
         below.  If `root` is `graph.ALL`, all classes will be included
         in the subgraph.
-    leafs : None | sequence
+    leaves : None | sequence
         A sequence of leaf node names for generating sub-graphs.
     entities : None | sequence
         A sequence of entities to add to the graph.
@@ -205,7 +209,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         Whether to add labels to the edges of the generated graph.
         It is also possible to provide a dict mapping the
         full labels (with cardinality stripped off for restrictions)
-        to some abbriviations.
+        to some abbreviations.
     addnodes : bool
         Whether to add missing target nodes in relations.
     addconstructs : bool
@@ -235,7 +239,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         self,
         ontology,
         root=None,
-        leafs=None,
+        leaves=None,
         entities=None,
         relations="isA",
         style=None,
@@ -292,7 +296,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         elif root:
             self.add_branch(
                 root,
-                leafs,
+                leaves,
                 relations=relations,
                 edgelabels=edgelabels,
                 addnodes=addnodes,
@@ -349,9 +353,9 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
     def add_branch(  # pylint: disable=too-many-arguments,too-many-locals
         self,
         root,
-        leafs=None,
-        include_leafs=True,
-        strict_leafs=False,
+        leaves=None,
+        include_leaves=True,
+        strict_leaves=False,
         exclude=None,
         relations="isA",
         edgelabels=None,
@@ -362,17 +366,16 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         include_parents="closest",
         **attrs,
     ):
-        """Adds branch under `root` ending at any entiry included in the
-        sequence `leafs`.  If `include_leafs` is true, leafs classes are
+        """Adds branch under `root` ending at any entity included in the
+        sequence `leaves`.  If `include_leaves` is true, leaf classes are
         also included."""
-        if leafs is None:
-            leafs = ()
-
+        if leaves is None:
+            leaves = ()
         classes = self.ontology.get_branch(
             root=root,
-            leafs=leafs,
-            include_leafs=include_leafs,
-            strict_leafs=strict_leafs,
+            leaves=leaves,
+            include_leaves=include_leaves,
+            strict_leaves=strict_leaves,
             exclude=exclude,
         )
 
@@ -384,7 +387,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
 
         nodeattrs = {}
         nodeattrs[get_label(root)] = self.style.get("root", {})
-        for leaf in leafs:
+        for leaf in leaves:
             nodeattrs[get_label(leaf)] = self.style.get("leaf", {})
 
         self.add_entities(
@@ -396,9 +399,17 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             nodeattrs=nodeattrs,
             **attrs,
         )
-
+        closest_ancestors = False
+        ancestor_generations = None
+        if include_parents == "closest":
+            closest_ancestors = True
+        elif isinstance(include_parents, int):
+            ancestor_generations = include_parents
         parents = self.ontology.get_ancestors(
-            classes, include=include_parents, strict=True
+            classes,
+            closest=closest_ancestors,
+            generations=ancestor_generations,
+            strict=True,
         )
         if parents:
             for parent in parents:
@@ -479,27 +490,31 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
             raise RuntimeError(f'`object` "{obj}" must have been added')
         key = (subject, predicate, obj)
         if key not in self.edges:
-            if edgelabel is None:
+            relations = self.style.get("relations", {})
+            rels = set(
+                self.ontology[_] for _ in relations if _ in self.ontology
+            )
+            if (edgelabel is None) and (
+                (predicate in rels) or (predicate == "isA")
+            ):
                 edgelabel = self.edgelabels
-
             label = None
             if edgelabel is None:
                 tokens = predicate.split()
                 if len(tokens) == 2 and tokens[1] in ("some", "only"):
-                    label = tokens[1]
+                    label = f"{tokens[0]} {tokens[1]}"
                 elif len(tokens) == 3 and tokens[1] in (
                     "exactly",
                     "min",
                     "max",
                 ):
-                    label = f"{tokens[1]} {tokens[2]}"
+                    label = f"{tokens[0]} {tokens[1]} {tokens[2]}"
             elif isinstance(edgelabel, str):
                 label = edgelabel
             elif isinstance(edgelabel, dict):
                 label = edgelabel.get(predicate, predicate)
             elif edgelabel:
                 label = predicate
-
             kwargs = self.get_edge_attrs(predicate, attrs=attrs)
             self.dot.edge(subject, obj, label=label, **kwargs)
             self.edges.add(key)
@@ -567,7 +582,9 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                         obj = self.add_class_construct(relation.value)
                     else:
                         continue
-                    pred = asstring(relation, exclude_object=True)
+                    pred = asstring(
+                        relation, exclude_object=True, ontology=self.ontology
+                    )
                     self.add_edge(
                         label, pred, obj, edgelabel=edgelabels, **attrs
                     )
@@ -661,7 +678,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         label = get_label(entity)
         # class
         if isinstance(entity, owlready2.ThingClass):
-            if self.ontology.is_defined(entity):
+            if entity.is_defined:
                 kwargs = self.style.get("defined_class", {})
             else:
                 kwargs = self.style.get("class", {})
@@ -689,9 +706,43 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         kwargs.update(attrs)
         return kwargs
 
-    def get_edge_attrs(self, predicate, attrs):
-        """Returns attributes for node or edge `name`.  `attrs` overrides
-        the default style."""
+    def _relation_styles(
+        self, entity: ThingClass, relations: dict, rels: set
+    ) -> dict:
+        """Helper function that returns the styles of the relations
+        to be used.
+
+        Parameters:
+            entity: the entity of the parent relation
+            relations: relations with default styles
+            rels: relations to be considered that have default styles,
+                either for the prefLabel or one of the altLabels
+        """
+        for relation in entity.mro():
+            if relation in rels:
+                if str(get_label(relation)) in relations:
+                    rattrs = relations[str(get_label(relation))]
+                else:
+                    for alt_label in relation.get_annotations()["altLabel"]:
+                        rattrs = relations[str(alt_label)]
+
+                break
+        else:
+            warnings.warn(
+                f"Style not defined for relation {get_label(entity)}. "
+                "Resorting to default style."
+            )
+            rattrs = self.style.get("default_relation", {})
+        return rattrs
+
+    def get_edge_attrs(self, predicate: str, attrs: dict) -> dict:
+        """Returns attributes for node or edge `predicate`.  `attrs` overrides
+        the default style.
+
+        Parameters:
+            predicate: predicate to get attributes for
+            attrs: desired attributes to override default
+        """
         # given type
         types = ("isA", "equivalent_to", "disjoint_with", "inverse_of")
         if predicate in types:
@@ -711,20 +762,8 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                 rels = set(
                     self.ontology[_] for _ in relations if _ in self.ontology
                 )
-                for relation in entity.mro():
-                    if relation in rels:
-                        rattrs = (
-                            relations[get_label(relation)]
-                            if relation in rels
-                            else {}
-                        )
-                        break
-                else:
-                    warnings.warn(
-                        f"Style not defined for relation {name}. "
-                        "Resorting to default style."
-                    )
-                    rattrs = self.style.get("default_relation", {})
+                rattrs = self._relation_styles(entity, relations, rels)
+
                 # object property
                 if isinstance(
                     entity,
@@ -755,6 +794,10 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
 
         Hence, you usually want to call add_legend() as the last method
         before saving or displaying.
+
+        Relations with defined style will be bold in legend.
+        Relations that have inherited style from parent relation
+        will not be bold.
         """
         rels = self.style.get("relations", {})
         if relations is None:
@@ -774,9 +817,16 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         label1 = [table]
         label2 = [table]
         for index, relation in enumerate(relations):
-            label1.append(
-                f'<tr><td align="right" port="i{index}">{relation}</td></tr>'
-            )
+            if (relation in rels) or (relation == "isA"):
+                label1.append(
+                    f'<tr><td align="right" '
+                    f'port="i{index}"><b>{relation}</b></td></tr>'
+                )
+            else:
+                label1.append(
+                    f'<tr><td align="right" '
+                    f'port="i{index}">{relation}</td></tr>'
+                )
             label2.append(f'<tr><td port="i{index}">&nbsp;</td></tr>')
         label1.append("</table>>")
         label2.append("</table>>")
@@ -840,9 +890,8 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
     def save(self, filename, fmt=None, **kwargs):
         """Saves graph to `filename`.  If format is not given, it is
         inferred from `filename`."""
-        base, ext = os.path.splitext(filename)
-        if fmt is None:
-            fmt = ext.lstrip(".")
+        base = os.path.splitext(filename)[0]
+        fmt = get_format(filename, default="svg", fmt=fmt)
         kwargs.setdefault("cleanup", True)
         if fmt in ("graphviz", "gv"):
             if "dictionary" in kwargs:
@@ -1067,7 +1116,7 @@ def cytoscapegraph(
             onto: ontology to be used for mouse actions.
             infobox: "left" or "right". Placement of infbox with
                      respect to graph.
-            force: force generate graph withour correct edgelabels.
+            force: force generate graph without correct edgelabels.
     Returns:
             cytoscapewidget with graph and infobox to be visualized
             in jupyter lab.

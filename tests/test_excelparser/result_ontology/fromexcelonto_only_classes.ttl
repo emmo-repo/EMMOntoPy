@@ -30,27 +30,10 @@
     rdfs:subClassOf <http://ontology.info/ontology#testclass> ;
     skos:prefLabel "ANewTestClass"@en .
 
-:EMMO_0ec801a2-7da4-55ff-906b-c5ccc905bb8d a owl:AnnotationProperty ;
-    rdfs:subPropertyOf :EMMO_98871837-aa90-5eef-9a56-926ae8beebbb ;
-    skos:prefLabel "subAnnotation"@en .
-
 :EMMO_1c81f1eb-8b94-5e74-96de-1aeacbdb5b93 a owl:Class ;
     emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "The boundary of a grain"@en ;
     rdfs:subClassOf :EMMO_472ed27e-ce08-53cb-8453-56ab363275c4 ;
     skos:prefLabel "GrainBoundary"@en .
-
-:EMMO_41808a43-529f-5798-b0ed-71ddcb2c5456 a owl:Class ;
-    emmo:EMMO_c84c6752_6d64_48cc_9500_e54a3c34898d "\"http at wikipedia\""@en ;
-    :EMMO_0ec801a2-7da4-55ff-906b-c5ccc905bb8d "\"Another thing\""@en ;
-    :EMMO_98871837-aa90-5eef-9a56-926ae8beebbb "\"A text about this type of boundary\""@en ;
-    rdfs:subClassOf :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ;
-    skos:prefLabel "SuperSpecialBoundary"@en .
-
-:EMMO_58de9bf1-4c92-57f0-af37-9ec8129c5db7 a owl:ObjectProperty ;
-    rdfs:domain :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ;
-    rdfs:range :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ;
-    rdfs:subPropertyOf :EMMO_a14817a8-a449-5115-8924-b90833317d02 ;
-    skos:prefLabel "hasSubBoundaryPart"@en .
 
 :EMMO_6920d08f-b1e4-5789-9778-f75f4514ef46 a owl:Class ;
     emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "NEED elucidation"@en ;
@@ -61,25 +44,14 @@
     emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "Spatial pattern localized in a volume of space"@en ;
     emmo:EMMO_b432d2d5_25f4_4165_99c5_5935a7763c1a "Textured surface after etching"@en ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:onProperty emmo:EMMO_17e27c22_37e1_468c_9dd7_95e137f73e7f ;
-            owl:someValuesFrom :EMMO_472ed27e-ce08-53cb-8453-56ab363275c4 ],
-        [ a owl:Restriction ;
             owl:onProperty emmo:EMMO_e1097637_70d2_4895_973f_2396f04fa204 ;
             owl:someValuesFrom emmo:EMMO_f1a51559_aa3d_43a0_9327_918039f0dfed ],
+        [ a owl:Restriction ;
+            owl:onProperty emmo:EMMO_17e27c22_37e1_468c_9dd7_95e137f73e7f ;
+            owl:someValuesFrom :EMMO_472ed27e-ce08-53cb-8453-56ab363275c4 ],
         :EMMO_4b32833e-0833-56a7-903c-28a6a8191fe8,
         :EMMO_5f50f77e-f321-53e3-af76-fe5b0a347479 ;
     skos:prefLabel "FiniteSpatialPattern"@en .
-
-:EMMO_7c8ba943-15cf-5621-98a3-ed1e7e68fee8 a owl:Class ;
-    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "A special boundary."@en ;
-    :EMMO_98871837-aa90-5eef-9a56-926ae8beebbb "\"A text about this type of boundary\""@en ;
-    rdfs:subClassOf :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ;
-    skos:prefLabel "SpecialBoundary"@en .
-
-:EMMO_a198aa47-2eca-5738-a69e-91679676ed2b a owl:DatatypeProperty ;
-    rdfs:domain emmo:EMMO_4ce76d7f_03f8_45b6_9003_90052a79bfaa ;
-    rdfs:subPropertyOf :EMMO_4f3d7c7b-1f77-5a91-8151-ddea40d9b4a2 ;
-    skos:prefLabel "hasPrimeNumberData"@en .
 
 :EMMO_b04965e6-a9bb-591f-8f8a-1adcb2c8dc39 a owl:Class ;
     rdfs:subClassOf emmo:EMMO_21f56795_ee72_4858_b571_11cfaa59c1a8 ;
@@ -126,11 +98,6 @@
     rdfs:subClassOf owl:Thing ;
     skos:prefLabel "TemporalPattern"@en .
 
-:EMMO_4f3d7c7b-1f77-5a91-8151-ddea40d9b4a2 a owl:DatatypeProperty ;
-    rdfs:domain emmo:EMMO_4ce76d7f_03f8_45b6_9003_90052a79bfaa ;
-    rdfs:subPropertyOf emmo:EMMO_faf79f53_749d_40b2_807c_d34244c192f4 ;
-    skos:prefLabel "hasIntegerData"@en .
-
 :EMMO_5f50f77e-f321-53e3-af76-fe5b0a347479 a owl:Class ;
     emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "Spatial pattern without regular temporal variations"@en ;
     emmo:EMMO_b432d2d5_25f4_4165_99c5_5935a7763c1a "Infinite grid"@en ;
@@ -141,17 +108,10 @@
     rdfs:subClassOf emmo:EMMO_eb77076b_a104_42ac_a065_798b2d2809ad ;
     skos:prefLabel "Atom"@en .
 
-:EMMO_98871837-aa90-5eef-9a56-926ae8beebbb a owl:AnnotationProperty ;
-    rdfs:comment "Where to find the entry in the \"book of boundaries\""@en ;
-    rdfs:subPropertyOf emmo:EMMO_c7b62dd7_063a_4c2a_8504_42f7264ba83f ;
-    skos:prefLabel "bookOfBoundariesEntry"@en .
-
-:EMMO_a14817a8-a449-5115-8924-b90833317d02 a owl:ObjectProperty ;
-    rdfs:comment "This definition is humbug"@en,
-        "has a part that is a boundary"@en ;
-    rdfs:domain :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ;
-    rdfs:subPropertyOf emmo:EMMO_17e27c22_37e1_468c_9dd7_95e137f73e7f ;
-    skos:prefLabel "hasBoundaryPart"@en .
+:EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 a owl:Class ;
+    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "NEED elucidation"@en ;
+    rdfs:subClassOf emmo:EMMO_649bf97b_4397_4005_90d9_219755d92e34 ;
+    skos:prefLabel "Boundary"@en .
 
 :EMMO_472ed27e-ce08-53cb-8453-56ab363275c4 a owl:Class ;
     emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 " "@en ;
@@ -160,8 +120,7 @@
 
 :EMMO_80bf0979-a0ec-529c-b9a1-d4aa3032e037 a owl:Class ;
     emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "everything that can be perceived or measured"@en ;
-    rdfs:comment " note that this is changed from pattern as Pattern is from emmo-beta4 an altLabel for Data"@en,
-        " this definition is much broader than definition of pattern such as \"the regular and repeated way in which something happens or is\""@en,
+    rdfs:comment " this definition is much broader than definition of pattern such as \"the regular and repeated way in which something happens or is\""@en,
         "a pattern is defined from a contrast"@en ;
     rdfs:subClassOf emmo:EMMO_649bf97b_4397_4005_90d9_219755d92e34 ;
     skos:prefLabel "SpecialPattern"@en .
@@ -182,8 +141,3 @@
             owl:someValuesFrom :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ],
         :EMMO_80bf0979-a0ec-529c-b9a1-d4aa3032e037 ;
     skos:prefLabel "FinitePattern"@en .
-
-:EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 a owl:Class ;
-    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "NEED elucidation"@en ;
-    rdfs:subClassOf emmo:EMMO_649bf97b_4397_4005_90d9_219755d92e34 ;
-    skos:prefLabel "Boundary"@en .

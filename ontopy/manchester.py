@@ -45,11 +45,11 @@ def manchester_expression():
     literal = (
         typedLiteral | stringLanguageLiteral | stringLiteral | numberLiteral
     )
-    logOp = pp.oneOf(["and", "or"], asKeyword=True)
+    logOp = pp.one_of(["and", "or"], asKeyword=True)
     expr = pp.Forward()
     restriction = pp.Forward()
     primary = pp.Keyword("not")[...] + (
-        restriction | ident("cls") | pp.nestedExpr("(", ")", expr)
+        restriction | ident("cls") | pp.nested_expr("(", ")", expr)
     )
     objPropExpr = (
         pp.Literal("inverse")
@@ -94,7 +94,7 @@ def evaluate(ontology: owlready2.Ontology, expr: str) -> owlready2.Construct:
     Example:
     >>> from ontopy.manchester import evaluate
     >>> from ontopy import get_ontology
-    >>> emmo = get_ontology.load()
+    >>> emmo = get_ontology().load()
 
     >>> restriction = evaluate(emmo, 'hasPart some Atom')
     >>> cls = evaluate(emmo, 'Atom')

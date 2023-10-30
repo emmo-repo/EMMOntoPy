@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING
 import yaml
 import owlready2
 
-from ontopy.utils import asstring, camelsplit, get_label
+from ontopy.utils import asstring, camelsplit, get_label, get_format
 from ontopy.graph import OntoGraph, filter_classes
 
 if TYPE_CHECKING:
@@ -54,7 +54,8 @@ class OntoDoc:
         "figwidth": "{{ width={width:.0f}px }}",
         "figure": "![{caption}]({path}){figwidth}\n",
         "header": "\n{:#<{level}} {label}    {{#{anchor}}}",
-        "link": "[{name}]({lowerurl})",
+        # Use ref instead of iri for local references in links
+        "link": "[{label}]({ref})",
         "point": "  - {point}\n",
         "points": "\n\n{points}\n",
         "annotation": "**{key}:** {value}\n",
@@ -138,7 +139,7 @@ class OntoDoc:
         "figwidth": 'width="{width:.0f}"',
         "figure": '<img src="{path}" alt="{caption}"{figwidth}>',
         "header": '<h{level} id="{anchor}">{label}</h{level}>',
-        "link": '<a href="{lowerurl}">{name}</a>',
+        "link": '<a href="{ref}">{label}</a>',
         "point": "      <li>{point}</li>\n",
         "points": "    <ul>\n      {points}\n    </ul>\n",
         "annotation": "  <dd><strong>{key}:</strong>\n{value}  </dd>\n",
@@ -173,9 +174,11 @@ class OntoDoc:
             os.path.basename(self.onto.base_iri.rstrip("/#"))
         )[0]
         irilink = self.style.get("link", "{name}").format(
+            iri=self.onto.base_iri,
             name=self.onto.base_iri,
-            url=self.onto.base_iri,
-            lowerurl=self.onto.base_iri,
+            ref=self.onto.base_iri,
+            label=self.onto.base_iri,
+            lowerlabel=self.onto.base_iri,
         )
         template = dedent(
             """\
@@ -282,7 +285,9 @@ class OntoDoc:
         # Add iri
         doc.append(
             annotation_style.format(
-                key="IRI", value=asstring(item.iri, link_style), ontology=onto
+                key="IRI",
+                value=asstring(item.iri, link_style, ontology=onto),
+                ontology=onto,
             )
         )
 
@@ -300,7 +305,8 @@ class OntoDoc:
                 if self.url_regex.match(value):
                     doc.append(
                         annotation_style.format(
-                            key=key, value=asstring(value, link_style)
+                            key=key,
+                            value=asstring(value, link_style, ontology=onto),
                         )
                     )
                 else:
@@ -323,14 +329,16 @@ class OntoDoc:
             ):
                 points.append(
                     point_style.format(
-                        point="is_a " + asstring(prop, link_style),
+                        point="is_a "
+                        + asstring(prop, link_style, ontology=onto),
                         ontology=onto,
                     )
                 )
             else:
                 points.append(
                     point_style.format(
-                        point=asstring(prop, link_style), ontology=onto
+                        point=asstring(prop, link_style, ontology=onto),
+                        ontology=onto,
                     )
                 )
 
@@ -338,7 +346,8 @@ class OntoDoc:
         for entity in item.equivalent_to:
             points.append(
                 point_style.format(
-                    point="equivalent_to " + asstring(entity, link_style)
+                    point="equivalent_to "
+                    + asstring(entity, link_style, ontology=onto)
                 )
             )
 
@@ -348,7 +357,9 @@ class OntoDoc:
             points.append(
                 point_style.format(
                     point="disjoint_with "
-                    + ", ".join(asstring(_, link_style) for _ in subjects),
+                    + ", ".join(
+                        asstring(s, link_style, ontology=onto) for s in subjects
+                    ),
                     ontology=onto,
                 )
             )
@@ -356,7 +367,9 @@ class OntoDoc:
         # ...add disjoint_unions
         if hasattr(item, "disjoint_unions"):
             for unions in item.disjoint_unions:
-                string = ", ".join(asstring(_, link_style) for _ in unions)
+                string = ", ".join(
+                    asstring(u, link_style, ontology=onto) for u in unions
+                )
                 points.append(
                     point_style.format(
                         point=f"disjoint_union_of {string}", ontology=onto
@@ -368,7 +381,7 @@ class OntoDoc:
             points.append(
                 point_style.format(
                     point="inverse_of "
-                    + asstring(item.inverse_property, link_style)
+                    + asstring(item.inverse_property, link_style, ontology=onto)
                 )
             )
 
@@ -376,7 +389,8 @@ class OntoDoc:
         for domain in getattr(item, "domain", ()):
             points.append(
                 point_style.format(
-                    point=f"domain {asstring(domain, link_style)}"
+                    point="domain "
+                    + asstring(domain, link_style, ontology=onto)
                 )
             )
 
@@ -384,7 +398,8 @@ class OntoDoc:
         for restriction in getattr(item, "range", ()):
             points.append(
                 point_style.format(
-                    point=f"range {asstring(restriction, link_style)}"
+                    point="range "
+                    + asstring(restriction, link_style, ontology=onto)
                 )
             )
 
@@ -412,7 +427,7 @@ class OntoDoc:
                 if item in instance.is_instance_of:
                     points.append(
                         point_style.format(
-                            point=asstring(instance, link_style),
+                            point=asstring(instance, link_style, ontology=onto),
                             ontology=onto,
                         )
                     )
@@ -503,9 +518,10 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
           - header_level: Header level.
           - terminated: Whether to branch should be terminated at all branch
             names in the final document.
-          - include_leafs: Whether to include leaf.
+          - include_leaves: Whether to include leaves as end points
+            to the branch.
 
-            %BRANCH name [header_level=3 terminated=1 include_leafs=0
+            %BRANCH name [header_level=3 terminated=1 include_leaves=0
                           namespaces='' ontologies='']
 
       * Insert generated figure of ontology branch `name`.  The figure
@@ -513,17 +529,17 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         where `figdir` is given at class initiation. It is recommended
         to exclude the file extension from `path`.  In this case, the
         default figformat will be used (and easily adjusted to the
-        correct format required by the backend). `leafs` may be a comma-
+        correct format required by the backend). `leaves` may be a comma-
         separated list of leaf node names.
 
-            %BRANCHFIG name [path='' caption='' terminated=1 include_leafs=1
-                             strict_leafs=1, width=0px leafs='' relations=all
+            %BRANCHFIG name [path='' caption='' terminated=1 include_leaves=1
+                             strict_leaves=1, width=0px leaves='' relations=all
                              edgelabels=0 namespaces='' ontologies='']
 
       * This is a combination of the %HEADER and %BRANCHFIG directives.
 
             %BRANCHHEAD name [level=2  path='' caption='' terminated=1
-                              include_leafs=1 width=0px leafs='']
+                              include_leaves=1 width=0px leaves='']
 
       * This is a combination of the %HEADER, %BRANCHFIG and %BRANCH
         directives. It inserts documentation of branch `name`, with a
@@ -531,7 +547,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         element.
 
             %BRANCHDOC name [level=2  path='' title='' caption='' terminated=1
-                             strict_leafs=1 width=0px leafs='' relations='all'
+                             strict_leaves=1 width=0px leaves='' relations='all'
                              rankdir='BT' legend=1 namespaces='' ontologies='']
 
       * Insert generated documentation for all entities of the given type.
@@ -708,11 +724,11 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     tokens[2:],
                     header_level=3,
                     terminated=1,
-                    include_leafs=0,
+                    include_leaves=0,
                     namespaces="",
                     ontologies="",
                 )
-                leafs = (
+                leaves = (
                     names if opts.terminated else ()
                 )  # pylint: disable=no-member
 
@@ -729,7 +745,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
 
                 branch = filter_classes(
                     onto.get_branch(
-                        name, leafs, opts.include_leafs
+                        name, leaves, opts.include_leaves
                     ),  # pylint: disable=no-member
                     included_namespaces=included_namespaces,
                     included_ontologies=included_ontologies,
@@ -745,10 +761,10 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         name: str,
         path: "Union[Path, str]",
         terminated: bool,
-        include_leafs: bool,
-        strict_leafs: bool,
+        include_leaves: bool,
+        strict_leaves: bool,
         width: float,
-        leafs: "Union[str, list[str]]",
+        leaves: "Union[str, list[str]]",
         relations: str,
         edgelabels: str,
         rankdir: str,
@@ -761,11 +777,12 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         Args:
             name: name of branch root
             path: optional figure path name
-            include_leafs: whether to include leafs
-            strict_leafs: whether strictly exclude leafs descendants
+            include_leaves: whether to include leaves as end points
+                to the branch.
+            strict_leaves: whether to strictly exclude leave descendants
             terminated: whether the graph should be terminated at leaf nodes
             width: optional figure width
-            leafs: optional leafs node names for graph termination
+            leaves: optional leaf node names for graph termination
             relations: comma-separated list of relations to include
             edgelabels: whether to include edgelabels
             rankdir: graph direction (BT, TB, RL, LR)
@@ -775,19 +792,19 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
 
         Returns:
             filepath: path to generated figure
-            leafs: used list of leaf node names
+            leaves: used list of leaf node names
             width: actual figure width
 
         """
         onto = self.ontodoc.onto
-        if leafs:
-            if isinstance(leafs, str):
-                leafs = leafs.split(",")
+        if leaves:
+            if isinstance(leaves, str):
+                leaves = leaves.split(",")
         elif terminated:
-            leafs = set(self.get_branches())
-            leafs.discard(name)
+            leaves = set(self.get_branches())
+            leaves.discard(name)
         else:
-            leafs = None
+            leaves = None
         if path:
             figdir = os.path.dirname(path)
             formatext = os.path.splitext(path)[1]
@@ -806,9 +823,9 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         graph = OntoGraph(onto, graph_attr={"rankdir": rankdir})
         graph.add_branch(
             root=name,
-            leafs=leafs,
-            include_leafs=include_leafs,
-            strict_leafs=strict_leafs,
+            leaves=leaves,
+            include_leaves=include_leaves,
+            strict_leaves=strict_leaves,
             relations=relations,
             edgelabels=edgelabels,
             included_namespaces=included_namespaces,
@@ -828,7 +845,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         if not os.path.exists(destdir):
             os.makedirs(destdir)
         graph.save(filepath, fmt=fmt)
-        return filepath, leafs, width
+        return filepath, leaves, width
 
     def process_branchfigs(self):
         """Process all %BRANCHFIG directives."""
@@ -841,10 +858,10 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     path="",
                     caption="",
                     terminated=1,
-                    include_leafs=1,
-                    strict_leafs=1,
+                    include_leaves=1,
+                    strict_leaves=1,
                     width=0,
-                    leafs="",
+                    leaves="",
                     relations="all",
                     edgelabels=0,
                     rankdir="BT",
@@ -868,10 +885,10 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     name,
                     opts.path,  # pylint: disable=no-member
                     opts.terminated,  # pylint: disable=no-member
-                    opts.include_leafs,  # pylint: disable=no-member
-                    opts.strict_leafs,  # pylint: disable=no-member
+                    opts.include_leaves,  # pylint: disable=no-member
+                    opts.strict_leaves,  # pylint: disable=no-member
                     opts.width,  # pylint: disable=no-member
-                    opts.leafs,  # pylint: disable=no-member
+                    opts.leaves,  # pylint: disable=no-member
                     opts.relations,  # pylint: disable=no-member
                     opts.edgelabels,  # pylint: disable=no-member
                     opts.rankdir,  # pylint: disable=no-member
@@ -906,9 +923,9 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     title=title,
                     caption=title + ".",
                     terminated=1,
-                    strict_leafs=1,
+                    strict_leaves=1,
                     width=0,
-                    leafs="",
+                    leaves="",
                     relations="all",
                     edgelabels=0,
                     rankdir="BT",
@@ -928,15 +945,15 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     else ()  # pylint: disable=no-member
                 )
 
-                include_leafs = 1
-                filepath, leafs, width = self._make_branchfig(
+                include_leaves = 1
+                filepath, leaves, width = self._make_branchfig(
                     name,
                     opts.path,  # pylint: disable=no-member
                     opts.terminated,  # pylint: disable=no-member
-                    include_leafs,
-                    opts.strict_leafs,  # pylint: disable=no-member
+                    include_leaves,
+                    opts.strict_leaves,  # pylint: disable=no-member
                     opts.width,  # pylint: disable=no-member
-                    opts.leafs,  # pylint: disable=no-member
+                    opts.leaves,  # pylint: disable=no-member
                     opts.relations,  # pylint: disable=no-member
                     opts.edgelabels,  # pylint: disable=no-member
                     opts.rankdir,  # pylint: disable=no-member
@@ -957,9 +974,9 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     )
                 )
                 if with_branch:
-                    include_leafs = 0
+                    include_leaves = 0
                     branch = filter_classes(
-                        onto.get_branch(name, leafs, include_leafs),
+                        onto.get_branch(name, leaves, include_leaves),
                         included_namespaces=included_namespaces,
                         included_ontologies=included_ontologies,
                     )
@@ -994,7 +1011,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     raise InvalidTemplateError(
                         f"Invalid argument to %%ALL: {token}"
                     )
-                items = sorted(items, key=asstring)
+                items = sorted(items, key=get_label)
                 del self.lines[i]
                 self.lines[i:i] = self.ontodoc.itemsdoc(
                     items, int(opts.header_level)  # pylint: disable=no-member
@@ -1012,10 +1029,10 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     path="",
                     level=3,
                     terminated=0,
-                    include_leafs=1,
-                    strict_leafs=1,
+                    include_leaves=1,
+                    strict_leaves=1,
                     width=0,
-                    leafs="",
+                    leaves="",
                     relations="isA",
                     edgelabels=0,
                     rankdir="BT",
@@ -1051,15 +1068,15 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
 
                 sec = []
                 for root in roots:
-                    name = asstring(root)
+                    name = asstring(root, link="{label}", ontology=onto)
                     filepath, _, width = self._make_branchfig(
                         name,
                         opts.path,  # pylint: disable=no-member
                         opts.terminated,  # pylint: disable=no-member
-                        opts.include_leafs,  # pylint: disable=no-member
-                        opts.strict_leafs,  # pylint: disable=no-member
+                        opts.include_leaves,  # pylint: disable=no-member
+                        opts.strict_leaves,  # pylint: disable=no-member
                         opts.width,  # pylint: disable=no-member
-                        opts.leafs,  # pylint: disable=no-member
+                        opts.leaves,  # pylint: disable=no-member
                         opts.relations,  # pylint: disable=no-member
                         opts.edgelabels,  # pylint: disable=no-member
                         opts.rankdir,  # pylint: disable=no-member
@@ -1160,7 +1177,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         for reg, sub in substitutions:
             content = re.sub(reg, sub, content)
 
-        fmt = get_format(outfile, fmt)
+        fmt = get_format(outfile, default="html", fmt=fmt)
         if fmt not in ("simple-html", "markdown", "md"):  # Run pandoc
             if not genfile:
                 with NamedTemporaryFile(mode="w+t", suffix=".md") as temp_file:
@@ -1391,17 +1408,6 @@ def run_pandoc_pdf(latex_dir, pdf_engine, outfile, args, verbose=True):
             print()
             print(f"move {pdffile} to {outfile}")
         shutil.move(pdffile, outfile)
-
-
-def get_format(outfile, fmt=None):
-    """Infer format from outfile and format."""
-    if fmt is None:
-        fmt = os.path.splitext(outfile)[1]
-    if not fmt:
-        fmt = "html"
-    if fmt.startswith("."):
-        fmt = fmt[1:]
-    return fmt
 
 
 def get_style(fmt):

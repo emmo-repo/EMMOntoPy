@@ -1,12 +1,15 @@
 """Test the `ontograph` tool."""
 from typing import TYPE_CHECKING
 
+import pytest
+
 if TYPE_CHECKING:
     from pathlib import Path
     from types import ModuleType
     from typing import Callable
 
 
+@pytest.mark.filterwarnings("ignore::UserWarning")
 def test_run(get_tool: "Callable[[str], ModuleType]", tmpdir: "Path") -> None:
     """Check that running `excel2onto` works.
 
@@ -52,3 +55,10 @@ def test_run(get_tool: "Callable[[str], ModuleType]", tmpdir: "Path") -> None:
             str(test_file),
         ]
     )
+
+    # Test Error raised if ontology to be updated does not exist
+    with pytest.raises(
+        FileNotFoundError,
+        match="The output ontology to be updated does not exist",
+    ):
+        excel2onto.main([f"--output=onto_not_created.ttl", str(test_file)])

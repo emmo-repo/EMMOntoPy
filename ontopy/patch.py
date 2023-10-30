@@ -3,9 +3,10 @@
 import types
 
 import owlready2
-from owlready2 import ThingClass, PropertyClass, Thing, Restriction, Namespace
-from owlready2 import Metadata
+from owlready2 import AnnotationPropertyClass, ThingClass, PropertyClass
+from owlready2 import Metadata, Thing, Restriction, Namespace
 from ontopy.utils import EMMOntoPyException
+from ontopy.ontology import Ontology as OntopyOntology
 
 
 def render_func(entity):
@@ -27,6 +28,10 @@ owlready2.set_render_func(render_func)
 #
 # Extending ThingClass (classes)
 # ==============================
+
+save_getattr = ThingClass.__getattr__
+
+
 def get_preferred_label(self):
     """Returns the preferred label as a string (not list).
 
@@ -67,11 +72,69 @@ def get_parents(self, strict=False):
 
 
 def _dir(self):
-    """Extend in dir() listing of ontology classes."""
+    """Extend dir() listing of ontology classes."""
     set_dir = set(object.__dir__(self))
-    props = self.namespace.world._props.keys()
+    props = [str(key) for key in self.namespace.world._props.keys()]
     set_dir.update(props)
     return sorted(set_dir)
+
+
+def _getitem(self, name):
+    """Provide item access to annotation properties."""
+    prop = self.namespace.ontology.get_by_label(name)
+    if isinstance(prop, AnnotationPropertyClass):
+        return getattr(self, name)
+    raise KeyError(f"no such annotation property: {name}")
+
+
+def _setitem(self, name, value):
+    """Provide item asignment for annotation properties.
+
+    Note, this appends `value` to the property instead of replacing the
+    property.  This is consistent with Owlready2, but may be little
+    unintuitive.
+
+    Example:
+    >>> from emmopy import get_emmo
+    >>> from owlready2 import locstr
+    >>> emmo = get_emmo()
+    >>> emmo.Atom['altLabel']
+    [locstr('ChemicalElement', 'en')]
+    >>> emmo.Atom['altLabel'] = 'Element'
+    >>> emmo.Atom['altLabel'] = locstr('Atomo', 'it')
+    >>> emmo.Atom['altLabel']
+    [locstr('ChemicalElement', 'en'), 'Element', locstr('Atomo', 'it')]
+    """
+
+    item = _getitem(self, name)
+    item.append(value)
+
+
+def _delitem(self, name):
+    """Provide item deletion for annotation properties.
+
+    Note, this simply clears the named property.
+    """
+    item = _getitem(self, name)
+    item.clear()
+
+
+def _getattr(self, name):
+    """Provide attribute access to annotation properties.
+
+    This upates __getattr__ in owlready2. If name is not found as
+    attribute it tries using the iriname of the annotation property.
+    """
+    try:
+        return save_getattr(self, name)
+    except AttributeError as err:
+        # make sure we are using and ontopy Ontology which has get_by_label
+        if isinstance(self.namespace.ontology, OntopyOntology):
+            entity = self.namespace.ontology.get_by_label(name)
+            # add annotation property to world._props for faster access later
+            self.namespace.world._props[name] = entity
+            return save_getattr(self, entity.name)
+        raise err
 
 
 def get_annotations(
@@ -85,8 +148,9 @@ def get_annotations(
     ontologies.
     """
     onto = self.namespace.ontology
+
     annotations = {
-        get_preferred_label(_): _._get_values_for_class(self)
+        str(get_preferred_label(_)): _._get_values_for_class(self)
         for _ in onto.annotation_properties(imported=imported)
     }
     if all:
@@ -136,13 +200,35 @@ def get_indirect_is_a(self, skip_classes=True):
     return subclass_relations
 
 
+is_defined = property(
+    fget=lambda self: (
+        hasattr(self, "equivalent_to") and bool(self.equivalent_to)
+    ),
+    doc="""Is true if this class is a defined class.
+
+    For a "defined class" both necessary and sufficient conditions for
+    membership in that class are given.  Hence, classes declared with
+    `owl:equivalentTo` are defined classes.
+
+    Note that this method is different from the `defined_class`
+    property provided by Owlready2, who's boolean value is set by the
+    user.
+    """,
+)
+
+
 # Inject methods into ThingClass
 setattr(ThingClass, "__dir__", _dir)
+setattr(ThingClass, "__getitem__", _getitem)
+setattr(ThingClass, "__setitem__", _setitem)
+setattr(ThingClass, "__delitem__", _delitem)
+setattr(ThingClass, "__getattr__", _getattr)
 setattr(ThingClass, "get_preferred_label", get_preferred_label)
 setattr(ThingClass, "get_parents", get_parents)
 setattr(ThingClass, "get_annotations", get_annotations)
 setattr(ThingClass, "disjoint_with", disjoint_with)
 setattr(ThingClass, "get_indirect_is_a", get_indirect_is_a)
+setattr(ThingClass, "is_defined", is_defined)
 
 
 #
@@ -192,7 +278,7 @@ setattr(Namespace, "__init__", namespace_init)
 # Extending Metadata
 # ==================
 def keys(self):
-    """Return a generator over annotation property names associates
+    """Return a generator over annotation property names associated
     with this ontology."""
     namespace = self.namespace
     for annotation in namespace.annotation_properties():

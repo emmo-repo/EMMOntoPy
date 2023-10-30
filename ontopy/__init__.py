@@ -2,7 +2,7 @@
 # pylint: disable=wrong-import-position,wrong-import-order
 import sys
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 # Ensure correct Python version
 if sys.version_info < (3, 7):

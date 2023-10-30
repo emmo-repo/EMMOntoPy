@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 import pytest
 from ontopy.utils import NoSuchLabelError
+import warnings
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -9,10 +10,15 @@ if TYPE_CHECKING:
 def test_prefix(testonto: "Ontology", emmo: "Ontology") -> None:
     """Test prefix in ontology"""
 
-    assert len(testonto.get_by_label_all("*")) == 3
-    assert testonto.get_by_label_all("*", prefix="testonto") == [
-        testonto.TestClass
-    ]
+    assert len(testonto.get_by_label_all("*")) == 7
+    assert set(testonto.get_by_label_all("*", prefix="testonto")) == set(
+        [
+            testonto.hasObjectProperty,
+            testonto.TestClass,
+            testonto.hasAnnotationProperty,
+            testonto.hasDataProperty,
+        ]
+    )
     assert (
         testonto.get_by_label("TestClass", prefix="testonto")
         == testonto.TestClass
@@ -31,6 +37,12 @@ def test_prefix(testonto: "Ontology", emmo: "Ontology") -> None:
     assert testonto.get_by_label("models:TestClass") == testonto.get_by_label(
         "TestClass", prefix="models"
     )
+
+    with pytest.raises(ValueError):
+        testonto.get_by_label_all(" ")
+
+    with pytest.raises(TypeError):
+        testonto.get_by_label(1)
 
 
 def test_prefix_emmo(emmo: "Ontology") -> None:

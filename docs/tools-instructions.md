@@ -167,9 +167,9 @@ optional arguments:
                         Note: FaCT++ is preferred with EMMO.
   --root ROOT, -r ROOT  Name of root node in the graph. Defaults to all
                         classes.
-  --leafs LEAFS         Leafs nodes for plotting sub-graphs. May be provided
+  --leaves LEAVES       Leaf nodes for plotting sub-graphs. May be provided
                         as a comma-separated string and/or with multiple
-                        --leafs options.
+                        --leaves options.
   --exclude EXCLUDE, -E EXCLUDE
                         Nodes, including their subclasses, to exclude from
                         sub-graphs. May be provided as a comma-separated
@@ -197,12 +197,13 @@ optional arguments:
 
 ### Examples
 
-The figure below is generated with the following command:
 
 ```console
+ontograph --relations=all --legend --format=pdf emmo-inferred emmo.pdf # complete ontology
+ontograph --root=Holistic --relations=hasInput,hasOutput,hasTemporaryParticipant,hasAgent --parents=2 --legend --leaves=Measurement,Manufacturing,CompleteManufacturing,ManufacturedProduct,CommercialProduct,Manufacturer --format=png --exclude=Task,Workflow,Computation,MaterialTreatment emmo-inferred measurement.png
 ontograph --root=Material --relations=all --legend --format=png emmo-inferred material.png
 ```
-
+The figure below is generated with the last command in the list above.
 ![Graph generated with the ontograph tool.](images/material.png)
 
 ---
@@ -393,6 +394,8 @@ options:
   --force, -f           Whether to force generation of ontology on non-fatal
                         error.
 ```
+
+See [the documentation of the python api](api_reference/ontopy/excelparser.md) for a thorough description of the requirements on the Excel workbook.
 
 ### Examples
 
