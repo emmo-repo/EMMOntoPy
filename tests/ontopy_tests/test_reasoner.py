@@ -7,20 +7,31 @@ if TYPE_CHECKING:
     from ontopy.ontology import Ontology
 
 
-def test_sync_reasoner_hermit(testonto: "Ontology") -> None:
+def test_sync_reasoner_hermit() -> None:
     """Test `ontopy:Ontology.sync_reasoner()` with HermiT."""
+    from ontopy import get_ontology
 
+    testonto = get_ontology("../testonto/testonto_for_reasoner.ttl")
+    print(testonto)
     testonto.sync_reasoner(reasoner="HermiT")
 
 
-def test_sync_reasoner_pellet(testonto: "Ontology") -> None:
+def test_sync_reasoner_pellet() -> None:
     """Test `ontopy:Ontology.sync_reasoner()` with Pellet"""
+    from ontopy import get_ontology
+
+    testonto = get_ontology("../testonto/testonto_for_reasoner.ttl")
+    print(testonto)
 
     testonto.sync_reasoner(reasoner="Pellet")
 
 
-def test_sync_reasoner_fact(testonto: "Ontology") -> None:
+def test_sync_reasoner_fact() -> None:
     """Test `ontopy:Ontology.sync_reasoner()` with FaCT++"""
+    from ontopy import get_ontology
+
+    testonto = get_ontology("../testonto/testonto_for_reasoner.ttl")
+    print(testonto)
 
     testonto.sync_reasoner(reasoner="FaCT++")
 
