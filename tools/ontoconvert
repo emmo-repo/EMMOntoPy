@@ -73,6 +73,7 @@ def main(argv: list = None):
         "-i",
         nargs="?",
         const="FaCT++",
+        choices=["HermiT", "Pellet", "FaCT++"],
         metavar="NAME",
         help=(
             "Add additional relations inferred by the reasoner.  Supported "
@@ -194,117 +195,26 @@ def main(argv: list = None):
         if args.rename_iris:
             rename_iris(onto, args.rename_iris)
 
-        # owlready2.reasoning._apply_reasoning_results() is broken!
-        # Currently it messes up everything by adding the inferred
-        # rdfs:subClassOf relations as rdf:type relations :-(
-        #
-        # Temporary workaround
-        # Instead of calling onto.sync_reasoner() we call FaCTPPGraph
-        # directly. This means that HermiT and Pellet are currently not
-        # supported
         if args.reasoner:
-            # pylint:disable=import-outside-toplevel
-            from ontopy.factpluspluswrapper.factppgraph import FaCTPPGraph
-            from ontopy.utils import FMAP
-            import rdflib
-            from rdflib import OWL, RDF, URIRef
-
-            if args.reasoner != "FaCT++":
-                raise NotImplementedError(
-                    "Only FaCT++ is currently supported..."
-                )
-            if args.output_dir != ".":
-                raise NotImplementedError(
-                    "The --output-dir option is currently not supported "
-                    "together with --reasoner."
-                )
-            if args.recursive:
-                raise NotImplementedError(
-                    "The --recursive option is currently not supported "
-                    "together with --reasoner."
-                )
-            if args.no_infer_imported:
-                raise NotImplementedError(
-                    "The --no-infer-imported option is currently not "
-                    "supported together with --reasoner."
-                )
-
-            graph0 = onto.world.as_rdflib_graph()
-            graph1 = rdflib.Graph()
-            for s, p, o in graph0.triples((None, None, None)):
-                if p != OWL.imports:
-                    graph1.add((s, p, o))
-            graph2 = FaCTPPGraph(graph1).inferred_graph()
-
-            # Remove existing ontology(ies)
-            remove = list(graph2.triples((None, RDF.type, OWL.Ontology)))
-            for triple in remove:
-                graph2.remove(triple)
-
-            # Add new ontology
-            if args.base_iri:
-                base_iri = args.base_iri
-            else:
-                stripped = onto.base_iri.rstrip("#/")
-                terminal = onto.base_iri[len(stripped) :]
-                base_iri = f"{stripped}-inferred{terminal}"
-            iri = URIRef(base_iri)
-            graph2.add((iri, RDF.type, OWL.Ontology))
-
-            # Add ontology metadata
-            ontologies = list(graph0.subjects(RDF.type, OWL.Ontology))
-            while str(ontologies[0]) == "http://anonymous":
-                ontologies.pop(0)
-            if ontologies:
-                for s, p, o in graph0.triples((ontologies[0], None, None)):
-                    graph2.add((iri, p, o))
-
-            # Serialise
-            if args.output_format:
-                fmt = FMAP.get(args.output_format, args.output_format)
-            else:
-                fmt = guess_format(args.output, fmap=FMAP)
-            graph2.namespace_manager.bind(
-                "emmo", rdflib.Namespace("http://emmo.info/emmo#")
+            include_imported = not args.no_infer_imported
+            verbose = not args.quiet
+            onto.sync_reasoner(
+                reasoner=args.reasoner,
+                include_imported=include_imported,
+                debug=verbose,
             )
-            graph2.serialize(destination=args.output, format=fmt)
-
-        else:
-            onto.save(
-                args.output,
-                format=output_format,
-                dir=args.output_dir,
-                mkdir=True,
-                overwrite=args.overwrite,
-                recursive=args.recursive,
-                squash=args.squash,
-                write_catalog_file=bool(args.catalog_file),
-                append_catalog=args.append_catalog,
-                catalog_file=args.catalog_file,
-            )
-
-        # Bring back these lines when _apply_reasoning_results() works again
-        # Remember to remove the Bugs subsection in the documentation
-
-        # if args.reasoner:
-        #     include_imported = not args.no_infer_imported
-        #     verbose = not args.quiet
-        #     onto.sync_reasoner(reasoner=args.reasoner,
-        #                        include_imported=include_imported,
-        #                        debug=verbose)
-        #
-        # onto.save(
-        #     args.output,
-        #     format=output_format,
-        #     dir=args.output_dir,
-        #     mkdir=True,
-        #     overwrite=args.overwrite,
-        #     recursive=args.recursive,
-        #     squash=args.squash,
-        #     write_catalog_file=bool(args.catalog_file),
-        #     append_catalog=args.append_catalog,
-        #     catalog_file=args.catalog_file,
-        # )
+        onto.save(
+            args.output,
+            format=output_format,
+            dir=args.output_dir,
+            mkdir=True,
+            overwrite=args.overwrite,
+            recursive=args.recursive,
+            squash=args.squash,
+            write_catalog_file=bool(args.catalog_file),
+            append_catalog=args.append_catalog,
+            catalog_file=args.catalog_file,
+        )
 
         for warning in warnings_handle:
             print(

@@ -1230,15 +1230,15 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                         break
 
     def sync_reasoner(
-        self, reasoner="FaCT++", include_imported=False, **kwargs
+        self, reasoner="HermiT", include_imported=False, **kwargs
     ):
         """Update current ontology by running the given reasoner.
 
-        Supported values for `reasoner` are 'Pellet', 'HermiT' and 'FaCT++'.
+        Supported values for `reasoner` are 'HermiT' (default), Pellet
+        and 'FaCT++'.
 
         If `include_imported` is true, the reasoner will also reason
-        over imported ontologies.  Note that this may be **very** slow
-        with Pellet and HermiT.
+        over imported ontologies.  Note that this may be **very** slow.
 
         Keyword arguments are passed to the underlying owlready2 function.
         """
