@@ -103,7 +103,7 @@ def main(
         const="HermiT",
         choices=["FaCT++", "HermiT", "Pellet"],
         help=(
-            'Run given reasoner on the ontology. Valid reasoners are "HermiT '
+            'Run given reasoner on the ontology. Valid reasoners are "HermiT" '
             '(default), "Pellet", and "FaCT++".'
         ),
     )
