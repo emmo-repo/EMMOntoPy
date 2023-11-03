@@ -1250,7 +1250,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             sync = owlready2.sync_reasoner_hermit
         else:
             raise ValueError(
-                f"unknown reasoner '{reasoner}'. Supported reasoners "
+                f"Unknown reasoner '{reasoner}'. Supported reasoners "
                 "are 'Pellet', 'HermiT' and 'FaCT++'."
             )
 

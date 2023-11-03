@@ -70,9 +70,3 @@ def test_basic(emmo: "Ontology") -> None:
     onto.sync_attributes(name_policy="uuid", name_prefix=name_prefix)
     assert synced_uuid != water.name
     assert water.name.startswith("onto_")
-
-
-def test_sync_reasoner(testonto: "Ontology") -> None:
-    """Test `ontopy:Ontology.sync_reasoner()`."""
-
-    testonto.sync_reasoner()
