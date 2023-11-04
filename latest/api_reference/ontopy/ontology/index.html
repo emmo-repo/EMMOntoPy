@@ -3362,15 +3362,15 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                         <span class="k">break</span>
 
     <span class="k">def</span> <span class="nf">sync_reasoner</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">reasoner</span><span class="o">=</span><span class="s2">&quot;FaCT++&quot;</span><span class="p">,</span> <span class="n">include_imported</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">reasoner</span><span class="o">=</span><span class="s2">&quot;HermiT&quot;</span><span class="p">,</span> <span class="n">include_imported</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update current ontology by running the given reasoner.</span>
 
-<span class="sd">        Supported values for `reasoner` are &#39;Pellet&#39;, &#39;HermiT&#39; and &#39;FaCT++&#39;.</span>
+<span class="sd">        Supported values for `reasoner` are &#39;HermiT&#39; (default), Pellet</span>
+<span class="sd">        and &#39;FaCT++&#39;.</span>
 
 <span class="sd">        If `include_imported` is true, the reasoner will also reason</span>
-<span class="sd">        over imported ontologies.  Note that this may be **very** slow</span>
-<span class="sd">        with Pellet and HermiT.</span>
+<span class="sd">        over imported ontologies.  Note that this may be **very** slow.</span>
 
 <span class="sd">        Keyword arguments are passed to the underlying owlready2 function.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -3382,7 +3382,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
             <span class="n">sync</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">sync_reasoner_hermit</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;unknown reasoner &#39;</span><span class="si">{</span><span class="n">reasoner</span><span class="si">}</span><span class="s2">&#39;. Supported reasoners &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Unknown reasoner &#39;</span><span class="si">{</span><span class="n">reasoner</span><span class="si">}</span><span class="s2">&#39;. Supported reasoners &quot;</span>
                 <span class="s2">&quot;are &#39;Pellet&#39;, &#39;HermiT&#39; and &#39;FaCT++&#39;.&quot;</span>
             <span class="p">)</span>
 
@@ -7285,7 +7285,7 @@ the property.</p>
 
 
 <h3 id="ontopy.ontology.Ontology.sync_reasoner" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">sync_reasoner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reasoner</span><span class="o">=</span><span class="s1">&#39;FaCT++&#39;</span><span class="p">,</span> <span class="n">include_imported</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">sync_reasoner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reasoner</span><span class="o">=</span><span class="s1">&#39;HermiT&#39;</span><span class="p">,</span> <span class="n">include_imported</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.ontology.Ontology.sync_reasoner" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -7293,24 +7293,24 @@ the property.</p>
     <div class="doc doc-contents ">
 
       <p>Update current ontology by running the given reasoner.</p>
-<p>Supported values for <code>reasoner</code> are 'Pellet', 'HermiT' and 'FaCT++'.</p>
+<p>Supported values for <code>reasoner</code> are 'HermiT' (default), Pellet
+and 'FaCT++'.</p>
 <p>If <code>include_imported</code> is true, the reasoner will also reason
-over imported ontologies.  Note that this may be <strong>very</strong> slow
-with Pellet and HermiT.</p>
+over imported ontologies.  Note that this may be <strong>very</strong> slow.</p>
 <p>Keyword arguments are passed to the underlying owlready2 function.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">sync_reasoner</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">reasoner</span><span class="o">=</span><span class="s2">&quot;FaCT++&quot;</span><span class="p">,</span> <span class="n">include_imported</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">reasoner</span><span class="o">=</span><span class="s2">&quot;HermiT&quot;</span><span class="p">,</span> <span class="n">include_imported</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update current ontology by running the given reasoner.</span>
 
-<span class="sd">    Supported values for `reasoner` are &#39;Pellet&#39;, &#39;HermiT&#39; and &#39;FaCT++&#39;.</span>
+<span class="sd">    Supported values for `reasoner` are &#39;HermiT&#39; (default), Pellet</span>
+<span class="sd">    and &#39;FaCT++&#39;.</span>
 
 <span class="sd">    If `include_imported` is true, the reasoner will also reason</span>
-<span class="sd">    over imported ontologies.  Note that this may be **very** slow</span>
-<span class="sd">    with Pellet and HermiT.</span>
+<span class="sd">    over imported ontologies.  Note that this may be **very** slow.</span>
 
 <span class="sd">    Keyword arguments are passed to the underlying owlready2 function.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -7322,7 +7322,7 @@ with Pellet and HermiT.</p>
         <span class="n">sync</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">sync_reasoner_hermit</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;unknown reasoner &#39;</span><span class="si">{</span><span class="n">reasoner</span><span class="si">}</span><span class="s2">&#39;. Supported reasoners &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Unknown reasoner &#39;</span><span class="si">{</span><span class="n">reasoner</span><span class="si">}</span><span class="s2">&#39;. Supported reasoners &quot;</span>
             <span class="s2">&quot;are &#39;Pellet&#39;, &#39;HermiT&#39; and &#39;FaCT++&#39;.&quot;</span>
         <span class="p">)</span>
 
