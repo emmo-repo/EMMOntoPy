@@ -109,11 +109,10 @@ def main(argv: list = None):
         "--reasoner",
         nargs="?",
         const="HermiT",
-        choices=["HermiT", "Pellet"],
+        choices=["HermiT", "Pellet", "FaCT++"],
         help=(
             'Run given reasoner on the ontology. Valid reasoners are "HermiT" '
-            '(default) and "Pellet". Note: these reasoners doesn\'t work well '
-            "with EMMO."
+            '(default), "Pellet" and "FaCT++".'
         ),
     )
     parser.add_argument(
