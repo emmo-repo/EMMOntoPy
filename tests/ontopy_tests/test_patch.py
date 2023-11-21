@@ -1,6 +1,7 @@
 """Tests Owlready2 patches implemented in ontopy/patch.py
 
 """
+import re
 
 import pytest
 
@@ -29,36 +30,40 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
     setassert(
         emmo.Atom.get_annotations(all=True).keys(),
         {
-            "qualifiedCardinality",
-            "minQualifiedCardinality",
-            "prefLabel",
-            "abstract",
-            "hiddenLabel",
-            "etymology",
-            "altLabel",
-            "example",
-            "elucidation",
+            "IEVReference",
+            "ISO14040Reference",
+            "ISO80000Reference",
+            "ISO9000Reference",
             "OWLDLRestrictedAxiom",
-            "wikipediaReference",
-            "conceptualisation",
-            "logo",
+            "VIMTerm",
+            "abstract",
+            "altLabel",
             "comment",
+            "conceptualisation",
+            "contact",
+            "contributor",
+            "creator",
             "dbpediaReference",
             "definition",
-            "VIMTerm",
-            "creator",
-            "iupacReference",
-            "contact",
-            "omReference",
-            "ISO9000Reference",
-            "ISO80000Reference",
-            "qudtReference",
-            "contributor",
-            "license",
-            "ISO14040Reference",
+            "elucidation",
+            "etymology",
+            "example",
             "figure",
-            "title",
+            "iupacReference",
+            "license",
+            "logo",
+            "minQualifiedCardinality",
+            "omReference",
+            "prefLabel",
             "publisher",
+            "qualifiedCardinality",
+            "qudtReference",
+            "title",
+            "ucumCode",
+            "uneceCommonCode",
+            "unitSymbol",
+            "wikidataReference",
+            "wikipediaReference",
         },
     )
 
@@ -85,6 +90,13 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
     assert (
         emmo.Atom.wikipediaReference == []
     )  # Check that wikipediaReference can be acceses as attribute
+
+
+def test_get_indirect_is_a(emmo: "Ontology") -> None:
+    assert any(
+        re.match("^emmo.*.hasDimensionString.value(.*)$", str(e))
+        for e in emmo.MicroPascal.get_indirect_is_a()
+    )
 
 
 # TODO: Fix disjoint_with().
