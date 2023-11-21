@@ -206,6 +206,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 "emmo.DerivedUnit",
                 "emmo.BaseUnit",
                 "emmo.UnitSymbol",
+                "emmo.SIAccepted",
                 "emmo.SICoherentDerivedUnit",
                 "emmo.SINonCoherentDerivedUnit",
                 "emmo.SISpecialUnit",
@@ -219,9 +220,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         if not hasattr(self.onto, "MeasurementUnit"):
             return
         exceptions.update(self.get_config("test_unit_dimension.exceptions", ()))
-        regex = re.compile(
-            r"^(emmo|metrology).hasPhysicalDimension.some\(.*\)$"
-        )
+        regex = re.compile(r"^(emmo|metrology).hasDimensionString.value\(.*\)$")
         classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.MeasurementUnit.descendants():
             if not self.check_imported and cls not in classes:
