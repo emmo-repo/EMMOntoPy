@@ -1,0 +1,105 @@
+@prefix : <http://emmo.info/testonto/0.1.0/testontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://emmo.info/testonto/0.1.0/testontology> .
+
+<http://emmo.info/testonto/0.1.0/testontology> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://emmo.info/testontology#hasColour
+<http://emmo.info/testontology#hasColour> rdf:type owl:ObjectProperty ;
+                                          rdfs:domain <http://emmo.info/testontology#Dye> ;
+                                          rdfs:range <http://emmo.info/testontology#Colour> .
+
+
+###  http://emmo.info/testontology#hasNaturePart
+<http://emmo.info/testontology#hasNaturePart> rdf:type owl:ObjectProperty ;
+                                              rdfs:subPropertyOf <http://emmo.info/testontology#hasPart> ;
+                                              rdfs:domain <http://emmo.info/testontology#Nature> ;
+                                              rdfs:range <http://emmo.info/testontology#Nature> .
+
+
+###  http://emmo.info/testontology#hasPart
+<http://emmo.info/testontology#hasPart> rdf:type owl:ObjectProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://emmo.info/testontology#Avocado
+<http://emmo.info/testontology#Avocado> rdf:type owl:Class ;
+                                        rdfs:subClassOf <http://emmo.info/testontology#EvergreenTree> ,
+                                                        <http://emmo.info/testontology#NaturalDye> ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://emmo.info/testontology#hasColour> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                          owl:onClass <http://emmo.info/testontology#Colour>
+                                                        ] .
+
+
+###  http://emmo.info/testontology#Colour
+<http://emmo.info/testontology#Colour> rdf:type owl:Class .
+
+
+###  http://emmo.info/testontology#DesiduousTree
+<http://emmo.info/testontology#DesiduousTree> rdf:type owl:Class ;
+                                              rdfs:subClassOf <http://emmo.info/testontology#Tree> .
+
+
+###  http://emmo.info/testontology#Dye
+<http://emmo.info/testontology#Dye> rdf:type owl:Class .
+
+
+###  http://emmo.info/testontology#EngelmannSpruce
+<http://emmo.info/testontology#EngelmannSpruce> rdf:type owl:Class ;
+                                                rdfs:subClassOf <http://emmo.info/testontology#Spruce> .
+
+
+###  http://emmo.info/testontology#EvergreenTree
+<http://emmo.info/testontology#EvergreenTree> rdf:type owl:Class ;
+                                              rdfs:subClassOf <http://emmo.info/testontology#Tree> .
+
+
+###  http://emmo.info/testontology#NaturalDye
+<http://emmo.info/testontology#NaturalDye> rdf:type owl:Class ;
+                                           owl:equivalentClass [ owl:intersectionOf ( <http://emmo.info/testontology#Dye>
+                                                                                      <http://emmo.info/testontology#Nature>
+                                                                                    ) ;
+                                                                 rdf:type owl:Class
+                                                               ] ;
+                                           rdfs:subClassOf <http://emmo.info/testontology#Dye> ,
+                                                           <http://emmo.info/testontology#Nature> .
+
+
+###  http://emmo.info/testontology#Nature
+<http://emmo.info/testontology#Nature> rdf:type owl:Class .
+
+
+###  http://emmo.info/testontology#NorwaySpruce
+<http://emmo.info/testontology#NorwaySpruce> rdf:type owl:Class ;
+                                             rdfs:subClassOf <http://emmo.info/testontology#Spruce> .
+
+
+###  http://emmo.info/testontology#ShingledHedgehogMushroom
+<http://emmo.info/testontology#ShingledHedgehogMushroom> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://emmo.info/testontology#NaturalDye> .
+
+
+###  http://emmo.info/testontology#Spruce
+<http://emmo.info/testontology#Spruce> rdf:type owl:Class ;
+                                       rdfs:subClassOf <http://emmo.info/testontology#EvergreenTree> .
+
+
+###  http://emmo.info/testontology#Tree
+<http://emmo.info/testontology#Tree> rdf:type owl:Class ;
+                                     rdfs:subClassOf <http://emmo.info/testontology#Nature> .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
