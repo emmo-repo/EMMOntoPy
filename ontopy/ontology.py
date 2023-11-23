@@ -1939,6 +1939,18 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """
         return self.new_entity(name, parent, "annotation_property")
 
+    def copy(self):
+        """Return a copy of the ontology."""
+        with tempfile.TemporaryDirectory() as handle:
+            tmpfile = os.path.join(handle, "tmp.owl")
+
+            self.save(
+                tmpfile,
+                squash=True,
+            )
+            ontology = get_ontology(tmpfile).load()
+        return ontology
+
 
 class BlankNode:
     """Represents a blank node.
