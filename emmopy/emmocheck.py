@@ -126,7 +126,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
         for cls in self.onto.classes(self.check_imported):
             for label in cls.label + getattr(cls, "prefLabel", []):
-                if label not in exceptions:
+                if str(label) not in exceptions:
                     with self.subTest(entity=cls, label=label):
                         self.assertTrue(label.isidentifier())
                         self.assertTrue(label[0].isupper())
