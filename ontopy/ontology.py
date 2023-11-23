@@ -1009,6 +1009,34 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 append=append_catalog,
             )
 
+    def copy(self, recursive=True, copy_world=False):
+        """Return a copy of self.
+
+        Arguments:
+            recursive: Whether to copy imported ontologies recursively.
+            copy_world: Whether to also copy the world.
+        """
+        if copy_world:
+            raise NotImplementedError(
+                "Argument `copy_world` is not yet implemented."
+            )
+
+        onto = Ontology(
+            world=self.world,
+            base_iri=self.base_iri,
+            name=self.name,
+        )
+        onto.label_annotations = self.label_annotations[:]
+        onto.prefix = self.prefix
+
+        if recursive:
+            for imported in self.imported_ontologies:
+                onto.imported_ontologies.append(imported.copy())
+        else:
+            onto.imported_ontologies = self.imported_ontologies[:]
+
+        return onto
+
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
 
