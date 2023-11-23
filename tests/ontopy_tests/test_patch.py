@@ -1,11 +1,11 @@
 """Tests Owlready2 patches implemented in ontopy/patch.py
 
 """
+import re
 
 import pytest
 
 from ontopy import get_ontology
-
 from owlready2 import owl, Inverse
 
 from utilities import setassert
@@ -85,6 +85,16 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
     assert (
         emmo.Atom.wikipediaReference == []
     )  # Check that wikipediaReference can be acceses as attribute
+
+
+def test_get_indirect_is_a() -> None:
+    from ontopy import get_ontology
+
+    emmo = get_ontology("emmo-development").load()
+    assert any(
+        re.match("^emmo.*.hasDimensionString.value(.*)$", str(e))
+        for e in emmo.MicroPascal.get_indirect_is_a()
+    )
 
 
 # TODO: Fix disjoint_with().

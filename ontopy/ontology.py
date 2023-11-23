@@ -117,7 +117,7 @@ class World(owlready2.World):
             )
         elif base_iri == "emmo-development":
             base_iri = (
-                "https://emmo-repo.github.io/versions/1.0.0-beta4/"
+                "https://emmo-repo.github.io/versions/1.0.0-beta5/"
                 "emmo-inferred.ttl"
             )
 
