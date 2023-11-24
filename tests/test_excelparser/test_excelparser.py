@@ -33,6 +33,17 @@ def test_excelparser(repo_dir: "Path") -> None:
     )
     ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
     # ontology.save("test.ttl") # used for printing new ontology when debugging
+    # remove python_names added by owlready2 before comparing the ontologies.
+    # The emmontopy.ontology.save removes all triples with this relation as default.
+    ontology.save("test.ttl")  # used for printing new ontology when debugging
+
+    # onto2 = ontology.copy()
+    ontology._del_data_triple_spod(
+        p=ontology._abbreviate(
+            "http://www.lesfleursdunormal.fr/static/_downloads/"
+            "owlready_ontology.owl#python_name"
+        )
+    )
     assert onto == ontology
     assert errors.keys() == {
         "already_defined",

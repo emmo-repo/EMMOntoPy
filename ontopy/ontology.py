@@ -851,6 +851,77 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         write_catalog_file=False,
         append_catalog=False,
         catalog_file="catalog-v001.xml",
+        keep_python_names=False,
+    ):
+        """Writes the ontology to file.
+
+        Parameters
+        ----------
+        filename: None | str | Path
+            Name of file to write to.  If None, it defaults to the name
+            of the ontology with `format` as file extension.
+        format: str
+            Output format. The default is to infer it from `filename`.
+        dir: str | Path
+            If `filename` is a relative path, it is a relative path to `dir`.
+        mkdir: bool
+            Whether to create output directory if it does not exists.
+        owerwrite: bool
+            If true and `filename` exists, remove the existing file before
+            saving.  The default is to append to an existing ontology.
+        recursive: bool
+            Whether to save imported ontologies recursively.  This is
+            commonly combined with `filename=None`, `dir` and `mkdir`.
+        squash: bool
+        assert testonto_copy.FantasyClass2
+            If true, rdflib will be used to save the current ontology
+            together with all its sub-ontologies into `filename`.
+            It make no sense to combine this with `recursive`.
+        write_catalog_file: bool
+            Whether to also write a catalog file to disk.
+        append_catalog: bool
+            Whether to append to an existing catalog file.
+        catalog_file: str | Path
+            Name of catalog file.  If not an absolute path, it is prepended
+            to `dir`.
+        keep_python_names: bool
+            Whether to keep python names in the ontology.
+        """
+        if keep_python_names:
+            newonto = self
+        else:
+            newonto = self.copy()
+            newonto._del_data_triple_spod(
+                p=newonto._abbreviate(
+                    "http://www.lesfleursdunormal.fr/static/_downloads/"
+                    "owlready_ontology.owl#python_name"
+                )
+            )
+        newonto._save(
+            filename=filename,
+            format=format,
+            dir=dir,
+            mkdir=mkdir,
+            overwrite=overwrite,
+            recursive=recursive,
+            squash=squash,
+            write_catalog_file=write_catalog_file,
+            append_catalog=append_catalog,
+            catalog_file=catalog_file,
+        )
+
+    def _save(
+        self,
+        filename=None,
+        format=None,
+        dir=".",
+        mkdir=False,
+        overwrite=False,
+        recursive=False,
+        squash=False,
+        write_catalog_file=False,
+        append_catalog=False,
+        catalog_file="catalog-v001.xml",
     ):
         """Writes the ontology to file.
 
@@ -938,7 +1009,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             for onto in self.imported_ontologies:
                 obase = onto.base_iri.rstrip("#/")
                 newdir = Path(dir) / os.path.relpath(obase, base)
-                onto.save(
+                onto._save(
                     filename=None,
                     format=format,
                     dir=newdir.resolve(),
@@ -1944,11 +2015,25 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         with tempfile.TemporaryDirectory() as handle:
             tmpfile = os.path.join(handle, "tmp.owl")
 
-            self.save(
+            self._save(
                 tmpfile,
+                dir=handle,
+                # recursive=True,
+                write_catalog_file=True,
+                mkdir=True,
+                # overwrite=True,
+                # tmpfile,
                 squash=True,
             )
+            # print(self.TestClass)
+            # print out content of all files in tmpdir
+            for file in os.listdir(handle):
+                with open(os.path.join(handle, file), "r") as f:
+                    print(f"File: {file}")
+                    print(f.read())
+
             ontology = get_ontology(tmpfile).load()
+            # print(ontology.TestClass)
         return ontology
 
 
