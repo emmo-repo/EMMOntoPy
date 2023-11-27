@@ -206,7 +206,7 @@ def main(argv: list = None):
         onto.save(
             args.output,
             format=output_format,
-            dir=args.output_dir,
+            directory=args.output_dir,
             mkdir=True,
             overwrite=args.overwrite,
             recursive=args.recursive,
