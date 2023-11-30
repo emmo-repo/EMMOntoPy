@@ -57,9 +57,10 @@ def test_save(
     # Check that file is overwritten only wityh overwrite=True, and
     # not by default (overwrite=False).
     # To do this we
-    # 1. check that the file testonto.owl is the same as
+    # 1. check that the file testonto.rdfxml is the same as
     # testonto_saved.owl
-    # 2. save testonto to testonto.owl again
+    # 2. save testonto to testonto.rdfxml again. Since overwrite=False
+    # this should append to testonto.rdfxml
     # 3. check that testonto.owl is not the same as testonto_saved.owl
     # 4. save testonto to testonto.owl again, but with overwrite=True
     # 5. check that testonto.owl is the same as testonto_saved.owl
