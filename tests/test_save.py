@@ -78,11 +78,12 @@ def test_save(tmpdir: "Path", testonto: "Ontology") -> None:
     assert owlfile == owlfile2
 
     # Test that the ontology is saved recursively when deisred
-    testonto.save(format="ttl", dir=tmpdir / "recursively" , mkdir=True, recursive=True)
+    testonto.save(
+        format="ttl", dir=tmpdir / "recursively", mkdir=True, recursive=True
+    )
     assert (tmpdir / "recursively" / "testonto.ttl").exists()
     # Recursive save is not working . Issue #687
     # assert (tmpdir / "recursively" / "models.ttl").exists()
-
 
     # print name of files in tmpdir
     # print("Files in tmpdir:")
