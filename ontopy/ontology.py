@@ -1025,7 +1025,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             base = self.base_iri.rstrip("#/")
             for onto in self.imported_ontologies:
                 obase = onto.base_iri.rstrip("#/")
-                newdir = Path(dir) / os.path.relpath(obase, base)
+                newdir = Path(directory) / os.path.relpath(obase, base)
                 onto._save(
                     file=None,
                     format=format,
@@ -1081,9 +1081,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
             def append(onto):
                 obase = onto.base_iri.rstrip("#/")
-                newdir = Path(dir) / os.path.relpath(obase, base)
+                newdir = Path(directory) / os.path.relpath(obase, base)
                 newpath = newdir.resolve() / f"{onto.name}.{fmt}"
-                relpath = os.path.relpath(newpath, dir)
+                relpath = os.path.relpath(newpath, directory)
                 mappings[onto.get_version(as_iri=True)] = str(relpath)
                 for imported in onto.imported_ontologies:
                     append(imported)
@@ -2029,29 +2029,60 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
     def copy(self):
         """Return a copy of the ontology."""
-        with tempfile.TemporaryDirectory() as handle:
-            tmpfile = os.path.join(handle, "tmp.owl")
-
+        with tempfile.TemporaryDirectory() as dirname:
+            filename = os.path.join(dirname, "tmp.owl")
             self._save(
-                tmpfile,
-                directory=handle,
-                # recursive=True,
+                filename,
+                directory=dirname,
+                format="rdfxml",
+                recursive=True,
                 write_catalog_file=True,
                 mkdir=True,
                 # overwrite=True,
                 # tmpfile,
-                squash=True,
+                # squash=True,
             )
             # print(self.TestClass)
             # print out content of all files in tmpdir
-            for file in os.listdir(handle):
-                with open(os.path.join(handle, file), "r") as f:
+            for file in os.listdir(dirname):
+                with open(os.path.join(dirname, file), "r") as f:
                     print(f"File: {file}")
                     print(f.read())
 
-            ontology = get_ontology(tmpfile).load()
+            ontology = get_ontology(filename).load()
             # print(ontology.TestClass)
         return ontology
+
+    def copy2(self, recursive=True, copy_world=True):
+        """Return a copy of self.
+
+        Arguments:
+            recursive: Whether to copy imported ontologies recursively.
+            copy_world: Whether to also copy the world.
+        """
+
+        if copy_world:
+            new_world = World()
+            self.world.get_triples()
+            # raise NotImplementedError(
+            #    "Argument `copy_world` is not yet implemented."
+            # )
+
+        onto = Ontology(
+            world=World() if copy_world else self.world,
+            base_iri=self.base_iri,
+            name=self.name,
+        )
+        onto.label_annotations = self.label_annotations[:]
+        onto.prefix = self.prefix
+
+        if recursive:
+            for imported in self.imported_ontologies:
+                onto.imported_ontologies.append(imported.copy())
+        else:
+            onto.imported_ontologies = self.imported_ontologies[:]
+
+        return onto
 
 
 class BlankNode:

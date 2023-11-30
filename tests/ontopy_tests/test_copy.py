@@ -17,13 +17,21 @@ def test_copy(testonto: "Ontology") -> None:
     testonto.new_entity("FantasyClass", testonto.TestClass)
     assert testonto_ref.FantasyClass == testonto.FantasyClass
 
-    # Mgake a copy and check that new entity in original is not in copy
+    # Make a copy and check that new entity in original is not in copy
     testonto_copy = testonto.copy()
 
-    testonto.new_entity("FantasyClass2", testonto_copy.TestClass)
+    testonto.new_entity("FantasyClass2", testonto.TestClass)
 
     assert testonto.FantasyClass2
+    print("testonto", list(testonto.classes()))
+    print(list(testonto_copy.classes()))
+    print("copied label annotations", testonto_copy.label_annotations)
+    print("copied prefix", testonto_copy.prefix)
+    assert testonto_copy.FantasyClass
+    print("*************************************")
+    print(set(testonto.classes()).difference(testonto_copy.classes()))
 
+    print("*************************")
     with pytest.raises(NoSuchLabelError):
         assert testonto_copy.FantasyClass2
 
