@@ -4,12 +4,23 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-def test_save(tmpdir: "Path", testonto: "Ontology") -> None:
-    import pytest
-
-    from ontopy import get_ontology
-    from ontopy.ontology import EMMOntoPyException
+def test_save(
+    tmpdir: "Path",
+    testonto: "Ontology",
+    repo_dir: "Path",
+) -> None:
+    import os
     from pathlib import Path
+
+    # For debugging purposes tmpdir can be set to a directory
+    # in the current directory: test_save_dir
+    # Remember to remove the directory after testing
+    debug = False
+    if debug:
+        tmpdir = repo_dir / "tests" / "test_save_dir"
+        import os
+
+        os.makedirs(tmpdir, exist_ok=True)
 
     # Save ontology in a different location
     testonto.save(tmpdir / "testonto_saved.ttl")
@@ -84,11 +95,6 @@ def test_save(tmpdir: "Path", testonto: "Ontology") -> None:
     assert (tmpdir / "recursively" / "testonto.ttl").exists()
     # Recursive save is not working . Issue #687
     # assert (tmpdir / "recursively" / "models.ttl").exists()
-
-    # print name of files in tmpdir
-    # print("Files in tmpdir:")
-    # for file in (tmpdir / "recursively").iterdir():
-    #    print(file)
 
     # squash merge during save
 
