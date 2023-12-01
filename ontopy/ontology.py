@@ -1555,7 +1555,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 "No versionIRI or versionInfo " f"in Ontology {self.base_iri!r}"
             )
         _, _, version_info = tokens[0]
-        return version_info.strip('"').strip("'")
+        return version_info.split("^^")[0].strip('"')
 
     def set_version(self, version=None, version_iri=None):
         """Assign version to ontology by asigning owl:versionIRI.
