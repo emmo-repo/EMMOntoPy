@@ -7,7 +7,7 @@ on:
 jobs:
   updates-to-master:
     name: External
-    uses: SINTEF/ci-cd/.github/workflows/ci_cd_updated_default_branch.yml@v2.6.0
+    uses: SINTEF/ci-cd/.github/workflows/ci_cd_updated_default_branch.yml@v2.7.1
     if: github.repository_owner == 'emmo-repo'
     with:
       git_username: EMMOntoPy Developers
