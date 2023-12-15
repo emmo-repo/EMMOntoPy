@@ -35,6 +35,7 @@ from ontopy.utils import (
     write_catalog,
     infer_version,
     convert_imported,
+    directory_layout,
     FMAP,
     IncompatibleVersion,
     isinteractive,
@@ -935,20 +936,24 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     "`recursive` and `squash` should not both be true"
                 )
             base = self.base_iri.rstrip("#/")
-            for onto in self.imported_ontologies:
-                obase = onto.base_iri.rstrip("#/")
-                newdir = Path(dir) / os.path.relpath(obase, base)
+            for onto, path in directory_layout(self).items():
+                fname = Path(dir) / f"{path}.{fmt}"
+                catfile = (
+                    catalog_file
+                    if os.path.isabs(catalog_file)
+                    else os.path.join(os.path.dirname(path), catalog_file)
+                )
                 onto.save(
-                    filename=None,
+                    filename=fname,
                     format=format,
-                    dir=newdir.resolve(),
+                    dir=dir,
                     mkdir=mkdir,
                     overwrite=overwrite,
-                    recursive=recursive,
-                    squash=squash,
+                    recursive=False,
+                    squash=False,
                     write_catalog_file=write_catalog_file,
                     append_catalog=append_catalog,
-                    catalog_file=catalog_file,
+                    catalog_file=catfile,
                 )
 
         if squash:
@@ -980,9 +985,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     suffix=".owl", delete=False
                 ) as handle:
                     tmpfile = handle.name
-                super().save(tmpfile, format="rdfxml")
+                super().save(tmpfile, format="ntriples")
                 graph = rdflib.Graph()
-                graph.parse(tmpfile, format="xml")
+                graph.parse(tmpfile, format="ntriples")
                 graph.serialize(destination=filename, format=format)
             finally:
                 os.remove(tmpfile)

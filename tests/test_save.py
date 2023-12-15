@@ -104,3 +104,19 @@ def test_save(
     # append_catalog
 
     # catalog_filename
+
+
+# Simple working tests without pytest getting in the way - feel free to change
+
+if True:  # Whether to test for EMMO
+    from pathlib import Path
+
+    from ontopy import get_ontology
+
+    emmo = get_ontology("../EMMO/emmo.ttl").load()
+    emmo.save(
+        format="turtle",
+        dir=Path(__file__).absolute().parent / "outdir",
+        recursive=True,
+        mkdir=True,
+    )
