@@ -745,3 +745,48 @@ def get_format(outfile: str, default: str, fmt: str = None):
     if not fmt:
         fmt = default
     return fmt.lstrip(".")
+
+
+def directory_layout(onto):
+    """Analyse imported ontologies and suggested a directory layout for
+    saving recursively.
+
+    Arguments:
+        onto: Ontology to analyse.
+
+    Returns:
+        layout: A dict mapping ontology objects to relative path names with
+            with the file extension stripped off.
+    """
+    layout = {}
+
+    def recur(o):
+        for imported in o.imported_ontologies:
+            if imported not in layout:
+                recur(imported)
+        baseiri = o.base_iri.rstrip("/#")
+
+        # Some heuristics here to reproduce the EMMO layout.
+        # It might not apply to all ontologies, so maybe it should be
+        # made optional?  Alternatively, change EMMO ontology IRIs to
+        # match the directory layout.
+        emmolayout = (
+            any(
+                oo.base_iri.startswith(baseiri + "/")
+                for oo in o.imported_ontologies
+            )
+            or o.base_iri == "http://emmo.info/emmo/mereocausality#"
+        )
+
+        layout[o] = (
+            baseiri + "/" + os.path.basename(baseiri) if emmolayout else baseiri
+        )
+
+    recur(onto)
+
+    # Strip off initial common prefix from all paths
+    prefix = os.path.commonprefix(list(layout.values()))
+    for o, path in layout.items():
+        layout[o] = path[len(prefix) :].lstrip("/")
+
+    return layout
