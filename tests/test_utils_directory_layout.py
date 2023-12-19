@@ -1,11 +1,12 @@
 import os
+from pathlib import Path
 
-from emmopy import get_emmo
+from ontopy import get_ontology
 from ontopy.utils import directory_layout
 
 
-if True:  # Whether to check on EMMO
-    emmo = get_emmo()
+if False:  # Whether to check on EMMO
+    emmo = get_ontology("../EMMO/emmo.ttl").load()
     layout = directory_layout(emmo)
 
     # Map base IRIs to ontologies for easy access to all sub-ontologies
@@ -66,3 +67,14 @@ if True:  # Whether to check on EMMO
         layout[omap["http://emmo.info/emmo/mereocausality#"]]
         == "mereocausality/mereocausality"
     )
+
+
+if True:
+    thisdir = Path(__file__).resolve().parent
+    ontopath = thisdir / "testonto" / "testonto.ttl"
+    onto = get_ontology(ontopath).load()
+    layout = directory_layout(onto)
+    omap = {o.base_iri: o for o in layout.keys()}
+
+    assert layout[omap["http://emmo.info/models#"]] == "models"
+    assert layout[omap["http://emmo.info/testonto#"]] == "testonto"
