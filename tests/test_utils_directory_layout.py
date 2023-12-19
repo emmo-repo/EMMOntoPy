@@ -1,11 +1,11 @@
 import os
 
-from ontopy import get_ontology
+from emmopy import get_emmo
 from ontopy.utils import directory_layout
 
 
 if True:  # Whether to check on EMMO
-    emmo = get_ontology("../EMMO/emmo.ttl").load()
+    emmo = get_emmo()
     layout = directory_layout(emmo)
 
     # Map base IRIs to ontologies for easy access to all sub-ontologies
