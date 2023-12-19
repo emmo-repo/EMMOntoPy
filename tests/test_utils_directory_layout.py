@@ -5,7 +5,8 @@ from ontopy import get_ontology
 from ontopy.utils import directory_layout
 
 
-if False:  # Whether to check on EMMO
+# Requires that we have EMMO checked out locally
+if False:
     emmo = get_ontology("../EMMO/emmo.ttl").load()
     layout = directory_layout(emmo)
 
