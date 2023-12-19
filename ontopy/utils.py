@@ -304,6 +304,7 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
     catalog_file="catalog-v001.xml",
     baseuri=None,
     recursive=False,
+    relative_to=None,
     return_paths=False,
     visited_iris=None,
     visited_paths=None,
@@ -327,6 +328,9 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
 
     If `recursive` is true, catalog files in sub-folders are also read.
 
+    if `relative_to` is given, the paths in the returned dict will be
+    relative to this path.
+
     If `return_paths` is true, a set of directory paths to source
     files is returned in addition to the default dict.
 
@@ -335,6 +339,8 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
 
     A ReadCatalogError is raised if the catalog file cannot be found.
     """
+    # pylint: disable=too-many-branches
+
     # Protocols supported by urllib.request
     web_protocols = "http://", "https://", "ftp://"
     uri = str(uri)  # in case uri is a pathlib.Path object
@@ -448,13 +454,18 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
                     load_catalog(catalog)
 
     load_catalog(filepath)
+
+    if relative_to:
+        for iri, path in iris.items():
+            iris[iri] = os.path.relpath(path, relative_to)
+
     if return_paths:
         return iris, dirs
     return iris
 
 
 def write_catalog(
-    mappings: dict,
+    irimap: dict,
     output: "Union[str, Path]" = "catalog-v001.xml",
     directory: "Union[str, Path]" = ".",
     relative_paths: bool = True,
@@ -463,27 +474,29 @@ def write_catalog(
     """Write catalog file do disk.
 
     Args:
-        mappings: dict mapping ontology IRIs (name) to actual locations
+        irimap: dict mapping ontology IRIs (name) to actual locations
             (URIs).  It has the same format as the dict returned by
             read_catalog().
         output: name of catalog file.
         directory: directory path to the catalog file.  Only used if `output`
             is a relative path.
-        relative_paths: whether to write absolute or relative paths to
-            for file paths inside the catalog file.
+        relative_paths: whether to write file paths inside the catalog as
+            relative paths (instead of  absolute paths).
         append: whether to append to a possible existing catalog file.
             If false, an existing file will be overwritten.
     """
-    web_protocol = "http://", "https://", "ftp://"
+    filename = Path(directory) / output
+
     if relative_paths:
-        for key, item in mappings.items():
-            if not item.startswith(web_protocol):
-                mappings[key] = os.path.relpath(item, Path(directory).resolve())
-    filename = (Path(directory) / output).resolve()
+        irimap = irimap.copy()  # don't modify provided irimap
+        for iri, path in irimap.items():
+            if os.path.isabs(path):
+                irimap[iri] = os.path.relpath(path, filename.parent)
+
     if filename.exists() and append:
         iris = read_catalog(filename)
-        iris.update(mappings)
-        mappings = iris
+        iris.update(irimap)
+        irimap = iris
 
     res = [
         '<?xml version="1.0" encoding="UTF-8" standalone="no"?>',
@@ -492,8 +505,8 @@ def write_catalog(
         '    <group id="Folder Repository, directory=, recursive=true, '
         'Auto-Update=false, version=2" prefer="public" xml:base="">',
     ]
-    for key, value in dict(mappings).items():
-        res.append(f'        <uri name="{key}" uri="{value}"/>')
+    for iri, path in irimap.items():
+        res.append(f'        <uri name="{iri}" uri="{path}"/>')
     res.append("    </group>")
     res.append("</catalog>")
     with open(filename, "wt") as handle:

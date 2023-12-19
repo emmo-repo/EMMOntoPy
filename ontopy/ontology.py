@@ -935,14 +935,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 raise ValueError(
                     "`recursive` and `squash` should not both be true"
                 )
-            base = self.base_iri.rstrip("#/")
-            for onto, path in directory_layout(self).items():
+            layout = directory_layout(self)
+
+            for onto, path in layout.items():
                 fname = Path(dir) / f"{path}.{fmt}"
-                catfile = (
-                    catalog_file
-                    if os.path.isabs(catalog_file)
-                    else os.path.join(os.path.dirname(path), catalog_file)
-                )
                 onto.save(
                     filename=fname,
                     format=format,
@@ -951,10 +947,47 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     overwrite=overwrite,
                     recursive=False,
                     squash=False,
-                    write_catalog_file=write_catalog_file,
-                    append_catalog=append_catalog,
-                    catalog_file=catfile,
+                    write_catalog_file=False,
+                    # write_catalog_file=write_catalog_file,
+                    # append_catalog=True,
+                    # catalog_file=catalog_files.get(onto, "catalog-v001.xml"),
                 )
+                # if write_catalog_file:
+                #    catdir = (
+                #        fname.parent.parent
+                #        if fname.parent.stem == fname.parent.parent.stem
+                #        else fname.parent
+                #    )
+                #    catalog_files[onto] = Path(
+                #        catalog_file
+                #        if os.path.isabs(catalog_file)
+                #        else catdir / catalog_file
+                #    )
+
+            if write_catalog_file:
+                catalog_files = set()
+                irimap = {}
+                for onto, path in layout.items():
+                    irimap[
+                        onto.get_version(as_iri=True)
+                    ] = f"{dir}/{path}.{fmt}"
+                    catalog_files.add(Path(path).parent / catalog_file)
+
+                for catfile in catalog_files:
+                    write_catalog(
+                        irimap.copy(),
+                        output=catfile,
+                        directory=dir,
+                        append=append_catalog,
+                    )
+
+        elif write_catalog_file:
+            write_catalog(
+                {self.get_version(as_iri=True): filename},
+                output=catalog_file,
+                directory=dir,
+                append=append_catalog,
+            )
 
         if squash:
             from rdflib import (  # pylint:disable=import-outside-toplevel
@@ -991,28 +1024,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 graph.serialize(destination=filename, format=format)
             finally:
                 os.remove(tmpfile)
-
-        if write_catalog_file:
-            mappings = {}
-            base = self.base_iri.rstrip("#/")
-
-            def append(onto):
-                obase = onto.base_iri.rstrip("#/")
-                newdir = Path(dir) / os.path.relpath(obase, base)
-                newpath = newdir.resolve() / f"{onto.name}.{fmt}"
-                relpath = os.path.relpath(newpath, dir)
-                mappings[onto.get_version(as_iri=True)] = str(relpath)
-                for imported in onto.imported_ontologies:
-                    append(imported)
-
-            if recursive:
-                append(self)
-            write_catalog(
-                mappings,
-                output=catalog_file,
-                directory=dir,
-                append=append_catalog,
-            )
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.

@@ -106,7 +106,7 @@ def test_save(
     # catalog_filename
 
 
-# Simple working tests without pytest getting in the way - feel free to change
+# Simple working tests without pytest getting in the way - feel free to change to pytest
 
 if True:  # Whether to test for EMMO
     from pathlib import Path
@@ -119,4 +119,5 @@ if True:  # Whether to test for EMMO
         dir=Path(__file__).absolute().parent / "outdir",
         recursive=True,
         mkdir=True,
+        write_catalog_file=True,
     )
