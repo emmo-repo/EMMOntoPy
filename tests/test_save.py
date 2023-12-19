@@ -111,9 +111,9 @@ def test_save(
 if True:  # Whether to test for EMMO
     from pathlib import Path
 
-    from ontopy import get_ontology
+    from emmopy import get_emmo
 
-    emmo = get_ontology("../EMMO/emmo.ttl").load()
+    emmo = get_emmo()
     emmo.save(
         format="turtle",
         dir=Path(__file__).absolute().parent / "outdir",
