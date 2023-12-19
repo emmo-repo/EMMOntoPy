@@ -948,21 +948,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     recursive=False,
                     squash=False,
                     write_catalog_file=False,
-                    # write_catalog_file=write_catalog_file,
-                    # append_catalog=True,
-                    # catalog_file=catalog_files.get(onto, "catalog-v001.xml"),
                 )
-                # if write_catalog_file:
-                #    catdir = (
-                #        fname.parent.parent
-                #        if fname.parent.stem == fname.parent.parent.stem
-                #        else fname.parent
-                #    )
-                #    catalog_files[onto] = Path(
-                #        catalog_file
-                #        if os.path.isabs(catalog_file)
-                #        else catdir / catalog_file
-                #    )
 
             if write_catalog_file:
                 catalog_files = set()
