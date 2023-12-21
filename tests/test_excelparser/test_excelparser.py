@@ -91,7 +91,7 @@ def test_excelparser(repo_dir: "Path") -> None:
         update_xlspath, force=True, input_ontology=ontology
     )
     assert updated_onto.ATotallyNewPattern
-    assert updated_onto.Pattern.iri == onto.Pattern.iri
+    assert updated_onto.FinitePattern.iri == onto.FinitePattern.iri
     assert len(list(onto.classes())) + 1 == len(list(updated_onto.classes()))
 
 
@@ -100,11 +100,10 @@ def test_excelparser_only_classes(repo_dir: "Path") -> None:
     to version 0.5.2 in which only classes where considered, but with empty sheets
     for properties."""
 
-
-if True:
-    from pathlib import Path
-
-    repo_dir = Path(__file__).resolve().parent.parent.parent
+    # if True:
+    #    from pathlib import Path
+    #
+    #    repo_dir = Path(__file__).resolve().parent.parent.parent
 
     ontopath = (
         repo_dir
@@ -156,5 +155,5 @@ if True:
         update_xlspath, force=True, input_ontology=ontology
     )
     assert updated_onto.ATotallyNewPattern
-    assert updated_onto.Pattern.iri == onto.Pattern.iri
+    assert updated_onto.FinitePattern.iri == onto.FinitePattern.iri
     assert len(list(onto.classes())) + 1 == len(list(updated_onto.classes()))
