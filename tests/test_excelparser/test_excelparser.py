@@ -126,13 +126,11 @@ if True:
     # Used for printing new ontology when debugging
     # ontology.save("test_only_classes.ttl")
 
-    diff1 = onto.difference(ontology)
-    diff2 = ontology.difference(onto)
-    print("-" * 70)
-    print(diff1)
-    print("-" * 70)
-    print(diff2)
-    print("-" * 70)
+    print("-----  only in onto  -----")
+    print(onto.difference(ontology))
+
+    print("-----  only in ontology  -----")
+    print(ontology.difference(onto))
 
     assert onto == ontology
     assert errors["already_defined"] == {"SpecialPattern"}
