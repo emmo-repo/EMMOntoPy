@@ -99,6 +99,13 @@ def test_excelparser_only_classes(repo_dir: "Path") -> None:
     """This loads the excelfile used and tests that the resulting ontology prior
     to version 0.5.2 in which only classes where considered, but with empty sheets
     for properties."""
+
+
+if True:
+    from pathlib import Path
+
+    repo_dir = Path(__file__).resolve().parent.parent.parent
+
     ontopath = (
         repo_dir
         / "tests"
@@ -118,6 +125,14 @@ def test_excelparser_only_classes(repo_dir: "Path") -> None:
     ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
     # Used for printing new ontology when debugging
     # ontology.save("test_only_classes.ttl")
+
+    diff1 = onto.difference(ontology)
+    diff2 = ontology.difference(onto)
+    print("-" * 70)
+    print(diff1)
+    print("-" * 70)
+    print(diff2)
+    print("-" * 70)
 
     assert onto == ontology
     assert errors["already_defined"] == {"SpecialPattern"}

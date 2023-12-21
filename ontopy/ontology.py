@@ -1941,6 +1941,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """
         return self.new_entity(name, parent, "annotation_property")
 
+    def difference(self, other: owlready2.Ontology) -> set:
+        """Return a set of triples that are in this, but not in the
+        `other` ontology."""
+        # pylint: disable=invalid-name
+        s1 = set(self.get_unabbreviated_triples(blank="_:b"))
+        s2 = set(other.get_unabbreviated_triples(blank="_:b"))
+        return s1.difference(s2)
+
 
 class BlankNode:
     """Represents a blank node.
@@ -2008,7 +2016,7 @@ def _unabbreviate(
 
 
 def _get_unabbreviated_triples(
-    self, subject=None, predicate=None, obj=None, blank=None
+    onto, subject=None, predicate=None, obj=None, blank=None
 ):
     """Help function returning all matching triples unabbreviated.
 
@@ -2016,23 +2024,23 @@ def _get_unabbreviated_triples(
     """
     # pylint: disable=invalid-name
     abb = (
-        None if subject is None else self._abbreviate(subject),
-        None if predicate is None else self._abbreviate(predicate),
-        None if obj is None else self._abbreviate(obj),
+        None if subject is None else onto._abbreviate(subject),
+        None if predicate is None else onto._abbreviate(predicate),
+        None if obj is None else onto._abbreviate(obj),
     )
-    for s, p, o in self._get_obj_triples_spo_spo(*abb):
+    for s, p, o in onto._get_obj_triples_spo_spo(*abb):
         yield (
-            _unabbreviate(self, s, blank=blank),
-            _unabbreviate(self, p, blank=blank),
-            _unabbreviate(self, o, blank=blank),
+            _unabbreviate(onto, s, blank=blank),
+            _unabbreviate(onto, p, blank=blank),
+            _unabbreviate(onto, o, blank=blank),
         )
-    for s, p, o, d in self._get_data_triples_spod_spod(*abb, d=None):
+    for s, p, o, d in onto._get_data_triples_spod_spod(*abb, d=None):
         yield (
-            _unabbreviate(self, s, blank=blank),
-            _unabbreviate(self, p, blank=blank),
+            _unabbreviate(onto, s, blank=blank),
+            _unabbreviate(onto, p, blank=blank),
             f'"{o}"{d}'
             if isinstance(d, str)
-            else f'"{o}"^^{_unabbreviate(self, d)}'
+            else f'"{o}"^^{_unabbreviate(onto, d)}'
             if d
             else o,
         )
