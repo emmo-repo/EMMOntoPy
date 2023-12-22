@@ -100,9 +100,9 @@ def test_excelparser_only_classes(repo_dir: "Path") -> None:
     to version 0.5.2 in which only classes where considered, but with empty sheets
     for properties."""
 
+    # Useful for debugging with ipython
     # if True:
     #    from pathlib import Path
-    #
     #    repo_dir = Path(__file__).resolve().parent.parent.parent
 
     ontopath = (
@@ -125,11 +125,9 @@ def test_excelparser_only_classes(repo_dir: "Path") -> None:
     # Used for printing new ontology when debugging
     # ontology.save("test_only_classes.ttl")
 
-    print("-----  only in onto  -----")
-    print(onto.difference(ontology))
-
-    print("-----  only in ontology  -----")
-    print(ontology.difference(onto))
+    # Useful for debugging
+    # print("-----  only in onto  -----")
+    # print(onto.difference(ontology))
 
     assert onto == ontology
     assert errors["already_defined"] == {"SpecialPattern"}
