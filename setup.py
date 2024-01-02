@@ -112,6 +112,7 @@ setuptools.setup(
         "tools/ontoconvert",
         "tools/ontoversion",
         "tools/excel2onto",
+        "tools/redirectioncheck",
     ],
     package_data={
         "ontopy.factpluspluswrapper.java.lib.so": ["*"],
