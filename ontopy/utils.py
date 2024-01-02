@@ -769,7 +769,8 @@ def directory_layout(onto):
 
     Returns:
         layout: A dict mapping ontology objects to relative path names
-            with the file extension stripped off.
+            derived from the ontology IRIs. No file name extension are
+            added.
 
     Example:
         Assume that our ontology `onto` has IRI `ex:onto`. If it directly
