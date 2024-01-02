@@ -761,15 +761,29 @@ def get_format(outfile: str, default: str, fmt: str = None):
 
 
 def directory_layout(onto):
-    """Analyse imported ontologies and suggested a directory layout for
-    saving recursively.
+    """Analyse IRIs of imported ontologies and suggested a directory
+    layout for saving recursively.
 
     Arguments:
         onto: Ontology to analyse.
 
     Returns:
-        layout: A dict mapping ontology objects to relative path names with
+        layout: A dict mapping ontology objects to relative path names
             with the file extension stripped off.
+
+    Example:
+        Assume that our ontology `onto` has IRI `ex:onto`. If it directly
+        or indirectly imports ontologies with IRIs `ex:A/ontoA`, `ex:B/ontoB`
+        and `ex:A/C/ontoC`, this function will return the following dict:
+
+            {
+                onto: "onto",
+                ontoA: "A/ontoA",
+                ontoB: "B/ontoB",
+                ontoC: "A/C/ontoC",
+            }
+
+        where `ontoA`, `ontoB` and `ontoC` are imported Ontology objects.
     """
     layout = {}
 
