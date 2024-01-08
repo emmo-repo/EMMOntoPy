@@ -93,15 +93,18 @@ if True:
     from ontopy import get_ontology
 
     emmo = get_ontology("emmo-development").load()
-    indirect1 = emmo.MicroPascal.get_indirect_is_a()
-    indirect2 = emmo.MicroPascal.get_indirect_is_a(skip_classes=False)
-
     assert any(
         re.match("^emmo.*\.hasDimensionString.value(.*)$", str(e))
-        for e in indirect1
+        for e in emmo.MicroPascal.get_indirect_is_a()
     )
-    assert all(re.match("^emmo.*\.Item$", str(e)) is None for e in indirect1)
-    assert any(re.match("^emmo.*\.Item$", str(e)) for e in indirect2)
+    assert all(
+        re.match("^emmo.*\.Item$", str(e)) is None
+        for e in emmo.MicroPascal.get_indirect_is_a()
+    )
+    assert any(
+        re.match("^emmo.*\.Item$", str(e))
+        for e in emmo.MicroPascal.get_indirect_is_a(skip_classes=False)
+    )
 
 
 # TODO: Fix disjoint_with().
