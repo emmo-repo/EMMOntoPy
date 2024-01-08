@@ -5,6 +5,12 @@ if TYPE_CHECKING:
 
 
 def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
+    # if True:
+    #    from pathlib import Path
+    #    from ontopy import get_ontology
+    #    repo_dir = Path(__file__).resolve().parent.parent
+    #    testonto = get_ontology(str(repo_dir / "tests" / "testonto" / "testonto.ttl")).load()
+
     import pytest
 
     from ontopy import get_ontology
@@ -21,7 +27,7 @@ def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
     assert str(emmo.Atom.prefLabel.first()) == "Atom"
 
     emmo = get_ontology(
-        "https://emmo-repo.github.io/latest-stable/" "emmo-inferred.owl"
+        "https://emmo-repo.github.io/emmo-inferred.ttl"
     ).load()  # owl format
     assert str(emmo.Atom.prefLabel.first()) == "Atom"
 
