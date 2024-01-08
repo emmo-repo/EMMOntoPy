@@ -35,6 +35,7 @@ from ontopy.utils import (
     write_catalog,
     infer_version,
     convert_imported,
+    directory_layout,
     FMAP,
     IncompatibleVersion,
     isinteractive,
@@ -934,22 +935,45 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 raise ValueError(
                     "`recursive` and `squash` should not both be true"
                 )
-            base = self.base_iri.rstrip("#/")
-            for onto in self.imported_ontologies:
-                obase = onto.base_iri.rstrip("#/")
-                newdir = Path(dir) / os.path.relpath(obase, base)
+            layout = directory_layout(self)
+
+            for onto, path in layout.items():
+                fname = Path(dir) / f"{path}.{fmt}"
                 onto.save(
-                    filename=None,
+                    filename=fname,
                     format=format,
-                    dir=newdir.resolve(),
+                    dir=dir,
                     mkdir=mkdir,
                     overwrite=overwrite,
-                    recursive=recursive,
-                    squash=squash,
-                    write_catalog_file=write_catalog_file,
-                    append_catalog=append_catalog,
-                    catalog_file=catalog_file,
+                    recursive=False,
+                    squash=False,
+                    write_catalog_file=False,
                 )
+
+            if write_catalog_file:
+                catalog_files = set()
+                irimap = {}
+                for onto, path in layout.items():
+                    irimap[
+                        onto.get_version(as_iri=True)
+                    ] = f"{dir}/{path}.{fmt}"
+                    catalog_files.add(Path(path).parent / catalog_file)
+
+                for catfile in catalog_files:
+                    write_catalog(
+                        irimap.copy(),
+                        output=catfile,
+                        directory=dir,
+                        append=append_catalog,
+                    )
+
+        elif write_catalog_file:
+            write_catalog(
+                {self.get_version(as_iri=True): filename},
+                output=catalog_file,
+                directory=dir,
+                append=append_catalog,
+            )
 
         if squash:
             from rdflib import (  # pylint:disable=import-outside-toplevel
@@ -980,34 +1004,12 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     suffix=".owl", delete=False
                 ) as handle:
                     tmpfile = handle.name
-                super().save(tmpfile, format="rdfxml")
+                super().save(tmpfile, format="ntriples")
                 graph = rdflib.Graph()
-                graph.parse(tmpfile, format="xml")
+                graph.parse(tmpfile, format="ntriples")
                 graph.serialize(destination=filename, format=format)
             finally:
                 os.remove(tmpfile)
-
-        if write_catalog_file:
-            mappings = {}
-            base = self.base_iri.rstrip("#/")
-
-            def append(onto):
-                obase = onto.base_iri.rstrip("#/")
-                newdir = Path(dir) / os.path.relpath(obase, base)
-                newpath = newdir.resolve() / f"{onto.name}.{fmt}"
-                relpath = os.path.relpath(newpath, dir)
-                mappings[onto.get_version(as_iri=True)] = str(relpath)
-                for imported in onto.imported_ontologies:
-                    append(imported)
-
-            if recursive:
-                append(self)
-            write_catalog(
-                mappings,
-                output=catalog_file,
-                directory=dir,
-                append=append_catalog,
-            )
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
@@ -1939,6 +1941,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """
         return self.new_entity(name, parent, "annotation_property")
 
+    def difference(self, other: owlready2.Ontology) -> set:
+        """Return a set of triples that are in this, but not in the
+        `other` ontology."""
+        # pylint: disable=invalid-name
+        s1 = set(self.get_unabbreviated_triples(blank="_:b"))
+        s2 = set(other.get_unabbreviated_triples(blank="_:b"))
+        return s1.difference(s2)
+
 
 class BlankNode:
     """Represents a blank node.
@@ -2006,7 +2016,7 @@ def _unabbreviate(
 
 
 def _get_unabbreviated_triples(
-    self, subject=None, predicate=None, obj=None, blank=None
+    onto, subject=None, predicate=None, obj=None, blank=None
 ):
     """Help function returning all matching triples unabbreviated.
 
@@ -2014,23 +2024,23 @@ def _get_unabbreviated_triples(
     """
     # pylint: disable=invalid-name
     abb = (
-        None if subject is None else self._abbreviate(subject),
-        None if predicate is None else self._abbreviate(predicate),
-        None if obj is None else self._abbreviate(obj),
+        None if subject is None else onto._abbreviate(subject),
+        None if predicate is None else onto._abbreviate(predicate),
+        None if obj is None else onto._abbreviate(obj),
     )
-    for s, p, o in self._get_obj_triples_spo_spo(*abb):
+    for s, p, o in onto._get_obj_triples_spo_spo(*abb):
         yield (
-            _unabbreviate(self, s, blank=blank),
-            _unabbreviate(self, p, blank=blank),
-            _unabbreviate(self, o, blank=blank),
+            _unabbreviate(onto, s, blank=blank),
+            _unabbreviate(onto, p, blank=blank),
+            _unabbreviate(onto, o, blank=blank),
         )
-    for s, p, o, d in self._get_data_triples_spod_spod(*abb, d=None):
+    for s, p, o, d in onto._get_data_triples_spod_spod(*abb, d=None):
         yield (
-            _unabbreviate(self, s, blank=blank),
-            _unabbreviate(self, p, blank=blank),
+            _unabbreviate(onto, s, blank=blank),
+            _unabbreviate(onto, p, blank=blank),
             f'"{o}"{d}'
             if isinstance(d, str)
-            else f'"{o}"^^{_unabbreviate(self, d)}'
+            else f'"{o}"^^{_unabbreviate(onto, d)}'
             if d
             else o,
         )

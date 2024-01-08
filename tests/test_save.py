@@ -104,3 +104,20 @@ def test_save(
     # append_catalog
 
     # catalog_filename
+
+
+# Simple working tests without pytest getting in the way - feel free to change to pytest
+
+if True:  # Whether to test for EMMO
+    from pathlib import Path
+
+    from emmopy import get_emmo
+
+    emmo = get_emmo()
+    emmo.save(
+        format="turtle",
+        dir=Path(__file__).absolute().parent / "outdir",
+        recursive=True,
+        mkdir=True,
+        write_catalog_file=True,
+    )
