@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -1214,6 +1214,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.utils.directory_layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      directory_layout()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.utils.english" class="md-nav__link">
     <span class="md-ellipsis">
       english()
@@ -1591,6 +1600,15 @@
   <a href="#ontopy.utils.convert_imported" class="md-nav__link">
     <span class="md-ellipsis">
       convert_imported()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.directory_layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      directory_layout()
     </span>
   </a>
   
@@ -2590,6 +2608,138 @@ local file names</p></td>
 
 
 
+<h2 id="ontopy.utils.directory_layout" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">directory_layout</span><span class="p">(</span><span class="n">onto</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.directory_layout" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Analyse IRIs of imported ontologies and suggested a directory
+layout for saving recursively.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>onto</code></td>
+        <td></td>
+        <td><p>Ontology to analyse.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>layout</code></td>
+      <td><p>A dict mapping ontology objects to relative path names
+    derived from the ontology IRIs. No file name extension are
+    added.</p></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Examples:</strong></p>
+    <p>Assume that our ontology <code>onto</code> has IRI <code>ex:onto</code>. If it directly
+or indirectly imports ontologies with IRIs <code>ex:A/ontoA</code>, <code>ex:B/ontoB</code>
+and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
+<div class="highlight"><pre><span></span><code>{
+    onto: &quot;onto&quot;,
+    ontoA: &quot;A/ontoA&quot;,
+    ontoB: &quot;B/ontoB&quot;,
+    ontoC: &quot;A/C/ontoC&quot;,
+}
+</code></pre></div>
+<p>where <code>ontoA</code>, <code>ontoB</code> and <code>ontoC</code> are imported Ontology objects.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">directory_layout</span><span class="p">(</span><span class="n">onto</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyse IRIs of imported ontologies and suggested a directory</span>
+<span class="sd">    layout for saving recursively.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        onto: Ontology to analyse.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        layout: A dict mapping ontology objects to relative path names</span>
+<span class="sd">            derived from the ontology IRIs. No file name extension are</span>
+<span class="sd">            added.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Assume that our ontology `onto` has IRI `ex:onto`. If it directly</span>
+<span class="sd">        or indirectly imports ontologies with IRIs `ex:A/ontoA`, `ex:B/ontoB`</span>
+<span class="sd">        and `ex:A/C/ontoC`, this function will return the following dict:</span>
+
+<span class="sd">            {</span>
+<span class="sd">                onto: &quot;onto&quot;,</span>
+<span class="sd">                ontoA: &quot;A/ontoA&quot;,</span>
+<span class="sd">                ontoB: &quot;B/ontoB&quot;,</span>
+<span class="sd">                ontoC: &quot;A/C/ontoC&quot;,</span>
+<span class="sd">            }</span>
+
+<span class="sd">        where `ontoA`, `ontoB` and `ontoC` are imported Ontology objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">layout</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">recur</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">imported</span> <span class="ow">in</span> <span class="n">o</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">imported</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">layout</span><span class="p">:</span>
+                <span class="n">recur</span><span class="p">(</span><span class="n">imported</span><span class="p">)</span>
+        <span class="n">baseiri</span> <span class="o">=</span> <span class="n">o</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Some heuristics here to reproduce the EMMO layout.</span>
+        <span class="c1"># It might not apply to all ontologies, so maybe it should be</span>
+        <span class="c1"># made optional?  Alternatively, change EMMO ontology IRIs to</span>
+        <span class="c1"># match the directory layout.</span>
+        <span class="n">emmolayout</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">any</span><span class="p">(</span>
+                <span class="n">oo</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">baseiri</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">oo</span> <span class="ow">in</span> <span class="n">o</span><span class="o">.</span><span class="n">imported_ontologies</span>
+            <span class="p">)</span>
+            <span class="ow">or</span> <span class="n">o</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">==</span> <span class="s2">&quot;http://emmo.info/emmo/mereocausality#&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">layout</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">baseiri</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">baseiri</span><span class="p">)</span> <span class="k">if</span> <span class="n">emmolayout</span> <span class="k">else</span> <span class="n">baseiri</span>
+        <span class="p">)</span>
+
+    <span class="n">recur</span><span class="p">(</span><span class="n">onto</span><span class="p">)</span>
+
+    <span class="c1"># Strip off initial common prefix from all paths</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">commonprefix</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">layout</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="p">:]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">layout</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h2 id="ontopy.utils.english" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">english</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></code>
 
@@ -2824,7 +2974,7 @@ false otherwise.</p>
 
 
 <h2 id="ontopy.utils.read_catalog" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">read_catalog</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_paths</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visited_iris</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visited_paths</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">read_catalog</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">relative_to</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_paths</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visited_iris</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visited_paths</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.utils.read_catalog" class="headerlink" title="Permanent link">&para;</a></h2>
@@ -2844,6 +2994,8 @@ directory.</p>
 mapped locations.  Otherwise it defaults to <code>uri</code> with its final
 component omitted.</p>
 <p>If <code>recursive</code> is true, catalog files in sub-folders are also read.</p>
+<p>if <code>relative_to</code> is given, the paths in the returned dict will be
+relative to this path.</p>
 <p>If <code>return_paths</code> is true, a set of directory paths to source
 files is returned in addition to the default dict.</p>
 <p>The <code>visited_uris</code> and <code>visited_paths</code> arguments are only intended for
@@ -2857,6 +3009,7 @@ internal use to avoid infinite recursions.</p>
     <span class="n">catalog_file</span><span class="o">=</span><span class="s2">&quot;catalog-v001.xml&quot;</span><span class="p">,</span>
     <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">relative_to</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">return_paths</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">visited_iris</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">visited_paths</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -2880,6 +3033,9 @@ internal use to avoid infinite recursions.</p>
 
 <span class="sd">    If `recursive` is true, catalog files in sub-folders are also read.</span>
 
+<span class="sd">    if `relative_to` is given, the paths in the returned dict will be</span>
+<span class="sd">    relative to this path.</span>
+
 <span class="sd">    If `return_paths` is true, a set of directory paths to source</span>
 <span class="sd">    files is returned in addition to the default dict.</span>
 
@@ -2888,6 +3044,8 @@ internal use to avoid infinite recursions.</p>
 
 <span class="sd">    A ReadCatalogError is raised if the catalog file cannot be found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># pylint: disable=too-many-branches</span>
+
     <span class="c1"># Protocols supported by urllib.request</span>
     <span class="n">web_protocols</span> <span class="o">=</span> <span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="s2">&quot;ftp://&quot;</span>
     <span class="n">uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>  <span class="c1"># in case uri is a pathlib.Path object</span>
@@ -3001,6 +3159,11 @@ internal use to avoid infinite recursions.</p>
                     <span class="n">load_catalog</span><span class="p">(</span><span class="n">catalog</span><span class="p">)</span>
 
     <span class="n">load_catalog</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">relative_to</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">iri</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">iris</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">iris</span><span class="p">[</span><span class="n">iri</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">relative_to</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">return_paths</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">iris</span><span class="p">,</span> <span class="n">dirs</span>
     <span class="k">return</span> <span class="n">iris</span>
@@ -3057,7 +3220,7 @@ annotation referring to the old IRI.</p>
 
 
 <h2 id="ontopy.utils.write_catalog" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">write_catalog</span><span class="p">(</span><span class="n">mappings</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">relative_paths</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">write_catalog</span><span class="p">(</span><span class="n">irimap</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">relative_paths</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.utils.write_catalog" class="headerlink" title="Permanent link">&para;</a></h2>
@@ -3078,7 +3241,7 @@ annotation referring to the old IRI.</p>
   </thead>
   <tbody>
       <tr>
-        <td><code>mappings</code></td>
+        <td><code>irimap</code></td>
         <td><code>dict</code></td>
         <td><p>dict mapping ontology IRIs (name) to actual locations
 (URIs).  It has the same format as the dict returned by
@@ -3101,8 +3264,8 @@ is a relative path.</p></td>
       <tr>
         <td><code>relative_paths</code></td>
         <td><code>bool</code></td>
-        <td><p>whether to write absolute or relative paths to
-for file paths inside the catalog file.</p></td>
+        <td><p>whether to write file paths inside the catalog as
+relative paths (instead of  absolute paths).</p></td>
         <td><code>True</code></td>
       </tr>
       <tr>
@@ -3117,7 +3280,7 @@ If false, an existing file will be overwritten.</p></td>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">write_catalog</span><span class="p">(</span>
-    <span class="n">mappings</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">irimap</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">output</span><span class="p">:</span> <span class="s2">&quot;Union[str, Path]&quot;</span> <span class="o">=</span> <span class="s2">&quot;catalog-v001.xml&quot;</span><span class="p">,</span>
     <span class="n">directory</span><span class="p">:</span> <span class="s2">&quot;Union[str, Path]&quot;</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
     <span class="n">relative_paths</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -3126,27 +3289,29 @@ If false, an existing file will be overwritten.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Write catalog file do disk.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        mappings: dict mapping ontology IRIs (name) to actual locations</span>
+<span class="sd">        irimap: dict mapping ontology IRIs (name) to actual locations</span>
 <span class="sd">            (URIs).  It has the same format as the dict returned by</span>
 <span class="sd">            read_catalog().</span>
 <span class="sd">        output: name of catalog file.</span>
 <span class="sd">        directory: directory path to the catalog file.  Only used if `output`</span>
 <span class="sd">            is a relative path.</span>
-<span class="sd">        relative_paths: whether to write absolute or relative paths to</span>
-<span class="sd">            for file paths inside the catalog file.</span>
+<span class="sd">        relative_paths: whether to write file paths inside the catalog as</span>
+<span class="sd">            relative paths (instead of  absolute paths).</span>
 <span class="sd">        append: whether to append to a possible existing catalog file.</span>
 <span class="sd">            If false, an existing file will be overwritten.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">web_protocol</span> <span class="o">=</span> <span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="s2">&quot;ftp://&quot;</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span> <span class="o">/</span> <span class="n">output</span>
+
     <span class="k">if</span> <span class="n">relative_paths</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">mappings</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">web_protocol</span><span class="p">):</span>
-                <span class="n">mappings</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span> <span class="o">/</span> <span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+        <span class="n">irimap</span> <span class="o">=</span> <span class="n">irimap</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># don&#39;t modify provided irimap</span>
+        <span class="k">for</span> <span class="n">iri</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">irimap</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="n">irimap</span><span class="p">[</span><span class="n">iri</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">append</span><span class="p">:</span>
         <span class="n">iris</span> <span class="o">=</span> <span class="n">read_catalog</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-        <span class="n">iris</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mappings</span><span class="p">)</span>
-        <span class="n">mappings</span> <span class="o">=</span> <span class="n">iris</span>
+        <span class="n">iris</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">irimap</span><span class="p">)</span>
+        <span class="n">irimap</span> <span class="o">=</span> <span class="n">iris</span>
 
     <span class="n">res</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s1">&#39;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#39;</span><span class="p">,</span>
@@ -3155,8 +3320,8 @@ If false, an existing file will be overwritten.</p></td>
         <span class="s1">&#39;    &lt;group id=&quot;Folder Repository, directory=, recursive=true, &#39;</span>
         <span class="s1">&#39;Auto-Update=false, version=2&quot; prefer=&quot;public&quot; xml:base=&quot;&quot;&gt;&#39;</span><span class="p">,</span>
     <span class="p">]</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mappings</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;        &lt;uri name=&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&quot; uri=&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">&quot;/&gt;&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">iri</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">irimap</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;        &lt;uri name=&quot;</span><span class="si">{</span><span class="n">iri</span><span class="si">}</span><span class="s1">&quot; uri=&quot;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1">&quot;/&gt;&#39;</span><span class="p">)</span>
     <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;    &lt;/group&gt;&quot;</span><span class="p">)</span>
     <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&lt;/catalog&gt;&quot;</span><span class="p">)</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
