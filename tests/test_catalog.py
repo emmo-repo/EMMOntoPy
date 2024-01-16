@@ -7,6 +7,12 @@ if TYPE_CHECKING:
 
 
 def test_catalog(repo_dir: "Path", tmpdir: "Path") -> None:
+    # if True:
+    #    from pathlib import Path
+    #    repo_dir = Path(__file__).resolve().parent.parent
+    #    tmpdir = repo_dir / "tests" / "xxx"
+    #    tmpdir.mkdir()
+
     ontodir = repo_dir / "tests" / "catalogs_for_testing"
     catalog_expected = {
         "http://emmo.info/testonto/0.1.0": str(ontodir / "testonto.ttl"),
@@ -71,14 +77,23 @@ def test_catalog(repo_dir: "Path", tmpdir: "Path") -> None:
 def test_write_catalog_choosing_relative_paths(
     repo_dir: "Path", tmpdir: "Path"
 ) -> None:
+    # if True:
+    #    from pathlib import Path
+    #    import shutil
+    #    repo_dir = Path(__file__).resolve().parent.parent
+    #    tmpdir = repo_dir / "tests" / "xxx"
+    #    if tmpdir.exists():
+    #        shutil.rmtree(tmpdir)
+    #    tmpdir.mkdir()
+
     ontodir = repo_dir / "tests" / "catalogs_for_testing"
-    catalog1 = read_catalog(str(ontodir))
+    catalog1 = read_catalog(ontodir, relative_to=ontodir)
     write_catalog(
         catalog1,
         output=(tmpdir / "cat-relative-paths.xml"),
         relative_paths=True,
     )
-    catalog2 = read_catalog(str(ontodir))
+    catalog2 = read_catalog(ontodir)
     write_catalog(
         catalog2,
         output=(tmpdir / "cat-absolute-paths.xml"),
@@ -101,8 +116,8 @@ def test_write_catalog_choosing_relative_paths(
     ontodir = repo_dir / "tests" / "catalogs_for_testing"
 
     catalog_expected_relative_paths = {
-        str("tests/catalogs_for_testing/testonto.ttl"),
-        str("tests/catalogs_for_testing/models.ttl"),
+        "testonto.ttl",
+        "models.ttl",
     }
 
     catalog_expected_absolute_paths = {
