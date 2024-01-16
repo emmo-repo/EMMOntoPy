@@ -6,7 +6,6 @@ import re
 import pytest
 
 from ontopy import get_ontology
-
 from owlready2 import owl, Inverse
 
 from utilities import setassert
@@ -92,10 +91,22 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
     )  # Check that wikipediaReference can be acceses as attribute
 
 
-def test_get_indirect_is_a(emmo: "Ontology") -> None:
+def test_get_indirect_is_a() -> None:
+    import re
+    from ontopy import get_ontology
+
+    emmo = get_ontology("emmo-development").load()
     assert any(
-        re.match("^emmo.*.hasDimensionString.value(.*)$", str(e))
+        re.match("^emmo.*\.hasDimensionString.value(.*)$", str(e))
         for e in emmo.MicroPascal.get_indirect_is_a()
+    )
+    assert all(
+        re.match("^emmo.*\.Item$", str(e)) is None
+        for e in emmo.MicroPascal.get_indirect_is_a()
+    )
+    assert any(
+        re.match("^emmo.*\.Item$", str(e))
+        for e in emmo.MicroPascal.get_indirect_is_a(skip_classes=False)
     )
 
 

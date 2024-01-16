@@ -126,7 +126,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
         for cls in self.onto.classes(self.check_imported):
             for label in cls.label + getattr(cls, "prefLabel", []):
-                if label not in exceptions:
+                if str(label) not in exceptions:
                     with self.subTest(entity=cls, label=label):
                         self.assertTrue(label.isidentifier())
                         self.assertTrue(label[0].isupper())
@@ -404,6 +404,11 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
 
     def test_dimensional_unit(self):
         """Check correct syntax of dimension string of dimensional units."""
+
+        # This test requires that the ontology has imported SIDimensionalUnit
+        if "SIDimensionalUnit" not in self.onto:
+            self.skipTest("SIDimensionalUnit is not imported")
+
         # pylint: disable=invalid-name
         regex = re.compile(
             "^T([+-][1-9][0-9]*|0) L([+-][1-9]|0) M([+-][1-9]|0) "

@@ -99,11 +99,11 @@ def _setitem(self, name, value):
     >>> from owlready2 import locstr
     >>> emmo = get_emmo()
     >>> emmo.Atom['altLabel']
-    ['ChemicalElement']
+    [locstr('ChemicalElement', 'en')]
     >>> emmo.Atom['altLabel'] = 'Element'
     >>> emmo.Atom['altLabel'] = locstr('Atomo', 'it')
     >>> emmo.Atom['altLabel']
-    ['ChemicalElement', 'Element', 'Atomo']
+    [locstr('ChemicalElement', 'en'), 'Element', locstr('Atomo', 'it')]
     """
 
     item = _getitem(self, name)
