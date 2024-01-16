@@ -87,8 +87,7 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
     )  # Check that wikipediaReference can be acceses as attribute
 
 
-# def test_get_indirect_is_a() -> None:
-if True:
+def test_get_indirect_is_a() -> None:
     import re
     from ontopy import get_ontology
 
