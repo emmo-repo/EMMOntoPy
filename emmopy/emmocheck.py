@@ -126,7 +126,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
         for cls in self.onto.classes(self.check_imported):
             for label in cls.label + getattr(cls, "prefLabel", []):
-                if label not in exceptions:
+                if str(label) not in exceptions:
                     with self.subTest(entity=cls, label=label):
                         self.assertTrue(label.isidentifier())
                         self.assertTrue(label[0].isupper())
@@ -206,6 +206,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 "emmo.DerivedUnit",
                 "emmo.BaseUnit",
                 "emmo.UnitSymbol",
+                "emmo.SIAccepted",
                 "emmo.SICoherentDerivedUnit",
                 "emmo.SINonCoherentDerivedUnit",
                 "emmo.SISpecialUnit",
@@ -219,9 +220,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         if not hasattr(self.onto, "MeasurementUnit"):
             return
         exceptions.update(self.get_config("test_unit_dimension.exceptions", ()))
-        regex = re.compile(
-            r"^(emmo|metrology).hasPhysicalDimension.some\(.*\)$"
-        )
+        regex = re.compile(r"^(emmo|metrology).hasDimensionString.value\(.*\)$")
         classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.MeasurementUnit.descendants():
             if not self.check_imported and cls not in classes:

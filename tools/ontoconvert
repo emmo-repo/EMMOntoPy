@@ -203,6 +203,7 @@ def main(argv: list = None):
                 include_imported=include_imported,
                 debug=verbose,
             )
+
         onto.save(
             args.output,
             format=output_format,
