@@ -551,6 +551,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         self,
         iri_base: str = "http://emmo.info/emmo",
         prefix: str = "emmo",
+        visited: "Optional[Set]" = None,
     ) -> None:
         """Set a common prefix for all imported ontologies
         with the same first part of the base_iri.
@@ -559,11 +560,18 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             iri_base: The start of the base_iri to look for. Defaults to
                 the emmo base_iri http://emmo.info/emmo
             prefix: the desired prefix. Defaults to emmo.
+            visited: Ontologies to skip. Only intended for internal use.
         """
+        if visited is None:
+            visited = set()
         if self.base_iri.startswith(iri_base):
             self.prefix = prefix
         for onto in self.imported_ontologies:
-            onto.set_common_prefix(iri_base=iri_base, prefix=prefix)
+            if not onto in visited:
+                visited.add(onto)
+                onto.set_common_prefix(
+                    iri_base=iri_base, prefix=prefix, visited=visited
+                )
 
     def load(  # pylint: disable=too-many-arguments,arguments-renamed
         self,
