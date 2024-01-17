@@ -2976,6 +2976,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">iri_base</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://emmo.info/emmo&quot;</span><span class="p">,</span>
         <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;emmo&quot;</span><span class="p">,</span>
+        <span class="n">visited</span><span class="p">:</span> <span class="s2">&quot;Optional[Set]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a common prefix for all imported ontologies</span>
 <span class="sd">        with the same first part of the base_iri.</span>
@@ -2984,11 +2985,18 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 <span class="sd">            iri_base: The start of the base_iri to look for. Defaults to</span>
 <span class="sd">                the emmo base_iri http://emmo.info/emmo</span>
 <span class="sd">            prefix: the desired prefix. Defaults to emmo.</span>
+<span class="sd">            visited: Ontologies to skip. Only intended for internal use.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">visited</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">iri_base</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
         <span class="k">for</span> <span class="n">onto</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">:</span>
-            <span class="n">onto</span><span class="o">.</span><span class="n">set_common_prefix</span><span class="p">(</span><span class="n">iri_base</span><span class="o">=</span><span class="n">iri_base</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">onto</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">onto</span><span class="p">)</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">set_common_prefix</span><span class="p">(</span>
+                    <span class="n">iri_base</span><span class="o">=</span><span class="n">iri_base</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">visited</span><span class="o">=</span><span class="n">visited</span>
+                <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">load</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments,arguments-renamed</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -7261,7 +7269,7 @@ to <code>dir</code>.</p>
 
 
 <h3 id="ontopy.ontology.Ontology.set_common_prefix" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">set_common_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iri_base</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;emmo&#39;</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">set_common_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iri_base</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;emmo&#39;</span><span class="p">,</span> <span class="n">visited</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.ontology.Ontology.set_common_prefix" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -7295,6 +7303,12 @@ the emmo base_iri http://emmo.info/emmo</p></td>
         <td><p>the desired prefix. Defaults to emmo.</p></td>
         <td><code>&#39;emmo&#39;</code></td>
       </tr>
+      <tr>
+        <td><code>visited</code></td>
+        <td><code>Optional[Set]</code></td>
+        <td><p>Ontologies to skip. Only intended for internal use.</p></td>
+        <td><code>None</code></td>
+      </tr>
   </tbody>
 </table>
         <details class="quote">
@@ -7303,6 +7317,7 @@ the emmo base_iri http://emmo.info/emmo</p></td>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">iri_base</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://emmo.info/emmo&quot;</span><span class="p">,</span>
     <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;emmo&quot;</span><span class="p">,</span>
+    <span class="n">visited</span><span class="p">:</span> <span class="s2">&quot;Optional[Set]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set a common prefix for all imported ontologies</span>
 <span class="sd">    with the same first part of the base_iri.</span>
@@ -7311,11 +7326,18 @@ the emmo base_iri http://emmo.info/emmo</p></td>
 <span class="sd">        iri_base: The start of the base_iri to look for. Defaults to</span>
 <span class="sd">            the emmo base_iri http://emmo.info/emmo</span>
 <span class="sd">        prefix: the desired prefix. Defaults to emmo.</span>
+<span class="sd">        visited: Ontologies to skip. Only intended for internal use.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">visited</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">iri_base</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
     <span class="k">for</span> <span class="n">onto</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">:</span>
-        <span class="n">onto</span><span class="o">.</span><span class="n">set_common_prefix</span><span class="p">(</span><span class="n">iri_base</span><span class="o">=</span><span class="n">iri_base</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">onto</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+            <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">onto</span><span class="p">)</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">set_common_prefix</span><span class="p">(</span>
+                <span class="n">iri_base</span><span class="o">=</span><span class="n">iri_base</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">visited</span><span class="o">=</span><span class="n">visited</span>
+            <span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
