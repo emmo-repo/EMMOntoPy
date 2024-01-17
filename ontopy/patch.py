@@ -138,8 +138,10 @@ def _getattr(self, name):
             # Try first unpatched getattr method to avoid risking
             # infinite recursion.
             try:
+                print("xxx:", name)
                 return save_getattr(self, entity.name)
             except AttributeError:
+                print("yyy:", name)
                 return getattr(self, entity.name)
         raise err
 

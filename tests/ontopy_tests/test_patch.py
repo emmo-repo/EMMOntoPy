@@ -8,11 +8,11 @@ import pytest
 from ontopy import get_ontology
 from owlready2 import owl, Inverse
 
-from utilities import setassert
-
 
 def test_get_by_label_onto(emmo: "Ontology") -> None:
     # Test some ThingClass extensions implemented in patch.py
+    from utilities import setassert
+
     assert str(emmo.Atom.get_preferred_label()) == "Atom"
 
     assert emmo.Atom.get_parents() == {emmo.MolecularEntity}
@@ -104,6 +104,24 @@ def test_get_indirect_is_a() -> None:
         re.match("^emmo.*\.Item$", str(e))
         for e in emmo.MicroPascal.get_indirect_is_a(skip_classes=False)
     )
+
+
+# def test_getattr() -> None:
+if True:
+    from pathlib import Path
+
+    thisdir = Path(__file__).resolve().parent
+    ontodir = thisdir.parent / "testonto"
+    onto = get_ontology(ontodir / "mammal.ttl").load()
+    onto.Cat.latinName.append("FelisCatus")
+
+    # For PR #699
+    # emmo.Atom.conceptualisation.append(
+    #    "Describing the logical steps of formalising an atom..."
+    # )
+    # emmo.Molecule.conceptualisation.append(
+    #    "Describing the logical steps of formalising a molecule..."
+    # )
 
 
 # TODO: Fix disjoint_with().
