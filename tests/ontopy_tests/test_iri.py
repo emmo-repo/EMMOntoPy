@@ -1,5 +1,6 @@
 import re
 from pathlib import Path
+import os
 
 from ontopy import get_ontology
 
