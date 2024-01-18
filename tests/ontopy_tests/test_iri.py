@@ -1,6 +1,5 @@
 import re
 from pathlib import Path
-import os
 
 from ontopy import get_ontology
 
@@ -14,8 +13,9 @@ def test_iri():
     onto = get_ontology(ontodir / "testonto.ttl").load()
     onto.base_iri = "http://example.com/onto"
     onto.iri = "http://example.com/onto/testonto"
-    if os.path.exists(outdir / "testonto.ttl"):
-        os.remove(outdir / "testonto.ttl")
+    ontofile = outdir / "testonto.ttl"
+    if ontofile.exists():
+        ontofile.unlink()
     onto.save(outdir / "testonto.ttl")
 
     # Load saved ontology and make sure that base_iri and iri are stored
