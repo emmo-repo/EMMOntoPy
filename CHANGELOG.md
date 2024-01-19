@@ -1,16 +1,46 @@
 # Changelog
 
-## [Unreleased](https://github.com/emmo-repo/EMMOntoPy/tree/HEAD)
+## [v0.6.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.6.1) (2024-01-17)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.6.0...HEAD)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.6.0...v0.6.1)
 
 **Closed issues:**
 
-- pyparsing has been updated [\#629](https://github.com/emmo-repo/EMMOntoPy/issues/629)
+- No tests for ontology.save [\#684](https://github.com/emmo-repo/EMMOntoPy/issues/684)
+- Allow using HermiT from ontoconvert [\#664](https://github.com/emmo-repo/EMMOntoPy/issues/664)
+- PrefLabel used by new\_entity, and get\_by\_label even if it is not in the ontology [\#642](https://github.com/emmo-repo/EMMOntoPy/issues/642)
+- ontology\(imported=True\) returns all classes in world [\#640](https://github.com/emmo-repo/EMMOntoPy/issues/640)
+- excel2onto example doesn't come into the github pages documentation [\#626](https://github.com/emmo-repo/EMMOntoPy/issues/626)
+- owlready2 \> 0.41 fails [\#624](https://github.com/emmo-repo/EMMOntoPy/issues/624)
+- get\_by\_label and get\_by\_label all force add label\_annotations [\#621](https://github.com/emmo-repo/EMMOntoPy/issues/621)
+- hasPhysicalDimension convention has changed in EMMO-1.0.0-beta3 [\#347](https://github.com/emmo-repo/EMMOntoPy/issues/347)
+
+**Merged pull requests:**
+
+- Avoid infinite recursion in set\_common\_prefix\(\) [\#701](https://github.com/emmo-repo/EMMOntoPy/pull/701) ([jesper-friis](https://github.com/jesper-friis))
+- Updated the getattr patch [\#699](https://github.com/emmo-repo/EMMOntoPy/pull/699) ([jesper-friis](https://github.com/jesper-friis))
+- WIP: Fix issues with changed IRIs effecting test\_excelparser [\#697](https://github.com/emmo-repo/EMMOntoPy/pull/697) ([jesper-friis](https://github.com/jesper-friis))
+- Added directory\_layout\(\) function [\#696](https://github.com/emmo-repo/EMMOntoPy/pull/696) ([jesper-friis](https://github.com/jesper-friis))
+- Added redirection checking tool [\#695](https://github.com/emmo-repo/EMMOntoPy/pull/695) ([jesper-friis](https://github.com/jesper-friis))
+- Add test save [\#686](https://github.com/emmo-repo/EMMOntoPy/pull/686) ([francescalb](https://github.com/francescalb))
+- Update test\_unit\_dimension in emmocheck to EMMO 1.0.0-beta5 [\#678](https://github.com/emmo-repo/EMMOntoPy/pull/678) ([jesper-friis](https://github.com/jesper-friis))
+- Skip checking dimensional units for domain ontologies that doesn't load this class. [\#677](https://github.com/emmo-repo/EMMOntoPy/pull/677) ([jesper-friis](https://github.com/jesper-friis))
+- HermiT is default reasoner. [\#671](https://github.com/emmo-repo/EMMOntoPy/pull/671) ([francescalb](https://github.com/francescalb))
+- Ci/dependabot updates [\#662](https://github.com/emmo-repo/EMMOntoPy/pull/662) ([francescalb](https://github.com/francescalb))
+- Updated emmocheck to new EMMO quantities and units [\#658](https://github.com/emmo-repo/EMMOntoPy/pull/658) ([jesper-friis](https://github.com/jesper-friis))
+- Update README.md [\#657](https://github.com/emmo-repo/EMMOntoPy/pull/657) ([jesper-friis](https://github.com/jesper-friis))
+- Corrected bug so that asking for entities in imported does not return all in world [\#655](https://github.com/emmo-repo/EMMOntoPy/pull/655) ([francescalb](https://github.com/francescalb))
+- Corrected get\_by\_label to use only labels in the ontology [\#643](https://github.com/emmo-repo/EMMOntoPy/pull/643) ([francescalb](https://github.com/francescalb))
+- Update to comply with owlready2\>0.41 [\#639](https://github.com/emmo-repo/EMMOntoPy/pull/639) ([francescalb](https://github.com/francescalb))
+- Ontodoc example in documentation [\#630](https://github.com/emmo-repo/EMMOntoPy/pull/630) ([francescalb](https://github.com/francescalb))
 
 ## [v0.6.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.6.0) (2023-06-19)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.4...v0.6.0)
+
+**Closed issues:**
+
+- pyparsing has been updated [\#629](https://github.com/emmo-repo/EMMOntoPy/issues/629)
 
 **Merged pull requests:**
 
@@ -22,19 +52,19 @@
 
 ## [v0.5.3.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.2) (2023-06-15)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3.1...v0.5.3.2)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3...v0.5.3.2)
 
 **Merged pull requests:**
 
 - remove warnings\_as\_errors in cd workflow introduced in 0.5.3 [\#625](https://github.com/emmo-repo/EMMOntoPy/pull/625) ([francescalb](https://github.com/francescalb))
 
-## [v0.5.3.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.1) (2023-06-12)
-
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3...v0.5.3.1)
-
 ## [v0.5.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3) (2023-06-12)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.2...v0.5.3)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3.1...v0.5.3)
+
+## [v0.5.3.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.1) (2023-06-12)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.2...v0.5.3.1)
 
 **Closed issues:**
 
