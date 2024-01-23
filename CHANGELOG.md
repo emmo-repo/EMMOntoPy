@@ -1,6 +1,14 @@
 # Changelog
 
-## [v0.6.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.6.1) (2024-01-17)
+## [v0.6.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.6.2) (2024-01-19)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.6.1...v0.6.2)
+
+**Merged pull requests:**
+
+- Allow controling ontology IRI when saving [\#700](https://github.com/emmo-repo/EMMOntoPy/pull/700) ([jesper-friis](https://github.com/jesper-friis))
+
+## [v0.6.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.6.1) (2024-01-18)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.6.0...v0.6.1)
 
