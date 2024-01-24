@@ -992,19 +992,23 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         if squash:
             URIRef, RDF, OWL = rdflib.URIRef, rdflib.RDF, rdflib.OWL
+            iri = self.iri if self.iri else self.base_iri
             graph = self.world.as_rdflib_graph()
-            graph.namespace_manager.bind("", rdflib.Namespace(self.base_iri))
+            graph.namespace_manager.bind("", rdflib.Namespace(iri))
+
+            # Remove all ontology-declarations in the graph that are
+            # not the current ontology.
+            for s, _, _ in graph.triples((None, RDF.type, OWL.Ontology)):
+                if str(s).rstrip("/#") != self.base_iri.rstrip("/#"):
+                    for _, p, o in graph.triples((s, None, None)):
+                        graph.remove((s, p, o))
+                graph.remove((s, OWL.imports, None))
+
             if self.iri:
                 base_iri = URIRef(self.base_iri)
                 for s, p, o in graph.triples((base_iri, None, None)):
                     graph.remove((s, p, o))
                     graph.add((URIRef(self.iri), p, o))
-
-            # Remove anonymous namespace and imports
-            graph.remove((URIRef("http://anonymous"), RDF.type, OWL.Ontology))
-            imports = list(graph.triples((None, OWL.imports, None)))
-            for triple in imports:
-                graph.remove(triple)
 
             graph.serialize(destination=filename, format=format)
         elif format in OWLREADY2_FORMATS:
