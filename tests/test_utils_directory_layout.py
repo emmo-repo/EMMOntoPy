@@ -6,7 +6,7 @@ from ontopy.utils import directory_layout
 
 
 # Requires that we have EMMO checked out locally
-if False:
+if True:
     emmo = get_ontology("../EMMO/emmo.ttl").load()
     layout = directory_layout(emmo)
 
@@ -79,3 +79,19 @@ if True:
 
     assert layout[omap["http://emmo.info/models#"]] == "models"
     assert layout[omap["http://emmo.info/testonto#"]] == "testonto"
+
+
+if True:
+    thisdir = Path(__file__).resolve().parent
+    ontopath = thisdir / "testonto" / "testonto-recursive.ttl"
+    onto = get_ontology(ontopath).load()
+    layout = directory_layout(onto)
+    omap = {o.base_iri: o for o in layout.keys()}
+
+    assert (
+        layout[omap["http://emmo.info/models-recursive#"]] == "models-recursive"
+    )
+    assert (
+        layout[omap["http://emmo.info/testonto-recursive#"]]
+        == "testonto-recursive"
+    )
