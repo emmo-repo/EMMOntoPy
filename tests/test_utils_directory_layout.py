@@ -13,7 +13,6 @@ def test_emmo_directory_layout():
 
     # Map base IRIs to ontologies for easy access to all sub-ontologies
     omap = {o.base_iri: o for o in layout.keys()}
-    print(omap)
     # Base IRI of EMMO should not end with slash (/) !!!
     assert layout[omap["http://emmo.info/emmo/"]] == "emmo"
 
