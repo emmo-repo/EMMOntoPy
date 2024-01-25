@@ -2696,12 +2696,8 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
 
 <span class="sd">        where `ontoA`, `ontoB` and `ontoC` are imported Ontology objects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">layout</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">def</span> <span class="nf">recur</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">imported</span> <span class="ow">in</span> <span class="n">o</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">imported</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">layout</span><span class="p">:</span>
-                <span class="n">recur</span><span class="p">(</span><span class="n">imported</span><span class="p">)</span>
         <span class="n">baseiri</span> <span class="o">=</span> <span class="n">o</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">)</span>
 
         <span class="c1"># Some heuristics here to reproduce the EMMO layout.</span>
@@ -2719,7 +2715,11 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
         <span class="n">layout</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">baseiri</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">baseiri</span><span class="p">)</span> <span class="k">if</span> <span class="n">emmolayout</span> <span class="k">else</span> <span class="n">baseiri</span>
         <span class="p">)</span>
+        <span class="k">for</span> <span class="n">imported</span> <span class="ow">in</span> <span class="n">o</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">imported</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">layout</span><span class="p">:</span>
+                <span class="n">recur</span><span class="p">(</span><span class="n">imported</span><span class="p">)</span>
 
+    <span class="n">layout</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">recur</span><span class="p">(</span><span class="n">onto</span><span class="p">)</span>
 
     <span class="c1"># Strip off initial common prefix from all paths</span>
