@@ -26,7 +26,6 @@ def test_save(
     testonto.save(tmpdir / "testonto_saved.ttl")
     # check that the file is in tmpdir
     assert (tmpdir / "testonto_saved.ttl").exists()
-    testonto.save(format="rdfxml")
 
     # provide a format and filename
     testonto.save(tmpdir / "testonto_saved.owl", format="rdfxml")
@@ -37,6 +36,7 @@ def test_save(
     # the file will be saved in the current directory
     testonto.save(format="rdfxml")
     assert Path(testonto.name + ".rdfxml").exists()
+
     # check if testonto_saved.owl and testonto.rdfxml are identical files
     with open(tmpdir / "testonto_saved.owl") as f:
         owlfile = f.read()
@@ -47,11 +47,11 @@ def test_save(
     Path(testonto.name + ".rdfxml").unlink()
 
     # Provide format and directory
-    testonto.save(format="rdfxml", dir=tmpdir)
+    testonto.save(format="rdfxml", directory=tmpdir)
     assert (tmpdir / str(testonto.name + ".rdfxml")).exists()
 
     # Provide directory that does not exist, but add mkdir=True
-    testonto.save(format="owl", dir=tmpdir / "subdir", mkdir=True)
+    testonto.save(format="owl", directory=tmpdir / "subdir", mkdir=True)
     assert (tmpdir / "subdir" / (testonto.name + ".owl")).exists()
 
     # Check that file is overwritten only wityh overwrite=True, and
@@ -65,6 +65,9 @@ def test_save(
     # 4. save testonto to testonto.owl again, but with overwrite=True
     # 5. check that testonto.owl is the same as testonto_saved.owl
     # NB! this is not currently working, issue #685
+    # It might be that this inetnional behaviour of save should be changed.
+    # If so, the tests should change accordingly.
+    # This should be addressed in issue #685
 
     # 1.
     with open(tmpdir / "testonto_saved.owl") as f:
@@ -73,7 +76,7 @@ def test_save(
         owlfile2 = f.read()
     assert owlfile == owlfile2
     # 2.
-    testonto.save(format="rdfxml", dir=tmpdir)
+    testonto.save(format="rdfxml", directory=tmpdir)
     # 3.
     with open(tmpdir / "testonto_saved.owl") as f:
         owlfile = f.read()
@@ -81,7 +84,7 @@ def test_save(
         owlfile2 = f.read()
     # assert owlfile != owlfile2 # to be uncommented when issue #685 is fixed
     # 4.
-    testonto.save(format="rdfxml", dir=tmpdir, overwrite=True)
+    testonto.save(format="rdfxml", directory=tmpdir, overwrite=True)
     # 5.
     with open(tmpdir / "testonto_saved.owl") as f:
         owlfile = f.read()
@@ -89,13 +92,23 @@ def test_save(
         owlfile2 = f.read()
     assert owlfile == owlfile2
 
-    # Test that the ontology is saved recursively when deisred
+    # Test that the ontology is saved recursively only when desired
     testonto.save(
-        format="ttl", dir=tmpdir / "recursively", mkdir=True, recursive=True
+        format="ttl",
+        directory=tmpdir / "recursively",
+        mkdir=True,
+        recursive=False,
     )
     assert (tmpdir / "recursively" / "testonto.ttl").exists()
-    # Recursive save is not working . Issue #687
-    # assert (tmpdir / "recursively" / "models.ttl").exists()
+    assert (tmpdir / "recursively" / "models.ttl").exists() == False
+
+    testonto.save(
+        format="ttl",
+        directory=tmpdir / "recursively",
+        mkdir=True,
+        recursive=True,
+    )
+    assert (tmpdir / "recursively" / "models.ttl").exists()
 
     # squash merge during save
 
@@ -107,17 +120,99 @@ def test_save(
 
 
 # Simple working tests without pytest getting in the way - feel free to change to pytest
-
-if True:  # Whether to test for EMMO
+def test_save_emmo(
+    tmpdir: "Path",
+    repo_dir: "Path",
+) -> None:
+    import os
     from pathlib import Path
 
-    from emmopy import get_emmo
+    from ontopy import get_ontology
 
-    emmo = get_emmo()
+    # For debugging purposes tmpdir can be set to a directory
+    # in the current directory: test_save_dir
+    # Remember to remove the directory after testing
+    debug = False
+    if debug:
+        tmpdir = repo_dir / "tests" / "test_save_dir"
+        import os
+
+        os.makedirs(tmpdir, exist_ok=True)
+    emmo = get_ontology(
+        "https://raw.githubusercontent.com/emmo-repo/EMMO/1.0.0-beta4/emmo.ttl"
+    ).load()
+
+    # Since version is missing in some imported ontologies (at least in periodic_table)
+    # we need to fix that.
+    # Note that ths is fix of an error in EMMO-1.0.0-beta4
+    version = emmo.get_version()
+    # for onto in emmo.indirectly_imported_ontologies():
+    #    try:
+    #        onto.get_version(as_iri=True)
+    #    except TypeError:
+    #        onto.set_version(version)
+    #    # print(onto, onto.get_version(as_iri=True))
+
     emmo.save(
         format="turtle",
-        dir=Path(__file__).absolute().parent / "outdir",
+        directory=tmpdir / "emmosaved",
         recursive=True,
         mkdir=True,
         write_catalog_file=True,
+        keep_python_names=False,
+    )
+    assert set(os.listdir(tmpdir / "emmosaved")) == {
+        "catalog-v001.xml",
+        "disciplines",
+        "emmo.ttl",
+        "mereocausality",
+        "multiperspective",
+        "perspectives",
+    }
+
+    assert set(os.listdir(tmpdir / "emmosaved" / "disciplines")) == {
+        "materials.ttl",
+        "math.ttl",
+        "computerscience.ttl",
+        "chemistry.ttl",
+        "unitsextension.ttl",
+        "catalog-v001.xml",
+        "isq.ttl",
+        "periodictable.ttl",
+        "metrology.ttl",
+        "siunits.ttl",
+        "disciplines.ttl",
+        "manufacturing.ttl",
+        "models.ttl",
+    }
+
+
+if True:
+    # def test_save_emmo_domain_ontology():
+    import os
+    from pathlib import Path
+
+    from ontopy import get_ontology
+
+    # For debugging purposes tmpdir can be set to a directory
+    # in the current directory: test_save_dir
+    # Remember to remove the directory after testing
+    debug = False
+    if debug:
+        tmpdir = repo_dir / "tests" / "test_save_dir"
+        import os
+
+        os.makedirs(tmpdir, exist_ok=True)
+
+    onto = get_ontology(
+        "https://raw.githubusercontent.com/emmo-repo/domain-electrochemistry/master/electrochemistry.ttl"
+    ).load()
+
+    onto.save(
+        format="turtle",
+        directory="saved",
+        recursive=True,
+        mkdir=True,
+        write_catalog_file=True,
+        keep_python_names=True,
     )

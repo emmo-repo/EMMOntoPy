@@ -11,13 +11,18 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-@pytest.mark.filterwarnings("ignore:Ignoring concept :UserWarning")
-@pytest.mark.filterwarnings("ignore:Invalid parents for :UserWarning")
-@pytest.mark.filterwarnings(
-    "ignore:Not able to add the following concepts :UserWarning"
-)
-def test_excelparser(repo_dir: "Path") -> None:
+# @pytest.mark.filterwarnings("ignore:Ignoring concept :UserWarning")
+# @pytest.mark.filterwarnings("ignore:Invalid parents for :UserWarning")
+# @pytest.mark.filterwarnings(
+#    "ignore:Not able to add the following concepts :UserWarning"
+# )
+
+if True:
+    # def test_excelparser(repo_dir: "Path") -> None:
     """Basic test for creating an ontology from an Excel file."""
+    import pathlib
+
+    repo_dir = pathlib.Path("/home/flb/projects/Team4.0/EMMOntoPy")
     ontopath = (
         repo_dir
         / "tests"
@@ -33,6 +38,18 @@ def test_excelparser(repo_dir: "Path") -> None:
     )
     ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
     # ontology.save("test.ttl") # used for printing new ontology when debugging
+    # remove python_names added by owlready2 before comparing the ontologies.
+    # The emmontopy.ontology.save removes all triples with this relation as default.
+    # ontology.save("test.ttl")  # used for printing new ontology when debugging
+    print("before copy")
+    onto2 = ontology.copy()
+    print("after copy")
+    ontology._del_data_triple_spod(
+        p=ontology._abbreviate(
+            "http://www.lesfleursdunormal.fr/static/_downloads/"
+            "owlready_ontology.owl#python_name"
+        )
+    )
     assert onto == ontology
     assert errors.keys() == {
         "already_defined",

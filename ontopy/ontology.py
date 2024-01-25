@@ -861,9 +861,100 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
     def save(
         self,
-        filename=None,
+        file=None,
+        format=None,  # pylint: disable=redefined-builtin
+        directory=None,
+        mkdir=False,
+        overwrite=False,
+        recursive=False,
+        squash=False,
+        write_catalog_file=False,
+        append_catalog=False,
+        catalog_file="catalog-v001.xml",
+        keep_python_names=False,
+        filename=None,  # deprecated
+        dir=None,  # pylint: disable=redefined-builtin  # deprecated
+    ):  # pylint: disable=too-many-arguments
+        """Writes the ontology to file.
+
+        Parameters
+        ----------
+        file: None | str | Path
+            Name of file to write to.  If None, it defaults to the name
+            of the ontology with `format` as file extension.
+        format: str
+            Output format. The default is to infer it from `file`.
+        directory: str | Path
+            If `file` is a relative path, it is a relative path to `directory`.
+        mkdir: bool
+            Whether to create output directory if it does not exists.
+        owerwrite: bool
+            If true and `file` exists, remove the existing file before
+            saving.  The default is to append to an existing ontology.
+        recursive: bool
+            Whether to save imported ontologies recursively.  This is
+            commonly combined with `file=None`, `directory` and `mkdir`.
+        squash: bool
+        assert testonto_copy.FantasyClass2
+            If true, rdflib will be used to save the current ontology
+            together with all its sub-ontologies into `file`.
+            It make no sense to combine this with `recursive`.
+        write_catalog_file: bool
+            Whether to also write a catalog file to disk.
+        append_catalog: bool
+            Whether to append to an existing catalog file.
+        catalog_file: str | Path
+            Name of catalog file.  If not an absolute path, it is prepended
+            to `directory`.
+        keep_python_names: bool
+            Whether to keep python names in the ontology.
+        """
+
+        if filename:
+            warnings.warn(
+                "The `filename` argument is deprecated. Use `file` instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            file = filename
+        if dir:
+            warnings.warn(
+                "The `dir` argument is deprecated. Use `directory` instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            directory = dir
+        if not directory:
+            directory = "."
+        if keep_python_names:
+            newonto = self
+        else:
+            newonto = self.copy()
+            newonto._del_data_triple_spod(
+                p=newonto._abbreviate(
+                    "http://www.lesfleursdunormal.fr/static/_downloads/"
+                    "owlready_ontology.owl#python_name"
+                )
+            )
+
+        newonto._save(
+            file=file,
+            format=format,
+            directory=directory,
+            mkdir=mkdir,
+            overwrite=overwrite,
+            recursive=recursive,
+            squash=squash,
+            write_catalog_file=write_catalog_file,
+            append_catalog=append_catalog,
+            catalog_file=catalog_file,
+        )
+
+    def _save(  # pylint: disable=too-many-branches
+        self,
+        file=None,
         format=None,
-        dir=".",
+        directory=".",
         mkdir=False,
         overwrite=False,
         recursive=False,
@@ -876,24 +967,24 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         Parameters
         ----------
-        filename: None | str | Path
+        file: None | str | Path
             Name of file to write to.  If None, it defaults to the name
             of the ontology with `format` as file extension.
         format: str
-            Output format. The default is to infer it from `filename`.
-        dir: str | Path
-            If `filename` is a relative path, it is a relative path to `dir`.
+            Output format. The default is to infer it from `file`.
+        directory: str | Path
+            If `file` is a relative path, it is a relative path to `directory`
         mkdir: bool
             Whether to create output directory if it does not exists.
         owerwrite: bool
-            If true and `filename` exists, remove the existing file before
+            If true and `file` exists, remove the existing file before
             saving.  The default is to append to an existing ontology.
         recursive: bool
             Whether to save imported ontologies recursively.  This is
-            commonly combined with `filename=None`, `dir` and `mkdir`.
+            commonly combined with `file=None`, `directory` and `mkdir`.
         squash: bool
             If true, rdflib will be used to save the current ontology
-            together with all its sub-ontologies into `filename`.
+            together with all its sub-ontologies into `file`.
             It make no sense to combine this with `recursive`.
         write_catalog_file: bool
             Whether to also write a catalog file to disk.
@@ -901,7 +992,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             Whether to append to an existing catalog file.
         catalog_file: str | Path
             Name of catalog file.  If not an absolute path, it is prepended
-            to `dir`.
+            to `directory`.
         """
         # pylint: disable=redefined-builtin,too-many-arguments
         # pylint: disable=too-many-statements,too-many-branches
@@ -924,26 +1015,25 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             )
 
         revmap = {value: key for key, value in FMAP.items()}
-        if filename is None:
+        if file is None:
             if format:
                 fmt = revmap.get(format, format)
-                filename = f"{self.name}.{fmt}"
+                file = f"{self.name}.{fmt}"
             else:
                 raise TypeError("`filename` and `format` cannot both be None.")
-        filename = os.path.join(dir, filename)
-        dir = Path(filename).resolve().parent
-
+        file = os.path.join(directory, file)
+        directory = Path(file).resolve().parent
         if mkdir:
-            outdir = Path(filename).parent.resolve()
+            outdir = Path(file).parent.resolve()
             if not outdir.exists():
                 outdir.mkdir(parents=True)
 
         if not format:
-            format = guess_format(filename, fmap=FMAP)
+            format = guess_format(file, fmap=FMAP)
         fmt = revmap.get(format, format)
 
-        if overwrite and filename and os.path.exists(filename):
-            os.remove(filename)
+        if overwrite and file and os.path.exists(file):
+            os.remove(file)
 
         if recursive:
             if squash:
@@ -951,13 +1041,12 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     "`recursive` and `squash` should not both be true"
                 )
             layout = directory_layout(self)
-
             for onto, path in layout.items():
-                fname = Path(dir) / f"{path}.{fmt}"
-                onto.save(
-                    filename=fname,
+                fname = Path(directory) / f"{path}.{fmt}"
+                onto._save(
+                    file=fname,
                     format=format,
-                    dir=dir,
+                    directory=directory,
                     mkdir=mkdir,
                     overwrite=overwrite,
                     recursive=False,
@@ -971,22 +1060,22 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 for onto, path in layout.items():
                     irimap[
                         onto.get_version(as_iri=True)
-                    ] = f"{dir}/{path}.{fmt}"
+                    ] = f"{directory}/{path}.{fmt}"
                     catalog_files.add(Path(path).parent / catalog_file)
 
                 for catfile in catalog_files:
                     write_catalog(
                         irimap.copy(),
                         output=catfile,
-                        directory=dir,
+                        directory=directory,
                         append=append_catalog,
                     )
 
         elif write_catalog_file:
             write_catalog(
-                {self.get_version(as_iri=True): filename},
+                {self.get_version(as_iri=True): file},
                 output=catalog_file,
-                directory=dir,
+                directory=directory,
                 append=append_catalog,
             )
 
@@ -1010,9 +1099,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     graph.remove((s, p, o))
                     graph.add((URIRef(self.iri), p, o))
 
-            graph.serialize(destination=filename, format=format)
+            graph.serialize(destination=file, format=format)
         elif format in OWLREADY2_FORMATS:
-            super().save(file=filename, format=fmt)
+            super().save(file=file, format=fmt)
         else:
             # The try-finally clause is needed for cleanup and because
             # we have to provide delete=False to NamedTemporaryFile
@@ -1040,7 +1129,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     ):
                         graph.remove((s, p, o))
                         graph.add((rdflib.URIRef(self.iri), p, o))
-                graph.serialize(destination=filename, format=format)
+                graph.serialize(destination=file, format=format)
             finally:
                 os.remove(tmpfile)
 
@@ -1973,6 +2062,56 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             the new annotation property.
         """
         return self.new_entity(name, parent, "annotation_property")
+
+    def copy(self):
+        """Return a copy of the ontology."""
+        with tempfile.TemporaryDirectory() as dirname:
+            self._save(
+                directory=dirname,
+                format="turtle",
+                recursive=True,
+                write_catalog_file=True,
+                mkdir=True,
+                # overwrite=True,
+                # tmpfile,
+                # squash=True,
+            )
+            ontology = get_ontology(self.base_iri).load(
+                filename=dirname + "/" + self.name + ".ttl"
+            )
+            ontology.name = self.name
+        return ontology
+
+    def copy2(self, recursive=True, copy_world=True):
+        """Return a copy of self.
+
+        Arguments:
+            recursive: Whether to copy imported ontologies recursively.
+            copy_world: Whether to also copy the world.
+        """
+
+        if copy_world:
+            # new_world = World()
+            # self.world.get_triples()
+            raise NotImplementedError(
+                "Argument `copy_world` is not yet implemented."
+            )
+
+        onto = Ontology(
+            world=World() if copy_world else self.world,
+            base_iri=self.base_iri,
+            name=self.name,
+        )
+        onto.label_annotations = self.label_annotations[:]
+        onto.prefix = self.prefix
+
+        if recursive:
+            for imported in self.imported_ontologies:
+                onto.imported_ontologies.append(imported.copy())
+        else:
+            onto.imported_ontologies = self.imported_ontologies[:]
+
+        return onto
 
     def difference(self, other: owlready2.Ontology) -> set:
         """Return a set of triples that are in this, but not in the
