@@ -873,7 +873,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         catalog_file="catalog-v001.xml",
         keep_python_names=False,
         filename=None,  # deprecated
-        dir=".",  # pylint: disable=redefined-builtin  # deprecated
+        dir=None,  # pylint: disable=redefined-builtin  # deprecated
     ):  # pylint: disable=too-many-arguments
         """Writes the ontology to file.
 
@@ -909,6 +909,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         keep_python_names: bool
             Whether to keep python names in the ontology.
         """
+
         if filename:
             warnings.warn(
                 "The `filename` argument is deprecated. Use `file` instead.",
@@ -923,7 +924,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 stacklevel=2,
             )
             directory = dir
-
+        if not directory:
+            directory = "."
         if keep_python_names:
             newonto = self
         else:
@@ -934,6 +936,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     "owlready_ontology.owl#python_name"
                 )
             )
+
         newonto._save(
             file=file,
             format=format,
@@ -947,7 +950,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             catalog_file=catalog_file,
         )
 
-    def _save(
+    def _save(  # pylint: disable=too-many-branches
         self,
         file=None,
         format=None,
@@ -1020,7 +1023,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 raise TypeError("`filename` and `format` cannot both be None.")
         file = os.path.join(directory, file)
         directory = Path(file).resolve().parent
-
         if mkdir:
             outdir = Path(file).parent.resolve()
             if not outdir.exists():
@@ -1039,7 +1041,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     "`recursive` and `squash` should not both be true"
                 )
             layout = directory_layout(self)
-
             for onto, path in layout.items():
                 fname = Path(directory) / f"{path}.{fmt}"
                 onto._save(
@@ -1059,14 +1060,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 for onto, path in layout.items():
                     irimap[
                         onto.get_version(as_iri=True)
-                    ] = f"{dir}/{path}.{fmt}"
+                    ] = f"{directory}/{path}.{fmt}"
                     catalog_files.add(Path(path).parent / catalog_file)
 
                 for catfile in catalog_files:
                     write_catalog(
                         irimap.copy(),
                         output=catfile,
-                        directory=dir,
+                        directory=directory,
                         append=append_catalog,
                     )
 
@@ -1074,7 +1075,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             write_catalog(
                 {self.get_version(as_iri=True): file},
                 output=catalog_file,
-                directory=dir,
+                directory=directory,
                 append=append_catalog,
             )
 
@@ -1128,7 +1129,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     ):
                         graph.remove((s, p, o))
                         graph.add((rdflib.URIRef(self.iri), p, o))
-                graph.serialize(destination=filename, format=format)
+                graph.serialize(destination=file, format=format)
             finally:
                 os.remove(tmpfile)
 
@@ -2065,11 +2066,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def copy(self):
         """Return a copy of the ontology."""
         with tempfile.TemporaryDirectory() as dirname:
-            filename = os.path.join(dirname, "tmp.owl")
             self._save(
-                filename,
                 directory=dirname,
-                format="rdfxml",
+                format="turtle",
                 recursive=True,
                 write_catalog_file=True,
                 mkdir=True,
@@ -2077,15 +2076,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 # tmpfile,
                 # squash=True,
             )
-            # print(self.TestClass)
-            # print out content of all files in tmpdir
-            for file in os.listdir(dirname):
-                with open(os.path.join(dirname, file), "r") as f:
-                    print(f"File: {file}")
-                    print(f.read())
-
-            ontology = get_ontology(filename).load()
-            # print(ontology.TestClass)
+            ontology = get_ontology(self.base_iri).load(
+                filename=dirname + "/" + self.name + ".ttl"
+            )
+            ontology.name = self.name
         return ontology
 
     def copy2(self, recursive=True, copy_world=True):
@@ -2098,10 +2092,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         if copy_world:
             # new_world = World()
-            self.world.get_triples()
-            # raise NotImplementedError(
-            #    "Argument `copy_world` is not yet implemented."
-            # )
+            # self.world.get_triples()
+            raise NotImplementedError(
+                "Argument `copy_world` is not yet implemented."
+            )
 
         onto = Ontology(
             world=World() if copy_world else self.world,

@@ -20,6 +20,9 @@ def test_copy(testonto: "Ontology") -> None:
     # Make a copy and check that new entity in original is not in copy
     testonto_copy = testonto.copy()
 
+    # Check that the name of the cipy is the same
+    assert testonto_copy.name == testonto.name
+
     testonto.new_entity("FantasyClass2", testonto.TestClass)
 
     assert testonto.FantasyClass2
@@ -67,7 +70,12 @@ def test_copy_with_save(testonto: "Ontology", tmp_path: "Path") -> None:
     assert len(list(python_name_triples(testonto))) == 3
 
     # save, not keeping python name triples in the saved ontology
-    testonto.save(tmp_path / "testonto_1.ttl", keep_python_names=False)
+    testonto.save(
+        tmp_path / "testonto_1.ttl",
+        keep_python_names=False,
+        recursive=True,
+        write_catalog_file=True,
+    )
 
     # load the saved ontology and check that python name triples are not there
     testonto1 = get_ontology(tmp_path / "testonto_1.ttl").load()
@@ -94,7 +102,6 @@ def test_copy_emmo(emmo: "Ontology") -> None:
 
     from emmopy import get_emmo
 
-    # Make a copy and check that new entity in original is not in copy
     new_emmo = emmo.copy()
 
     assert new_emmo == emmo
