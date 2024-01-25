@@ -168,10 +168,21 @@ class World(owlready2.World):
 
 
 class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
-    """A generic class extending owlready2.Ontology."""
+    """A generic class extending owlready2.Ontology.
+
+    Additional attributes:
+        iri: IRI of this ontology.  Currently only used for serialisation
+            with rdflib. Defaults to None, meaning `base_iri` will be used
+            instead.
+        label_annotations: List of label annotations, i.e. annotations
+            that are recognised by the get_by_label() method. Defaults
+            to `[skos:prefLabel, rdf:label, skos:altLabel]`.
+        prefix: Prefix for this ontology. Defaults to None.
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.iri = None
         self.label_annotations = DEFAULT_LABEL_ANNOTATIONS[:]
         self.prefix = None
 
@@ -551,6 +562,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         self,
         iri_base: str = "http://emmo.info/emmo",
         prefix: str = "emmo",
+        visited: "Optional[Set]" = None,
     ) -> None:
         """Set a common prefix for all imported ontologies
         with the same first part of the base_iri.
@@ -559,11 +571,18 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             iri_base: The start of the base_iri to look for. Defaults to
                 the emmo base_iri http://emmo.info/emmo
             prefix: the desired prefix. Defaults to emmo.
+            visited: Ontologies to skip. Only intended for internal use.
         """
+        if visited is None:
+            visited = set()
         if self.base_iri.startswith(iri_base):
             self.prefix = prefix
         for onto in self.imported_ontologies:
-            onto.set_common_prefix(iri_base=iri_base, prefix=prefix)
+            if not onto in visited:
+                visited.add(onto)
+                onto.set_common_prefix(
+                    iri_base=iri_base, prefix=prefix, visited=visited
+                )
 
     def load(  # pylint: disable=too-many-arguments,arguments-renamed
         self,
@@ -926,10 +945,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         if overwrite and filename and os.path.exists(filename):
             os.remove(filename)
 
-        EMMO = rdflib.Namespace(  # pylint:disable=invalid-name
-            "http://emmo.info/emmo#"
-        )
-
         if recursive:
             if squash:
                 raise ValueError(
@@ -976,20 +991,24 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             )
 
         if squash:
-            from rdflib import (  # pylint:disable=import-outside-toplevel
-                URIRef,
-                RDF,
-                OWL,
-            )
-
+            URIRef, RDF, OWL = rdflib.URIRef, rdflib.RDF, rdflib.OWL
+            iri = self.iri if self.iri else self.base_iri
             graph = self.world.as_rdflib_graph()
-            graph.namespace_manager.bind("emmo", EMMO)
+            graph.namespace_manager.bind("", rdflib.Namespace(iri))
 
-            # Remove anonymous namespace and imports
-            graph.remove((URIRef("http://anonymous"), RDF.type, OWL.Ontology))
-            imports = list(graph.triples((None, OWL.imports, None)))
-            for triple in imports:
-                graph.remove(triple)
+            # Remove all ontology-declarations in the graph that are
+            # not the current ontology.
+            for s, _, _ in graph.triples((None, RDF.type, OWL.Ontology)):
+                if str(s).rstrip("/#") != self.base_iri.rstrip("/#"):
+                    for _, p, o in graph.triples((s, None, None)):
+                        graph.remove((s, p, o))
+                graph.remove((s, OWL.imports, None))
+
+            if self.iri:
+                base_iri = URIRef(self.base_iri)
+                for s, p, o in graph.triples((base_iri, None, None)):
+                    graph.remove((s, p, o))
+                    graph.add((URIRef(self.iri), p, o))
 
             graph.serialize(destination=filename, format=format)
         elif format in OWLREADY2_FORMATS:
@@ -1007,6 +1026,20 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 super().save(tmpfile, format="ntriples")
                 graph = rdflib.Graph()
                 graph.parse(tmpfile, format="ntriples")
+                graph.namespace_manager.bind(
+                    "", rdflib.Namespace(self.base_iri)
+                )
+                if self.iri:
+                    base_iri = rdflib.URIRef(self.base_iri)
+                    for (
+                        s,
+                        p,
+                        o,
+                    ) in graph.triples(  # pylint: disable=not-an-iterable
+                        (base_iri, None, None)
+                    ):
+                        graph.remove((s, p, o))
+                        graph.add((rdflib.URIRef(self.iri), p, o))
                 graph.serialize(destination=filename, format=format)
             finally:
                 os.remove(tmpfile)

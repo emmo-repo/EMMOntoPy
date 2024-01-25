@@ -786,12 +786,8 @@ def directory_layout(onto):
 
         where `ontoA`, `ontoB` and `ontoC` are imported Ontology objects.
     """
-    layout = {}
 
     def recur(o):
-        for imported in o.imported_ontologies:
-            if imported not in layout:
-                recur(imported)
         baseiri = o.base_iri.rstrip("/#")
 
         # Some heuristics here to reproduce the EMMO layout.
@@ -809,7 +805,11 @@ def directory_layout(onto):
         layout[o] = (
             baseiri + "/" + os.path.basename(baseiri) if emmolayout else baseiri
         )
+        for imported in o.imported_ontologies:
+            if imported not in layout:
+                recur(imported)
 
+    layout = {}
     recur(onto)
 
     # Strip off initial common prefix from all paths
