@@ -1,6 +1,16 @@
 # Changelog
 
-## [v0.6.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.6.2) (2024-01-19)
+## [v0.6.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.6.3) (2024-01-25)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.6.2...v0.6.3)
+
+**Merged pull requests:**
+
+- Fix infinite recursion in directory layout [\#708](https://github.com/emmo-repo/EMMOntoPy/pull/708) ([jesper-friis](https://github.com/jesper-friis))
+- Ensure that saving with squash removes all but current ontology [\#707](https://github.com/emmo-repo/EMMOntoPy/pull/707) ([jesper-friis](https://github.com/jesper-friis))
+- Turned on directory layout tests for emmo and made them pytest [\#706](https://github.com/emmo-repo/EMMOntoPy/pull/706) ([francescalb](https://github.com/francescalb))
+
+## [v0.6.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.6.2) (2024-01-23)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.6.1...v0.6.2)
 
