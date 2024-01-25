@@ -15,11 +15,11 @@
 
 :Mammal rdf:type owl:Class ;
     rdfs:subClassOf animal:Vertebrates ;
-    animal:latinName "Mammalia"@en ;
+    animal:latinName "Mammalia" ;
     skos:prefLabel "Pattedyr"@no , "Mammal"@en .
 
 :Rodent rdf:type owl:Class ;
-    rdfs:subClassOf :Mammal ;
+    rdfs:subClassOf :Mammal , animal:FourLeggedAnimal ;
     skos:prefLabel "Gnager"@no , "Rodent"@en .
 
 :Mouse rdf:type owl:Class ;
@@ -27,7 +27,7 @@
     skos:prefLabel "Mouse"@en .
 
 :Felines rdf:type owl:Class ;
-    rdfs:subClassOf :Mammal ;
+    rdfs:subClassOf :Mammal , animal:FourLeggedAnimal ;
     skos:prefLabel "Kattedyr"@no , "Felines"@en .
 
 :Cat rdf:type owl:Class ;

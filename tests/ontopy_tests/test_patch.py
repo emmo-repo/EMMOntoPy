@@ -115,12 +115,15 @@ if True:
     onto = get_ontology(ontodir / "mammal.ttl").load()
     onto.Cat.latinName.append("FelisCatus")
 
+    print("-------------")
+
     # For PR #699
-    # emmo.Atom.conceptualisation.append(
-    #    "Describing the logical steps of formalising an atom..."
-    # )
+    emmo = get_ontology("emmo-development").load()
+    emmo.Atom.conceptualisation.append(
+        "Describing the logical steps of formalising an atom..."
+    )
     # emmo.Molecule.conceptualisation.append(
-    #    "Describing the logical steps of formalising a molecule..."
+    #   "Describing the logical steps of formalising a molecule..."
     # )
 
 

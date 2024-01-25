@@ -12,8 +12,8 @@
     owl:versionInfo "0.1" .
 
 :latinName rdf:type owl:AnnotationProperty ;
-    rdfs:subPropertyOf rdf:label ;
-    skos:prefLabel "latinName"@en .
+    rdfs:subPropertyOf rdf:comment ;
+    skos:prefLabel "latinName" .
 
 :hasLegs rdf:type owl:DatatypeProperty ;
     rdfs:domain :Animal ;
@@ -28,19 +28,43 @@
 
 :Animal rdf:type owl:Class ;
     rdfs:subClassOf owl:Thing ;
-    :latinName "Animalia"@en ;
+    :latinName "Animalia" ;
     skos:prefLabel "Animal"@en .
 
 :Vertebrates rdf:type owl:Class ;
     rdfs:subClassOf :Animal ;
-    :latinName "Vertebrata"@en ;
+    :latinName "Vertebrata" ;
     skos:prefLabel "Virveldyr"@no , "Vertebrates"@en .
 
 :Insect rdf:type owl:Class ;
-    rdfs:subClassOf :Animal , [
-        rdf:type owl:Restriction ;
-        owl:onProperty :hasLegs ;
-        owl:hasValue "6"^^xsd:int
-    ] ;
-    :latinName "Insectum"@en ;
+    rdfs:subClassOf :Animal , :SixLeggedAnimal ;
+    :latinName "Insectum" ;
     skos:prefLabel "Insekt"@no , "Insect"@en .
+
+:FourLeggedAnimal rdf:type owl:Class ;
+    owl:equivalentClass [
+        owl:intersectionOf (
+            :Animal [
+                rdf:type owl:Restriction ;
+                owl:onProperty :hasLegs ;
+                owl:hasValue "4"^^xsd:int
+            ]
+        ) ;
+        rdf:type owl:Class
+    ] ;
+    :latinName "Quadruped" ;
+    skos:prefLabel "FourLeggedAnimal"@en .
+
+:SixLeggedAnimal rdf:type owl:Class ;
+    owl:equivalentClass [
+        owl:intersectionOf (
+            :Animal [
+                rdf:type owl:Restriction ;
+                owl:onProperty :hasLegs ;
+                owl:hasValue "6"^^xsd:int
+            ]
+        ) ;
+        rdf:type owl:Class
+    ] ;
+    :latinName "Hexapeda" ;
+    skos:prefLabel "SixLeggedAnimal"@en .
