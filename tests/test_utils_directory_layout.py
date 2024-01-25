@@ -71,3 +71,19 @@ def test_local_directory_layout():
 
     assert layout[omap["http://emmo.info/models#"]] == "models"
     assert layout[omap["http://emmo.info/testonto#"]] == "testonto"
+
+
+def test_local_directory_layout_recursive():
+    thisdir = Path(__file__).resolve().parent
+    ontopath = thisdir / "testonto" / "testonto-recursive.ttl"
+    onto = get_ontology(ontopath).load()
+    layout = directory_layout(onto)
+    omap = {o.base_iri: o for o in layout.keys()}
+
+    assert (
+        layout[omap["http://emmo.info/models-recursive#"]] == "models-recursive"
+    )
+    assert (
+        layout[omap["http://emmo.info/testonto-recursive#"]]
+        == "testonto-recursive"
+    )
