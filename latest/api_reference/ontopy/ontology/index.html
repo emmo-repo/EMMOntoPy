@@ -1179,6 +1179,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.copy" class="md-nav__link">
+    <span class="md-ellipsis">
+      copy()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#ontopy.ontology.Ontology.data_properties" class="md-nav__link">
     <span class="md-ellipsis">
       data_properties()
@@ -1961,6 +1970,15 @@
   <a href="#ontopy.ontology.Ontology.common_ancestors" class="md-nav__link">
     <span class="md-ellipsis">
       common_ancestors()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.copy" class="md-nav__link">
+    <span class="md-ellipsis">
+      copy()
     </span>
   </a>
   
@@ -3360,7 +3378,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 <span class="sd">            to `dir`.</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">        -------</span>
+<span class="sd">        --------</span>
 <span class="sd">            The path to the saved ontology.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># pylint: disable=redefined-builtin,too-many-arguments</span>
@@ -3510,8 +3528,21 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                 <span class="n">directory</span><span class="o">=</span><span class="nb">dir</span><span class="p">,</span>
                 <span class="n">append</span><span class="o">=</span><span class="n">append_catalog</span><span class="p">,</span>
             <span class="p">)</span>
-
         <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">returnpath</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a copy of the ontology.&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">dirname</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+                <span class="nb">dir</span><span class="o">=</span><span class="n">dirname</span><span class="p">,</span>
+                <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;turtle&quot;</span><span class="p">,</span>
+                <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">write_catalog_file</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">mkdir</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">ontology</span> <span class="o">=</span> <span class="n">get_ontology</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+            <span class="n">ontology</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">return</span> <span class="n">ontology</span>
 
     <span class="k">def</span> <span class="nf">get_imported_ontologies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a list with imported ontologies.</span>
@@ -4824,6 +4855,43 @@ are also returned.</p></td>
 <span class="k">def</span> <span class="nf">common_ancestors</span><span class="p">(</span><span class="n">cls1</span><span class="p">,</span> <span class="n">cls2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a list of common ancestors for `cls1` and `cls2`.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">cls1</span><span class="o">.</span><span class="n">ancestors</span><span class="p">())</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">cls2</span><span class="o">.</span><span class="n">ancestors</span><span class="p">())</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontology.Ontology.copy" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontology.Ontology.copy" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Return a copy of the ontology.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontology.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a copy of the ontology.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">dirname</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+            <span class="nb">dir</span><span class="o">=</span><span class="n">dirname</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;turtle&quot;</span><span class="p">,</span>
+            <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">write_catalog_file</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">mkdir</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ontology</span> <span class="o">=</span> <span class="n">get_ontology</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="n">ontology</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">return</span> <span class="n">ontology</span>
 </code></pre></div>
         </details>
     </div>
@@ -7213,7 +7281,7 @@ to <code>dir</code>.</p>
 <span class="sd">        to `dir`.</span>
 
 <span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    --------</span>
 <span class="sd">        The path to the saved ontology.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># pylint: disable=redefined-builtin,too-many-arguments</span>
@@ -7363,7 +7431,6 @@ to <code>dir</code>.</p>
             <span class="n">directory</span><span class="o">=</span><span class="nb">dir</span><span class="p">,</span>
             <span class="n">append</span><span class="o">=</span><span class="n">append_catalog</span><span class="p">,</span>
         <span class="p">)</span>
-
     <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">returnpath</span><span class="p">)</span>
 </code></pre></div>
         </details>
