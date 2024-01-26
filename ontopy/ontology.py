@@ -998,14 +998,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                         directory=dir,
                         append=append_catalog,
                     )
-
-        elif write_catalog_file:
-            write_catalog(
-                {self.get_version(as_iri=True): filepath},
-                output=catalog_file,
-                directory=dir,
-                append=append_catalog,
-            )
         elif squash:
             URIRef, RDF, OWL = rdflib.URIRef, rdflib.RDF, rdflib.OWL
             iri = self.iri if self.iri else self.base_iri
@@ -1059,6 +1051,15 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 graph.serialize(destination=filepath, format=format)
             finally:
                 os.remove(tmpfile)
+
+        if write_catalog_file and not recursive:
+            write_catalog(
+                {self.get_version(as_iri=True): filepath},
+                output=catalog_file,
+                directory=dir,
+                append=append_catalog,
+            )
+
         return Path(returnpath)
 
     def get_imported_ontologies(self, recursive=False):
