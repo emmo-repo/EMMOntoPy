@@ -908,8 +908,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             Name of catalog file.  If not an absolute path, it is prepended
             to `dir`.
 
-        Returns:
-        ----------
+        Returns
+        -------
             The path to the saved ontology.
         """
         # pylint: disable=redefined-builtin,too-many-arguments
