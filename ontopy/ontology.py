@@ -871,7 +871,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         write_catalog_file=False,
         append_catalog=False,
         catalog_file="catalog-v001.xml",
-    ) -> str:
+    ) -> Path:
         """Writes the ontology to file.
 
         Parameters
@@ -1059,7 +1059,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 graph.serialize(destination=filepath, format=format)
             finally:
                 os.remove(tmpfile)
-        return returnpath
+        return Path(returnpath)
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
