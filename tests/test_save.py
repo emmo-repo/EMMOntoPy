@@ -114,7 +114,7 @@ def test_save(
 
 
 # Simple working tests without pytest getting in the way - feel free to change to pytest
-def test_save_emmo(
+def test_save_and_copy_emmo(
     tmpdir: "Path",
     repo_dir: "Path",
 ) -> None:
@@ -178,6 +178,14 @@ def test_save_emmo(
         "manufacturing.ttl",
         "models.ttl",
     }
+
+    new_emmo = emmo.copy()
+
+    assert new_emmo == emmo
+
+    # emmo_from_web = get_emmo()
+    #
+    # assert new_emmo == emmo_from_web
 
 
 def test_save_emmo_domain_ontology(

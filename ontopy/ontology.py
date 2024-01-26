@@ -1061,6 +1061,20 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 os.remove(tmpfile)
         return returnpath
 
+    def copy(self):
+        """Return a copy of the ontology."""
+        with tempfile.TemporaryDirectory() as dirname:
+            filename = self.save(
+                dir=dirname,
+                format="rdfxml",
+                recursive=True,
+                write_catalog_file=True,
+                mkdir=True,
+            )
+            ontology = get_ontology(filename).load()
+            ontology.name = self.name
+        return ontology
+
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
 
