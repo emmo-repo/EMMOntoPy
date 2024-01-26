@@ -894,7 +894,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         squash: bool
             If true, rdflib will be used to save the current ontology
             together with all its sub-ontologies into `filename`.
-            It make no sense to combine this with `recursive`.
+            It makes no sense to combine this with `recursive`.
         write_catalog_file: bool
             Whether to also write a catalog file to disk.
         append_catalog: bool
@@ -922,28 +922,31 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     "'Known issues' section of the README."
                 )
             )
-
         revmap = {value: key for key, value in FMAP.items()}
         if filename is None:
             if format:
                 fmt = revmap.get(format, format)
-                filename = f"{self.name}.{fmt}"
+                file = f"{self.name}.{fmt}"
             else:
                 raise TypeError("`filename` and `format` cannot both be None.")
-        filename = os.path.join(dir, filename)
-        dir = Path(filename).resolve().parent
+        else:
+            file = filename
+        filepath = os.path.join(dir, file)
+        returnpath = filepath
+
+        dir = Path(filepath).resolve().parent
 
         if mkdir:
-            outdir = Path(filename).parent.resolve()
+            outdir = Path(filepath).parent.resolve()
             if not outdir.exists():
                 outdir.mkdir(parents=True)
 
         if not format:
-            format = guess_format(filename, fmap=FMAP)
+            format = guess_format(file, fmap=FMAP)
         fmt = revmap.get(format, format)
 
-        if overwrite and filename and os.path.exists(filename):
-            os.remove(filename)
+        if overwrite and os.path.exists(filepath):
+            os.remove(filepath)
 
         if recursive:
             if squash:
@@ -951,7 +954,12 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     "`recursive` and `squash` should not both be true"
                 )
             layout = directory_layout(self)
-
+            if filename:
+                layout[self] = file.rstrip(f".{fmt}")
+            # Update path to where the ontology is saved
+            # Note that filename should include format
+            # when given
+            returnpath = Path(dir) / f"{layout[self]}.{fmt}"
             for onto, path in layout.items():
                 fname = Path(dir) / f"{path}.{fmt}"
                 onto.save(
@@ -984,13 +992,12 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         elif write_catalog_file:
             write_catalog(
-                {self.get_version(as_iri=True): filename},
+                {self.get_version(as_iri=True): filepath},
                 output=catalog_file,
                 directory=dir,
                 append=append_catalog,
             )
-
-        if squash:
+        elif squash:
             URIRef, RDF, OWL = rdflib.URIRef, rdflib.RDF, rdflib.OWL
             iri = self.iri if self.iri else self.base_iri
             graph = self.world.as_rdflib_graph()
@@ -1010,9 +1017,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     graph.remove((s, p, o))
                     graph.add((URIRef(self.iri), p, o))
 
-            graph.serialize(destination=filename, format=format)
+            graph.serialize(destination=filepath, format=format)
         elif format in OWLREADY2_FORMATS:
-            super().save(file=filename, format=fmt)
+            super().save(file=filepath, format=fmt)
         else:
             # The try-finally clause is needed for cleanup and because
             # we have to provide delete=False to NamedTemporaryFile
@@ -1040,9 +1047,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     ):
                         graph.remove((s, p, o))
                         graph.add((rdflib.URIRef(self.iri), p, o))
-                graph.serialize(destination=filename, format=format)
+                graph.serialize(destination=filepath, format=format)
             finally:
                 os.remove(tmpfile)
+        return returnpath
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
