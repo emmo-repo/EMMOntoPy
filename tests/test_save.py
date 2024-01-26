@@ -65,7 +65,7 @@ def test_save(
     # 4. save testonto to testonto.owl again, but with overwrite=True
     # 5. check that testonto.owl is the same as testonto_saved.owl
     # NB! this is not currently working, issue #685
-    # It might be that this inetnional behaviour of save should be changed.
+    # It might be that this intentional behaviour of save should be changed.
     # If so, the tests should change accordingly.
     # This should be addressed in issue #685
 
