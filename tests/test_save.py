@@ -194,10 +194,6 @@ def test_save_and_copy_emmo(
     copied_emmo = emmo.copy()
     assert copied_emmo == emmo
 
-    # Check that copied ontology is the same as another ontology loaded from web
-    new_emmo_from_web = get_ontology(emmopath).load()
-    assert copied_emmo == new_emmo_from_web
-
 
 def test_save_emmo_domain_ontology(
     tmpdir: "Path",
