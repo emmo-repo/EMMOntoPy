@@ -110,13 +110,7 @@ def test_save(
     )
     assert (tmpdir / "recursively" / "models.ttl").exists()
 
-    # squash merge during save
-
-    # Write catalogfile
-
-    # append_catalog
-
-    # catalog_filename
+    # squash merge during save is tested in test_ontology_squash.py
 
 
 # Simple working tests without pytest getting in the way - feel free to change to pytest
