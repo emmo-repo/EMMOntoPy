@@ -1050,7 +1050,15 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 graph.serialize(destination=filepath, format=format)
             finally:
                 os.remove(tmpfile)
-        return returnpath
+
+        if write_catalog_file and not recursive:
+            write_catalog(
+                {self.get_version(as_iri=True): filepath},
+                output=catalog_file,
+                directory=dir,
+                append=append_catalog,
+            )
+        return Path(returnpath)
 
     def copy(self):
         """Return a copy of the ontology."""
@@ -1065,16 +1073,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             ontology = get_ontology(filename).load()
             ontology.name = self.name
         return ontology
-
-        if write_catalog_file and not recursive:
-            write_catalog(
-                {self.get_version(as_iri=True): filepath},
-                output=catalog_file,
-                directory=dir,
-                append=append_catalog,
-            )
-
-        return Path(returnpath)
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.

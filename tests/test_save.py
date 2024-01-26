@@ -102,7 +102,6 @@ def test_save(
     assert (tmpdir / "recursively" / "testonto.ttl").exists()
     assert (tmpdir / "recursively" / "models.ttl").exists() == False
 
-
     testonto.save(
         format="ttl",
         dir=tmpdir / "recursively",
@@ -111,7 +110,6 @@ def test_save(
     )
     assert (tmpdir / "recursively" / "models.ttl").exists()
 
-    # squash merge during save is tested in test_ontology_squash.py
 
 def test_ontology_squash():
     import re
@@ -134,7 +132,7 @@ def test_ontology_squash():
     assert s[0].startswith("<http://emmo.info/testonto>")
     assert len(re.findall(r"owl:imports", txt)) == 0
 
-# Simple working tests without pytest getting in the way - feel free to change to pytest
+
 def test_save_and_copy_emmo(
     tmpdir: "Path",
     repo_dir: "Path",
@@ -191,7 +189,6 @@ def test_save_and_copy_emmo(
         "manufacturing.ttl",
         "models.ttl",
     }
-
 
     # Check that copied ontology is the same as the original
     copied_emmo = emmo.copy()
