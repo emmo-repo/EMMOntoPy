@@ -2696,6 +2696,14 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
 
 <span class="sd">        where `ontoA`, `ontoB` and `ontoC` are imported Ontology objects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_imported</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">imported</span><span class="o">.</span><span class="n">base_iri</span> <span class="k">for</span> <span class="n">imported</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">indirectly_imported_ontologies</span><span class="p">()</span>
+    <span class="p">]</span>
+    <span class="c1"># get protocol and domain of all imported ontologies</span>
+    <span class="n">namespace_roots</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">iri</span> <span class="ow">in</span> <span class="n">all_imported</span><span class="p">:</span>
+        <span class="n">protocol</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlsplit</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span>
+        <span class="n">namespace_roots</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;://&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">protocol</span><span class="p">,</span> <span class="n">domain</span><span class="p">]))</span>
 
     <span class="k">def</span> <span class="nf">recur</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
         <span class="n">baseiri</span> <span class="o">=</span> <span class="n">o</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">)</span>
@@ -2721,11 +2729,19 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
 
     <span class="n">layout</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">recur</span><span class="p">(</span><span class="n">onto</span><span class="p">)</span>
-
     <span class="c1"># Strip off initial common prefix from all paths</span>
-    <span class="n">prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">commonprefix</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
-    <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">layout</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="p">:]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">namespace_roots</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">commonprefix</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">layout</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="p">:]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">namespace_root</span> <span class="ow">in</span> <span class="n">namespace_roots</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">namespace_root</span><span class="p">):</span>
+                    <span class="n">layout</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlsplit</span><span class="p">(</span><span class="n">namespace_root</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="o">+</span> <span class="n">path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">namespace_root</span><span class="p">)</span> <span class="p">:]</span>
+                    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">layout</span>
 </code></pre></div>

@@ -1500,6 +1500,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.save--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2274,6 +2283,15 @@
   <a href="#ontopy.ontology.Ontology.save--parameters" class="md-nav__link">
     <span class="md-ellipsis">
       Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.save--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
     </span>
   </a>
   
@@ -3304,7 +3322,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="n">write_catalog_file</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">append_catalog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">catalog_file</span><span class="o">=</span><span class="s2">&quot;catalog-v001.xml&quot;</span><span class="p">,</span>
-    <span class="p">):</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes the ontology to file.</span>
 
 <span class="sd">        Parameters</span>
@@ -3324,10 +3342,15 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 <span class="sd">        recursive: bool</span>
 <span class="sd">            Whether to save imported ontologies recursively.  This is</span>
 <span class="sd">            commonly combined with `filename=None`, `dir` and `mkdir`.</span>
+<span class="sd">            Note that depending on the structure of the ontology and</span>
+<span class="sd">            all imports the ontology might end up in a subdirectory.</span>
+<span class="sd">            If filename is given, the ontology is saved to the given</span>
+<span class="sd">            directory.</span>
+<span class="sd">            The path to the final location is returned.</span>
 <span class="sd">        squash: bool</span>
 <span class="sd">            If true, rdflib will be used to save the current ontology</span>
 <span class="sd">            together with all its sub-ontologies into `filename`.</span>
-<span class="sd">            It make no sense to combine this with `recursive`.</span>
+<span class="sd">            It makes no sense to combine this with `recursive`.</span>
 <span class="sd">        write_catalog_file: bool</span>
 <span class="sd">            Whether to also write a catalog file to disk.</span>
 <span class="sd">        append_catalog: bool</span>
@@ -3335,6 +3358,10 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 <span class="sd">        catalog_file: str | Path</span>
 <span class="sd">            Name of catalog file.  If not an absolute path, it is prepended</span>
 <span class="sd">            to `dir`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            The path to the saved ontology.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># pylint: disable=redefined-builtin,too-many-arguments</span>
         <span class="c1"># pylint: disable=too-many-statements,too-many-branches</span>
@@ -3355,28 +3382,31 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                     <span class="s2">&quot;&#39;Known issues&#39; section of the README.&quot;</span>
                 <span class="p">)</span>
             <span class="p">)</span>
-
         <span class="n">revmap</span> <span class="o">=</span> <span class="p">{</span><span class="n">value</span><span class="p">:</span> <span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">FMAP</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">format</span><span class="p">:</span>
                 <span class="n">fmt</span> <span class="o">=</span> <span class="n">revmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
-                <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fmt</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fmt</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`filename` and `format` cannot both be None.&quot;</span><span class="p">)</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-        <span class="nb">dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+        <span class="n">returnpath</span> <span class="o">=</span> <span class="n">filepath</span>
+
+        <span class="nb">dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span>
 
         <span class="k">if</span> <span class="n">mkdir</span><span class="p">:</span>
-            <span class="n">outdir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+            <span class="n">outdir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">outdir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
                 <span class="n">outdir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">format</span><span class="p">:</span>
-            <span class="nb">format</span> <span class="o">=</span> <span class="n">guess_format</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fmap</span><span class="o">=</span><span class="n">FMAP</span><span class="p">)</span>
+            <span class="nb">format</span> <span class="o">=</span> <span class="n">guess_format</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">fmap</span><span class="o">=</span><span class="n">FMAP</span><span class="p">)</span>
         <span class="n">fmt</span> <span class="o">=</span> <span class="n">revmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">overwrite</span> <span class="ow">and</span> <span class="n">filename</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">overwrite</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">squash</span><span class="p">:</span>
@@ -3384,7 +3414,12 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                     <span class="s2">&quot;`recursive` and `squash` should not both be true&quot;</span>
                 <span class="p">)</span>
             <span class="n">layout</span> <span class="o">=</span> <span class="n">directory_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
+            <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+                <span class="n">layout</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">fmt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># Update path to where the ontology is saved</span>
+            <span class="c1"># Note that filename should include format</span>
+            <span class="c1"># when given</span>
+            <span class="n">returnpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">layout</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fmt</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="k">for</span> <span class="n">onto</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">fname</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fmt</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="n">onto</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
@@ -3414,16 +3449,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                         <span class="n">directory</span><span class="o">=</span><span class="nb">dir</span><span class="p">,</span>
                         <span class="n">append</span><span class="o">=</span><span class="n">append_catalog</span><span class="p">,</span>
                     <span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">write_catalog_file</span><span class="p">:</span>
-            <span class="n">write_catalog</span><span class="p">(</span>
-                <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="n">as_iri</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span> <span class="n">filename</span><span class="p">},</span>
-                <span class="n">output</span><span class="o">=</span><span class="n">catalog_file</span><span class="p">,</span>
-                <span class="n">directory</span><span class="o">=</span><span class="nb">dir</span><span class="p">,</span>
-                <span class="n">append</span><span class="o">=</span><span class="n">append_catalog</span><span class="p">,</span>
-            <span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">squash</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">squash</span><span class="p">:</span>
             <span class="n">URIRef</span><span class="p">,</span> <span class="n">RDF</span><span class="p">,</span> <span class="n">OWL</span> <span class="o">=</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">URIRef</span><span class="p">,</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">RDF</span><span class="p">,</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">OWL</span>
             <span class="n">iri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span>
             <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">as_rdflib_graph</span><span class="p">()</span>
@@ -3443,9 +3469,9 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                     <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
                     <span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
 
-            <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">format</span> <span class="ow">in</span> <span class="n">OWLREADY2_FORMATS</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># The try-finally clause is needed for cleanup and because</span>
             <span class="c1"># we have to provide delete=False to NamedTemporaryFile</span>
@@ -3473,9 +3499,19 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                     <span class="p">):</span>
                         <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
                         <span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rdflib</span><span class="o">.</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
-                <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
+                <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
             <span class="k">finally</span><span class="p">:</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">write_catalog_file</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">recursive</span><span class="p">:</span>
+            <span class="n">write_catalog</span><span class="p">(</span>
+                <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="n">as_iri</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span> <span class="n">filepath</span><span class="p">},</span>
+                <span class="n">output</span><span class="o">=</span><span class="n">catalog_file</span><span class="p">,</span>
+                <span class="n">directory</span><span class="o">=</span><span class="nb">dir</span><span class="p">,</span>
+                <span class="n">append</span><span class="o">=</span><span class="n">append_catalog</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">returnpath</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_imported_ontologies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a list with imported ontologies.</span>
@@ -7095,13 +7131,18 @@ saving.  The default is to append to an existing ontology.</p>
 <div class="admonition recursive">
 <p class="admonition-title">bool</p>
 <p>Whether to save imported ontologies recursively.  This is
-commonly combined with <code>filename=None</code>, <code>dir</code> and <code>mkdir</code>.</p>
+commonly combined with <code>filename=None</code>, <code>dir</code> and <code>mkdir</code>.
+Note that depending on the structure of the ontology and
+all imports the ontology might end up in a subdirectory.
+If filename is given, the ontology is saved to the given
+directory.
+The path to the final location is returned.</p>
 </div>
 <div class="admonition squash">
 <p class="admonition-title">bool</p>
 <p>If true, rdflib will be used to save the current ontology
 together with all its sub-ontologies into <code>filename</code>.
-It make no sense to combine this with <code>recursive</code>.</p>
+It makes no sense to combine this with <code>recursive</code>.</p>
 </div>
 <div class="admonition write_catalog_file">
 <p class="admonition-title">bool</p>
@@ -7116,6 +7157,9 @@ It make no sense to combine this with <code>recursive</code>.</p>
 <p>Name of catalog file.  If not an absolute path, it is prepended
 to <code>dir</code>.</p>
 </div>
+<h5 id="ontopy.ontology.Ontology.save--returns">Returns<a class="headerlink" href="#ontopy.ontology.Ontology.save--returns" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code>The path to the saved ontology.
+</code></pre></div>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
@@ -7131,7 +7175,7 @@ to <code>dir</code>.</p>
     <span class="n">write_catalog_file</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">append_catalog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">catalog_file</span><span class="o">=</span><span class="s2">&quot;catalog-v001.xml&quot;</span><span class="p">,</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Writes the ontology to file.</span>
 
 <span class="sd">    Parameters</span>
@@ -7151,10 +7195,15 @@ to <code>dir</code>.</p>
 <span class="sd">    recursive: bool</span>
 <span class="sd">        Whether to save imported ontologies recursively.  This is</span>
 <span class="sd">        commonly combined with `filename=None`, `dir` and `mkdir`.</span>
+<span class="sd">        Note that depending on the structure of the ontology and</span>
+<span class="sd">        all imports the ontology might end up in a subdirectory.</span>
+<span class="sd">        If filename is given, the ontology is saved to the given</span>
+<span class="sd">        directory.</span>
+<span class="sd">        The path to the final location is returned.</span>
 <span class="sd">    squash: bool</span>
 <span class="sd">        If true, rdflib will be used to save the current ontology</span>
 <span class="sd">        together with all its sub-ontologies into `filename`.</span>
-<span class="sd">        It make no sense to combine this with `recursive`.</span>
+<span class="sd">        It makes no sense to combine this with `recursive`.</span>
 <span class="sd">    write_catalog_file: bool</span>
 <span class="sd">        Whether to also write a catalog file to disk.</span>
 <span class="sd">    append_catalog: bool</span>
@@ -7162,6 +7211,10 @@ to <code>dir</code>.</p>
 <span class="sd">    catalog_file: str | Path</span>
 <span class="sd">        Name of catalog file.  If not an absolute path, it is prepended</span>
 <span class="sd">        to `dir`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        The path to the saved ontology.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># pylint: disable=redefined-builtin,too-many-arguments</span>
     <span class="c1"># pylint: disable=too-many-statements,too-many-branches</span>
@@ -7182,28 +7235,31 @@ to <code>dir</code>.</p>
                 <span class="s2">&quot;&#39;Known issues&#39; section of the README.&quot;</span>
             <span class="p">)</span>
         <span class="p">)</span>
-
     <span class="n">revmap</span> <span class="o">=</span> <span class="p">{</span><span class="n">value</span><span class="p">:</span> <span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">FMAP</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">format</span><span class="p">:</span>
             <span class="n">fmt</span> <span class="o">=</span> <span class="n">revmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fmt</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fmt</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`filename` and `format` cannot both be None.&quot;</span><span class="p">)</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-    <span class="nb">dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="n">filename</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+    <span class="n">returnpath</span> <span class="o">=</span> <span class="n">filepath</span>
+
+    <span class="nb">dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span>
 
     <span class="k">if</span> <span class="n">mkdir</span><span class="p">:</span>
-        <span class="n">outdir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+        <span class="n">outdir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">outdir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="n">outdir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">format</span><span class="p">:</span>
-        <span class="nb">format</span> <span class="o">=</span> <span class="n">guess_format</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fmap</span><span class="o">=</span><span class="n">FMAP</span><span class="p">)</span>
+        <span class="nb">format</span> <span class="o">=</span> <span class="n">guess_format</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">fmap</span><span class="o">=</span><span class="n">FMAP</span><span class="p">)</span>
     <span class="n">fmt</span> <span class="o">=</span> <span class="n">revmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">overwrite</span> <span class="ow">and</span> <span class="n">filename</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">overwrite</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">squash</span><span class="p">:</span>
@@ -7211,7 +7267,12 @@ to <code>dir</code>.</p>
                 <span class="s2">&quot;`recursive` and `squash` should not both be true&quot;</span>
             <span class="p">)</span>
         <span class="n">layout</span> <span class="o">=</span> <span class="n">directory_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">layout</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">fmt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Update path to where the ontology is saved</span>
+        <span class="c1"># Note that filename should include format</span>
+        <span class="c1"># when given</span>
+        <span class="n">returnpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">layout</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fmt</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">for</span> <span class="n">onto</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">fname</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fmt</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">onto</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
@@ -7241,16 +7302,7 @@ to <code>dir</code>.</p>
                     <span class="n">directory</span><span class="o">=</span><span class="nb">dir</span><span class="p">,</span>
                     <span class="n">append</span><span class="o">=</span><span class="n">append_catalog</span><span class="p">,</span>
                 <span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">write_catalog_file</span><span class="p">:</span>
-        <span class="n">write_catalog</span><span class="p">(</span>
-            <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="n">as_iri</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span> <span class="n">filename</span><span class="p">},</span>
-            <span class="n">output</span><span class="o">=</span><span class="n">catalog_file</span><span class="p">,</span>
-            <span class="n">directory</span><span class="o">=</span><span class="nb">dir</span><span class="p">,</span>
-            <span class="n">append</span><span class="o">=</span><span class="n">append_catalog</span><span class="p">,</span>
-        <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">squash</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">squash</span><span class="p">:</span>
         <span class="n">URIRef</span><span class="p">,</span> <span class="n">RDF</span><span class="p">,</span> <span class="n">OWL</span> <span class="o">=</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">URIRef</span><span class="p">,</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">RDF</span><span class="p">,</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">OWL</span>
         <span class="n">iri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">as_rdflib_graph</span><span class="p">()</span>
@@ -7270,9 +7322,9 @@ to <code>dir</code>.</p>
                 <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
                 <span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
 
-        <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">format</span> <span class="ow">in</span> <span class="n">OWLREADY2_FORMATS</span><span class="p">:</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># The try-finally clause is needed for cleanup and because</span>
         <span class="c1"># we have to provide delete=False to NamedTemporaryFile</span>
@@ -7300,9 +7352,19 @@ to <code>dir</code>.</p>
                 <span class="p">):</span>
                     <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
                     <span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rdflib</span><span class="o">.</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
-            <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">write_catalog_file</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">recursive</span><span class="p">:</span>
+        <span class="n">write_catalog</span><span class="p">(</span>
+            <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="n">as_iri</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span> <span class="n">filepath</span><span class="p">},</span>
+            <span class="n">output</span><span class="o">=</span><span class="n">catalog_file</span><span class="p">,</span>
+            <span class="n">directory</span><span class="o">=</span><span class="nb">dir</span><span class="p">,</span>
+            <span class="n">append</span><span class="o">=</span><span class="n">append_catalog</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">returnpath</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
