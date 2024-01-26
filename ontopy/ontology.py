@@ -871,7 +871,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         write_catalog_file=False,
         append_catalog=False,
         catalog_file="catalog-v001.xml",
-    ) -> str:
+    ) -> Path:
         """Writes the ontology to file.
 
         Parameters
@@ -908,8 +908,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             Name of catalog file.  If not an absolute path, it is prepended
             to `dir`.
 
-        Returns:
-        ----------
+        Returns
             The path to the saved ontology.
         """
         # pylint: disable=redefined-builtin,too-many-arguments
@@ -998,14 +997,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                         directory=dir,
                         append=append_catalog,
                     )
-
-        elif write_catalog_file:
-            write_catalog(
-                {self.get_version(as_iri=True): filepath},
-                output=catalog_file,
-                directory=dir,
-                append=append_catalog,
-            )
         elif squash:
             URIRef, RDF, OWL = rdflib.URIRef, rdflib.RDF, rdflib.OWL
             iri = self.iri if self.iri else self.base_iri
@@ -1074,6 +1065,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             ontology = get_ontology(filename).load()
             ontology.name = self.name
         return ontology
+
+        if write_catalog_file and not recursive:
+            write_catalog(
+                {self.get_version(as_iri=True): filepath},
+                output=catalog_file,
+                directory=dir,
+                append=append_catalog,
+            )
+
+        return Path(returnpath)
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.

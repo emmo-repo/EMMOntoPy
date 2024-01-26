@@ -65,7 +65,7 @@ def test_save(
     # 4. save testonto to testonto.owl again, but with overwrite=True
     # 5. check that testonto.owl is the same as testonto_saved.owl
     # NB! this is not currently working, issue #685
-    # It might be that this inetnional behaviour of save should be changed.
+    # It might be that this intentional behaviour of save should be changed.
     # If so, the tests should change accordingly.
     # This should be addressed in issue #685
 
@@ -102,6 +102,7 @@ def test_save(
     assert (tmpdir / "recursively" / "testonto.ttl").exists()
     assert (tmpdir / "recursively" / "models.ttl").exists() == False
 
+
     testonto.save(
         format="ttl",
         dir=tmpdir / "recursively",
@@ -112,6 +113,26 @@ def test_save(
 
     # squash merge during save is tested in test_ontology_squash.py
 
+def test_ontology_squash():
+    import re
+    from pathlib import Path
+    from ontopy import get_ontology
+
+    repo_dir = Path(__file__).resolve().parent.parent
+    onto_dir = repo_dir / "tests" / "testonto"
+    out_dir = repo_dir / "tests" / "output"
+
+    testonto = get_ontology(onto_dir / "testonto.ttl").load()
+
+    testonto.save(out_dir / "testonto_squash.ttl", squash=True)
+
+    with open(out_dir / "testonto_squash.ttl", "r") as f:
+        txt = f.read()
+
+    s = re.findall(r".* a owl:Ontology", txt)
+    assert len(s) == 1
+    assert s[0].startswith("<http://emmo.info/testonto>")
+    assert len(re.findall(r"owl:imports", txt)) == 0
 
 # Simple working tests without pytest getting in the way - feel free to change to pytest
 def test_save_and_copy_emmo(
@@ -138,17 +159,6 @@ def test_save_and_copy_emmo(
     )
 
     emmo = get_ontology(emmopath).load()
-
-    # Since version is missing in some imported ontologies (at least in periodic_table)
-    # we need to fix that.
-    # Note that ths is fix of an error in EMMO-1.0.0-beta4
-    # version = emmo.get_version()
-    # for onto in emmo.indirectly_imported_ontologies():
-    #    try:
-    #        onto.get_version(as_iri=True)
-    #    except TypeError:
-    #        onto.set_version(version)
-    #    # print(onto, onto.get_version(as_iri=True))
 
     emmo.save(
         format="turtle",
@@ -181,6 +191,7 @@ def test_save_and_copy_emmo(
         "manufacturing.ttl",
         "models.ttl",
     }
+
 
     # Check that copied ontology is the same as the original
     copied_emmo = emmo.copy()
