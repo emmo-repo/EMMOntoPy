@@ -909,6 +909,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             to `dir`.
 
         Returns
+        --------
             The path to the saved ontology.
         """
         # pylint: disable=redefined-builtin,too-many-arguments
