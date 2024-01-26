@@ -1066,7 +1066,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         with tempfile.TemporaryDirectory() as dirname:
             filename = self.save(
                 dir=dirname,
-                format="rdfxml",
+                format="turtle",
                 recursive=True,
                 write_catalog_file=True,
                 mkdir=True,

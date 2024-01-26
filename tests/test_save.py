@@ -132,14 +132,17 @@ def test_save_and_copy_emmo(
         import os
 
         os.makedirs(tmpdir, exist_ok=True)
-    emmo = get_ontology(
+
+    emmopath = (
         "https://raw.githubusercontent.com/emmo-repo/EMMO/1.0.0-beta4/emmo.ttl"
-    ).load()
+    )
+
+    emmo = get_ontology(emmopath).load()
 
     # Since version is missing in some imported ontologies (at least in periodic_table)
     # we need to fix that.
     # Note that ths is fix of an error in EMMO-1.0.0-beta4
-    version = emmo.get_version()
+    # version = emmo.get_version()
     # for onto in emmo.indirectly_imported_ontologies():
     #    try:
     #        onto.get_version(as_iri=True)
@@ -179,13 +182,13 @@ def test_save_and_copy_emmo(
         "models.ttl",
     }
 
-    new_emmo = emmo.copy()
+    # Check that copied ontology is the same as the original
+    copied_emmo = emmo.copy()
+    assert copied_emmo == emmo
 
-    assert new_emmo == emmo
-
-    # emmo_from_web = get_emmo()
-    #
-    # assert new_emmo == emmo_from_web
+    # Check that copied ontology is the same as another ontology loaded from web
+    new_emmo_from_web = get_ontology(emmopath).load()
+    assert copied_emmo == new_emmo_from_web
 
 
 def test_save_emmo_domain_ontology(

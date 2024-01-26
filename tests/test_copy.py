@@ -20,23 +20,19 @@ def test_copy(testonto: "Ontology") -> None:
     # Make a copy and check that new entity in original is not in copy
     testonto_copy = testonto.copy()
 
-    # Check that the name of the cipy is the same
+    # Check that the name of the copy is the same
     assert testonto_copy.name == testonto.name
 
+    # create a new entity in the original and check that it is there
+    # and not in the copy
+
     testonto.new_entity("FantasyClass2", testonto.TestClass)
-
     assert testonto.FantasyClass2
-    print("testonto", list(testonto.classes()))
-    print(list(testonto_copy.classes()))
-    print("copied label annotations", testonto_copy.label_annotations)
-    print("copied prefix", testonto_copy.prefix)
-    assert testonto_copy.FantasyClass
-    print("*************************************")
-    print(set(testonto.classes()).difference(testonto_copy.classes()))
-
-    print("*************************")
+    assert testonto_copy.FantasyClass  # Class in ontology before copying
     with pytest.raises(NoSuchLabelError):
         assert testonto_copy.FantasyClass2
+
+    assert testonto.prefix == testonto_copy.prefix
 
 
 def test_copy_emmo() -> None:
