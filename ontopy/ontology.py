@@ -871,7 +871,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         write_catalog_file=False,
         append_catalog=False,
         catalog_file="catalog-v001.xml",
-    ):
+    ) -> str:
         """Writes the ontology to file.
 
         Parameters
@@ -891,6 +891,11 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         recursive: bool
             Whether to save imported ontologies recursively.  This is
             commonly combined with `filename=None`, `dir` and `mkdir`.
+            Note that depending on the structure of the ontology and
+            all imports the ontology might end up in a subdirectory.
+            If filename is given, the ontology is saved to the given
+            directory.
+            The path to the final location is returned.
         squash: bool
             If true, rdflib will be used to save the current ontology
             together with all its sub-ontologies into `filename`.
@@ -902,6 +907,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         catalog_file: str | Path
             Name of catalog file.  If not an absolute path, it is prepended
             to `dir`.
+
+        Returns:
+        ----------
+            The path to the saved ontology.
         """
         # pylint: disable=redefined-builtin,too-many-arguments
         # pylint: disable=too-many-statements,too-many-branches
