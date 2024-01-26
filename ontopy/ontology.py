@@ -909,7 +909,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             to `dir`.
 
         Returns
-        -------
+        --------
             The path to the saved ontology.
         """
         # pylint: disable=redefined-builtin,too-many-arguments
@@ -1059,8 +1059,21 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 directory=dir,
                 append=append_catalog,
             )
-
         return Path(returnpath)
+
+    def copy(self):
+        """Return a copy of the ontology."""
+        with tempfile.TemporaryDirectory() as dirname:
+            filename = self.save(
+                dir=dirname,
+                format="turtle",
+                recursive=True,
+                write_catalog_file=True,
+                mkdir=True,
+            )
+            ontology = get_ontology(filename).load()
+            ontology.name = self.name
+        return ontology
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.

@@ -133,8 +133,7 @@ def test_ontology_squash():
     assert len(re.findall(r"owl:imports", txt)) == 0
 
 
-# Simple working tests without pytest getting in the way - feel free to change to pytest
-def test_save_emmo(
+def test_save_and_copy_emmo(
     tmpdir: "Path",
     repo_dir: "Path",
 ) -> None:
@@ -152,20 +151,12 @@ def test_save_emmo(
         import os
 
         os.makedirs(tmpdir, exist_ok=True)
-    emmo = get_ontology(
-        "https://raw.githubusercontent.com/emmo-repo/EMMO/1.0.0-beta4/emmo.ttl"
-    ).load()
 
-    # Since version is missing in some imported ontologies (at least in periodic_table)
-    # we need to fix that.
-    # Note that ths is fix of an error in EMMO-1.0.0-beta4
-    version = emmo.get_version()
-    # for onto in emmo.indirectly_imported_ontologies():
-    #    try:
-    #        onto.get_version(as_iri=True)
-    #    except TypeError:
-    #        onto.set_version(version)
-    #    # print(onto, onto.get_version(as_iri=True))
+    emmopath = (
+        "https://raw.githubusercontent.com/emmo-repo/EMMO/1.0.0-beta4/emmo.ttl"
+    )
+
+    emmo = get_ontology(emmopath).load()
 
     emmo.save(
         format="turtle",
@@ -198,6 +189,10 @@ def test_save_emmo(
         "manufacturing.ttl",
         "models.ttl",
     }
+
+    # Check that copied ontology is the same as the original
+    copied_emmo = emmo.copy()
+    assert copied_emmo == emmo
 
 
 def test_save_emmo_domain_ontology(
