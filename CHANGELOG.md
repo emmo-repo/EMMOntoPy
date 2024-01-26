@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.7.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.7.0) (2024-01-26)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.6.3...v0.7.0)
+
+**Merged pull requests:**
+
+- Ontology copy [\#711](https://github.com/emmo-repo/EMMOntoPy/pull/711) ([francescalb](https://github.com/francescalb))
+- Update save recursive and layout [\#710](https://github.com/emmo-repo/EMMOntoPy/pull/710) ([francescalb](https://github.com/francescalb))
+
 ## [v0.6.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.6.3) (2024-01-25)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.6.2...v0.6.3)
