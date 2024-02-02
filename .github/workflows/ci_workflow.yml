@@ -93,6 +93,8 @@ jobs:
     - name: Upload coverage to Codecov
       if: matrix.python-version == '3.9' && github.repository == 'emmo-repo/EMMOntoPy'
       uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
 
     # - name: Run vertical demo
     #   run: |
