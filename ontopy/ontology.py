@@ -97,7 +97,7 @@ class World(owlready2.World):
                   version of EMMO. Until first stable release
                   emmo-inferred and emmo-development will be the same.
             OntologyClass: If given and `base_iri` doesn't correspond
-                to an existing ontology, a new ontology is created of
+                 an existing ontology, a new ontology is created of
                 this Ontology subclass.  Defaults to `ontopy.Ontology`.
             label_annotations: Sequence of label IRIs used for accessing
                 entities in the ontology given that they are in the ontology.
@@ -871,6 +871,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         write_catalog_file=False,
         append_catalog=False,
         catalog_file="catalog-v001.xml",
+        keep_python_names=False,
     ) -> Path:
         """Writes the ontology to file.
 
@@ -931,6 +932,29 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     "'Known issues' section of the README."
                 )
             )
+        if not keep_python_names:
+            ontocopy = self.copy()
+            ontocopy._del_data_triple_spod(
+                p=ontocopy._abbreviate(
+                    "http://www.lesfleursdunormal.fr/static/_downloads/"
+                    "owlready_ontology.owl#python_name"
+                )
+            )
+            returnpath = ontocopy.save(
+                filename=filename,
+                format=format,
+                dir=dir,
+                mkdir=mkdir,
+                overwrite=overwrite,
+                recursive=recursive,
+                squash=squash,
+                write_catalog_file=write_catalog_file,
+                append_catalog=append_catalog,
+                catalog_file=catalog_file,
+                keep_python_names=True,
+            )
+            return returnpath
+
         revmap = {value: key for key, value in FMAP.items()}
         if filename is None:
             if format:
@@ -980,6 +1004,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     recursive=False,
                     squash=False,
                     write_catalog_file=False,
+                    keep_python_names=keep_python_names,
                 )
 
             if write_catalog_file:
@@ -1070,7 +1095,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 recursive=True,
                 write_catalog_file=True,
                 mkdir=True,
+                keep_python_names=True,
             )
+            # copy all in dirname to new directory
+            newdir = Path("/home/flb/projects/Team4.0/EMMOntoPy/temp/newonto")
+            import shutil
+
+            shutil.copytree(dirname, newdir)
+            print(filename)
             ontology = get_ontology(filename).load()
             ontology.name = self.name
         return ontology

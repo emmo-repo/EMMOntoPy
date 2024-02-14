@@ -32,7 +32,18 @@ def test_excelparser(repo_dir: "Path") -> None:
         repo_dir / "tests" / "test_excelparser" / "onto_update.xlsx"
     )
     ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
-    # ontology.save("test.ttl") # used for printing new ontology when debugging
+    # ontology.save("test.ttl", keep_python_names=False) # used for printing new ontology when debugging
+    ontology._del_data_triple_spod(
+        p=ontology._abbreviate(
+            "http://www.lesfleursdunormal.fr/static/_downloads/"
+            "owlready_ontology.owl#python_name"
+        )
+    )
+
+    ontology.save(
+        "test.ttl", keep_python_names=True
+    )  # used for printing new ontology when debugging
+
     assert onto == ontology
     assert errors.keys() == {
         "already_defined",

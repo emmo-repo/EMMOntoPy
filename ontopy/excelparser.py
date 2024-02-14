@@ -550,15 +550,14 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
 
         # Add versionInfo
         try:
-            _add_literal(
-                metadata,
-                onto.metadata.versionInfo,
-                "Ontology version Info",
-                metadata=True,
-                only_one=True,
+            name_list = _parse_literal(
+                metadata, "Ontology version Info", metadata=True
             )
+            onto.metadata.versionInfo.append(name_list[0])
         except AttributeError:
             pass
+
+        onto.set_version(onto.get_version())
     return onto, catalog
 
 
