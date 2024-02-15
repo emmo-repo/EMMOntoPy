@@ -1098,13 +1098,15 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 keep_python_names=True,
             )
             # copy all in dirname to new directory
-            newdir = Path("/home/flb/projects/Team4.0/EMMOntoPy/temp/newonto")
-            import shutil
+            # newdir = Path("/home/flb/projects/Team4.0/EMMOntoPy/temp/newonto")
+            # import shutil
 
-            shutil.copytree(dirname, newdir)
-            print(filename)
+            # shutil.copytree(dirname, newdir)
+            # print(filename)
             ontology = get_ontology(filename).load()
             ontology.name = self.name
+            ontology.iri = self.iri
+            ontology.base_iri = self.base_iri
         return ontology
 
     def get_imported_ontologies(self, recursive=False):
