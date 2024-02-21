@@ -2028,9 +2028,9 @@ def _get_unabbreviated_triples(
         yield (
             _unabbreviate(self, s, blank=blank),
             _unabbreviate(self, p, blank=blank),
-            f'"{o}"{d}'
-            if isinstance(d, str)
-            else f'"{o}"^^{_unabbreviate(self, d)}'
-            if d
-            else o,
+            (
+                f'"{o}"{d}'
+                if isinstance(d, str)
+                else f'"{o}"^^{_unabbreviate(self, d)}' if d else o
+            ),
         )

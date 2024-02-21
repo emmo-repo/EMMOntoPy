@@ -1,4 +1,5 @@
 """This module injects some additional methods into owlready2 classes."""
+
 # pylint: disable=protected-access
 import types
 

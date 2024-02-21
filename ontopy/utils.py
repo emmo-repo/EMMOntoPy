@@ -1,5 +1,6 @@
 """Some generic utility functions.
 """
+
 # pylint: disable=protected-access
 import os
 import sys
