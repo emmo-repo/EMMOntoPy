@@ -914,7 +914,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """
         # pylint: disable=redefined-builtin,too-many-arguments
         # pylint: disable=too-many-statements,too-many-branches
-        # pylint: disable=too-many-locals,arguments-renamed
+        # pylint: disable=too-many-locals,arguments-renamed,invalid-name
         if not _validate_installed_version(
             package="rdflib", min_version="6.0.0"
         ) and format == FMAP.get("ttl", ""):
@@ -1121,8 +1121,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             generator.append(self.data_properties(imported))
         if annotation_properties:
             generator.append(self.annotation_properties(imported))
-        for entity in itertools.chain(*generator):
-            yield entity
+        yield from itertools.chain(*generator)
 
     def classes(self, imported=False):
         """Returns an generator over all classes.
