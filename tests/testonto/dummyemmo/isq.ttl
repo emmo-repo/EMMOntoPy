@@ -1,0 +1,5 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+<http://emmo.info/emmo/disciplines/isq> a owl:Ontology ;
+    owl:versionIRI <http://emmo.info/emmo/1.0.0-beta5/disciplines/isq> ;
+    owl:versionInfo "1.0.0-beta5" .
