@@ -1181,8 +1181,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             elif entity_type == "annotation_properties":
                 generator = super().annotation_properties()
 
-        for entity in generator:
-            yield entity
+        yield from generator
 
     def individuals(self, imported=False):
         """Returns an generator over all individuals.
@@ -2050,8 +2049,7 @@ def flatten(items):
     """Yield items from any nested iterable."""
     for item in items:
         if isinstance(item, Iterable) and not isinstance(item, (str, bytes)):
-            for sub_item in flatten(item):
-                yield sub_item
+            yield from flatten(item)
         else:
             yield item
 
