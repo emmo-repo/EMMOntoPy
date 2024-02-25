@@ -5,5 +5,7 @@
 	    <uri name="http://emmo.info/testonto/0.1.0/models" uri="models.ttl"/>
 	    <uri name="http://emmo.info/testonto-recursive/0.1.0" uri="testonto-recursive.ttl"/>
 	    <uri name="http://emmo.info/testonto/0.1.0/models-recursive" uri="models-recursive.ttl"/>
+	    <uri name="http://emmo.info/emmo/domain/dummychameo/1.0.0/dummychameo" uri="dummychameo/dummychameo.ttl"/>
+	    <uri name="http://emmo.info/emmo/1.0.0-beta5/disciplines/isq" uri="dummyemmo/isq.ttl"/>
     </group>
 </catalog>

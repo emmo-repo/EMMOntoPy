@@ -1,0 +1,8 @@
+@prefix : <http://emmo.info/emmo/domain/dummychameo#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+<http://emmo.info/emmo/domain/chameo/chameo> a owl:Ontology ;
+    dcterms:license "https://creativecommons.org/licenses/by/4.0/legalcode" ;
+    owl:versionIRI <http://emmo.info/emmo/domain/dummychameo/1.0.0/dummychameo> ;
+    owl:versionInfo "1.0.0-beta3" .

@@ -786,6 +786,14 @@ def directory_layout(onto):
 
         where `ontoA`, `ontoB` and `ontoC` are imported Ontology objects.
     """
+    all_imported = [
+        imported.base_iri for imported in onto.indirectly_imported_ontologies()
+    ]
+    # get protocol and domain of all imported ontologies
+    namespace_roots = set()
+    for iri in all_imported:
+        protocol, domain, *_ = urllib.parse.urlsplit(iri)
+        namespace_roots.add("://".join([protocol, domain]))
 
     def recur(o):
         baseiri = o.base_iri.rstrip("/#")
@@ -811,10 +819,18 @@ def directory_layout(onto):
 
     layout = {}
     recur(onto)
-
     # Strip off initial common prefix from all paths
-    prefix = os.path.commonprefix(list(layout.values()))
-    for o, path in layout.items():
-        layout[o] = path[len(prefix) :].lstrip("/")
+    if len(namespace_roots) == 1:
+        prefix = os.path.commonprefix(list(layout.values()))
+        for o, path in layout.items():
+            layout[o] = path[len(prefix) :].lstrip("/")
+    else:
+        for o, path in layout.items():
+            for namespace_root in namespace_roots:
+                if path.startswith(namespace_root):
+                    layout[o] = (
+                        urllib.parse.urlsplit(namespace_root)[1]
+                        + path[len(namespace_root) :]
+                    )
 
     return layout
