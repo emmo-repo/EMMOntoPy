@@ -87,12 +87,18 @@ def main(argv: list = None):
         help="Do not infer imported ontologies.",
     )
     parser.add_argument(
+        "--iri",
+        "-I",
+        help="IRI of converted ontology.",
+    )
+    parser.add_argument(
         "--base-iri",
         "-b",
         help=(
-            "Base iri of inferred ontology. The default is the base iri of "
-            'the input ontology with "-inferred" appended to it. Used '
-            "together with --reasoner."
+            "Base IRI of converted ontology.  "
+            "This argument can be used to workaround the bug in Owlready2 "
+            "that changes the base IRI of the ontology to always end with a "
+            "slash."
         ),
     )
     parser.add_argument(
@@ -188,6 +194,12 @@ def main(argv: list = None):
             format=input_format,
             url_from_catalog=args.url_from_catalog,
         )
+
+        if args.iri:
+            onto.iri = args.iri
+
+        if args.base_iri:
+            onto.base_iri = args.base_iri
 
         if args.annotate_source:
             annotate_source(onto)
