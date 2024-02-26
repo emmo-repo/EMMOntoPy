@@ -914,7 +914,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """
         # pylint: disable=redefined-builtin,too-many-arguments
         # pylint: disable=too-many-statements,too-many-branches
-        # pylint: disable=too-many-locals,arguments-renamed
+        # pylint: disable=too-many-locals,arguments-renamed,invalid-name
         if not _validate_installed_version(
             package="rdflib", min_version="6.0.0"
         ) and format == FMAP.get("ttl", ""):
@@ -1121,8 +1121,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             generator.append(self.data_properties(imported))
         if annotation_properties:
             generator.append(self.annotation_properties(imported))
-        for entity in itertools.chain(*generator):
-            yield entity
+        yield from itertools.chain(*generator)
 
     def classes(self, imported=False):
         """Returns an generator over all classes.
@@ -1182,8 +1181,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             elif entity_type == "annotation_properties":
                 generator = super().annotation_properties()
 
-        for entity in generator:
-            yield entity
+        yield from generator
 
     def individuals(self, imported=False):
         """Returns an generator over all individuals.
@@ -2051,8 +2049,7 @@ def flatten(items):
     """Yield items from any nested iterable."""
     for item in items:
         if isinstance(item, Iterable) and not isinstance(item, (str, bytes)):
-            for sub_item in flatten(item):
-                yield sub_item
+            yield from flatten(item)
         else:
             yield item
 
