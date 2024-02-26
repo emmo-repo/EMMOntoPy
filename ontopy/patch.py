@@ -177,8 +177,7 @@ def disjoint_with(self, reduce=False):
             disjoint_set.difference_update(
                 entity.descendants(include_self=False)
             )
-        for entity in disjoint_set:
-            yield entity
+        yield from disjoint_set
     else:
         for disjoint in self.disjoints():
             for entity in disjoint.entities:
