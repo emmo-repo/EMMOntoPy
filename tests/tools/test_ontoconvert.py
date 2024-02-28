@@ -8,31 +8,12 @@ if TYPE_CHECKING:
 
 
 # if True:
-def test_run(get_tool: "Callable[[str], ModuleType]", tmpdir: "Path") -> None:
-    """Check that running `ontoconvert` works.
-
-    Parameters:
-        get_tool: Local module fixture to load a named tool as a module.
-            See the current folder's `conftest.py` file.
-        tmpdir: A generic pytest fixture to generate a temporary directory,
-            which will exist only for the lifetime of this test function.
-    """
+def test_run() -> None:
+    """Check that running `ontoconvert` works."""
     import re
-    from pathlib import Path
-    import sys
-    import importlib
+    from ontopy.testutils import ontodir, outdir, get_tool_module
 
-    testdir = Path(__file__).resolve().parent.parent
-    ontodir = testdir / "testonto"
-    outdir = testdir / "output"
-    toolsdir = testdir.parent / "tools"
-
-    # ontoconvert = get_tool("ontoconvert")
-
-    sys.path.append(str(toolsdir))
-    ontoconvert = importlib.machinery.SourceFileLoader(
-        "ontoconvert", str(toolsdir / "ontoconvert")
-    ).load_module()
+    ontoconvert = get_tool_module("ontoconvert")
 
     # Test 1
     ontoconvert.main(
