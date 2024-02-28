@@ -8,10 +8,7 @@ def test_run() -> None:
 
     ontodoc = get_tool_module("ontodoc")
 
-    from pathlib import Path
-
     test_file = ontodir / "models.ttl"
-
     ontodoc = get_tool_module("ontodoc")
 
     ontodoc.main([str(test_file), str(outdir / "test.md")])

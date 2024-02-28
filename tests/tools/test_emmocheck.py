@@ -4,8 +4,6 @@
 # if True:
 def test_run() -> None:
     """Check that running `emmocheck` works."""
-    from pathlib import Path
-
     from ontopy.testutils import ontodir, get_tool_module
 
     test_file = ontodir / "models.ttl"
