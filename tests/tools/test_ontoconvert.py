@@ -7,8 +7,8 @@ if TYPE_CHECKING:
     from typing import Callable
 
 
-if True:
-    # def test_run(get_tool: "Callable[[str], ModuleType]", tmpdir: "Path") -> None:
+# if True:
+def test_run(get_tool: "Callable[[str], ModuleType]", tmpdir: "Path") -> None:
     """Check that running `ontoconvert` works.
 
     Parameters:
