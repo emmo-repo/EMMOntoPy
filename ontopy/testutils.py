@@ -1,4 +1,4 @@
-"""Motule primarly intended to be imported by tests.
+"""Module primarly intended to be imported by tests.
 
 It defines some directories and some utility functions that can be used
 with and without conftest.
