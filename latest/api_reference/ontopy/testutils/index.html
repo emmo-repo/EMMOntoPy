@@ -10,28 +10,28 @@
       
       
       
-        <link rel="canonical" href="https://emmo-repo.github.io/EMMOntoPy/latest/examples/jupyter-visualization/">
+        <link rel="canonical" href="https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/testutils/">
       
       
-        <link rel="prev" href="../emmodoc/">
+        <link rel="prev" href="../patch/">
       
       
-        <link rel="next" href="../ontology-from-excel/">
+        <link rel="next" href="../utils/">
       
       
-      <link rel="icon" href="../../images/favicon.png">
+      <link rel="icon" href="../../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.12">
     
     
       
-        <title>Jupyter visualization - EMMOntoPy</title>
+        <title>testutils - EMMOntoPy</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.7e359304.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7e359304.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -50,11 +50,11 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="../../css/reference.css">
+      <link rel="stylesheet" href="../../../css/reference.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#visualise-an-ontology-using-pyctoscape-in-jupyter-notebook" class="md-skip">
+        <a href="#testutils" class="md-skip">
           Skip to content
         </a>
       
@@ -98,9 +98,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="EMMOntoPy" class="md-header__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
+    <a href="../../.." title="EMMOntoPy" class="md-header__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
       
-  <img src="../../images/emmontopy-logo.svg" alt="logo">
+  <img src="../../../images/emmontopy-logo.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -117,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Jupyter visualization
+              testutils
             
           </span>
         </div>
@@ -204,9 +204,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="EMMOntoPy" class="md-nav__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
+    <a href="../../.." title="EMMOntoPy" class="md-nav__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
       
-  <img src="../../images/emmontopy-logo.svg" alt="logo">
+  <img src="../../../images/emmontopy-logo.svg" alt="logo">
 
     </a>
     EMMOntoPy
@@ -233,7 +233,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -253,7 +253,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tools-instructions/" class="md-nav__link">
+      <a href="../../../tools-instructions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -273,7 +273,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docker-instructions/" class="md-nav__link">
+      <a href="../../../docker-instructions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -293,7 +293,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../LICENSE/" class="md-nav__link">
+      <a href="../../../LICENSE/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -310,19 +310,17 @@
       
   
   
-    
   
   
-  
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -336,7 +334,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Examples and demonstrations
@@ -385,7 +383,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../demo/" class="md-nav__link">
+      <a href="../../../demo/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -406,7 +404,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../demo/horizontal/" class="md-nav__link">
+      <a href="../../../demo/horizontal/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -427,7 +425,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../demo/vertical/" class="md-nav__link">
+      <a href="../../../demo/vertical/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -453,19 +451,17 @@
                 
   
   
-    
   
   
-  
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
         
           
           <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
@@ -479,7 +475,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5_2">
             <span class="md-nav__icon md-icon"></span>
             Examples
@@ -493,7 +489,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../emmodoc/" class="md-nav__link">
+      <a href="../../../examples/emmodoc/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -511,30 +507,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Jupyter visualization
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../examples/jupyter-visualization/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -543,44 +519,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#installation-instructions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Installation instructions
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#test-the-notebook" class="md-nav__link">
-    <span class="md-ellipsis">
-      Test the notebook
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -593,7 +531,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ontology-from-excel/" class="md-nav__link">
+      <a href="../../../examples/ontology-from-excel/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -664,7 +602,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developers/release-instructions/" class="md-nav__link">
+      <a href="../../../developers/release-instructions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -685,7 +623,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developers/setup/" class="md-nav__link">
+      <a href="../../../developers/setup/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -706,7 +644,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developers/testing/" class="md-nav__link">
+      <a href="../../../developers/testing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -734,7 +672,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../CHANGELOG/" class="md-nav__link">
+      <a href="../../../CHANGELOG/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -751,17 +689,19 @@
       
   
   
+    
   
   
+  
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
         
           
           <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
@@ -775,7 +715,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             API Reference
@@ -824,7 +764,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/emmopy/emmocheck/" class="md-nav__link">
+      <a href="../../emmopy/emmocheck/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -845,7 +785,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/emmopy/emmopy/" class="md-nav__link">
+      <a href="../../emmopy/emmopy/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -871,17 +811,19 @@
                 
   
   
+    
   
   
+  
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" checked>
         
           
           <label class="md-nav__link" for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
@@ -895,7 +837,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_8_2">
             <span class="md-nav__icon md-icon"></span>
             ontopy
@@ -909,7 +851,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/ontopy/colortest/" class="md-nav__link">
+      <a href="../colortest/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -930,7 +872,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/ontopy/excelparser/" class="md-nav__link">
+      <a href="../excelparser/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -951,7 +893,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/ontopy/graph/" class="md-nav__link">
+      <a href="../graph/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -972,7 +914,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/ontopy/manchester/" class="md-nav__link">
+      <a href="../manchester/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -993,7 +935,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/ontopy/nadict/" class="md-nav__link">
+      <a href="../nadict/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1014,7 +956,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/ontopy/ontodoc/" class="md-nav__link">
+      <a href="../ontodoc/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1035,7 +977,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/ontopy/ontology/" class="md-nav__link">
+      <a href="../ontology/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1056,7 +998,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/ontopy/patch/" class="md-nav__link">
+      <a href="../patch/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1074,10 +1016,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../api_reference/ontopy/testutils/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    testutils
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -1086,6 +1048,44 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.testutils" class="md-nav__link">
+    <span class="md-ellipsis">
+      ontopy.testutils
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.testutils.get_tool_module" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_tool_module()
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1098,7 +1098,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/ontopy/utils/" class="md-nav__link">
+      <a href="../utils/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1154,7 +1154,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/ontopy/factpluspluswrapper/factppgraph/" class="md-nav__link">
+      <a href="../factpluspluswrapper/factppgraph/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1175,7 +1175,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/ontopy/factpluspluswrapper/owlapi_interface/" class="md-nav__link">
+      <a href="../factpluspluswrapper/owlapi_interface/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1196,7 +1196,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api_reference/ontopy/factpluspluswrapper/sync_factpp/" class="md-nav__link">
+      <a href="../factpluspluswrapper/sync_factpp/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1260,18 +1260,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#installation-instructions" class="md-nav__link">
+  <a href="#ontopy.testutils" class="md-nav__link">
     <span class="md-ellipsis">
-      Installation instructions
+      ontopy.testutils
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#test-the-notebook" class="md-nav__link">
+  <a href="#ontopy.testutils.get_tool_module" class="md-nav__link">
     <span class="md-ellipsis">
-      Test the notebook
+      get_tool_module()
     </span>
   </a>
   
@@ -1292,28 +1292,78 @@
                   
 
 
-<h1 id="visualise-an-ontology-using-pyctoscape-in-jupyter-notebook">Visualise an ontology using pyctoscape in Jupyter Notebook<a class="headerlink" href="#visualise-an-ontology-using-pyctoscape-in-jupyter-notebook" title="Permanent link">&para;</a></h1>
-<h2 id="installation-instructions">Installation instructions<a class="headerlink" href="#installation-instructions" title="Permanent link">&para;</a></h2>
-<p>In a terminal, run:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/path/to/env/dirs
-python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>cytopy<span class="w">  </span><span class="c1"># cytopy is my name, you can choose what ouy want</span>
-<span class="nb">source</span><span class="w"> </span>cytopy/bin/activate
-<span class="nb">cd</span><span class="w"> </span>/dir/to/EMMOntoPy/
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-pip<span class="w"> </span>install<span class="w"> </span>jupyterlab
-python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>cytopy
-pip<span class="w"> </span>install<span class="w"> </span>ipywidgets
-pip<span class="w"> </span>install<span class="w"> </span>nodejs<span class="w"> </span><span class="c1"># Note requires that node.js and npm has already been isntalled!</span>
-pip<span class="w"> </span>install<span class="w"> </span>ipycytoscape<span class="w"> </span>pydotplus<span class="w"> </span>networkx
-pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>setuptools
-jupyter<span class="w"> </span>labextension<span class="w"> </span>install<span class="w"> </span>@jupyter-widgets/jupyterlab-manager
+<h1 id="testutils">testutils<a class="headerlink" href="#testutils" title="Permanent link">&para;</a></h1>
+
+
+  <div class="doc doc-object doc-module">
+
+<a id="ontopy.testutils"></a>
+    <div class="doc doc-contents first">
+
+      <p>Module primarly intended to be imported by tests.</p>
+<p>It defines some directories and some utility functions that can be used
+with and without conftest.</p>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.testutils.get_tool_module" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_tool_module</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.testutils.get_tool_module" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Imports and returns the module for the EMMOntoPy tool
+corresponding to <code>name</code>.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/testutils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_tool_module</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Imports and returns the module for the EMMOntoPy tool</span>
+<span class="sd">    corresponding to `name`.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">toolsdir</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">toolsdir</span><span class="p">))</span>
+
+    <span class="c1"># For Python 3.4+</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">spec_from_loader</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">SourceFileLoader</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">toolsdir</span> <span class="o">/</span> <span class="n">name</span><span class="p">)))</span>
+    <span class="n">module</span> <span class="o">=</span> <span class="n">module_from_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+    <span class="n">spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">module</span>
 </code></pre></div>
-<h2 id="test-the-notebook">Test the notebook<a class="headerlink" href="#test-the-notebook" title="Permanent link">&para;</a></h2>
-<p>In a terminal, run:</p>
-<div class="highlight"><pre><span></span><code>jupyter-lab
-</code></pre></div>
-<p>That should start jupyter kernel and open a new tab in your browser.
-In the side pane, select <code>team40.ipynb</code> and run the notebook.</p>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
 
 
 
@@ -1384,10 +1434,10 @@ In the side pane, select <code>team40.ipynb</code> and run the notebook.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
       
     
   </body>
