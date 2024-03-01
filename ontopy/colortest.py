@@ -5,6 +5,7 @@ Print tests in colors.
 Adapted from https://github.com/meshy/colour-runner by Charlie Denton
 License: MIT
 """
+
 # pylint: disable=invalid-name,missing-function-docstring,protected-access
 from unittest.result import TestResult
 from unittest.runner import TextTestRunner

@@ -986,9 +986,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 catalog_files = set()
                 irimap = {}
                 for onto, path in layout.items():
-                    irimap[
-                        onto.get_version(as_iri=True)
-                    ] = f"{dir}/{path}.{fmt}"
+                    irimap[onto.get_version(as_iri=True)] = (
+                        f"{dir}/{path}.{fmt}"
+                    )
                     catalog_files.add(Path(path).parent / catalog_file)
 
                 for catfile in catalog_files:
@@ -1121,8 +1121,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             generator.append(self.data_properties(imported))
         if annotation_properties:
             generator.append(self.annotation_properties(imported))
-        for entity in itertools.chain(*generator):
-            yield entity
+        yield from itertools.chain(*generator)
 
     def classes(self, imported=False):
         """Returns an generator over all classes.
@@ -1182,8 +1181,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             elif entity_type == "annotation_properties":
                 generator = super().annotation_properties()
 
-        for entity in generator:
-            yield entity
+        yield from generator
 
     def individuals(self, imported=False):
         """Returns an generator over all individuals.
@@ -2051,8 +2049,7 @@ def flatten(items):
     """Yield items from any nested iterable."""
     for item in items:
         if isinstance(item, Iterable) and not isinstance(item, (str, bytes)):
-            for sub_item in flatten(item):
-                yield sub_item
+            yield from flatten(item)
         else:
             yield item
 
@@ -2102,9 +2099,9 @@ def _get_unabbreviated_triples(
         yield (
             _unabbreviate(onto, s, blank=blank),
             _unabbreviate(onto, p, blank=blank),
-            f'"{o}"{d}'
-            if isinstance(d, str)
-            else f'"{o}"^^{_unabbreviate(onto, d)}'
-            if d
-            else o,
+            (
+                f'"{o}"{d}'
+                if isinstance(d, str)
+                else f'"{o}"^^{_unabbreviate(onto, d)}' if d else o
+            ),
         )
