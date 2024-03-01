@@ -3,6 +3,7 @@
 Automagically retrieve the EMMO utilizing
 [`ontopy.get_ontology`][ontopy.get_ontology].
 """
+
 from typing import Optional, TYPE_CHECKING
 
 from ontopy import get_ontology

@@ -1,6 +1,5 @@
 """Test the Ontology.difference() methode"""
 
-
 if True:
     from pathlib import Path
     from ontopy import get_ontology

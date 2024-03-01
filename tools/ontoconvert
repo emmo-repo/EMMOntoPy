@@ -88,13 +88,19 @@ def main(argv: list = None):
     )
     # To be implemented...
     parser.add_argument(
+        "--iri",
+        "-I",
+        help="IRI of converted ontology.",
+    )
+    parser.add_argument(
         "--base-iri",
         "-b",
         help=(
-            "Base iri of output ontology. The default is the base iri of "
+            "Base IRI of converted ontology. The default is the base iri of "
             "the input ontology."
-            "\n\nNOTE: Currently this option does nothing. Kept to not break "
-            "existing workflows using it."
+            "\n\nThis argument can be used to workaround the bug in Owlready2 "
+            "that changes the base IRI of the ontology to always end with a "
+            "slash."
         ),
     )
     parser.add_argument(
@@ -190,6 +196,12 @@ def main(argv: list = None):
             format=input_format,
             url_from_catalog=args.url_from_catalog,
         )
+
+        if args.iri:
+            onto.iri = args.iri
+
+        if args.base_iri:
+            onto.base_iri = args.base_iri
 
         if args.annotate_source:
             annotate_source(onto)

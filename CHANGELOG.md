@@ -1,5 +1,23 @@
 # Changelog
 
+## [v0.7.0.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.7.0.1) (2024-02-29)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.7.1...v0.7.0.1)
+
+## [v0.7.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.7.1) (2024-02-29)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.7.0...v0.7.1)
+
+**Closed issues:**
+
+- Implement ontoconvert --base-iri argument [\#716](https://github.com/emmo-repo/EMMOntoPy/issues/716)
+
+**Merged pull requests:**
+
+- Added `yield from` [\#720](https://github.com/emmo-repo/EMMOntoPy/pull/720) ([jesper-friis](https://github.com/jesper-friis))
+- Correct saving squashed ontology [\#719](https://github.com/emmo-repo/EMMOntoPy/pull/719) ([jesper-friis](https://github.com/jesper-friis))
+- Updated ontoconvert help [\#715](https://github.com/emmo-repo/EMMOntoPy/pull/715) ([jesper-friis](https://github.com/jesper-friis))
+
 ## [v0.7.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.7.0) (2024-01-26)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.6.3...v0.7.0)
