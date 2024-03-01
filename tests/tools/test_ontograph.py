@@ -1,5 +1,12 @@
 """Test the `ontograph` tool."""
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pathlib import Path
+    from types import ModuleType
+    from typing import Callable
+
 
 def test_run() -> None:
     """Check that running `ontograph` works."""

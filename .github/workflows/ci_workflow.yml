@@ -10,7 +10,7 @@ on:
 jobs:
   tests:
     name: External
-    uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.6.0
+    uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.7.1
     with:
       # General
       install_extras: "[dev,docs]"
@@ -74,7 +74,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -93,6 +93,8 @@ jobs:
     - name: Upload coverage to Codecov
       if: matrix.python-version == '3.9' && github.repository == 'emmo-repo/EMMOntoPy'
       uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
 
     # - name: Run vertical demo
     #   run: |
@@ -118,7 +120,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Set up Python 3.9
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: "3.9"
 

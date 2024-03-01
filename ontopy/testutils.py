@@ -3,6 +3,7 @@
 It defines some directories and some utility functions that can be used
 with and without conftest.
 """
+
 import sys
 from pathlib import Path
 from importlib.util import spec_from_loader, module_from_spec

@@ -1,5 +1,12 @@
 """Test the `ontoconvert` tool."""
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pathlib import Path
+    from types import ModuleType
+    from typing import Callable
+
 
 # if True:
 def test_run() -> None:

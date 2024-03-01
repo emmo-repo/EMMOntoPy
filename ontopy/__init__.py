@@ -1,4 +1,5 @@
 """# `ontopy` Module"""
+
 # pylint: disable=wrong-import-position,wrong-import-order
 import sys
 
