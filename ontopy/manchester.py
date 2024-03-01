@@ -6,6 +6,7 @@ syntax into Owlready2 classes. The main function in this module is
 
 Pyparsing is used under the hood for parsing.
 """
+
 # pylint: disable=unused-import,wrong-import-order
 import pyparsing as pp
 import ontopy  # noqa F401 -- ontopy must be imported before owlready2

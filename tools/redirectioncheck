@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+"""Script for testing URL redirections.
+
+The expected redirections are specified in a YAML file maping URLs to
+expected redirections:
+
+    ---
+    redirections:
+      https://example.com: |
+        https://example.com
+      http://emmo.info/emmo: |
+        https://raw.githubusercontent.com/emmo-repo/EMMO/master/emmo.ttl
+      https://w3id.org/emmo/: |
+        https://raw.githubusercontent.com/emmo-repo/EMMO/master/emmo.ttl
+
+"""
+import sys
+import argparse
+
+import yaml
+import requests
+
+
+def test_all(yamlfile, conf=None):
+    """Test all redirections specified in `yamlfile`.
+
+    Arguments:
+        yamlfile: File specifying redirections.
+        conf: Dict with additional testing configurations.
+
+    Returns:
+        ok: Whether the redirection was successful.
+    """
+    with open(yamlfile, "r") as f:
+        specifications = yaml.safe_load(f)
+
+    ok = True
+    for url, redirected_url in specifications["redirections"].items():
+        ok &= test_redirection(url, redirected_url, conf=conf)
+
+    return ok
+
+
+def test_redirection(url, redirected_url, conf=None):
+    """Test a redirection.
+
+    Arguments:
+        url: URL to test.
+        redirected_url: Expected redirection.
+        conf: Dict with additional testing configurations.
+
+    Returns:
+        ok: Whether the redirection was successful.
+    """
+    verbose = conf.get("verbose")
+    r = requests.get(url, timeout=5)
+    ok, reason, got = r.ok, r.reason, None
+
+    if r.ok and r.url != redirected_url:
+        ok, reason, got = False, "Invalid redirection", r.url
+
+    if verbose:
+        print(f"{url:64} {reason}")
+        if (got and verbose > 1) or verbose > 2:
+            print(f"  got:      {got}")
+            print(f"  expected: {redirected_url}")
+            print()
+
+    return ok
+
+
+def main(argv: list = None):
+    """Main function for running redirection tests."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "yamlfile",
+        nargs="?",
+        default="redirections.yaml",
+        help="Name of YAML file specifying redirections to test.",
+    )
+    parser.add_argument(
+        "--verbose",
+        "-v",
+        action="count",
+        default=1,
+        help="Increase verbosity level. Max verbosity is -vv",
+    )
+    parser.add_argument(
+        "--silent",
+        "--quiet",
+        "-q",
+        action="store_const",
+        const=0,
+        dest="verbose",
+        help="Whether to be silent..",
+    )
+    args = parser.parse_args(args=argv)
+    conf = {"verbose": args.verbose}
+
+    return test_all(args.yamlfile, conf=conf)
+
+
+if __name__ == "__main__":
+    success = main()
+    sys.exit(0 if success else 1)

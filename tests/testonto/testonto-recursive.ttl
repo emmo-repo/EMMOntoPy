@@ -1,0 +1,33 @@
+@prefix : <http://emmo.info/testonto-recursive#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@base <http://emmo.info/testonto-recursive> .
+
+<http://emmo.info/testonto-recursive> rdf:type owl:Ontology ;
+                             owl:versionIRI <http://emmo.info/testonto-recursive/0.1.0> ;
+                             owl:imports <http://emmo.info/testonto/0.1.0/models-recursive> ;
+			     owl:versionInfo "0.1.0" .
+
+
+:testclass rdf:type owl:Class ;
+    rdfs:subClassOf owl:Thing ;
+    skos:prefLabel "TestClass"@en .
+
+:testobjectproperty rdf:type owl:ObjectProperty ;
+    rdfs:domain :testclass ;
+    rdfs:range :testclass ;
+    skos:prefLabel "hasObjectProperty"@en .
+
+:testannotationproperty rdf:type owl:AnnotationProperty ;
+    rdfs:domain :testclass ;
+    rdfs:range rdfs:Literal ;
+    skos:prefLabel "hasAnnotationProperty"@en .
+
+:testdatatypeproperty rdf:type owl:DatatypeProperty ;
+    rdfs:domain :testclass ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "hasDataProperty"@en .
