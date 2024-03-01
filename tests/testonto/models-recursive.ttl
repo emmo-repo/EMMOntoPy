@@ -1,0 +1,23 @@
+@prefix : <http://emmo.info/models-recursive#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@base <http://emmo.info/models-recursive> .
+
+<http://emmo.info/models-recursive> rdf:type owl:Ontology ;
+    owl:imports <http://emmo.info/testonto-recursive/0.1.0> ;
+    owl:versionIRI <http://emmo.info/testonto/0.1.0/models-recursive> .
+
+
+# Annotations
+skos:prefLabel rdf:type owl:AnnotationProperty .
+skos:altLabel rdf:type owl:AnnotationProperty .
+
+
+:testclass rdf:type owl:Class ;
+    rdfs:subClassOf owl:Thing ;
+    skos:prefLabel "TestClass"@en ;
+    skos:altLabel 25517 . # Test that values given as integers are accepted by ontodoc

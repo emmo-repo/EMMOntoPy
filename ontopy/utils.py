@@ -786,12 +786,16 @@ def directory_layout(onto):
 
         where `ontoA`, `ontoB` and `ontoC` are imported Ontology objects.
     """
-    layout = {}
+    all_imported = [
+        imported.base_iri for imported in onto.indirectly_imported_ontologies()
+    ]
+    # get protocol and domain of all imported ontologies
+    namespace_roots = set()
+    for iri in all_imported:
+        protocol, domain, *_ = urllib.parse.urlsplit(iri)
+        namespace_roots.add("://".join([protocol, domain]))
 
     def recur(o):
-        for imported in o.imported_ontologies:
-            if imported not in layout:
-                recur(imported)
         baseiri = o.base_iri.rstrip("/#")
 
         # Some heuristics here to reproduce the EMMO layout.
@@ -809,12 +813,24 @@ def directory_layout(onto):
         layout[o] = (
             baseiri + "/" + os.path.basename(baseiri) if emmolayout else baseiri
         )
+        for imported in o.imported_ontologies:
+            if imported not in layout:
+                recur(imported)
 
+    layout = {}
     recur(onto)
-
     # Strip off initial common prefix from all paths
-    prefix = os.path.commonprefix(list(layout.values()))
-    for o, path in layout.items():
-        layout[o] = path[len(prefix) :].lstrip("/")
+    if len(namespace_roots) == 1:
+        prefix = os.path.commonprefix(list(layout.values()))
+        for o, path in layout.items():
+            layout[o] = path[len(prefix) :].lstrip("/")
+    else:
+        for o, path in layout.items():
+            for namespace_root in namespace_roots:
+                if path.startswith(namespace_root):
+                    layout[o] = (
+                        urllib.parse.urlsplit(namespace_root)[1]
+                        + path[len(namespace_root) :]
+                    )
 
     return layout
