@@ -60,7 +60,7 @@ def test_redirection(url, redirected_url, conf=None):
         ok, reason, got = False, "Invalid redirection", r.url
 
     if verbose:
-        print(f"{url:60} {reason}")
+        print(f"{url:64} {reason}")
         if (got and verbose > 1) or verbose > 2:
             print(f"  got:      {got}")
             print(f"  expected: {redirected_url}")
@@ -83,7 +83,7 @@ def main(argv: list = None):
         "-v",
         action="count",
         default=1,
-        help="Whether to print verbose output (default).",
+        help="Increase verbosity level. Max verbosity is -vv",
     )
     parser.add_argument(
         "--silent",

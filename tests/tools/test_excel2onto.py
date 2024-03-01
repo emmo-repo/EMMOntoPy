@@ -1,17 +1,11 @@
 """Test the `ontograph` tool."""
 
 from typing import TYPE_CHECKING
-
 import pytest
-
-if TYPE_CHECKING:
-    from pathlib import Path
-    from types import ModuleType
-    from typing import Callable
 
 
 @pytest.mark.filterwarnings("ignore::UserWarning")
-def test_run(get_tool: "Callable[[str], ModuleType]", tmpdir: "Path") -> None:
+def test_run() -> None:
     """Check that running `excel2onto` works.
 
     Parameters:
@@ -21,36 +15,33 @@ def test_run(get_tool: "Callable[[str], ModuleType]", tmpdir: "Path") -> None:
             exist only for the lifetime of this test function.
 
     """
-    from pathlib import Path
+    from ontopy.testutils import ontodir, outdir, testdir, get_tool_module
 
-    test_file = (
-        Path(__file__).resolve().parent.parent
-        / "test_excelparser"
-        / "onto.xlsx"
-    )
-    test_file2 = (
-        Path(__file__).resolve().parent.parent
-        / "test_excelparser"
-        / "onto_update.xlsx"
-    )
-    excel2onto = get_tool("excel2onto")
+    test_file = testdir / "test_excelparser" / "onto.xlsx"
+    test_file2 = testdir / "test_excelparser" / "onto_update.xlsx"
+    excel2onto = get_tool_module("excel2onto")
 
-    excel2onto.main(
-        [f"--output={str(tmpdir)}/onto.ttl", "--force", str(test_file)]
-    )
+    outfile = outdir / "onto.ttl"
+    if outfile.exists():  # consider to add an --overwrite option to excel2onto
+        outfile.unlink()
+    excel2onto.main([f"--output={outfile}", "--force", str(test_file)])
 
+    # Append to outfile
     excel2onto.main(
         [
-            f"--output={str(tmpdir)}/onto.ttl",
+            f"--output={outdir}/onto.ttl",
             "--force",
             "--input_ontology=newonto.ttl",
             str(test_file2),
         ]
     )
 
+    outfile = outdir / "ontology.ttl"
+    if outfile.exists():
+        outfile.unlink()
     excel2onto.main(
         [
-            f"--output={str(tmpdir)}/ontology.ttl",
+            f"--output={outfile}",
             "--force",
             "--update=False",
             str(test_file),
