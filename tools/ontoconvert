@@ -86,13 +86,21 @@ def main(argv: list = None):
         action="store_true",
         help="Do not infer imported ontologies.",
     )
+    # To be implemented...
+    parser.add_argument(
+        "--iri",
+        "-I",
+        help="IRI of converted ontology.",
+    )
     parser.add_argument(
         "--base-iri",
         "-b",
         help=(
-            "Base iri of inferred ontology. The default is the base iri of "
-            'the input ontology with "-inferred" appended to it. Used '
-            "together with --reasoner."
+            "Base IRI of converted ontology. The default is the base iri of "
+            "the input ontology."
+            "\n\nThis argument can be used to workaround the bug in Owlready2 "
+            "that changes the base IRI of the ontology to always end with a "
+            "slash."
         ),
     )
     parser.add_argument(
@@ -128,7 +136,7 @@ def main(argv: list = None):
         "-a",
         action="store_true",
         help=(
-            "Whether to annotate all entities with be base IRI of the source "
+            "Whether to annotate all entities with the base IRI of the source "
             "ontology using `dcterms:source` relations.  This is contextual "
             "information that is otherwise lost when ontologies are inferred "
             "and/or squashed."
@@ -189,6 +197,12 @@ def main(argv: list = None):
             url_from_catalog=args.url_from_catalog,
         )
 
+        if args.iri:
+            onto.iri = args.iri
+
+        if args.base_iri:
+            onto.base_iri = args.base_iri
+
         if args.annotate_source:
             annotate_source(onto)
 
@@ -203,6 +217,7 @@ def main(argv: list = None):
                 include_imported=include_imported,
                 debug=verbose,
             )
+
         onto.save(
             args.output,
             format=output_format,

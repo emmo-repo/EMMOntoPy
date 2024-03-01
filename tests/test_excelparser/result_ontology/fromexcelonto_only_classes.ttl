@@ -12,7 +12,7 @@
         "Jesper Friis"@en,
         "Sylvain Gouttebroze"@en ;
     dcterms:title "A test domain ontology"@en ;
-    owl:imports <http://emmo.info/emmo-inferred>,
+    owl:imports <http://emmo.info/emmo>,
         <http://ontology.info/ontology> ;
     owl:versionInfo "0.01"@en .
 
