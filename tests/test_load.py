@@ -43,7 +43,7 @@ def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
 
     with pytest.raises(
         EMMOntoPyException,
-        match="'URL error', <HTTPError 404: 'Not Found'>, 'http://emmo.info/non-existing/ontology'"
+        match="'URL error', <HTTPError 404: 'Not Found'>, 'http://emmo.info/non-existing/ontology'",
         # match="HTTP Error 404: https://emmo.info/non-existing/ontology: Not Found",
     ):
         get_ontology("http://emmo.info/non-existing/ontology#").load()

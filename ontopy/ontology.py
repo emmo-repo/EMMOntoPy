@@ -914,7 +914,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """
         # pylint: disable=redefined-builtin,too-many-arguments
         # pylint: disable=too-many-statements,too-many-branches
-        # pylint: disable=too-many-locals,arguments-renamed
+        # pylint: disable=too-many-locals,arguments-renamed,invalid-name
         if not _validate_installed_version(
             package="rdflib", min_version="6.0.0"
         ) and format == FMAP.get("ttl", ""):
@@ -986,9 +986,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 catalog_files = set()
                 irimap = {}
                 for onto, path in layout.items():
-                    irimap[
-                        onto.get_version(as_iri=True)
-                    ] = f"{dir}/{path}.{fmt}"
+                    irimap[onto.get_version(as_iri=True)] = (
+                        f"{dir}/{path}.{fmt}"
+                    )
                     catalog_files.add(Path(path).parent / catalog_file)
 
                 for catfile in catalog_files:
@@ -1000,21 +1000,42 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     )
         elif squash:
             URIRef, RDF, OWL = rdflib.URIRef, rdflib.RDF, rdflib.OWL
-            iri = self.iri if self.iri else self.base_iri
-            graph = self.world.as_rdflib_graph()
-            graph.namespace_manager.bind("", rdflib.Namespace(iri))
+
+            # Make a copy of the owlready2 graph object to not mess with
+            # owlready2 internals
+            graph = rdflib.Graph()
+            graph_owlready2 = self.world.as_rdflib_graph()
+            for triple in graph_owlready2.triples((None, None, None)):
+                graph.add(triple)
+
+            # Add namespaces
+            graph.namespace_manager.bind("", rdflib.Namespace(self.base_iri))
+            graph.namespace_manager.bind(
+                "swrl", rdflib.Namespace("http://www.w3.org/2003/11/swrl#")
+            )
 
             # Remove all ontology-declarations in the graph that are
             # not the current ontology.
-            for s, _, _ in graph.triples((None, RDF.type, OWL.Ontology)):
+            for s, _, _ in graph.triples(  # pylint: disable=not-an-iterable
+                (None, RDF.type, OWL.Ontology)
+            ):
                 if str(s).rstrip("/#") != self.base_iri.rstrip("/#"):
-                    for _, p, o in graph.triples((s, None, None)):
+                    for (
+                        _,
+                        p,
+                        o,
+                    ) in graph.triples(  # pylint: disable=not-an-iterable
+                        (s, None, None)
+                    ):
                         graph.remove((s, p, o))
                 graph.remove((s, OWL.imports, None))
 
+            # Insert correct IRI of the ontology
             if self.iri:
                 base_iri = URIRef(self.base_iri)
-                for s, p, o in graph.triples((base_iri, None, None)):
+                for s, p, o in graph.triples(  # pylint: disable=not-an-iterable
+                    (base_iri, None, None)
+                ):
                     graph.remove((s, p, o))
                     graph.add((URIRef(self.iri), p, o))
 
@@ -1121,8 +1142,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             generator.append(self.data_properties(imported))
         if annotation_properties:
             generator.append(self.annotation_properties(imported))
-        for entity in itertools.chain(*generator):
-            yield entity
+        yield from itertools.chain(*generator)
 
     def classes(self, imported=False):
         """Returns an generator over all classes.
@@ -1182,8 +1202,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             elif entity_type == "annotation_properties":
                 generator = super().annotation_properties()
 
-        for entity in generator:
-            yield entity
+        yield from generator
 
     def individuals(self, imported=False):
         """Returns an generator over all individuals.
@@ -2051,8 +2070,7 @@ def flatten(items):
     """Yield items from any nested iterable."""
     for item in items:
         if isinstance(item, Iterable) and not isinstance(item, (str, bytes)):
-            for sub_item in flatten(item):
-                yield sub_item
+            yield from flatten(item)
         else:
             yield item
 
@@ -2102,9 +2120,9 @@ def _get_unabbreviated_triples(
         yield (
             _unabbreviate(onto, s, blank=blank),
             _unabbreviate(onto, p, blank=blank),
-            f'"{o}"{d}'
-            if isinstance(d, str)
-            else f'"{o}"^^{_unabbreviate(onto, d)}'
-            if d
-            else o,
+            (
+                f'"{o}"{d}'
+                if isinstance(d, str)
+                else f'"{o}"^^{_unabbreviate(onto, d)}' if d else o
+            ),
         )
