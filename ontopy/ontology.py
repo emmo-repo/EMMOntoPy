@@ -35,6 +35,7 @@ from ontopy.utils import (
     write_catalog,
     infer_version,
     convert_imported,
+    directory_layout,
     FMAP,
     IncompatibleVersion,
     isinteractive,
@@ -117,7 +118,7 @@ class World(owlready2.World):
             )
         elif base_iri == "emmo-development":
             base_iri = (
-                "https://emmo-repo.github.io/versions/1.0.0-beta4/"
+                "https://emmo-repo.github.io/versions/1.0.0-beta5/"
                 "emmo-inferred.ttl"
             )
 
@@ -167,10 +168,21 @@ class World(owlready2.World):
 
 
 class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
-    """A generic class extending owlready2.Ontology."""
+    """A generic class extending owlready2.Ontology.
+
+    Additional attributes:
+        iri: IRI of this ontology.  Currently only used for serialisation
+            with rdflib. Defaults to None, meaning `base_iri` will be used
+            instead.
+        label_annotations: List of label annotations, i.e. annotations
+            that are recognised by the get_by_label() method. Defaults
+            to `[skos:prefLabel, rdf:label, skos:altLabel]`.
+        prefix: Prefix for this ontology. Defaults to None.
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.iri = None
         self.label_annotations = DEFAULT_LABEL_ANNOTATIONS[:]
         self.prefix = None
 
@@ -550,6 +562,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         self,
         iri_base: str = "http://emmo.info/emmo",
         prefix: str = "emmo",
+        visited: "Optional[Set]" = None,
     ) -> None:
         """Set a common prefix for all imported ontologies
         with the same first part of the base_iri.
@@ -558,11 +571,18 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             iri_base: The start of the base_iri to look for. Defaults to
                 the emmo base_iri http://emmo.info/emmo
             prefix: the desired prefix. Defaults to emmo.
+            visited: Ontologies to skip. Only intended for internal use.
         """
+        if visited is None:
+            visited = set()
         if self.base_iri.startswith(iri_base):
             self.prefix = prefix
         for onto in self.imported_ontologies:
-            onto.set_common_prefix(iri_base=iri_base, prefix=prefix)
+            if not onto in visited:
+                visited.add(onto)
+                onto.set_common_prefix(
+                    iri_base=iri_base, prefix=prefix, visited=visited
+                )
 
     def load(  # pylint: disable=too-many-arguments,arguments-renamed
         self,
@@ -851,7 +871,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         write_catalog_file=False,
         append_catalog=False,
         catalog_file="catalog-v001.xml",
-    ):
+    ) -> Path:
         """Writes the ontology to file.
 
         Parameters
@@ -871,10 +891,15 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         recursive: bool
             Whether to save imported ontologies recursively.  This is
             commonly combined with `filename=None`, `dir` and `mkdir`.
+            Note that depending on the structure of the ontology and
+            all imports the ontology might end up in a subdirectory.
+            If filename is given, the ontology is saved to the given
+            directory.
+            The path to the final location is returned.
         squash: bool
             If true, rdflib will be used to save the current ontology
             together with all its sub-ontologies into `filename`.
-            It make no sense to combine this with `recursive`.
+            It makes no sense to combine this with `recursive`.
         write_catalog_file: bool
             Whether to also write a catalog file to disk.
         append_catalog: bool
@@ -882,6 +907,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         catalog_file: str | Path
             Name of catalog file.  If not an absolute path, it is prepended
             to `dir`.
+
+        Returns
+        --------
+            The path to the saved ontology.
         """
         # pylint: disable=redefined-builtin,too-many-arguments
         # pylint: disable=too-many-statements,too-many-branches
@@ -902,74 +931,96 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     "'Known issues' section of the README."
                 )
             )
-
         revmap = {value: key for key, value in FMAP.items()}
         if filename is None:
             if format:
                 fmt = revmap.get(format, format)
-                filename = f"{self.name}.{fmt}"
+                file = f"{self.name}.{fmt}"
             else:
                 raise TypeError("`filename` and `format` cannot both be None.")
-        filename = os.path.join(dir, filename)
-        dir = Path(filename).resolve().parent
+        else:
+            file = filename
+        filepath = os.path.join(dir, file)
+        returnpath = filepath
+
+        dir = Path(filepath).resolve().parent
 
         if mkdir:
-            outdir = Path(filename).parent.resolve()
+            outdir = Path(filepath).parent.resolve()
             if not outdir.exists():
                 outdir.mkdir(parents=True)
 
         if not format:
-            format = guess_format(filename, fmap=FMAP)
+            format = guess_format(file, fmap=FMAP)
         fmt = revmap.get(format, format)
 
-        if overwrite and filename and os.path.exists(filename):
-            os.remove(filename)
-
-        EMMO = rdflib.Namespace(  # pylint:disable=invalid-name
-            "http://emmo.info/emmo#"
-        )
+        if overwrite and os.path.exists(filepath):
+            os.remove(filepath)
 
         if recursive:
             if squash:
                 raise ValueError(
                     "`recursive` and `squash` should not both be true"
                 )
-            base = self.base_iri.rstrip("#/")
-            for onto in self.imported_ontologies:
-                obase = onto.base_iri.rstrip("#/")
-                newdir = Path(dir) / os.path.relpath(obase, base)
+            layout = directory_layout(self)
+            if filename:
+                layout[self] = file.rstrip(f".{fmt}")
+            # Update path to where the ontology is saved
+            # Note that filename should include format
+            # when given
+            returnpath = Path(dir) / f"{layout[self]}.{fmt}"
+            for onto, path in layout.items():
+                fname = Path(dir) / f"{path}.{fmt}"
                 onto.save(
-                    filename=None,
+                    filename=fname,
                     format=format,
-                    dir=newdir.resolve(),
+                    dir=dir,
                     mkdir=mkdir,
                     overwrite=overwrite,
-                    recursive=recursive,
-                    squash=squash,
-                    write_catalog_file=write_catalog_file,
-                    append_catalog=append_catalog,
-                    catalog_file=catalog_file,
+                    recursive=False,
+                    squash=False,
+                    write_catalog_file=False,
                 )
 
-        if squash:
-            from rdflib import (  # pylint:disable=import-outside-toplevel
-                URIRef,
-                RDF,
-                OWL,
-            )
+            if write_catalog_file:
+                catalog_files = set()
+                irimap = {}
+                for onto, path in layout.items():
+                    irimap[
+                        onto.get_version(as_iri=True)
+                    ] = f"{dir}/{path}.{fmt}"
+                    catalog_files.add(Path(path).parent / catalog_file)
 
+                for catfile in catalog_files:
+                    write_catalog(
+                        irimap.copy(),
+                        output=catfile,
+                        directory=dir,
+                        append=append_catalog,
+                    )
+        elif squash:
+            URIRef, RDF, OWL = rdflib.URIRef, rdflib.RDF, rdflib.OWL
+            iri = self.iri if self.iri else self.base_iri
             graph = self.world.as_rdflib_graph()
-            graph.namespace_manager.bind("emmo", EMMO)
+            graph.namespace_manager.bind("", rdflib.Namespace(iri))
 
-            # Remove anonymous namespace and imports
-            graph.remove((URIRef("http://anonymous"), RDF.type, OWL.Ontology))
-            imports = list(graph.triples((None, OWL.imports, None)))
-            for triple in imports:
-                graph.remove(triple)
+            # Remove all ontology-declarations in the graph that are
+            # not the current ontology.
+            for s, _, _ in graph.triples((None, RDF.type, OWL.Ontology)):
+                if str(s).rstrip("/#") != self.base_iri.rstrip("/#"):
+                    for _, p, o in graph.triples((s, None, None)):
+                        graph.remove((s, p, o))
+                graph.remove((s, OWL.imports, None))
 
-            graph.serialize(destination=filename, format=format)
+            if self.iri:
+                base_iri = URIRef(self.base_iri)
+                for s, p, o in graph.triples((base_iri, None, None)):
+                    graph.remove((s, p, o))
+                    graph.add((URIRef(self.iri), p, o))
+
+            graph.serialize(destination=filepath, format=format)
         elif format in OWLREADY2_FORMATS:
-            super().save(file=filename, format=fmt)
+            super().save(file=filepath, format=fmt)
         else:
             # The try-finally clause is needed for cleanup and because
             # we have to provide delete=False to NamedTemporaryFile
@@ -980,34 +1031,49 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     suffix=".owl", delete=False
                 ) as handle:
                     tmpfile = handle.name
-                super().save(tmpfile, format="rdfxml")
+                super().save(tmpfile, format="ntriples")
                 graph = rdflib.Graph()
-                graph.parse(tmpfile, format="xml")
-                graph.serialize(destination=filename, format=format)
+                graph.parse(tmpfile, format="ntriples")
+                graph.namespace_manager.bind(
+                    "", rdflib.Namespace(self.base_iri)
+                )
+                if self.iri:
+                    base_iri = rdflib.URIRef(self.base_iri)
+                    for (
+                        s,
+                        p,
+                        o,
+                    ) in graph.triples(  # pylint: disable=not-an-iterable
+                        (base_iri, None, None)
+                    ):
+                        graph.remove((s, p, o))
+                        graph.add((rdflib.URIRef(self.iri), p, o))
+                graph.serialize(destination=filepath, format=format)
             finally:
                 os.remove(tmpfile)
 
-        if write_catalog_file:
-            mappings = {}
-            base = self.base_iri.rstrip("#/")
-
-            def append(onto):
-                obase = onto.base_iri.rstrip("#/")
-                newdir = Path(dir) / os.path.relpath(obase, base)
-                newpath = newdir.resolve() / f"{onto.name}.{fmt}"
-                relpath = os.path.relpath(newpath, dir)
-                mappings[onto.get_version(as_iri=True)] = str(relpath)
-                for imported in onto.imported_ontologies:
-                    append(imported)
-
-            if recursive:
-                append(self)
+        if write_catalog_file and not recursive:
             write_catalog(
-                mappings,
+                {self.get_version(as_iri=True): filepath},
                 output=catalog_file,
                 directory=dir,
                 append=append_catalog,
             )
+        return Path(returnpath)
+
+    def copy(self):
+        """Return a copy of the ontology."""
+        with tempfile.TemporaryDirectory() as dirname:
+            filename = self.save(
+                dir=dirname,
+                format="turtle",
+                recursive=True,
+                write_catalog_file=True,
+                mkdir=True,
+            )
+            ontology = get_ontology(filename).load()
+            ontology.name = self.name
+        return ontology
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
@@ -1555,7 +1621,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 "No versionIRI or versionInfo " f"in Ontology {self.base_iri!r}"
             )
         _, _, version_info = tokens[0]
-        return version_info.strip('"').strip("'")
+        return version_info.split("^^")[0].strip('"')
 
     def set_version(self, version=None, version_iri=None):
         """Assign version to ontology by asigning owl:versionIRI.
@@ -1939,6 +2005,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """
         return self.new_entity(name, parent, "annotation_property")
 
+    def difference(self, other: owlready2.Ontology) -> set:
+        """Return a set of triples that are in this, but not in the
+        `other` ontology."""
+        # pylint: disable=invalid-name
+        s1 = set(self.get_unabbreviated_triples(blank="_:b"))
+        s2 = set(other.get_unabbreviated_triples(blank="_:b"))
+        return s1.difference(s2)
+
 
 class BlankNode:
     """Represents a blank node.
@@ -2006,7 +2080,7 @@ def _unabbreviate(
 
 
 def _get_unabbreviated_triples(
-    self, subject=None, predicate=None, obj=None, blank=None
+    onto, subject=None, predicate=None, obj=None, blank=None
 ):
     """Help function returning all matching triples unabbreviated.
 
@@ -2014,23 +2088,23 @@ def _get_unabbreviated_triples(
     """
     # pylint: disable=invalid-name
     abb = (
-        None if subject is None else self._abbreviate(subject),
-        None if predicate is None else self._abbreviate(predicate),
-        None if obj is None else self._abbreviate(obj),
+        None if subject is None else onto._abbreviate(subject),
+        None if predicate is None else onto._abbreviate(predicate),
+        None if obj is None else onto._abbreviate(obj),
     )
-    for s, p, o in self._get_obj_triples_spo_spo(*abb):
+    for s, p, o in onto._get_obj_triples_spo_spo(*abb):
         yield (
-            _unabbreviate(self, s, blank=blank),
-            _unabbreviate(self, p, blank=blank),
-            _unabbreviate(self, o, blank=blank),
+            _unabbreviate(onto, s, blank=blank),
+            _unabbreviate(onto, p, blank=blank),
+            _unabbreviate(onto, o, blank=blank),
         )
-    for s, p, o, d in self._get_data_triples_spod_spod(*abb, d=None):
+    for s, p, o, d in onto._get_data_triples_spod_spod(*abb, d=None):
         yield (
-            _unabbreviate(self, s, blank=blank),
-            _unabbreviate(self, p, blank=blank),
+            _unabbreviate(onto, s, blank=blank),
+            _unabbreviate(onto, p, blank=blank),
             f'"{o}"{d}'
             if isinstance(d, str)
-            else f'"{o}"^^{_unabbreviate(self, d)}'
+            else f'"{o}"^^{_unabbreviate(onto, d)}'
             if d
             else o,
         )
