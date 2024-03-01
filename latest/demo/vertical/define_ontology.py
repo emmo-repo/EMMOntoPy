@@ -127,6 +127,7 @@ with onto:
             \ c_1211  c_1222  c_1233  c_1223  c_1231  c_1212 /
 
         """
+
         is_a = [hasType.exactly(36, emmo.Real)]
 
     # class Spacegroup(emmo.DescriptiveProperty):
