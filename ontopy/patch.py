@@ -1,4 +1,5 @@
 """This module injects some additional methods into owlready2 classes."""
+
 # pylint: disable=protected-access
 import types
 
@@ -29,6 +30,7 @@ owlready2.set_render_func(render_func)
 # Extending ThingClass (classes)
 # ==============================
 
+# Save a copy of the unpatched ThingClass.__getattr__() method.
 save_getattr = ThingClass.__getattr__
 
 
@@ -133,7 +135,13 @@ def _getattr(self, name):
             entity = self.namespace.ontology.get_by_label(name)
             # add annotation property to world._props for faster access later
             self.namespace.world._props[name] = entity
-            return save_getattr(self, entity.name)
+
+            # Try first unpatched getattr method to avoid risking
+            # infinite recursion.
+            try:
+                return save_getattr(self, entity.name)
+            except AttributeError:
+                return getattr(self, entity.name)
         raise err
 
 
@@ -186,15 +194,18 @@ def get_indirect_is_a(self, skip_classes=True):
     """
     subclass_relations = set()
     for entity in reversed(self.mro()):
-        if hasattr(entity, "is_a"):
-            if skip_classes:
-                subclass_relations.update(
-                    _
-                    for _ in entity.is_a
-                    if not isinstance(_, owlready2.ThingClass)
-                )
-            else:
-                subclass_relations.update(entity.is_a)
+        for attr in "is_a", "equivalent_to":
+            if hasattr(entity, attr):
+                lst = getattr(entity, attr)
+                if skip_classes:
+                    subclass_relations.update(
+                        r
+                        for r in lst
+                        if not isinstance(r, owlready2.ThingClass)
+                    )
+                else:
+                    subclass_relations.update(lst)
+
     subclass_relations.update(self.is_a)
     return subclass_relations
 

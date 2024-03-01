@@ -1,0 +1,5 @@
+---
+redirections:
+  https://example.com:                 https://example.com/
+  http://emmo.info/emmo:               https://raw.githubusercontent.com/emmo-repo/EMMO/master/emmo.ttl
+  https://w3id.org/emmo/1.0.0-beta5/:  https://raw.githubusercontent.com/emmo-repo/EMMO/1.0.0-beta5/emmo.ttl

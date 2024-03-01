@@ -1,4 +1,5 @@
 """# `ontopy.factpluspluswrapper.factppgraph`"""
+
 # pylint: disable=too-few-public-methods
 from rdflib import URIRef, OWL, RDF, RDFS
 

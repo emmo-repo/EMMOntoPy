@@ -1,6 +1,7 @@
 """
 python example for creating ontology from excel
 """
+
 from pathlib import Path
 
 from ontopy.excelparser import create_ontology_from_excel

@@ -9,6 +9,7 @@ subClassOf, Relations.
 
 Note that correct case is mandatory.
 """
+
 import os
 from typing import Tuple, Union
 import warnings

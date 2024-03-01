@@ -1,4 +1,5 @@
 """Periodic table example."""
+
 # pylint: disable=import-error,too-few-public-methods,invalid-name
 import os
 import types
