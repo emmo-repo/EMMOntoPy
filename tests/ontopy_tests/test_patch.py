@@ -1,6 +1,7 @@
 """Tests Owlready2 patches implemented in ontopy/patch.py
 
 """
+
 import re
 
 import pytest
