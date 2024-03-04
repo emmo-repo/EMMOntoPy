@@ -4,6 +4,7 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <http://emmo.info/emmo/domain/onto> a owl:Ontology ;
     dcterms:contributor "SINTEF"@en,
@@ -14,7 +15,8 @@
     dcterms:title "A test domain ontology"@en ;
     owl:imports <http://emmo.info/emmo>,
         <http://ontology.info/ontology> ;
-    owl:versionInfo "0.01"@en .
+    owl:versionIRI <http://emmo.info/emmo/domain/0.01/onto> ;
+    owl:versionInfo "0.01"^^xsd:string .
 
 :EMMO_0264be35-e8ad-5b35-a1a3-84b37bde22d1 a owl:Class ;
     emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "Temporal pattern occurring in a time interval"@en ;
