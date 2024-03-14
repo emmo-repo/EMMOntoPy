@@ -60,6 +60,26 @@ def main(argv: list = None):
         ),
     )
     parser.add_argument(
+        "--copy-annotation",
+        "-c",
+        action="append",
+        default=[],
+        metavar="FROM-->TO",
+        help=(
+            "Copy annotation FROM to annotation TO in each class and "
+            "property in the ontology.  May be provided multiple times."
+        ),
+    )
+    parser.add_argument(
+        "--copy-preflabel",
+        "-p",
+        action="store_true",
+        help=(
+            "Alias for: `--copy-annotation=http://www.w3.org/2004/02/skos/"
+            "core#prefLabel-->http://www.w3.org/2000/01/rdf-schema#label`"
+        ),
+    )
+    parser.add_argument(
         "--no-catalog",
         "-n",
         action="store_false",
@@ -72,7 +92,7 @@ def main(argv: list = None):
         "--infer",
         "-i",
         nargs="?",
-        const="FaCT++",
+        const="HermiT",
         choices=["HermiT", "Pellet", "FaCT++"],
         metavar="NAME",
         help=(
@@ -188,6 +208,14 @@ def main(argv: list = None):
     if not output_format:
         output_format = "xml"
 
+    if args.copy_annotation is None:
+        args.copy_annotation = []
+    if args.copy_preflabel:
+        args.copy_annotation.append(
+            "http://www.w3.org/2004/02/skos/core#prefLabel-->"
+            "http://www.w3.org/2000/01/rdf-schema#label"
+        )
+
     # Perform conversion
     with warnings.catch_warnings(record=True) as warnings_handle:
         warnings.simplefilter("always")
@@ -217,6 +245,11 @@ def main(argv: list = None):
                 include_imported=include_imported,
                 debug=verbose,
             )
+
+        for cpy in args.copy_annotation:
+            src, dst = cpy.split("-->", 1)
+            print(src)
+            print("  -->", dst)
 
         onto.save(
             args.output,
