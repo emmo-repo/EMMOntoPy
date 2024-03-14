@@ -39,3 +39,18 @@ def test_run() -> None:
     assert re.search("@prefix : <https://w3id.org/ex/testonto#>", output2)
     assert re.search("<https://w3id.org/ex/testonto> .* owl:Ontology", output2)
     assert re.search("testclass .* owl:Class", output2)
+
+    # Test 3 - copy-annotation
+    ontoconvert.main(
+        [
+            "-p",
+            "--iri=https://w3id.org/ex/testonto",
+            "--base-iri=https://w3id.org/ex/testonto#",
+            str(ontodir / "testonto.ttl"),
+            str(outdir / "test_ontoconvert3.ttl"),
+        ]
+    )
+    input3 = (ontodir / "testonto.ttl").read_text()
+    output3 = (outdir / "test_ontoconvert3.ttl").read_text()
+    assert not re.search('rdfs:label "hasAnnotationProperty"@en', input3)
+    assert re.search('rdfs:label "hasAnnotationProperty"@en', output3)

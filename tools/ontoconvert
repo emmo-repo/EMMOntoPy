@@ -7,7 +7,7 @@ import warnings
 from rdflib.util import guess_format
 
 from ontopy import get_ontology
-from ontopy.utils import annotate_source, rename_iris
+from ontopy.utils import annotate_source, rename_iris, copy_annotation
 
 
 def main(argv: list = None):
@@ -248,8 +248,7 @@ def main(argv: list = None):
 
         for cpy in args.copy_annotation:
             src, dst = cpy.split("-->", 1)
-            print(src)
-            print("  -->", dst)
+            copy_annotation(onto, src, dst)
 
         onto.save(
             args.output,
