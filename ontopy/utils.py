@@ -840,7 +840,11 @@ def directory_layout(onto):
 def copy_annotation(onto, src, dst):
     """In all classes and properties in `onto`, copy annotation `src` to `dst`.
 
-    The `src` and `dst` can either be provided as a label string or a full IRI.
+    Arguments:
+        onto: Ontology to work on.
+        src: Name of source annotation.
+        dst: Name or IRI of destination annotation.  Use IRI if the
+            destination annotation is not already in the ontology.
     """
     if onto.world[src]:
         src = onto.world[src]
