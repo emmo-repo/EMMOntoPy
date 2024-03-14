@@ -67,7 +67,10 @@ def main(argv: list = None):
         metavar="FROM-->TO",
         help=(
             "Copy annotation FROM to annotation TO in each class and "
-            "property in the ontology.  May be provided multiple times."
+            "property in the ontology.  FROM and TO may be given as "
+            "full IRIs or (if they already exists as annotations in the "
+            "ontology) as entity names.  "
+            "This option be given multiple times."
         ),
     )
     parser.add_argument(
