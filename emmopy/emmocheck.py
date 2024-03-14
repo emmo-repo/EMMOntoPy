@@ -73,17 +73,30 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         """
         exceptions = set(
             (
-                "terms.license",
-                "terms.abstract",
-                "terms.contributor",
-                "terms.creator",
-                "terms.publisher",
-                "terms.title",
-                "core.prefLabel",
+                "0.1.homepage",  # foaf:homepage
+                "0.1.logo",
+                "0.1.page",
+                "0.1.name",
+                "bibo:doi",
                 "core.altLabel",
                 "core.hiddenLabel",
-                "foaf.logo",
-                "0.1.logo",  # foaf.logo
+                "core.prefLabel",
+                "terms.abstract",
+                "terms.alternative",
+                "terms:bibliographicCitation",
+                "terms.contributor",
+                "terms.created",
+                "terms.creator",
+                "terms.hasFormat",
+                "terms.identifier",
+                "terms.issued",
+                "terms.license",
+                "terms.modified",
+                "terms.publisher",
+                "terms.source",
+                "terms.title",
+                "vann:preferredNamespacePrefix",
+                "vann:preferredNamespaceUri",
             )
         )
         exceptions.update(
