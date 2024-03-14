@@ -861,7 +861,7 @@ def copy_annotation(onto, src, dst):
                 "new destination annotation property must be provided as "
                 "a full IRI"
             )
-        name = min(dst.rsplit("#")[-1], dst.rsplit("/")[-1])
+        name = min(dst.rsplit("#")[-1], dst.rsplit("/")[-1], key=len)
         iri = dst
         dst = onto.new_annotation_property(name, owlready2.AnnotationProperty)
         dst.iri = iri

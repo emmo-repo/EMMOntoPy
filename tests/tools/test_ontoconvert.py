@@ -54,3 +54,18 @@ def test_run() -> None:
     output3 = (outdir / "test_ontoconvert3.ttl").read_text()
     assert not re.search('rdfs:label "hasAnnotationProperty"@en', input3)
     assert re.search('rdfs:label "hasAnnotationProperty"@en', output3)
+
+    # Test 4 - copy-annotation with source as annotation label
+    ontoconvert.main(
+        [
+            "-c prefLabel-->http://www.w3.org/2004/02/skos/core#hiddenLabel",
+            "--iri=https://w3id.org/ex/testonto",
+            "--base-iri=https://w3id.org/ex/testonto#",
+            str(ontodir / "testonto.ttl"),
+            str(outdir / "test_ontoconvert4.ttl"),
+        ]
+    )
+    input4 = (ontodir / "testonto.ttl").read_text()
+    output4 = (outdir / "test_ontoconvert4.ttl").read_text()
+    assert not re.search('skos:hiddenLabel "hasAnnotationProperty"@en', input4)
+    assert re.search('skos:hiddenLabel "hasAnnotationProperty"@en', output4)

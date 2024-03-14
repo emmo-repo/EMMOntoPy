@@ -248,7 +248,7 @@ def main(argv: list = None):
 
         for cpy in args.copy_annotation:
             src, dst = cpy.split("-->", 1)
-            copy_annotation(onto, src, dst)
+            copy_annotation(onto, src.strip(), dst.strip())
 
         onto.save(
             args.output,
