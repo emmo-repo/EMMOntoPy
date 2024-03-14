@@ -1,4 +1,6 @@
 """Test the `ontograph` tool."""
+
+from typing import TYPE_CHECKING
 import pytest
 
 

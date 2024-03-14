@@ -986,9 +986,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 catalog_files = set()
                 irimap = {}
                 for onto, path in layout.items():
-                    irimap[
-                        onto.get_version(as_iri=True)
-                    ] = f"{dir}/{path}.{fmt}"
+                    irimap[onto.get_version(as_iri=True)] = (
+                        f"{dir}/{path}.{fmt}"
+                    )
                     catalog_files.add(Path(path).parent / catalog_file)
 
                 for catfile in catalog_files:
@@ -2120,9 +2120,9 @@ def _get_unabbreviated_triples(
         yield (
             _unabbreviate(onto, s, blank=blank),
             _unabbreviate(onto, p, blank=blank),
-            f'"{o}"{d}'
-            if isinstance(d, str)
-            else f'"{o}"^^{_unabbreviate(onto, d)}'
-            if d
-            else o,
+            (
+                f'"{o}"{d}'
+                if isinstance(d, str)
+                else f'"{o}"^^{_unabbreviate(onto, d)}' if d else o
+            ),
         )

@@ -1,5 +1,11 @@
 """Test the `emmocheck` tool."""
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from types import ModuleType
+    from typing import Callable
+
 
 # if True:
 def test_run() -> None:
