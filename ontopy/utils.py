@@ -835,3 +835,38 @@ def directory_layout(onto):
                     )
 
     return layout
+
+
+def copy_annotation(onto, src, dst):
+    """In all classes and properties in `onto`, copy annotation `src` to `dst`.
+
+    Arguments:
+        onto: Ontology to work on.
+        src: Name of source annotation.
+        dst: Name or IRI of destination annotation.  Use IRI if the
+            destination annotation is not already in the ontology.
+    """
+    if onto.world[src]:
+        src = onto.world[src]
+    else:
+        src = onto[src]
+
+    if onto.world[dst]:
+        dst = onto.world[dst]
+    elif dst in onto:
+        dst = onto[dst]
+    else:
+        if "://" not in dst:
+            raise ValueError(
+                "new destination annotation property must be provided as "
+                "a full IRI"
+            )
+        name = min(dst.rsplit("#")[-1], dst.rsplit("/")[-1], key=len)
+        iri = dst
+        dst = onto.new_annotation_property(name, owlready2.AnnotationProperty)
+        dst.iri = iri
+
+    for e in onto.get_entities():
+        new = getattr(e, src.name).first()
+        if new and new not in getattr(e, dst.name):
+            getattr(e, dst.name).append(new)
