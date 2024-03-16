@@ -1221,6 +1221,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.utils.copy_annotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      copy_annotation()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.utils.directory_layout" class="md-nav__link">
     <span class="md-ellipsis">
       directory_layout()
@@ -1605,6 +1614,15 @@
   <a href="#ontopy.utils.convert_imported" class="md-nav__link">
     <span class="md-ellipsis">
       convert_imported()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.copy_annotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      copy_annotation()
     </span>
   </a>
   
@@ -2601,6 +2619,95 @@ local file names</p></td>
         <span class="p">)</span><span class="o">.</span><span class="n">with_traceback</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">__traceback__</span><span class="p">)</span>
     <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">output_ontology</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">output_format</span><span class="p">)</span>
     <span class="n">recur</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">outext</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.copy_annotation" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">copy_annotation</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.copy_annotation" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>In all classes and properties in <code>onto</code>, copy annotation <code>src</code> to <code>dst</code>.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>onto</code></td>
+        <td></td>
+        <td><p>Ontology to work on.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>src</code></td>
+        <td></td>
+        <td><p>Name of source annotation.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>dst</code></td>
+        <td></td>
+        <td><p>Name or IRI of destination annotation.  Use IRI if the
+destination annotation is not already in the ontology.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">copy_annotation</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;In all classes and properties in `onto`, copy annotation `src` to `dst`.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        onto: Ontology to work on.</span>
+<span class="sd">        src: Name of source annotation.</span>
+<span class="sd">        dst: Name or IRI of destination annotation.  Use IRI if the</span>
+<span class="sd">            destination annotation is not already in the ontology.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">src</span><span class="p">]:</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">src</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="n">onto</span><span class="p">[</span><span class="n">src</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">dst</span><span class="p">]:</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">dst</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">dst</span> <span class="ow">in</span> <span class="n">onto</span><span class="p">:</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">onto</span><span class="p">[</span><span class="n">dst</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;://&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dst</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;new destination annotation property must be provided as &quot;</span>
+                <span class="s2">&quot;a full IRI&quot;</span>
+            <span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dst</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span>
+        <span class="n">iri</span> <span class="o">=</span> <span class="n">dst</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">new_annotation_property</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">AnnotationProperty</span><span class="p">)</span>
+        <span class="n">dst</span><span class="o">.</span><span class="n">iri</span> <span class="o">=</span> <span class="n">iri</span>
+
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_entities</span><span class="p">():</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">new</span> <span class="ow">and</span> <span class="n">new</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">dst</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">dst</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
