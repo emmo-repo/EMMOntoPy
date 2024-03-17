@@ -1014,7 +1014,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 ("bibo", "http://purl.org/ontology/bibo/"),
             ]
             for prefix, iri in extra_namespaces:
-                graph.namespace_manager.bind(prefix, rdflib.Namespace(iri))
+                graph.namespace_manager.bind(
+                    prefix, rdflib.Namespace(iri), override=False
+                )
 
             # Remove all ontology-declarations in the graph that are
             # not the current ontology.
