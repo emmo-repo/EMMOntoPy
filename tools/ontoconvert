@@ -83,8 +83,9 @@ def main(argv: list = None):
             "Alias for: `--copy-annotation="
             "http://www.w3.org/2004/02/skos/core#prefLabel"
             "-->http://www.w3.org/2000/01/rdf-schema#label "
-            "--copy-annotation="
-            "https://w3id.org/emmo#EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9"
+            "--copy-annotation=elucidation"
+            "-->http://www.w3.org/2000/01/rdf-schema#comment`"
+            "--copy-annotation=definition"
             "-->http://www.w3.org/2000/01/rdf-schema#comment`"
         ),
     )
@@ -224,6 +225,7 @@ def main(argv: list = None):
                 "http://www.w3.org/2004/02/skos/core#prefLabel"
                 "-->http://www.w3.org/2000/01/rdf-schema#label",
                 "elucidation-->http://www.w3.org/2000/01/rdf-schema#comment",
+                "definition-->http://www.w3.org/2000/01/rdf-schema#comment",
             ]
         )
 

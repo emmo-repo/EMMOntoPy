@@ -36,7 +36,7 @@
     skos:prefLabel "hasDataProperty"@en .
 
 
-# Declare elucidation here since we are not importing EMMO
+# Declare emmo:elucidation and skos:prefLabel here since we are not importing these ontologies
 emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 a owl:AnnotationProperty ;
     skos:prefLabel "elucidation"@en ;
     rdfs:comment "Short enlightening explanation aimed to facilitate the user in drawing the connection (interpretation) between a OWL entity and the real world object(s) for which it stands."@en .
