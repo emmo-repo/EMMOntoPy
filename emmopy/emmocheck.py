@@ -76,8 +76,9 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                 "0.1.Person",  # foaf:Person
                 "0.1.homepage",
                 "0.1.logo",
-                "0.1.page",
+                "0.1.mbox",
                 "0.1.name",
+                "0.1.page",
                 "bibo:doi",
                 "core.altLabel",
                 "core.hiddenLabel",
