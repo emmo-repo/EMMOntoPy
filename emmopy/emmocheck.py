@@ -73,7 +73,8 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         """
         exceptions = set(
             (
-                "0.1.homepage",  # foaf:homepage
+                "0.1.Person",  # foaf:Person
+                "0.1.homepage",
                 "0.1.logo",
                 "0.1.page",
                 "0.1.name",
