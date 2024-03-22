@@ -74,12 +74,19 @@ def main(argv: list = None):
         ),
     )
     parser.add_argument(
-        "--copy-preflabel",
-        "-p",
+        "--copy-emmo-annotations",
+        "-e",
         action="store_true",
         help=(
-            "Alias for: `--copy-annotation=http://www.w3.org/2004/02/skos/"
-            "core#prefLabel-->http://www.w3.org/2000/01/rdf-schema#label`"
+            "Make a copy of EMMO annotations to plain RDFS for increased "
+            "interoperability. "
+            "Alias for: `--copy-annotation="
+            "http://www.w3.org/2004/02/skos/core#prefLabel"
+            "-->http://www.w3.org/2000/01/rdf-schema#label "
+            "--copy-annotation=elucidation"
+            "-->http://www.w3.org/2000/01/rdf-schema#comment`"
+            "--copy-annotation=definition"
+            "-->http://www.w3.org/2000/01/rdf-schema#comment`"
         ),
     )
     parser.add_argument(
@@ -211,12 +218,15 @@ def main(argv: list = None):
     if not output_format:
         output_format = "xml"
 
-    if args.copy_annotation is None:
-        args.copy_annotation = []
-    if args.copy_preflabel:
-        args.copy_annotation.append(
-            "http://www.w3.org/2004/02/skos/core#prefLabel-->"
-            "http://www.w3.org/2000/01/rdf-schema#label"
+    # Annotations to copy with --copy-emmo-annotations
+    if args.copy_emmo_annotations:
+        args.copy_annotation.extend(
+            [
+                "http://www.w3.org/2004/02/skos/core#prefLabel"
+                "-->http://www.w3.org/2000/01/rdf-schema#label",
+                "elucidation-->http://www.w3.org/2000/01/rdf-schema#comment",
+                "definition-->http://www.w3.org/2000/01/rdf-schema#comment",
+            ]
         )
 
     # Perform conversion
