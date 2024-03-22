@@ -1004,15 +1004,19 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             # Make a copy of the owlready2 graph object to not mess with
             # owlready2 internals
             graph = rdflib.Graph()
-            graph_owlready2 = self.world.as_rdflib_graph()
-            for triple in graph_owlready2.triples((None, None, None)):
+            for triple in self.world.as_rdflib_graph():
                 graph.add(triple)
 
-            # Add namespaces
-            graph.namespace_manager.bind("", rdflib.Namespace(self.base_iri))
-            graph.namespace_manager.bind(
-                "swrl", rdflib.Namespace("http://www.w3.org/2003/11/swrl#")
-            )
+            # Add common namespaces unknown to rdflib
+            extra_namespaces = [
+                ("", self.base_iri),
+                ("swrl", "http://www.w3.org/2003/11/swrl#"),
+                ("bibo", "http://purl.org/ontology/bibo/"),
+            ]
+            for prefix, iri in extra_namespaces:
+                graph.namespace_manager.bind(
+                    prefix, rdflib.Namespace(iri), override=False
+                )
 
             # Remove all ontology-declarations in the graph that are
             # not the current ontology.
