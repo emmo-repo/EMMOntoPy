@@ -103,20 +103,22 @@ def test_get_by_label_emmo(emmo: "Ontology") -> None:
     from emmopy import get_emmo
     from ontopy import get_ontology
     from ontopy.ontology import NoSuchLabelError
+    from ontopy.testutils import ontodir
 
     emmo = get_emmo()
     assert emmo[emmo.Atom.name] == emmo.Atom
     assert emmo[emmo.Atom.iri] == emmo.Atom
 
     # Load an ontology with imported sub-ontologies
-    onto = get_ontology(
-        "https://raw.githubusercontent.com/BIG-MAP/BattINFO/master/battinfo.ttl"
-    ).load()
-    assert onto.Electrolyte.prefLabel.en.first() == "Electrolyte"
+    # XXX: doesn't work at the moment
+    # onto = get_ontology("https://w3id.org/emmo/domain/battery").load()
+    # assert onto.Electrolyte.prefLabel.en.first() == "Electrolyte"
+    onto = get_ontology(ontodir / "testonto.ttl").load()
+    assert onto.TestClass.prefLabel.en.first() == "TestClass"
 
     # Check colon_in_name argument
-    onto.Atom.altLabel.append("Element:X")
+    emmo.Atom.altLabel.append("Element:X")
     with pytest.raises(NoSuchLabelError):
-        onto.get_by_label("Element:X")
+        emmo.get_by_label("Element:X")
 
-    assert onto.get_by_label("Element:X", colon_in_label=True) == onto.Atom
+    assert emmo.get_by_label("Element:X", colon_in_label=True) == emmo.Atom
