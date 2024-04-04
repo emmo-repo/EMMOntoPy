@@ -40,7 +40,6 @@ class OntoDoc:
             individuals) to document.
         imported: Whether to recursively include imported ontologies.
 
-
     """
 
     def __init__(

@@ -1,3 +1,6 @@
+"""Test ontodoc"""
+
+
 # if True:
 def test_ontodoc():
     """Test ontodoc."""
@@ -12,7 +15,7 @@ def test_ontodoc():
 
     # emmo = get_ontology("https://w3id.org/emmo/1.0.0-rc1").load()
     emmo = get_ontology("../EMMO/emmo.ttl").load()
-    emmo.sync_reasoner(include_imported=True)
+    # emmo.sync_reasoner(include_imported=True)
 
-    ontologies = emmo.get_imported_ontologies(True)
+    # ontologies = emmo.get_imported_ontologies(True)
     # owlready2.sync_reasoner(ontologies)
