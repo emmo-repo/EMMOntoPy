@@ -56,13 +56,38 @@ class OntoDoc:
             for entity in entities:
                 self.add_entity(entity)
 
-        self.entities = set()
+        self.classes = set()
+        self.object_properties = set()
+        self.data_properties = set()
+        self.annotation_properties = set()
+        self.datatypes = set()
+        self.individuals = set()
 
     def add_entity(self, entity: "Union[Cls, Property, Individual]") -> None:
         """Add `entity` (class, property, individual) to list of entities to
         document."""
-        self.entities.add(entity)
+        if isinstance(entity, owlready2.ThingClass):
+            self.classes.add(entity)
+        elif isinstance(entity, owlready2.ObjectPropertyClass):
+            self.object_properties.add(entity)
+        elif isinstance(entity, owlready2.DataPropertyClass):
+            self.object_properties.add(entity)
+        elif isinstance(entity, owlready2.AnnotationPropertyClass):
+            self.object_properties.add(entity)
+        elif isinstance(entity, owlready2.Thing):
+            if (
+                hasattr(entity.__class__, "iri")
+                and entity.__class__.iri
+                == "http://www.w3.org/2000/01/rdf-schema#Datatype"
+            ):
+                self.datatypes.add(entity)
+            else:
+                self.individuals.add(entity)
 
     def add_ontology(self, onto: "Ontology", imported: bool = False) -> None:
         """Add ontology `onto` to documentation."""
-        self.entities.update(onto.get_entities(imported=imported))
+        for entity in onto.get_entities(imported=imported):
+            self.add_entity(entity)
+
+    def write_header(self):
+        """ """

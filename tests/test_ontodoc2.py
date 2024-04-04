@@ -1,8 +1,7 @@
 """Test ontodoc"""
 
-
-# if True:
-def test_ontodoc():
+if True:
+    # def test_ontodoc():
     """Test ontodoc."""
     from pathlib import Path
 
