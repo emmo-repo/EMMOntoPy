@@ -101,8 +101,9 @@ def get_label(entity):
         try:
             label = entity[la]
             if label:
-                return lable
-        except (NoSuchLabelError, AttributeError):
+                print("*** LABEL:", repr(label))
+                return label
+        except (NoSuchLabelError, AttributeError, TypeError):
             continue
     if hasattr(entity, "prefLabel") and entity.prefLabel:
         return entity.prefLabel.first()

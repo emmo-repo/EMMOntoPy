@@ -6,13 +6,12 @@ if True:
     from pathlib import Path
 
     from ontopy import get_ontology
-    from ontopy.ontodoc2 import ModuleDocumentation
+    from ontopy.ontodoc2 import OntologyDocumentation
     import owlready2
 
     # emmo = get_ontology("https://w3id.org/emmo/1.0.0-rc1").load()
     emmo = get_ontology("../EMMO/emmo.ttl").load()
     # emmo.sync_reasoner(include_imported=True)
 
-    md = ModuleDocumentation(emmo)
-    print(md.get_header())
-    print(md.get_refdoc())
+    od = OntologyDocumentation(emmo)
+    print(od.get_refdoc())

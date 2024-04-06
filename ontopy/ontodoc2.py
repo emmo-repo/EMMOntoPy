@@ -3,15 +3,7 @@
 A module for documenting ontologies.
 """
 # pylint: disable=fixme,too-many-lines,no-member
-import os
-import re
-import time
-import warnings
-import shlex
-import shutil
-import subprocess  # nosec
-from textwrap import dedent
-from tempfile import NamedTemporaryFile, TemporaryDirectory
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import rdflib
@@ -58,8 +50,8 @@ class ModuleDocumentation:
         self.object_properties = set()
         self.data_properties = set()
         self.annotation_properties = set()
-        self.datatypes = set()
         self.individuals = set()
+        self.datatypes = set()
 
         if ontology:
             self.add_ontology(ontology)
@@ -67,6 +59,18 @@ class ModuleDocumentation:
         if entities:
             for entity in entities:
                 self.add_entity(entity)
+
+    def nonempty(self) -> bool:
+        """Returns whether the module has any classes, properties, individuals
+        or datatypes."""
+        return (
+            self.classes
+            or self.object_properties
+            or self.data_properties
+            or self.annotation_properties
+            or self.individuals
+            or self.datatypes
+        )
 
     def add_entity(self, entity: "Entity") -> None:
         """Add `entity` (class, property, individual, datatype) to list of
@@ -104,24 +108,32 @@ class ModuleDocumentation:
         elif self.ontology:
             iri = self.ontology.base_iri.rstrip("#/")
             title = self.graph.value(URIRef(iri), DCTERMS.title)
-        else:
-            title = ""
+        if not title:
+            title = self.ontology.name
 
+        heading = f"Module: {title}"
         return f"""
 
-{title}
-{'='*len(title)}
+{heading.title()}
+{'='*len(heading)}
 
 """
 
     def get_refdoc(
         self,
-        subsections="classes,object_properties,data_properties,annotation_properties,individuals,datatypes",
-    ):
+        subsections: str = "classes,object_properties,data_properties,annotation_properties,individuals,datatypes",
+        header: bool = True,
+    ) -> str:
         """Return reference documentation of all module entities.
 
-        `subsections` is a comma-separated list of subsections to
-        return documentation for.
+        Arguments:
+            subsections: Comma-separated list of subsections to include in
+                the returned documentation.
+            header: Whether to also include the header in the returned
+                documentation.
+
+        Returns:
+            String with reference documentation.
         """
         maps = {
             "classes": self.classes,
@@ -133,10 +145,14 @@ class ModuleDocumentation:
         }
         lines = []
 
+        if header:
+            lines.append(self.get_header())
+
         for subsection in subsections.split(","):
             if maps[subsection]:
                 lines.extend(
                     [
+                        "-" * len(subsection),
                         subsection.replace("_", " ").title(),
                         "-" * len(subsection),
                         "",
@@ -150,31 +166,28 @@ class ModuleDocumentation:
                         "",
                         f'   <div id="{entity.name}"></div>',
                         "",
-                        label,
+                        f"{label}",
                         "-" * len(label),
                         "",
                         f"* {entity.iri}",
                         "",
                         ".. raw:: html",
                         "",
-                        '  <table class="element-table">',
                     ]
                 )
-                for key, value in entity.get_annotations():
-                    lines.extend(
-                        [
-                            "  <tr>",
-                            f'  <td class="element-table-key"><span class="element-table-key">{key.title()}</span></td>',
-                            f'  <td class="element-table-value">{value}</td>',
-                            "  </tr>",
-                        ]
-                    )
-                lines.extend(
-                    [
-                        "  </table>",
-                        "",
-                    ]
-                )
+                if hasattr(entity, "get_annotations"):
+                    lines.append('  <table class="element-table">')
+                    for key, value in entity.get_annotations().items():
+                        lines.extend(
+                            [
+                                "  <tr>",
+                                f'  <td class="element-table-key"><span class="element-table-key">{key.title()}</span></td>',
+                                f'  <td class="element-table-value">{value}</td>',
+                                "  </tr>",
+                            ]
+                        )
+                    lines.extend(["  </table>", ""])
+
         return "\n".join(lines)
 
 
@@ -184,21 +197,81 @@ class OntologyDocumentation:
     Arguments:
         ontologies: Ontologies to include in the generated documentation.
             All entities in these ontologies will be included.
-        entities: Explicit listing of entities (classes, properties,
-            individuals) to document.
-        imported: Whether to recursively include imported ontologies.
-
+        imported: Whether to include imported ontologies.
+        recursive: Whether to recursively import all imported ontologies.
+            Implies `recursive=True`.
+        iri_match: A regular expression that the `base_iri` of imported
+            ontologies should match in order to be included.
     """
 
     def __init__(
         self,
-        ontologies: "Iterable[Ontology]" = (),
-        imported: bool = False,
+        ontologies: "Iterable[Ontology]",
+        imported: bool = True,
+        recursive: bool = False,
+        iri_match: "Optional[str]" = None,
     ) -> None:
-        if ontologies:
-            for onto in ontologies:
-                self.add_ontology(onto, imported=imported)
+        if isinstance(ontologies, (Ontology, str, Path)):
+            ontologies = [ontologies]
 
-        if entities:
-            for entity in entities:
-                self.add_entity(entity)
+        if recursive:
+            imported = True
+
+        self.module_documentations = []
+
+        # Explicitly included ontologies
+        included_ontologies = []
+        for onto in ontologies:
+            if isinstance(onto, (str, Path)):
+                onto = get_ontology(onto).load()
+            elif not isinstance(onto, Ontology):
+                raise TypeError(
+                    "expected ontology as an IRI, Path or Ontology object, "
+                    f"got: {onto}"
+                )
+            if onto not in included_ontologies:
+                included_ontologies.append(onto)
+
+        # Indirectly included ontologies (imported)
+        if imported:
+            for onto in included_ontologies:
+                ontos = onto.get_imported_ontologies(recursive=recursive)
+                if iri_match:
+                    ontos = [
+                        o for o in ontos if re.match(iri_match, o.base_iri)
+                    ]
+                for o in ontos:
+                    if o not in included_ontologies:
+                        included_ontologies.append(o)
+
+        # Module documentations
+        for onto in included_ontologies:
+            self.module_documentations.append(ModuleDocumentation(onto))
+
+    def get_header(self) -> str:
+        """Return a the reStructuredText header as a string."""
+        return f"""
+==========
+References
+==========
+"""
+
+    def get_refdoc(self, header: bool = True) -> str:
+        """Return reference documentation of all module entities.
+
+        Arguments:
+            header: Whether to also include the header in the returned
+                documentation.
+
+        Returns:
+            String with reference documentation.
+        """
+        moduledocs = []
+        if header:
+            moduledocs.append(self.get_header())
+        moduledocs.extend(
+            md.get_refdoc()
+            for md in self.module_documentations
+            if md.nonempty()
+        )
+        return "\n".join(moduledocs)
