@@ -96,13 +96,13 @@ def isinteractive():
 
 def get_label(entity):
     """Returns the label of an entity."""
+    # pylint: disable=too-many-return-statements
     onto = entity.namespace.ontology
     for la in onto.label_annotations:
         try:
             label = entity[la]
             if label:
-                print("*** LABEL:", repr(label))
-                return label
+                return label.first()
         except (NoSuchLabelError, AttributeError, TypeError):
             continue
     if hasattr(entity, "prefLabel") and entity.prefLabel:
@@ -127,7 +127,7 @@ def getiriname(iri):
     return res.fragment if res.fragment else res.path.rsplit("/", 1)[-1]
 
 
-def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
+def asstring(
     expr,
     link="{label}",
     recursion_depth=0,
@@ -154,6 +154,7 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
     Returns:
         String representation of `expr`.
     """
+    # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
     if ontology is None:
         ontology = expr.ontology
 

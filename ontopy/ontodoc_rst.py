@@ -3,25 +3,27 @@
 A module for documenting ontologies.
 """
 # pylint: disable=fixme,too-many-lines,no-member
+import re
+import warnings
+from html import escape
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import rdflib
 from rdflib import DCTERMS, URIRef
 
-from ontopy.ontology import Ontology
-from ontopy.utils import asstring, camelsplit, get_label, get_format
+from ontopy.ontology import Ontology, get_ontology
+from ontopy.utils import get_label
 
-import owlready2
+import owlready2  # pylint: disable=wrong-import-order
 
 if TYPE_CHECKING:
-    from pathlib import Path
-    from typing import Iterable, Optional, Union
+    from typing import Iterable, Optional, Type, Union
 
-    Cls: Type[owlready2.Thing]
-    Property: Type[owlready2.Property]
-    Individual: owlready2.Thing  # also datatype
-    Entity: Union[Cls, Property, Individual]
+    Cls = Type[owlready2.Thing]
+    Property = Type[owlready2.Property]
+    Individual = owlready2.Thing  # also datatype
+    Entity = Union[Cls, Property, Individual]
 
 
 class ModuleDocumentation:
@@ -33,16 +35,22 @@ class ModuleDocumentation:
         entities: Explicit listing of entities (classes, properties,
             individuals, datatypes) to document.  Normally not needed.
         title: Header title.  Be default it is inferred from title of
+        iri_regex: A regular expression that the IRI of documented entities
+            should match.
     """
+
+    # pylint: disable=too-many-instance-attributes
 
     def __init__(
         self,
         ontology: "Optional[Ontology]" = None,
         entities: "Optional[Iterable[Entity]]" = None,
         title: "Optional[str]" = None,
+        iri_regex: "Optional[str]" = None,
     ) -> None:
         self.ontology = ontology
         self.title = title
+        self.iri_regex = iri_regex
         self.graph = (
             ontology.world.as_rdflib_graph() if ontology else rdflib.Graph()
         )
@@ -76,6 +84,9 @@ class ModuleDocumentation:
         """Add `entity` (class, property, individual, datatype) to list of
         entities to document.
         """
+        if self.iri_regex and not re.match(self.iri_regex, entity.iri):
+            return
+
         if isinstance(entity, owlready2.ThingClass):
             self.classes.add(entity)
         elif isinstance(entity, owlready2.ObjectPropertyClass):
@@ -121,20 +132,34 @@ class ModuleDocumentation:
 
     def get_refdoc(
         self,
-        subsections: str = "classes,object_properties,data_properties,annotation_properties,individuals,datatypes",
+        subsections: str = "all",
         header: bool = True,
     ) -> str:
         """Return reference documentation of all module entities.
 
         Arguments:
             subsections: Comma-separated list of subsections to include in
-                the returned documentation.
+                the returned documentation.  Valid subsection names are:
+                  - classes
+                  - object_properties
+                  - data_properties
+                  - annotation_properties
+                  - individuals
+                  - datatypes
+                If "all", all subsections will be documented.
             header: Whether to also include the header in the returned
                 documentation.
 
         Returns:
             String with reference documentation.
         """
+        # pylint: disable=too-many-nested-blocks
+        if subsections == "all":
+            subsections = (
+                "classes,object_properties,data_properties,"
+                "annotation_properties,individuals,datatypes"
+            )
+
         maps = {
             "classes": self.classes,
             "object_properties": self.object_properties,
@@ -148,6 +173,20 @@ class ModuleDocumentation:
         if header:
             lines.append(self.get_header())
 
+        def add_keyvalue(key, value):
+            """Help function for adding a key-value row to table."""
+            escaped = escape(str(value)).replace("\n", "<br>")
+            lines.extend(
+                [
+                    "  <tr>",
+                    '  <td class="element-table-key">'
+                    f'<span class="element-table-key">'
+                    f"{key.title()}</span></td>",
+                    f'  <td class="element-table-value">{escaped}</td>',
+                    "  </tr>",
+                ]
+            )
+
         for subsection in subsections.split(","):
             if maps[subsection]:
                 lines.extend(
@@ -158,8 +197,8 @@ class ModuleDocumentation:
                         "",
                     ]
                 )
-            for entity in sorted(maps[subsection], key=lambda e: get_label(e)):
-                label = str(get_label(entity))
+            for entity in sorted(maps[subsection], key=get_label):
+                label = get_label(entity)
                 lines.extend(
                     [
                         ".. raw:: html",
@@ -178,14 +217,11 @@ class ModuleDocumentation:
                 if hasattr(entity, "get_annotations"):
                     lines.append('  <table class="element-table">')
                     for key, value in entity.get_annotations().items():
-                        lines.extend(
-                            [
-                                "  <tr>",
-                                f'  <td class="element-table-key"><span class="element-table-key">{key.title()}</span></td>',
-                                f'  <td class="element-table-value">{value}</td>',
-                                "  </tr>",
-                            ]
-                        )
+                        if isinstance(value, list):
+                            for val in value:
+                                add_keyvalue(key, val)
+                        else:
+                            add_keyvalue(key, value)
                     lines.extend(["  </table>", ""])
 
         return "\n".join(lines)
@@ -200,8 +236,8 @@ class OntologyDocumentation:
         imported: Whether to include imported ontologies.
         recursive: Whether to recursively import all imported ontologies.
             Implies `recursive=True`.
-        iri_match: A regular expression that the `base_iri` of imported
-            ontologies should match in order to be included.
+        iri_regex: A regular expression that the IRI of documented entities
+            should match.
     """
 
     def __init__(
@@ -209,7 +245,7 @@ class OntologyDocumentation:
         ontologies: "Iterable[Ontology]",
         imported: bool = True,
         recursive: bool = False,
-        iri_match: "Optional[str]" = None,
+        iri_regex: "Optional[str]" = None,
     ) -> None:
         if isinstance(ontologies, (Ontology, str, Path)):
             ontologies = [ontologies]
@@ -217,6 +253,7 @@ class OntologyDocumentation:
         if recursive:
             imported = True
 
+        self.iri_regex = iri_regex
         self.module_documentations = []
 
         # Explicitly included ontologies
@@ -234,23 +271,20 @@ class OntologyDocumentation:
 
         # Indirectly included ontologies (imported)
         if imported:
-            for onto in included_ontologies:
-                ontos = onto.get_imported_ontologies(recursive=recursive)
-                if iri_match:
-                    ontos = [
-                        o for o in ontos if re.match(iri_match, o.base_iri)
-                    ]
-                for o in ontos:
+            for onto in included_ontologies[:]:
+                for o in onto.get_imported_ontologies(recursive=recursive):
                     if o not in included_ontologies:
                         included_ontologies.append(o)
 
         # Module documentations
         for onto in included_ontologies:
-            self.module_documentations.append(ModuleDocumentation(onto))
+            self.module_documentations.append(
+                ModuleDocumentation(onto, iri_regex=iri_regex)
+            )
 
     def get_header(self) -> str:
         """Return a the reStructuredText header as a string."""
-        return f"""
+        return """
 ==========
 References
 ==========
@@ -275,3 +309,45 @@ References
             if md.nonempty()
         )
         return "\n".join(moduledocs)
+
+    def top_ontology(self) -> Ontology:
+        """Return the top-level ontology."""
+        return self.module_documentations[0].ontology
+
+    def write_refdoc(self, docfile=None):
+        """Write reference documentation to disk.
+
+        Arguments:
+            docfile: Name of file to write to. Defaults to the name of
+                the top ontology with extension `.rst`.
+        """
+        if not docfile:
+            docfile = self.top_ontology().name + ".rst"
+        Path(docfile).write_text(self.get_refdoc(), encoding="utf8")
+
+    def write_index_template(
+        self, indexfile="index.rst", docfile=None, overwrite=False
+    ):
+        """Write a basic template index.rst file to disk.
+
+        Arguments:
+            indexfile: Name of index file to write.
+            docfile: Name of generated documentation file.  If not given,
+                the name of the top ontology will be used.
+            overwrite: Whether to overwrite an existing file.
+        """
+        docname = Path(docfile).stem if docfile else self.top_ontology().name
+        content = f"""
+.. toctree::
+   :includehidden:
+   :hidden:
+
+   Reference Index <{docname}>
+
+"""
+        outpath = Path(indexfile)
+        if not overwrite and outpath.exists():
+            warnings.warn(f"index.rst file already exists: {outpath}")
+            return
+
+        outpath.write_text(content, encoding="utf8")
