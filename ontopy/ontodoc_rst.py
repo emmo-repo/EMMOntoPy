@@ -423,11 +423,11 @@ References
         md = self.module_documentations[0]
 
         iri = md.ontology.base_iri.rstrip("#/")
-        authors = list(md.graph.objects(URIRef(iri), DCTERMS.creator))
+        authors = sorted(md.graph.objects(URIRef(iri), DCTERMS.creator))
         license = md.graph.value(URIRef(iri), DCTERMS.license, default=None)
         release = md.graph.value(URIRef(iri), OWL.versionInfo, default="1.0")
 
-        author = ", ".join(str(authors)) if authors else "<AUTHOR>"
+        author = ", ".join(a.value for a in authors) if authors else "<AUTHOR>"
         copyright = license if license else f"{time.strftime('%Y')}, {author}"
 
         content = f"""
