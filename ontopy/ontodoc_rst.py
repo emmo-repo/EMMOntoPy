@@ -14,7 +14,7 @@ import rdflib
 from rdflib import DCTERMS, OWL, URIRef
 
 from ontopy.ontology import Ontology, get_ontology
-from ontopy.utils import get_label
+from ontopy.utils import asstring, get_label
 
 import owlready2  # pylint: disable=wrong-import-order
 
@@ -134,6 +134,7 @@ class ModuleDocumentation:
         subsections: str = "all",
         header: bool = True,
     ) -> str:
+        # pylint: disable=too-many-branches
         """Return reference documentation of all module entities.
 
         Arguments:
@@ -172,16 +173,29 @@ class ModuleDocumentation:
         if header:
             lines.append(self.get_header())
 
+        def add_header(name):
+            clsname = f"element-table-{name.lower().replace(' ', '-')}"
+            lines.extend(
+                [
+                    "  <tr>",
+                    f'    <th class="{clsname}" rowspac="2">{name}</th>',
+                    "  </tr>",
+                ]
+            )
+
         def add_keyvalue(key, value):
             """Help function for adding a key-value row to table."""
             escaped = escape(str(value)).replace("\n", "<br>")
+            expanded = re.sub(
+                r"(https?://[^\s]+)", r'<a href="\1">\1</a>', escaped
+            )
             lines.extend(
                 [
                     "  <tr>",
                     '    <td class="element-table-key">'
                     f'<span class="element-table-key">'
                     f"{key.title()}</span></td>",
-                    f'    <td class="element-table-value">{escaped}</td>',
+                    f'    <td class="element-table-value">{expanded}</td>',
                     "  </tr>",
                 ]
             )
@@ -207,29 +221,32 @@ class ModuleDocumentation:
                         f"{label}",
                         "-" * len(label),
                         "",
-                        f"* {entity.iri}",
+                        ".. raw:: html",
                         "",
+                        '  <table class="element-table">',
                     ]
                 )
+                add_keyvalue("IRI", entity.iri)
                 if hasattr(entity, "get_annotations"):
-                    lines.extend(
-                        [
-                            ".. raw:: html",
-                            "",
-                            '  <table class="element-table">',
-                            "  <tr>",
-                            '    <th class="element-table-header" rowspac="2">'
-                            "Annotations</th>",
-                            "  </tr>",
-                        ]
-                    )
+                    add_header("Annotatins")
                     for key, value in entity.get_annotations().items():
                         if isinstance(value, list):
                             for val in value:
                                 add_keyvalue(key, val)
                         else:
                             add_keyvalue(key, value)
-                    lines.extend(["  </table>", ""])
+                if entity.is_a or entity.equivalent_to:
+                    add_header("Formal description")
+                    for r in entity.equivalent_to:
+                        add_keyvalue(
+                            "Equivalent To", asstring(r, ontology=self.ontology)
+                        )
+                    for r in entity.is_a:
+                        add_keyvalue(
+                            "Subclass Of", asstring(r, ontology=self.ontology)
+                        )
+
+                lines.extend(["  </table>", ""])
 
         return "\n".join(lines)
 
