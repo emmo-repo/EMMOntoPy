@@ -3,10 +3,10 @@ A module for documenting ontologies.
 """
 
 # pylint: disable=fixme,too-many-lines,no-member,too-many-instance-attributes
+import html
 import re
 import time
 import warnings
-from html import escape
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -183,19 +183,22 @@ class ModuleDocumentation:
                 ]
             )
 
-        def add_keyvalue(key, value):
+        def add_keyvalue(key, value, escape=True, htmllink=True):
             """Help function for adding a key-value row to table."""
-            escaped = escape(str(value)).replace("\n", "<br>")
-            expanded = re.sub(
-                r"(https?://[^\s]+)", r'<a href="\1">\1</a>', escaped
-            )
+            if escape:
+                value = html.escape(str(value))
+            if htmllink:
+                value = re.sub(
+                    r"(https?://[^\s]+)", r'<a href="\1">\1</a>', value
+                )
+            value = value.replace("\n", "<br>")
             lines.extend(
                 [
                     "  <tr>",
                     '    <td class="element-table-key">'
                     f'<span class="element-table-key">'
                     f"{key.title()}</span></td>",
-                    f'    <td class="element-table-value">{expanded}</td>',
+                    f'    <td class="element-table-value">{value}</td>',
                     "  </tr>",
                 ]
             )
@@ -238,12 +241,33 @@ class ModuleDocumentation:
                 if entity.is_a or entity.equivalent_to:
                     add_header("Formal description")
                     for r in entity.equivalent_to:
+
+                        # FIXME: Skip restrictions with value None to work
+                        # around bug in Owlready2 that doesn't handle custom
+                        # datatypes in restrictions correctly...
+                        if hasattr(r, "value") and r.value is None:
+                            continue
+
                         add_keyvalue(
-                            "Equivalent To", asstring(r, ontology=self.ontology)
+                            "Equivalent To",
+                            asstring(
+                                r,
+                                link='<a href="{iri}">{label}</a>',
+                                ontology=self.ontology,
+                            ),
+                            escape=False,
+                            htmllink=False,
                         )
                     for r in entity.is_a:
                         add_keyvalue(
-                            "Subclass Of", asstring(r, ontology=self.ontology)
+                            "Subclass Of",
+                            asstring(
+                                r,
+                                link='<a href="{iri}">{label}</a>',
+                                ontology=self.ontology,
+                            ),
+                            escape=False,
+                            htmllink=False,
                         )
 
                 lines.extend(["  </table>", ""])

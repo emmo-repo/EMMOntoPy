@@ -61,6 +61,7 @@ def test_ontodoc_rst() -> None:
         [
             "--imported",
             "--reasoner=HermiT",
+            "--iri-regex=^https://w3id.org/emmo/domain",
             str(test_file),
             str(outdir / "mammal.rst"),
         ]
