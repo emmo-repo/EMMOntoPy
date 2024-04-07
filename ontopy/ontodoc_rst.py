@@ -1,16 +1,17 @@
-# -*- coding: utf-8 -*-
 """
 A module for documenting ontologies.
 """
-# pylint: disable=fixme,too-many-lines,no-member
+
+# pylint: disable=fixme,too-many-lines,no-member,too-many-instance-attributes
 import re
+import time
 import warnings
 from html import escape
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import rdflib
-from rdflib import DCTERMS, URIRef
+from rdflib import DCTERMS, OWL, URIRef
 
 from ontopy.ontology import Ontology, get_ontology
 from ontopy.utils import get_label
@@ -38,8 +39,6 @@ class ModuleDocumentation:
         iri_regex: A regular expression that the IRI of documented entities
             should match.
     """
-
-    # pylint: disable=too-many-instance-attributes
 
     def __init__(
         self,
@@ -114,13 +113,13 @@ class ModuleDocumentation:
 
     def get_header(self) -> str:
         """Return a the reStructuredText header as a string."""
+        iri = self.ontology.base_iri.rstrip("#/")
         if self.title:
             title = self.title
         elif self.ontology:
-            iri = self.ontology.base_iri.rstrip("#/")
             title = self.graph.value(URIRef(iri), DCTERMS.title)
         if not title:
-            title = self.ontology.name
+            title = iri.rsplit("/", 1)[-1]
 
         heading = f"Module: {title}"
         return f"""
@@ -179,10 +178,10 @@ class ModuleDocumentation:
             lines.extend(
                 [
                     "  <tr>",
-                    '  <td class="element-table-key">'
+                    '    <td class="element-table-key">'
                     f'<span class="element-table-key">'
                     f"{key.title()}</span></td>",
-                    f'  <td class="element-table-value">{escaped}</td>',
+                    f'    <td class="element-table-value">{escaped}</td>',
                     "  </tr>",
                 ]
             )
@@ -210,12 +209,20 @@ class ModuleDocumentation:
                         "",
                         f"* {entity.iri}",
                         "",
-                        ".. raw:: html",
-                        "",
                     ]
                 )
                 if hasattr(entity, "get_annotations"):
-                    lines.append('  <table class="element-table">')
+                    lines.extend(
+                        [
+                            ".. raw:: html",
+                            "",
+                            '  <table class="element-table">',
+                            "  <tr>",
+                            '    <th class="element-table-header" rowspac="2">'
+                            "Annotations</th>",
+                            "  </tr>",
+                        ]
+                    )
                     for key, value in entity.get_annotations().items():
                         if isinstance(value, list):
                             for val in value:
@@ -290,12 +297,15 @@ References
 ==========
 """
 
-    def get_refdoc(self, header: bool = True) -> str:
+    def get_refdoc(self, header: bool = True, subsections: str = "all") -> str:
         """Return reference documentation of all module entities.
 
         Arguments:
             header: Whether to also include the header in the returned
                 documentation.
+            subsections: Comma-separated list of subsections to include in
+                the returned documentation. See ModuleDocumentation.get_refdoc()
+                for more info.
 
         Returns:
             String with reference documentation.
@@ -304,7 +314,7 @@ References
         if header:
             moduledocs.append(self.get_header())
         moduledocs.extend(
-            md.get_refdoc()
+            md.get_refdoc(subsections=subsections)
             for md in self.module_documentations
             if md.nonempty()
         )
@@ -314,16 +324,21 @@ References
         """Return the top-level ontology."""
         return self.module_documentations[0].ontology
 
-    def write_refdoc(self, docfile=None):
+    def write_refdoc(self, docfile=None, subsections="all"):
         """Write reference documentation to disk.
 
         Arguments:
             docfile: Name of file to write to. Defaults to the name of
                 the top ontology with extension `.rst`.
+            subsections: Comma-separated list of subsections to include in
+                the returned documentation. See ModuleDocumentation.get_refdoc()
+                for more info.
         """
         if not docfile:
             docfile = self.top_ontology().name + ".rst"
-        Path(docfile).write_text(self.get_refdoc(), encoding="utf8")
+        Path(docfile).write_text(
+            self.get_refdoc(subsections=subsections), encoding="utf8"
+        )
 
     def write_index_template(
         self, indexfile="index.rst", docfile=None, overwrite=False
@@ -351,3 +366,63 @@ References
             return
 
         outpath.write_text(content, encoding="utf8")
+
+    def write_conf_template(
+        self, conffile="conf.py", docfile=None, overwrite=False
+    ):
+        """Write basic template sphinx conf.py file to disk.
+
+        Arguments:
+            conffile: Name of configuration file to write.
+            docfile: Name of generated documentation file.  If not given,
+                the name of the top ontology will be used.
+            overwrite: Whether to overwrite an existing file.
+        """
+        # pylint: disable=redefined-builtin
+        md = self.module_documentations[0]
+
+        iri = md.ontology.base_iri.rstrip("#/")
+        authors = list(md.graph.objects(URIRef(iri), DCTERMS.creator))
+        license = md.graph.value(URIRef(iri), DCTERMS.license, default=None)
+        release = md.graph.value(URIRef(iri), OWL.versionInfo, default="1.0")
+
+        author = ", ".join(str(authors)) if authors else "<AUTHOR>"
+        copyright = license if license else f"{time.strftime('%Y')}, {author}"
+
+        content = f"""
+# Configuration file for the Sphinx documentation builder.
+#
+# For the full list of built-in configuration values, see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
+
+# -- Project information -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+
+project = '{md.ontology.name}'
+copyright = '{copyright}'
+author = '{author}'
+release = '{release}'
+
+# -- General configuration ---------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
+
+extensions = []
+
+templates_path = ['_templates']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+
+
+
+# -- Options for HTML output -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
+
+html_theme = 'alabaster'
+html_static_path = ['_static']
+"""
+        if not conffile:
+            conffile = Path(docfile).with_name("conf.py")
+        if overwrite and conffile.exists():
+            warnings.warn(f"conf.py file already exists: {conffile}")
+            return
+
+        conffile.write_text(content, encoding="utf8")

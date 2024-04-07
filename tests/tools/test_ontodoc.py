@@ -48,3 +48,20 @@ def test_run_w_punning() -> None:
     ontodoc.main(
         [str(test_file), "--format=simple-html", str(outdir / "test.html")]
     )
+
+
+def test_ontodoc_rst() -> None:
+    """Test reStructuredText output with ontodoc."""
+    from ontopy.testutils import ontodir, outdir, get_tool_module
+
+    test_file = ontodir / "mammal.ttl"
+    ontodoc = get_tool_module("ontodoc")
+
+    ontodoc.main(
+        [
+            "--imported",
+            "--reasoner=HermiT",
+            str(test_file),
+            str(outdir / "mammal.rst"),
+        ]
+    )

@@ -252,10 +252,14 @@ def main(argv: list = None):
         )
         docfile = Path(args.outfile)
         indexfile = docfile.with_name("index.rst")
+        conffile = docfile.with_name("conf.py")
         od.write_refdoc(docfile=docfile)
         if not indexfile.exists():
             print(f"Generating index template: {indexfile}")
             od.write_index_template(indexfile=indexfile, docfile=docfile)
+        if not conffile.exists():
+            print(f"Generating configuration template: {conffile}")
+            od.write_conf_template(conffile=conffile, docfile=docfile)
 
     else:
         # Instantiate old ontodoc instance
