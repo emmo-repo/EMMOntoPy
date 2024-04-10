@@ -109,8 +109,11 @@ def test_get_by_label_emmo(emmo: "Ontology") -> None:
     assert emmo[emmo.Atom.iri] == emmo.Atom
 
     # Load an ontology with imported sub-ontologies
+    # Note that this test also includes testing of loading
+    # ontology with catalog file directly from the web
+    # It is therefore not duplicated in test_load.
     onto = get_ontology(
-        "https://raw.githubusercontent.com/BIG-MAP/BattINFO/master/battinfo.ttl"
+        "https://raw.githubusercontent.com/emmo-repo/domain-battery/master/battery.ttl"
     ).load()
     assert onto.Electrolyte.prefLabel.en.first() == "Electrolyte"
 
