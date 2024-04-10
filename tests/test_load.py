@@ -35,11 +35,8 @@ def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
     assert str(testonto.TestClass.prefLabel.first()) == "TestClass"
 
     # Use catalog file when downloading from web
-    onto = get_ontology(
-        "https://raw.githubusercontent.com/BIG-MAP/BattINFO/master/"
-        "battinfo.ttl"
-    ).load()
-    assert str(onto.Electrolyte.prefLabel.first()) == "Electrolyte"
+    # This is tested in test_get_by_label in which some additional tests
+    # are performed on labels.
 
     with pytest.raises(
         EMMOntoPyException,
