@@ -238,7 +238,7 @@ class ModuleDocumentation:
                 )
                 add_keyvalue("IRI", entity.iri)
                 if hasattr(entity, "get_annotations"):
-                    add_header("Annotatins")
+                    add_header("Annotations")
                     for key, value in entity.get_annotations().items():
                         if isinstance(value, list):
                             for val in value:
