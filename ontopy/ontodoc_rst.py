@@ -111,8 +111,8 @@ class ModuleDocumentation:
         for entity in ontology.get_entities(imported=imported):
             self.add_entity(entity)
 
-    def get_header(self) -> str:
-        """Return a the reStructuredText header as a string."""
+    def get_title(self) -> str:
+        """Return a module title."""
         iri = self.ontology.base_iri.rstrip("#/")
         if self.title:
             title = self.title
@@ -120,8 +120,11 @@ class ModuleDocumentation:
             title = self.graph.value(URIRef(iri), DCTERMS.title)
         if not title:
             title = iri.rsplit("/", 1)[-1]
+        return title
 
-        heading = f"Module: {title}"
+    def get_header(self) -> str:
+        """Return a the reStructuredText header as a string."""
+        heading = f"Module: {self.get_title()}"
         return f"""
 
 {heading.title()}
@@ -134,7 +137,7 @@ class ModuleDocumentation:
         subsections: str = "all",
         header: bool = True,
     ) -> str:
-        # pylint: disable=too-many-branches
+        # pylint: disable=too-many-branches,too-many-locals
         """Return reference documentation of all module entities.
 
         Arguments:
@@ -178,7 +181,7 @@ class ModuleDocumentation:
             lines.extend(
                 [
                     "  <tr>",
-                    f'    <th class="{clsname}" rowspac="2">{name}</th>',
+                    f'    <th class="{clsname}" rowspan="2">{name}</th>',
                     "  </tr>",
                 ]
             )
@@ -205,9 +208,13 @@ class ModuleDocumentation:
 
         for subsection in subsections.split(","):
             if maps[subsection]:
+                moduletitle = self.get_title().lower().replace(" ", "-")
+                anchor = f"{moduletitle}-{subsection.replace('_', '-')}"
                 lines.extend(
                     [
-                        "-" * len(subsection),
+                        "",
+                        f".. _{anchor}:",
+                        "",
                         subsection.replace("_", " ").title(),
                         "-" * len(subsection),
                         "",
@@ -222,7 +229,7 @@ class ModuleDocumentation:
                         f'   <div id="{entity.name}"></div>',
                         "",
                         f"{label}",
-                        "-" * len(label),
+                        "^" * len(label),
                         "",
                         ".. raw:: html",
                         "",
@@ -305,7 +312,7 @@ class OntologyDocumentation:
         self.module_documentations = []
 
         # Explicitly included ontologies
-        included_ontologies = []
+        included_ontologies = {}
         for onto in ontologies:
             if isinstance(onto, (str, Path)):
                 onto = get_ontology(onto).load()
@@ -314,18 +321,18 @@ class OntologyDocumentation:
                     "expected ontology as an IRI, Path or Ontology object, "
                     f"got: {onto}"
                 )
-            if onto not in included_ontologies:
-                included_ontologies.append(onto)
+            if onto.base_iri not in included_ontologies:
+                included_ontologies[onto.base_iri] = onto
 
         # Indirectly included ontologies (imported)
         if imported:
-            for onto in included_ontologies[:]:
+            for onto in list(included_ontologies.values()):
                 for o in onto.get_imported_ontologies(recursive=recursive):
-                    if o not in included_ontologies:
-                        included_ontologies.append(o)
+                    if o.base_iri not in included_ontologies:
+                        included_ontologies[o.base_iri] = o
 
         # Module documentations
-        for onto in included_ontologies:
+        for onto in included_ontologies.values():
             self.module_documentations.append(
                 ModuleDocumentation(onto, iri_regex=iri_regex)
             )
