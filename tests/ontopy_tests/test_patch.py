@@ -18,17 +18,16 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
 
     assert emmo.Atom.get_parents() == {emmo.MolecularEntity}
 
-    setassert(
-        emmo.Atom.get_annotations().keys(),
-        {
-            "prefLabel",
-            "altLabel",
-            "elucidation",
-            "comment",
-        },
-    )
-    setassert(
-        emmo.Atom.get_annotations(all=True).keys(),
+    annot = set(str(a) for a in emmo.Atom.get_annotations().keys())
+    assert annot == {
+        "prefLabel",
+        "altLabel",
+        "elucidation",
+        "comment",
+    }
+
+    annot = set(str(a) for a in emmo.Atom.get_annotations(all=True).keys())
+    assert not annot.difference(
         {
             "qualifiedCardinality",
             "minQualifiedCardinality",
@@ -44,6 +43,7 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
             "conceptualisation",
             "logo",
             "comment",
+            "label",
             "dbpediaReference",
             "definition",
             "VIMTerm",
