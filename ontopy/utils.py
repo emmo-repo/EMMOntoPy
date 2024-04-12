@@ -96,6 +96,15 @@ def isinteractive():
 
 def get_label(entity):
     """Returns the label of an entity."""
+    onto = entity.namespace.ontology
+    for la in onto.label_annotations:
+        try:
+            label = entity[la]
+            if label:
+                print("*** LABEL:", repr(label))
+                return label
+        except (NoSuchLabelError, AttributeError, TypeError):
+            continue
     if hasattr(entity, "prefLabel") and entity.prefLabel:
         return entity.prefLabel.first()
     if hasattr(entity, "label") and entity.label:
