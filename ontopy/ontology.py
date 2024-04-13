@@ -943,7 +943,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         else:
             file = filename
         filepath = os.path.join(
-            dir, file if isinstance(file, str) else file.name
+            dir, file if isinstance(file, (str, Path)) else file.name
         )
         returnpath = filepath
 
