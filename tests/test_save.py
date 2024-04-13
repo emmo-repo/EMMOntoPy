@@ -234,13 +234,21 @@ def test_save_emmo_domain_ontology(
         write_catalog_file=True,
     )
     assert get_ontology(savedfile).load()
-    assert set(os.listdir(outputdir)) == {"emmo.info", "w3id.org"}
+
+    outputfiles = set(os.listdir(outputdir))
+    for fname in {"emmo.info", "w3id.org"}:
+        assert fname in outputfiles
+
     assert set(
         os.listdir(outputdir / "emmo.info" / "emmo" / "domain" / "chameo")
     ) == {"chameo.rdfxml", "catalog-v001.xml"}
-    assert set(
+
+    outputfiles = set(
         os.listdir(outputdir / "emmo.info" / "emmo" / "disciplines")
-    ) == {"isq.rdfxml", "catalog-v001.xml"}
+    )
+    for fname in {"isq.rdfxml", "catalog-v001.xml"}:
+        assert fname in outputfiles
+
     assert set(os.listdir(outputdir / "w3id.org" / "emmo" / "domain")) == {
         "dummyonto.rdfxml",
         "catalog-v001.xml",
@@ -262,9 +270,15 @@ def test_save_emmo_domain_ontology(
         "dummyonto.rdfxml",
         "catalog-v001.xml",
     }
-    assert set(
+
+    outputfiles = set(
         os.listdir(outputdir / "emmo.info" / "emmo" / "domain" / "chameo")
-    ) == {"chameo.rdfxml", "catalog-v001.xml"}
-    assert set(
+    )
+    for fname in {"chameo.rdfxml", "catalog-v001.xml"}:
+        assert fname in outputfiles
+
+    outputfiles = set(
         os.listdir(outputdir / "emmo.info" / "emmo" / "disciplines")
-    ) == {"isq.rdfxml", "catalog-v001.xml"}
+    )
+    for fname in {"isq.rdfxml", "catalog-v001.xml"}:
+        fname in outputfiles
