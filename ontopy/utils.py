@@ -883,10 +883,12 @@ def copy_annotation(onto, src, dst):
         dst: Name or IRI of destination annotation.  Use IRI if the
             destination annotation is not already in the ontology.
     """
-    if onto.world[src]:
-        src = onto.world[src]
+    if src in ("comment",):
+        aname = src
+    elif onto.world[src]:
+        aname = onto.world[src].name
     else:
-        src = onto[src]
+        aname = onto[src].name
 
     if onto.world[dst]:
         dst = onto.world[dst]
@@ -904,6 +906,6 @@ def copy_annotation(onto, src, dst):
         dst.iri = iri
 
     for e in onto.get_entities():
-        new = getattr(e, src.name).first()
+        new = getattr(e, aname).first()
         if new and new not in getattr(e, dst.name):
             getattr(e, dst.name).append(new)
