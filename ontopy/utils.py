@@ -107,7 +107,7 @@ def get_preferred_language(langstrings: list) -> str:
     change it with:
 
     >>> import ontopy.utils
-    >>> ontopy.utils.PREFERRED_LANGUAGE = "it"
+    >>> ontopy.utils.PREFERRED_LANGUAGE = "en"
 
     """
     for langstr in langstrings:
