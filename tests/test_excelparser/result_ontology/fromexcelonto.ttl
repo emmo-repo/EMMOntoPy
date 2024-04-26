@@ -72,7 +72,7 @@
 
 :EMMO_7c8ba943-15cf-5621-98a3-ed1e7e68fee8 a owl:Class ;
     emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 "A special boundary."@en ;
-    :EMMO_98871837-aa90-5eef-9a56-926ae8beebbb "\"A text about this type of boundary\""@en ;
+    :EMMO_98871837-aa90-5eef-9a56-926ae8beebbb "\"A text about this type of=boundary\""@en ;
     rdfs:subClassOf :EMMO_1b2bfe71-5da9-5c46-b137-be45c3e3f9c3 ;
     skos:prefLabel "SpecialBoundary"@en .
 
