@@ -181,7 +181,7 @@ class ModuleDocumentation:
             lines.extend(
                 [
                     "  <tr>",
-                    f'    <th class="{clsname}" rowspan="2">{name}</th>',
+                    f'    <th class="{clsname}" colspan="2">{name}</th>',
                     "  </tr>",
                 ]
             )
