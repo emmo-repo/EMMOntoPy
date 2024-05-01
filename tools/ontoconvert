@@ -9,6 +9,9 @@ from rdflib.util import guess_format
 from ontopy import get_ontology
 from ontopy.utils import annotate_source, rename_iris, copy_annotation
 
+import owlready2  # pylint: disable=wrong-import-order
+import owlready2.reasoning  # pylint: disable=wrong-import-order
+
 
 def main(argv: list = None):
     """Main run function.
@@ -118,7 +121,14 @@ def main(argv: list = None):
         action="store_true",
         help="Do not infer imported ontologies.",
     )
-    # To be implemented...
+    parser.add_argument(
+        "--java-executable",
+        help="Path to Java executable to use. Default is `java`.",
+    )
+    parser.add_argument(
+        "--java-memory",
+        help="Maximum memory allocated to Java in MB. Default is 2000.",
+    )
     parser.add_argument(
         "--iri",
         "-I",
@@ -219,6 +229,12 @@ def main(argv: list = None):
         output_format = guess_format(args.output)
     if not output_format:
         output_format = "xml"
+
+    # Settings for running Java
+    if args.java_executable:
+        owlready2.JAVA_EXE = args.java_executable
+    if args.java_memory:
+        owlready2.reasoning.JAVA_MEMORY = int(args.java_memory)
 
     # Annotations to copy with --copy-emmo-annotations
     if args.copy_emmo_annotations:
