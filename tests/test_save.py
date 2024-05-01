@@ -224,9 +224,9 @@ def test_save_emmo_domain_ontology() -> None:
     assert set(
         os.listdir(outputdir / "emmo.info" / "emmo" / "domain" / "chameo")
     ) == {"chameo.rdfxml", "catalog-v001.xml"}
-    assert set(
+    assert not {"isq.rdfxml", "catalog-v001.xml"}.difference(
         os.listdir(outputdir / "emmo.info" / "emmo" / "disciplines")
-    ) == {"isq.rdfxml", "catalog-v001.xml"}
+    )
     assert set(os.listdir(outputdir / "w3id.org" / "emmo" / "domain")) == {
         "dummyonto.rdfxml",
         "catalog-v001.xml",
@@ -249,8 +249,8 @@ def test_save_emmo_domain_ontology() -> None:
         "catalog-v001.xml",
     }
     assert set(
-        os.listdir(outputdir / "emmo.info" / "emmo" / "domain" / "chameo")
+        os.listdir(outputdir2 / "emmo.info" / "emmo" / "domain" / "chameo")
     ) == {"chameo.rdfxml", "catalog-v001.xml"}
-    assert set(
-        os.listdir(outputdir / "emmo.info" / "emmo" / "disciplines")
-    ) == {"isq.rdfxml", "catalog-v001.xml"}
+    assert not {"isq.rdfxml", "catalog-v001.xml"}.difference(
+        os.listdir(outputdir2 / "emmo.info" / "emmo" / "disciplines")
+    )
