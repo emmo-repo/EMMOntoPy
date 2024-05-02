@@ -87,8 +87,10 @@ def main(argv: list = None):
             "http://www.w3.org/2004/02/skos/core#prefLabel"
             "-->http://www.w3.org/2000/01/rdf-schema#label "
             "--copy-annotation=elucidation"
-            "-->http://www.w3.org/2000/01/rdf-schema#comment`"
+            "-->http://www.w3.org/2000/01/rdf-schema#comment` "
             "--copy-annotation=definition"
+            "-->http://www.w3.org/2000/01/rdf-schema#comment` "
+            "--copy-annotation=comment"
             "-->http://www.w3.org/2000/01/rdf-schema#comment`"
         ),
     )
@@ -110,7 +112,7 @@ def main(argv: list = None):
         metavar="NAME",
         help=(
             "Add additional relations inferred by the reasoner.  Supported "
-            'reasoners are "FaCT++" (default), "HermiT" and "Pellet".'
+            'reasoners are "HermiT" (default), "Pellet" and "FaCT++".'
         ),
     )
     parser.add_argument(
@@ -242,6 +244,7 @@ def main(argv: list = None):
                 "-->http://www.w3.org/2000/01/rdf-schema#label",
                 "elucidation-->http://www.w3.org/2000/01/rdf-schema#comment",
                 "definition-->http://www.w3.org/2000/01/rdf-schema#comment",
+                "comment-->http://www.w3.org/2000/01/rdf-schema#comment",
             ]
         )
 
