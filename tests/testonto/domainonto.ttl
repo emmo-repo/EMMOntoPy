@@ -43,6 +43,11 @@ emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9 a owl:AnnotationProperty ;
     skos:prefLabel "elucidation"@en ;
     rdfs:comment "Short enlightening explanation aimed to facilitate the user in drawing the connection (interpretation) between a OWL entity and the real world object(s) for which it stands."@en .
 
+emmo:EMMO_c7b62dd7_063a_4c2a_8504_42f7264ba83f a owl:AnnotationProperty ;
+    rdfs:subPropertyOf rdfs:comment ;
+    skos:prefLabel "comment"@en ;
+    rdfs:comment "A text that add some information about the entity."@en .
+
 :EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84 a owl:AnnotationProperty ;
     rdfs:subPropertyOf rdfs:comment ;
     skos:prefLabel "definition"@en ;
