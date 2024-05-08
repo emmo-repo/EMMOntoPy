@@ -1,5 +1,6 @@
 mike~=2.1
-mkdocs~=1.6
+mkdocs~=1.5; python_version<"3.8"
+mkdocs~=1.6; python_version>="3.8"
 mkdocs-awesome-pages-plugin~=2.9
 mkdocs-material~=9.5; python_version>="3.8"
 mkdocs-material~=9.2; python_version<"3.8"
