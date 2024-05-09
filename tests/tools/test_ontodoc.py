@@ -54,15 +54,17 @@ def test_ontodoc_rst() -> None:
     """Test reStructuredText output with ontodoc."""
     from ontopy.testutils import ontodir, outdir, get_tool_module
 
-    test_file = ontodir / "mammal.ttl"
     ontodoc = get_tool_module("ontodoc")
-
     ontodoc.main(
         [
             "--imported",
             "--reasoner=HermiT",
             "--iri-regex=^https://w3id.org/emmo/domain",
-            str(test_file),
+            str(ontodir / "mammal.ttl"),
             str(outdir / "mammal.rst"),
         ]
     )
+    rstfile = outdir / "mammal.rst"
+    assert rstfile.exists()
+    content = rstfile.read_text()
+    assert "latinName" in content
