@@ -97,10 +97,11 @@ def isinteractive():
     )
 
 
-def get_preferred_language(langstrings: list) -> str:
-    """Given a list of localised strings, return the one for the
-    preferred language.  If no one match the preferred language,
-    return the one with no language tag or fallback to the first
+def get_preferred_language(langstrings: list, lang=None) -> str:
+    """Given a list of localised strings, return the one in language
+    `lang`. If `lang` is not given, use
+    `ontopy.utils.PREFERRED_LANGUAGE`.  If no one match is found,
+    return the first one with no language tag or fallback to the first
     string.
 
     The preferred language is stored as a module variable. You can
@@ -110,13 +111,15 @@ def get_preferred_language(langstrings: list) -> str:
     >>> ontopy.utils.PREFERRED_LANGUAGE = "en"
 
     """
+    if lang is None:
+        lang = PREFERRED_LANGUAGE
     for langstr in langstrings:
-        if hasattr(langstr, "lang") and langstr.lang == PREFERRED_LANGUAGE:
-            return langstr
+        if hasattr(langstr, "lang") and langstr.lang == lang:
+            return str(langstr)
     for langstr in langstrings:
         if not hasattr(langstr, "lang"):
             return langstr
-    return langstr[0]
+    return str(langstrings[0])
 
 
 def get_label(entity):

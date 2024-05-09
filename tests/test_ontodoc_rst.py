@@ -12,7 +12,7 @@ def test_ontodoc():
     import owlready2
 
     # onto = get_ontology("https://w3id.org/emmo/1.0.0-rc1").load()
-    onto = get_ontology(ontodir / "animal.ttl").load()
+    onto = get_ontology(ontodir / "mammal.ttl").load()
     # onto.sync_reasoner(include_imported=True)
 
     od = OntologyDocumentation(
