@@ -37,3 +37,16 @@ def test_rename_iris(testonto: "Ontology"):
         "http://www.w3.org/2004/02/skos/core#exactMatch",
         "http://emmo.info/models#testclass",
     )
+
+
+def test_preferred_language():
+    from ontopy import get_ontology
+    from ontopy.testutils import ontodir
+    from ontopy.utils import get_preferred_language
+
+    onto = get_ontology(ontodir / "animal.ttl").load()
+    pl = onto.Vertebrate.prefLabel
+    assert get_preferred_language(pl) == "Vertebrate"
+    assert get_preferred_language(pl, "en") == "Vertebrate"
+    assert get_preferred_language(pl, "no") == "Virveldyr"
+    assert get_preferred_language(pl, "it") == "Vertebrate"

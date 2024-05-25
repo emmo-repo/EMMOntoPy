@@ -652,6 +652,8 @@ def _add_entities(
         owlready2.DataPropertyClass,
     ]:
         rowheader = "subPropertyOf"
+    else:
+        raise TypeError(f"Unexpected `entitytype`: {entitytype!r}")
 
     # Dictionary with lists of entities that raise errors
     entities_with_errors = {

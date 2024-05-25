@@ -23,4 +23,4 @@ from .ontology import World, get_ontology
 from owlready2 import onto_path
 
 
-__all__ = ("patch", "World", "get_ontology", "onto_path")
+__all__ = ("__version__", "World", "get_ontology", "onto_path")
