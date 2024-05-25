@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.22">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.24">
     
     
       
@@ -28,7 +28,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.732c4fb1.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6543a935.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
@@ -977,6 +977,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../ontodoc_rst/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ontodoc_rst
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../ontology/" class="md-nav__link">
         
   
@@ -1266,6 +1287,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.utils.get_preferred_language" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_preferred_language()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.utils.getiriname" class="md-nav__link">
     <span class="md-ellipsis">
       getiriname()
@@ -1351,10 +1381,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2_11" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2_12" >
         
           
-          <label class="md-nav__link" for="__nav_8_2_11" id="__nav_8_2_11_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_8_2_12" id="__nav_8_2_12_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1365,8 +1395,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_8_2_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8_2_11">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_8_2_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2_12">
             <span class="md-nav__icon md-icon"></span>
             factpluspluswrapper
           </label>
@@ -1665,6 +1695,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.utils.get_preferred_language" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_preferred_language()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.utils.getiriname" class="md-nav__link">
     <span class="md-ellipsis">
       getiriname()
@@ -1755,6 +1794,7 @@
 
 
   <div class="doc doc-children">
+
 
 
 
@@ -2211,7 +2251,7 @@ to represent.</p></td>
 </table>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">asstring</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-return-statements,too-many-branches,too-many-statements</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">asstring</span><span class="p">(</span>
     <span class="n">expr</span><span class="p">,</span>
     <span class="n">link</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{label}</span><span class="s2">&quot;</span><span class="p">,</span>
     <span class="n">recursion_depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -2238,6 +2278,7 @@ to represent.</p></td>
 <span class="sd">    Returns:</span>
 <span class="sd">        String representation of `expr`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># pylint: disable=too-many-return-statements,too-many-branches,too-many-statements</span>
     <span class="k">if</span> <span class="n">ontology</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">ontology</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">ontology</span>
 
@@ -2940,10 +2981,21 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the label of an entity.&quot;&quot;&quot;</span>
+    <span class="c1"># pylint: disable=too-many-return-statements</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;namespace&quot;</span><span class="p">):</span>
+        <span class="n">onto</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">ontology</span>
+        <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">label_annotations</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">la</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">label_annotations</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">label</span> <span class="o">=</span> <span class="n">entity</span><span class="p">[</span><span class="n">la</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">get_preferred_language</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+                <span class="k">except</span> <span class="p">(</span><span class="n">NoSuchLabelError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                    <span class="k">continue</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">get_preferred_language</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">entity</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">get_preferred_language</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">entity</span><span class="o">.</span><span class="vm">__name__</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">):</span>
@@ -2951,6 +3003,67 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">entity</span>
     <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.get_preferred_language" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_preferred_language</span><span class="p">(</span><span class="n">langstrings</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.get_preferred_language" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Given a list of localised strings, return the one in language
+<code>lang</code>. If <code>lang</code> is not given, use
+<code>ontopy.utils.PREFERRED_LANGUAGE</code>.  If no one match is found,
+return the first one with no language tag or fallback to the first
+string.</p>
+<p>The preferred language is stored as a module variable. You can
+change it with:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>import ontopy.utils
+ontopy.utils.PREFERRED_LANGUAGE = "en"</p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_preferred_language</span><span class="p">(</span><span class="n">langstrings</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a list of localised strings, return the one in language</span>
+<span class="sd">    `lang`. If `lang` is not given, use</span>
+<span class="sd">    `ontopy.utils.PREFERRED_LANGUAGE`.  If no one match is found,</span>
+<span class="sd">    return the first one with no language tag or fallback to the first</span>
+<span class="sd">    string.</span>
+
+<span class="sd">    The preferred language is stored as a module variable. You can</span>
+<span class="sd">    change it with:</span>
+
+<span class="sd">    &gt;&gt;&gt; import ontopy.utils</span>
+<span class="sd">    &gt;&gt;&gt; ontopy.utils.PREFERRED_LANGUAGE = &quot;en&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">lang</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">lang</span> <span class="o">=</span> <span class="n">PREFERRED_LANGUAGE</span>
+    <span class="k">for</span> <span class="n">langstr</span> <span class="ow">in</span> <span class="n">langstrings</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">langstr</span><span class="p">,</span> <span class="s2">&quot;lang&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">langstr</span><span class="o">.</span><span class="n">lang</span> <span class="o">==</span> <span class="n">lang</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">langstr</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">langstr</span> <span class="ow">in</span> <span class="n">langstrings</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">langstr</span><span class="p">,</span> <span class="s2">&quot;lang&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">langstr</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">langstrings</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </code></pre></div>
         </details>
     </div>
@@ -3543,7 +3656,7 @@ If false, an existing file will be overwritten.</p></td>
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.5cfa9459.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.081f42fc.min.js"></script>
       
     
   </body>
