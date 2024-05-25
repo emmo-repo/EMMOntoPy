@@ -224,13 +224,17 @@ def test_save_emmo_domain_ontology() -> None:
     assert set(
         os.listdir(outputdir / "emmo.info" / "emmo" / "domain" / "chameo")
     ) == {"chameo.rdfxml", "catalog-v001.xml"}
-    assert not {"isq.rdfxml", "catalog-v001.xml"}.difference(
-        os.listdir(outputdir / "emmo.info" / "emmo" / "disciplines")
-    )
+
     assert set(os.listdir(outputdir / "w3id.org" / "emmo" / "domain")) == {
         "dummyonto.rdfxml",
         "catalog-v001.xml",
     }
+
+    created_files = set(
+        os.listdir(outputdir / "emmo.info" / "emmo" / "disciplines")
+    )
+    for fname in ("isq.rdfxml", "catalog-v001.xml"):
+        assert fname in created_files
 
     # Test saving but giving filename. It should then be saved in the parent directory
     outputdir2 = outdir / "saved_emmo_domain_ontology2"
@@ -251,6 +255,9 @@ def test_save_emmo_domain_ontology() -> None:
     assert set(
         os.listdir(outputdir2 / "emmo.info" / "emmo" / "domain" / "chameo")
     ) == {"chameo.rdfxml", "catalog-v001.xml"}
-    assert not {"isq.rdfxml", "catalog-v001.xml"}.difference(
+
+    created_files2 = set(
         os.listdir(outputdir2 / "emmo.info" / "emmo" / "disciplines")
     )
+    for fname in ("isq.rdfxml", "catalog-v001.xml"):
+        assert fname in created_files
