@@ -643,6 +643,7 @@ def _add_entities(
         if not altlabel == "nan":
             labels.update(altlabel.split(";"))
     # Find column name depending on entitytype
+    rowheader = "entity_type_not_set"
     if entitytype is owlready2.ThingClass:
         rowheader = "subClassOf"
     # If entitytype is a subclass of owlready2.PropertyClass
