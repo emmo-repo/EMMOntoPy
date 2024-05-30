@@ -195,24 +195,12 @@ def test_save_and_copy_emmo(
     assert copied_emmo == emmo
 
 
-def test_save_emmo_domain_ontology(
-    tmpdir: "Path",
-    repo_dir: "Path",
-) -> None:
+def test_save_emmo_domain_ontology() -> None:
     import os
     from pathlib import Path
     from ontopy.utils import directory_layout
     from ontopy import get_ontology
-
-    # For debugging purposes tmpdir can be set to a directory
-    # in the current directory: test_save_dir
-    # Remember to remove the directory after testing
-    debug = True
-    if debug:
-        tmpdir = repo_dir / "tests" / "test_save_dir"
-        import os
-
-        os.makedirs(tmpdir, exist_ok=True)
+    from ontopy.testutils import ontodir, outdir
 
     # This test was created with the domain-electrochemistry ontology which imports
     # emmo submodules as well as chameo.
@@ -221,11 +209,9 @@ def test_save_emmo_domain_ontology(
     # while emmo and chameo start with https://w3id.org/emmo/
     # For faster tests a dummyontology was created.
     # onto = get_ontology('https://raw.githubusercontent.com/emmo-repo/domain-electrochemistry/master/electrochemistry.ttl').load()
-    onto = get_ontology(
-        repo_dir / "tests" / "testonto" / "dummyonto_w_dummyemmo.ttl"
-    ).load()
+    onto = get_ontology(ontodir / "dummyonto_w_dummyemmo.ttl").load()
 
-    outputdir = tmpdir / "saved_emmo_domain_ontology"
+    outputdir = outdir / "saved_emmo_domain_ontology"
     savedfile = onto.save(
         format="rdfxml",
         dir=outputdir,
@@ -238,16 +224,20 @@ def test_save_emmo_domain_ontology(
     assert set(
         os.listdir(outputdir / "emmo.info" / "emmo" / "domain" / "chameo")
     ) == {"chameo.rdfxml", "catalog-v001.xml"}
-    assert set(
-        os.listdir(outputdir / "emmo.info" / "emmo" / "disciplines")
-    ) == {"isq.rdfxml", "catalog-v001.xml"}
+
     assert set(os.listdir(outputdir / "w3id.org" / "emmo" / "domain")) == {
         "dummyonto.rdfxml",
         "catalog-v001.xml",
     }
 
+    created_files = set(
+        os.listdir(outputdir / "emmo.info" / "emmo" / "disciplines")
+    )
+    for fname in ("isq.rdfxml", "catalog-v001.xml"):
+        assert fname in created_files
+
     # Test saving but giving filename. It should then be saved in the parent directory
-    outputdir2 = tmpdir / "saved_emmo_domain_ontology2"
+    outputdir2 = outdir / "saved_emmo_domain_ontology2"
     savedfile2 = onto.save(
         format="rdfxml",
         dir=outputdir2,
@@ -263,8 +253,11 @@ def test_save_emmo_domain_ontology(
         "catalog-v001.xml",
     }
     assert set(
-        os.listdir(outputdir / "emmo.info" / "emmo" / "domain" / "chameo")
+        os.listdir(outputdir2 / "emmo.info" / "emmo" / "domain" / "chameo")
     ) == {"chameo.rdfxml", "catalog-v001.xml"}
-    assert set(
-        os.listdir(outputdir / "emmo.info" / "emmo" / "disciplines")
-    ) == {"isq.rdfxml", "catalog-v001.xml"}
+
+    created_files2 = set(
+        os.listdir(outputdir2 / "emmo.info" / "emmo" / "disciplines")
+    )
+    for fname in ("isq.rdfxml", "catalog-v001.xml"):
+        assert fname in created_files

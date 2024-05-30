@@ -651,6 +651,8 @@ def _add_entities(
         owlready2.DataPropertyClass,
     ]:
         rowheader = "subPropertyOf"
+    else:
+        raise TypeError(f"Unexpected `entitytype`: {entitytype!r}")
 
     # Dictionary with lists of entities that raise errors
     entities_with_errors = {
@@ -807,7 +809,7 @@ def _add_entities(
                     or row["Other annotations"] == "nan"
                 ):
                     for annotation in row["Other annotations"].split(";"):
-                        key, value = annotation.split("=")
+                        key, value = annotation.split("=", 1)
                         entity[key.strip(" ")] = english(value.strip(" "))
 
             remaining_rows.difference_update(added_rows)

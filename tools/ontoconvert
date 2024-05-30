@@ -7,7 +7,10 @@ import warnings
 from rdflib.util import guess_format
 
 from ontopy import get_ontology
-from ontopy.utils import annotate_source, rename_iris
+from ontopy.utils import annotate_source, rename_iris, copy_annotation
+
+import owlready2  # pylint: disable=wrong-import-order
+import owlready2.reasoning  # pylint: disable=wrong-import-order
 
 
 def main(argv: list = None):
@@ -60,6 +63,38 @@ def main(argv: list = None):
         ),
     )
     parser.add_argument(
+        "--copy-annotation",
+        "-c",
+        action="append",
+        default=[],
+        metavar="FROM-->TO",
+        help=(
+            "Copy annotation FROM to annotation TO in each class and "
+            "property in the ontology.  FROM and TO may be given as "
+            "full IRIs or (if they already exists as annotations in the "
+            "ontology) as entity names.  "
+            "This option be given multiple times."
+        ),
+    )
+    parser.add_argument(
+        "--copy-emmo-annotations",
+        "-e",
+        action="store_true",
+        help=(
+            "Make a copy of EMMO annotations to plain RDFS for increased "
+            "interoperability. "
+            "Alias for: `--copy-annotation="
+            "http://www.w3.org/2004/02/skos/core#prefLabel"
+            "-->http://www.w3.org/2000/01/rdf-schema#label "
+            "--copy-annotation=elucidation"
+            "-->http://www.w3.org/2000/01/rdf-schema#comment` "
+            "--copy-annotation=definition"
+            "-->http://www.w3.org/2000/01/rdf-schema#comment` "
+            "--copy-annotation=comment"
+            "-->http://www.w3.org/2000/01/rdf-schema#comment`"
+        ),
+    )
+    parser.add_argument(
         "--no-catalog",
         "-n",
         action="store_false",
@@ -72,12 +107,12 @@ def main(argv: list = None):
         "--infer",
         "-i",
         nargs="?",
-        const="FaCT++",
+        const="HermiT",
         choices=["HermiT", "Pellet", "FaCT++"],
         metavar="NAME",
         help=(
             "Add additional relations inferred by the reasoner.  Supported "
-            'reasoners are "FaCT++" (default), "HermiT" and "Pellet".'
+            'reasoners are "HermiT" (default), "Pellet" and "FaCT++".'
         ),
     )
     parser.add_argument(
@@ -86,7 +121,14 @@ def main(argv: list = None):
         action="store_true",
         help="Do not infer imported ontologies.",
     )
-    # To be implemented...
+    parser.add_argument(
+        "--java-executable",
+        help="Path to Java executable to use. Default is `java`.",
+    )
+    parser.add_argument(
+        "--java-memory",
+        help="Maximum memory allocated to Java in MB. Default is 2000.",
+    )
     parser.add_argument(
         "--iri",
         "-I",
@@ -188,6 +230,24 @@ def main(argv: list = None):
     if not output_format:
         output_format = "xml"
 
+    # Settings for running Java
+    if args.java_executable:
+        owlready2.JAVA_EXE = args.java_executable
+    if args.java_memory:
+        owlready2.reasoning.JAVA_MEMORY = int(args.java_memory)
+
+    # Annotations to copy with --copy-emmo-annotations
+    if args.copy_emmo_annotations:
+        args.copy_annotation.extend(
+            [
+                "http://www.w3.org/2004/02/skos/core#prefLabel"
+                "-->http://www.w3.org/2000/01/rdf-schema#label",
+                "elucidation-->http://www.w3.org/2000/01/rdf-schema#comment",
+                "definition-->http://www.w3.org/2000/01/rdf-schema#comment",
+                "comment-->http://www.w3.org/2000/01/rdf-schema#comment",
+            ]
+        )
+
     # Perform conversion
     with warnings.catch_warnings(record=True) as warnings_handle:
         warnings.simplefilter("always")
@@ -217,6 +277,10 @@ def main(argv: list = None):
                 include_imported=include_imported,
                 debug=verbose,
             )
+
+        for cpy in args.copy_annotation:
+            src, dst = cpy.split("-->", 1)
+            copy_annotation(onto, src.strip(), dst.strip())
 
         onto.save(
             args.output,

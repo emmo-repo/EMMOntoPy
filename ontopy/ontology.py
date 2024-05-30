@@ -872,6 +872,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         append_catalog=False,
         catalog_file="catalog-v001.xml",
         keep_python_names=False,
+        **kwargs,
     ) -> Path:
         """Writes the ontology to file.
 
@@ -916,6 +917,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         # pylint: disable=redefined-builtin,too-many-arguments
         # pylint: disable=too-many-statements,too-many-branches
         # pylint: disable=too-many-locals,arguments-renamed,invalid-name
+
         if not _validate_installed_version(
             package="rdflib", min_version="6.0.0"
         ) and format == FMAP.get("ttl", ""):
@@ -964,7 +966,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 raise TypeError("`filename` and `format` cannot both be None.")
         else:
             file = filename
-        filepath = os.path.join(dir, file)
+        filepath = os.path.join(
+            dir, file if isinstance(file, (str, Path)) else file.name
+        )
         returnpath = filepath
 
         dir = Path(filepath).resolve().parent
@@ -1005,6 +1009,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     squash=False,
                     write_catalog_file=False,
                     keep_python_names=keep_python_names,
+                    **kwargs,
                 )
 
             if write_catalog_file:
@@ -1029,15 +1034,19 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             # Make a copy of the owlready2 graph object to not mess with
             # owlready2 internals
             graph = rdflib.Graph()
-            graph_owlready2 = self.world.as_rdflib_graph()
-            for triple in graph_owlready2.triples((None, None, None)):
+            for triple in self.world.as_rdflib_graph():
                 graph.add(triple)
 
-            # Add namespaces
-            graph.namespace_manager.bind("", rdflib.Namespace(self.base_iri))
-            graph.namespace_manager.bind(
-                "swrl", rdflib.Namespace("http://www.w3.org/2003/11/swrl#")
-            )
+            # Add common namespaces unknown to rdflib
+            extra_namespaces = [
+                ("", self.base_iri),
+                ("swrl", "http://www.w3.org/2003/11/swrl#"),
+                ("bibo", "http://purl.org/ontology/bibo/"),
+            ]
+            for prefix, iri in extra_namespaces:
+                graph.namespace_manager.bind(
+                    prefix, rdflib.Namespace(iri), override=False
+                )
 
             # Remove all ontology-declarations in the graph that are
             # not the current ontology.
@@ -1066,7 +1075,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
             graph.serialize(destination=filepath, format=format)
         elif format in OWLREADY2_FORMATS:
-            super().save(file=filepath, format=fmt)
+            super().save(file=filepath, format=fmt, **kwargs)
         else:
             # The try-finally clause is needed for cleanup and because
             # we have to provide delete=False to NamedTemporaryFile
@@ -1077,7 +1086,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     suffix=".owl", delete=False
                 ) as handle:
                     tmpfile = handle.name
-                super().save(tmpfile, format="ntriples")
+                super().save(tmpfile, format="ntriples", **kwargs)
                 graph = rdflib.Graph()
                 graph.parse(tmpfile, format="ntriples")
                 graph.namespace_manager.bind(
@@ -1139,6 +1148,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         def rec_imported(onto):
             for ontology in onto.imported_ontologies:
+                # pylint: disable=possibly-used-before-assignment
                 if ontology not in imported:
                     imported.add(ontology)
                     rec_imported(ontology)
@@ -1361,12 +1371,46 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         Keyword arguments are passed to the underlying owlready2 function.
         """
+        # pylint: disable=too-many-branches
+
+        removed_equivalent = defaultdict(list)
+        removed_subclasses = defaultdict(list)
+
         if reasoner == "FaCT++":
             sync = sync_reasoner_factpp
         elif reasoner == "Pellet":
             sync = owlready2.sync_reasoner_pellet
         elif reasoner == "HermiT":
             sync = owlready2.sync_reasoner_hermit
+
+            # Remove custom data propertyes, otherwise HermiT will crash
+            datatype_iri = "http://www.w3.org/2000/01/rdf-schema#Datatype"
+
+            for cls in self.classes(imported=include_imported):
+                remove_eq = []
+                for i, r in enumerate(cls.equivalent_to):
+                    if isinstance(r, owlready2.Restriction):
+                        if (
+                            hasattr(r.value.__class__, "iri")
+                            and r.value.__class__.iri == datatype_iri
+                        ):
+                            remove_eq.append(i)
+                            removed_equivalent[cls].append(r)
+                for i in reversed(remove_eq):
+                    del cls.equivalent_to[i]
+
+                remove_subcls = []
+                for i, r in enumerate(cls.is_a):
+                    if isinstance(r, owlready2.Restriction):
+                        if (
+                            hasattr(r.value.__class__, "iri")
+                            and r.value.__class__.iri == datatype_iri
+                        ):
+                            remove_subcls.append(i)
+                            removed_subclasses[cls].append(r)
+                for i in reversed(remove_subcls):
+                    del cls.is_a[i]
+
         else:
             raise ValueError(
                 f"Unknown reasoner '{reasoner}'. Supported reasoners "
@@ -1382,6 +1426,12 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 sync(self.world, **kwargs)
             else:
                 sync(self, **kwargs)
+
+        # Restore removed custom data properties
+        for cls, eqs in removed_equivalent.items():
+            cls.extend(eqs)
+        for cls, subcls in removed_subclasses.items():
+            cls.extend(subcls)
 
     def sync_attributes(  # pylint: disable=too-many-branches
         self,
