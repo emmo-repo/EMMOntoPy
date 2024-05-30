@@ -157,10 +157,19 @@ def get_annotations(
     """
     onto = self.namespace.ontology
 
+    def extend(key, values):
+        """Extend annotations with a sequence of values."""
+        if key in annotations:
+            annotations[key].extend(values)
+        else:
+            annotations[key] = values
+
     annotations = {
-        str(get_preferred_label(_)): _._get_values_for_class(self)
-        for _ in onto.annotation_properties(imported=imported)
+        str(get_preferred_label(a)): a._get_values_for_class(self)
+        for a in onto.annotation_properties(imported=imported)
     }
+    extend("comment", self.comment)
+    extend("label", self.label)
     if all:
         return annotations
     return {key: value for key, value in annotations.items() if value}

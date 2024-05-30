@@ -1114,6 +1114,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         def rec_imported(onto, imported):
             for ontology in onto.imported_ontologies:
+                # pylint: disable=possibly-used-before-assignment
                 if ontology not in imported:
                     imported.add(ontology)
                     rec_imported(ontology, imported)

@@ -27,6 +27,9 @@ if TYPE_CHECKING:
     from typing import Optional, Union
 
 
+# Preferred language
+PREFERRED_LANGUAGE = "en"
+
 # Format mappings: file extension -> rdflib format name
 FMAP = {
     "": "turtle",
@@ -94,12 +97,48 @@ def isinteractive():
     )
 
 
+def get_preferred_language(langstrings: list, lang=None) -> str:
+    """Given a list of localised strings, return the one in language
+    `lang`. If `lang` is not given, use
+    `ontopy.utils.PREFERRED_LANGUAGE`.  If no one match is found,
+    return the first one with no language tag or fallback to the first
+    string.
+
+    The preferred language is stored as a module variable. You can
+    change it with:
+
+    >>> import ontopy.utils
+    >>> ontopy.utils.PREFERRED_LANGUAGE = "en"
+
+    """
+    if lang is None:
+        lang = PREFERRED_LANGUAGE
+    for langstr in langstrings:
+        if hasattr(langstr, "lang") and langstr.lang == lang:
+            return str(langstr)
+    for langstr in langstrings:
+        if not hasattr(langstr, "lang"):
+            return langstr
+    return str(langstrings[0])
+
+
 def get_label(entity):
     """Returns the label of an entity."""
+    # pylint: disable=too-many-return-statements
+    if hasattr(entity, "namespace"):
+        onto = entity.namespace.ontology
+        if onto.label_annotations:
+            for la in onto.label_annotations:
+                try:
+                    label = entity[la]
+                    if label:
+                        return get_preferred_language(label)
+                except (NoSuchLabelError, AttributeError, TypeError):
+                    continue
     if hasattr(entity, "prefLabel") and entity.prefLabel:
-        return entity.prefLabel.first()
+        return get_preferred_language(entity.prefLabel)
     if hasattr(entity, "label") and entity.label:
-        return entity.label.first()
+        return get_preferred_language(entity.label)
     if hasattr(entity, "__name__"):
         return entity.__name__
     if hasattr(entity, "name"):
@@ -118,7 +157,7 @@ def getiriname(iri):
     return res.fragment if res.fragment else res.path.rsplit("/", 1)[-1]
 
 
-def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
+def asstring(
     expr,
     link="{label}",
     recursion_depth=0,
@@ -145,6 +184,7 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
     Returns:
         String representation of `expr`.
     """
+    # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
     if ontology is None:
         ontology = expr.ontology
 
