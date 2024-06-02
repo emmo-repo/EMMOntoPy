@@ -888,8 +888,11 @@ def copy_annotation(onto, src, dst):
     """
     if onto.world[src]:
         src = onto.world[src]
-    else:
+    elif src in onto:
         src = onto[src]
+    else:
+        warnings.warn(f"skipping copy for missing source annotation: {src}")
+        return
 
     if onto.world[dst]:
         dst = onto.world[dst]
