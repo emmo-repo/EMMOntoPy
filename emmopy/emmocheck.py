@@ -232,7 +232,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                     + len(entity.definition)
                     + len(entity.conceptualisation)
                     >= 1,
-                    msg=f"no description of {label}",
+                    msg="missing description (elucidation, deinition and/or "
+                    f"conceptualidation): {label}",
                 )
                 self.assertTrue(
                     len(entity.elucidation) < 2,
