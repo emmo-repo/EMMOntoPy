@@ -206,17 +206,13 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 "conceptualisation)"
             )
         for entity in self.onto.classes(self.check_imported):
-            if (
-                # pylint: disable=too-many-boolean-expressions
-                repr(entity) in exceptions
-                or repr(entity).startswith("owl.")
-                or repr(entity).startswith("0.1.")
-                or repr(entity).startswith("bibo.")
-                or repr(entity).startswith("core.")
-                or repr(entity).startswith("terms.")
-                or repr(entity).startswith("vann.")
-            ):
+
+            # Skip concepts from exceptions and common w3c vocabularies
+            vocabs = "owl.", "0.1.", "bibo.", "core.", "terms.", "vann."
+            r = repr(entity)
+            if r in exceptions or any(r.startswith(v) for v in vocabs):
                 continue
+
             label = str(get_label(entity))
             with self.subTest(entity=entity, label=label):
                 self.assertTrue(
