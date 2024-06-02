@@ -244,6 +244,8 @@ def main(argv: list = None):
                 "-->http://www.w3.org/2000/01/rdf-schema#label",
                 "elucidation-->http://www.w3.org/2000/01/rdf-schema#comment",
                 "definition-->http://www.w3.org/2000/01/rdf-schema#comment",
+                "conceptualisation"
+                "-->http://www.w3.org/2000/01/rdf-schema#comment",
                 "comment-->http://www.w3.org/2000/01/rdf-schema#comment",
             ]
         )

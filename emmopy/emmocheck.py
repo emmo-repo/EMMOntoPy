@@ -185,6 +185,72 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 class TestFunctionalEMMOConventions(TestEMMOConventions):
     """Test functional EMMO conventions."""
 
+    def test_description(self):
+        """Check that all entities have a description.
+
+        A description is either an elucidation, a definition or a
+        conceptualisation.
+
+        Exceptions include entities from standard w3c vocabularies.".
+        """
+        exceptions = set()
+        exceptions.update(self.get_config("test_description.exceptions", ()))
+        props = self.onto.world._props  # pylint: disable=protected-access
+        if (
+            "EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" not in props
+            or "EMMO_31252f35_c767_4b97_a877_1235076c3e13" not in props
+            or "EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84" not in props
+        ):
+            self.fail(
+                "ontology has no description (elucidation, definition or "
+                "conceptualisation)"
+            )
+        for entity in self.onto.classes(self.check_imported):
+            if (
+                # pylint: disable=too-many-boolean-expressions
+                repr(entity) in exceptions
+                or repr(entity).startswith("owl.")
+                or repr(entity).startswith("0.1.")
+                or repr(entity).startswith("bibo.")
+                or repr(entity).startswith("core.")
+                or repr(entity).startswith("terms.")
+                or repr(entity).startswith("vann.")
+            ):
+                continue
+            label = str(get_label(entity))
+            with self.subTest(entity=entity, label=label):
+                self.assertTrue(
+                    hasattr(entity, "elucidation"),
+                    msg="no 'elucidation' in ontology",
+                )
+                self.assertTrue(
+                    hasattr(entity, "definition"),
+                    msg="no 'definition' in ontology",
+                )
+                self.assertTrue(
+                    hasattr(entity, "conceptualisation"),
+                    msg="no 'conceptualisation' in ontology",
+                )
+                self.assertTrue(
+                    len(entity.elucidation)
+                    + len(entity.definition)
+                    + len(entity.conceptualisation)
+                    >= 1,
+                    msg=f"no description of {label}",
+                )
+                self.assertTrue(
+                    len(entity.elucidation) < 2,
+                    msg=f"more than one elucidation for {label}",
+                )
+                self.assertTrue(
+                    len(entity.definition) < 2,
+                    msg=f"more than one definition for {label}",
+                )
+                self.assertTrue(
+                    len(entity.conceptualisation) < 2,
+                    msg=f"more than one conceptualisation for {label}",
+                )
+
     def test_unit_dimension(self):
         """Check that all measurement units have a physical dimension.
 
