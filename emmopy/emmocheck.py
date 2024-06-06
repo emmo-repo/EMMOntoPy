@@ -188,10 +188,11 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
     def test_description(self):
         """Check that all entities have a description.
 
-        A description is either an elucidation, a definition or a
-        conceptualisation.
+        A description is either an emmo:elucidation, an
+        emmo:definition or an emmo:conceptualisation.
 
-        Exceptions include entities from standard w3c vocabularies.".
+        Exceptions include entities from standard w3c vocabularies.
+
         """
         exceptions = set()
         exceptions.update(self.get_config("test_description.exceptions", ()))
@@ -202,8 +203,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             or "EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84" not in props
         ):
             self.fail(
-                "ontology has no description (elucidation, definition or "
-                "conceptualisation)"
+                "ontology has no description (emmo:elucidation, "
+                "emmo:definition or emmo:conceptualisation)"
             )
         for entity in self.onto.classes(self.check_imported):
 
@@ -217,35 +218,56 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             with self.subTest(entity=entity, label=label):
                 self.assertTrue(
                     hasattr(entity, "elucidation"),
-                    msg="no 'elucidation' in ontology",
+                    msg=f"{label} has no emmo:elucidation",
                 )
                 self.assertTrue(
                     hasattr(entity, "definition"),
-                    msg="no 'definition' in ontology",
+                    msg=f"{label} has no emmo:definition",
                 )
                 self.assertTrue(
                     hasattr(entity, "conceptualisation"),
-                    msg="no 'conceptualisation' in ontology",
+                    msg=f"{label} has no emmo:conceptualisation",
                 )
                 self.assertTrue(
                     len(entity.elucidation)
                     + len(entity.definition)
                     + len(entity.conceptualisation)
                     >= 1,
-                    msg="missing description (elucidation, deinition and/or "
-                    f"conceptualidation): {label}",
+                    msg="missing description (emmo:elucidation, "
+                    f"emmo:deinition and/or emmo:conceptualidation): {label}",
                 )
                 self.assertTrue(
-                    len(entity.elucidation) < 2,
-                    msg=f"more than one elucidation for {label}",
+                    len(
+                        [
+                            s
+                            for s in entity.elucidation
+                            if not hasattr(s, "lang") or s.lang == "en"
+                        ]
+                    )
+                    < 2,
+                    msg=f"more than one emmo:elucidation for {label}",
                 )
                 self.assertTrue(
-                    len(entity.definition) < 2,
-                    msg=f"more than one definition for {label}",
+                    len(
+                        [
+                            s
+                            for s in entity.definition
+                            if not hasattr(s, "lang") or s.lang == "en"
+                        ]
+                    )
+                    < 2,
+                    msg=f"more than one emmo:definition for {label}",
                 )
                 self.assertTrue(
-                    len(entity.conceptualisation) < 2,
-                    msg=f"more than one conceptualisation for {label}",
+                    len(
+                        [
+                            s
+                            for s in entity.conceptualisation
+                            if not hasattr(s, "lang") or s.lang == "en"
+                        ]
+                    )
+                    < 2,
+                    msg=f"more than one emmo:conceptualisation for {label}",
                 )
 
     def test_unit_dimension(self):
