@@ -2727,8 +2727,11 @@ destination annotation is not already in the ontology.</p></td>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">src</span><span class="p">]:</span>
         <span class="n">src</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">src</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">onto</span><span class="p">:</span>
         <span class="n">src</span> <span class="o">=</span> <span class="n">onto</span><span class="p">[</span><span class="n">src</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no such annotation: &#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s2">&#39; Skip copy annotation...&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
 
     <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">dst</span><span class="p">]:</span>
         <span class="n">dst</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">dst</span><span class="p">]</span>

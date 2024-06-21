@@ -855,6 +855,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_description" class="md-nav__link">
+    <span class="md-ellipsis">
+      test_description()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_dimensional_unit" class="md-nav__link">
     <span class="md-ellipsis">
       test_dimensional_unit()
@@ -1459,6 +1468,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_description" class="md-nav__link">
+    <span class="md-ellipsis">
+      test_description()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_dimensional_unit" class="md-nav__link">
     <span class="md-ellipsis">
       test_dimensional_unit()
@@ -1745,6 +1763,91 @@ TestFunctionalEMMOConventions        </code>
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">TestFunctionalEMMOConventions</span><span class="p">(</span><span class="n">TestEMMOConventions</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test functional EMMO conventions.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">test_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all entities have a description.</span>
+
+<span class="sd">        A description is either an emmo:elucidation, an</span>
+<span class="sd">        emmo:definition or an emmo:conceptualisation.</span>
+
+<span class="sd">        Exceptions include entities from standard w3c vocabularies.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_description.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="s2">&quot;EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
+            <span class="ow">or</span> <span class="s2">&quot;EMMO_31252f35_c767_4b97_a877_1235076c3e13&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
+            <span class="ow">or</span> <span class="s2">&quot;EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span>
+                <span class="s2">&quot;ontology has no description (emmo:elucidation, &quot;</span>
+                <span class="s2">&quot;emmo:definition or emmo:conceptualisation)&quot;</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+
+            <span class="c1"># Skip concepts from exceptions and common w3c vocabularies</span>
+            <span class="n">vocabs</span> <span class="o">=</span> <span class="s2">&quot;owl.&quot;</span><span class="p">,</span> <span class="s2">&quot;0.1.&quot;</span><span class="p">,</span> <span class="s2">&quot;bibo.&quot;</span><span class="p">,</span> <span class="s2">&quot;core.&quot;</span><span class="p">,</span> <span class="s2">&quot;terms.&quot;</span><span class="p">,</span> <span class="s2">&quot;vann.&quot;</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">exceptions</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vocabs</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="n">label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                    <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;elucidation&quot;</span><span class="p">),</span>
+                    <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> has no emmo:elucidation&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                    <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;definition&quot;</span><span class="p">),</span>
+                    <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> has no emmo:definition&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                    <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;conceptualisation&quot;</span><span class="p">),</span>
+                    <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> has no emmo:conceptualisation&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">elucidation</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">definition</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">conceptualisation</span><span class="p">)</span>
+                    <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;missing description (emmo:elucidation, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;emmo:deinition and/or emmo:conceptualidation): </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">s</span>
+                            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">elucidation</span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;lang&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">s</span><span class="o">.</span><span class="n">lang</span> <span class="o">==</span> <span class="s2">&quot;en&quot;</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="o">&lt;</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;more than one emmo:elucidation for </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">s</span>
+                            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">definition</span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;lang&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">s</span><span class="o">.</span><span class="n">lang</span> <span class="o">==</span> <span class="s2">&quot;en&quot;</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="o">&lt;</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;more than one emmo:definition for </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">s</span>
+                            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">conceptualisation</span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;lang&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">s</span><span class="o">.</span><span class="n">lang</span> <span class="o">==</span> <span class="s2">&quot;en&quot;</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="o">&lt;</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;more than one emmo:conceptualisation for </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">test_unit_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all measurement units have a physical dimension.</span>
@@ -2155,6 +2258,117 @@ TestFunctionalEMMOConventions        </code>
 
 
 
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="emmopy.emmocheck.TestFunctionalEMMOConventions.test_description" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">test_description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_description" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that all entities have a description.</p>
+<p>A description is either an emmo:elucidation, an
+emmo:definition or an emmo:conceptualisation.</p>
+<p>Exceptions include entities from standard w3c vocabularies.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all entities have a description.</span>
+
+<span class="sd">    A description is either an emmo:elucidation, an</span>
+<span class="sd">    emmo:definition or an emmo:conceptualisation.</span>
+
+<span class="sd">    Exceptions include entities from standard w3c vocabularies.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_description.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
+    <span class="n">props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="s2">&quot;EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
+        <span class="ow">or</span> <span class="s2">&quot;EMMO_31252f35_c767_4b97_a877_1235076c3e13&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
+        <span class="ow">or</span> <span class="s2">&quot;EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span>
+            <span class="s2">&quot;ontology has no description (emmo:elucidation, &quot;</span>
+            <span class="s2">&quot;emmo:definition or emmo:conceptualisation)&quot;</span>
+        <span class="p">)</span>
+    <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+
+        <span class="c1"># Skip concepts from exceptions and common w3c vocabularies</span>
+        <span class="n">vocabs</span> <span class="o">=</span> <span class="s2">&quot;owl.&quot;</span><span class="p">,</span> <span class="s2">&quot;0.1.&quot;</span><span class="p">,</span> <span class="s2">&quot;bibo.&quot;</span><span class="p">,</span> <span class="s2">&quot;core.&quot;</span><span class="p">,</span> <span class="s2">&quot;terms.&quot;</span><span class="p">,</span> <span class="s2">&quot;vann.&quot;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">exceptions</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vocabs</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="n">label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;elucidation&quot;</span><span class="p">),</span>
+                <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> has no emmo:elucidation&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;definition&quot;</span><span class="p">),</span>
+                <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> has no emmo:definition&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;conceptualisation&quot;</span><span class="p">),</span>
+                <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> has no emmo:conceptualisation&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">elucidation</span><span class="p">)</span>
+                <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">definition</span><span class="p">)</span>
+                <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">conceptualisation</span><span class="p">)</span>
+                <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;missing description (emmo:elucidation, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;emmo:deinition and/or emmo:conceptualidation): </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">s</span>
+                        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">elucidation</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;lang&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">s</span><span class="o">.</span><span class="n">lang</span> <span class="o">==</span> <span class="s2">&quot;en&quot;</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
+                <span class="o">&lt;</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;more than one emmo:elucidation for </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">s</span>
+                        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">definition</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;lang&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">s</span><span class="o">.</span><span class="n">lang</span> <span class="o">==</span> <span class="s2">&quot;en&quot;</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
+                <span class="o">&lt;</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;more than one emmo:definition for </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">s</span>
+                        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">conceptualisation</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;lang&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">s</span><span class="o">.</span><span class="n">lang</span> <span class="o">==</span> <span class="s2">&quot;en&quot;</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
+                <span class="o">&lt;</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;more than one emmo:conceptualisation for </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
 
 
 
