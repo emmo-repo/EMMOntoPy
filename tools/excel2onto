@@ -71,6 +71,7 @@ def main(argv: list = None):
     except SystemExit as exc:
         sys.exit(exc.code)  # Exit without traceback on invalid arguments
 
+    input_ontology = None
     if args.update:
         try:
             if args.input_ontology:
@@ -83,7 +84,6 @@ def main(argv: list = None):
                     "Did not find the output ontology to be updated, "
                     "will fully generate a new one."
                 )
-                input_ontology = None
             else:
                 raise FileNotFoundError(
                     "The output ontology to be updated "
