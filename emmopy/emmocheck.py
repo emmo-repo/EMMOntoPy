@@ -185,6 +185,91 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 class TestFunctionalEMMOConventions(TestEMMOConventions):
     """Test functional EMMO conventions."""
 
+    def test_description(self):
+        """Check that all entities have a description.
+
+        A description is either an emmo:elucidation, an
+        emmo:definition or an emmo:conceptualisation.
+
+        Exceptions include entities from standard w3c vocabularies.
+
+        """
+        exceptions = set()
+        exceptions.update(self.get_config("test_description.exceptions", ()))
+        props = self.onto.world._props  # pylint: disable=protected-access
+        if (
+            "EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" not in props
+            or "EMMO_31252f35_c767_4b97_a877_1235076c3e13" not in props
+            or "EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84" not in props
+        ):
+            self.fail(
+                "ontology has no description (emmo:elucidation, "
+                "emmo:definition or emmo:conceptualisation)"
+            )
+        for entity in self.onto.classes(self.check_imported):
+
+            # Skip concepts from exceptions and common w3c vocabularies
+            vocabs = "owl.", "0.1.", "bibo.", "core.", "terms.", "vann."
+            r = repr(entity)
+            if r in exceptions or any(r.startswith(v) for v in vocabs):
+                continue
+
+            label = str(get_label(entity))
+            with self.subTest(entity=entity, label=label):
+                self.assertTrue(
+                    hasattr(entity, "elucidation"),
+                    msg=f"{label} has no emmo:elucidation",
+                )
+                self.assertTrue(
+                    hasattr(entity, "definition"),
+                    msg=f"{label} has no emmo:definition",
+                )
+                self.assertTrue(
+                    hasattr(entity, "conceptualisation"),
+                    msg=f"{label} has no emmo:conceptualisation",
+                )
+                self.assertTrue(
+                    len(entity.elucidation)
+                    + len(entity.definition)
+                    + len(entity.conceptualisation)
+                    >= 1,
+                    msg="missing description (emmo:elucidation, "
+                    f"emmo:deinition and/or emmo:conceptualidation): {label}",
+                )
+                self.assertTrue(
+                    len(
+                        [
+                            s
+                            for s in entity.elucidation
+                            if not hasattr(s, "lang") or s.lang == "en"
+                        ]
+                    )
+                    < 2,
+                    msg=f"more than one emmo:elucidation for {label}",
+                )
+                self.assertTrue(
+                    len(
+                        [
+                            s
+                            for s in entity.definition
+                            if not hasattr(s, "lang") or s.lang == "en"
+                        ]
+                    )
+                    < 2,
+                    msg=f"more than one emmo:definition for {label}",
+                )
+                self.assertTrue(
+                    len(
+                        [
+                            s
+                            for s in entity.conceptualisation
+                            if not hasattr(s, "lang") or s.lang == "en"
+                        ]
+                    )
+                    < 2,
+                    msg=f"more than one emmo:conceptualisation for {label}",
+                )
+
     def test_unit_dimension(self):
         """Check that all measurement units have a physical dimension.
 

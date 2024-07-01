@@ -15,4 +15,9 @@ def test_run() -> None:
     test_file = ontodir / "models.ttl"
     emmocheck = get_tool_module("emmocheck")
 
+    # The main() method will raise an exception on error, so it is
+    # sufficient to just call it here
+
+    emmocheck.main(["--skip=test_description", str(test_file)])
+
     emmocheck.main([str(test_file)])
