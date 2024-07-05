@@ -1146,16 +1146,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         are also returned.
         """
 
-        def rec_imported(onto):
+        def rec_imported(onto, imported):
             for ontology in onto.imported_ontologies:
                 # pylint: disable=possibly-used-before-assignment
                 if ontology not in imported:
                     imported.add(ontology)
-                    rec_imported(ontology)
+                    rec_imported(ontology, imported)
 
         if recursive:
             imported = set()
-            rec_imported(self)
+            rec_imported(self, imported)
             return list(imported)
 
         return self.imported_ontologies
