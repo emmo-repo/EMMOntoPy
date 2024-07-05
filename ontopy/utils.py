@@ -891,6 +891,7 @@ def copy_annotation(onto, src, dst):
     elif src in onto:
         src = onto[src]
     else:
+
         warnings.warn(f"skipping copy for missing source annotation: {src}")
         return
 
