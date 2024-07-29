@@ -891,7 +891,8 @@ def copy_annotation(onto, src, dst):
     elif src in onto:
         src = onto[src]
     else:
-        warnings.warn(f"no such annotation: '{src}' Skip copy annotation...")
+
+        warnings.warn(f"skipping copy for missing source annotation: {src}")
         return
 
     if onto.world[dst]:
