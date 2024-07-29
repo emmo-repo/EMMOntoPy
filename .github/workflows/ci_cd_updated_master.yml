@@ -29,3 +29,5 @@ jobs:
         (LICENSE.txt),(LICENSE.md)
         (tools),(../tools)
       changelog_exclude_labels: dependencies
+    secrets:
+      PAT: ${{ secrets.RELEASE_PAT }}
