@@ -17,7 +17,7 @@ repos:
     args: [--markdown-linebreak-ext=md]
 
 - repo: https://github.com/ambv/black
-  rev: 24.4.2
+  rev: 24.8.0
   hooks:
   - id: black
     name: Blacken
@@ -36,7 +36,7 @@ repos:
 #     exclude: ^tests/.*$
 
 - repo: https://github.com/SINTEF/ci-cd
-  rev: v2.7.4
+  rev: v2.8.0
   hooks:
   - id: docs-api-reference
     args:
