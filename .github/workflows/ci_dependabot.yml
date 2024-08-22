@@ -11,7 +11,7 @@ on:
 jobs:
   create-collected-pr:
     name: External
-    uses: SINTEF/ci-cd/.github/workflows/ci_update_dependencies.yml@v2.8.0
+    uses: SINTEF/ci-cd/.github/workflows/ci_update_dependencies.yml@v2.8.1
     if: github.repository_owner == 'emmo-repo'
     with:
       git_username: EMMOntoPy Developers
