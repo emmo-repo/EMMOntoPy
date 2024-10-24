@@ -31,5 +31,4 @@ jobs:
       changelog_exclude_labels: dependencies
 
     secrets:
-      PyPI_token: ${{ secrets.PYPI_TOKEN }}
       PAT: ${{ secrets.RELEASE_PAT }}
