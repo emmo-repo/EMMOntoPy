@@ -1,12 +1,37 @@
 # Changelog
 
-## [v0.7.0.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.7.0.1) (2024-02-29)
+## [v7.0.2](https://github.com/emmo-repo/EMMOntoPy/tree/v7.0.2) (2024-10-24)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.7.1...v0.7.0.1)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.7.1...v7.0.2)
+
+**Closed issues:**
+
+- excelparser, allow for = in strings for other annotations. [\#751](https://github.com/emmo-repo/EMMOntoPy/issues/751)
+- Add options to ontoconvert for adding annotations expected by FOOPS [\#728](https://github.com/emmo-repo/EMMOntoPy/issues/728)
+
+**Merged pull requests:**
+
+- Updated to owlready2==0.44 [\#780](https://github.com/emmo-repo/EMMOntoPy/pull/780) ([francescalb](https://github.com/francescalb))
+- Added release\_pat secret to ci\_cd\_updated\_master workflow [\#777](https://github.com/emmo-repo/EMMOntoPy/pull/777) ([francescalb](https://github.com/francescalb))
+- Added test for descriptions [\#766](https://github.com/emmo-repo/EMMOntoPy/pull/766) ([jesper-friis](https://github.com/jesper-friis))
+- Fixed failing test\_save in master [\#756](https://github.com/emmo-repo/EMMOntoPy/pull/756) ([jesper-friis](https://github.com/jesper-friis))
+- Added possibility for = in extra annotations defined in excelparser [\#752](https://github.com/emmo-repo/EMMOntoPy/pull/752) ([francescalb](https://github.com/francescalb))
+- Load doamin-battery instead of battinfo which is just an extra wrapping [\#745](https://github.com/emmo-repo/EMMOntoPy/pull/745) ([francescalb](https://github.com/francescalb))
+- Rewriting ontodoc based on domain-battery [\#742](https://github.com/emmo-repo/EMMOntoPy/pull/742) ([jesper-friis](https://github.com/jesper-friis))
+- Make it possible to run HermiT on EMMO [\#740](https://github.com/emmo-repo/EMMOntoPy/pull/740) ([jesper-friis](https://github.com/jesper-friis))
+- Added minor fixes for ontoconvert [\#739](https://github.com/emmo-repo/EMMOntoPy/pull/739) ([jesper-friis](https://github.com/jesper-friis))
+- Added additional recognised prefixes [\#734](https://github.com/emmo-repo/EMMOntoPy/pull/734) ([jesper-friis](https://github.com/jesper-friis))
+- Copy EMMO annotations [\#733](https://github.com/emmo-repo/EMMOntoPy/pull/733) ([jesper-friis](https://github.com/jesper-friis))
+- Add --copy-annotation option to ontoconvert [\#732](https://github.com/emmo-repo/EMMOntoPy/pull/732) ([jesper-friis](https://github.com/jesper-friis))
+- Updated list of IRIs to ignore when checking prefLabel [\#731](https://github.com/emmo-repo/EMMOntoPy/pull/731) ([jesper-friis](https://github.com/jesper-friis))
 
 ## [v0.7.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.7.1) (2024-02-29)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.7.0...v0.7.1)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.7.0.1...v0.7.1)
+
+## [v0.7.0.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.7.0.1) (2024-02-29)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.7.0...v0.7.0.1)
 
 **Closed issues:**
 
