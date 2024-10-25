@@ -51,10 +51,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dist  # The artifact will always be called 'dist'
-          path: my-dists
+          path: dist
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          # The path to the distribution to upload
-          package-dir: my-dists
