@@ -5,7 +5,7 @@ on:
     types: [published]
 
 jobs:
-  publish:
+  build:
     name: External
     uses: SINTEF/ci-cd/.github/workflows/cd_release.yml@v2.8.3
     if: github.repository == 'emmo-repo/EMMOntoPy' && startsWith(github.ref, 'refs/tags/v')
@@ -21,8 +21,11 @@ jobs:
       # ontopy/__init__.py
       package_dirs: ontopy
       install_extras: "[dev]"
-      build_cmd: "python -m build"
-      publish_on_pypi: true
+      build_libs: build
+      build_cmd: "python -m build -o dists"
+      build_dir: dists
+      publish_on_pypi: false
+      upload_distribution: true
 
       # Update documentation
       update_docs: true
@@ -32,3 +35,26 @@ jobs:
 
     secrets:
       PAT: ${{ secrets.RELEASE_PAT }}
+
+  publish:
+    name: Publish on PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: release
+      url: https://pypi.org/project/EMMOntoPy
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download distribution
+        uses: actions/download-artifact@v4
+        with:
+          name: dist  # The artifact will always be called 'dist'
+          path: my-dists
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          # The path to the distribution to upload
+          package-dir: my-dists
