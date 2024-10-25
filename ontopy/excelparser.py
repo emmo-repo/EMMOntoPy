@@ -34,6 +34,7 @@ class ExcelError(EMMOntoPyException):
 
 def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-locals
     excelpath: str,
+    *,
     concept_sheet_name: str = "Concepts",
     metadata_sheet_name: str = "Metadata",
     imports_sheet_name: str = "ImportedOntologies",
@@ -290,7 +291,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-
     )
 
 
-def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments
+def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments, too-many-positional-arguments
     data: pd.DataFrame,
     objectproperties: pd.DataFrame,
     annotationproperties: pd.DataFrame,
@@ -584,6 +585,7 @@ def _add_literal(  # pylint: disable=too-many-arguments
     data: Union[pd.DataFrame, pd.Series],
     destination: owlready2.prop.IndividualValueList,  #
     name: str,
+    *,
     metadata: bool = False,
     only_one: bool = False,
     sep: str = ";",
@@ -902,7 +904,7 @@ def _add_range_domain(
     return onto, properties_with_errors
 
 
-def _make_entity_list(  # pylint: disable=too-many-arguments
+def _make_entity_list(  # pylint: disable=too-many-arguments, too-many-positional-arguments
     onto: owlready2.Ontology,
     row: pd.Series,
     rowheader: str,
