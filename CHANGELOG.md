@@ -1,14 +1,5 @@
 # Changelog
 
-## [Unreleased](https://github.com/emmo-repo/EMMOntoPy/tree/HEAD)
-
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.7.2...HEAD)
-
-**Closed issues:**
-
-- Remove or rename "old" version tags [\#547](https://github.com/emmo-repo/EMMOntoPy/issues/547)
-- Handle old `EMMO` Python package version tags [\#272](https://github.com/emmo-repo/EMMOntoPy/issues/272)
-
 ## [v0.7.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.7.2) (2024-10-25)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.7.1...v0.7.2)
@@ -17,9 +8,12 @@
 
 - excelparser, allow for = in strings for other annotations. [\#751](https://github.com/emmo-repo/EMMOntoPy/issues/751)
 - Add options to ontoconvert for adding annotations expected by FOOPS [\#728](https://github.com/emmo-repo/EMMOntoPy/issues/728)
+- Remove or rename "old" version tags [\#547](https://github.com/emmo-repo/EMMOntoPy/issues/547)
+- Handle old `EMMO` Python package version tags [\#272](https://github.com/emmo-repo/EMMOntoPy/issues/272)
 
 **Merged pull requests:**
 
+- Corrected publishing info [\#792](https://github.com/emmo-repo/EMMOntoPy/pull/792) ([francescalb](https://github.com/francescalb))
 - Flb/trusted publisher on pypi [\#791](https://github.com/emmo-repo/EMMOntoPy/pull/791) ([francescalb](https://github.com/francescalb))
 - Updated to owlready2==0.44 [\#780](https://github.com/emmo-repo/EMMOntoPy/pull/780) ([francescalb](https://github.com/francescalb))
 - Added release\_pat secret to ci\_cd\_updated\_master workflow [\#777](https://github.com/emmo-repo/EMMOntoPy/pull/777) ([francescalb](https://github.com/francescalb))
