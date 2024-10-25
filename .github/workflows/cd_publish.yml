@@ -40,7 +40,9 @@ jobs:
     name: Publish on PyPI
     needs: build
     runs-on: ubuntu-latest
-    environment: release
+    environment:
+      name: release
+      url: https://pypi.org/project/EMMOntoPy
     permissions:
       id-token: write
 
