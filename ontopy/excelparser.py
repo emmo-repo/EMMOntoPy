@@ -473,6 +473,7 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
             "owlready_ontology.owl#python_name"
         )
     )
+
     # Add back the triples python name triples that were in the input_ontology.
     if input_ontology:
         for triple in pyname_triples_to_keep:
