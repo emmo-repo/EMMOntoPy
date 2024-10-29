@@ -95,6 +95,39 @@ def test_excelparser(repo_dir: "Path") -> None:
     assert updated_onto.FinitePattern.iri == onto.FinitePattern.iri
     assert len(list(onto.classes())) + 1 == len(list(updated_onto.classes()))
 
+    # check that the owlready2 generated python names are not in the triples
+    assert (
+        list(
+            ontology.get_unabbreviated_triples(
+                predicate="http://www.lesfleursdunormal.fr/static/_downloads/"
+                "owlready_ontology.owl#python_name"
+            )
+        )
+        == []
+    )
+    # check that the owlready2 generated python names are not in the triples
+    assert (
+        list(
+            updated_onto.get_unabbreviated_triples(
+                predicate="http://www.lesfleursdunormal.fr/static/_downloads/"
+                "owlready_ontology.owl#python_name"
+            )
+        )
+        == []
+    )
+
+    # Just to be sure that the method of getting the correct triples is OK
+    assert (
+        len(
+            list(
+                ontology.get_unabbreviated_triples(
+                    predicate="http://www.w3.org/2000/01/rdf-schema#subClassOf"
+                )
+            )
+        )
+        > 1
+    )
+
 
 def test_excelparser_only_classes(repo_dir: "Path") -> None:
     """This loads the excelfile used and tests that the resulting ontology prior
