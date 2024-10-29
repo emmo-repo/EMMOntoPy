@@ -313,6 +313,15 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     if input_ontology:
         onto = input_ontology
         catalog = {}
+        # Since we will remove newly created python_name added
+        # by owlready2 in the triples, we keep track of those
+        # that come from the input ontology
+        pyname_triples_to_keep = list(
+            onto.get_unabbreviated_triples(
+                predicate="http://www.lesfleursdunormal.fr/static/_downloads/"
+                "owlready_ontology.owl#python_name"
+            )
+        )
     else:  # Create new ontology
         onto, catalog = get_metadata_from_dataframe(
             metadata, base_iri, imports=imports
@@ -456,6 +465,21 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     entities_with_errors = {
         key: set(value) for key, value in entities_with_errors.items()
     }
+
+    # Remove triples with predicate 'python_name' added by owlready2
+    onto._del_data_triple_spod(  # pylint: disable=protected-access
+        p=onto._abbreviate(  # pylint: disable=protected-access
+            "http://www.lesfleursdunormal.fr/static/_downloads/"
+            "owlready_ontology.owl#python_name"
+        )
+    )
+    # Add back the triples python name triples that were in the input_ontology.
+    if input_ontology:
+        for triple in pyname_triples_to_keep:
+            onto._add_data_triple_spod(  # pylint: disable=protected-access
+                s=triple[0], p=triple[1], o=triple[2]
+            )
+
     return onto, catalog, entities_with_errors
 
 
