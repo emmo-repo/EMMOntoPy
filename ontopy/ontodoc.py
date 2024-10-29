@@ -597,6 +597,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
         template,
         ontodoc,
         basedir=".",
+        *,
         figdir="genfigs",
         figformat="png",
         figscale=1.0,
@@ -756,7 +757,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
                     branch, int(opts.header_level)  # pylint: disable=no-member
                 ).split("\n")
 
-    def _make_branchfig(  # pylint: disable=too-many-arguments,too-many-locals
+    def _make_branchfig(  # pylint: disable=too-many-arguments,too-many-locals, too-many-positional-arguments
         self,
         name: str,
         path: "Union[Path, str]",
@@ -1142,6 +1143,7 @@ class DocPP:  # pylint: disable=too-many-instance-attributes
     def write(  # pylint: disable=too-many-arguments
         self,
         outfile,
+        *,
         fmt=None,
         pandoc_option_files=(),
         pandoc_options=(),
@@ -1288,6 +1290,7 @@ def run_pandoc(  # pylint: disable=too-many-arguments
     genfile,
     outfile,
     fmt,
+    *,
     pandoc_option_files=(),
     pandoc_options=(),
     verbose=True,
@@ -1444,6 +1447,7 @@ def get_maxwidth(fmt):
 def get_docpp(  # pylint: disable=too-many-arguments
     ontodoc,
     infile,
+    *,
     figdir="genfigs",
     figformat="png",
     maxwidth=None,

@@ -239,6 +239,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         self,
         ontology,
         root=None,
+        *,
         leaves=None,
         entities=None,
         relations="isA",
@@ -296,7 +297,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         elif root:
             self.add_branch(
                 root,
-                leaves,
+                leaves=leaves,
                 relations=relations,
                 edgelabels=edgelabels,
                 addnodes=addnodes,
@@ -326,6 +327,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
     def add_entities(  # pylint: disable=too-many-arguments
         self,
         entities=None,
+        *,
         relations="isA",
         edgelabels=None,
         addnodes=False,
@@ -353,6 +355,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
     def add_branch(  # pylint: disable=too-many-arguments,too-many-locals
         self,
         root,
+        *,
         leaves=None,
         include_leaves=True,
         strict_leaves=False,
@@ -427,6 +430,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
     def add_parents(  # pylint: disable=too-many-arguments
         self,
         name,
+        *,
         levels=1,
         relations="isA",
         edgelabels=None,
@@ -522,6 +526,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
     def add_source_edges(  # pylint: disable=too-many-arguments,too-many-branches
         self,
         source,
+        *,
         relations=None,
         edgelabels=None,
         addnodes=None,
@@ -607,6 +612,7 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
 
     def add_edges(  # pylint: disable=too-many-arguments
         self,
+        *,
         sources=None,
         relations=None,
         edgelabels=None,
@@ -998,6 +1004,7 @@ def get_module_dependencies(iri_or_onto, strip_base=None):
 def plot_modules(  # pylint: disable=too-many-arguments
     src,
     filename=None,
+    *,
     fmt=None,
     show=False,
     strip_base=None,
