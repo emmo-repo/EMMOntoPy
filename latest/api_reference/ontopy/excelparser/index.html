@@ -1973,6 +1973,15 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
     <span class="k">if</span> <span class="n">input_ontology</span><span class="p">:</span>
         <span class="n">onto</span> <span class="o">=</span> <span class="n">input_ontology</span>
         <span class="n">catalog</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># Since we will remove newly created python_name added</span>
+        <span class="c1"># by owlready2 in the triples, we keep track of those</span>
+        <span class="c1"># that come from the input ontology</span>
+        <span class="n">pyname_triples_to_keep</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">get_unabbreviated_triples</span><span class="p">(</span>
+                <span class="n">predicate</span><span class="o">=</span><span class="s2">&quot;http://www.lesfleursdunormal.fr/static/_downloads/&quot;</span>
+                <span class="s2">&quot;owlready_ontology.owl#python_name&quot;</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>  <span class="c1"># Create new ontology</span>
         <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span> <span class="o">=</span> <span class="n">get_metadata_from_dataframe</span><span class="p">(</span>
             <span class="n">metadata</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">imports</span>
@@ -2116,6 +2125,21 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
     <span class="n">entities_with_errors</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">key</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">entities_with_errors</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
     <span class="p">}</span>
+
+    <span class="c1"># Remove triples with predicate &#39;python_name&#39; added by owlready2</span>
+    <span class="n">onto</span><span class="o">.</span><span class="n">_del_data_triple_spod</span><span class="p">(</span>  <span class="c1"># pylint: disable=protected-access</span>
+        <span class="n">p</span><span class="o">=</span><span class="n">onto</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>  <span class="c1"># pylint: disable=protected-access</span>
+            <span class="s2">&quot;http://www.lesfleursdunormal.fr/static/_downloads/&quot;</span>
+            <span class="s2">&quot;owlready_ontology.owl#python_name&quot;</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="c1"># Add back the triples python name triples that were in the input_ontology.</span>
+    <span class="k">if</span> <span class="n">input_ontology</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">triple</span> <span class="ow">in</span> <span class="n">pyname_triples_to_keep</span><span class="p">:</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">_add_data_triple_spod</span><span class="p">(</span>  <span class="c1"># pylint: disable=protected-access</span>
+                <span class="n">s</span><span class="o">=</span><span class="n">triple</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="o">=</span><span class="n">triple</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">o</span><span class="o">=</span><span class="n">triple</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="p">)</span>
+
     <span class="k">return</span> <span class="n">onto</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">entities_with_errors</span>
 </code></pre></div>
         </details>
