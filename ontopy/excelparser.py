@@ -456,6 +456,15 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     entities_with_errors = {
         key: set(value) for key, value in entities_with_errors.items()
     }
+
+    # Remove triples with predicate 'python_name' added by owlready2i>0.45
+    onto._del_data_triple_spod(  # pylint: disable=protected-access
+        p=onto._abbreviate(  # pylint: disable=protected-access
+            "http://www.lesfleursdunormal.fr/static/_downloads/"
+            "owlready_ontology.owl#python_name"
+        )
+    )
+
     return onto, catalog, entities_with_errors
 
 
