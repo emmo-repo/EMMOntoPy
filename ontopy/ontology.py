@@ -156,6 +156,7 @@ class World(owlready2.World):
     ):
         # pylint: disable=invalid-name
         """Returns all triples unabbreviated.
+        Imported ontologies not included.
 
         If any of the `subject`, `predicate` or `obj` arguments are given,
         only matching triples will be returned.
@@ -2157,6 +2158,7 @@ def _get_unabbreviated_triples(
     onto, subject=None, predicate=None, obj=None, blank=None
 ):
     """Help function returning all matching triples unabbreviated.
+    Does not include imported ontologies.
 
     If `blank` is given, it will be used to represent blank nodes.
     """

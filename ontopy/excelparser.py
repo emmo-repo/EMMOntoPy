@@ -466,7 +466,6 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
         key: set(value) for key, value in entities_with_errors.items()
     }
 
-
     # Remove triples with predicate 'python_name' added by owlready2
     onto._del_data_triple_spod(  # pylint: disable=protected-access
         p=onto._abbreviate(  # pylint: disable=protected-access
