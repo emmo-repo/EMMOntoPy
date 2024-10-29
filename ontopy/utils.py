@@ -342,6 +342,7 @@ class ReadCatalogError(IOError):
 
 def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-many-arguments
     uri,
+    *,
     catalog_file="catalog-v001.xml",
     baseuri=None,
     recursive=False,
@@ -602,6 +603,7 @@ def _validate_installed_version(
 def convert_imported(  # pylint: disable=too-many-arguments,too-many-locals
     input_ontology: "Union[Path, str]",
     output_ontology: "Union[Path, str]",
+    *,
     input_format: "Optional[str]" = None,
     output_format: str = "xml",
     url_from_catalog: "Optional[bool]" = None,
