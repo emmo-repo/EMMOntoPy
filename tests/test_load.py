@@ -55,9 +55,9 @@ def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
 
 
 def test_load_rdfs() -> None:
+    """Test to load non-emmo based ontologies rdf and rdfs"""
     from ontopy import get_ontology
 
-    # Test loading non-EMMO-based ontologies rdf and rdfs
     rdf_onto = get_ontology(
         "https://www.w3.org/1999/02/22-rdf-syntax-ns.ttl"
     ).load(emmo_based=False)
@@ -65,4 +65,4 @@ def test_load_rdfs() -> None:
         emmo_based=False
     )
     rdfs_onto.Class  # Needed to initialize rdfs_onto
-    assert type(rdf_onto.HTML).iri == rdfs_onto.Datatype.iri
+    assert rdf_onto.HTML.is_a[0].iri == rdfs_onto.Datatype.iri
