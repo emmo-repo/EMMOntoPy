@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
     
     
       
@@ -2197,8 +2197,7 @@ is squashed and/or inferred.</p>
       <tr>
         <td><code>expr</code></td>
         <td></td>
-        <td><p>The entity, restriction or a logical expression or these
-to represent.</p></td>
+        <td><p>The entity, restriction or logical expression to represent.</p></td>
         <td><em>required</em></td>
       </tr>
       <tr>
@@ -2261,8 +2260,7 @@ to represent.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a string representation of `expr`.</span>
 
 <span class="sd">    Arguments:</span>
-<span class="sd">        expr: The entity, restriction or a logical expression or these</span>
-<span class="sd">            to represent.</span>
+<span class="sd">        expr: The entity, restriction or logical expression to represent.</span>
 <span class="sd">        link: A template for links.  May contain the following variables:</span>
 <span class="sd">            - {iri}: The full IRI of the concept.</span>
 <span class="sd">            - {name}: Name-part of IRI.</span>
@@ -2731,7 +2729,8 @@ destination annotation is not already in the ontology.</p></td>
     <span class="k">elif</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">onto</span><span class="p">:</span>
         <span class="n">src</span> <span class="o">=</span> <span class="n">onto</span><span class="p">[</span><span class="n">src</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no such annotation: &#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s2">&#39; Skip copy annotation...&quot;</span><span class="p">)</span>
+
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;skipping copy for missing source annotation: </span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">dst</span><span class="p">]:</span>

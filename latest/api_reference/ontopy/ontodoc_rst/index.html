@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
     
     
       
@@ -1682,6 +1682,10 @@ should match.</p></td>
         <span class="bp">self</span><span class="o">.</span><span class="n">individuals</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datatypes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
+        <span class="c1"># All navigation IDs added by the ontology. Used to warn about</span>
+        <span class="c1"># dublicated IDs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">navids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
         <span class="k">if</span> <span class="n">ontology</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_ontology</span><span class="p">(</span><span class="n">ontology</span><span class="p">)</span>
 
@@ -1759,7 +1763,7 @@ should match.</p></td>
         <span class="n">subsections</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
         <span class="n">header</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="c1"># pylint: disable=too-many-branches,too-many-locals</span>
+        <span class="c1"># pylint: disable=too-many-branches,too-many-locals,too-many-statements</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return reference documentation of all module entities.</span>
 
 <span class="sd">        Arguments:</span>
@@ -1808,15 +1812,31 @@ should match.</p></td>
                 <span class="p">]</span>
             <span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">add_keyvalue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">escape</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">htmllink</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Help function for adding a key-value row to table.&quot;&quot;&quot;</span>
-            <span class="k">if</span> <span class="n">escape</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">htmllink</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
-                    <span class="sa">r</span><span class="s2">&quot;(https?://[^\s]+)&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;&lt;a href=&quot;\1&quot;&gt;\1&lt;/a&gt;&#39;</span><span class="p">,</span> <span class="n">value</span>
-                <span class="p">)</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">add_keyvalue</span><span class="p">(</span>
+            <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">escape</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">htmllink</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_figure</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Help function for adding a key-value row to table.</span>
+
+<span class="sd">            Arguments:</span>
+<span class="sd">                key: Key to show in the table.</span>
+<span class="sd">                value: Value to show in the table.</span>
+<span class="sd">                htmllink: Whether to add html link to value.</span>
+<span class="sd">                show_figure: Whether to show figure in value column.</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">show_figure</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s2">&quot;^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$&quot;</span><span class="p">,</span>
+                <span class="n">asstring</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">),</span>
+            <span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&lt;img src=&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">&quot;&gt;&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">escape</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">htmllink</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+                        <span class="sa">r</span><span class="s2">&quot;(https?://[^\s]+)&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;&lt;a href=&quot;\1&quot;&gt;\1&lt;/a&gt;&#39;</span><span class="p">,</span> <span class="n">value</span>
+                    <span class="p">)</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">)</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="s2">&quot;  &lt;tr&gt;&quot;</span><span class="p">,</span>
@@ -1844,11 +1864,27 @@ should match.</p></td>
                 <span class="p">)</span>
             <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">maps</span><span class="p">[</span><span class="n">subsection</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="n">get_label</span><span class="p">):</span>
                 <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+                <span class="n">navid</span> <span class="o">=</span> <span class="n">navid2</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;duplicated entity names: </span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">navid</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;   &lt;div id=&quot;</span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;&gt;&lt;/div&gt;&#39;</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">):</span>
+                    <span class="n">preflabel</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="o">.</span><span class="n">first</span><span class="p">())</span>
+                    <span class="k">if</span> <span class="n">preflabel</span> <span class="o">!=</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">preflabel</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="p">:</span>
+                            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;duplicated prefLabel: </span><span class="si">{</span><span class="n">preflabel</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">preflabel</span><span class="p">)</span>
+                            <span class="n">navid2</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;   &lt;div id=&quot;</span><span class="si">{</span><span class="n">preflabel</span><span class="si">}</span><span class="s1">&quot;&gt;&lt;/div&gt;&#39;</span>
+
                 <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
                     <span class="p">[</span>
                         <span class="s2">&quot;.. raw:: html&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                        <span class="sa">f</span><span class="s1">&#39;   &lt;div id=&quot;</span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">,</span>
+                        <span class="n">navid</span><span class="p">,</span>
+                        <span class="n">navid2</span><span class="p">,</span>
                         <span class="s2">&quot;&quot;</span><span class="p">,</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;^&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">),</span>
@@ -2100,7 +2136,7 @@ documentation.</p></td>
     <span class="n">subsections</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
     <span class="n">header</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="c1"># pylint: disable=too-many-branches,too-many-locals</span>
+    <span class="c1"># pylint: disable=too-many-branches,too-many-locals,too-many-statements</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return reference documentation of all module entities.</span>
 
 <span class="sd">    Arguments:</span>
@@ -2149,15 +2185,31 @@ documentation.</p></td>
             <span class="p">]</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">add_keyvalue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">escape</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">htmllink</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Help function for adding a key-value row to table.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">escape</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">htmllink</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
-                <span class="sa">r</span><span class="s2">&quot;(https?://[^\s]+)&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;&lt;a href=&quot;\1&quot;&gt;\1&lt;/a&gt;&#39;</span><span class="p">,</span> <span class="n">value</span>
-            <span class="p">)</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">add_keyvalue</span><span class="p">(</span>
+        <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">escape</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">htmllink</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_figure</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Help function for adding a key-value row to table.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            key: Key to show in the table.</span>
+<span class="sd">            value: Value to show in the table.</span>
+<span class="sd">            htmllink: Whether to add html link to value.</span>
+<span class="sd">            show_figure: Whether to show figure in value column.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">show_figure</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$&quot;</span><span class="p">,</span>
+            <span class="n">asstring</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">),</span>
+        <span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&lt;img src=&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">&quot;&gt;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">escape</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">htmllink</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;(https?://[^\s]+)&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;&lt;a href=&quot;\1&quot;&gt;\1&lt;/a&gt;&#39;</span><span class="p">,</span> <span class="n">value</span>
+                <span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">)</span>
         <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="s2">&quot;  &lt;tr&gt;&quot;</span><span class="p">,</span>
@@ -2185,11 +2237,27 @@ documentation.</p></td>
             <span class="p">)</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">maps</span><span class="p">[</span><span class="n">subsection</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="n">get_label</span><span class="p">):</span>
             <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="n">navid</span> <span class="o">=</span> <span class="n">navid2</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;duplicated entity names: </span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">navid</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;   &lt;div id=&quot;</span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;&gt;&lt;/div&gt;&#39;</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">):</span>
+                <span class="n">preflabel</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="o">.</span><span class="n">first</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">preflabel</span> <span class="o">!=</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">preflabel</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="p">:</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;duplicated prefLabel: </span><span class="si">{</span><span class="n">preflabel</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">preflabel</span><span class="p">)</span>
+                        <span class="n">navid2</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;   &lt;div id=&quot;</span><span class="si">{</span><span class="n">preflabel</span><span class="si">}</span><span class="s1">&quot;&gt;&lt;/div&gt;&#39;</span>
+
             <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="s2">&quot;.. raw:: html&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s1">&#39;   &lt;div id=&quot;</span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">,</span>
+                    <span class="n">navid</span><span class="p">,</span>
+                    <span class="n">navid2</span><span class="p">,</span>
                     <span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;^&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">),</span>
