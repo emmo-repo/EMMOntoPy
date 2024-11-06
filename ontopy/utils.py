@@ -933,8 +933,8 @@ def get_datatype_class():
     from ontopy import utils  # pylint: disable=import-self
 
     # Check is Datatype is cached in module __dict__
-    if hasattr(utils, "Datatype"):
-        return utils.Datatype
+    if hasattr(utils, "_Datatype"):
+        return utils._Datatype
 
     # Use try-finally clause instead of delete=True to avoid problems
     # with file-locking on Windows
@@ -961,7 +961,7 @@ def get_datatype_class():
 
         onto = get_ontology(filename).load()
         Datatype = onto.new_datatype.__class__
-        utils.Datatype = Datatype  # cache Datatype in module __dict__
+        utils._Datatype = Datatype  # cache Datatype in module __dict__
         return Datatype
 
     finally:
