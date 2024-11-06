@@ -3,6 +3,7 @@ A module for documenting ontologies.
 """
 
 # pylint: disable=fixme,too-many-lines,no-member,too-many-instance-attributes
+# pylint: disable=invalid-name
 import html
 import re
 import time
@@ -196,7 +197,7 @@ class ModuleDocumentation:
             """Help function for adding a key-value row to table."""
             if show_figure and re.match(
                 r"^(http://|https://)[a-zA-Z.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$",
-                value,
+                asstring(value, ontology=self.ontology),
             ):
                 value = f'<img src="{value}">'
             else:
