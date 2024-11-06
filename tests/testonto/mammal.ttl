@@ -5,13 +5,15 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix animal: <https://w3id.org/emmo/animal#> .
 @base <https://w3id.org/emmo/domain/mammal#> .
 
 <https://w3id.org/emmo/domain/mammal> rdf:type owl:Ontology ;
-                                owl:versionIRI <https://w3id.org/emmo/domain/mammal/0.1> ;
-                                owl:imports <https://w3id.org/emmo/domain/animal/0.1> ;
-                                owl:versionInfo "0.1" .
+    owl:versionIRI <https://w3id.org/emmo/domain/mammal/0.1> ;
+    owl:imports <https://w3id.org/emmo/domain/animal/0.1> ;
+    owl:versionInfo "0.1" ;
+    foaf:logo "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Mammal_collage.png/450px-Mammal_collage.png" .
 
 #################################################################
 #    Classes
@@ -20,7 +22,8 @@
 ###  https://w3id.org/emmo/mammal#Cat
 :Cat rdf:type owl:Class ;
      rdfs:subClassOf :Felines ;
-     skos:prefLabel "Cat"@en .
+     skos:prefLabel "Cat"@en ;
+     foaf:img "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Orange_tabby_cat_sitting_on_fallen_leaves-Hisashi-01A.jpg/168px-Orange_tabby_cat_sitting_on_fallen_leaves-Hisashi-01A.jpg" .
 
 
 ###  https://w3id.org/emmo/mammal#Felines

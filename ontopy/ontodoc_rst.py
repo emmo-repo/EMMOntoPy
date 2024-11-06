@@ -3,6 +3,7 @@ A module for documenting ontologies.
 """
 
 # pylint: disable=fixme,too-many-lines,no-member,too-many-instance-attributes
+# pylint: disable=invalid-name
 import html
 import re
 import time
@@ -59,6 +60,10 @@ class ModuleDocumentation:
         self.annotation_properties = set()
         self.individuals = set()
         self.datatypes = set()
+
+        # All navigation IDs added by the ontology. Used to warn about
+        # dublicated IDs
+        self.navids = set()
 
         if ontology:
             self.add_ontology(ontology)
@@ -137,7 +142,7 @@ class ModuleDocumentation:
         subsections: str = "all",
         header: bool = True,
     ) -> str:
-        # pylint: disable=too-many-branches,too-many-locals
+        # pylint: disable=too-many-branches,too-many-locals,too-many-statements
         """Return reference documentation of all module entities.
 
         Arguments:
@@ -186,15 +191,31 @@ class ModuleDocumentation:
                 ]
             )
 
-        def add_keyvalue(key, value, escape=True, htmllink=True):
-            """Help function for adding a key-value row to table."""
-            if escape:
-                value = html.escape(str(value))
-            if htmllink:
-                value = re.sub(
-                    r"(https?://[^\s]+)", r'<a href="\1">\1</a>', value
-                )
-            value = value.replace("\n", "<br>")
+        def add_keyvalue(
+            key, value, escape=True, htmllink=True, show_figure=True
+        ):
+            """Help function for adding a key-value row to table.
+
+            Arguments:
+                key: Key to show in the table.
+                value: Value to show in the table.
+                htmllink: Whether to add html link to value.
+                show_figure: Whether to show figure in value column.
+
+            """
+            if show_figure and re.match(
+                r"^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$",
+                asstring(value, ontology=self.ontology),
+            ):
+                value = f'<img src="{value}">'
+            else:
+                if escape:
+                    value = html.escape(str(value))
+                if htmllink:
+                    value = re.sub(
+                        r"(https?://[^\s]+)", r'<a href="\1">\1</a>', value
+                    )
+                value = value.replace("\n", "<br>")
             lines.extend(
                 [
                     "  <tr>",
@@ -222,11 +243,27 @@ class ModuleDocumentation:
                 )
             for entity in sorted(maps[subsection], key=get_label):
                 label = get_label(entity)
+                navid = navid2 = ""
+                if entity.name in self.navids:
+                    warnings.warn(f"duplicated entity names: {entity.name}")
+                else:
+                    self.navids.add(entity.name)
+                    navid = f'   <div id="{entity.name}"></div>'
+                if hasattr(entity, "prefLabel"):
+                    preflabel = str(entity.prefLabel.first())
+                    if preflabel != entity.name:
+                        if preflabel in self.navids:
+                            warnings.warn(f"duplicated prefLabel: {preflabel}")
+                        else:
+                            self.navids.add(preflabel)
+                            navid2 = f'   <div id="{preflabel}"></div>'
+
                 lines.extend(
                     [
                         ".. raw:: html",
                         "",
-                        f'   <div id="{entity.name}"></div>',
+                        navid,
+                        navid2,
                         "",
                         f"{label}",
                         "^" * len(label),
