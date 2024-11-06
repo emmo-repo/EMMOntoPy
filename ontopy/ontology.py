@@ -156,6 +156,7 @@ class World(owlready2.World):
     ):
         # pylint: disable=invalid-name
         """Returns all triples unabbreviated.
+        Imported ontologies not included.
 
         If any of the `subject`, `predicate` or `obj` arguments are given,
         only matching triples will be returned.
@@ -311,6 +312,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def get_by_label(
         self,
         label: str,
+        *,
         label_annotations: str = None,
         prefix: str = None,
         imported: bool = True,
@@ -586,6 +588,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
     def load(  # pylint: disable=too-many-arguments,arguments-renamed
         self,
+        *,
         only_local=False,
         filename=None,
         format=None,  # pylint: disable=redefined-builtin
@@ -677,6 +680,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
     def _load(  # pylint: disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements
         self,
+        *,
         only_local=False,
         filename=None,
         format=None,  # pylint: disable=redefined-builtin
@@ -864,6 +868,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         filename=None,
         format=None,
         dir=".",
+        *,
         mkdir=False,
         overwrite=False,
         recursive=False,
@@ -1128,6 +1133,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
     def get_entities(  # pylint: disable=too-many-arguments
         self,
+        *,
         imported=True,
         classes=True,
         individuals=True,
@@ -1537,6 +1543,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         root,
         leaves=(),
         include_leaves=True,
+        *,
         strict_leaves=False,
         exclude=None,
         sort=False,
@@ -2151,6 +2158,7 @@ def _get_unabbreviated_triples(
     onto, subject=None, predicate=None, obj=None, blank=None
 ):
     """Help function returning all matching triples unabbreviated.
+    Does not include imported ontologies.
 
     If `blank` is given, it will be used to represent blank nodes.
     """

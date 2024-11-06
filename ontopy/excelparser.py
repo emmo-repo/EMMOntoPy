@@ -34,6 +34,7 @@ class ExcelError(EMMOntoPyException):
 
 def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-locals
     excelpath: str,
+    *,
     concept_sheet_name: str = "Concepts",
     metadata_sheet_name: str = "Metadata",
     imports_sheet_name: str = "ImportedOntologies",
@@ -290,7 +291,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-
     )
 
 
-def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments
+def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments, too-many-positional-arguments
     data: pd.DataFrame,
     objectproperties: pd.DataFrame,
     annotationproperties: pd.DataFrame,
@@ -312,6 +313,15 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     if input_ontology:
         onto = input_ontology
         catalog = {}
+        # Since we will remove newly created python_name added
+        # by owlready2 in the triples, we keep track of those
+        # that come from the input ontology
+        pyname_triples_to_keep = list(
+            onto.get_unabbreviated_triples(
+                predicate="http://www.lesfleursdunormal.fr/static/_downloads/"
+                "owlready_ontology.owl#python_name"
+            )
+        )
     else:  # Create new ontology
         onto, catalog = get_metadata_from_dataframe(
             metadata, base_iri, imports=imports
@@ -455,6 +465,22 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
     entities_with_errors = {
         key: set(value) for key, value in entities_with_errors.items()
     }
+
+    # Remove triples with predicate 'python_name' added by owlready2
+    onto._del_data_triple_spod(  # pylint: disable=protected-access
+        p=onto._abbreviate(  # pylint: disable=protected-access
+            "http://www.lesfleursdunormal.fr/static/_downloads/"
+            "owlready_ontology.owl#python_name"
+        )
+    )
+
+    # Add back the triples python name triples that were in the input_ontology.
+    if input_ontology:
+        for triple in pyname_triples_to_keep:
+            onto._add_data_triple_spod(  # pylint: disable=protected-access
+                s=triple[0], p=triple[1], o=triple[2]
+            )
+
     return onto, catalog, entities_with_errors
 
 
@@ -585,6 +611,7 @@ def _add_literal(  # pylint: disable=too-many-arguments
     data: Union[pd.DataFrame, pd.Series],
     destination: owlready2.prop.IndividualValueList,  #
     name: str,
+    *,
     metadata: bool = False,
     only_one: bool = False,
     sep: str = ";",
@@ -903,7 +930,7 @@ def _add_range_domain(
     return onto, properties_with_errors
 
 
-def _make_entity_list(  # pylint: disable=too-many-arguments
+def _make_entity_list(  # pylint: disable=too-many-arguments, too-many-positional-arguments
     onto: owlready2.Ontology,
     row: pd.Series,
     rowheader: str,
