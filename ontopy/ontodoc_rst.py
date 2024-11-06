@@ -196,7 +196,7 @@ class ModuleDocumentation:
         ):
             """Help function for adding a key-value row to table."""
             if show_figure and re.match(
-                r"^(http://|https://)[a-zA-Z.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$",
+                r"^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$",
                 asstring(value, ontology=self.ontology),
             ):
                 value = f'<img src="{value}">'
