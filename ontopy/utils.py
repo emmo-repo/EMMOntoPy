@@ -943,6 +943,7 @@ def get_datatype_class():
         with tempfile.NamedTemporaryFile(
             suffix=".ttl", mode="wt", delete=False
         ) as f:
+            filename = f.name
             f.write(
                 textwrap.dedent(
                     """
@@ -957,7 +958,6 @@ def get_datatype_class():
                     """
                 )
             )
-            filename = f.name
 
         onto = get_ontology(filename).load()
         Datatype = onto.new_datatype.__class__
