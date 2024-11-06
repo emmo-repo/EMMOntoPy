@@ -50,3 +50,10 @@ def test_preferred_language():
     assert get_preferred_language(pl, "en") == "Vertebrate"
     assert get_preferred_language(pl, "no") == "Virveldyr"
     assert get_preferred_language(pl, "it") == "Vertebrate"
+
+
+def test_datatype_class():
+    from ontopy.utils import get_datatype_class
+
+    Datatype = get_datatype_class()
+    assert repr(Datatype) == "rdf-schema.Datatype"
