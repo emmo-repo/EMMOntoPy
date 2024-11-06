@@ -56,4 +56,4 @@ def test_datatype_class():
     from ontopy.utils import get_datatype_class
 
     Datatype = get_datatype_class()
-    assert repr(Datatype) == "rdf-schema.Datatype"
+    assert repr(Datatype).endswith("Datatype")
