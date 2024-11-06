@@ -194,7 +194,15 @@ class ModuleDocumentation:
         def add_keyvalue(
             key, value, escape=True, htmllink=True, show_figure=True
         ):
-            """Help function for adding a key-value row to table."""
+            """Help function for adding a key-value row to table.
+
+            Arguments:
+                key: Key to show in the table.
+                value: Value to show in the table.
+                htmllink: Whether to add html link to value.
+                show_figure: Whether to show figure in value column.
+
+            """
             if show_figure and re.match(
                 r"^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$",
                 asstring(value, ontology=self.ontology),
