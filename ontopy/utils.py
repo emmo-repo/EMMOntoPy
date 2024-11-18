@@ -1,7 +1,7 @@
 """Some generic utility functions.
 """
 
-# pylint: disable=protected-access
+# pylint: disable=protected-access,invalid-name
 import os
 import sys
 import re
@@ -167,8 +167,7 @@ def asstring(
     """Returns a string representation of `expr`.
 
     Arguments:
-        expr: The entity, restriction or a logical expression or these
-            to represent.
+        expr: The entity, restriction or logical expression to represent.
         link: A template for links.  May contain the following variables:
             - {iri}: The full IRI of the concept.
             - {name}: Name-part of IRI.
@@ -893,7 +892,8 @@ def copy_annotation(onto, src, dst):
     elif src in onto:
         src = onto[src]
     else:
-        warnings.warn(f"no such annotation: '{src}' Skip copy annotation...")
+
+        warnings.warn(f"skipping copy for missing source annotation: {src}")
         return
 
     if onto.world[dst]:
