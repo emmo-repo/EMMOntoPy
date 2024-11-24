@@ -318,6 +318,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 "emmo.SIAcceptedPrefixedUnit",
                 "emmo.SIAcceptedDerivedUnit",
                 "emmo.SIMetricPrefixedUnit",
+                "emmo.CGSUnit",
             )
         )
         if not hasattr(self.onto, "MeasurementUnit"):
