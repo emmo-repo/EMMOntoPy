@@ -194,6 +194,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         Exceptions include entities from standard w3c vocabularies.
 
         """
+        # pylint: disable=invalid-name
         exceptions = set()
         exceptions.update(self.get_config("test_description.exceptions", ()))
         props = self.onto.world._props  # pylint: disable=protected-access
@@ -313,6 +314,10 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 "emmo.SIBaseUnit",
                 "emmo.SIUnitSymbol",
                 "emmo.SIUnit",
+                "emmo.SIDerivedUnit",
+                "emmo.SIAcceptedPrefixedUnit",
+                "emmo.SIAcceptedDerivedUnit",
+                "emmo.SIMetricPrefixedUnit",
             )
         )
         if not hasattr(self.onto, "MeasurementUnit"):
@@ -431,6 +436,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 "metrology.ExactConstant",
                 "metrology.MeasuredConstant",
                 "metrology.DerivedQuantity",
+                "metrology.PhysicalQuantiyByDefinition",
                 "isq.ISQBaseQuantity",
                 "isq.InternationalSystemOfQuantity",
                 "isq.ISQDerivedQuantity",
@@ -466,6 +472,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 "emmo.Intensive",
                 "emmo.Extensive",
                 "emmo.Concentration",
+                "emmo.PhysicalQuantiyByDefinition",
             )
         )
         if not hasattr(self.onto, "PhysicalQuantity"):
@@ -500,7 +507,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                             issubclass(cls, self.onto.ISQDimensionlessQuantity)
                         )
 
-    def test_dimensional_unit(self):
+    def test_dimensional_unit_rc2(self):
         """Check correct syntax of dimension string of dimensional units."""
 
         # This test requires that the ontology has imported SIDimensionalUnit
@@ -519,6 +526,38 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 r = cls.equivalent_to[0]
                 self.assertIsInstance(r, owlready2.Restriction)
                 self.assertRegex(r.value, regex)
+
+    def test_dimensional_unit(self):
+        """Check correct syntax of dimension string of dimensional units."""
+
+        # This test requires that the ontology has imported SIDimensionalUnit
+        if "SIDimensionalUnit" not in self.onto:
+            self.skipTest("SIDimensionalUnit is not imported")
+
+        # pylint: disable=invalid-name
+        regex = re.compile(
+            "^T([+-][1-9][0-9]*|0) L([+-][1-9]|0) M([+-][1-9]|0) "
+            "I([+-][1-9]|0) (H|Θ)([+-][1-9]|0) N([+-][1-9]|0) "
+            "J([+-][1-9]|0)$"
+        )
+        for cls in self.onto.SIDimensionalUnit.__subclasses__():
+            with self.subTest(cls=cls, label=get_label(cls)):
+                dimstr = [
+                    r.value
+                    for r in cls.is_a
+                    if isinstance(r, owlready2.Restriction)
+                    and repr(r.property) == "emmo.hasDimensionString"
+                ]
+                self.assertEqual(
+                    len(dimstr),
+                    1,
+                    msg="expect one emmo:hasDimensionString value restriction",
+                )
+                self.assertRegex(
+                    dimstr[0],
+                    regex,
+                    msg=f"invalid dimension string: '{dimstr[0]}'",
+                )
 
     def test_physical_quantity_dimension(self):
         """Check that all physical quantities have `hasPhysicalDimension`.
@@ -873,6 +912,7 @@ def main(
                     "test_physical_quantity_dimension_annotation",
                     "test_quantity_dimension_beta3",
                     "test_physical_quantity_dimension",
+                    "test_dimensional_unit_rc2",
                 ]
             )
             msg = {name: "skipped by default" for name in skipped}
