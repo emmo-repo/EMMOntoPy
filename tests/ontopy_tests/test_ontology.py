@@ -3,7 +3,7 @@
 from ontopy import get_ontology
 from ontopy.testutils import ontodir
 
-animal = get_ontology(ontodir / "animal.ttl").load()
+animal = get_ontology(ontodir / "mammal.ttl").load()
 
 
 # if True:
