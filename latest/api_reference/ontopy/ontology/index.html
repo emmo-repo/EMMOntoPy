@@ -3837,67 +3837,85 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 
 <span class="sd">        Keyword arguments are passed to the underlying owlready2 function.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># pylint: disable=too-many-branches</span>
-
-        <span class="n">removed_equivalent</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
-        <span class="n">removed_subclasses</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="c1"># pylint: disable=too-many-branches,too-many-locals</span>
+        <span class="c1"># pylint: disable=unexpected-keyword-arg,invalid-name</span>
+        <span class="n">removed_gspo</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># obj: (ontology, s, p, o)</span>
+        <span class="n">removed_gspod</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># data: (ontology, s, p, o, d)</span>
 
         <span class="k">if</span> <span class="n">reasoner</span> <span class="o">==</span> <span class="s2">&quot;FaCT++&quot;</span><span class="p">:</span>
             <span class="n">sync</span> <span class="o">=</span> <span class="n">sync_reasoner_factpp</span>
+            <span class="n">remove_custom_datatypes</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">elif</span> <span class="n">reasoner</span> <span class="o">==</span> <span class="s2">&quot;Pellet&quot;</span><span class="p">:</span>
             <span class="n">sync</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">sync_reasoner_pellet</span>
+            <span class="n">remove_custom_datatypes</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">elif</span> <span class="n">reasoner</span> <span class="o">==</span> <span class="s2">&quot;HermiT&quot;</span><span class="p">:</span>
             <span class="n">sync</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">sync_reasoner_hermit</span>
-
-            <span class="c1"># Remove custom data propertyes, otherwise HermiT will crash</span>
-            <span class="n">datatype_iri</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2000/01/rdf-schema#Datatype&quot;</span>
-
-            <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="n">imported</span><span class="o">=</span><span class="n">include_imported</span><span class="p">):</span>
-                <span class="n">remove_eq</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Restriction</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="p">(</span>
-                            <span class="nb">hasattr</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">)</span>
-                            <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">iri</span> <span class="o">==</span> <span class="n">datatype_iri</span>
-                        <span class="p">):</span>
-                            <span class="n">remove_eq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                            <span class="n">removed_equivalent</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">remove_eq</span><span class="p">):</span>
-                    <span class="k">del</span> <span class="bp">cls</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-                <span class="n">remove_subcls</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">is_a</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Restriction</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="p">(</span>
-                            <span class="nb">hasattr</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">)</span>
-                            <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">iri</span> <span class="o">==</span> <span class="n">datatype_iri</span>
-                        <span class="p">):</span>
-                            <span class="n">remove_subcls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                            <span class="n">removed_subclasses</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">remove_subcls</span><span class="p">):</span>
-                    <span class="k">del</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
+            <span class="n">remove_custom_datatypes</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Unknown reasoner &#39;</span><span class="si">{</span><span class="n">reasoner</span><span class="si">}</span><span class="s2">&#39;. Supported reasoners &quot;</span>
                 <span class="s2">&quot;are &#39;Pellet&#39;, &#39;HermiT&#39; and &#39;FaCT++&#39;.&quot;</span>
             <span class="p">)</span>
 
-        <span class="c1"># For some reason we must visit all entities once before running</span>
-        <span class="c1"># the reasoner...</span>
-        <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_entities</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">include_imported</span><span class="p">:</span>
+            <span class="n">ontologies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_imported_ontologies</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span>
 
-        <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">include_imported</span><span class="p">:</span>
-                <span class="n">sync</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">sync</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">remove_custom_datatypes</span><span class="p">:</span>
+            <span class="n">datatype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>
+                <span class="s2">&quot;http://www.w3.org/2000/01/rdf-schema#Datatype&quot;</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">onto</span> <span class="ow">in</span> <span class="n">ontologies</span><span class="p">:</span>
+                <span class="c1"># Collect all defined rdfs:Datatype instances</span>
+                <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">_get_obj_triples_spo_spo</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="n">datatype</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">s2</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">o2</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">_get_obj_triples_spo_spo</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">):</span>
+                        <span class="n">removed_gspo</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">onto</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">o2</span><span class="p">))</span>
 
-        <span class="c1"># Restore removed custom data properties</span>
-        <span class="k">for</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">eqs</span> <span class="ow">in</span> <span class="n">removed_equivalent</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">eqs</span><span class="p">)</span>
-        <span class="k">for</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">subcls</span> <span class="ow">in</span> <span class="n">removed_subclasses</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">subcls</span><span class="p">)</span>
+                <span class="c1"># Datatype instances that are known to crash the reasoner</span>
+                <span class="n">datatypes</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://www.w3.org/2002/07/owl#rational&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#NCName&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#NMTOKEN&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#Name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#base64Binary&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#dateTimeStamp&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#hexBinary&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#language&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#nonPositiveInteger&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#normalizedString&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#token&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#unsignedByte&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#unsignedInt&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#unsignedLong&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#unsignedShort&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">datatypes</span><span class="p">:</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">_get_obj_triples_spo_spo</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="n">d</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">s2</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">o2</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">_get_obj_triples_spo_spo</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">):</span>
+                            <span class="n">removed_gspo</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">onto</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">o2</span><span class="p">))</span>
+
+        <span class="c1"># Remove triples selected for removal</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">removed_gspo</span><span class="p">:</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">_del_obj_triple_spo</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">removed_gspod</span><span class="p">:</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">_del_data_triple_spod</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+
+            <span class="c1"># Run reasoner</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">include_imported</span><span class="p">:</span>
+                    <span class="n">sync</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">sync</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Restore removed triples</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">removed_gspo</span><span class="p">:</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">_add_obj_triple_spo</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">removed_gspod</span><span class="p">:</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_del_data_triple_spod</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">sync_attributes</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-branches</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -7984,67 +8002,85 @@ over imported ontologies.  Note that this may be <strong>very</strong> slow.</p>
 
 <span class="sd">    Keyword arguments are passed to the underlying owlready2 function.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># pylint: disable=too-many-branches</span>
-
-    <span class="n">removed_equivalent</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">removed_subclasses</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="c1"># pylint: disable=too-many-branches,too-many-locals</span>
+    <span class="c1"># pylint: disable=unexpected-keyword-arg,invalid-name</span>
+    <span class="n">removed_gspo</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># obj: (ontology, s, p, o)</span>
+    <span class="n">removed_gspod</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># data: (ontology, s, p, o, d)</span>
 
     <span class="k">if</span> <span class="n">reasoner</span> <span class="o">==</span> <span class="s2">&quot;FaCT++&quot;</span><span class="p">:</span>
         <span class="n">sync</span> <span class="o">=</span> <span class="n">sync_reasoner_factpp</span>
+        <span class="n">remove_custom_datatypes</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">elif</span> <span class="n">reasoner</span> <span class="o">==</span> <span class="s2">&quot;Pellet&quot;</span><span class="p">:</span>
         <span class="n">sync</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">sync_reasoner_pellet</span>
+        <span class="n">remove_custom_datatypes</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">elif</span> <span class="n">reasoner</span> <span class="o">==</span> <span class="s2">&quot;HermiT&quot;</span><span class="p">:</span>
         <span class="n">sync</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">sync_reasoner_hermit</span>
-
-        <span class="c1"># Remove custom data propertyes, otherwise HermiT will crash</span>
-        <span class="n">datatype_iri</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2000/01/rdf-schema#Datatype&quot;</span>
-
-        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="n">imported</span><span class="o">=</span><span class="n">include_imported</span><span class="p">):</span>
-            <span class="n">remove_eq</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">):</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Restriction</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="p">(</span>
-                        <span class="nb">hasattr</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">)</span>
-                        <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">iri</span> <span class="o">==</span> <span class="n">datatype_iri</span>
-                    <span class="p">):</span>
-                        <span class="n">remove_eq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                        <span class="n">removed_equivalent</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">remove_eq</span><span class="p">):</span>
-                <span class="k">del</span> <span class="bp">cls</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-            <span class="n">remove_subcls</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">is_a</span><span class="p">):</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Restriction</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="p">(</span>
-                        <span class="nb">hasattr</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">)</span>
-                        <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">iri</span> <span class="o">==</span> <span class="n">datatype_iri</span>
-                    <span class="p">):</span>
-                        <span class="n">remove_subcls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                        <span class="n">removed_subclasses</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">remove_subcls</span><span class="p">):</span>
-                <span class="k">del</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
+        <span class="n">remove_custom_datatypes</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Unknown reasoner &#39;</span><span class="si">{</span><span class="n">reasoner</span><span class="si">}</span><span class="s2">&#39;. Supported reasoners &quot;</span>
             <span class="s2">&quot;are &#39;Pellet&#39;, &#39;HermiT&#39; and &#39;FaCT++&#39;.&quot;</span>
         <span class="p">)</span>
 
-    <span class="c1"># For some reason we must visit all entities once before running</span>
-    <span class="c1"># the reasoner...</span>
-    <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_entities</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">include_imported</span><span class="p">:</span>
+        <span class="n">ontologies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_imported_ontologies</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span>
 
-    <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">include_imported</span><span class="p">:</span>
-            <span class="n">sync</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sync</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">remove_custom_datatypes</span><span class="p">:</span>
+        <span class="n">datatype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>
+            <span class="s2">&quot;http://www.w3.org/2000/01/rdf-schema#Datatype&quot;</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">onto</span> <span class="ow">in</span> <span class="n">ontologies</span><span class="p">:</span>
+            <span class="c1"># Collect all defined rdfs:Datatype instances</span>
+            <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">_get_obj_triples_spo_spo</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="n">datatype</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">s2</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">o2</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">_get_obj_triples_spo_spo</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">):</span>
+                    <span class="n">removed_gspo</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">onto</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">o2</span><span class="p">))</span>
 
-    <span class="c1"># Restore removed custom data properties</span>
-    <span class="k">for</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">eqs</span> <span class="ow">in</span> <span class="n">removed_equivalent</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">eqs</span><span class="p">)</span>
-    <span class="k">for</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">subcls</span> <span class="ow">in</span> <span class="n">removed_subclasses</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">subcls</span><span class="p">)</span>
+            <span class="c1"># Datatype instances that are known to crash the reasoner</span>
+            <span class="n">datatypes</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;http://www.w3.org/2002/07/owl#rational&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#NCName&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#NMTOKEN&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#Name&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#base64Binary&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#dateTimeStamp&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#hexBinary&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#language&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#nonPositiveInteger&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#normalizedString&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#token&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#unsignedByte&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#unsignedInt&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#unsignedLong&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#unsignedShort&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">datatypes</span><span class="p">:</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">_get_obj_triples_spo_spo</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="n">d</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">s2</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">o2</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">_get_obj_triples_spo_spo</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">):</span>
+                        <span class="n">removed_gspo</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">onto</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">o2</span><span class="p">))</span>
+
+    <span class="c1"># Remove triples selected for removal</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">removed_gspo</span><span class="p">:</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">_del_obj_triple_spo</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">removed_gspod</span><span class="p">:</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">_del_data_triple_spod</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+
+        <span class="c1"># Run reasoner</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">include_imported</span><span class="p">:</span>
+                <span class="n">sync</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sync</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Restore removed triples</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">removed_gspo</span><span class="p">:</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">_add_obj_triple_spo</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">removed_gspod</span><span class="p">:</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_del_data_triple_spod</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
