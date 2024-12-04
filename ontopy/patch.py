@@ -6,8 +6,10 @@ import types
 import owlready2
 from owlready2 import AnnotationPropertyClass, ThingClass, PropertyClass
 from owlready2 import Metadata, Thing, Restriction, Namespace
-from ontopy.utils import EMMOntoPyException
-from ontopy.ontology import Ontology as OntopyOntology
+from ontopy.utils import EMMOntoPyException  # pylint: disable=cyclic-import
+from ontopy.ontology import (  # pylint: disable=cyclic-import
+    Ontology as OntopyOntology,
+)
 
 
 def render_func(entity):
