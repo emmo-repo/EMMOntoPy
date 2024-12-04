@@ -1269,6 +1269,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.utils.get_datatype_class" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_datatype_class()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.utils.get_format" class="md-nav__link">
     <span class="md-ellipsis">
       get_format()
@@ -1671,6 +1680,15 @@
   <a href="#ontopy.utils.english" class="md-nav__link">
     <span class="md-ellipsis">
       english()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.get_datatype_class" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_datatype_class()
     </span>
   </a>
   
@@ -2358,6 +2376,11 @@ is squashed and/or inferred.</p>
                 <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">string</span><span class="si">!r}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
+
+    <span class="n">Datatype</span> <span class="o">=</span> <span class="n">get_datatype_class</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">Datatype</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Or</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="s2">&quot; or &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
             <span class="p">[</span>
@@ -2927,6 +2950,74 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">english</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns `string` as an English location string.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">locstr</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.get_datatype_class" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_datatype_class</span><span class="p">()</span></code>
+
+
+<a href="#ontopy.utils.get_datatype_class" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Return a class representing rdfs:Datatype.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_datatype_class</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a class representing rdfs:Datatype.&quot;&quot;&quot;</span>
+    <span class="c1"># This is a hack, but I find no other way to access rdfs:Datatype</span>
+    <span class="c1"># with Owlready2...</span>
+
+    <span class="c1"># These cannot be imported at module initialisation time...</span>
+    <span class="kn">from</span> <span class="nn">ontopy</span> <span class="kn">import</span> <span class="n">get_ontology</span>
+    <span class="kn">from</span> <span class="nn">ontopy</span> <span class="kn">import</span> <span class="n">utils</span>  <span class="c1"># pylint: disable=import-self</span>
+
+    <span class="c1"># Check is Datatype is cached in module __dict__</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">utils</span><span class="p">,</span> <span class="s2">&quot;_Datatype&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">_Datatype</span>
+
+    <span class="c1"># Use try-finally clause instead of delete=True to avoid problems</span>
+    <span class="c1"># with file-locking on Windows</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span>
+            <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.ttl&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wt&quot;</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                <span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span>
+<span class="w">                    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    @prefix : &lt;http://example.com/onto#&gt; .</span>
+<span class="sd">                    @prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .</span>
+<span class="sd">                    @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .</span>
+<span class="sd">                    @prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .</span>
+
+<span class="sd">                    &lt;http://example.com/onto&gt; rdf:type owl:Ontology .</span>
+
+<span class="sd">                    :new_datatype rdf:type rdfs:Datatype .</span>
+<span class="sd">                    &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">onto</span> <span class="o">=</span> <span class="n">get_ontology</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="n">Datatype</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">new_datatype</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">_Datatype</span> <span class="o">=</span> <span class="n">Datatype</span>  <span class="c1"># cache Datatype in module __dict__</span>
+        <span class="k">return</span> <span class="n">Datatype</span>
+
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
