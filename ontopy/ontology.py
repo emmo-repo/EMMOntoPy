@@ -1344,67 +1344,85 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         Keyword arguments are passed to the underlying owlready2 function.
         """
-        # pylint: disable=too-many-branches
-
-        removed_equivalent = defaultdict(list)
-        removed_subclasses = defaultdict(list)
+        # pylint: disable=too-many-branches,too-many-locals
+        # pylint: disable=unexpected-keyword-arg,invalid-name
+        removed_gspo = []  # obj: (ontology, s, p, o)
+        removed_gspod = []  # data: (ontology, s, p, o, d)
 
         if reasoner == "FaCT++":
             sync = sync_reasoner_factpp
+            remove_custom_datatypes = True
         elif reasoner == "Pellet":
             sync = owlready2.sync_reasoner_pellet
+            remove_custom_datatypes = False
         elif reasoner == "HermiT":
             sync = owlready2.sync_reasoner_hermit
-
-            # Remove custom data propertyes, otherwise HermiT will crash
-            datatype_iri = "http://www.w3.org/2000/01/rdf-schema#Datatype"
-
-            for cls in self.classes(imported=include_imported):
-                remove_eq = []
-                for i, r in enumerate(cls.equivalent_to):
-                    if isinstance(r, owlready2.Restriction):
-                        if (
-                            hasattr(r.value.__class__, "iri")
-                            and r.value.__class__.iri == datatype_iri
-                        ):
-                            remove_eq.append(i)
-                            removed_equivalent[cls].append(r)
-                for i in reversed(remove_eq):
-                    del cls.equivalent_to[i]
-
-                remove_subcls = []
-                for i, r in enumerate(cls.is_a):
-                    if isinstance(r, owlready2.Restriction):
-                        if (
-                            hasattr(r.value.__class__, "iri")
-                            and r.value.__class__.iri == datatype_iri
-                        ):
-                            remove_subcls.append(i)
-                            removed_subclasses[cls].append(r)
-                for i in reversed(remove_subcls):
-                    del cls.is_a[i]
-
+            remove_custom_datatypes = True
         else:
             raise ValueError(
                 f"Unknown reasoner '{reasoner}'. Supported reasoners "
                 "are 'Pellet', 'HermiT' and 'FaCT++'."
             )
 
-        # For some reason we must visit all entities once before running
-        # the reasoner...
-        list(self.get_entities())
+        if include_imported:
+            ontologies = self.get_imported_ontologies(recursive=True)
+        else:
+            ontologies = [self]
 
-        with self:
-            if include_imported:
-                sync(self.world, **kwargs)
-            else:
-                sync(self, **kwargs)
+        if remove_custom_datatypes:
+            datatype = self._abbreviate(
+                "http://www.w3.org/2000/01/rdf-schema#Datatype"
+            )
+            for onto in ontologies:
+                # Collect all defined rdfs:Datatype instances
+                for s, p, o in onto._get_obj_triples_spo_spo(o=datatype):
+                    for s2, p2, o2 in onto._get_obj_triples_spo_spo(s=s):
+                        removed_gspo.append((onto, s2, p2, o2))
 
-        # Restore removed custom data properties
-        for cls, eqs in removed_equivalent.items():
-            cls.extend(eqs)
-        for cls, subcls in removed_subclasses.items():
-            cls.extend(subcls)
+                # Datatype instances that are known to crash the reasoner
+                datatypes = (
+                    "http://www.w3.org/2002/07/owl#rational",
+                    "http://www.w3.org/2001/XMLSchema#NCName",
+                    "http://www.w3.org/2001/XMLSchema#NMTOKEN",
+                    "http://www.w3.org/2001/XMLSchema#Name",
+                    "http://www.w3.org/2001/XMLSchema#base64Binary",
+                    "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+                    "http://www.w3.org/2001/XMLSchema#hexBinary",
+                    "http://www.w3.org/2001/XMLSchema#language",
+                    "http://www.w3.org/2001/XMLSchema#nonPositiveInteger",
+                    "http://www.w3.org/2001/XMLSchema#normalizedString",
+                    "http://www.w3.org/2001/XMLSchema#token",
+                    "http://www.w3.org/2001/XMLSchema#unsignedByte",
+                    "http://www.w3.org/2001/XMLSchema#unsignedInt",
+                    "http://www.w3.org/2001/XMLSchema#unsignedLong",
+                    "http://www.w3.org/2001/XMLSchema#unsignedShort",
+                )
+                for dtype in datatypes:
+                    d = onto._abbreviate(dtype)
+                    for s, p, o in onto._get_obj_triples_spo_spo(o=d):
+                        for s2, p2, o2 in onto._get_obj_triples_spo_spo(s=s):
+                            removed_gspo.append((onto, s2, p2, o2))
+
+        # Remove triples selected for removal
+        try:
+            for g, s, p, o in removed_gspo:
+                g._del_obj_triple_spo(s, p, o)
+            for g, s, p, o, d in removed_gspod:
+                g._del_data_triple_spod(s, p, o, d)
+
+            # Run reasoner
+            with self:
+                if include_imported:
+                    sync(self.world, **kwargs)
+                else:
+                    sync(self, **kwargs)
+
+        # Restore removed triples
+        finally:
+            for g, s, p, o in removed_gspo:
+                g._add_obj_triple_spo(s, p, o)
+            for g, s, p, o, d in removed_gspod:
+                g.world._del_data_triple_spod(s, p, o, d)
 
     def sync_attributes(  # pylint: disable=too-many-branches
         self,
