@@ -26,6 +26,7 @@ from owlready2 import locstr
 from owlready2.entity import ThingClass
 from owlready2.prop import ObjectPropertyClass, DataPropertyClass
 from owlready2 import AnnotationPropertyClass
+from owlready2.base import rdf_type
 
 from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 from ontopy.utils import (  # pylint: disable=cyclic-import
@@ -1208,7 +1209,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                         generator.append(prop)
         else:
             if entity_type == "classes":
-                generator = super().classes()
+                generator = list(super().classes())
+                # Add new triples of type rdfs:Class
+                rdf_schema_class = self._abbreviate(
+                    "http://www.w3.org/2000/01/rdf-schema#Class"
+                )
+                for s in self._get_obj_triples_po_s(rdf_type, rdf_schema_class):
+                    if not s < 0:
+                        generator.append(self.world._get_by_storid(s))
             elif entity_type == "individuals":
                 generator = super().individuals()
             elif entity_type == "object_properties":

@@ -3,13 +3,18 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from pathlib import Path
 
+from pathlib import Path
 
-def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
+
+def test_load() -> None:
     # if True:
-    #    from pathlib import Path
-    #    from ontopy import get_ontology
-    #    repo_dir = Path(__file__).resolve().parent.parent
-    #    testonto = get_ontology(str(repo_dir / "tests" / "testonto" / "testonto.ttl")).load()
+    from pathlib import Path
+    from ontopy import get_ontology
+
+    repo_dir = Path(__file__).resolve().parent.parent
+    testonto = get_ontology(
+        str(repo_dir / "tests" / "testonto" / "testonto.ttl")
+    ).load()
 
     import pytest
 
@@ -66,3 +71,18 @@ def test_load_rdfs() -> None:
     )
     rdfs_onto.Class  # Needed to initialize rdfs_onto
     assert rdf_onto.HTML.is_a[0].iri == rdfs_onto.Datatype.iri
+
+
+def test_load_schema() -> None:
+    """Test to load non-emmo based ontologies rdf and rdfs"""
+    from ontopy import get_ontology
+
+    repo_dir = Path(__file__).resolve().parent
+    onto = get_ontology(repo_dir / "testonto" / "minischema.ttl").load(
+        emmo_based=False
+    )
+    assert list(onto.classes()) == [onto.AMRadioChannel]
+    onto_owlclass = get_ontology(
+        repo_dir / "testonto" / "minischema_owlclass.ttl"
+    ).load(emmo_based=False)
+    assert list(onto_owlclass.classes()) == [onto_owlclass.AMRadioChannel]
