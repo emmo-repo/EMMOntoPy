@@ -1344,7 +1344,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         Keyword arguments are passed to the underlying owlready2 function.
         """
         # pylint: disable=too-many-branches,too-many-locals
-        # pylint: disable=unexpected-keyword-arg
+        # pylint: disable=unexpected-keyword-arg,invalid-name
         removed_gspo = []  # obj: (ontology, s, p, o)
         removed_gspod = []  # data: (ontology, s, p, o, d)
 
@@ -1356,7 +1356,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             remove_custom_datatypes = False
         elif reasoner == "HermiT":
             sync = owlready2.sync_reasoner_hermit
-            remove_custom_datatypes = False
+            remove_custom_datatypes = True
         else:
             raise ValueError(
                 f"Unknown reasoner '{reasoner}'. Supported reasoners "
