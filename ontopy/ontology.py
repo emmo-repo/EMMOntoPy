@@ -28,7 +28,7 @@ from owlready2.prop import ObjectPropertyClass, DataPropertyClass
 from owlready2 import AnnotationPropertyClass
 
 from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
-from ontopy.utils import (
+from ontopy.utils import (  # pylint: disable=cyclic-import
     english,
     asstring,
     read_catalog,

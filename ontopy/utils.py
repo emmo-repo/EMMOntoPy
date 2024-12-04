@@ -1,13 +1,15 @@
 """Some generic utility functions.
 """
 
-# pylint: disable=protected-access,invalid-name
+# pylint: disable=protected-access,invalid-name,redefined-outer-name
+# pylint: disable=import-outside-toplevel
 import os
 import sys
 import re
 import datetime
 import inspect
 import tempfile
+import textwrap
 from pathlib import Path
 from typing import TYPE_CHECKING
 import urllib.request
@@ -21,7 +23,6 @@ from rdflib.util import guess_format
 from rdflib.plugin import PluginException
 
 import owlready2
-
 
 if TYPE_CHECKING:
     from typing import Optional, Union
@@ -265,6 +266,11 @@ def asstring(
                 f" {string!r}" if isinstance(expr.value, str) else f" {string}"
             )
         return res
+
+    Datatype = get_datatype_class()
+    if isinstance(expr, Datatype):
+        return str(expr).rsplit(".", 1)[-1]
+
     if isinstance(expr, owlready2.Or):
         res = " or ".join(
             [
@@ -915,3 +921,49 @@ def copy_annotation(onto, src, dst):
         new = getattr(e, src.name).first()
         if new and new not in getattr(e, dst.name):
             getattr(e, dst.name).append(new)
+
+
+def get_datatype_class():
+    """Return a class representing rdfs:Datatype."""
+    # This is a hack, but I find no other way to access rdfs:Datatype
+    # with Owlready2...
+
+    # These cannot be imported at module initialisation time...
+    from ontopy import get_ontology
+    from ontopy import utils  # pylint: disable=import-self
+
+    # Check is Datatype is cached in module __dict__
+    if hasattr(utils, "_Datatype"):
+        return utils._Datatype
+
+    # Use try-finally clause instead of delete=True to avoid problems
+    # with file-locking on Windows
+    filename = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            suffix=".ttl", mode="wt", delete=False
+        ) as f:
+            filename = f.name
+            f.write(
+                textwrap.dedent(
+                    """
+                    @prefix : <http://example.com/onto#> .
+                    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+                    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+                    @prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+                    <http://example.com/onto> rdf:type owl:Ontology .
+
+                    :new_datatype rdf:type rdfs:Datatype .
+                    """
+                )
+            )
+
+        onto = get_ontology(filename).load()
+        Datatype = onto.new_datatype.__class__
+        utils._Datatype = Datatype  # cache Datatype in module __dict__
+        return Datatype
+
+    finally:
+        if filename:
+            os.unlink(filename)
