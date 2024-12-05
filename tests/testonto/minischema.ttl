@@ -14,3 +14,10 @@ schema:AMRadioChannel a rdfs:Class ;
     rdfs:comment "A radio channel that uses AM." ;
     rdfs:subClassOf schema:RadioChannel ;
     schema:source <https://github.com/schemaorg/schemaorg/issues/1004> .
+
+schema:abridged a rdf:Property ;
+    rdfs:label "abridged" ;
+    rdfs:comment "Indicates whether the book is an abridged edition." ;
+    schema:domainIncludes schema:Book ;
+    schema:isPartOf <https://bib.schema.org> ;
+    schema:rangeIncludes schema:Boolean .

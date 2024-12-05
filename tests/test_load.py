@@ -86,3 +86,5 @@ def test_load_schema() -> None:
         repo_dir / "testonto" / "minischema_owlclass.ttl"
     ).load(emmo_based=False)
     assert list(onto_owlclass.classes()) == [onto_owlclass.AMRadioChannel]
+
+    print(list(onto.properties()))

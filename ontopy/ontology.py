@@ -1141,6 +1141,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         object_properties=True,
         data_properties=True,
         annotation_properties=True,
+        properties=True,
     ):
         """Return a generator over (optionally) all classes, individuals,
         object_properties, data_properties and annotation_properties.
@@ -1159,6 +1160,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             generator.append(self.data_properties(imported))
         if annotation_properties:
             generator.append(self.annotation_properties(imported))
+        # if properties:
+        #    generator.append(self.properties(imported))
         yield from itertools.chain(*generator)
 
     def classes(self, imported=False):
@@ -1264,6 +1267,29 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         """
         return self._entities("annotation_properties", imported=imported)
+
+    def properties(self, imported=False):
+        """Returns an generator over all properties.
+        It searches for owl:object_properties, owl:data_properties,
+        owl:annotation_properties and rdf:Properties
+
+        Arguments:
+            imported: if `True`, entities in imported ontologies
+                are also returned.
+        """
+        generator = list(self._entities("object_properties", imported=imported))
+        # generator.append(list(self._entities("annotation_propertoes", imported=imported)))
+        # generator.append(list(self._entities("data_propertoes")))
+
+        rdf_property = self._abbreviate(
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        )
+        for s in self._get_obj_triples_po_s(rdf_type, rdf_property):
+            if not s < 0:
+                print(s, self._unabbreviate(s))
+                generator.append(self[self._unabbreviate(s)])
+                # generator.append(self.world._get_by_storid(s))
+        yield from generator
 
     def get_root_classes(self, imported=False):
         """Returns a list or root classes."""
