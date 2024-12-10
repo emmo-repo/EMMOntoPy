@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# pylint: disable=too-many-lines
 """
 A module for testing an ontology against conventions defined for EMMO.
 
