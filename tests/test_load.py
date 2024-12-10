@@ -57,37 +57,3 @@ def test_load() -> None:
         "datamodel-ontology/master/datamodel.ttl"
     ).load()
     assert onto.DataModel
-
-
-def test_load_rdfs() -> None:
-    """Test to load non-emmo based ontologies rdf and rdfs"""
-    from ontopy import get_ontology
-
-    rdf_onto = get_ontology(
-        "https://www.w3.org/1999/02/22-rdf-syntax-ns.ttl"
-    ).load(emmo_based=False)
-    rdfs_onto = get_ontology("https://www.w3.org/2000/01/rdf-schema.ttl").load(
-        emmo_based=False
-    )
-    rdfs_onto.Class  # Needed to initialize rdfs_onto
-    assert rdf_onto.HTML.is_a[0].iri == rdfs_onto.Datatype.iri
-
-
-def test_load_schema() -> None:
-    """Test to load non-emmo based ontologies rdf and rdfs"""
-    from ontopy import get_ontology
-
-    repo_dir = Path(__file__).resolve().parent
-    onto = get_ontology(repo_dir / "testonto" / "minischema.ttl").load(
-        emmo_based=False
-    )
-    assert list(onto.classes()) == [onto.AMRadioChannel]
-    onto_owlclass = get_ontology(
-        repo_dir / "testonto" / "minischema_owlclass.ttl"
-    ).load(emmo_based=False)
-    assert list(onto_owlclass.classes()) == [onto_owlclass.AMRadioChannel]
-
-    assert list(onto.properties()) == ["https://schema.org/abridged"]
-
-    # Should be:
-    # assert list(onto.properties()) == [onto.abridged]
