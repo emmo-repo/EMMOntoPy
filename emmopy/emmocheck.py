@@ -279,6 +279,71 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         """
         exceptions = set(
             (
+                "emmo.MultipleUnit",
+                "emmo.SubMultipleUnit",
+                "emmo.OffSystemUnit",
+                "emmo.PrefixedUnit",
+                "emmo.NonPrefixedUnit",
+                "emmo.SpecialUnit",
+                "emmo.DerivedUnit",
+                "emmo.BaseUnit",
+                "emmo.UnitSymbol",
+                "emmo.SICoherentDerivedUnit",
+                "emmo.SINonCoherentDerivedUnit",
+                "emmo.SIMetricPrefixedUnit",
+                "emmo.SISpecialUnit",
+                "emmo.SICoherentUnit",
+                "emmo.SIPrefixedUnit",
+                "emmo.SIBaseUnit",
+                "emmo.SIUnitSymbol",
+                "emmo.SIUnit",
+                "emmo.MultipleUnit",
+                "emmo.SubMultipleUnit",
+                "emmo.OffSystemUnit",
+                "emmo.PrefixedUnit",
+                "emmo.NonPrefixedUnit",
+                "emmo.SpecialUnit",
+                "emmo.DerivedUnit",
+                "emmo.BaseUnit",
+                "emmo.UnitSymbol",
+                "emmo.SIAccepted",
+                "emmo.SICoherentDerivedUnit",
+                "emmo.SINonCoherentDerivedUnit",
+                "emmo.SISpecialUnit",
+                "emmo.SICoherentUnit",
+                "emmo.SIPrefixedUnit",
+                "emmo.SIBaseUnit",
+                "emmo.SIUnitSymbol",
+                "emmo.SIUnit",
+            )
+        )
+        if not hasattr(self.onto, "MeasurementUnit"):
+            return
+        exceptions.update(self.get_config("test_unit_dimension.exceptions", ()))
+        regex = re.compile(r"^(emmo|metrology).hasDimensionString.value\(.*\)$")
+        classes = set(self.onto.classes(self.check_imported))
+        for cls in self.onto.MeasurementUnit.descendants():
+            if not self.check_imported and cls not in classes:
+                continue
+            # Assume that actual units are not subclassed
+            if not list(cls.subclasses()) and repr(cls) not in exceptions:
+                with self.subTest(cls=cls, label=get_label(cls)):
+                    self.assertTrue(
+                        any(
+                            regex.match(repr(r))
+                            for r in cls.get_indirect_is_a()
+                        ),
+                        msg=cls,
+                    )
+
+    def test_unit_dimension_rc1(self):
+        """Check that all measurement units have a physical dimension.
+
+        Configurations:
+            exceptions - full class names of classes to ignore.
+        """
+        exceptions = set(
+            (
                 "metrology.MultipleUnit",
                 "metrology.SubMultipleUnit",
                 "metrology.OffSystemUnit",
