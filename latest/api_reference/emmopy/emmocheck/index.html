@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.47">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.48">
     
     
       
@@ -917,6 +917,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_unit_dimension_rc1" class="md-nav__link">
+    <span class="md-ellipsis">
+      test_unit_dimension_rc1()
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1530,6 +1539,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_unit_dimension_rc1" class="md-nav__link">
+    <span class="md-ellipsis">
+      test_unit_dimension_rc1()
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1850,6 +1868,71 @@ TestFunctionalEMMOConventions        </code>
                 <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">test_unit_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all measurement units have a physical dimension.</span>
+
+<span class="sd">        Configurations:</span>
+<span class="sd">            exceptions - full class names of classes to ignore.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;emmo.MultipleUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SubMultipleUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.OffSystemUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.PrefixedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.NonPrefixedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SpecialUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.DerivedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.BaseUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.UnitSymbol&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SICoherentDerivedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SINonCoherentDerivedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIMetricPrefixedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SISpecialUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SICoherentUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIPrefixedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIBaseUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIUnitSymbol&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.MultipleUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SubMultipleUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.OffSystemUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.PrefixedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.NonPrefixedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SpecialUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.DerivedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.BaseUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.UnitSymbol&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIAccepted&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SICoherentDerivedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SINonCoherentDerivedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SISpecialUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SICoherentUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIPrefixedUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIBaseUnit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIUnitSymbol&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;emmo.SIUnit&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="s2">&quot;MeasurementUnit&quot;</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_unit_dimension.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(emmo|metrology).hasDimensionString.value\(.*\)$&quot;</span><span class="p">)</span>
+        <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">MeasurementUnit</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># Assume that actual units are not subclassed</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">subclasses</span><span class="p">())</span> <span class="ow">and</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                        <span class="nb">any</span><span class="p">(</span>
+                            <span class="n">regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
+                            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_indirect_is_a</span><span class="p">()</span>
+                        <span class="p">),</span>
+                        <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_unit_dimension_rc1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all measurement units have a physical dimension.</span>
 
 <span class="sd">        Configurations:</span>
@@ -2861,6 +2944,98 @@ emmo:definition or an emmo:conceptualisation.</p>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_unit_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all measurement units have a physical dimension.</span>
+
+<span class="sd">    Configurations:</span>
+<span class="sd">        exceptions - full class names of classes to ignore.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;emmo.MultipleUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SubMultipleUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.OffSystemUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.PrefixedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.NonPrefixedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SpecialUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.DerivedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.BaseUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.UnitSymbol&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SICoherentDerivedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SINonCoherentDerivedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIMetricPrefixedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SISpecialUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SICoherentUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIPrefixedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIBaseUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIUnitSymbol&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.MultipleUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SubMultipleUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.OffSystemUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.PrefixedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.NonPrefixedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SpecialUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.DerivedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.BaseUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.UnitSymbol&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIAccepted&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SICoherentDerivedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SINonCoherentDerivedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SISpecialUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SICoherentUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIPrefixedUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIBaseUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIUnitSymbol&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;emmo.SIUnit&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="s2">&quot;MeasurementUnit&quot;</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_unit_dimension.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
+    <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(emmo|metrology).hasDimensionString.value\(.*\)$&quot;</span><span class="p">)</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
+    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">MeasurementUnit</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="c1"># Assume that actual units are not subclassed</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">subclasses</span><span class="p">())</span> <span class="ow">and</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                    <span class="nb">any</span><span class="p">(</span>
+                        <span class="n">regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
+                        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_indirect_is_a</span><span class="p">()</span>
+                    <span class="p">),</span>
+                    <span class="n">msg</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span>
+                <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="emmopy.emmocheck.TestFunctionalEMMOConventions.test_unit_dimension_rc1" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">test_unit_dimension_rc1</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#emmopy.emmocheck.TestFunctionalEMMOConventions.test_unit_dimension_rc1" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that all measurement units have a physical dimension.</p>
+<div class="admonition configurations">
+<p class="admonition-title">Configurations</p>
+<p>exceptions - full class names of classes to ignore.</p>
+</div>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_unit_dimension_rc1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all measurement units have a physical dimension.</span>
 
 <span class="sd">    Configurations:</span>
