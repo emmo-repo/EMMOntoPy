@@ -1160,8 +1160,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             generator.append(self.data_properties(imported))
         if annotation_properties:
             generator.append(self.annotation_properties(imported))
-        # if properties:
-        #    generator.append(self.properties(imported))
+        if properties:
+            generator.append(self.properties(imported))
         yield from itertools.chain(*generator)
 
     def classes(self, imported=False):
@@ -1210,6 +1210,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 elif entity_type == "annotation_properties":
                     for prop in list(onto.annotation_properties()):
                         generator.append(prop)
+                elif entity_type == "properties":
+                    generator.append(list(onto.properties()))
         else:
             if entity_type == "classes":
                 generator = list(super().classes())
@@ -1228,6 +1230,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 generator = super().data_properties()
             elif entity_type == "annotation_properties":
                 generator = super().annotation_properties()
+            elif entity_type == "properties":
+                generator = self.properties()
 
         yield from generator
 
@@ -1277,9 +1281,19 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             imported: if `True`, entities in imported ontologies
                 are also returned.
         """
-        generator = list(self._entities("object_properties", imported=imported))
-        # generator.append(list(self._entities("annotation_propertoes", imported=imported)))
-        # generator.append(list(self._entities("data_propertoes")))
+        generator = []
+        for prop in list(
+            self._entities("object_properties", imported=imported)
+        ):
+            generator.append(prop)
+
+        for prop in list(
+            self._entities("annotation_propertoes", imported=imported)
+        ):
+            generator.append(prop)
+
+        for prop in list(self._entities("data_properties", imported=imported)):
+            generator.append(prop)
 
         rdf_property = self._abbreviate(
             "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
@@ -1287,7 +1301,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         for s in self._get_obj_triples_po_s(rdf_type, rdf_property):
             if not s < 0:
                 print(s, self._unabbreviate(s))
-                generator.append(self[self._unabbreviate(s)])
+                generator.append(self._unabbreviate(s))
+                # generator.append(self[self._unabbreviate(s)])
                 # generator.append(self.world._get_by_storid(s))
         yield from generator
 

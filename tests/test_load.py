@@ -87,4 +87,7 @@ def test_load_schema() -> None:
     ).load(emmo_based=False)
     assert list(onto_owlclass.classes()) == [onto_owlclass.AMRadioChannel]
 
-    print(list(onto.properties()))
+    assert list(onto.properties()) == ["https://schema.org/abridged"]
+
+    # Should be:
+    # assert list(onto.properties()) == [onto.abridged]
