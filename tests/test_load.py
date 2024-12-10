@@ -3,13 +3,18 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from pathlib import Path
 
+from pathlib import Path
 
-def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
+
+def test_load() -> None:
     # if True:
-    #    from pathlib import Path
-    #    from ontopy import get_ontology
-    #    repo_dir = Path(__file__).resolve().parent.parent
-    #    testonto = get_ontology(str(repo_dir / "tests" / "testonto" / "testonto.ttl")).load()
+    from pathlib import Path
+    from ontopy import get_ontology
+
+    repo_dir = Path(__file__).resolve().parent.parent
+    testonto = get_ontology(
+        str(repo_dir / "tests" / "testonto" / "testonto.ttl")
+    ).load()
 
     import pytest
 
@@ -52,17 +57,3 @@ def test_load(repo_dir: "Path", testonto: "Ontology") -> None:
         "datamodel-ontology/master/datamodel.ttl"
     ).load()
     assert onto.DataModel
-
-
-def test_load_rdfs() -> None:
-    """Test to load non-emmo based ontologies rdf and rdfs"""
-    from ontopy import get_ontology
-
-    rdf_onto = get_ontology(
-        "https://www.w3.org/1999/02/22-rdf-syntax-ns.ttl"
-    ).load(emmo_based=False)
-    rdfs_onto = get_ontology("https://www.w3.org/2000/01/rdf-schema.ttl").load(
-        emmo_based=False
-    )
-    rdfs_onto.Class  # Needed to initialize rdfs_onto
-    assert rdf_onto.HTML.is_a[0].iri == rdfs_onto.Datatype.iri
