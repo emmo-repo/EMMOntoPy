@@ -75,3 +75,4 @@ if True:
 # def test_load_qudt:
 # if True:
 #    units = get_ontology("http://qudt.org/2.1/vocab/unit").load()
+# rdflib comppains. Apparently it cannot serialize it once it is loaded.
