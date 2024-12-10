@@ -471,7 +471,14 @@ References
         license = md.graph.value(URIRef(iri), DCTERMS.license, default=None)
         release = md.graph.value(URIRef(iri), OWL.versionInfo, default="1.0")
 
-        author = ", ".join(a.value for a in authors) if authors else "<AUTHOR>"
+        # FIXME: If authors are URIs, extract their names from the URI
+        author = (
+            ", ".join(
+                a.value if hasattr(a, "value") else str(a) for a in authors
+            )
+            if authors
+            else "<AUTHOR>"
+        )
         copyright = license if license else f"{time.strftime('%Y')}, {author}"
 
         content = f"""
