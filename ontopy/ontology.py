@@ -1364,7 +1364,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             )
 
         if include_imported:
-            ontologies = self.get_imported_ontologies(recursive=True)
+            ontologies = [self] + self.get_imported_ontologies(recursive=True)
         else:
             ontologies = [self]
 
@@ -1381,6 +1381,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 # Datatype instances that are known to crash the reasoner
                 datatypes = (
                     "http://www.w3.org/2002/07/owl#rational",
+                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML",
+                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#JSON",
                     "http://www.w3.org/2001/XMLSchema#NCName",
                     "http://www.w3.org/2001/XMLSchema#NMTOKEN",
                     "http://www.w3.org/2001/XMLSchema#Name",

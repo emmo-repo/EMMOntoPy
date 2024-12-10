@@ -269,7 +269,7 @@ class EMMO2Meta:
                         Property(
                             name,
                             type=ptype,
-                            dims=dimensions,
+                            shape=dimensions,
                             unit=unit,
                             description=descr,
                         )
