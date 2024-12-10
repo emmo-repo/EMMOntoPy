@@ -7,6 +7,11 @@ if TYPE_CHECKING:
     from ontopy.ontology import Ontology
 
 
+# if True:
+#    from emmopy import get_emmo
+#    emmo = get_emmo()
+
+
 @pytest.mark.filterwarnings("ignore:adding new IRI to ontology:UserWarning")
 def test_basic(emmo: "Ontology") -> None:
     from ontopy import get_ontology
