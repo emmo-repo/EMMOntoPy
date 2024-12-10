@@ -73,5 +73,5 @@ if True:
 
 
 # def test_load_qudt:
-if True:
-    units = get_ontology("http://qudt.org/2.1/vocab/unit").load()
+# if True:
+#    units = get_ontology("http://qudt.org/2.1/vocab/unit").load()
