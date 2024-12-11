@@ -1289,7 +1289,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             generator.append(prop)
 
         for prop in list(
-            self._entities("annotation_propertoes", imported=imported)
+            self._entities("annotation_properties", imported=imported)
         ):
             generator.append(prop)
 
