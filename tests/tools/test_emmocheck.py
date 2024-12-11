@@ -1,4 +1,5 @@
 """Test the `emmocheck` tool."""
+
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -6,19 +7,17 @@ if TYPE_CHECKING:
     from typing import Callable
 
 
-def test_run(get_tool: "Callable[[str], ModuleType]") -> None:
-    """Check that running `emmocheck` works.
+# if True:
+def test_run() -> None:
+    """Check that running `emmocheck` works."""
+    from ontopy.testutils import ontodir, get_tool_module
 
-    Parameters:
-        get_tool: Local module fixture to load a named tool as a module.
-            See the current folder's `conftest.py` file.
+    test_file = ontodir / "models.ttl"
+    emmocheck = get_tool_module("emmocheck")
 
-    """
-    from pathlib import Path
+    # The main() method will raise an exception on error, so it is
+    # sufficient to just call it here
 
-    test_file = (
-        Path(__file__).resolve().parent.parent / "testonto" / "models.ttl"
-    )
-    emmocheck = get_tool("emmocheck")
+    emmocheck.main(["--skip=test_description", str(test_file)])
 
     emmocheck.main([str(test_file)])

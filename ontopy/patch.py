@@ -1,12 +1,15 @@
 """This module injects some additional methods into owlready2 classes."""
+
 # pylint: disable=protected-access
 import types
 
 import owlready2
 from owlready2 import AnnotationPropertyClass, ThingClass, PropertyClass
 from owlready2 import Metadata, Thing, Restriction, Namespace
-from ontopy.utils import EMMOntoPyException
-from ontopy.ontology import Ontology as OntopyOntology
+from ontopy.utils import EMMOntoPyException  # pylint: disable=cyclic-import
+from ontopy.ontology import (  # pylint: disable=cyclic-import
+    Ontology as OntopyOntology,
+)
 
 
 def render_func(entity):
@@ -29,6 +32,7 @@ owlready2.set_render_func(render_func)
 # Extending ThingClass (classes)
 # ==============================
 
+# Save a copy of the unpatched ThingClass.__getattr__() method.
 save_getattr = ThingClass.__getattr__
 
 
@@ -133,7 +137,13 @@ def _getattr(self, name):
             entity = self.namespace.ontology.get_by_label(name)
             # add annotation property to world._props for faster access later
             self.namespace.world._props[name] = entity
-            return save_getattr(self, entity.name)
+
+            # Try first unpatched getattr method to avoid risking
+            # infinite recursion.
+            try:
+                return save_getattr(self, entity.name)
+            except AttributeError:
+                return getattr(self, entity.name)
         raise err
 
 
@@ -149,10 +159,19 @@ def get_annotations(
     """
     onto = self.namespace.ontology
 
+    def extend(key, values):
+        """Extend annotations with a sequence of values."""
+        if key in annotations:
+            annotations[key].extend(values)
+        else:
+            annotations[key] = values
+
     annotations = {
-        str(get_preferred_label(_)): _._get_values_for_class(self)
-        for _ in onto.annotation_properties(imported=imported)
+        str(get_preferred_label(a)): a._get_values_for_class(self)
+        for a in onto.annotation_properties(imported=imported)
     }
+    extend("comment", self.comment)
+    extend("label", self.label)
     if all:
         return annotations
     return {key: value for key, value in annotations.items() if value}
@@ -170,8 +189,7 @@ def disjoint_with(self, reduce=False):
             disjoint_set.difference_update(
                 entity.descendants(include_self=False)
             )
-        for entity in disjoint_set:
-            yield entity
+        yield from disjoint_set
     else:
         for disjoint in self.disjoints():
             for entity in disjoint.entities:
@@ -187,15 +205,18 @@ def get_indirect_is_a(self, skip_classes=True):
     """
     subclass_relations = set()
     for entity in reversed(self.mro()):
-        if hasattr(entity, "is_a"):
-            if skip_classes:
-                subclass_relations.update(
-                    _
-                    for _ in entity.is_a
-                    if not isinstance(_, owlready2.ThingClass)
-                )
-            else:
-                subclass_relations.update(entity.is_a)
+        for attr in "is_a", "equivalent_to":
+            if hasattr(entity, attr):
+                lst = getattr(entity, attr)
+                if skip_classes:
+                    subclass_relations.update(
+                        r
+                        for r in lst
+                        if not isinstance(r, owlready2.ThingClass)
+                    )
+                else:
+                    subclass_relations.update(lst)
+
     subclass_relations.update(self.is_a)
     return subclass_relations
 

@@ -13,6 +13,7 @@ import warnings
 import uuid
 import tempfile
 import types
+import re
 from pathlib import Path
 from collections import defaultdict
 from collections.abc import Iterable
@@ -28,13 +29,14 @@ from owlready2.prop import ObjectPropertyClass, DataPropertyClass
 from owlready2 import AnnotationPropertyClass
 
 from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
-from ontopy.utils import (
+from ontopy.utils import (  # pylint: disable=cyclic-import
     english,
     asstring,
     read_catalog,
     write_catalog,
     infer_version,
     convert_imported,
+    directory_layout,
     FMAP,
     IncompatibleVersion,
     isinteractive,
@@ -49,7 +51,7 @@ from ontopy.utils import (
 )
 
 if TYPE_CHECKING:
-    from typing import List, Sequence
+    from typing import Iterator, List, Sequence
 
 
 # Default annotations to look up
@@ -117,7 +119,7 @@ class World(owlready2.World):
             )
         elif base_iri == "emmo-development":
             base_iri = (
-                "https://emmo-repo.github.io/versions/1.0.0-beta4/"
+                "https://emmo-repo.github.io/versions/1.0.0-beta5/"
                 "emmo-inferred.ttl"
             )
 
@@ -155,6 +157,7 @@ class World(owlready2.World):
     ):
         # pylint: disable=invalid-name
         """Returns all triples unabbreviated.
+        Imported ontologies not included.
 
         If any of the `subject`, `predicate` or `obj` arguments are given,
         only matching triples will be returned.
@@ -167,10 +170,21 @@ class World(owlready2.World):
 
 
 class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
-    """A generic class extending owlready2.Ontology."""
+    """A generic class extending owlready2.Ontology.
+
+    Additional attributes:
+        iri: IRI of this ontology.  Currently only used for serialisation
+            with rdflib. Defaults to None, meaning `base_iri` will be used
+            instead.
+        label_annotations: List of label annotations, i.e. annotations
+            that are recognised by the get_by_label() method. Defaults
+            to `[skos:prefLabel, rdf:label, skos:altLabel]`.
+        prefix: Prefix for this ontology. Defaults to None.
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.iri = None
         self.label_annotations = DEFAULT_LABEL_ANNOTATIONS[:]
         self.prefix = None
 
@@ -299,6 +313,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def get_by_label(
         self,
         label: str,
+        *,
         label_annotations: str = None,
         prefix: str = None,
         imported: bool = True,
@@ -550,6 +565,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         self,
         iri_base: str = "http://emmo.info/emmo",
         prefix: str = "emmo",
+        visited: "Optional[Set]" = None,
     ) -> None:
         """Set a common prefix for all imported ontologies
         with the same first part of the base_iri.
@@ -558,14 +574,22 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             iri_base: The start of the base_iri to look for. Defaults to
                 the emmo base_iri http://emmo.info/emmo
             prefix: the desired prefix. Defaults to emmo.
+            visited: Ontologies to skip. Only intended for internal use.
         """
+        if visited is None:
+            visited = set()
         if self.base_iri.startswith(iri_base):
             self.prefix = prefix
         for onto in self.imported_ontologies:
-            onto.set_common_prefix(iri_base=iri_base, prefix=prefix)
+            if not onto in visited:
+                visited.add(onto)
+                onto.set_common_prefix(
+                    iri_base=iri_base, prefix=prefix, visited=visited
+                )
 
     def load(  # pylint: disable=too-many-arguments,arguments-renamed
         self,
+        *,
         only_local=False,
         filename=None,
         format=None,  # pylint: disable=redefined-builtin
@@ -657,6 +681,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
     def _load(  # pylint: disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements
         self,
+        *,
         only_local=False,
         filename=None,
         format=None,  # pylint: disable=redefined-builtin
@@ -844,6 +869,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         filename=None,
         format=None,
         dir=".",
+        *,
         mkdir=False,
         overwrite=False,
         recursive=False,
@@ -851,7 +877,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         write_catalog_file=False,
         append_catalog=False,
         catalog_file="catalog-v001.xml",
-    ):
+        **kwargs,
+    ) -> Path:
         """Writes the ontology to file.
 
         Parameters
@@ -871,10 +898,15 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         recursive: bool
             Whether to save imported ontologies recursively.  This is
             commonly combined with `filename=None`, `dir` and `mkdir`.
+            Note that depending on the structure of the ontology and
+            all imports the ontology might end up in a subdirectory.
+            If filename is given, the ontology is saved to the given
+            directory.
+            The path to the final location is returned.
         squash: bool
             If true, rdflib will be used to save the current ontology
             together with all its sub-ontologies into `filename`.
-            It make no sense to combine this with `recursive`.
+            It makes no sense to combine this with `recursive`.
         write_catalog_file: bool
             Whether to also write a catalog file to disk.
         append_catalog: bool
@@ -882,10 +914,15 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         catalog_file: str | Path
             Name of catalog file.  If not an absolute path, it is prepended
             to `dir`.
+
+        Returns
+        --------
+            The path to the saved ontology.
         """
         # pylint: disable=redefined-builtin,too-many-arguments
         # pylint: disable=too-many-statements,too-many-branches
-        # pylint: disable=too-many-locals,arguments-renamed
+        # pylint: disable=too-many-locals,arguments-renamed,invalid-name
+
         if not _validate_installed_version(
             package="rdflib", min_version="6.0.0"
         ) and format == FMAP.get("ttl", ""):
@@ -902,74 +939,124 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     "'Known issues' section of the README."
                 )
             )
-
         revmap = {value: key for key, value in FMAP.items()}
         if filename is None:
             if format:
                 fmt = revmap.get(format, format)
-                filename = f"{self.name}.{fmt}"
+                file = f"{self.name}.{fmt}"
             else:
                 raise TypeError("`filename` and `format` cannot both be None.")
-        filename = os.path.join(dir, filename)
-        dir = Path(filename).resolve().parent
+        else:
+            file = filename
+        filepath = os.path.join(
+            dir, file if isinstance(file, (str, Path)) else file.name
+        )
+        returnpath = filepath
+
+        dir = Path(filepath).resolve().parent
 
         if mkdir:
-            outdir = Path(filename).parent.resolve()
+            outdir = Path(filepath).parent.resolve()
             if not outdir.exists():
                 outdir.mkdir(parents=True)
 
         if not format:
-            format = guess_format(filename, fmap=FMAP)
+            format = guess_format(file, fmap=FMAP)
         fmt = revmap.get(format, format)
 
-        if overwrite and filename and os.path.exists(filename):
-            os.remove(filename)
-
-        EMMO = rdflib.Namespace(  # pylint:disable=invalid-name
-            "http://emmo.info/emmo#"
-        )
+        if overwrite and os.path.exists(filepath):
+            os.remove(filepath)
 
         if recursive:
             if squash:
                 raise ValueError(
                     "`recursive` and `squash` should not both be true"
                 )
-            base = self.base_iri.rstrip("#/")
-            for onto in self.imported_ontologies:
-                obase = onto.base_iri.rstrip("#/")
-                newdir = Path(dir) / os.path.relpath(obase, base)
+            layout = directory_layout(self)
+            if filename:
+                layout[self] = file.rstrip(f".{fmt}")
+            # Update path to where the ontology is saved
+            # Note that filename should include format
+            # when given
+            returnpath = Path(dir) / f"{layout[self]}.{fmt}"
+            for onto, path in layout.items():
+                fname = Path(dir) / f"{path}.{fmt}"
                 onto.save(
-                    filename=None,
+                    filename=fname,
                     format=format,
-                    dir=newdir.resolve(),
+                    dir=dir,
                     mkdir=mkdir,
                     overwrite=overwrite,
-                    recursive=recursive,
-                    squash=squash,
-                    write_catalog_file=write_catalog_file,
-                    append_catalog=append_catalog,
-                    catalog_file=catalog_file,
+                    recursive=False,
+                    squash=False,
+                    write_catalog_file=False,
+                    **kwargs,
                 )
 
-        if squash:
-            from rdflib import (  # pylint:disable=import-outside-toplevel
-                URIRef,
-                RDF,
-                OWL,
-            )
+            if write_catalog_file:
+                catalog_files = set()
+                irimap = {}
+                for onto, path in layout.items():
+                    irimap[onto.get_version(as_iri=True)] = (
+                        f"{dir}/{path}.{fmt}"
+                    )
+                    catalog_files.add(Path(path).parent / catalog_file)
 
-            graph = self.world.as_rdflib_graph()
-            graph.namespace_manager.bind("emmo", EMMO)
+                for catfile in catalog_files:
+                    write_catalog(
+                        irimap.copy(),
+                        output=catfile,
+                        directory=dir,
+                        append=append_catalog,
+                    )
+        elif squash:
+            URIRef, RDF, OWL = rdflib.URIRef, rdflib.RDF, rdflib.OWL
 
-            # Remove anonymous namespace and imports
-            graph.remove((URIRef("http://anonymous"), RDF.type, OWL.Ontology))
-            imports = list(graph.triples((None, OWL.imports, None)))
-            for triple in imports:
-                graph.remove(triple)
+            # Make a copy of the owlready2 graph object to not mess with
+            # owlready2 internals
+            graph = rdflib.Graph()
+            for triple in self.world.as_rdflib_graph():
+                graph.add(triple)
 
-            graph.serialize(destination=filename, format=format)
+            # Add common namespaces unknown to rdflib
+            extra_namespaces = [
+                ("", self.base_iri),
+                ("swrl", "http://www.w3.org/2003/11/swrl#"),
+                ("bibo", "http://purl.org/ontology/bibo/"),
+            ]
+            for prefix, iri in extra_namespaces:
+                graph.namespace_manager.bind(
+                    prefix, rdflib.Namespace(iri), override=False
+                )
+
+            # Remove all ontology-declarations in the graph that are
+            # not the current ontology.
+            for s, _, _ in graph.triples(  # pylint: disable=not-an-iterable
+                (None, RDF.type, OWL.Ontology)
+            ):
+                if str(s).rstrip("/#") != self.base_iri.rstrip("/#"):
+                    for (
+                        _,
+                        p,
+                        o,
+                    ) in graph.triples(  # pylint: disable=not-an-iterable
+                        (s, None, None)
+                    ):
+                        graph.remove((s, p, o))
+                graph.remove((s, OWL.imports, None))
+
+            # Insert correct IRI of the ontology
+            if self.iri:
+                base_iri = URIRef(self.base_iri)
+                for s, p, o in graph.triples(  # pylint: disable=not-an-iterable
+                    (base_iri, None, None)
+                ):
+                    graph.remove((s, p, o))
+                    graph.add((URIRef(self.iri), p, o))
+
+            graph.serialize(destination=filepath, format=format)
         elif format in OWLREADY2_FORMATS:
-            super().save(file=filename, format=fmt)
+            super().save(file=filepath, format=fmt, **kwargs)
         else:
             # The try-finally clause is needed for cleanup and because
             # we have to provide delete=False to NamedTemporaryFile
@@ -980,34 +1067,49 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     suffix=".owl", delete=False
                 ) as handle:
                     tmpfile = handle.name
-                super().save(tmpfile, format="rdfxml")
+                super().save(tmpfile, format="ntriples", **kwargs)
                 graph = rdflib.Graph()
-                graph.parse(tmpfile, format="xml")
-                graph.serialize(destination=filename, format=format)
+                graph.parse(tmpfile, format="ntriples")
+                graph.namespace_manager.bind(
+                    "", rdflib.Namespace(self.base_iri)
+                )
+                if self.iri:
+                    base_iri = rdflib.URIRef(self.base_iri)
+                    for (
+                        s,
+                        p,
+                        o,
+                    ) in graph.triples(  # pylint: disable=not-an-iterable
+                        (base_iri, None, None)
+                    ):
+                        graph.remove((s, p, o))
+                        graph.add((rdflib.URIRef(self.iri), p, o))
+                graph.serialize(destination=filepath, format=format)
             finally:
                 os.remove(tmpfile)
 
-        if write_catalog_file:
-            mappings = {}
-            base = self.base_iri.rstrip("#/")
-
-            def append(onto):
-                obase = onto.base_iri.rstrip("#/")
-                newdir = Path(dir) / os.path.relpath(obase, base)
-                newpath = newdir.resolve() / f"{onto.name}.{fmt}"
-                relpath = os.path.relpath(newpath, dir)
-                mappings[onto.get_version(as_iri=True)] = str(relpath)
-                for imported in onto.imported_ontologies:
-                    append(imported)
-
-            if recursive:
-                append(self)
+        if write_catalog_file and not recursive:
             write_catalog(
-                mappings,
+                {self.get_version(as_iri=True): filepath},
                 output=catalog_file,
                 directory=dir,
                 append=append_catalog,
             )
+        return Path(returnpath)
+
+    def copy(self):
+        """Return a copy of the ontology."""
+        with tempfile.TemporaryDirectory() as dirname:
+            filename = self.save(
+                dir=dirname,
+                format="turtle",
+                recursive=True,
+                write_catalog_file=True,
+                mkdir=True,
+            )
+            ontology = get_ontology(filename).load()
+            ontology.name = self.name
+        return ontology
 
     def get_imported_ontologies(self, recursive=False):
         """Return a list with imported ontologies.
@@ -1016,21 +1118,23 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         are also returned.
         """
 
-        def rec_imported(onto):
+        def rec_imported(onto, imported):
             for ontology in onto.imported_ontologies:
+                # pylint: disable=possibly-used-before-assignment
                 if ontology not in imported:
                     imported.add(ontology)
-                    rec_imported(ontology)
+                    rec_imported(ontology, imported)
 
         if recursive:
             imported = set()
-            rec_imported(self)
+            rec_imported(self, imported)
             return list(imported)
 
         return self.imported_ontologies
 
     def get_entities(  # pylint: disable=too-many-arguments
         self,
+        *,
         imported=True,
         classes=True,
         individuals=True,
@@ -1055,8 +1159,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             generator.append(self.data_properties(imported))
         if annotation_properties:
             generator.append(self.annotation_properties(imported))
-        for entity in itertools.chain(*generator):
-            yield entity
+        yield from itertools.chain(*generator)
 
     def classes(self, imported=False):
         """Returns an generator over all classes.
@@ -1116,8 +1219,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             elif entity_type == "annotation_properties":
                 generator = super().annotation_properties()
 
-        for entity in generator:
-            yield entity
+        yield from generator
 
     def individuals(self, imported=False):
         """Returns an generator over all individuals.
@@ -1230,39 +1332,99 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                         break
 
     def sync_reasoner(
-        self, reasoner="FaCT++", include_imported=False, **kwargs
+        self, reasoner="HermiT", include_imported=False, **kwargs
     ):
         """Update current ontology by running the given reasoner.
 
-        Supported values for `reasoner` are 'Pellet', 'HermiT' and 'FaCT++'.
+        Supported values for `reasoner` are 'HermiT' (default), Pellet
+        and 'FaCT++'.
 
         If `include_imported` is true, the reasoner will also reason
-        over imported ontologies.  Note that this may be **very** slow
-        with Pellet and HermiT.
+        over imported ontologies.  Note that this may be **very** slow.
 
         Keyword arguments are passed to the underlying owlready2 function.
         """
+        # pylint: disable=too-many-branches,too-many-locals
+        # pylint: disable=unexpected-keyword-arg,invalid-name
+        removed_gspo = []  # obj: (ontology, s, p, o)
+        removed_gspod = []  # data: (ontology, s, p, o, d)
+
         if reasoner == "FaCT++":
             sync = sync_reasoner_factpp
+            remove_custom_datatypes = True
         elif reasoner == "Pellet":
             sync = owlready2.sync_reasoner_pellet
+            remove_custom_datatypes = False
         elif reasoner == "HermiT":
             sync = owlready2.sync_reasoner_hermit
+            remove_custom_datatypes = True
         else:
             raise ValueError(
-                f"unknown reasoner '{reasoner}'. Supported reasoners "
+                f"Unknown reasoner '{reasoner}'. Supported reasoners "
                 "are 'Pellet', 'HermiT' and 'FaCT++'."
             )
 
-        # For some reason we must visit all entities once before running
-        # the reasoner...
-        list(self.get_entities())
+        if include_imported:
+            ontologies = [self] + self.get_imported_ontologies(recursive=True)
+        else:
+            ontologies = [self]
 
-        with self:
-            if include_imported:
-                sync(self.world, **kwargs)
-            else:
-                sync(self, **kwargs)
+        if remove_custom_datatypes:
+            datatype = self._abbreviate(
+                "http://www.w3.org/2000/01/rdf-schema#Datatype"
+            )
+            for onto in ontologies:
+                # Collect all defined rdfs:Datatype instances
+                for s, p, o in onto._get_obj_triples_spo_spo(o=datatype):
+                    for s2, p2, o2 in onto._get_obj_triples_spo_spo(s=s):
+                        removed_gspo.append((onto, s2, p2, o2))
+
+                # Datatype instances that are known to crash the reasoner
+                datatypes = (
+                    "http://www.w3.org/2002/07/owl#rational",
+                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML",
+                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#JSON",
+                    "http://www.w3.org/2001/XMLSchema#NCName",
+                    "http://www.w3.org/2001/XMLSchema#NMTOKEN",
+                    "http://www.w3.org/2001/XMLSchema#Name",
+                    "http://www.w3.org/2001/XMLSchema#base64Binary",
+                    "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+                    "http://www.w3.org/2001/XMLSchema#hexBinary",
+                    "http://www.w3.org/2001/XMLSchema#language",
+                    "http://www.w3.org/2001/XMLSchema#nonPositiveInteger",
+                    "http://www.w3.org/2001/XMLSchema#normalizedString",
+                    "http://www.w3.org/2001/XMLSchema#token",
+                    "http://www.w3.org/2001/XMLSchema#unsignedByte",
+                    "http://www.w3.org/2001/XMLSchema#unsignedInt",
+                    "http://www.w3.org/2001/XMLSchema#unsignedLong",
+                    "http://www.w3.org/2001/XMLSchema#unsignedShort",
+                )
+                for dtype in datatypes:
+                    d = onto._abbreviate(dtype)
+                    for s, p, o in onto._get_obj_triples_spo_spo(o=d):
+                        for s2, p2, o2 in onto._get_obj_triples_spo_spo(s=s):
+                            removed_gspo.append((onto, s2, p2, o2))
+
+        # Remove triples selected for removal
+        try:
+            for g, s, p, o in removed_gspo:
+                g._del_obj_triple_spo(s, p, o)
+            for g, s, p, o, d in removed_gspod:
+                g._del_data_triple_spod(s, p, o, d)
+
+            # Run reasoner
+            with self:
+                if include_imported:
+                    sync(self.world, **kwargs)
+                else:
+                    sync(self, **kwargs)
+
+        # Restore removed triples
+        finally:
+            for g, s, p, o in removed_gspo:
+                g._add_obj_triple_spo(s, p, o)
+            for g, s, p, o, d in removed_gspod:
+                g.world._del_data_triple_spod(s, p, o, d)
 
     def sync_attributes(  # pylint: disable=too-many-branches
         self,
@@ -1402,6 +1564,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         root,
         leaves=(),
         include_leaves=True,
+        *,
         strict_leaves=False,
         exclude=None,
         sort=False,
@@ -1555,7 +1718,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 "No versionIRI or versionInfo " f"in Ontology {self.base_iri!r}"
             )
         _, _, version_info = tokens[0]
-        return version_info.strip('"').strip("'")
+        return version_info.split("^^")[0].strip('"')
 
     def set_version(self, version=None, version_iri=None):
         """Assign version to ontology by asigning owl:versionIRI.
@@ -1939,6 +2102,90 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """
         return self.new_entity(name, parent, "annotation_property")
 
+    def difference(self, other: owlready2.Ontology) -> set:
+        """Return a set of triples that are in this, but not in the
+        `other` ontology."""
+        # pylint: disable=invalid-name
+        s1 = set(self.get_unabbreviated_triples(blank="_:b"))
+        s2 = set(other.get_unabbreviated_triples(blank="_:b"))
+        return s1.difference(s2)
+
+    def find(
+        self, text: str, domain="world", case_sensitive=False, regex=False
+    ) -> "Iterator":
+        """A simple alternative to the  Owlready2 `search()` method.
+
+        This method searches through all literal strings in the given domain.
+
+        Args:
+            text: Free text string to search for.
+            domain: Domain to search. Should be one of:
+                - "ontology": Current ontology.
+                - "imported": Current and all imported ontologies.
+                - "world": The world.
+            case_sensitive: Whether the search is case sensitive.
+            regex: Whether to use regular expression search.
+
+        Returns:
+            Iterator over `(subject, predicate, literal_string)` triples,
+            converted to EMMOntoPy objects.
+
+        """
+        # pylint: disable=too-many-locals,too-many-branches
+
+        if domain == "ontology":
+            ontologies = [self]
+        elif domain == "imported":
+            ontologies = [self] + self.get_imported_ontologies(recursive=True)
+        elif domain == "world":
+            ontologies = [self.world]
+        else:
+            raise ValueError(
+                "`domain` must be 'ontology', 'imported' or 'world'. "
+                f"Got: {domain}"
+            )
+
+        # Define our match function
+        if regex:
+            flags = 0 if case_sensitive else re.IGNORECASE
+            pattern = re.compile(f"{text}", flags=flags)
+
+            def matchfun(string):
+                """Match function using regex."""
+                return re.match(pattern, string)
+
+        else:
+            if not case_sensitive:
+                text = text.lower()
+
+            def matchfun(string):
+                """Match function without regex."""
+                if case_sensitive:
+                    return text in string
+                return text in string.lower()
+
+        ontology_storid = self.world._abbreviate(
+            "http://www.w3.org/2002/07/owl#Ontology"
+        )
+        for onto in ontologies:
+            for s, p, o, _ in onto._get_data_triples_spod_spod(
+                None, None, None, None
+            ):
+                predicate = self.world.get(self.world._unabbreviate(p))
+                if isinstance(o, str) and matchfun(o):
+                    assert isinstance(
+                        s, int
+                    ), "subject should be a storid"  # nosec
+                    if s >= 0:
+                        subject = self.world.get(self.world._unabbreviate(s))
+                        if s == ontology_storid:
+                            yield self.world.get_ontology(
+                                subject.iri
+                            ), predicate, o
+                        yield subject, predicate, o
+                    else:
+                        yield BlankNode(self.world, s), predicate, o
+
 
 class BlankNode:
     """Represents a blank node.
@@ -1977,8 +2224,7 @@ def flatten(items):
     """Yield items from any nested iterable."""
     for item in items:
         if isinstance(item, Iterable) and not isinstance(item, (str, bytes)):
-            for sub_item in flatten(item):
-                yield sub_item
+            yield from flatten(item)
         else:
             yield item
 
@@ -2006,31 +2252,32 @@ def _unabbreviate(
 
 
 def _get_unabbreviated_triples(
-    self, subject=None, predicate=None, obj=None, blank=None
+    onto, subject=None, predicate=None, obj=None, blank=None
 ):
     """Help function returning all matching triples unabbreviated.
+    Does not include imported ontologies.
 
     If `blank` is given, it will be used to represent blank nodes.
     """
     # pylint: disable=invalid-name
     abb = (
-        None if subject is None else self._abbreviate(subject),
-        None if predicate is None else self._abbreviate(predicate),
-        None if obj is None else self._abbreviate(obj),
+        None if subject is None else onto._abbreviate(subject),
+        None if predicate is None else onto._abbreviate(predicate),
+        None if obj is None else onto._abbreviate(obj),
     )
-    for s, p, o in self._get_obj_triples_spo_spo(*abb):
+    for s, p, o in onto._get_obj_triples_spo_spo(*abb):
         yield (
-            _unabbreviate(self, s, blank=blank),
-            _unabbreviate(self, p, blank=blank),
-            _unabbreviate(self, o, blank=blank),
+            _unabbreviate(onto, s, blank=blank),
+            _unabbreviate(onto, p, blank=blank),
+            _unabbreviate(onto, o, blank=blank),
         )
-    for s, p, o, d in self._get_data_triples_spod_spod(*abb, d=None):
+    for s, p, o, d in onto._get_data_triples_spod_spod(*abb, d=None):
         yield (
-            _unabbreviate(self, s, blank=blank),
-            _unabbreviate(self, p, blank=blank),
-            f'"{o}"{d}'
-            if isinstance(d, str)
-            else f'"{o}"^^{_unabbreviate(self, d)}'
-            if d
-            else o,
+            _unabbreviate(onto, s, blank=blank),
+            _unabbreviate(onto, p, blank=blank),
+            (
+                f'"{o}"{d}'
+                if isinstance(d, str)
+                else f'"{o}"^^{_unabbreviate(onto, d)}' if d else o
+            ),
         )

@@ -5,6 +5,7 @@ import os
 import sys
 import argparse
 import subprocess  # nosec
+from pathlib import Path
 
 # Support running from uninstalled package by adding parent dir to sys path
 rootdir = os.path.abspath(
@@ -21,6 +22,7 @@ from ontopy.ontodoc import (  # pylint: disable=import-error
     get_maxwidth,
     get_docpp,
 )
+from ontopy.ontodoc_rst import OntologyDocumentation
 from ontopy.utils import get_format
 
 import owlready2
@@ -35,6 +37,7 @@ def main(argv: list = None):
             manually / through Python.
 
     """
+    # pylint: disable=too-many-locals,too-many-statements
     parser = argparse.ArgumentParser(
         description="Tool for documenting ontologies.",
         epilog=(
@@ -109,11 +112,10 @@ def main(argv: list = None):
         "--reasoner",
         nargs="?",
         const="HermiT",
-        choices=["HermiT", "Pellet"],
+        choices=["HermiT", "Pellet", "FaCT++"],
         help=(
             'Run given reasoner on the ontology. Valid reasoners are "HermiT" '
-            '(default) and "Pellet". Note: these reasoners doesn\'t work well '
-            "with EMMO."
+            '(default), "Pellet" and "FaCT++".'
         ),
     )
     parser.add_argument(
@@ -131,9 +133,9 @@ def main(argv: list = None):
         "-f",
         metavar="FORMAT",
         help=(
-            'Output format. May be "md", "simple-html" or any other format '
-            "supported by pandoc. By default the format is inferred from "
-            "--output."
+            'Output format. May be "rst", "md", "simple-html" or any other '
+            "format supported by pandoc. By default the format is inferred "
+            "from OUTFILE."
         ),
     )
     parser.add_argument(
@@ -200,6 +202,14 @@ def main(argv: list = None):
             "debugging)."
         ),
     )
+    parser.add_argument(
+        "--iri-regex",
+        "-r",
+        metavar="REGEX",
+        help=(
+            "Regular expression matching IRIs to include in the documentation."
+        ),
+    )
     args = parser.parse_args(args=argv)
 
     # Append to onto_path
@@ -230,35 +240,54 @@ def main(argv: list = None):
     if args.reasoner:
         onto.sync_reasoner(reasoner=args.reasoner)
 
-    # Instantiate ontodoc instance
+    # Get output format
     fmt = get_format(args.outfile, default="html", fmt=args.format)
-    style = get_style(fmt)
-    figformat = args.figformat if args.figformat else get_figformat(fmt)
-    maxwidth = args.max_figwidth if args.max_figwidth else get_maxwidth(fmt)
-    ontodoc = OntoDoc(onto, style=style)
-    res = get_docpp(
-        ontodoc,
-        args.template,
-        figdir=args.figdir,
-        figformat=figformat,
-        maxwidth=maxwidth,
-        imported=args.imported,
-    )
-    res.process()
 
-    try:
-        res.write(
-            args.outfile,
-            fmt=args.format,
-            pandoc_option_files=args.pandoc_option_files,
-            pandoc_options=args.pandoc_options,
-            genfile=args.genfile,
+    if fmt == "rst":
+        # New reStructuredText format
+        od = OntologyDocumentation(
+            onto,
+            recursive=args.imported,
+            iri_regex=args.iri_regex,
         )
-    except subprocess.CalledProcessError as exc:
-        sys.exit(exc.returncode)  # Exit without traceback on pandoc errors
+        docfile = Path(args.outfile)
+        indexfile = docfile.with_name("index.rst")
+        conffile = docfile.with_name("conf.py")
+        od.write_refdoc(docfile=docfile)
+        if not indexfile.exists():
+            print(f"Generating index template: {indexfile}")
+            od.write_index_template(indexfile=indexfile, docfile=docfile)
+        if not conffile.exists():
+            print(f"Generating configuration template: {conffile}")
+            od.write_conf_template(conffile=conffile, docfile=docfile)
 
-    return res
+    else:
+        # Instantiate old ontodoc instance
+        style = get_style(fmt)
+        figformat = args.figformat if args.figformat else get_figformat(fmt)
+        maxwidth = args.max_figwidth if args.max_figwidth else get_maxwidth(fmt)
+        ontodoc = OntoDoc(onto, style=style)
+        docpp = get_docpp(
+            ontodoc,
+            args.template,
+            figdir=args.figdir,
+            figformat=figformat,
+            maxwidth=maxwidth,
+            imported=args.imported,
+        )
+        docpp.process()
+
+        try:
+            docpp.write(
+                args.outfile,
+                fmt=args.format,
+                pandoc_option_files=args.pandoc_option_files,
+                pandoc_options=args.pandoc_options,
+                genfile=args.genfile,
+            )
+        except subprocess.CalledProcessError as exc:
+            sys.exit(exc.returncode)  # Exit without traceback on pandoc errors
 
 
 if __name__ == "__main__":
-    docpp = main()
+    main()

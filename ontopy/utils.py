@@ -1,12 +1,15 @@
 """Some generic utility functions.
 """
-# pylint: disable=protected-access
+
+# pylint: disable=protected-access,invalid-name,redefined-outer-name
+# pylint: disable=import-outside-toplevel
 import os
 import sys
 import re
 import datetime
 import inspect
 import tempfile
+import textwrap
 from pathlib import Path
 from typing import TYPE_CHECKING
 import urllib.request
@@ -21,10 +24,12 @@ from rdflib.plugin import PluginException
 
 import owlready2
 
-
 if TYPE_CHECKING:
     from typing import Optional, Union
 
+
+# Preferred language
+PREFERRED_LANGUAGE = "en"
 
 # Format mappings: file extension -> rdflib format name
 FMAP = {
@@ -93,12 +98,48 @@ def isinteractive():
     )
 
 
+def get_preferred_language(langstrings: list, lang=None) -> str:
+    """Given a list of localised strings, return the one in language
+    `lang`. If `lang` is not given, use
+    `ontopy.utils.PREFERRED_LANGUAGE`.  If no one match is found,
+    return the first one with no language tag or fallback to the first
+    string.
+
+    The preferred language is stored as a module variable. You can
+    change it with:
+
+    >>> import ontopy.utils
+    >>> ontopy.utils.PREFERRED_LANGUAGE = "en"
+
+    """
+    if lang is None:
+        lang = PREFERRED_LANGUAGE
+    for langstr in langstrings:
+        if hasattr(langstr, "lang") and langstr.lang == lang:
+            return str(langstr)
+    for langstr in langstrings:
+        if not hasattr(langstr, "lang"):
+            return langstr
+    return str(langstrings[0])
+
+
 def get_label(entity):
     """Returns the label of an entity."""
+    # pylint: disable=too-many-return-statements
+    if hasattr(entity, "namespace"):
+        onto = entity.namespace.ontology
+        if onto.label_annotations:
+            for la in onto.label_annotations:
+                try:
+                    label = entity[la]
+                    if label:
+                        return get_preferred_language(label)
+                except (NoSuchLabelError, AttributeError, TypeError):
+                    continue
     if hasattr(entity, "prefLabel") and entity.prefLabel:
-        return entity.prefLabel.first()
+        return get_preferred_language(entity.prefLabel)
     if hasattr(entity, "label") and entity.label:
-        return entity.label.first()
+        return get_preferred_language(entity.label)
     if hasattr(entity, "__name__"):
         return entity.__name__
     if hasattr(entity, "name"):
@@ -117,7 +158,7 @@ def getiriname(iri):
     return res.fragment if res.fragment else res.path.rsplit("/", 1)[-1]
 
 
-def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
+def asstring(
     expr,
     link="{label}",
     recursion_depth=0,
@@ -127,8 +168,7 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
     """Returns a string representation of `expr`.
 
     Arguments:
-        expr: The entity, restriction or a logical expression or these
-            to represent.
+        expr: The entity, restriction or logical expression to represent.
         link: A template for links.  May contain the following variables:
             - {iri}: The full IRI of the concept.
             - {name}: Name-part of IRI.
@@ -144,6 +184,7 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
     Returns:
         String representation of `expr`.
     """
+    # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
     if ontology is None:
         ontology = expr.ontology
 
@@ -225,6 +266,11 @@ def asstring(  # pylint: disable=too-many-return-statements,too-many-branches,to
                 f" {string!r}" if isinstance(expr.value, str) else f" {string}"
             )
         return res
+
+    Datatype = get_datatype_class()
+    if isinstance(expr, Datatype):
+        return str(expr).rsplit(".", 1)[-1]
+
     if isinstance(expr, owlready2.Or):
         res = " or ".join(
             [
@@ -301,9 +347,11 @@ class ReadCatalogError(IOError):
 
 def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-many-arguments
     uri,
+    *,
     catalog_file="catalog-v001.xml",
     baseuri=None,
     recursive=False,
+    relative_to=None,
     return_paths=False,
     visited_iris=None,
     visited_paths=None,
@@ -327,6 +375,9 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
 
     If `recursive` is true, catalog files in sub-folders are also read.
 
+    if `relative_to` is given, the paths in the returned dict will be
+    relative to this path.
+
     If `return_paths` is true, a set of directory paths to source
     files is returned in addition to the default dict.
 
@@ -335,6 +386,8 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
 
     A ReadCatalogError is raised if the catalog file cannot be found.
     """
+    # pylint: disable=too-many-branches
+
     # Protocols supported by urllib.request
     web_protocols = "http://", "https://", "ftp://"
     uri = str(uri)  # in case uri is a pathlib.Path object
@@ -448,13 +501,18 @@ def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-man
                     load_catalog(catalog)
 
     load_catalog(filepath)
+
+    if relative_to:
+        for iri, path in iris.items():
+            iris[iri] = os.path.relpath(path, relative_to)
+
     if return_paths:
         return iris, dirs
     return iris
 
 
 def write_catalog(
-    mappings: dict,
+    irimap: dict,
     output: "Union[str, Path]" = "catalog-v001.xml",
     directory: "Union[str, Path]" = ".",
     relative_paths: bool = True,
@@ -463,27 +521,29 @@ def write_catalog(
     """Write catalog file do disk.
 
     Args:
-        mappings: dict mapping ontology IRIs (name) to actual locations
+        irimap: dict mapping ontology IRIs (name) to actual locations
             (URIs).  It has the same format as the dict returned by
             read_catalog().
         output: name of catalog file.
         directory: directory path to the catalog file.  Only used if `output`
             is a relative path.
-        relative_paths: whether to write absolute or relative paths to
-            for file paths inside the catalog file.
+        relative_paths: whether to write file paths inside the catalog as
+            relative paths (instead of  absolute paths).
         append: whether to append to a possible existing catalog file.
             If false, an existing file will be overwritten.
     """
-    web_protocol = "http://", "https://", "ftp://"
+    filename = Path(directory) / output
+
     if relative_paths:
-        for key, item in mappings.items():
-            if not item.startswith(web_protocol):
-                mappings[key] = os.path.relpath(item, Path(directory).resolve())
-    filename = (Path(directory) / output).resolve()
+        irimap = irimap.copy()  # don't modify provided irimap
+        for iri, path in irimap.items():
+            if os.path.isabs(path):
+                irimap[iri] = os.path.relpath(path, filename.parent)
+
     if filename.exists() and append:
         iris = read_catalog(filename)
-        iris.update(mappings)
-        mappings = iris
+        iris.update(irimap)
+        irimap = iris
 
     res = [
         '<?xml version="1.0" encoding="UTF-8" standalone="no"?>',
@@ -492,8 +552,8 @@ def write_catalog(
         '    <group id="Folder Repository, directory=, recursive=true, '
         'Auto-Update=false, version=2" prefer="public" xml:base="">',
     ]
-    for key, value in dict(mappings).items():
-        res.append(f'        <uri name="{key}" uri="{value}"/>')
+    for iri, path in irimap.items():
+        res.append(f'        <uri name="{iri}" uri="{path}"/>')
     res.append("    </group>")
     res.append("</catalog>")
     with open(filename, "wt") as handle:
@@ -548,6 +608,7 @@ def _validate_installed_version(
 def convert_imported(  # pylint: disable=too-many-arguments,too-many-locals
     input_ontology: "Union[Path, str]",
     output_ontology: "Union[Path, str]",
+    *,
     input_format: "Optional[str]" = None,
     output_format: str = "xml",
     url_from_catalog: "Optional[bool]" = None,
@@ -745,3 +806,164 @@ def get_format(outfile: str, default: str, fmt: str = None):
     if not fmt:
         fmt = default
     return fmt.lstrip(".")
+
+
+def directory_layout(onto):
+    """Analyse IRIs of imported ontologies and suggested a directory
+    layout for saving recursively.
+
+    Arguments:
+        onto: Ontology to analyse.
+
+    Returns:
+        layout: A dict mapping ontology objects to relative path names
+            derived from the ontology IRIs. No file name extension are
+            added.
+
+    Example:
+        Assume that our ontology `onto` has IRI `ex:onto`. If it directly
+        or indirectly imports ontologies with IRIs `ex:A/ontoA`, `ex:B/ontoB`
+        and `ex:A/C/ontoC`, this function will return the following dict:
+
+            {
+                onto: "onto",
+                ontoA: "A/ontoA",
+                ontoB: "B/ontoB",
+                ontoC: "A/C/ontoC",
+            }
+
+        where `ontoA`, `ontoB` and `ontoC` are imported Ontology objects.
+    """
+    all_imported = [
+        imported.base_iri for imported in onto.indirectly_imported_ontologies()
+    ]
+    # get protocol and domain of all imported ontologies
+    namespace_roots = set()
+    for iri in all_imported:
+        protocol, domain, *_ = urllib.parse.urlsplit(iri)
+        namespace_roots.add("://".join([protocol, domain]))
+
+    def recur(o):
+        baseiri = o.base_iri.rstrip("/#")
+
+        # Some heuristics here to reproduce the EMMO layout.
+        # It might not apply to all ontologies, so maybe it should be
+        # made optional?  Alternatively, change EMMO ontology IRIs to
+        # match the directory layout.
+        emmolayout = (
+            any(
+                oo.base_iri.startswith(baseiri + "/")
+                for oo in o.imported_ontologies
+            )
+            or o.base_iri == "http://emmo.info/emmo/mereocausality#"
+        )
+
+        layout[o] = (
+            baseiri + "/" + os.path.basename(baseiri) if emmolayout else baseiri
+        )
+        for imported in o.imported_ontologies:
+            if imported not in layout:
+                recur(imported)
+
+    layout = {}
+    recur(onto)
+    # Strip off initial common prefix from all paths
+    if len(namespace_roots) == 1:
+        prefix = os.path.commonprefix(list(layout.values()))
+        for o, path in layout.items():
+            layout[o] = path[len(prefix) :].lstrip("/")
+    else:
+        for o, path in layout.items():
+            for namespace_root in namespace_roots:
+                if path.startswith(namespace_root):
+                    layout[o] = (
+                        urllib.parse.urlsplit(namespace_root)[1]
+                        + path[len(namespace_root) :]
+                    )
+
+    return layout
+
+
+def copy_annotation(onto, src, dst):
+    """In all classes and properties in `onto`, copy annotation `src` to `dst`.
+
+    Arguments:
+        onto: Ontology to work on.
+        src: Name of source annotation.
+        dst: Name or IRI of destination annotation.  Use IRI if the
+            destination annotation is not already in the ontology.
+    """
+    if onto.world[src]:
+        src = onto.world[src]
+    elif src in onto:
+        src = onto[src]
+    else:
+
+        warnings.warn(f"skipping copy for missing source annotation: {src}")
+        return
+
+    if onto.world[dst]:
+        dst = onto.world[dst]
+    elif dst in onto:
+        dst = onto[dst]
+    else:
+        if "://" not in dst:
+            raise ValueError(
+                "new destination annotation property must be provided as "
+                "a full IRI"
+            )
+        name = min(dst.rsplit("#")[-1], dst.rsplit("/")[-1], key=len)
+        iri = dst
+        dst = onto.new_annotation_property(name, owlready2.AnnotationProperty)
+        dst.iri = iri
+
+    for e in onto.get_entities():
+        new = getattr(e, src.name).first()
+        if new and new not in getattr(e, dst.name):
+            getattr(e, dst.name).append(new)
+
+
+def get_datatype_class():
+    """Return a class representing rdfs:Datatype."""
+    # This is a hack, but I find no other way to access rdfs:Datatype
+    # with Owlready2...
+
+    # These cannot be imported at module initialisation time...
+    from ontopy import get_ontology
+    from ontopy import utils  # pylint: disable=import-self
+
+    # Check is Datatype is cached in module __dict__
+    if hasattr(utils, "_Datatype"):
+        return utils._Datatype
+
+    # Use try-finally clause instead of delete=True to avoid problems
+    # with file-locking on Windows
+    filename = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            suffix=".ttl", mode="wt", delete=False
+        ) as f:
+            filename = f.name
+            f.write(
+                textwrap.dedent(
+                    """
+                    @prefix : <http://example.com/onto#> .
+                    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+                    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+                    @prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+                    <http://example.com/onto> rdf:type owl:Ontology .
+
+                    :new_datatype rdf:type rdfs:Datatype .
+                    """
+                )
+            )
+
+        onto = get_ontology(filename).load()
+        Datatype = onto.new_datatype.__class__
+        utils._Datatype = Datatype  # cache Datatype in module __dict__
+        return Datatype
+
+    finally:
+        if filename:
+            os.unlink(filename)

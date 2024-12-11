@@ -73,17 +73,30 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         """
         exceptions = set(
             (
-                "terms.license",
-                "terms.abstract",
-                "terms.contributor",
-                "terms.creator",
-                "terms.publisher",
-                "terms.title",
-                "core.prefLabel",
+                "0.1.homepage",  # foaf:homepage
+                "0.1.logo",
+                "0.1.page",
+                "0.1.name",
+                "bibo:doi",
                 "core.altLabel",
                 "core.hiddenLabel",
-                "foaf.logo",
-                "0.1.logo",  # foaf.logo
+                "core.prefLabel",
+                "terms.abstract",
+                "terms.alternative",
+                "terms:bibliographicCitation",
+                "terms.contributor",
+                "terms.created",
+                "terms.creator",
+                "terms.hasFormat",
+                "terms.identifier",
+                "terms.issued",
+                "terms.license",
+                "terms.modified",
+                "terms.publisher",
+                "terms.source",
+                "terms.title",
+                "vann:preferredNamespacePrefix",
+                "vann:preferredNamespaceUri",
             )
         )
         exceptions.update(
@@ -126,7 +139,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
         for cls in self.onto.classes(self.check_imported):
             for label in cls.label + getattr(cls, "prefLabel", []):
-                if label not in exceptions:
+                if str(label) not in exceptions:
                     with self.subTest(entity=cls, label=label):
                         self.assertTrue(label.isidentifier())
                         self.assertTrue(label[0].isupper())
@@ -172,7 +185,157 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 class TestFunctionalEMMOConventions(TestEMMOConventions):
     """Test functional EMMO conventions."""
 
+    def test_description(self):
+        """Check that all entities have a description.
+
+        A description is either an emmo:elucidation, an
+        emmo:definition or an emmo:conceptualisation.
+
+        Exceptions include entities from standard w3c vocabularies.
+
+        """
+        exceptions = set()
+        exceptions.update(self.get_config("test_description.exceptions", ()))
+        props = self.onto.world._props  # pylint: disable=protected-access
+        if (
+            "EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" not in props
+            or "EMMO_31252f35_c767_4b97_a877_1235076c3e13" not in props
+            or "EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84" not in props
+        ):
+            self.fail(
+                "ontology has no description (emmo:elucidation, "
+                "emmo:definition or emmo:conceptualisation)"
+            )
+        for entity in self.onto.classes(self.check_imported):
+
+            # Skip concepts from exceptions and common w3c vocabularies
+            vocabs = "owl.", "0.1.", "bibo.", "core.", "terms.", "vann."
+            r = repr(entity)
+            if r in exceptions or any(r.startswith(v) for v in vocabs):
+                continue
+
+            label = str(get_label(entity))
+            with self.subTest(entity=entity, label=label):
+                self.assertTrue(
+                    hasattr(entity, "elucidation"),
+                    msg=f"{label} has no emmo:elucidation",
+                )
+                self.assertTrue(
+                    hasattr(entity, "definition"),
+                    msg=f"{label} has no emmo:definition",
+                )
+                self.assertTrue(
+                    hasattr(entity, "conceptualisation"),
+                    msg=f"{label} has no emmo:conceptualisation",
+                )
+                self.assertTrue(
+                    len(entity.elucidation)
+                    + len(entity.definition)
+                    + len(entity.conceptualisation)
+                    >= 1,
+                    msg="missing description (emmo:elucidation, "
+                    f"emmo:deinition and/or emmo:conceptualidation): {label}",
+                )
+                self.assertTrue(
+                    len(
+                        [
+                            s
+                            for s in entity.elucidation
+                            if not hasattr(s, "lang") or s.lang == "en"
+                        ]
+                    )
+                    < 2,
+                    msg=f"more than one emmo:elucidation for {label}",
+                )
+                self.assertTrue(
+                    len(
+                        [
+                            s
+                            for s in entity.definition
+                            if not hasattr(s, "lang") or s.lang == "en"
+                        ]
+                    )
+                    < 2,
+                    msg=f"more than one emmo:definition for {label}",
+                )
+                self.assertTrue(
+                    len(
+                        [
+                            s
+                            for s in entity.conceptualisation
+                            if not hasattr(s, "lang") or s.lang == "en"
+                        ]
+                    )
+                    < 2,
+                    msg=f"more than one emmo:conceptualisation for {label}",
+                )
+
     def test_unit_dimension(self):
+        """Check that all measurement units have a physical dimension.
+
+        Configurations:
+            exceptions - full class names of classes to ignore.
+        """
+        exceptions = set(
+            (
+                "emmo.MultipleUnit",
+                "emmo.SubMultipleUnit",
+                "emmo.OffSystemUnit",
+                "emmo.PrefixedUnit",
+                "emmo.NonPrefixedUnit",
+                "emmo.SpecialUnit",
+                "emmo.DerivedUnit",
+                "emmo.BaseUnit",
+                "emmo.UnitSymbol",
+                "emmo.SICoherentDerivedUnit",
+                "emmo.SINonCoherentDerivedUnit",
+                "emmo.SIMetricPrefixedUnit",
+                "emmo.SISpecialUnit",
+                "emmo.SICoherentUnit",
+                "emmo.SIPrefixedUnit",
+                "emmo.SIBaseUnit",
+                "emmo.SIUnitSymbol",
+                "emmo.SIUnit",
+                "emmo.MultipleUnit",
+                "emmo.SubMultipleUnit",
+                "emmo.OffSystemUnit",
+                "emmo.PrefixedUnit",
+                "emmo.NonPrefixedUnit",
+                "emmo.SpecialUnit",
+                "emmo.DerivedUnit",
+                "emmo.BaseUnit",
+                "emmo.UnitSymbol",
+                "emmo.SIAccepted",
+                "emmo.SICoherentDerivedUnit",
+                "emmo.SINonCoherentDerivedUnit",
+                "emmo.SISpecialUnit",
+                "emmo.SICoherentUnit",
+                "emmo.SIPrefixedUnit",
+                "emmo.SIBaseUnit",
+                "emmo.SIUnitSymbol",
+                "emmo.SIUnit",
+            )
+        )
+        if not hasattr(self.onto, "MeasurementUnit"):
+            return
+        exceptions.update(self.get_config("test_unit_dimension.exceptions", ()))
+        regex = re.compile(r"^(emmo|metrology).hasDimensionString.value\(.*\)$")
+        classes = set(self.onto.classes(self.check_imported))
+        for cls in self.onto.MeasurementUnit.descendants():
+            if not self.check_imported and cls not in classes:
+                continue
+            # Assume that actual units are not subclassed
+            if not list(cls.subclasses()) and repr(cls) not in exceptions:
+                with self.subTest(cls=cls, label=get_label(cls)):
+                    self.assertTrue(
+                        any(
+                            regex.match(repr(r))
+                            for r in cls.get_indirect_is_a()
+                        ),
+                        msg=cls,
+                    )
+
+    def test_unit_dimension_rc1(self):
         """Check that all measurement units have a physical dimension.
 
         Configurations:
@@ -206,6 +369,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 "emmo.DerivedUnit",
                 "emmo.BaseUnit",
                 "emmo.UnitSymbol",
+                "emmo.SIAccepted",
                 "emmo.SICoherentDerivedUnit",
                 "emmo.SINonCoherentDerivedUnit",
                 "emmo.SISpecialUnit",
@@ -219,9 +383,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         if not hasattr(self.onto, "MeasurementUnit"):
             return
         exceptions.update(self.get_config("test_unit_dimension.exceptions", ()))
-        regex = re.compile(
-            r"^(emmo|metrology).hasPhysicalDimension.some\(.*\)$"
-        )
+        regex = re.compile(r"^(emmo|metrology).hasDimensionString.value\(.*\)$")
         classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.MeasurementUnit.descendants():
             if not self.check_imported and cls not in classes:
@@ -405,6 +567,11 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
 
     def test_dimensional_unit(self):
         """Check correct syntax of dimension string of dimensional units."""
+
+        # This test requires that the ontology has imported SIDimensionalUnit
+        if "SIDimensionalUnit" not in self.onto:
+            self.skipTest("SIDimensionalUnit is not imported")
+
         # pylint: disable=invalid-name
         regex = re.compile(
             "^T([+-][1-9][0-9]*|0) L([+-][1-9]|0) M([+-][1-9]|0) "

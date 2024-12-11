@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <group id="Folder Repository, directory=, recursive=true, Auto-Update=false, version=2" prefer="public" xml:base="">
-	    <uri name="http://emmo.info/testonto/0.1.0" uri="ontology.ttl"/>
-	    <uri name="http://emmo.info/testonto/0.1.0/models" uri="models.ttl"/>
-    </group>
+  <group id="Folder Repository, directory=, recursive=true, Auto-Update=false, version=2" prefer="public" xml:base="">
+    <uri name="http://emmo.info/testonto/0.1.0"                            uri="testonto.ttl"/>
+    <uri name="http://emmo.info/testonto/0.1.0/models"                     uri="models.ttl"/>
+    <uri name="http://emmo.info/testonto-recursive/0.1.0"                  uri="testonto-recursive.ttl"/>
+    <uri name="http://emmo.info/testonto/0.1.0/models-recursive"           uri="models-recursive.ttl"/>
+    <uri name="http://emmo.info/emmo/domain/dummychameo/1.0.0/dummychameo" uri="dummychameo/dummychameo.ttl"/>
+    <uri name="https://w3id.org/emmo/domain/animal/0.1"                    uri="animal.ttl"/>
+    <uri name="https://w3id.org/emmo/domain/mammal/0.1"                    uri="mammal.ttl"/>
+  </group>
 </catalog>

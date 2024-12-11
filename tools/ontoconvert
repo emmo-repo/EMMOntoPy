@@ -7,7 +7,10 @@ import warnings
 from rdflib.util import guess_format
 
 from ontopy import get_ontology
-from ontopy.utils import annotate_source, rename_iris
+from ontopy.utils import annotate_source, rename_iris, copy_annotation
+
+import owlready2  # pylint: disable=wrong-import-order
+import owlready2.reasoning  # pylint: disable=wrong-import-order
 
 
 def main(argv: list = None):
@@ -60,6 +63,38 @@ def main(argv: list = None):
         ),
     )
     parser.add_argument(
+        "--copy-annotation",
+        "-c",
+        action="append",
+        default=[],
+        metavar="FROM-->TO",
+        help=(
+            "Copy annotation FROM to annotation TO in each class and "
+            "property in the ontology.  FROM and TO may be given as "
+            "full IRIs or (if they already exists as annotations in the "
+            "ontology) as entity names.  "
+            "This option be given multiple times."
+        ),
+    )
+    parser.add_argument(
+        "--copy-emmo-annotations",
+        "-e",
+        action="store_true",
+        help=(
+            "Make a copy of EMMO annotations to plain RDFS for increased "
+            "interoperability. "
+            "Alias for: `--copy-annotation="
+            "http://www.w3.org/2004/02/skos/core#prefLabel"
+            "-->http://www.w3.org/2000/01/rdf-schema#label "
+            "--copy-annotation=elucidation"
+            "-->http://www.w3.org/2000/01/rdf-schema#comment` "
+            "--copy-annotation=definition"
+            "-->http://www.w3.org/2000/01/rdf-schema#comment` "
+            "--copy-annotation=comment"
+            "-->http://www.w3.org/2000/01/rdf-schema#comment`"
+        ),
+    )
+    parser.add_argument(
         "--no-catalog",
         "-n",
         action="store_false",
@@ -72,11 +107,12 @@ def main(argv: list = None):
         "--infer",
         "-i",
         nargs="?",
-        const="FaCT++",
+        const="HermiT",
+        choices=["HermiT", "Pellet", "FaCT++"],
         metavar="NAME",
         help=(
             "Add additional relations inferred by the reasoner.  Supported "
-            'reasoners are "FaCT++" (default), "HermiT" and "Pellet".'
+            'reasoners are "HermiT" (default), "Pellet" and "FaCT++".'
         ),
     )
     parser.add_argument(
@@ -86,12 +122,27 @@ def main(argv: list = None):
         help="Do not infer imported ontologies.",
     )
     parser.add_argument(
+        "--java-executable",
+        help="Path to Java executable to use. Default is `java`.",
+    )
+    parser.add_argument(
+        "--java-memory",
+        help="Maximum memory allocated to Java in MB. Default is 2000.",
+    )
+    parser.add_argument(
+        "--iri",
+        "-I",
+        help="IRI of converted ontology.",
+    )
+    parser.add_argument(
         "--base-iri",
         "-b",
         help=(
-            "Base iri of inferred ontology. The default is the base iri of "
-            'the input ontology with "-inferred" appended to it. Used '
-            "together with --reasoner."
+            "Base IRI of converted ontology. The default is the base iri of "
+            "the input ontology."
+            "\n\nThis argument can be used to workaround the bug in Owlready2 "
+            "that changes the base IRI of the ontology to always end with a "
+            "slash."
         ),
     )
     parser.add_argument(
@@ -127,7 +178,7 @@ def main(argv: list = None):
         "-a",
         action="store_true",
         help=(
-            "Whether to annotate all entities with be base IRI of the source "
+            "Whether to annotate all entities with the base IRI of the source "
             "ontology using `dcterms:source` relations.  This is contextual "
             "information that is otherwise lost when ontologies are inferred "
             "and/or squashed."
@@ -179,6 +230,26 @@ def main(argv: list = None):
     if not output_format:
         output_format = "xml"
 
+    # Settings for running Java
+    if args.java_executable:
+        owlready2.JAVA_EXE = args.java_executable
+    if args.java_memory:
+        owlready2.reasoning.JAVA_MEMORY = int(args.java_memory)
+
+    # Annotations to copy with --copy-emmo-annotations
+    if args.copy_emmo_annotations:
+        args.copy_annotation.extend(
+            [
+                "http://www.w3.org/2004/02/skos/core#prefLabel"
+                "-->http://www.w3.org/2000/01/rdf-schema#label",
+                "elucidation-->http://www.w3.org/2000/01/rdf-schema#comment",
+                "definition-->http://www.w3.org/2000/01/rdf-schema#comment",
+                "conceptualisation"
+                "-->http://www.w3.org/2000/01/rdf-schema#comment",
+                "comment-->http://www.w3.org/2000/01/rdf-schema#comment",
+            ]
+        )
+
     # Perform conversion
     with warnings.catch_warnings(record=True) as warnings_handle:
         warnings.simplefilter("always")
@@ -188,123 +259,43 @@ def main(argv: list = None):
             url_from_catalog=args.url_from_catalog,
         )
 
+        if args.iri:
+            onto.iri = args.iri
+
+        if args.base_iri:
+            onto.base_iri = args.base_iri
+
         if args.annotate_source:
             annotate_source(onto)
 
         if args.rename_iris:
             rename_iris(onto, args.rename_iris)
 
-        # owlready2.reasoning._apply_reasoning_results() is broken!
-        # Currently it messes up everything by adding the inferred
-        # rdfs:subClassOf relations as rdf:type relations :-(
-        #
-        # Temporary workaround
-        # Instead of calling onto.sync_reasoner() we call FaCTPPGraph
-        # directly. This means that HermiT and Pellet are currently not
-        # supported
         if args.reasoner:
-            # pylint:disable=import-outside-toplevel
-            from ontopy.factpluspluswrapper.factppgraph import FaCTPPGraph
-            from ontopy.utils import FMAP
-            import rdflib
-            from rdflib import OWL, RDF, URIRef
-
-            if args.reasoner != "FaCT++":
-                raise NotImplementedError(
-                    "Only FaCT++ is currently supported..."
-                )
-            if args.output_dir != ".":
-                raise NotImplementedError(
-                    "The --output-dir option is currently not supported "
-                    "together with --reasoner."
-                )
-            if args.recursive:
-                raise NotImplementedError(
-                    "The --recursive option is currently not supported "
-                    "together with --reasoner."
-                )
-            if args.no_infer_imported:
-                raise NotImplementedError(
-                    "The --no-infer-imported option is currently not "
-                    "supported together with --reasoner."
-                )
-
-            graph0 = onto.world.as_rdflib_graph()
-            graph1 = rdflib.Graph()
-            for s, p, o in graph0.triples((None, None, None)):
-                if p != OWL.imports:
-                    graph1.add((s, p, o))
-            graph2 = FaCTPPGraph(graph1).inferred_graph()
-
-            # Remove existing ontology(ies)
-            remove = list(graph2.triples((None, RDF.type, OWL.Ontology)))
-            for triple in remove:
-                graph2.remove(triple)
-
-            # Add new ontology
-            if args.base_iri:
-                base_iri = args.base_iri
-            else:
-                stripped = onto.base_iri.rstrip("#/")
-                terminal = onto.base_iri[len(stripped) :]
-                base_iri = f"{stripped}-inferred{terminal}"
-            iri = URIRef(base_iri)
-            graph2.add((iri, RDF.type, OWL.Ontology))
-
-            # Add ontology metadata
-            ontologies = list(graph0.subjects(RDF.type, OWL.Ontology))
-            while str(ontologies[0]) == "http://anonymous":
-                ontologies.pop(0)
-            if ontologies:
-                for s, p, o in graph0.triples((ontologies[0], None, None)):
-                    graph2.add((iri, p, o))
-
-            # Serialise
-            if args.output_format:
-                fmt = FMAP.get(args.output_format, args.output_format)
-            else:
-                fmt = guess_format(args.output, fmap=FMAP)
-            graph2.namespace_manager.bind(
-                "emmo", rdflib.Namespace("http://emmo.info/emmo#")
-            )
-            graph2.serialize(destination=args.output, format=fmt)
-
-        else:
-            onto.save(
-                args.output,
-                format=output_format,
-                dir=args.output_dir,
-                mkdir=True,
-                overwrite=args.overwrite,
-                recursive=args.recursive,
-                squash=args.squash,
-                write_catalog_file=bool(args.catalog_file),
-                append_catalog=args.append_catalog,
-                catalog_file=args.catalog_file,
+            include_imported = not args.no_infer_imported
+            verbose = not args.quiet
+            onto.sync_reasoner(
+                reasoner=args.reasoner,
+                include_imported=include_imported,
+                debug=verbose,
             )
 
-        # Bring back these lines when _apply_reasoning_results() works again
-        # Remember to remove the Bugs subsection in the documentation
+        for cpy in args.copy_annotation:
+            src, dst = cpy.split("-->", 1)
+            copy_annotation(onto, src.strip(), dst.strip())
 
-        # if args.reasoner:
-        #     include_imported = not args.no_infer_imported
-        #     verbose = not args.quiet
-        #     onto.sync_reasoner(reasoner=args.reasoner,
-        #                        include_imported=include_imported,
-        #                        debug=verbose)
-        #
-        # onto.save(
-        #     args.output,
-        #     format=output_format,
-        #     dir=args.output_dir,
-        #     mkdir=True,
-        #     overwrite=args.overwrite,
-        #     recursive=args.recursive,
-        #     squash=args.squash,
-        #     write_catalog_file=bool(args.catalog_file),
-        #     append_catalog=args.append_catalog,
-        #     catalog_file=args.catalog_file,
-        # )
+        onto.save(
+            args.output,
+            format=output_format,
+            dir=args.output_dir,
+            mkdir=True,
+            overwrite=args.overwrite,
+            recursive=args.recursive,
+            squash=args.squash,
+            write_catalog_file=bool(args.catalog_file),
+            append_catalog=args.append_catalog,
+            catalog_file=args.catalog_file,
+        )
 
         for warning in warnings_handle:
             print(

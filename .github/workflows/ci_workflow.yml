@@ -10,7 +10,7 @@ on:
 jobs:
   tests:
     name: External
-    uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.5.2
+    uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.8.3
     with:
       # General
       install_extras: "[dev,docs]"
@@ -26,19 +26,22 @@ jobs:
       pylint_options: "--rcfile=pyproject.toml"
       pylint_targets: "*.py tools emmopy ontopy"
 
-      # safety
-      # Ignore ID 44715 for now.
-      # See this NumPy issue for more information: https://github.com/numpy/numpy/issues/19038
-      # Also ignore IDs 44716 and 44717 as they are not deemed to be as severe as it is
-      # laid out in the CVE.
-      # Remove ignoring 48547 as soon as RDFLib/rdflib#1844 has been fixed and the fix
-      # has been released.
+
+      # safety-specific settings
       run_safety: true
+      # 48547: RDFLib vulnerability: https://pyup.io/vulnerabilities/PVE-2022-48547/48547/
+      # 44715-44717: NumPy vulnerabilities:
+      #  https://pyup.io/vulnerabilities/CVE-2021-41495/44715/
+      #  https://pyup.io/vulnerabilities/CVE-2021-41496/44716/
+      #  https://pyup.io/vulnerabilities/CVE-2021-34141/44717/
+      # 70612: Jinja2 vulnerability. Only used as subdependency for mkdocs++ in tripper.
+      #  https://data.safetycli.com/v/70612/97c/
       safety_options: |
+        --ignore=48547
         --ignore=44715
         --ignore=44716
         --ignore=44717
-        --ignore=48547
+        --ignore=70612
 
       # Build distribution
       run_build_package: true
@@ -74,7 +77,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -92,7 +95,9 @@ jobs:
 
     - name: Upload coverage to Codecov
       if: matrix.python-version == '3.9' && github.repository == 'emmo-repo/EMMOntoPy'
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
 
     # - name: Run vertical demo
     #   run: |
@@ -118,7 +123,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Set up Python 3.9
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: "3.9"
 

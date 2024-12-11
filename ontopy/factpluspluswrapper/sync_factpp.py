@@ -1,4 +1,5 @@
-"""# `ontopy.factpluspluswrapper.syncfatpp`"""
+"""Interface FaCT++ reasoner."""
+
 # pylint: disable=protected-access
 from collections import defaultdict
 from collections.abc import Sequence

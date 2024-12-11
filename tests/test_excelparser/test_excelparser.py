@@ -1,4 +1,5 @@
 """Test the Excel parser module."""
+
 from typing import TYPE_CHECKING
 
 import pytest
@@ -91,14 +92,53 @@ def test_excelparser(repo_dir: "Path") -> None:
         update_xlspath, force=True, input_ontology=ontology
     )
     assert updated_onto.ATotallyNewPattern
-    assert updated_onto.Pattern.iri == onto.Pattern.iri
+    assert updated_onto.FinitePattern.iri == onto.FinitePattern.iri
     assert len(list(onto.classes())) + 1 == len(list(updated_onto.classes()))
+
+    # check that the owlready2 generated python names are not in the triples
+    assert (
+        list(
+            ontology.get_unabbreviated_triples(
+                predicate="http://www.lesfleursdunormal.fr/static/_downloads/"
+                "owlready_ontology.owl#python_name"
+            )
+        )
+        == []
+    )
+    # check that the owlready2 generated python names are not in the triples
+    assert (
+        list(
+            updated_onto.get_unabbreviated_triples(
+                predicate="http://www.lesfleursdunormal.fr/static/_downloads/"
+                "owlready_ontology.owl#python_name"
+            )
+        )
+        == []
+    )
+
+    # Just to be sure that the method of getting the correct triples is OK
+    assert (
+        len(
+            list(
+                ontology.get_unabbreviated_triples(
+                    predicate="http://www.w3.org/2000/01/rdf-schema#subClassOf"
+                )
+            )
+        )
+        > 1
+    )
 
 
 def test_excelparser_only_classes(repo_dir: "Path") -> None:
     """This loads the excelfile used and tests that the resulting ontology prior
     to version 0.5.2 in which only classes where considered, but with empty sheets
     for properties."""
+
+    # Useful for debugging with ipython
+    # if True:
+    #    from pathlib import Path
+    #    repo_dir = Path(__file__).resolve().parent.parent.parent
+
     ontopath = (
         repo_dir
         / "tests"
@@ -118,6 +158,10 @@ def test_excelparser_only_classes(repo_dir: "Path") -> None:
     ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
     # Used for printing new ontology when debugging
     # ontology.save("test_only_classes.ttl")
+
+    # Useful for debugging
+    # print("-----  only in onto  -----")
+    # print(onto.difference(ontology))
 
     assert onto == ontology
     assert errors["already_defined"] == {"SpecialPattern"}
@@ -143,5 +187,5 @@ def test_excelparser_only_classes(repo_dir: "Path") -> None:
         update_xlspath, force=True, input_ontology=ontology
     )
     assert updated_onto.ATotallyNewPattern
-    assert updated_onto.Pattern.iri == onto.Pattern.iri
+    assert updated_onto.FinitePattern.iri == onto.FinitePattern.iri
     assert len(list(onto.classes())) + 1 == len(list(updated_onto.classes()))

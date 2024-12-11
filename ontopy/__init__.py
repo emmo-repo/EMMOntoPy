@@ -1,8 +1,9 @@
 """# `ontopy` Module"""
+
 # pylint: disable=wrong-import-position,wrong-import-order
 import sys
 
-__version__ = "0.6.0"
+__version__ = "0.7.2"
 
 # Ensure correct Python version
 if sys.version_info < (3, 7):
@@ -22,4 +23,4 @@ from .ontology import World, get_ontology
 from owlready2 import onto_path
 
 
-__all__ = ("patch", "World", "get_ontology", "onto_path")
+__all__ = ("__version__", "World", "get_ontology", "onto_path")
