@@ -1213,6 +1213,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.find" class="md-nav__link">
+    <span class="md-ellipsis">
+      find()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#ontopy.ontology.Ontology.get_ancestors" class="md-nav__link">
     <span class="md-ellipsis">
       get_ancestors()
@@ -2023,6 +2032,15 @@
   <a href="#ontopy.ontology.Ontology.difference" class="md-nav__link">
     <span class="md-ellipsis">
       difference()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.find" class="md-nav__link">
+    <span class="md-ellipsis">
+      find()
     </span>
   </a>
   
@@ -4600,6 +4618,82 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="n">s1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_unabbreviated_triples</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="s2">&quot;_:b&quot;</span><span class="p">))</span>
         <span class="n">s2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">get_unabbreviated_triples</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="s2">&quot;_:b&quot;</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">s1</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">,</span> <span class="n">case_sensitive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Iterator&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A simple alternative to the  Owlready2 `search()` method.</span>
+
+<span class="sd">        This method searches through all literal strings in the given domain.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            text: Free text string to search for.</span>
+<span class="sd">            domain: Domain to search. Should be one of:</span>
+<span class="sd">                - &quot;ontology&quot;: Current ontology.</span>
+<span class="sd">                - &quot;imported&quot;: Current and all imported ontologies.</span>
+<span class="sd">                - &quot;world&quot;: The world.</span>
+<span class="sd">            case_sensitive: Whether the search is case sensitive.</span>
+<span class="sd">            regex: Whether to use regular expression search.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Iterator over `(subject, predicate, literal_string)` triples,</span>
+<span class="sd">            converted to EMMOntoPy objects.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pylint: disable=too-many-locals,too-many-branches</span>
+
+        <span class="k">if</span> <span class="n">domain</span> <span class="o">==</span> <span class="s2">&quot;ontology&quot;</span><span class="p">:</span>
+            <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">domain</span> <span class="o">==</span> <span class="s2">&quot;imported&quot;</span><span class="p">:</span>
+            <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_imported_ontologies</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">domain</span> <span class="o">==</span> <span class="s2">&quot;world&quot;</span><span class="p">:</span>
+            <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;`domain` must be &#39;ontology&#39;, &#39;imported&#39; or &#39;world&#39;. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Got: </span><span class="si">{</span><span class="n">domain</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Define our match function</span>
+        <span class="k">if</span> <span class="n">regex</span><span class="p">:</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">case_sensitive</span> <span class="k">else</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">matchfun</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;Match function using regex.&quot;&quot;&quot;</span>
+                <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">case_sensitive</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+            <span class="k">def</span> <span class="nf">matchfun</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;Match function without regex.&quot;&quot;&quot;</span>
+                <span class="k">if</span> <span class="n">case_sensitive</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">string</span>
+                <span class="k">return</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="n">ontology_storid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>
+            <span class="s2">&quot;http://www.w3.org/2002/07/owl#Ontology&quot;</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">onto</span> <span class="ow">in</span> <span class="n">ontologies</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">_get_data_triples_spod_spod</span><span class="p">(</span>
+                <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="p">):</span>
+                <span class="n">predicate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">matchfun</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+                    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+                        <span class="n">s</span><span class="p">,</span> <span class="nb">int</span>
+                    <span class="p">),</span> <span class="s2">&quot;subject should be a storid&quot;</span>  <span class="c1"># nosec</span>
+                    <span class="k">if</span> <span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">subject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+                        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">ontology_storid</span><span class="p">:</span>
+                            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">get_ontology</span><span class="p">(</span>
+                                <span class="n">subject</span><span class="o">.</span><span class="n">iri</span>
+                            <span class="p">),</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">o</span>
+                        <span class="k">yield</span> <span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">o</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">yield</span> <span class="n">BlankNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">,</span> <span class="n">s</span><span class="p">),</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">o</span>
 </code></pre></div>
         </details>
 
@@ -5095,6 +5189,162 @@ are also returned.</p></td>
     <span class="n">s1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_unabbreviated_triples</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="s2">&quot;_:b&quot;</span><span class="p">))</span>
     <span class="n">s2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">get_unabbreviated_triples</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="s2">&quot;_:b&quot;</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">s1</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontology.Ontology.find" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="s1">&#39;world&#39;</span><span class="p">,</span> <span class="n">case_sensitive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontology.Ontology.find" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>A simple alternative to the  Owlready2 <code>search()</code> method.</p>
+<p>This method searches through all literal strings in the given domain.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>text</code></td>
+        <td><code>str</code></td>
+        <td><p>Free text string to search for.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>domain</code></td>
+        <td></td>
+        <td><p>Domain to search. Should be one of:
+- "ontology": Current ontology.
+- "imported": Current and all imported ontologies.
+- "world": The world.</p></td>
+        <td><code>&#39;world&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>case_sensitive</code></td>
+        <td></td>
+        <td><p>Whether the search is case sensitive.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>regex</code></td>
+        <td></td>
+        <td><p>Whether to use regular expression search.</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Iterator</code></td>
+      <td><p>Iterator over <code>(subject, predicate, literal_string)</code> triples,
+converted to EMMOntoPy objects.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontology.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">find</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">,</span> <span class="n">case_sensitive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Iterator&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A simple alternative to the  Owlready2 `search()` method.</span>
+
+<span class="sd">    This method searches through all literal strings in the given domain.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        text: Free text string to search for.</span>
+<span class="sd">        domain: Domain to search. Should be one of:</span>
+<span class="sd">            - &quot;ontology&quot;: Current ontology.</span>
+<span class="sd">            - &quot;imported&quot;: Current and all imported ontologies.</span>
+<span class="sd">            - &quot;world&quot;: The world.</span>
+<span class="sd">        case_sensitive: Whether the search is case sensitive.</span>
+<span class="sd">        regex: Whether to use regular expression search.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Iterator over `(subject, predicate, literal_string)` triples,</span>
+<span class="sd">        converted to EMMOntoPy objects.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># pylint: disable=too-many-locals,too-many-branches</span>
+
+    <span class="k">if</span> <span class="n">domain</span> <span class="o">==</span> <span class="s2">&quot;ontology&quot;</span><span class="p">:</span>
+        <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">domain</span> <span class="o">==</span> <span class="s2">&quot;imported&quot;</span><span class="p">:</span>
+        <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_imported_ontologies</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">domain</span> <span class="o">==</span> <span class="s2">&quot;world&quot;</span><span class="p">:</span>
+        <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;`domain` must be &#39;ontology&#39;, &#39;imported&#39; or &#39;world&#39;. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Got: </span><span class="si">{</span><span class="n">domain</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Define our match function</span>
+    <span class="k">if</span> <span class="n">regex</span><span class="p">:</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">case_sensitive</span> <span class="k">else</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">matchfun</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Match function using regex.&quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">case_sensitive</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">matchfun</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Match function without regex.&quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">case_sensitive</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">string</span>
+            <span class="k">return</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="n">ontology_storid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>
+        <span class="s2">&quot;http://www.w3.org/2002/07/owl#Ontology&quot;</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">onto</span> <span class="ow">in</span> <span class="n">ontologies</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">_get_data_triples_spod_spod</span><span class="p">(</span>
+            <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="n">predicate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">matchfun</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+                    <span class="n">s</span><span class="p">,</span> <span class="nb">int</span>
+                <span class="p">),</span> <span class="s2">&quot;subject should be a storid&quot;</span>  <span class="c1"># nosec</span>
+                <span class="k">if</span> <span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">subject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">ontology_storid</span><span class="p">:</span>
+                        <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">get_ontology</span><span class="p">(</span>
+                            <span class="n">subject</span><span class="o">.</span><span class="n">iri</span>
+                        <span class="p">),</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">o</span>
+                    <span class="k">yield</span> <span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">o</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">BlankNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">,</span> <span class="n">s</span><span class="p">),</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">o</span>
 </code></pre></div>
         </details>
     </div>
