@@ -3876,7 +3876,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">include_imported</span><span class="p">:</span>
-            <span class="n">ontologies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_imported_ontologies</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_imported_ontologies</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span>
 
@@ -3893,6 +3893,8 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                 <span class="c1"># Datatype instances that are known to crash the reasoner</span>
                 <span class="n">datatypes</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="s2">&quot;http://www.w3.org/2002/07/owl#rational&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#JSON&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#NCName&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#NMTOKEN&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#Name&quot;</span><span class="p">,</span>
@@ -8273,7 +8275,7 @@ over imported ontologies.  Note that this may be <strong>very</strong> slow.</p>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">include_imported</span><span class="p">:</span>
-        <span class="n">ontologies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_imported_ontologies</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_imported_ontologies</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span>
 
@@ -8290,6 +8292,8 @@ over imported ontologies.  Note that this may be <strong>very</strong> slow.</p>
             <span class="c1"># Datatype instances that are known to crash the reasoner</span>
             <span class="n">datatypes</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;http://www.w3.org/2002/07/owl#rational&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#JSON&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#NCName&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#NMTOKEN&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#Name&quot;</span><span class="p">,</span>
