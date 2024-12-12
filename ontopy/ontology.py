@@ -13,6 +13,7 @@ import warnings
 import uuid
 import tempfile
 import types
+import re
 from pathlib import Path
 from collections import defaultdict
 from collections.abc import Iterable
@@ -50,7 +51,7 @@ from ontopy.utils import (  # pylint: disable=cyclic-import
 )
 
 if TYPE_CHECKING:
-    from typing import List, Sequence
+    from typing import Iterator, List, Sequence
 
 
 # Default annotations to look up
@@ -1364,7 +1365,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             )
 
         if include_imported:
-            ontologies = self.get_imported_ontologies(recursive=True)
+            ontologies = [self] + self.get_imported_ontologies(recursive=True)
         else:
             ontologies = [self]
 
@@ -1381,6 +1382,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 # Datatype instances that are known to crash the reasoner
                 datatypes = (
                     "http://www.w3.org/2002/07/owl#rational",
+                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML",
+                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#JSON",
                     "http://www.w3.org/2001/XMLSchema#NCName",
                     "http://www.w3.org/2001/XMLSchema#NMTOKEN",
                     "http://www.w3.org/2001/XMLSchema#Name",
@@ -2106,6 +2109,82 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         s1 = set(self.get_unabbreviated_triples(blank="_:b"))
         s2 = set(other.get_unabbreviated_triples(blank="_:b"))
         return s1.difference(s2)
+
+    def find(
+        self, text: str, domain="world", case_sensitive=False, regex=False
+    ) -> "Iterator":
+        """A simple alternative to the  Owlready2 `search()` method.
+
+        This method searches through all literal strings in the given domain.
+
+        Args:
+            text: Free text string to search for.
+            domain: Domain to search. Should be one of:
+                - "ontology": Current ontology.
+                - "imported": Current and all imported ontologies.
+                - "world": The world.
+            case_sensitive: Whether the search is case sensitive.
+            regex: Whether to use regular expression search.
+
+        Returns:
+            Iterator over `(subject, predicate, literal_string)` triples,
+            converted to EMMOntoPy objects.
+
+        """
+        # pylint: disable=too-many-locals,too-many-branches
+
+        if domain == "ontology":
+            ontologies = [self]
+        elif domain == "imported":
+            ontologies = [self] + self.get_imported_ontologies(recursive=True)
+        elif domain == "world":
+            ontologies = [self.world]
+        else:
+            raise ValueError(
+                "`domain` must be 'ontology', 'imported' or 'world'. "
+                f"Got: {domain}"
+            )
+
+        # Define our match function
+        if regex:
+            flags = 0 if case_sensitive else re.IGNORECASE
+            pattern = re.compile(f"{text}", flags=flags)
+
+            def matchfun(string):
+                """Match function using regex."""
+                return re.match(pattern, string)
+
+        else:
+            if not case_sensitive:
+                text = text.lower()
+
+            def matchfun(string):
+                """Match function without regex."""
+                if case_sensitive:
+                    return text in string
+                return text in string.lower()
+
+        ontology_storid = self.world._abbreviate(
+            "http://www.w3.org/2002/07/owl#Ontology"
+        )
+        for onto in ontologies:
+            for s, p, o, _ in onto._get_data_triples_spod_spod(
+                None, None, None, None
+            ):
+                predicate = self.world.get(self.world._unabbreviate(p))
+                if isinstance(o, str) and matchfun(o):
+                    assert isinstance(
+                        s, int
+                    ), "subject should be a storid"  # nosec
+                    if s >= 0:
+                        subject = self.world.get(self.world._unabbreviate(s))
+                        if s == ontology_storid:
+                            yield self.world.get_ontology(
+                                subject.iri
+                            ), predicate, o
+                        yield subject, predicate, o
+                    else:
+                        yield BlankNode(self.world, s), predicate, o
 
 
 class BlankNode:
