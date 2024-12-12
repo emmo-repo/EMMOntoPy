@@ -780,15 +780,25 @@ def rename_iris(onto, annotation="prefLabel"):
     to the value of the annotation.  Also add an `skos:exactMatch`
     annotation referring to the old IRI.
     """
-    exactMatch = onto._abbreviate(  # pylint:disable=invalid-name
-        "http://www.w3.org/2004/02/skos/core#exactMatch"
-    )
+    # exactMatch = onto._abbreviate(  # pylint:disable=invalid-name
+    #     "http://www.w3.org/2004/02/skos/core#exactMatch"
+    # )
     for entity in onto.get_entities():
-        if hasattr(entity, annotation) and getattr(entity, annotation):
-            onto._add_data_triple_spod(
-                entity.storid, exactMatch, entity.iri, ""
-            )
-            entity.name = getattr(entity, annotation).first()
+        label = getattr(entity, annotation).first()
+        if (
+            label
+            and not onto.world[f"{onto.base_iri}{label}"]
+            and hasattr(entity, annotation)
+            and getattr(entity, annotation)
+        ):
+            # pylint: disable=fixme
+            # FIXME: Saving the below skos:exactMatch relations makes Owlready2
+            # crash when saving.
+            #
+            # onto._add_data_triple_spod(
+            #     entity.storid, exactMatch, entity.iri, ""
+            # )
+            entity.name = label
 
 
 def normalise_url(url):
