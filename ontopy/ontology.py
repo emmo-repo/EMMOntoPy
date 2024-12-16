@@ -1161,33 +1161,23 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         also be included.
 
         Arguments:
-        - imported (bool): Whether to include entities from imported
+            imported (bool): Whether to include entities from imported
         ontologies. Defaults to `True`.
-        - classes (bool): Whether to include classes. Defaults to `True`.
-        - individuals (bool): Whether to include individuals.
+            classes (bool): Whether to include classes. Defaults to `True`.
+            individuals (bool): Whether to include individuals.
         Defaults to `True`.
-        - object_properties (bool): Whether to include object properties.
+            object_properties (bool): Whether to include object properties.
         Defaults to `True`.
-        - data_properties (bool): Whether to include data properties.
+            data_properties (bool): Whether to include data properties.
         Defaults to `True`.
-        - annotation_properties (bool): Whether to include annotation
+            annotation_properties (bool): Whether to include annotation
         properties. Defaults to `True`.
-        - properties (bool): Whether to include `rdfs:Property` entities.
+            properties (bool): Whether to include `rdfs:Property` entities.
         Defaults to `True`.
 
         Yields:
-        - Entities matching the specified filters.
+            Entities matching the specified filters.
 
-        Example:
-        To retrieve only individuals and classes:
-        ```
-        for entity in ontology.get_entities(classes=True, individuals=True,
-                                            object_properties=False,
-                                            data_properties=False,
-                                            annotation_properties=False,
-                                            properties=False):
-            print(entity)
-        ```
         """
 
         generator = []
