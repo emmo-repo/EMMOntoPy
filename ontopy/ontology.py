@@ -52,7 +52,7 @@ from ontopy.utils import (  # pylint: disable=cyclic-import
 )
 
 if TYPE_CHECKING:
-    from typing import Iterator, List, Sequence
+    from typing import Iterator, List, Sequence, Generator
 
 
 # Default annotations to look up
@@ -1136,14 +1136,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def get_entities(  # pylint: disable=too-many-arguments
         self,
         *,
-        imported=True,
-        classes=True,
-        individuals=True,
-        object_properties=True,
-        data_properties=True,
-        annotation_properties=True,
-        properties=True,
-    ):
+        imported: bool = True,
+        classes: bool = True,
+        individuals: bool = True,
+        object_properties: bool = True,
+        data_properties: bool = True,
+        annotation_properties: bool = True,
+        properties: bool = True,
+    ) -> "Generator[Union[str, object], None, None]":
         """
         This method returns a generator over entities in the ontology,
         including the following categories:
