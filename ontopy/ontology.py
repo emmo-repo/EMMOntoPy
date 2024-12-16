@@ -27,6 +27,7 @@ from owlready2 import locstr
 from owlready2.entity import ThingClass
 from owlready2.prop import ObjectPropertyClass, DataPropertyClass
 from owlready2 import AnnotationPropertyClass
+from owlready2.base import rdf_type
 
 from ontopy.factpluspluswrapper.sync_factpp import sync_reasoner_factpp
 from ontopy.utils import (  # pylint: disable=cyclic-import
@@ -51,7 +52,7 @@ from ontopy.utils import (  # pylint: disable=cyclic-import
 )
 
 if TYPE_CHECKING:
-    from typing import Iterator, List, Sequence
+    from typing import Iterator, List, Sequence, Generator
 
 
 # Default annotations to look up
@@ -1135,19 +1136,50 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     def get_entities(  # pylint: disable=too-many-arguments
         self,
         *,
-        imported=True,
-        classes=True,
-        individuals=True,
-        object_properties=True,
-        data_properties=True,
-        annotation_properties=True,
-    ):
-        """Return a generator over (optionally) all classes, individuals,
-        object_properties, data_properties and annotation_properties.
-
-        If `imported` is `True`, entities in imported ontologies will also
-        be included.
+        imported: bool = True,
+        classes: bool = True,
+        individuals: bool = True,
+        object_properties: bool = True,
+        data_properties: bool = True,
+        annotation_properties: bool = True,
+        properties: bool = True,
+    ) -> "Generator[Union[str, object], None, None]":
         """
+        This method returns a generator over entities in the ontology,
+        including the following categories:
+        - Classes (`owl:Class` or `rdfs:Class`)
+        - Individuals
+        - Object properties (`owl:ObjectProperty`)
+        - Data properties (`owl:DataProperty`)
+        - Annotation properties (`owl:AnnotationProperty`)
+        - Properties (`rdfs:Property`)
+
+        Notes:
+        - If `properties` is `True`, `rdfs:Property` entities will be returned
+        as IRIs (strings) rather than Python objects.
+        - When `imported` is `True`, entities from imported ontologies will
+        also be included.
+
+        Arguments:
+            imported (bool): Whether to include entities from imported
+        ontologies. Defaults to `True`.
+            classes (bool): Whether to include classes. Defaults to `True`.
+            individuals (bool): Whether to include individuals.
+        Defaults to `True`.
+            object_properties (bool): Whether to include object properties.
+        Defaults to `True`.
+            data_properties (bool): Whether to include data properties.
+        Defaults to `True`.
+            annotation_properties (bool): Whether to include annotation
+        properties. Defaults to `True`.
+            properties (bool): Whether to include `rdfs:Property` entities.
+        Defaults to `True`.
+
+        Yields:
+            Entities matching the specified filters.
+
+        """
+
         generator = []
         if classes:
             generator.append(self.classes(imported))
@@ -1159,6 +1191,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             generator.append(self.data_properties(imported))
         if annotation_properties:
             generator.append(self.annotation_properties(imported))
+        if properties:
+            generator.append(self.properties(imported))
         yield from itertools.chain(*generator)
 
     def classes(self, imported=False):
@@ -1175,14 +1209,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     ):  # pylint: disable=too-many-branches
         """Returns an generator over all entities of the desired type.
         This is a helper function for `classes()`, `individuals()`,
-        `object_properties()`, `data_properties()` and
-        `annotation_properties()`.
+        `object_properties()`, `data_properties()`,
+        `annotation_properties()` and `properties`.
 
         Arguments:
             entity_type: The type of entity desired given as a string.
                 Can be any of `classes`, `individuals`,
-                `object_properties`, `data_properties` and
-                `annotation_properties`.
+                `object_properties`, `data_properties`,
+                `annotation_properties` or `properties`.
             imported: if `True`, entities in imported ontologies
                 are also returned.
         """
@@ -1207,9 +1241,18 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 elif entity_type == "annotation_properties":
                     for prop in list(onto.annotation_properties()):
                         generator.append(prop)
+                elif entity_type == "properties":
+                    generator.append(list(onto.properties()))
         else:
             if entity_type == "classes":
-                generator = super().classes()
+                generator = list(super().classes())
+                # Add new triples of type rdfs:Class
+                rdf_schema_class = self._abbreviate(
+                    "http://www.w3.org/2000/01/rdf-schema#Class"
+                )
+                for s in self._get_obj_triples_po_s(rdf_type, rdf_schema_class):
+                    if not s < 0:
+                        generator.append(self.world._get_by_storid(s))
             elif entity_type == "individuals":
                 generator = super().individuals()
             elif entity_type == "object_properties":
@@ -1218,6 +1261,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 generator = super().data_properties()
             elif entity_type == "annotation_properties":
                 generator = super().annotation_properties()
+            elif entity_type == "properties":
+                generator = self.properties()
 
         yield from generator
 
@@ -1257,6 +1302,40 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         """
         return self._entities("annotation_properties", imported=imported)
+
+    def properties(self, imported=False):
+        """Returns an generator over all properties.
+        It searches for owl:object_properties, owl:data_properties,
+        owl:annotation_properties and rdf:Properties
+
+        Arguments:
+            imported: if `True`, entities in imported ontologies
+                are also returned.
+        """
+        generator = []
+        for prop in list(
+            self._entities("object_properties", imported=imported)
+        ):
+            generator.append(prop)
+
+        for prop in list(
+            self._entities("annotation_properties", imported=imported)
+        ):
+            generator.append(prop)
+
+        for prop in list(self._entities("data_properties", imported=imported)):
+            generator.append(prop)
+
+        rdf_property = self._abbreviate(
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        )
+        for s in self._get_obj_triples_po_s(rdf_type, rdf_property):
+            if not s < 0:
+                # print(s, self._unabbreviate(s))
+                generator.append(self._unabbreviate(s))
+                # generator.append(self[self._unabbreviate(s)])
+                # generator.append(self.world._get_by_storid(s))
+        yield from generator
 
     def get_root_classes(self, imported=False):
         """Returns a list or root classes."""
