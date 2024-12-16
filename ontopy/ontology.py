@@ -1144,12 +1144,52 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         annotation_properties=True,
         properties=True,
     ):
-        """Return a generator over (optionally) all classes, individuals,
-        object_properties, data_properties and annotation_properties.
-
-        If `imported` is `True`, entities in imported ontologies will also
-        be included.
         """
+        This method returns a generator over entities in the ontology,
+        including the following categories:
+        - Classes (`owl:Class` or `rdfs:Class`)
+        - Individuals
+        - Object properties (`owl:ObjectProperty`)
+        - Data properties (`owl:DataProperty`)
+        - Annotation properties (`owl:AnnotationProperty`)
+        - Properties (`rdfs:Property`)
+
+        Notes:
+        - If `properties` is `True`, `rdfs:Property` entities will be returned
+        as IRIs (strings) rather than Python objects.
+        - When `imported` is `True`, entities from imported ontologies will
+        also be included.
+
+        Arguments:
+        - imported (bool): Whether to include entities from imported
+        ontologies. Defaults to `True`.
+        - classes (bool): Whether to include classes. Defaults to `True`.
+        - individuals (bool): Whether to include individuals.
+        Defaults to `True`.
+        - object_properties (bool): Whether to include object properties.
+        Defaults to `True`.
+        - data_properties (bool): Whether to include data properties.
+        Defaults to `True`.
+        - annotation_properties (bool): Whether to include annotation
+        properties. Defaults to `True`.
+        - properties (bool): Whether to include `rdfs:Property` entities.
+        Defaults to `True`.
+
+        Yields:
+        - Entities matching the specified filters.
+
+        Example:
+        To retrieve only individuals and classes:
+        ```
+        for entity in ontology.get_entities(classes=True, individuals=True,
+                                            object_properties=False,
+                                            data_properties=False,
+                                            annotation_properties=False,
+                                            properties=False):
+            print(entity)
+        ```
+        """
+
         generator = []
         if classes:
             generator.append(self.classes(imported))
@@ -1179,14 +1219,14 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
     ):  # pylint: disable=too-many-branches
         """Returns an generator over all entities of the desired type.
         This is a helper function for `classes()`, `individuals()`,
-        `object_properties()`, `data_properties()` and
-        `annotation_properties()`.
+        `object_properties()`, `data_properties()`,
+        `annotation_properties()` and `properties`.
 
         Arguments:
             entity_type: The type of entity desired given as a string.
                 Can be any of `classes`, `individuals`,
-                `object_properties`, `data_properties` and
-                `annotation_properties`.
+                `object_properties`, `data_properties`,
+                `annotation_properties` or `properties`.
             imported: if `True`, entities in imported ontologies
                 are also returned.
         """
