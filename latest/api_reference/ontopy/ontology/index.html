@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.48">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
@@ -1489,6 +1489,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      properties()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#ontopy.ontology.Ontology.remove_label_annotation" class="md-nav__link">
     <span class="md-ellipsis">
       remove_label_annotation()
@@ -2308,6 +2317,15 @@
   <a href="#ontopy.ontology.Ontology.object_properties" class="md-nav__link">
     <span class="md-ellipsis">
       object_properties()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      properties()
     </span>
   </a>
   
@@ -3646,19 +3664,50 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
     <span class="k">def</span> <span class="nf">get_entities</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
-        <span class="n">imported</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">classes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">individuals</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">object_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">data_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">annotation_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a generator over (optionally) all classes, individuals,</span>
-<span class="sd">        object_properties, data_properties and annotation_properties.</span>
+        <span class="n">imported</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">classes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">individuals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">object_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">data_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">annotation_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Generator[Union[str, object], None, None]&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method returns a generator over entities in the ontology,</span>
+<span class="sd">        including the following categories:</span>
+<span class="sd">        - Classes (`owl:Class` or `rdfs:Class`)</span>
+<span class="sd">        - Individuals</span>
+<span class="sd">        - Object properties (`owl:ObjectProperty`)</span>
+<span class="sd">        - Data properties (`owl:DataProperty`)</span>
+<span class="sd">        - Annotation properties (`owl:AnnotationProperty`)</span>
+<span class="sd">        - Properties (`rdfs:Property`)</span>
 
-<span class="sd">        If `imported` is `True`, entities in imported ontologies will also</span>
-<span class="sd">        be included.</span>
+<span class="sd">        Notes:</span>
+<span class="sd">        - If `properties` is `True`, `rdfs:Property` entities will be returned</span>
+<span class="sd">        as IRIs (strings) rather than Python objects.</span>
+<span class="sd">        - When `imported` is `True`, entities from imported ontologies will</span>
+<span class="sd">        also be included.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            imported (bool): Whether to include entities from imported</span>
+<span class="sd">        ontologies. Defaults to `True`.</span>
+<span class="sd">            classes (bool): Whether to include classes. Defaults to `True`.</span>
+<span class="sd">            individuals (bool): Whether to include individuals.</span>
+<span class="sd">        Defaults to `True`.</span>
+<span class="sd">            object_properties (bool): Whether to include object properties.</span>
+<span class="sd">        Defaults to `True`.</span>
+<span class="sd">            data_properties (bool): Whether to include data properties.</span>
+<span class="sd">        Defaults to `True`.</span>
+<span class="sd">            annotation_properties (bool): Whether to include annotation</span>
+<span class="sd">        properties. Defaults to `True`.</span>
+<span class="sd">            properties (bool): Whether to include `rdfs:Property` entities.</span>
+<span class="sd">        Defaults to `True`.</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            Entities matching the specified filters.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">generator</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">classes</span><span class="p">:</span>
             <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="n">imported</span><span class="p">))</span>
@@ -3670,6 +3719,8 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
             <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_properties</span><span class="p">(</span><span class="n">imported</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">annotation_properties</span><span class="p">:</span>
             <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">(</span><span class="n">imported</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">properties</span><span class="p">:</span>
+            <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">imported</span><span class="p">))</span>
         <span class="k">yield from</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">generator</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -3686,14 +3737,14 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
     <span class="p">):</span>  <span class="c1"># pylint: disable=too-many-branches</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an generator over all entities of the desired type.</span>
 <span class="sd">        This is a helper function for `classes()`, `individuals()`,</span>
-<span class="sd">        `object_properties()`, `data_properties()` and</span>
-<span class="sd">        `annotation_properties()`.</span>
+<span class="sd">        `object_properties()`, `data_properties()`,</span>
+<span class="sd">        `annotation_properties()` and `properties`.</span>
 
 <span class="sd">        Arguments:</span>
 <span class="sd">            entity_type: The type of entity desired given as a string.</span>
 <span class="sd">                Can be any of `classes`, `individuals`,</span>
-<span class="sd">                `object_properties`, `data_properties` and</span>
-<span class="sd">                `annotation_properties`.</span>
+<span class="sd">                `object_properties`, `data_properties`,</span>
+<span class="sd">                `annotation_properties` or `properties`.</span>
 <span class="sd">            imported: if `True`, entities in imported ontologies</span>
 <span class="sd">                are also returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -3718,9 +3769,18 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                 <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;annotation_properties&quot;</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">onto</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">()):</span>
                         <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;properties&quot;</span><span class="p">:</span>
+                    <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">onto</span><span class="o">.</span><span class="n">properties</span><span class="p">()))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;classes&quot;</span><span class="p">:</span>
-                <span class="n">generator</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">classes</span><span class="p">()</span>
+                <span class="n">generator</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">classes</span><span class="p">())</span>
+                <span class="c1"># Add new triples of type rdfs:Class</span>
+                <span class="n">rdf_schema_class</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>
+                    <span class="s2">&quot;http://www.w3.org/2000/01/rdf-schema#Class&quot;</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_obj_triples_po_s</span><span class="p">(</span><span class="n">rdf_type</span><span class="p">,</span> <span class="n">rdf_schema_class</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_get_by_storid</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
             <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;individuals&quot;</span><span class="p">:</span>
                 <span class="n">generator</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">individuals</span><span class="p">()</span>
             <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;object_properties&quot;</span><span class="p">:</span>
@@ -3729,6 +3789,8 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                 <span class="n">generator</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">data_properties</span><span class="p">()</span>
             <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;annotation_properties&quot;</span><span class="p">:</span>
                 <span class="n">generator</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;properties&quot;</span><span class="p">:</span>
+                <span class="n">generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">()</span>
 
         <span class="k">yield from</span> <span class="n">generator</span>
 
@@ -3768,6 +3830,40 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;annotation_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an generator over all properties.</span>
+<span class="sd">        It searches for owl:object_properties, owl:data_properties,</span>
+<span class="sd">        owl:annotation_properties and rdf:Properties</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            imported: if `True`, entities in imported ontologies</span>
+<span class="sd">                are also returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">generator</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;object_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;annotation_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;data_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)):</span>
+            <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+
+        <span class="n">rdf_property</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>
+            <span class="s2">&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#Property&quot;</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_obj_triples_po_s</span><span class="p">(</span><span class="n">rdf_type</span><span class="p">,</span> <span class="n">rdf_property</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># print(s, self._unabbreviate(s))</span>
+                <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+                <span class="c1"># generator.append(self[self._unabbreviate(s)])</span>
+                <span class="c1"># generator.append(self.world._get_by_storid(s))</span>
+        <span class="k">yield from</span> <span class="n">generator</span>
 
     <span class="k">def</span> <span class="nf">get_root_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a list or root classes.&quot;&quot;&quot;</span>
@@ -6160,36 +6256,122 @@ within the specified number of generations.
 
 
 <h3 id="ontopy.ontology.Ontology.get_entities" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">individuals</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">object_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">data_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">annotation_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">get_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">individuals</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">object_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">data_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">annotation_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.ontology.Ontology.get_entities" class="headerlink" title="Permanent link">&para;</a></h3>
 
     <div class="doc doc-contents ">
 
-      <p>Return a generator over (optionally) all classes, individuals,
-object_properties, data_properties and annotation_properties.</p>
-<p>If <code>imported</code> is <code>True</code>, entities in imported ontologies will also
-be included.</p>
+      <p>This method returns a generator over entities in the ontology,
+including the following categories:
+- Classes (<code>owl:Class</code> or <code>rdfs:Class</code>)
+- Individuals
+- Object properties (<code>owl:ObjectProperty</code>)
+- Data properties (<code>owl:DataProperty</code>)
+- Annotation properties (<code>owl:AnnotationProperty</code>)
+- Properties (<code>rdfs:Property</code>)</p>
+<p>Notes:
+- If <code>properties</code> is <code>True</code>, <code>rdfs:Property</code> entities will be returned
+as IRIs (strings) rather than Python objects.
+- When <code>imported</code> is <code>True</code>, entities from imported ontologies will
+also be included.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>imported</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to include entities from imported</p></td>
+        <td><code>True</code></td>
+      </tr>
+  </tbody>
+</table>      <p>ontologies. Defaults to <code>True</code>.
+    classes (bool): Whether to include classes. Defaults to <code>True</code>.
+    individuals (bool): Whether to include individuals.
+Defaults to <code>True</code>.
+    object_properties (bool): Whether to include object properties.
+Defaults to <code>True</code>.
+    data_properties (bool): Whether to include data properties.
+Defaults to <code>True</code>.
+    annotation_properties (bool): Whether to include annotation
+properties. Defaults to <code>True</code>.
+    properties (bool): Whether to include <code>rdfs:Property</code> entities.
+Defaults to <code>True</code>.</p>
+
+<p><strong>Yields:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Generator[Union[str, object], None, None]</code></td>
+      <td><p>Entities matching the specified filters.</p></td>
+    </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_entities</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">imported</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">classes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">individuals</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">object_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">data_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">annotation_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a generator over (optionally) all classes, individuals,</span>
-<span class="sd">    object_properties, data_properties and annotation_properties.</span>
+    <span class="n">imported</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">classes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">individuals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">object_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">data_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">annotation_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Generator[Union[str, object], None, None]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method returns a generator over entities in the ontology,</span>
+<span class="sd">    including the following categories:</span>
+<span class="sd">    - Classes (`owl:Class` or `rdfs:Class`)</span>
+<span class="sd">    - Individuals</span>
+<span class="sd">    - Object properties (`owl:ObjectProperty`)</span>
+<span class="sd">    - Data properties (`owl:DataProperty`)</span>
+<span class="sd">    - Annotation properties (`owl:AnnotationProperty`)</span>
+<span class="sd">    - Properties (`rdfs:Property`)</span>
 
-<span class="sd">    If `imported` is `True`, entities in imported ontologies will also</span>
-<span class="sd">    be included.</span>
+<span class="sd">    Notes:</span>
+<span class="sd">    - If `properties` is `True`, `rdfs:Property` entities will be returned</span>
+<span class="sd">    as IRIs (strings) rather than Python objects.</span>
+<span class="sd">    - When `imported` is `True`, entities from imported ontologies will</span>
+<span class="sd">    also be included.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        imported (bool): Whether to include entities from imported</span>
+<span class="sd">    ontologies. Defaults to `True`.</span>
+<span class="sd">        classes (bool): Whether to include classes. Defaults to `True`.</span>
+<span class="sd">        individuals (bool): Whether to include individuals.</span>
+<span class="sd">    Defaults to `True`.</span>
+<span class="sd">        object_properties (bool): Whether to include object properties.</span>
+<span class="sd">    Defaults to `True`.</span>
+<span class="sd">        data_properties (bool): Whether to include data properties.</span>
+<span class="sd">    Defaults to `True`.</span>
+<span class="sd">        annotation_properties (bool): Whether to include annotation</span>
+<span class="sd">    properties. Defaults to `True`.</span>
+<span class="sd">        properties (bool): Whether to include `rdfs:Property` entities.</span>
+<span class="sd">    Defaults to `True`.</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        Entities matching the specified filters.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">generator</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">classes</span><span class="p">:</span>
         <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="n">imported</span><span class="p">))</span>
@@ -6201,6 +6383,8 @@ be included.</p>
         <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_properties</span><span class="p">(</span><span class="n">imported</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">annotation_properties</span><span class="p">:</span>
         <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">(</span><span class="n">imported</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">properties</span><span class="p">:</span>
+        <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">imported</span><span class="p">))</span>
     <span class="k">yield from</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">generator</span><span class="p">)</span>
 </code></pre></div>
         </details>
@@ -7443,6 +7627,85 @@ are also returned.</p></td>
 <span class="sd">            are also returned.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;object_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontology.Ontology.properties" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontology.Ontology.properties" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns an generator over all properties.
+It searches for owl:object_properties, owl:data_properties,
+owl:annotation_properties and rdf:Properties</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>imported</code></td>
+        <td></td>
+        <td><p>if <code>True</code>, entities in imported ontologies
+are also returned.</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontology.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an generator over all properties.</span>
+<span class="sd">    It searches for owl:object_properties, owl:data_properties,</span>
+<span class="sd">    owl:annotation_properties and rdf:Properties</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        imported: if `True`, entities in imported ontologies</span>
+<span class="sd">            are also returned.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">generator</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;object_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;annotation_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_entities</span><span class="p">(</span><span class="s2">&quot;data_properties&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)):</span>
+        <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+
+    <span class="n">rdf_property</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>
+        <span class="s2">&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#Property&quot;</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_obj_triples_po_s</span><span class="p">(</span><span class="n">rdf_type</span><span class="p">,</span> <span class="n">rdf_property</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># print(s, self._unabbreviate(s))</span>
+            <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+            <span class="c1"># generator.append(self[self._unabbreviate(s)])</span>
+            <span class="c1"># generator.append(self.world._get_by_storid(s))</span>
+    <span class="k">yield from</span> <span class="n">generator</span>
 </code></pre></div>
         </details>
     </div>
@@ -8824,7 +9087,7 @@ only matching triples will be returned.</p>
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
     
   </body>
