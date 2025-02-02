@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=too-many-lines
+# pylint: disable=too-many-lines,invalid-name
 """
 A module for testing an ontology against conventions defined for EMMO.
 
@@ -195,6 +195,11 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         Exceptions include entities from standard w3c vocabularies.
 
         """
+        MeasurementUnit = (
+            self.onto.MeasurementUnit
+            if "MeasurementUnit" in self.onto
+            else None
+        )
         # pylint: disable=invalid-name
         exceptions = set()
         exceptions.update(self.get_config("test_description.exceptions", ()))
@@ -214,6 +219,19 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             vocabs = "owl.", "0.1.", "bibo.", "core.", "terms.", "vann."
             r = repr(entity)
             if r in exceptions or any(r.startswith(v) for v in vocabs):
+                continue
+
+            # Skip units subclasses with a physical dimension
+            if (
+                MeasurementUnit
+                and issubclass(entity, MeasurementUnit)
+                and any(
+                    str(r.property.prefLabel.first()) == "hasDimensionString"
+                    for r in entity.get_indirect_is_a()
+                    if hasattr(r, "property")
+                    and hasattr(r.property, "prefLabel")
+                )
+            ):
                 continue
 
             label = str(get_label(entity))
