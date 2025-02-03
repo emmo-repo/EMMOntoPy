@@ -5,7 +5,24 @@ A module for testing an ontology against conventions defined for EMMO.
 
 A YAML file can be provided with additional test configurations.
 
+Toplevel keywords in the YAML file:
+
+  - `skip`: List of tests to skip
+  - `enable`: List of tests to enable
+  - `<test_name>`: A name of a test. Recognised nested keywords are:
+    - `exceptions`: List of entities in the ontology to skip. Should be written
+      as `<ns0>.<name>`, where `<ns0>` is the last component of the base IRI
+      and `<name>` is the name of the entity.
+    - `skipmodules`: List of module names to skip the test for. The module
+      names may be written either as the full module IRI or as the last
+      component of the module IRI.
+
 Example configuration file:
+
+    test_description:
+      skipmodules:
+        - manufacturing
+        - conformityassessment
 
     test_unit_dimensions:
       exceptions:
@@ -195,12 +212,12 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         Exceptions include entities from standard w3c vocabularies.
 
         """
+        # pylint: disable=invalid-name
         MeasurementUnit = (
             self.onto.MeasurementUnit
             if "MeasurementUnit" in self.onto
             else None
         )
-        # pylint: disable=invalid-name
         exceptions = set()
         exceptions.update(self.get_config("test_description.exceptions", ()))
         props = self.onto.world._props  # pylint: disable=protected-access
@@ -232,6 +249,10 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                     and hasattr(r.property, "prefLabel")
                 )
             ):
+                continue
+
+            # Check skipmodules
+            if skipmodule(self, "test_description", entity):
                 continue
 
             label = str(get_label(entity))
@@ -795,6 +816,32 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         visited = set()
         visited_onto = set()
         checker(self.onto, self.ignore_namespace)
+
+
+def skipmodule(testobj, testname, entity):
+    """Return true if `entity` is in a module that should be skipped."""
+    skipmodules = testobj.get_config(f"{testname}.skipmodules")
+
+    if not skipmodules:
+        return False
+
+    # Infer base iri
+    if entity.namespace.ontology.base_iri != "https://w3id.org/emmo#":
+        base_iri = entity.namespace.ontology.base_iri.rstrip("/#")
+    elif hasattr(entity, "isDefinedBy") and entity.isDefinedBy:
+        base_iri = entity.isDefinedBy.first().rstrip("/#")
+    else:
+        base_iri = entity.namespace.ontology.base_iri.rstrip("/#")
+
+    for module in skipmodules:
+        module = module.rstrip("/#")
+        if "/" in module:
+            if module == base_iri:
+                return True
+        elif module == base_iri.rsplit("/", 1)[-1]:
+            return True
+
+    return False
 
 
 def main(
