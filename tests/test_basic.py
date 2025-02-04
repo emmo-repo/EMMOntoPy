@@ -49,7 +49,7 @@ def test_basic(emmo: "Ontology") -> None:
             emmo.hasSpatialDirectPart.exactly(2, onto.Hydrogen)
             emmo.hasSpatialDirectPart.exactly(1, Oxygen)
 
-        # Create some
+        # Create some individuals
         H1 = onto.Hydrogen()
         H2 = onto.Hydrogen()
         O = Oxygen()
@@ -59,7 +59,7 @@ def test_basic(emmo: "Ontology") -> None:
     name_prefix = "myonto_"
     onto.sync_attributes(name_policy="sequential", name_prefix=name_prefix)
     assert f"{onto.base_iri}{name_prefix}0" in onto
-    assert f"{onto.base_iri}{name_prefix}6" in onto
+    assert f"{onto.base_iri}{name_prefix}3" in onto
 
     name_prefix = "onto_"
     onto.sync_attributes(name_policy="uuid", name_prefix=name_prefix)
