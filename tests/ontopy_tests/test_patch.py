@@ -1,6 +1,4 @@
-"""Tests Owlready2 patches implemented in ontopy/patch.py
-
-"""
+"""Tests Owlready2 patches implemented in ontopy/patch.py"""
 
 import re
 

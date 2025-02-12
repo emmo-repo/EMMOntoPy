@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""Tool for checking that ontologies conform to EMMO conventions.
-"""
+"""Tool for checking that ontologies conform to EMMO conventions."""
 import sys
 import os
 

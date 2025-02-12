@@ -1,5 +1,4 @@
-"""Some generic utility functions.
-"""
+"""Some generic utility functions."""
 
 # pylint: disable=protected-access,invalid-name,redefined-outer-name
 # pylint: disable=import-outside-toplevel
