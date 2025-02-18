@@ -11,6 +11,13 @@ updates:
   target-branch: ci/dependabot-updates
   labels:
     - dependencies
+  ignore:
+    - dependency-name: "mkdocstrings[python-legacy]"
+      versions:
+        - "0.26.1" # highest for Python3.8
+    - dependency-name: "pylint"
+      versions:
+        - "3.2.7" #highest for Python3.8
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
