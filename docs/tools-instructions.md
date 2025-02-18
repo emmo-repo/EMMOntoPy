@@ -69,15 +69,40 @@ optional arguments:
 ```
 <!-- (Missing example with local and path) -->
 
-### Example configuration file
 
-Example of YAML configuration file provided with the `--configfile` option that will omit `myunits.MyUnitCategory1` and `myunits.MyUnitCategory1` from the *unit dimensions test*.
+### Configuration file
+The `--configfile` options expects a YAML configuration file that specifies what tests to skip or enable.
+
+The following keywords are recognised in the YAML file:
+
+  - `skip`: List of tests to skip
+  - `enable`: List of tests to enable
+  - `<test_name>`: A name of a test. Recognised nested keywords are:
+    - `exceptions`: List of entities in the ontology to skip. Should be written
+      as `<ns0>.<name>`, where `<ns0>` is the last component of the base IRI
+      and `<name>` is the name of the entity.
+    - `skipmodules`: List of module names to skip the test for. The module
+      names may be written either as the full module IRI or as the last
+      component of the module IRI.
+
+Example configuration file:
 
 ```console
+test_description:
+  skipmodules:
+    - manufacturing
+    - conformityassessment
+
 test_unit_dimensions:
   exceptions:
     - myunits.MyUnitCategory1
     - myunits.MyUnitCategory2
+
+skip:
+  - name_of_test_to_skip
+
+enable:
+  - name_of_test_to_enable
 ```
 
 ---

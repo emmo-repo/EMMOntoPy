@@ -1,10 +1,28 @@
 # -*- coding: utf-8 -*-
+# pylint: disable=too-many-lines,invalid-name
 """
 A module for testing an ontology against conventions defined for EMMO.
 
 A YAML file can be provided with additional test configurations.
 
+Toplevel keywords in the YAML file:
+
+  - `skip`: List of tests to skip
+  - `enable`: List of tests to enable
+  - `<test_name>`: A name of a test. Recognised nested keywords are:
+    - `exceptions`: List of entities in the ontology to skip. Should be written
+      as `<ns0>.<name>`, where `<ns0>` is the last component of the base IRI
+      and `<name>` is the name of the entity.
+    - `skipmodules`: List of module names to skip the test for. The module
+      names may be written either as the full module IRI or as the last
+      component of the module IRI.
+
 Example configuration file:
+
+    test_description:
+      skipmodules:
+        - manufacturing
+        - conformityassessment
 
     test_unit_dimensions:
       exceptions:
@@ -194,6 +212,12 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         Exceptions include entities from standard w3c vocabularies.
 
         """
+        # pylint: disable=invalid-name
+        MeasurementUnit = (
+            self.onto.MeasurementUnit
+            if "MeasurementUnit" in self.onto
+            else None
+        )
         exceptions = set()
         exceptions.update(self.get_config("test_description.exceptions", ()))
         props = self.onto.world._props  # pylint: disable=protected-access
@@ -212,6 +236,23 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             vocabs = "owl.", "0.1.", "bibo.", "core.", "terms.", "vann."
             r = repr(entity)
             if r in exceptions or any(r.startswith(v) for v in vocabs):
+                continue
+
+            # Skip units subclasses with a physical dimension
+            if (
+                MeasurementUnit
+                and issubclass(entity, MeasurementUnit)
+                and any(
+                    str(r.property.prefLabel.first()) == "hasDimensionString"
+                    for r in entity.get_indirect_is_a()
+                    if hasattr(r, "property")
+                    and hasattr(r.property, "prefLabel")
+                )
+            ):
+                continue
+
+            # Check skipmodules
+            if skipmodule(self, "test_description", entity):
                 continue
 
             label = str(get_label(entity))
@@ -314,6 +355,10 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 "emmo.SIBaseUnit",
                 "emmo.SIUnitSymbol",
                 "emmo.SIUnit",
+                "emmo.SIAcceptedDerivedUnit",
+                "emmo.SIDerivedUnit",
+                "emmo.SIAcceptedPrefixedUnit",
+                "emmo.CGSUnit",
             )
         )
         if not hasattr(self.onto, "MeasurementUnit"):
@@ -378,6 +423,11 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 "emmo.SIBaseUnit",
                 "emmo.SIUnitSymbol",
                 "emmo.SIUnit",
+                "emmo.SIDerivedUnit",
+                "emmo.SIAcceptedPrefixedUnit",
+                "emmo.SIAcceptedDerivedUnit",
+                "emmo.SIMetricPrefixedUnit",
+                "emmo.CGSUnit",
             )
         )
         if not hasattr(self.onto, "MeasurementUnit"):
@@ -496,6 +546,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 "metrology.ExactConstant",
                 "metrology.MeasuredConstant",
                 "metrology.DerivedQuantity",
+                "metrology.PhysicalQuantiyByDefinition",
                 "isq.ISQBaseQuantity",
                 "isq.InternationalSystemOfQuantity",
                 "isq.ISQDerivedQuantity",
@@ -531,6 +582,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 "emmo.Intensive",
                 "emmo.Extensive",
                 "emmo.Concentration",
+                "emmo.PhysicalQuantiyByDefinition",
             )
         )
         if not hasattr(self.onto, "PhysicalQuantity"):
@@ -565,7 +617,7 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                             issubclass(cls, self.onto.ISQDimensionlessQuantity)
                         )
 
-    def test_dimensional_unit(self):
+    def test_dimensional_unit_rc2(self):
         """Check correct syntax of dimension string of dimensional units."""
 
         # This test requires that the ontology has imported SIDimensionalUnit
@@ -584,6 +636,38 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 r = cls.equivalent_to[0]
                 self.assertIsInstance(r, owlready2.Restriction)
                 self.assertRegex(r.value, regex)
+
+    def test_dimensional_unit(self):
+        """Check correct syntax of dimension string of dimensional units."""
+
+        # This test requires that the ontology has imported SIDimensionalUnit
+        if "SIDimensionalUnit" not in self.onto:
+            self.skipTest("SIDimensionalUnit is not imported")
+
+        # pylint: disable=invalid-name
+        regex = re.compile(
+            "^T([+-][1-9][0-9]*|0) L([+-][1-9]|0) M([+-][1-9]|0) "
+            "I([+-][1-9]|0) (H|Θ)([+-][1-9]|0) N([+-][1-9]|0) "
+            "J([+-][1-9]|0)$"
+        )
+        for cls in self.onto.SIDimensionalUnit.__subclasses__():
+            with self.subTest(cls=cls, label=get_label(cls)):
+                dimstr = [
+                    r.value
+                    for r in cls.is_a
+                    if isinstance(r, owlready2.Restriction)
+                    and repr(r.property) == "emmo.hasDimensionString"
+                ]
+                self.assertEqual(
+                    len(dimstr),
+                    1,
+                    msg="expect one emmo:hasDimensionString value restriction",
+                )
+                self.assertRegex(
+                    dimstr[0],
+                    regex,
+                    msg=f"invalid dimension string: '{dimstr[0]}'",
+                )
 
     def test_physical_quantity_dimension(self):
         """Check that all physical quantities have `hasPhysicalDimension`.
@@ -732,6 +816,32 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         visited = set()
         visited_onto = set()
         checker(self.onto, self.ignore_namespace)
+
+
+def skipmodule(testobj, testname, entity):
+    """Return true if `entity` is in a module that should be skipped."""
+    skipmodules = testobj.get_config(f"{testname}.skipmodules")
+
+    if not skipmodules:
+        return False
+
+    # Infer base iri
+    if entity.namespace.ontology.base_iri != "https://w3id.org/emmo#":
+        base_iri = entity.namespace.ontology.base_iri.rstrip("/#")
+    elif hasattr(entity, "isDefinedBy") and entity.isDefinedBy:
+        base_iri = entity.isDefinedBy.first().rstrip("/#")
+    else:
+        base_iri = entity.namespace.ontology.base_iri.rstrip("/#")
+
+    for module in skipmodules:
+        module = module.rstrip("/#")
+        if "/" in module:
+            if module == base_iri:
+                return True
+        elif module == base_iri.rsplit("/", 1)[-1]:
+            return True
+
+    return False
 
 
 def main(
@@ -938,6 +1048,7 @@ def main(
                     "test_physical_quantity_dimension_annotation",
                     "test_quantity_dimension_beta3",
                     "test_physical_quantity_dimension",
+                    "test_dimensional_unit_rc2",
                 ]
             )
             msg = {name: "skipped by default" for name in skipped}
