@@ -5,5 +5,4 @@ mkdocs-awesome-pages-plugin~=2.9
 mkdocs-material~=9.5; python_version>="3.8"
 mkdocs-material~=9.2; python_version<"3.8"
 mkdocstrings[python-legacy]~=0.26.2; python_version>="3.9"
-mkdocstrings[python-legacy]==0.26.1; python_version=="3.8"  # dependabot: ignore
-mkdocstrings[python-legacy]~=0.22.0; python_version<"3.8"
+mkdocstrings[python-legacy]==0.26.1; python_version=="3.8"
