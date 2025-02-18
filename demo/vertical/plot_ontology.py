@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Plots the user case ontology created with the script `define_ontology.py`.
-"""
+"""Plots the user case ontology created with the script `define_ontology.py`."""
 from ontopy import World
 
 
