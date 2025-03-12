@@ -36,7 +36,7 @@ repos:
 #     exclude: ^tests/.*$
 
 - repo: https://github.com/SINTEF/ci-cd
-  rev: v2.9.1
+  rev: v2.9.2
   hooks:
   - id: docs-api-reference
     args:
