@@ -568,7 +568,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         Note that this function might give unintended results.
         I.e. if `https://w3id.org/emmo` is given as iri_base
-        all imported domain ontologies adhering to the 
+        all imported domain ontologies adhering to the
         emmo standard for base_iri will be given the same
         prefix as well as emmo itself.
 
