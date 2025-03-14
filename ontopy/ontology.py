@@ -566,7 +566,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """Set a common prefix for all imported ontologies
         with the same first part of the base_iri.
 
-        Note that this function might give unintened results.
+        Note that this function might give unintended results.
         I.e. if `https://w3id.org/emmo` is given as iri_base
         all imported domain ontologies will be given the same
         prefix as well as emmo itself.
