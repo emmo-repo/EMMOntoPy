@@ -3,12 +3,19 @@ import pytest
 from ontopy.utils import NoSuchLabelError
 import warnings
 
-if TYPE_CHECKING:
-    from pathlib import Path
+from pathlib import Path
 
 
-def test_prefix(testonto: "Ontology", emmo: "Ontology") -> None:
+def test_prefix() -> None:
     """Test prefix in ontology"""
+    from emmopy import get_emmo
+    from ontopy import get_ontology
+
+    emmo = get_emmo()
+    repo_dir = Path(__file__).resolve().parent.parent.parent
+    onto_dir = repo_dir / "tests" / "testonto"
+
+    testonto = get_ontology(onto_dir / "testonto.ttl").load()
 
     assert len(testonto.get_by_label_all("*")) == 7
     assert set(testonto.get_by_label_all("*", prefix="testonto")) == set(
@@ -45,10 +52,11 @@ def test_prefix(testonto: "Ontology", emmo: "Ontology") -> None:
         testonto.get_by_label(1)
 
 
-def test_prefix_emmo(emmo: "Ontology") -> None:
+def test_prefix_emmo() -> None:
     """Test prefix in ontology"""
     from emmopy import get_emmo
 
+    emmo = get_emmo()
     # Check that the prefix of emmo-inferred becomes emmo
     assert emmo.Atom.namespace.ontology.prefix == "emmo"
     assert emmo.get_by_label("Atom", prefix="emmo") == emmo.Atom

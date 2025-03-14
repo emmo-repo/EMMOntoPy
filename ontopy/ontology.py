@@ -523,10 +523,17 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 ent for ent in self.get_entities() if ent.name in matches
             )
         if namespace:
+            print("in namespace", namespace)
+            print("entities", entities)
+            for ent in entities:
+                print("ent.namespace", ent.namespace)
+                print("ent.namespace.name", ent.namespace.name)
+                print("namespace", namespace)
+                print(namespace in [ent.namespace.name, ent.namespace.base_iri])
             return set(
                 ent
                 for ent in entities
-                if namespace in (ent.namespace.name, ent.namespace == namespace)
+                if namespace in [ent.namespace.name, ent.namespace._base_iri]
             )
 
         if prefix:
@@ -592,7 +599,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
     def set_common_prefix(
         self,
-        iri_base: str = "https://w3id.org/emmo/notinuse",
+        iri_base: str = "https://w3id.org/emmo",
         prefix: str = "emmo",
         visited: "Optional[Set]" = None,
     ) -> None:
