@@ -54,11 +54,10 @@ branch of mereotopology.
 %BRANCHDOC MathematicalModel
 %BRANCHDOC MathematicalOperator
 %BRANCHDOC Metrological
-%BRANCHDOC PhysicalDimension     rankdir=RL
+%BRANCHDOC hasMetrologicalReference   rankdir=RL
 %BRANCHDOC PhysicalQuantity
 %BRANCHDOC Number
 %BRANCHDOC MeasurementUnit
-%BRANCHDOC UTF8
 %BRANCHDOC SIBaseUnit
 %BRANCHDOC SISpecialUnit        rankdir=RL
 %BRANCHDOC PrefixedUnit
@@ -71,7 +70,6 @@ branch of mereotopology.
 %BRANCHDOC Reductionistic
 %BRANCHDOC Expression
 
-%BRANCHDOC Physicalistic
 %BRANCHDOC ElementaryParticle
 #%BRANCHDOC Subatomic
 %BRANCHDOC Matter
