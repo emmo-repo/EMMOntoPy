@@ -110,18 +110,13 @@ class World(owlready2.World):
         base_iri = base_iri.as_uri() if isinstance(base_iri, Path) else base_iri
 
         if base_iri == "emmo":
-            base_iri = (
-                "http://emmo-repo.github.io/versions/1.0.0-beta4/emmo.ttl"
-            )
+            base_iri = "https://w3id.org/emmo/"
         elif base_iri == "emmo-inferred":
-            base_iri = (
-                "https://emmo-repo.github.io/versions/1.0.0-beta4/"
-                "emmo-inferred.ttl"
-            )
+            base_iri = "https://w3id.org/emmo/inferred"
         elif base_iri == "emmo-development":
             base_iri = (
-                "https://emmo-repo.github.io/versions/1.0.0-beta5/"
-                "emmo-inferred.ttl"
+                "https://raw.githubusercontent.com/emmo-repo/EMMO/"
+                "refs/heads/dev/emmo.ttl"
             )
 
         if base_iri in self.ontologies:
@@ -599,22 +594,39 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
     def set_common_prefix(
         self,
-        iri_base: str = "https://w3id.org/emmo",
+        iri_base: str = "https://w3id.org/emmo/inferred",
         prefix: str = "emmo",
         visited: "Optional[Set]" = None,
     ) -> None:
         """Set a common prefix for all imported ontologies
         with the same first part of the base_iri.
 
+        Note that this function might give unintended results.
+        I.e. if `https://w3id.org/emmo` is given as iri_base
+        all imported domain ontologies adhering to the 
+        emmo standard for base_iri will be given the same
+        prefix as well as emmo itself.
+
+        The default is to set the prefix to emmo only for emmo-inferred.
+
         Args:
             iri_base: The start of the base_iri to look for. Defaults to
-                the emmo base_iri ttps://w3id.org/emmo
+                the emmo base_iri https://w3id.org/emmo/inferred
             prefix: the desired prefix. Defaults to emmo.
             visited: Ontologies to skip. Only intended for internal use.
         """
         if visited is None:
             visited = set()
         if self.base_iri.startswith(iri_base):
+            self.prefix = prefix
+
+        # If importing emmo-inferred set prefix to emmo
+        if (
+            iri_base == "https://w3id.org/emmo/inferred"
+            and self.prefix == "inferred"
+            and prefix == "emmo"
+            and self.base_iri == "https://w3id.org/emmo#"
+        ):
             self.prefix = prefix
         for onto in self.imported_ontologies:
             if not onto in visited:
@@ -1366,7 +1378,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         )
         for s in self._get_obj_triples_po_s(rdf_type, rdf_property):
             if not s < 0:
-                # print(s, self._unabbreviate(s))
                 generator.append(self._unabbreviate(s))
                 # generator.append(self[self._unabbreviate(s)])
                 # generator.append(self.world._get_by_storid(s))
