@@ -591,7 +591,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             and prefix == "emmo"
             and self.base_iri == "https://w3id.org/emmo#"
         ):
-            print("yes")
             self.prefix = prefix
         for onto in self.imported_ontologies:
             if not onto in visited:
@@ -688,7 +687,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         if emmo_based and prefix_emmo is None:
             prefix_emmo = True
         if prefix_emmo:
-            print("setting prefix")
             self.set_common_prefix()
 
         return self
@@ -1344,7 +1342,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         )
         for s in self._get_obj_triples_po_s(rdf_type, rdf_property):
             if not s < 0:
-                # print(s, self._unabbreviate(s))
                 generator.append(self._unabbreviate(s))
                 # generator.append(self[self._unabbreviate(s)])
                 # generator.append(self.world._get_by_storid(s))
