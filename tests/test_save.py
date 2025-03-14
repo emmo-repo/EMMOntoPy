@@ -248,6 +248,7 @@ def test_save_emmo_domain_ontology() -> None:
     )
     assert get_ontology(savedfile2).load()
     assert set(os.listdir(outputdir2)) == {
+        "w3id.org",
         "emmo.info",
         "dummyonto.rdfxml",
         "catalog-v001.xml",
