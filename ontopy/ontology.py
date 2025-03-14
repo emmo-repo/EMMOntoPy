@@ -317,33 +317,42 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         *,
         label_annotations: str = None,
         prefix: str = None,
+        namespace: str = None,
         imported: bool = True,
         colon_in_label: bool = None,
     ):
         """Returns entity with label annotation `label`.
 
         Arguments:
-           label: label so search for.
-               May be written as 'label' or 'prefix:label'.
-               get_by_label('prefix:label') ==
-               get_by_label('label', prefix='prefix').
-           label_annotations: a sequence of label annotation names to look up.
-               Defaults to the `label_annotations` property.
-           prefix: if provided, it should be the last component of
-               the base iri of an ontology (with trailing slash (/) or hash
-               (#) stripped off).  The search for a matching label will be
-               limited to this namespace.
-           imported: Whether to also look for `label` in imported ontologies.
-           colon_in_label: Whether to accept colon (:) in a label or name-part
-               of IRI.  Defaults to the `colon_in_label` property of `self`.
-               Setting this true cannot be combined with `prefix`.
+            label: label so search for.
+                May be written as 'label' or 'prefix:label'
+                get_by_label('prefix:label') is equivalent to
+                searching for both
+                get_by_label('label', prefix='prefix') and
+                get_by_label('label', namespace='prefix')
+            label_annotations: a sequence of label annotation names to look up.
+                Defaults to the `label_annotations` property.
+            prefix: if provided, it should be the last component of
+                the base iri of an ontology (with trailing slash (/) or hash
+                (#) stripped off).  The search for a matching label will be
+                limited to this ontology. `prefix` is ignored if `namespace`
+                is provided.
+            namespace: if provided, it should be the namespace of the entity.
+                It can be provided either as the whole namespace or only as the
+                last 'word' in the namespace, i.e. what is defined as the
+                namespace.name. `namespace` takes precedence over `prefix`.
+            imported: Whether to also look for `label` in imported ontologies.
+            colon_in_label: Whether to accept colon (:) in a label or name-part
+                of IRI.  Defaults to the `colon_in_label` property of `self`.
+                Setting this true cannot be combined with `prefix`.
 
         If several entities have the same label, only the one which is
         found first is returned.Use get_by_label_all() to get all matches.
 
-        Note, if different prefixes are provided in the label and via
-        the `prefix` argument a warning will be issued and the
-        `prefix` argument will take precedence.
+        Note, if namespace is provided directly in the first argument as
+        'namespace:label' it will be used as namespace and
+        any value given to the `namespace` argument will be
+        ignored.
 
         A NoSuchLabelError is raised if `label` cannot be found.
         """
@@ -358,23 +367,34 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         if colon_in_label is None:
             colon_in_label = self._colon_in_label
-        if colon_in_label:
-            if prefix:
-                raise ValueError(
-                    "`prefix` cannot be combined with `colon_in_label`"
+        if colon_in_label and prefix:
+            raise ValueError(
+                "`prefix` cannot be combined with `colon_in_label`"
+            )
+
+        splitlabel = label.split(":", 1)
+        if len(splitlabel) == 2 and not splitlabel[1].startswith("//"):
+            label = splitlabel[1]
+            if namespace and namespace != splitlabel[0]:
+                warnings.warn(
+                    f"Namespace given both as argument ({namespace}) "
+                    f"and in label as ({splitlabel[0]}). "
+                    "Namespace given in argument is ignored. "
                 )
-        else:
-            splitlabel = label.split(":", 1)
-            if len(splitlabel) == 2 and not splitlabel[1].startswith("//"):
-                label = splitlabel[1]
-                if prefix and prefix != splitlabel[0]:
-                    warnings.warn(
-                        f"Prefix given both as argument ({prefix}) "
-                        f"and in label ({splitlabel[0]}). "
-                        "Prefix given in argument takes precedence. "
-                    )
-                if not prefix:
-                    prefix = splitlabel[0]
+            namespace = splitlabel[0]
+
+        if namespace:
+            entityset = self.get_by_label_all(
+                label,
+                label_annotations=label_annotations,
+                namespace=namespace,
+            )
+            if len(entityset) == 1:
+                return entityset.pop()
+            raise NoSuchLabelError(
+                f"No label annotations matches for '{label}' "
+                f"with prefix '{prefix}'."
+            )
 
         if prefix:
             entityset = self.get_by_label_all(
@@ -384,11 +404,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             )
             if len(entityset) == 1:
                 return entityset.pop()
-            if len(entityset) > 1:
-                raise AmbiguousLabelError(
-                    f"Several entities have the same label '{label}' "
-                    f"with prefix '{prefix}'."
-                )
             raise NoSuchLabelError(
                 f"No label annotations matches for '{label}' "
                 f"with prefix '{prefix}'."
@@ -430,24 +445,30 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         label,
         label_annotations=None,
         prefix=None,
+        namespace=None,
         exact_match=False,
     ) -> "Set[Optional[owlready2.entity.EntityClass]]":
         """Returns set of entities with label annotation `label`.
 
         Arguments:
-           label: label so search for.
-               May be written as 'label' or 'prefix:label'.  Wildcard matching
-               using glob pattern is also supported if `exact_match` is set to
-               false.
-           label_annotations: a sequence of label annotation names to look up.
-               Defaults to the `label_annotations` property.
-           prefix: if provided, it should be the last component of
-               the base iri of an ontology (with trailing slash (/) or hash
-               (#) stripped off).  The search for a matching label will be
-               limited to this namespace.
-           exact_match: Do not treat "*" and brackets as special characters
-               when matching.  May be useful if your ontology has labels
-               containing such labels.
+            label: label so search for.
+                May be written as 'label' or 'prefix:label'.  Wildcard matching
+                using glob pattern is also supported if `exact_match` is set to
+                false.
+            label_annotations: a sequence of label annotation names to look up.
+                Defaults to the `label_annotations` property.
+            prefix: if provided, it should be the last component of
+                the base iri of an ontology (with trailing slash (/) or hash
+                (#) stripped off).  The search for a matching label will be
+                limited to this ontology. `prefix` is ignored if `namespace`
+                is provided.
+            namespace: if provided, it should be the namespace of the entity.
+                It can be provided either as the whole namespace or only as the
+                last 'word' in the namespace, i.e. what is defined as the
+                namespace.name. `namespace` takes precedence over `prefix`.
+            exact_match: Do not treat "*" and brackets as special characters
+                when matching.  May be useful if your ontology has labels
+                containing such labels.
 
         Returns:
             Set of all matching entities or an empty set if no matches
@@ -501,6 +522,12 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             entities.update(
                 ent for ent in self.get_entities() if ent.name in matches
             )
+        if namespace:
+            return set(
+                ent
+                for ent in entities
+                if namespace in (ent.namespace.name, ent.namespace == namespace)
+            )
 
         if prefix:
             return set(
@@ -508,6 +535,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 for ent in entities
                 if ent.namespace.ontology.prefix == prefix
             )
+
         return entities
 
     def _to_storids(self, sequence, create_if_missing=False):
@@ -564,7 +592,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
     def set_common_prefix(
         self,
-        iri_base: str = "http://emmo.info/emmo",
+        iri_base: str = "https://w3id.org/emmo/notinuse",
         prefix: str = "emmo",
         visited: "Optional[Set]" = None,
     ) -> None:
@@ -573,7 +601,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         Args:
             iri_base: The start of the base_iri to look for. Defaults to
-                the emmo base_iri http://emmo.info/emmo
+                the emmo base_iri ttps://w3id.org/emmo
             prefix: the desired prefix. Defaults to emmo.
             visited: Ontologies to skip. Only intended for internal use.
         """
