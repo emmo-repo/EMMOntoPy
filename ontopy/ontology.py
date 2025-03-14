@@ -571,7 +571,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         all imported domain ontologies will be given the same
         prefix as well as emmo itself.
 
-        The default is to set the prefix to emmo for emmo-inferred.
+        The default is to set the prefix to emmo only for emmo-inferred.
 
         Args:
             iri_base: The start of the base_iri to look for. Defaults to
