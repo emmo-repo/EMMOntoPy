@@ -231,7 +231,7 @@ def test_save_emmo_domain_ontology() -> None:
     }
 
     created_files = set(
-        os.listdir(outputdir / "emmo.info" / "emmo" / "disciplines")
+        os.listdir(outputdir / "w3id.org" / "emmo" / "disciplines")
     )
     for fname in ("isq.rdfxml", "catalog-v001.xml"):
         assert fname in created_files
@@ -258,7 +258,7 @@ def test_save_emmo_domain_ontology() -> None:
     ) == {"chameo.rdfxml", "catalog-v001.xml"}
 
     created_files2 = set(
-        os.listdir(outputdir2 / "emmo.info" / "emmo" / "disciplines")
+        os.listdir(outputdir2 / "w3id.org" / "emmo" / "disciplines")
     )
     for fname in ("isq.rdfxml", "catalog-v001.xml"):
         assert fname in created_files
