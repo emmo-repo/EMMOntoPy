@@ -1,5 +1,43 @@
 # Changelog
 
+## [v0.8.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.8.0) (2025-03-18)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.7.3...v0.8.0)
+
+**Closed issues:**
+
+- Is the variable OWLREADY2\_FORMATS incomplete? [\#219](https://github.com/emmo-repo/EMMOntoPy/issues/219)
+
+**Merged pull requests:**
+
+- Update to emmo 1.0.0 as it is now released [\#839](https://github.com/emmo-repo/EMMOntoPy/pull/839) ([francescalb](https://github.com/francescalb))
+- Updated to include python3.13 [\#831](https://github.com/emmo-repo/EMMOntoPy/pull/831) ([francescalb](https://github.com/francescalb))
+
+## [v0.7.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.7.3) (2025-03-12)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.7.2...v0.7.3)
+
+**Closed issues:**
+
+- Loading non-emmo-related ontologies [\#811](https://github.com/emmo-repo/EMMOntoPy/issues/811)
+- The test for load\_foaf is bypassed. [\#797](https://github.com/emmo-repo/EMMOntoPy/issues/797)
+- Explicitly support Python 3.12 [\#763](https://github.com/emmo-repo/EMMOntoPy/issues/763)
+- Update to emmo-beta5 [\#680](https://github.com/emmo-repo/EMMOntoPy/issues/680)
+
+**Merged pull requests:**
+
+- Ignore automatic dependency updates Python3.8 [\#830](https://github.com/emmo-repo/EMMOntoPy/pull/830) ([francescalb](https://github.com/francescalb))
+- Minor fix for fact++ [\#817](https://github.com/emmo-repo/EMMOntoPy/pull/817) ([jesper-friis](https://github.com/jesper-friis))
+- Importing rdfs schemas [\#814](https://github.com/emmo-repo/EMMOntoPy/pull/814) ([francescalb](https://github.com/francescalb))
+- Updated sync\_reasoner\(\) such that it works for FaCT++ [\#810](https://github.com/emmo-repo/EMMOntoPy/pull/810) ([jesper-friis](https://github.com/jesper-friis))
+- Updated emmocheck to ahead to latest formulation of units [\#809](https://github.com/emmo-repo/EMMOntoPy/pull/809) ([jesper-friis](https://github.com/jesper-friis))
+- Added find\(\) method [\#807](https://github.com/emmo-repo/EMMOntoPy/pull/807) ([jesper-friis](https://github.com/jesper-friis))
+- Added utils.get\_datatype\_class\(\) [\#804](https://github.com/emmo-repo/EMMOntoPy/pull/804) ([jesper-friis](https://github.com/jesper-friis))
+- Added test\_unit\_dimension\_rc1\(\) [\#798](https://github.com/emmo-repo/EMMOntoPy/pull/798) ([jesper-friis](https://github.com/jesper-friis))
+- Corrected test when loading rdfs. It used type for is\_a.  [\#796](https://github.com/emmo-repo/EMMOntoPy/pull/796) ([francescalb](https://github.com/francescalb))
+- Handle owlready2:python\_names in genated triples in excelparser [\#795](https://github.com/emmo-repo/EMMOntoPy/pull/795) ([francescalb](https://github.com/francescalb))
+- Added figures to generated documentation [\#767](https://github.com/emmo-repo/EMMOntoPy/pull/767) ([jesper-friis](https://github.com/jesper-friis))
+
 ## [v0.7.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.7.2) (2024-10-25)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.7.1...v0.7.2)
@@ -126,19 +164,19 @@
 
 ## [v0.5.3.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.2) (2023-06-15)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3...v0.5.3.2)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3.1...v0.5.3.2)
 
 **Merged pull requests:**
 
 - remove warnings\_as\_errors in cd workflow introduced in 0.5.3 [\#625](https://github.com/emmo-repo/EMMOntoPy/pull/625) ([francescalb](https://github.com/francescalb))
 
-## [v0.5.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3) (2023-06-12)
-
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3.1...v0.5.3)
-
 ## [v0.5.3.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.1) (2023-06-12)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.2...v0.5.3.1)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3...v0.5.3.1)
+
+## [v0.5.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3) (2023-06-12)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.2...v0.5.3)
 
 **Closed issues:**
 
