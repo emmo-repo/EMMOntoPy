@@ -17,6 +17,7 @@ import warnings
 import pandas as pd
 import numpy as np
 import pyparsing
+import defusedxml.ElementTree as ET
 
 import ontopy
 from ontopy import get_ontology
@@ -521,7 +522,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
             try:
                 cat = read_catalog(location.rsplit("/", 1)[0])
                 catalog.update(cat)
-            except ReadCatalogError:
+            except (ReadCatalogError, ET.ParseError):  # Issue 840
                 warnings.warn(f"Catalog for {imported} not found.")
             locations.add(location)
         # set defined prefix
