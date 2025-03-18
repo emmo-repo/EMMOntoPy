@@ -1,0 +1,3229 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the EMMOntoPy library">
+      
+      
+      
+        <link rel="canonical" href="https://emmo-repo.github.io/EMMOntoPy/0.8.0/api_reference/ontopy/ontodoc_rst/">
+      
+      
+        <link rel="prev" href="../ontodoc/">
+      
+      
+        <link rel="next" href="../ontology/">
+      
+      
+      <link rel="icon" href="../../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.9">
+    
+    
+      
+        <title>ontodoc_rst - EMMOntoPy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4af4bdda.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../css/reference.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="light-green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ontodoc_rst" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="EMMOntoPy" class="md-header__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
+      
+  <img src="../../../images/emmontopy-logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            EMMOntoPy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ontodoc_rst
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/emmo-repo/EMMOntoPy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EMMOntoPy
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="EMMOntoPy" class="md-nav__button md-logo" aria-label="EMMOntoPy" data-md-component="logo">
+      
+  <img src="../../../images/emmontopy-logo.svg" alt="logo">
+
+    </a>
+    EMMOntoPy
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/emmo-repo/EMMOntoPy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EMMOntoPy
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools-instructions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tools
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docker-instructions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../LICENSE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Examples and demonstrations
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Examples and demonstrations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Demo
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            Demo
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../demo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EMMO use cases
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../demo/horizontal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EMMO use case for horizontal interoperability
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../demo/vertical/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EMMO use case for vertical interoperability
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            Examples
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/emmodoc/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EMMOdoc
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/jupyter-visualization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Jupyter visualization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/ontology-from-excel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ontology generation from Excel
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Developers
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Developers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/release-instructions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Steps for creating a new release
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development environment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing and tooling
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CHANGELOG/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    emmopy
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_1">
+            <span class="md-nav__icon md-icon"></span>
+            emmopy
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../emmopy/emmocheck/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    emmocheck
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../emmopy/emmopy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    emmopy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    ontopy
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            ontopy
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../colortest/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    colortest
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../excelparser/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    excelparser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graph/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    graph
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manchester/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    manchester
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nadict/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    nadict
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ontodoc/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ontodoc
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    ontodoc_rst
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    ontodoc_rst
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst" class="md-nav__link">
+    <span class="md-ellipsis">
+      ontopy.ontodoc_rst
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      ModuleDocumentation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ModuleDocumentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation.add_entity" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_entity()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation.add_ontology" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_ontology()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation.get_header" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_header()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation.get_refdoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_refdoc()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation.get_title" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_title()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation.nonempty" class="md-nav__link">
+    <span class="md-ellipsis">
+      nonempty()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      OntologyDocumentation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OntologyDocumentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation.get_header" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_header()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation.get_refdoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_refdoc()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation.top_ontology" class="md-nav__link">
+    <span class="md-ellipsis">
+      top_ontology()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation.write_conf_template" class="md-nav__link">
+    <span class="md-ellipsis">
+      write_conf_template()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation.write_index_template" class="md-nav__link">
+    <span class="md-ellipsis">
+      write_index_template()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation.write_refdoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      write_refdoc()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ontology/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ontology
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../patch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    patch
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testutils/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    testutils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_2_12" id="__nav_8_2_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    factpluspluswrapper
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_8_2_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2_12">
+            <span class="md-nav__icon md-icon"></span>
+            factpluspluswrapper
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../factpluspluswrapper/factppgraph/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    factppgraph
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../factpluspluswrapper/owlapi_interface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    owlapi_interface
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../factpluspluswrapper/sync_factpp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sync_factpp
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst" class="md-nav__link">
+    <span class="md-ellipsis">
+      ontopy.ontodoc_rst
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      ModuleDocumentation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ModuleDocumentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation.add_entity" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_entity()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation.add_ontology" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_ontology()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation.get_header" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_header()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation.get_refdoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_refdoc()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation.get_title" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_title()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.ModuleDocumentation.nonempty" class="md-nav__link">
+    <span class="md-ellipsis">
+      nonempty()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      OntologyDocumentation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OntologyDocumentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation.get_header" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_header()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation.get_refdoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_refdoc()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation.top_ontology" class="md-nav__link">
+    <span class="md-ellipsis">
+      top_ontology()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation.write_conf_template" class="md-nav__link">
+    <span class="md-ellipsis">
+      write_conf_template()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation.write_index_template" class="md-nav__link">
+    <span class="md-ellipsis">
+      write_index_template()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontodoc_rst.OntologyDocumentation.write_refdoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      write_refdoc()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="ontodoc_rst">ontodoc_rst<a class="headerlink" href="#ontodoc_rst" title="Permanent link">&para;</a></h1>
+
+
+  <div class="doc doc-object doc-module">
+
+<a id="ontopy.ontodoc_rst"></a>
+    <div class="doc doc-contents first">
+
+      <p>A module for documenting ontologies.</p>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="ontopy.ontodoc_rst.ModuleDocumentation" class="doc doc-heading">
+        <code>
+ModuleDocumentation        </code>
+
+
+
+<a href="#ontopy.ontodoc_rst.ModuleDocumentation" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Class for documentating a module in an ontology.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ontology</code></td>
+        <td><code>Optional[Ontology]</code></td>
+        <td><p>Ontology to include in the generated documentation.
+All entities in this ontology will be included.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>entities</code></td>
+        <td><code>Optional[Iterable[Entity]]</code></td>
+        <td><p>Explicit listing of entities (classes, properties,
+individuals, datatypes) to document.  Normally not needed.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>title</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>Header title.  Be default it is inferred from title of</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>iri_regex</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>A regular expression that the IRI of documented entities
+should match.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ModuleDocumentation</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for documentating a module in an ontology.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        ontology: Ontology to include in the generated documentation.</span>
+<span class="sd">            All entities in this ontology will be included.</span>
+<span class="sd">        entities: Explicit listing of entities (classes, properties,</span>
+<span class="sd">            individuals, datatypes) to document.  Normally not needed.</span>
+<span class="sd">        title: Header title.  Be default it is inferred from title of</span>
+<span class="sd">        iri_regex: A regular expression that the IRI of documented entities</span>
+<span class="sd">            should match.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ontology</span><span class="p">:</span> <span class="s2">&quot;Optional[Ontology]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">entities</span><span class="p">:</span> <span class="s2">&quot;Optional[Iterable[Entity]]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">title</span><span class="p">:</span> <span class="s2">&quot;Optional[str]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">iri_regex</span><span class="p">:</span> <span class="s2">&quot;Optional[str]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span> <span class="o">=</span> <span class="n">ontology</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iri_regex</span> <span class="o">=</span> <span class="n">iri_regex</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">ontology</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">as_rdflib_graph</span><span class="p">()</span> <span class="k">if</span> <span class="n">ontology</span> <span class="k">else</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_properties</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation_properties</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">individuals</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datatypes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="c1"># All navigation IDs added by the ontology. Used to warn about</span>
+        <span class="c1"># dublicated IDs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">navids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">ontology</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_ontology</span><span class="p">(</span><span class="n">ontology</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">entities</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">nonempty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns whether the module has any classes, properties, individuals</span>
+<span class="sd">        or datatypes.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">classes</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_properties</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotation_properties</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">individuals</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatypes</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="s2">&quot;Entity&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add `entity` (class, property, individual, datatype) to list of</span>
+<span class="sd">        entities to document.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri_regex</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri_regex</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ObjectPropertyClass</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">DataPropertyClass</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">AnnotationPropertyClass</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Thing</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">iri</span>
+                <span class="o">==</span> <span class="s2">&quot;http://www.w3.org/2000/01/rdf-schema#Datatype&quot;</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">datatypes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">individuals</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_ontology</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">ontology</span><span class="p">:</span> <span class="s2">&quot;Ontology&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add ontology to documentation.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">ontology</span><span class="o">.</span><span class="n">get_entities</span><span class="p">(</span><span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_title</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a module title.&quot;&quot;&quot;</span>
+        <span class="n">iri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">:</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">:</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">URIRef</span><span class="p">(</span><span class="n">iri</span><span class="p">),</span> <span class="n">DCTERMS</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">title</span><span class="p">:</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="n">iri</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">title</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a the reStructuredText header as a string.&quot;&quot;&quot;</span>
+        <span class="n">heading</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Module: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_title</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+
+<span class="si">{</span><span class="n">heading</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span>
+<span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">heading</span><span class="p">)</span><span class="si">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_refdoc</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">subsections</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="n">header</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># pylint: disable=too-many-branches,too-many-locals,too-many-statements</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return reference documentation of all module entities.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            subsections: Comma-separated list of subsections to include in</span>
+<span class="sd">                the returned documentation.  Valid subsection names are:</span>
+<span class="sd">                  - classes</span>
+<span class="sd">                  - object_properties</span>
+<span class="sd">                  - data_properties</span>
+<span class="sd">                  - annotation_properties</span>
+<span class="sd">                  - individuals</span>
+<span class="sd">                  - datatypes</span>
+<span class="sd">                If &quot;all&quot;, all subsections will be documented.</span>
+<span class="sd">            header: Whether to also include the header in the returned</span>
+<span class="sd">                documentation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            String with reference documentation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pylint: disable=too-many-nested-blocks</span>
+        <span class="k">if</span> <span class="n">subsections</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+            <span class="n">subsections</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;classes,object_properties,data_properties,&quot;</span>
+                <span class="s2">&quot;annotation_properties,individuals,datatypes&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">maps</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;classes&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">,</span>
+            <span class="s2">&quot;object_properties&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="p">,</span>
+            <span class="s2">&quot;data_properties&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_properties</span><span class="p">,</span>
+            <span class="s2">&quot;annotation_properties&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">,</span>
+            <span class="s2">&quot;individuals&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">individuals</span><span class="p">,</span>
+            <span class="s2">&quot;datatypes&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatypes</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">header</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_header</span><span class="p">())</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">add_header</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+            <span class="n">clsname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;element-table-</span><span class="si">{</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="s2">&quot;  &lt;tr&gt;&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s1">&#39;    &lt;th class=&quot;</span><span class="si">{</span><span class="n">clsname</span><span class="si">}</span><span class="s1">&quot; colspan=&quot;2&quot;&gt;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&lt;/th&gt;&#39;</span><span class="p">,</span>
+                    <span class="s2">&quot;  &lt;/tr&gt;&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">add_keyvalue</span><span class="p">(</span>
+            <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">escape</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">htmllink</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_figure</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Help function for adding a key-value row to table.</span>
+
+<span class="sd">            Arguments:</span>
+<span class="sd">                key: Key to show in the table.</span>
+<span class="sd">                value: Value to show in the table.</span>
+<span class="sd">                htmllink: Whether to add html link to value.</span>
+<span class="sd">                show_figure: Whether to show figure in value column.</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">show_figure</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s2">&quot;^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$&quot;</span><span class="p">,</span>
+                <span class="n">asstring</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">),</span>
+            <span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&lt;img src=&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">&quot;&gt;&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">escape</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">htmllink</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+                        <span class="sa">r</span><span class="s2">&quot;(https?://[^\s]+)&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;&lt;a href=&quot;\1&quot;&gt;\1&lt;/a&gt;&#39;</span><span class="p">,</span> <span class="n">value</span>
+                    <span class="p">)</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="s2">&quot;  &lt;tr&gt;&quot;</span><span class="p">,</span>
+                    <span class="s1">&#39;    &lt;td class=&quot;element-table-key&quot;&gt;&#39;</span>
+                    <span class="sa">f</span><span class="s1">&#39;&lt;span class=&quot;element-table-key&quot;&gt;&#39;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span><span class="s2">&lt;/span&gt;&lt;/td&gt;&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s1">&#39;    &lt;td class=&quot;element-table-value&quot;&gt;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">&lt;/td&gt;&#39;</span><span class="p">,</span>
+                    <span class="s2">&quot;  &lt;/tr&gt;&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">subsection</span> <span class="ow">in</span> <span class="n">subsections</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">maps</span><span class="p">[</span><span class="n">subsection</span><span class="p">]:</span>
+                <span class="n">moduletitle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_title</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+                <span class="n">anchor</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">moduletitle</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">subsection</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;.. _</span><span class="si">{</span><span class="n">anchor</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">subsection</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span>
+                        <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">subsection</span><span class="p">),</span>
+                        <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">maps</span><span class="p">[</span><span class="n">subsection</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="n">get_label</span><span class="p">):</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+                <span class="n">navid</span> <span class="o">=</span> <span class="n">navid2</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;duplicated entity names: </span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">navid</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;   &lt;div id=&quot;</span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;&gt;&lt;/div&gt;&#39;</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">):</span>
+                    <span class="n">preflabel</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="o">.</span><span class="n">first</span><span class="p">())</span>
+                    <span class="k">if</span> <span class="n">preflabel</span> <span class="o">!=</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">preflabel</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="p">:</span>
+                            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;duplicated prefLabel: </span><span class="si">{</span><span class="n">preflabel</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">preflabel</span><span class="p">)</span>
+                            <span class="n">navid2</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;   &lt;div id=&quot;</span><span class="si">{</span><span class="n">preflabel</span><span class="si">}</span><span class="s1">&quot;&gt;&lt;/div&gt;&#39;</span>
+
+                <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="s2">&quot;.. raw:: html&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">navid</span><span class="p">,</span>
+                        <span class="n">navid2</span><span class="p">,</span>
+                        <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;^&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">),</span>
+                        <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;.. raw:: html&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="s1">&#39;  &lt;table class=&quot;element-table&quot;&gt;&#39;</span><span class="p">,</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;IRI&quot;</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;get_annotations&quot;</span><span class="p">):</span>
+                    <span class="n">add_header</span><span class="p">(</span><span class="s2">&quot;Annotations&quot;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_annotations</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                            <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                                <span class="n">add_keyvalue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">add_keyvalue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">is_a</span> <span class="ow">or</span> <span class="n">entity</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">:</span>
+                    <span class="n">add_header</span><span class="p">(</span><span class="s2">&quot;Formal description&quot;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">:</span>
+
+                        <span class="c1"># FIXME: Skip restrictions with value None to work</span>
+                        <span class="c1"># around bug in Owlready2 that doesn&#39;t handle custom</span>
+                        <span class="c1"># datatypes in restrictions correctly...</span>
+                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="k">continue</span>
+
+                        <span class="n">add_keyvalue</span><span class="p">(</span>
+                            <span class="s2">&quot;Equivalent To&quot;</span><span class="p">,</span>
+                            <span class="n">asstring</span><span class="p">(</span>
+                                <span class="n">r</span><span class="p">,</span>
+                                <span class="n">link</span><span class="o">=</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{iri}</span><span class="s1">&quot;&gt;</span><span class="si">{label}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="p">,</span>
+                                <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">,</span>
+                            <span class="p">),</span>
+                            <span class="n">escape</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">htmllink</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">is_a</span><span class="p">:</span>
+                        <span class="n">add_keyvalue</span><span class="p">(</span>
+                            <span class="s2">&quot;Subclass Of&quot;</span><span class="p">,</span>
+                            <span class="n">asstring</span><span class="p">(</span>
+                                <span class="n">r</span><span class="p">,</span>
+                                <span class="n">link</span><span class="o">=</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{iri}</span><span class="s1">&quot;&gt;</span><span class="si">{label}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="p">,</span>
+                                <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">,</span>
+                            <span class="p">),</span>
+                            <span class="n">escape</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">htmllink</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+                <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;  &lt;/table&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontodoc_rst.ModuleDocumentation.add_entity" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">add_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontodoc_rst.ModuleDocumentation.add_entity" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Add <code>entity</code> (class, property, individual, datatype) to list of
+entities to document.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="s2">&quot;Entity&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add `entity` (class, property, individual, datatype) to list of</span>
+<span class="sd">    entities to document.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri_regex</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri_regex</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ObjectPropertyClass</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">DataPropertyClass</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">AnnotationPropertyClass</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Thing</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">iri</span>
+            <span class="o">==</span> <span class="s2">&quot;http://www.w3.org/2000/01/rdf-schema#Datatype&quot;</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datatypes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">individuals</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontodoc_rst.ModuleDocumentation.add_ontology" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">add_ontology</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ontology</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontodoc_rst.ModuleDocumentation.add_ontology" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Add ontology to documentation.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_ontology</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">ontology</span><span class="p">:</span> <span class="s2">&quot;Ontology&quot;</span><span class="p">,</span> <span class="n">imported</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add ontology to documentation.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">ontology</span><span class="o">.</span><span class="n">get_entities</span><span class="p">(</span><span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontodoc_rst.ModuleDocumentation.get_header" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontodoc_rst.ModuleDocumentation.get_header" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Return a the reStructuredText header as a string.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code>    <span class="k">def</span><span class="w"> </span><span class="nf">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a the reStructuredText header as a string.&quot;&quot;&quot;</span>
+        <span class="n">heading</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Module: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_title</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+
+<span class="si">{</span><span class="n">heading</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span>
+<span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">heading</span><span class="p">)</span><span class="si">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontodoc_rst.ModuleDocumentation.get_refdoc" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_refdoc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subsections</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontodoc_rst.ModuleDocumentation.get_refdoc" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Return reference documentation of all module entities.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>subsections</code></td>
+        <td><code>str</code></td>
+        <td><p>Comma-separated list of subsections to include in
+the returned documentation.  Valid subsection names are:
+  - classes
+  - object_properties
+  - data_properties
+  - annotation_properties
+  - individuals
+  - datatypes
+If "all", all subsections will be documented.</p></td>
+        <td><code>&#39;all&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>header</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to also include the header in the returned
+documentation.</p></td>
+        <td><code>True</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>str</code></td>
+      <td><p>String with reference documentation.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_refdoc</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">subsections</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="n">header</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="c1"># pylint: disable=too-many-branches,too-many-locals,too-many-statements</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return reference documentation of all module entities.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        subsections: Comma-separated list of subsections to include in</span>
+<span class="sd">            the returned documentation.  Valid subsection names are:</span>
+<span class="sd">              - classes</span>
+<span class="sd">              - object_properties</span>
+<span class="sd">              - data_properties</span>
+<span class="sd">              - annotation_properties</span>
+<span class="sd">              - individuals</span>
+<span class="sd">              - datatypes</span>
+<span class="sd">            If &quot;all&quot;, all subsections will be documented.</span>
+<span class="sd">        header: Whether to also include the header in the returned</span>
+<span class="sd">            documentation.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        String with reference documentation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># pylint: disable=too-many-nested-blocks</span>
+    <span class="k">if</span> <span class="n">subsections</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+        <span class="n">subsections</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;classes,object_properties,data_properties,&quot;</span>
+            <span class="s2">&quot;annotation_properties,individuals,datatypes&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">maps</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;classes&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">,</span>
+        <span class="s2">&quot;object_properties&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="p">,</span>
+        <span class="s2">&quot;data_properties&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_properties</span><span class="p">,</span>
+        <span class="s2">&quot;annotation_properties&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">,</span>
+        <span class="s2">&quot;individuals&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">individuals</span><span class="p">,</span>
+        <span class="s2">&quot;datatypes&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatypes</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">header</span><span class="p">:</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_header</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_header</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+        <span class="n">clsname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;element-table-</span><span class="si">{</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;  &lt;tr&gt;&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;    &lt;th class=&quot;</span><span class="si">{</span><span class="n">clsname</span><span class="si">}</span><span class="s1">&quot; colspan=&quot;2&quot;&gt;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&lt;/th&gt;&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;  &lt;/tr&gt;&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_keyvalue</span><span class="p">(</span>
+        <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">escape</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">htmllink</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_figure</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Help function for adding a key-value row to table.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            key: Key to show in the table.</span>
+<span class="sd">            value: Value to show in the table.</span>
+<span class="sd">            htmllink: Whether to add html link to value.</span>
+<span class="sd">            show_figure: Whether to show figure in value column.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">show_figure</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$&quot;</span><span class="p">,</span>
+            <span class="n">asstring</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">),</span>
+        <span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&lt;img src=&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">&quot;&gt;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">escape</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">htmllink</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;(https?://[^\s]+)&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;&lt;a href=&quot;\1&quot;&gt;\1&lt;/a&gt;&#39;</span><span class="p">,</span> <span class="n">value</span>
+                <span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;  &lt;tr&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;    &lt;td class=&quot;element-table-key&quot;&gt;&#39;</span>
+                <span class="sa">f</span><span class="s1">&#39;&lt;span class=&quot;element-table-key&quot;&gt;&#39;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span><span class="s2">&lt;/span&gt;&lt;/td&gt;&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;    &lt;td class=&quot;element-table-value&quot;&gt;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">&lt;/td&gt;&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;  &lt;/tr&gt;&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">subsection</span> <span class="ow">in</span> <span class="n">subsections</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">maps</span><span class="p">[</span><span class="n">subsection</span><span class="p">]:</span>
+            <span class="n">moduletitle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_title</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+            <span class="n">anchor</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">moduletitle</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">subsection</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;.. _</span><span class="si">{</span><span class="n">anchor</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">subsection</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span>
+                    <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">subsection</span><span class="p">),</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">maps</span><span class="p">[</span><span class="n">subsection</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="n">get_label</span><span class="p">):</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="n">navid</span> <span class="o">=</span> <span class="n">navid2</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;duplicated entity names: </span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">navid</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;   &lt;div id=&quot;</span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;&gt;&lt;/div&gt;&#39;</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">):</span>
+                <span class="n">preflabel</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="o">.</span><span class="n">first</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">preflabel</span> <span class="o">!=</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">preflabel</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="p">:</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;duplicated prefLabel: </span><span class="si">{</span><span class="n">preflabel</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">navids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">preflabel</span><span class="p">)</span>
+                        <span class="n">navid2</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;   &lt;div id=&quot;</span><span class="si">{</span><span class="n">preflabel</span><span class="si">}</span><span class="s1">&quot;&gt;&lt;/div&gt;&#39;</span>
+
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="s2">&quot;.. raw:: html&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">navid</span><span class="p">,</span>
+                    <span class="n">navid2</span><span class="p">,</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;^&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">),</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.. raw:: html&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="s1">&#39;  &lt;table class=&quot;element-table&quot;&gt;&#39;</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;IRI&quot;</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;get_annotations&quot;</span><span class="p">):</span>
+                <span class="n">add_header</span><span class="p">(</span><span class="s2">&quot;Annotations&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_annotations</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                            <span class="n">add_keyvalue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">add_keyvalue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">is_a</span> <span class="ow">or</span> <span class="n">entity</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">:</span>
+                <span class="n">add_header</span><span class="p">(</span><span class="s2">&quot;Formal description&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">:</span>
+
+                    <span class="c1"># FIXME: Skip restrictions with value None to work</span>
+                    <span class="c1"># around bug in Owlready2 that doesn&#39;t handle custom</span>
+                    <span class="c1"># datatypes in restrictions correctly...</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                    <span class="n">add_keyvalue</span><span class="p">(</span>
+                        <span class="s2">&quot;Equivalent To&quot;</span><span class="p">,</span>
+                        <span class="n">asstring</span><span class="p">(</span>
+                            <span class="n">r</span><span class="p">,</span>
+                            <span class="n">link</span><span class="o">=</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{iri}</span><span class="s1">&quot;&gt;</span><span class="si">{label}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="p">,</span>
+                            <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">,</span>
+                        <span class="p">),</span>
+                        <span class="n">escape</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">htmllink</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">is_a</span><span class="p">:</span>
+                    <span class="n">add_keyvalue</span><span class="p">(</span>
+                        <span class="s2">&quot;Subclass Of&quot;</span><span class="p">,</span>
+                        <span class="n">asstring</span><span class="p">(</span>
+                            <span class="n">r</span><span class="p">,</span>
+                            <span class="n">link</span><span class="o">=</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{iri}</span><span class="s1">&quot;&gt;</span><span class="si">{label}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="p">,</span>
+                            <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">,</span>
+                        <span class="p">),</span>
+                        <span class="n">escape</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">htmllink</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;  &lt;/table&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontodoc_rst.ModuleDocumentation.get_title" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_title</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontodoc_rst.ModuleDocumentation.get_title" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Return a module title.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_title</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a module title.&quot;&quot;&quot;</span>
+    <span class="n">iri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">:</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">:</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">URIRef</span><span class="p">(</span><span class="n">iri</span><span class="p">),</span> <span class="n">DCTERMS</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">title</span><span class="p">:</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">iri</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">title</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontodoc_rst.ModuleDocumentation.nonempty" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">nonempty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontodoc_rst.ModuleDocumentation.nonempty" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns whether the module has any classes, properties, individuals
+or datatypes.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">nonempty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns whether the module has any classes, properties, individuals</span>
+<span class="sd">    or datatypes.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span>
+        <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span>
+        <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_properties</span>
+        <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotation_properties</span>
+        <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">individuals</span>
+        <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatypes</span>
+    <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="ontopy.ontodoc_rst.OntologyDocumentation" class="doc doc-heading">
+        <code>
+OntologyDocumentation        </code>
+
+
+
+<a href="#ontopy.ontodoc_rst.OntologyDocumentation" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Documentation for an ontology with a common namespace.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ontologies</code></td>
+        <td><code>Iterable[Ontology]</code></td>
+        <td><p>Ontologies to include in the generated documentation.
+All entities in these ontologies will be included.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>imported</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to include imported ontologies.</p></td>
+        <td><code>True</code></td>
+      </tr>
+      <tr>
+        <td><code>recursive</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to recursively import all imported ontologies.
+Implies <code>recursive=True</code>.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>iri_regex</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>A regular expression that the IRI of documented entities
+should match.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">OntologyDocumentation</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Documentation for an ontology with a common namespace.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        ontologies: Ontologies to include in the generated documentation.</span>
+<span class="sd">            All entities in these ontologies will be included.</span>
+<span class="sd">        imported: Whether to include imported ontologies.</span>
+<span class="sd">        recursive: Whether to recursively import all imported ontologies.</span>
+<span class="sd">            Implies `recursive=True`.</span>
+<span class="sd">        iri_regex: A regular expression that the IRI of documented entities</span>
+<span class="sd">            should match.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ontologies</span><span class="p">:</span> <span class="s2">&quot;Iterable[Ontology]&quot;</span><span class="p">,</span>
+        <span class="n">imported</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">iri_regex</span><span class="p">:</span> <span class="s2">&quot;Optional[str]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ontologies</span><span class="p">,</span> <span class="p">(</span><span class="n">Ontology</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+            <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="n">ontologies</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
+            <span class="n">imported</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">iri_regex</span> <span class="o">=</span> <span class="n">iri_regex</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module_documentations</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Explicitly included ontologies</span>
+        <span class="n">included_ontologies</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">onto</span> <span class="ow">in</span> <span class="n">ontologies</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+                <span class="n">onto</span> <span class="o">=</span> <span class="n">get_ontology</span><span class="p">(</span><span class="n">onto</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">Ontology</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s2">&quot;expected ontology as an IRI, Path or Ontology object, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;got: </span><span class="si">{</span><span class="n">onto</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">included_ontologies</span><span class="p">:</span>
+                <span class="n">included_ontologies</span><span class="p">[</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">]</span> <span class="o">=</span> <span class="n">onto</span>
+
+        <span class="c1"># Indirectly included ontologies (imported)</span>
+        <span class="k">if</span> <span class="n">imported</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">onto</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">included_ontologies</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+                <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_imported_ontologies</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">o</span><span class="o">.</span><span class="n">base_iri</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">included_ontologies</span><span class="p">:</span>
+                        <span class="n">included_ontologies</span><span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">base_iri</span><span class="p">]</span> <span class="o">=</span> <span class="n">o</span>
+
+        <span class="c1"># Module documentations</span>
+        <span class="k">for</span> <span class="n">onto</span> <span class="ow">in</span> <span class="n">included_ontologies</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">module_documentations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ModuleDocumentation</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">iri_regex</span><span class="o">=</span><span class="n">iri_regex</span><span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a the reStructuredText header as a string.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">==========</span>
+<span class="s2">References</span>
+<span class="s2">==========</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_refdoc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">header</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">subsections</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return reference documentation of all module entities.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            header: Whether to also include the header in the returned</span>
+<span class="sd">                documentation.</span>
+<span class="sd">            subsections: Comma-separated list of subsections to include in</span>
+<span class="sd">                the returned documentation. See ModuleDocumentation.get_refdoc()</span>
+<span class="sd">                for more info.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            String with reference documentation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">moduledocs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">header</span><span class="p">:</span>
+            <span class="n">moduledocs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_header</span><span class="p">())</span>
+        <span class="n">moduledocs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="n">md</span><span class="o">.</span><span class="n">get_refdoc</span><span class="p">(</span><span class="n">subsections</span><span class="o">=</span><span class="n">subsections</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">md</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">module_documentations</span>
+            <span class="k">if</span> <span class="n">md</span><span class="o">.</span><span class="n">nonempty</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">moduledocs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">top_ontology</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ontology</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the top-level ontology.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module_documentations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ontology</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_refdoc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">docfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subsections</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write reference documentation to disk.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            docfile: Name of file to write to. Defaults to the name of</span>
+<span class="sd">                the top ontology with extension `.rst`.</span>
+<span class="sd">            subsections: Comma-separated list of subsections to include in</span>
+<span class="sd">                the returned documentation. See ModuleDocumentation.get_refdoc()</span>
+<span class="sd">                for more info.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">docfile</span><span class="p">:</span>
+            <span class="n">docfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_ontology</span><span class="p">()</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.rst&quot;</span>
+        <span class="n">Path</span><span class="p">(</span><span class="n">docfile</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_refdoc</span><span class="p">(</span><span class="n">subsections</span><span class="o">=</span><span class="n">subsections</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_index_template</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">indexfile</span><span class="o">=</span><span class="s2">&quot;index.rst&quot;</span><span class="p">,</span> <span class="n">docfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write a basic template index.rst file to disk.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            indexfile: Name of index file to write.</span>
+<span class="sd">            docfile: Name of generated documentation file.  If not given,</span>
+<span class="sd">                the name of the top ontology will be used.</span>
+<span class="sd">            overwrite: Whether to overwrite an existing file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">docname</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">docfile</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span> <span class="k">if</span> <span class="n">docfile</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_ontology</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">.. toctree::</span>
+<span class="s2">   :includehidden:</span>
+<span class="s2">   :hidden:</span>
+
+<span class="s2">   Reference Index &lt;</span><span class="si">{</span><span class="n">docname</span><span class="si">}</span><span class="s2">&gt;</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="n">outpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">indexfile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">overwrite</span> <span class="ow">and</span> <span class="n">outpath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;index.rst file already exists: </span><span class="si">{</span><span class="n">outpath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">outpath</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_conf_template</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">conffile</span><span class="o">=</span><span class="s2">&quot;conf.py&quot;</span><span class="p">,</span> <span class="n">docfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write basic template sphinx conf.py file to disk.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            conffile: Name of configuration file to write.</span>
+<span class="sd">            docfile: Name of generated documentation file.  If not given,</span>
+<span class="sd">                the name of the top ontology will be used.</span>
+<span class="sd">            overwrite: Whether to overwrite an existing file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pylint: disable=redefined-builtin</span>
+        <span class="n">md</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module_documentations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">iri</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">)</span>
+        <span class="n">authors</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">md</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span><span class="n">URIRef</span><span class="p">(</span><span class="n">iri</span><span class="p">),</span> <span class="n">DCTERMS</span><span class="o">.</span><span class="n">creator</span><span class="p">))</span>
+        <span class="n">license</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">URIRef</span><span class="p">(</span><span class="n">iri</span><span class="p">),</span> <span class="n">DCTERMS</span><span class="o">.</span><span class="n">license</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">release</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">URIRef</span><span class="p">(</span><span class="n">iri</span><span class="p">),</span> <span class="n">OWL</span><span class="o">.</span><span class="n">versionInfo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span><span class="p">)</span>
+
+        <span class="c1"># FIXME: If authors are URIs, extract their names from the URI</span>
+        <span class="n">author</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">a</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">authors</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">authors</span>
+            <span class="k">else</span> <span class="s2">&quot;&lt;AUTHOR&gt;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">copyright</span> <span class="o">=</span> <span class="n">license</span> <span class="k">if</span> <span class="n">license</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">content</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2"># Configuration file for the Sphinx documentation builder.</span>
+<span class="s2">#</span>
+<span class="s2"># For the full list of built-in configuration values, see the documentation:</span>
+<span class="s2"># https://www.sphinx-doc.org/en/master/usage/configuration.html</span>
+
+<span class="s2"># -- Project information -----------------------------------------------------</span>
+<span class="s2"># https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information</span>
+
+<span class="s2">project = &#39;</span><span class="si">{</span><span class="n">md</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;</span>
+<span class="s2">copyright = &#39;</span><span class="si">{</span><span class="n">copyright</span><span class="si">}</span><span class="s2">&#39;</span>
+<span class="s2">author = &#39;</span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">&#39;</span>
+<span class="s2">release = &#39;</span><span class="si">{</span><span class="n">release</span><span class="si">}</span><span class="s2">&#39;</span>
+
+<span class="s2"># -- General configuration ---------------------------------------------------</span>
+<span class="s2"># https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration</span>
+
+<span class="s2">extensions = []</span>
+
+<span class="s2">templates_path = [&#39;_templates&#39;]</span>
+<span class="s2">exclude_patterns = [&#39;_build&#39;, &#39;Thumbs.db&#39;, &#39;.DS_Store&#39;]</span>
+
+
+
+<span class="s2"># -- Options for HTML output -------------------------------------------------</span>
+<span class="s2"># https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output</span>
+
+<span class="s2">html_theme = &#39;alabaster&#39;</span>
+<span class="s2">html_static_path = [&#39;_static&#39;]</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">conffile</span><span class="p">:</span>
+            <span class="n">conffile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">docfile</span><span class="p">)</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="s2">&quot;conf.py&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">overwrite</span> <span class="ow">and</span> <span class="n">conffile</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;conf.py file already exists: </span><span class="si">{</span><span class="n">conffile</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">conffile</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontodoc_rst.OntologyDocumentation.get_header" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontodoc_rst.OntologyDocumentation.get_header" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Return a the reStructuredText header as a string.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code>    <span class="k">def</span><span class="w"> </span><span class="nf">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a the reStructuredText header as a string.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">==========</span>
+<span class="s2">References</span>
+<span class="s2">==========</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontodoc_rst.OntologyDocumentation.get_refdoc" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_refdoc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">subsections</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontodoc_rst.OntologyDocumentation.get_refdoc" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Return reference documentation of all module entities.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>header</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to also include the header in the returned
+documentation.</p></td>
+        <td><code>True</code></td>
+      </tr>
+      <tr>
+        <td><code>subsections</code></td>
+        <td><code>str</code></td>
+        <td><p>Comma-separated list of subsections to include in
+the returned documentation. See ModuleDocumentation.get_refdoc()
+for more info.</p></td>
+        <td><code>&#39;all&#39;</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>str</code></td>
+      <td><p>String with reference documentation.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_refdoc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">header</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">subsections</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return reference documentation of all module entities.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        header: Whether to also include the header in the returned</span>
+<span class="sd">            documentation.</span>
+<span class="sd">        subsections: Comma-separated list of subsections to include in</span>
+<span class="sd">            the returned documentation. See ModuleDocumentation.get_refdoc()</span>
+<span class="sd">            for more info.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        String with reference documentation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">moduledocs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">header</span><span class="p">:</span>
+        <span class="n">moduledocs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_header</span><span class="p">())</span>
+    <span class="n">moduledocs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+        <span class="n">md</span><span class="o">.</span><span class="n">get_refdoc</span><span class="p">(</span><span class="n">subsections</span><span class="o">=</span><span class="n">subsections</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">md</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">module_documentations</span>
+        <span class="k">if</span> <span class="n">md</span><span class="o">.</span><span class="n">nonempty</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">moduledocs</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontodoc_rst.OntologyDocumentation.top_ontology" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">top_ontology</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontodoc_rst.OntologyDocumentation.top_ontology" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Return the top-level ontology.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">top_ontology</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ontology</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the top-level ontology.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module_documentations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ontology</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontodoc_rst.OntologyDocumentation.write_conf_template" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">write_conf_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conffile</span><span class="o">=</span><span class="s1">&#39;conf.py&#39;</span><span class="p">,</span> <span class="n">docfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontodoc_rst.OntologyDocumentation.write_conf_template" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Write basic template sphinx conf.py file to disk.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>conffile</code></td>
+        <td></td>
+        <td><p>Name of configuration file to write.</p></td>
+        <td><code>&#39;conf.py&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>docfile</code></td>
+        <td></td>
+        <td><p>Name of generated documentation file.  If not given,
+the name of the top ontology will be used.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>overwrite</code></td>
+        <td></td>
+        <td><p>Whether to overwrite an existing file.</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code>    <span class="k">def</span><span class="w"> </span><span class="nf">write_conf_template</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">conffile</span><span class="o">=</span><span class="s2">&quot;conf.py&quot;</span><span class="p">,</span> <span class="n">docfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write basic template sphinx conf.py file to disk.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            conffile: Name of configuration file to write.</span>
+<span class="sd">            docfile: Name of generated documentation file.  If not given,</span>
+<span class="sd">                the name of the top ontology will be used.</span>
+<span class="sd">            overwrite: Whether to overwrite an existing file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pylint: disable=redefined-builtin</span>
+        <span class="n">md</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module_documentations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">iri</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">)</span>
+        <span class="n">authors</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">md</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span><span class="n">URIRef</span><span class="p">(</span><span class="n">iri</span><span class="p">),</span> <span class="n">DCTERMS</span><span class="o">.</span><span class="n">creator</span><span class="p">))</span>
+        <span class="n">license</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">URIRef</span><span class="p">(</span><span class="n">iri</span><span class="p">),</span> <span class="n">DCTERMS</span><span class="o">.</span><span class="n">license</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">release</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">URIRef</span><span class="p">(</span><span class="n">iri</span><span class="p">),</span> <span class="n">OWL</span><span class="o">.</span><span class="n">versionInfo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span><span class="p">)</span>
+
+        <span class="c1"># FIXME: If authors are URIs, extract their names from the URI</span>
+        <span class="n">author</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">a</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">authors</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">authors</span>
+            <span class="k">else</span> <span class="s2">&quot;&lt;AUTHOR&gt;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">copyright</span> <span class="o">=</span> <span class="n">license</span> <span class="k">if</span> <span class="n">license</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">content</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2"># Configuration file for the Sphinx documentation builder.</span>
+<span class="s2">#</span>
+<span class="s2"># For the full list of built-in configuration values, see the documentation:</span>
+<span class="s2"># https://www.sphinx-doc.org/en/master/usage/configuration.html</span>
+
+<span class="s2"># -- Project information -----------------------------------------------------</span>
+<span class="s2"># https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information</span>
+
+<span class="s2">project = &#39;</span><span class="si">{</span><span class="n">md</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;</span>
+<span class="s2">copyright = &#39;</span><span class="si">{</span><span class="n">copyright</span><span class="si">}</span><span class="s2">&#39;</span>
+<span class="s2">author = &#39;</span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">&#39;</span>
+<span class="s2">release = &#39;</span><span class="si">{</span><span class="n">release</span><span class="si">}</span><span class="s2">&#39;</span>
+
+<span class="s2"># -- General configuration ---------------------------------------------------</span>
+<span class="s2"># https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration</span>
+
+<span class="s2">extensions = []</span>
+
+<span class="s2">templates_path = [&#39;_templates&#39;]</span>
+<span class="s2">exclude_patterns = [&#39;_build&#39;, &#39;Thumbs.db&#39;, &#39;.DS_Store&#39;]</span>
+
+
+
+<span class="s2"># -- Options for HTML output -------------------------------------------------</span>
+<span class="s2"># https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output</span>
+
+<span class="s2">html_theme = &#39;alabaster&#39;</span>
+<span class="s2">html_static_path = [&#39;_static&#39;]</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">conffile</span><span class="p">:</span>
+            <span class="n">conffile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">docfile</span><span class="p">)</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="s2">&quot;conf.py&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">overwrite</span> <span class="ow">and</span> <span class="n">conffile</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;conf.py file already exists: </span><span class="si">{</span><span class="n">conffile</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">conffile</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontodoc_rst.OntologyDocumentation.write_index_template" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">write_index_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indexfile</span><span class="o">=</span><span class="s1">&#39;index.rst&#39;</span><span class="p">,</span> <span class="n">docfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontodoc_rst.OntologyDocumentation.write_index_template" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Write a basic template index.rst file to disk.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>indexfile</code></td>
+        <td></td>
+        <td><p>Name of index file to write.</p></td>
+        <td><code>&#39;index.rst&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>docfile</code></td>
+        <td></td>
+        <td><p>Name of generated documentation file.  If not given,
+the name of the top ontology will be used.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>overwrite</code></td>
+        <td></td>
+        <td><p>Whether to overwrite an existing file.</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code>    <span class="k">def</span><span class="w"> </span><span class="nf">write_index_template</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">indexfile</span><span class="o">=</span><span class="s2">&quot;index.rst&quot;</span><span class="p">,</span> <span class="n">docfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write a basic template index.rst file to disk.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            indexfile: Name of index file to write.</span>
+<span class="sd">            docfile: Name of generated documentation file.  If not given,</span>
+<span class="sd">                the name of the top ontology will be used.</span>
+<span class="sd">            overwrite: Whether to overwrite an existing file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">docname</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">docfile</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span> <span class="k">if</span> <span class="n">docfile</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_ontology</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">.. toctree::</span>
+<span class="s2">   :includehidden:</span>
+<span class="s2">   :hidden:</span>
+
+<span class="s2">   Reference Index &lt;</span><span class="si">{</span><span class="n">docname</span><span class="si">}</span><span class="s2">&gt;</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="n">outpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">indexfile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">overwrite</span> <span class="ow">and</span> <span class="n">outpath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;index.rst file already exists: </span><span class="si">{</span><span class="n">outpath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">outpath</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="ontopy.ontodoc_rst.OntologyDocumentation.write_refdoc" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">write_refdoc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">docfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subsections</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontodoc_rst.OntologyDocumentation.write_refdoc" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Write reference documentation to disk.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>docfile</code></td>
+        <td></td>
+        <td><p>Name of file to write to. Defaults to the name of
+the top ontology with extension <code>.rst</code>.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>subsections</code></td>
+        <td></td>
+        <td><p>Comma-separated list of subsections to include in
+the returned documentation. See ModuleDocumentation.get_refdoc()
+for more info.</p></td>
+        <td><code>&#39;all&#39;</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">write_refdoc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">docfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subsections</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write reference documentation to disk.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        docfile: Name of file to write to. Defaults to the name of</span>
+<span class="sd">            the top ontology with extension `.rst`.</span>
+<span class="sd">        subsections: Comma-separated list of subsections to include in</span>
+<span class="sd">            the returned documentation. See ModuleDocumentation.get_refdoc()</span>
+<span class="sd">            for more info.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">docfile</span><span class="p">:</span>
+        <span class="n">docfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_ontology</span><span class="p">()</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.rst&quot;</span>
+    <span class="n">Path</span><span class="p">(</span><span class="n">docfile</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_refdoc</span><span class="p">(</span><span class="n">subsections</span><span class="o">=</span><span class="n">subsections</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span>
+    <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2019-2022 SINTEF
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/emmo-repo" target="_blank" rel="noopener" title="EMMO on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>
