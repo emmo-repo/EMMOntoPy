@@ -23,7 +23,7 @@ repos:
     name: Blacken
 
 - repo: https://github.com/PyCQA/bandit
-  rev: '1.8.2'
+  rev: '1.8.3'
   hooks:
   - id: bandit
     args: [-r]
@@ -36,7 +36,7 @@ repos:
 #     exclude: ^tests/.*$
 
 - repo: https://github.com/SINTEF/ci-cd
-  rev: v2.9.0
+  rev: v2.9.2
   hooks:
   - id: docs-api-reference
     args:

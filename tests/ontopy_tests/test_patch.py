@@ -22,42 +22,68 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
         "altLabel",
         "elucidation",
         "comment",
+        "label",
     }
 
     annot = set(str(a) for a in emmo.Atom.get_annotations(all=True).keys())
+    print(annot)
     assert not annot.difference(
         {
-            "qualifiedCardinality",
-            "minQualifiedCardinality",
-            "prefLabel",
-            "abstract",
-            "hiddenLabel",
-            "etymology",
-            "altLabel",
-            "example",
-            "elucidation",
-            "OWLDLRestrictedAxiom",
-            "wikipediaReference",
-            "conceptualisation",
-            "logo",
-            "comment",
-            "label",
-            "dbpediaReference",
-            "definition",
-            "VIMTerm",
-            "creator",
-            "iupacReference",
-            "contact",
-            "omReference",
-            "ISO9000Reference",
-            "ISO80000Reference",
-            "qudtReference",
+            "illustration",
             "contributor",
-            "license",
-            "ISO14040Reference",
-            "figure",
-            "title",
             "publisher",
+            "mbox",
+            "issued",
+            "metrologicalReference",
+            "OWLRL2DLAxioms",
+            "elucidation",
+            "etymology",
+            "omReference",
+            "preferredNamespacePrefix",
+            "workplaceHomepage",
+            "name",
+            "hasFormat",
+            "OWL2DLRestrictedAxiom",
+            "preferredNamespaceUri",
+            "uneceCommonCode",
+            "creator",
+            "contact",
+            "conceptualisation",
+            "SMILESReference",
+            "bibliographicCitation",
+            "iupacReference",
+            "dbpediaReference",
+            "minQualifiedCardinality",
+            "comment",
+            "hiddenLabel",
+            "fullAddress",
+            "logo",
+            "example",
+            "doi",
+            "definition",
+            "altLabel",
+            "license",
+            "ucumCode",
+            "inchiKey",
+            "unitCode",
+            "homepage",
+            "IEVReference",
+            "alternative",
+            "modified",
+            "wikidataReference",
+            "source",
+            "status",
+            "prefLabel",
+            "ISO80000Reference",
+            "unitSymbol",
+            "qudtReference",
+            "abstract",
+            "label",
+            "qualifiedCardinality",
+            "created",
+            "wikipediaReference",
+            "title",
+            "VIMTerm",
         },
     )
 
@@ -77,13 +103,13 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
     assert emmo.Atom["altLabel"] == ["ChemicalElement"]
 
     assert emmo.Atom.is_defined == False
-    assert emmo.Holistic.is_defined == True
+    assert emmo.UnitSymbol.is_defined == True
     assert (
         emmo.wikipediaReference
     )  # Check that wikipediaReference is in ontology
     assert (
         emmo.Atom.wikipediaReference == []
-    )  # Check that wikipediaReference can be acceses as attribute
+    )  # Check that wikipediaReference can be accesed as attribute
 
 
 def test_get_indirect_is_a() -> None:
