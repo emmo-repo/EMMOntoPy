@@ -377,8 +377,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     "Namespace given in argument is ignored. "
                 )
             namespace = splitlabel[0]
-
+        #print('namespace', namespace)
         if namespace:
+            #print('in get_by_label namespavce')
             entityset = self.get_by_label_all(
                 label,
                 label_annotations=label_annotations,
@@ -388,7 +389,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 return entityset.pop()
             raise NoSuchLabelError(
                 f"No label annotations matches for '{label}' "
-                f"with prefix '{prefix}'."
+                f"with namespace '{namespace}'."
             )
 
         if prefix:
@@ -518,13 +519,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 ent for ent in self.get_entities() if ent.name in matches
             )
         if namespace:
-            print("in namespace", namespace)
-            print("entities", entities)
-            for ent in entities:
-                print("ent.namespace", ent.namespace)
-                print("ent.namespace.name", ent.namespace.name)
-                print("namespace", namespace)
-                print(namespace in [ent.namespace.name, ent.namespace.base_iri])
+            #print("in namespace", namespace)
+            #print("entities", entities)
+            #for ent in entities:
+            #    print("ent.namespace", ent.namespace)
+            #    print("ent.namespace.name", ent.namespace.name)
+            #    print("namespace", namespace)
+            #    print(namespace in [ent.namespace.name, ent.namespace.base_iri])
             return set(
                 ent
                 for ent in entities
