@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.9">
     
     
       
@@ -28,7 +28,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.8608ea7d.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4af4bdda.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
@@ -3132,22 +3132,39 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 
     <span class="k">def</span><span class="w"> </span><span class="nf">set_common_prefix</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">iri_base</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://emmo.info/emmo&quot;</span><span class="p">,</span>
+        <span class="n">iri_base</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://w3id.org/emmo/inferred&quot;</span><span class="p">,</span>
         <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;emmo&quot;</span><span class="p">,</span>
         <span class="n">visited</span><span class="p">:</span> <span class="s2">&quot;Optional[Set]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a common prefix for all imported ontologies</span>
 <span class="sd">        with the same first part of the base_iri.</span>
 
+<span class="sd">        Note that this function might give unintended results.</span>
+<span class="sd">        I.e. if `https://w3id.org/emmo` is given as iri_base</span>
+<span class="sd">        all imported domain ontologies adhering to the</span>
+<span class="sd">        emmo standard for base_iri will be given the same</span>
+<span class="sd">        prefix as well as emmo itself.</span>
+
+<span class="sd">        The default is to set the prefix to emmo only for emmo-inferred.</span>
+
 <span class="sd">        Args:</span>
 <span class="sd">            iri_base: The start of the base_iri to look for. Defaults to</span>
-<span class="sd">                the emmo base_iri http://emmo.info/emmo</span>
+<span class="sd">                the emmo base_iri https://w3id.org/emmo/inferred</span>
 <span class="sd">            prefix: the desired prefix. Defaults to emmo.</span>
 <span class="sd">            visited: Ontologies to skip. Only intended for internal use.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">visited</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">iri_base</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+
+        <span class="c1"># If importing emmo-inferred set prefix to emmo</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">iri_base</span> <span class="o">==</span> <span class="s2">&quot;https://w3id.org/emmo/inferred&quot;</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">==</span> <span class="s2">&quot;inferred&quot;</span>
+            <span class="ow">and</span> <span class="n">prefix</span> <span class="o">==</span> <span class="s2">&quot;emmo&quot;</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">==</span> <span class="s2">&quot;https://w3id.org/emmo#&quot;</span>
+        <span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
         <span class="k">for</span> <span class="n">onto</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">onto</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
@@ -3899,7 +3916,6 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_obj_triples_po_s</span><span class="p">(</span><span class="n">rdf_type</span><span class="p">,</span> <span class="n">rdf_property</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="c1"># print(s, self._unabbreviate(s))</span>
                 <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
                 <span class="c1"># generator.append(self[self._unabbreviate(s)])</span>
                 <span class="c1"># generator.append(self.world._get_by_storid(s))</span>
@@ -7741,7 +7757,6 @@ are also returned.</p></td>
     <span class="p">)</span>
     <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_obj_triples_po_s</span><span class="p">(</span><span class="n">rdf_type</span><span class="p">,</span> <span class="n">rdf_property</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c1"># print(s, self._unabbreviate(s))</span>
             <span class="n">generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
             <span class="c1"># generator.append(self[self._unabbreviate(s)])</span>
             <span class="c1"># generator.append(self.world._get_by_storid(s))</span>
@@ -8154,7 +8169,7 @@ to <code>dir</code>.</p>
 
 
 <h3 id="ontopy.ontology.Ontology.set_common_prefix" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">set_common_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iri_base</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;emmo&#39;</span><span class="p">,</span> <span class="n">visited</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">set_common_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iri_base</span><span class="o">=</span><span class="s1">&#39;https://w3id.org/emmo/inferred&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;emmo&#39;</span><span class="p">,</span> <span class="n">visited</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.ontology.Ontology.set_common_prefix" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -8163,6 +8178,12 @@ to <code>dir</code>.</p>
 
       <p>Set a common prefix for all imported ontologies
 with the same first part of the base_iri.</p>
+<p>Note that this function might give unintended results.
+I.e. if <code>https://w3id.org/emmo</code> is given as iri_base
+all imported domain ontologies adhering to the
+emmo standard for base_iri will be given the same
+prefix as well as emmo itself.</p>
+<p>The default is to set the prefix to emmo only for emmo-inferred.</p>
 
 <p><strong>Parameters:</strong></p>
 <table>
@@ -8179,8 +8200,8 @@ with the same first part of the base_iri.</p>
         <td><code>iri_base</code></td>
         <td><code>str</code></td>
         <td><p>The start of the base_iri to look for. Defaults to
-the emmo base_iri http://emmo.info/emmo</p></td>
-        <td><code>&#39;http://emmo.info/emmo&#39;</code></td>
+the emmo base_iri https://w3id.org/emmo/inferred</p></td>
+        <td><code>&#39;https://w3id.org/emmo/inferred&#39;</code></td>
       </tr>
       <tr>
         <td><code>prefix</code></td>
@@ -8200,22 +8221,39 @@ the emmo base_iri http://emmo.info/emmo</p></td>
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_common_prefix</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
-    <span class="n">iri_base</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://emmo.info/emmo&quot;</span><span class="p">,</span>
+    <span class="n">iri_base</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://w3id.org/emmo/inferred&quot;</span><span class="p">,</span>
     <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;emmo&quot;</span><span class="p">,</span>
     <span class="n">visited</span><span class="p">:</span> <span class="s2">&quot;Optional[Set]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set a common prefix for all imported ontologies</span>
 <span class="sd">    with the same first part of the base_iri.</span>
 
+<span class="sd">    Note that this function might give unintended results.</span>
+<span class="sd">    I.e. if `https://w3id.org/emmo` is given as iri_base</span>
+<span class="sd">    all imported domain ontologies adhering to the</span>
+<span class="sd">    emmo standard for base_iri will be given the same</span>
+<span class="sd">    prefix as well as emmo itself.</span>
+
+<span class="sd">    The default is to set the prefix to emmo only for emmo-inferred.</span>
+
 <span class="sd">    Args:</span>
 <span class="sd">        iri_base: The start of the base_iri to look for. Defaults to</span>
-<span class="sd">            the emmo base_iri http://emmo.info/emmo</span>
+<span class="sd">            the emmo base_iri https://w3id.org/emmo/inferred</span>
 <span class="sd">        prefix: the desired prefix. Defaults to emmo.</span>
 <span class="sd">        visited: Ontologies to skip. Only intended for internal use.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">visited</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">iri_base</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+
+    <span class="c1"># If importing emmo-inferred set prefix to emmo</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">iri_base</span> <span class="o">==</span> <span class="s2">&quot;https://w3id.org/emmo/inferred&quot;</span>
+        <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">==</span> <span class="s2">&quot;inferred&quot;</span>
+        <span class="ow">and</span> <span class="n">prefix</span> <span class="o">==</span> <span class="s2">&quot;emmo&quot;</span>
+        <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">==</span> <span class="s2">&quot;https://w3id.org/emmo#&quot;</span>
+    <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
     <span class="k">for</span> <span class="n">onto</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">onto</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
@@ -8715,18 +8753,13 @@ World            (<span title="owlready2.namespace.World">World</span>)
         <span class="n">base_iri</span> <span class="o">=</span> <span class="n">base_iri</span><span class="o">.</span><span class="n">as_uri</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base_iri</span><span class="p">,</span> <span class="n">Path</span><span class="p">)</span> <span class="k">else</span> <span class="n">base_iri</span>
 
         <span class="k">if</span> <span class="n">base_iri</span> <span class="o">==</span> <span class="s2">&quot;emmo&quot;</span><span class="p">:</span>
-            <span class="n">base_iri</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;http://emmo-repo.github.io/versions/1.0.0-beta4/emmo.ttl&quot;</span>
-            <span class="p">)</span>
+            <span class="n">base_iri</span> <span class="o">=</span> <span class="s2">&quot;https://w3id.org/emmo/&quot;</span>
         <span class="k">elif</span> <span class="n">base_iri</span> <span class="o">==</span> <span class="s2">&quot;emmo-inferred&quot;</span><span class="p">:</span>
-            <span class="n">base_iri</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;https://emmo-repo.github.io/versions/1.0.0-beta4/&quot;</span>
-                <span class="s2">&quot;emmo-inferred.ttl&quot;</span>
-            <span class="p">)</span>
+            <span class="n">base_iri</span> <span class="o">=</span> <span class="s2">&quot;https://w3id.org/emmo/inferred&quot;</span>
         <span class="k">elif</span> <span class="n">base_iri</span> <span class="o">==</span> <span class="s2">&quot;emmo-development&quot;</span><span class="p">:</span>
             <span class="n">base_iri</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;https://emmo-repo.github.io/versions/1.0.0-beta5/&quot;</span>
-                <span class="s2">&quot;emmo-inferred.ttl&quot;</span>
+                <span class="s2">&quot;https://raw.githubusercontent.com/emmo-repo/EMMO/&quot;</span>
+                <span class="s2">&quot;refs/heads/dev/emmo.ttl&quot;</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">base_iri</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontologies</span><span class="p">:</span>
@@ -8881,18 +8914,13 @@ Defaults to DEFAULT_LABEL_ANNOTATIONS if set to None.</p></td>
     <span class="n">base_iri</span> <span class="o">=</span> <span class="n">base_iri</span><span class="o">.</span><span class="n">as_uri</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base_iri</span><span class="p">,</span> <span class="n">Path</span><span class="p">)</span> <span class="k">else</span> <span class="n">base_iri</span>
 
     <span class="k">if</span> <span class="n">base_iri</span> <span class="o">==</span> <span class="s2">&quot;emmo&quot;</span><span class="p">:</span>
-        <span class="n">base_iri</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;http://emmo-repo.github.io/versions/1.0.0-beta4/emmo.ttl&quot;</span>
-        <span class="p">)</span>
+        <span class="n">base_iri</span> <span class="o">=</span> <span class="s2">&quot;https://w3id.org/emmo/&quot;</span>
     <span class="k">elif</span> <span class="n">base_iri</span> <span class="o">==</span> <span class="s2">&quot;emmo-inferred&quot;</span><span class="p">:</span>
-        <span class="n">base_iri</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;https://emmo-repo.github.io/versions/1.0.0-beta4/&quot;</span>
-            <span class="s2">&quot;emmo-inferred.ttl&quot;</span>
-        <span class="p">)</span>
+        <span class="n">base_iri</span> <span class="o">=</span> <span class="s2">&quot;https://w3id.org/emmo/inferred&quot;</span>
     <span class="k">elif</span> <span class="n">base_iri</span> <span class="o">==</span> <span class="s2">&quot;emmo-development&quot;</span><span class="p">:</span>
         <span class="n">base_iri</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;https://emmo-repo.github.io/versions/1.0.0-beta5/&quot;</span>
-            <span class="s2">&quot;emmo-inferred.ttl&quot;</span>
+            <span class="s2">&quot;https://raw.githubusercontent.com/emmo-repo/EMMO/&quot;</span>
+            <span class="s2">&quot;refs/heads/dev/emmo.ttl&quot;</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">base_iri</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontologies</span><span class="p">:</span>
