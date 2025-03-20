@@ -2025,7 +2025,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         generations2 = self.number_of_generations(cls2, cca)
         return 2 * ccadepth / (generations1 + generations2 + 2 * ccadepth)
 
-    def new_entity(
+    def new_entity(  # pylint: disable=too-many-arguments,too-many-branches,too-many-positional-arguments
         self,
         name: str,
         parent: Union[
@@ -2170,7 +2170,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             name: name of the object property
             parent: parent(s) of the object property
             iri: IRI of the new object property.  If None, a new IRI will be
-            based on the ontology base IRI and the entity name.
+                based on the ontology base IRI and the entity name.
         Returns:
             the new object property.
         """
@@ -2189,7 +2189,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             name: name of the data property
             parent: parent(s) of the data property
             iri: IRI of the new data property.  If None, a new IRI will be
-            based on the ontology base IRI and the entity name
+                based on the ontology base IRI and the entity name
         Returns:
             the new data property.
         """
@@ -2208,7 +2208,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             name: name of the annotation property
             parent: parent(s) of the annotation property
             iri: IRI of the new annotation property.  If None, a new IRI will
-            be based on the ontology base IRI and the entity name.
+                be based on the ontology base IRI and the entity name.
         Returns:
             the new annotation property.
         """
