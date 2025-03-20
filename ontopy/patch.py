@@ -2,15 +2,20 @@
 
 # pylint: disable=protected-access
 import types
+from typing import Any, Generator, Tuple
 
 import owlready2
 from owlready2 import AnnotationPropertyClass, ThingClass, PropertyClass
 from owlready2 import Metadata, Thing, Restriction, Namespace
-from ontopy.utils import EMMOntoPyException  # pylint: disable=cyclic-import
+
+# pylint: disable=wrong-import-order
+from ontopy.utils import (
+    EMMOntoPyException,
+    NoSuchLabelError,
+)  # pylint: disable=cyclic-import
 from ontopy.ontology import (  # pylint: disable=cyclic-import
     Ontology as OntopyOntology,
 )
-from typing import Any, Generator, Iterator, Tuple
 
 
 def render_func(entity):
@@ -295,10 +300,11 @@ def namespace_init(self, world_or_ontology, base_iri, name=None):
 
 setattr(Namespace, "__init__", namespace_init)
 
+
 #
 # Extending Metadata
 # ==================
-def keys(self):
+def keys(self) -> Generator[str, None, None]:
     """Return a generator over annotation property names associated
     with this ontology, i.e. metadata keys."""
 
@@ -307,13 +313,13 @@ def keys(self):
     for triple in triples:
         try:
             pred = namespace[namespace._unabbreviate(triple[1])]
-        except:
+        except NoSuchLabelError:
             pred = namespace._unabbreviate(triple[1])
 
         yield pred
 
 
-def items(self):
+def items(self) -> Generator[Tuple[str, Any], None, None]:
     """Return a generator over annotation property (name, value_list)
     pairs in associates with this ontology, i.e. the metadata."""
     namespace = self.namespace
@@ -322,20 +328,20 @@ def items(self):
     for triple in triples:
         try:
             pred = namespace[namespace._unabbreviate(triple[1])]
-        except:
+        except NoSuchLabelError:
             pred = namespace._unabbreviate(triple[1])
 
         if isinstance(triple[2], str):
             obj = triple[2]
-        elif isinstance(triple[2], int):
+        else:
             try:
                 obj = namespace[namespace._unabbreviate(triple[2])]
-            except:
+            except NoSuchLabelError:
                 obj = namespace._unabbreviate(triple[2])
         yield pred, obj
 
 
-def has(self, name):
+def has(self, name) -> bool:
     """Returns true if name"""
     return name in set(self.keys())
 
@@ -349,7 +355,7 @@ def __iter__(self):
 
 
 def __setattr__(self, attr, values):
-    print('in settattr')
+    print("in settattr")
     metadata__setattr__save(self, attr, values)
     # Make sure that __setattr__() also updates the triplestore
     lst = self.__dict__[attr]
@@ -377,20 +383,19 @@ def __setattr__(self, attr, values):
 def __repr__(self):
     result = ["Metadata("]
     for annotation, values in self.items():
-        result.append(
-            f"  {annotation}=[{values}],"
-        )
+        result.append(f"  {annotation}=[{values}],")
     result.append(")")
     return "\n".join(result)
 
+
 orig_metadata_init = Metadata.__init__
 
-def __init__(self, namespace, storid):
-    orig_namespace_init(self,namespace, storid)
 
-    keys = self.keys()
-    #with self.namespace.ontology:
-    for key in keys:
+def __init__(self, namespace, storid):
+    orig_namespace_init(self, namespace, storid)
+
+    # with self.namespace.ontology:
+    for key in self.keys():
         if not isinstance(key, owlready2.annotation.AnnotationPropertyClass):
             self.namespace.ontology.new_annotation_property(key)
 
@@ -403,6 +408,6 @@ setattr(Metadata, "__contains__", __contains__)
 setattr(Metadata, "__iter__", __iter__)
 setattr(Metadata, "__setattr__", __setattr__)
 setattr(Metadata, "__repr__", __repr__)
-#setattr(Metadata, "__init__", __init__)
+# setattr(Metadata, "__init__", __init__)
 Metadata.__getitem__ = Metadata.__getattr__
 Metadata.__setitem__ = Metadata.__setattr__
