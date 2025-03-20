@@ -2061,7 +2061,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         generations2 = self.number_of_generations(cls2, cca)
         return 2 * ccadepth / (generations1 + generations2 + 2 * ccadepth)
 
-    def new_entity(
+    def new_entity(  # pylint: disable=too-many-arguments,too-many-branches,too-many-positional-arguments
         self,
         name: str,
         parent: Union[
@@ -2081,6 +2081,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             ]
         ] = "class",
         preflabel: Optional[str] = None,
+        iri: Optional[str] = None,
     ) -> Union[
         ThingClass,
         ObjectPropertyClass,
@@ -2104,6 +2105,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 be added as prefLabel if skos:prefLabel is in the ontology
                 and listed in `self.label_annotations`.  Set `preflabel` to
                 False, to avoid assigning a prefLabel.
+            iri: IRI of the entity.  If None, a new IRI will be generated
+                based on the ontology base IRI and the entity name.
 
         Returns:
             the new entity.
@@ -2149,7 +2152,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         with self:
             entity = types.new_class(name, parents)
-
+            if iri:
+                entity.iri = iri
             preflabel_iri = "http://www.w3.org/2004/02/skos/core#prefLabel"
             if preflabel:
                 if not self.world[preflabel_iri]:
@@ -2170,63 +2174,81 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
     # Method that creates new ThingClass using new_entity
     def new_class(
-        self, name: str, parent: Union[ThingClass, Iterable]
+        self,
+        name: str,
+        parent: Union[ThingClass, Iterable],
+        iri: Optional[str] = None,
     ) -> ThingClass:
         """Create and return new class.
 
         Args:
             name: name of the class
             parent: parent(s) of the class
+            iri: IRI of the new class.  If None, a new IRI will be generated
+                based on the ontology base IRI and the entity name.
+
 
         Returns:
             the new class.
         """
-        return self.new_entity(name, parent, "class")
+        return self.new_entity(name, parent, "class", iri=iri)
 
     # Method that creates new ObjectPropertyClass using new_entity
     def new_object_property(
-        self, name: str, parent: Union[ObjectPropertyClass, Iterable]
+        self,
+        name: str,
+        parent: Union[ObjectPropertyClass, Iterable],
+        iri: Optional[str] = None,
     ) -> ObjectPropertyClass:
         """Create and return new object property.
 
         Args:
             name: name of the object property
             parent: parent(s) of the object property
-
+            iri: IRI of the new object property.  If None, a new IRI will be
+                based on the ontology base IRI and the entity name.
         Returns:
             the new object property.
         """
-        return self.new_entity(name, parent, "object_property")
+        return self.new_entity(name, parent, "object_property", iri=iri)
 
     # Method that creates new DataPropertyClass using new_entity
     def new_data_property(
-        self, name: str, parent: Union[DataPropertyClass, Iterable]
+        self,
+        name: str,
+        parent: Union[DataPropertyClass, Iterable],
+        iri: Optional[str] = None,
     ) -> DataPropertyClass:
         """Create and return new data property.
 
         Args:
             name: name of the data property
             parent: parent(s) of the data property
-
+            iri: IRI of the new data property.  If None, a new IRI will be
+                based on the ontology base IRI and the entity name
         Returns:
             the new data property.
         """
-        return self.new_entity(name, parent, "data_property")
+        return self.new_entity(name, parent, "data_property", iri=iri)
 
     # Method that creates new AnnotationPropertyClass using new_entity
     def new_annotation_property(
-        self, name: str, parent: Union[AnnotationPropertyClass, Iterable]
+        self,
+        name: str,
+        parent: Union[AnnotationPropertyClass, Iterable],
+        iri: Optional[str] = None,
     ) -> AnnotationPropertyClass:
         """Create and return new annotation property.
 
         Args:
             name: name of the annotation property
             parent: parent(s) of the annotation property
-
+            iri: IRI of the new annotation property.  If None, a new IRI will
+                be based on the ontology base IRI and the entity name.
         Returns:
             the new annotation property.
         """
-        return self.new_entity(name, parent, "annotation_property")
+        return self.new_entity(name, parent, "annotation_property", iri=iri)
 
     def difference(self, other: owlready2.Ontology) -> set:
         """Return a set of triples that are in this, but not in the

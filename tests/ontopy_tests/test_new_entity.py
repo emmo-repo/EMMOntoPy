@@ -101,12 +101,29 @@ def test_new_entity(testonto: "Ontology") -> None:
             entitytype="nonexistingpropertytype",
         )
     testonto.new_class("AnotherClass3", (testonto.AnotherClass,))
+
+    assert (
+        testonto.AnotherClass3.iri == "http://emmo.info/testonto#AnotherClass3"
+    )
     testonto.new_object_property(
         "hasSubObjectProperty3", testonto.hasObjectProperty
     )
+
+    assert (
+        testonto.hasSubObjectProperty3.iri
+        == "http://emmo.info/testonto#hasSubObjectProperty3"
+    )
     testonto.new_data_property("hasSubDataProperty3", testonto.hasDataProperty)
+    assert (
+        testonto.hasSubDataProperty3.iri
+        == "http://emmo.info/testonto#hasSubDataProperty3"
+    )
     testonto.new_annotation_property(
         "hasSubAnnotationProperty3", testonto.hasAnnotationProperty
+    )
+    assert (
+        testonto.hasSubAnnotationProperty3.iri
+        == "http://emmo.info/testonto#hasSubAnnotationProperty3"
     )
 
 
@@ -122,4 +139,57 @@ def test_new_entity_w_preflabel() -> None:
         preflabel="NewClass",
     )
 
-    # assert testonto2.NewClass.preflabel == "NewClass"
+    assert testonto2.NewClass.prefLabel.en == ["NewClass"]
+
+
+def test_new_entity_w_iri(testonto: "Ontology") -> None:
+    """Test adding entities to ontology"""
+    from ontopy import get_ontology
+    import owlready2
+
+    testonto.new_entity(
+        "NewClass", owlready2.Thing, iri="http://different_ontology#NewClass"
+    )
+
+    assert testonto.NewClass.iri == "http://different_ontology#NewClass"
+
+    testonto.new_class(
+        "AnotherClass",
+        (testonto.NewClass,),
+        iri="http://different_ontology#AnotherClass",
+    )
+
+    assert testonto.AnotherClass.iri == "http://different_ontology#AnotherClass"
+
+    testonto.new_object_property(
+        "hasSubObjectProperty",
+        testonto.hasObjectProperty,
+        iri="http://different_ontology#hasSubObjectProperty",
+    )
+
+    assert (
+        testonto.hasSubObjectProperty.iri
+        == "http://different_ontology#hasSubObjectProperty"
+    )
+
+    testonto.new_data_property(
+        "hasSubDataProperty",
+        testonto.hasDataProperty,
+        iri="http://different_ontology#hasSubDataProperty",
+    )
+
+    assert (
+        testonto.hasSubDataProperty.iri
+        == "http://different_ontology#hasSubDataProperty"
+    )
+
+    testonto.new_annotation_property(
+        "hasSubAnnotationProperty",
+        testonto.hasAnnotationProperty,
+        iri="http://different_ontology#hasSubAnnotationProperty",
+    )
+
+    assert (
+        testonto.hasSubAnnotationProperty.iri
+        == "http://different_ontology#hasSubAnnotationProperty"
+    )
