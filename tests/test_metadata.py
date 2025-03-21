@@ -6,8 +6,7 @@ if TYPE_CHECKING:
 from pathlib import Path
 
 
-# def test_metadata() -> None:
-if True:
+def test_metadata() -> None:
     from pathlib import Path
     from ontopy import get_ontology
 
@@ -18,50 +17,43 @@ if True:
 
     expected_keys = set(
         [
-            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-            "http://www.w3.org/2002/07/owl#imports",
-            "http://www.w3.org/2002/07/owl#versionIRI",
-            "http://purl.org/dc/terms/contributor",
-            "http://purl.org/dc/terms/creator",
-            testonto.metadata.namespace.hasFormat,
-            "http://purl.org/dc/terms/publisher",
-            testonto.metadata.namespace.homepage,
-            # testonto.metadata.namespace.comment,
-            # testonto.metadata.namespace.versionInfo,
-            "http://purl.org/dc/terms/abstract",
-            testonto.metadata.namespace.alternative,
-            testonto.metadata.namespace.created,
-            "http://purl.org/dc/terms/license",
-            "http://purl.org/dc/terms/title",
-            testonto.metadata.namespace.status,
-            testonto.metadata.namespace.preferredNamespacePrefix,
-            testonto.metadata.namespace.preferredNamespaceUri,
-            "http://emmo.info/testonto#EMMO_1246b120_abbe_4840_b0f8_3e4348b24a17",
-        ]
-    )
-
-    print(set(testonto.metadata.keys()).difference(expected_keys))
-    assert set(testonto.metadata.keys()) == set(
-        [
-            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-            "http://www.w3.org/2002/07/owl#imports",
-            "http://www.w3.org/2002/07/owl#versionIRI",
-            "http://purl.org/dc/terms/contributor",
-            "http://purl.org/dc/terms/creator",
-            testonto.metadata.namespace.hasFormat,
-            "http://purl.org/dc/terms/publisher",
-            testonto.metadata.namespace.homepage,
-            "http://purl.org/dc/terms/comment",
-            "http://www.w3.org/2002/07/owl#versionInfo",
-            "http://purl.org/dc/terms/abstract",
-            "http://purl.org/dc/terms/alternative",
-            testonto.metadata.namespace.created,
-            "http://iurl.org/dc/terms/title",
-            "http://purl.org/ontology/bibo/status",
             "http://purl.org/vocab/vann/preferredNamespacePrefix",
             "http://purl.org/vocab/vann/preferredNamespaceUri",
+            "http://purl.org/dc/terms/created",
+            "http://purl.org/dc/terms/alternative",
+            "http://purl.org/ontology/bibo/status",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+            "http://www.w3.org/2000/01/rdf-schema#comment",
+            "http://purl.org/dc/terms/abstract",
+            "http://purl.org/dc/terms/license",
+            "http://purl.org/dc/terms/title",
             "http://emmo.info/testonto#EMMO_1246b120_abbe_4840_b0f8_3e4348b24a17",
+            "http://www.w3.org/2002/07/owl#versionIRI",
+            "http://www.w3.org/2002/07/owl#imports",
+            "http://purl.org/dc/terms/contributor",
+            "http://www.w3.org/2002/07/owl#versionInfo",
+            "http://purl.org/dc/terms/creator",
+            "http://purl.org/dc/terms/hasFormat",
+            "http://xmlns.com/foaf/0.1/homepage",
         ]
     )
 
-    assert testonto.metadata.items() == []
+    # versionInfo and comment are not defined in the ontology
+    # but are still available predefined in owlready2
+    assert set(testonto.metadata.keys()) == expected_keys
+
+    items_dict = dict(testonto.metadata.items())
+
+    assert set(items_dict.keys()) == set(testonto.metadata.keys())
+
+    assert testonto.metadata["http://purl.org/dc/terms/title"] == [
+        "The test ontology (TESTONTO)"
+    ]
+    assert testonto.metadata.title == ["The test ontology (TESTONTO)"]
+
+    assert testonto.metadata.creator == [
+        "https://orcid.org/0000-0001-8869-3718",
+        "http://emmo.info/testonto#JesperFriis",
+    ]
+
+    assert testonto.metadata.versionInfo == ["0.2.0"]

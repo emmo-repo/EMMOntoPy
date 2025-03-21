@@ -44,6 +44,13 @@ def test_classes(repo_dir) -> None:
     assert set(testonto.object_properties(imported=False)) == set()
 
     assert set(testonto.annotation_properties(imported=True)) == {
+        testonto.preferredNamespaceUri,
+        testonto.alternative,
+        testonto.homepage,
+        testonto.preferredNamespacePrefix,
+        testonto.hasFormat,
+        testonto.created,
+        testonto.status,
         testonto.prefLabel,
         testonto.altLabel,
         testonto.hasAnnotationProperty,

@@ -309,36 +309,36 @@ def keys(self) -> Generator[str, None, None]:
     with this ontology, i.e. metadata keys."""
 
     namespace = self.namespace
-    triples = namespace.get_triples(s=self.storid)
-    for triple in triples:
+    predicates = set(x[1] for x in namespace.get_triples(s=self.storid))
+    for pred in predicates:
         try:
-            pred = namespace[namespace._unabbreviate(triple[1])]
+            pred = namespace[namespace._unabbreviate(pred)].iri
         except NoSuchLabelError:
-            pred = namespace._unabbreviate(triple[1])
+            pred = namespace._unabbreviate(pred)
 
         yield pred
 
 
 def items(self) -> Generator[Tuple[str, Any], None, None]:
-    """Return a generator over annotation property (name, value_list)
-    pairs in associates with this ontology, i.e. the metadata."""
+    """Return a dict of annotation properties as (name, value_list)
+    pairs associated with this ontology, i.e. the metadata."""
     namespace = self.namespace
 
-    triples = namespace.get_triples(s=self.storid)
-    for triple in triples:
-        try:
-            pred = namespace[namespace._unabbreviate(triple[1])]
-        except NoSuchLabelError:
-            pred = namespace._unabbreviate(triple[1])
+    for key in self.keys():
+        triples = namespace._get_triples_spod_spod(
+            s=self.storid, p=namespace._abbreviate(key), o=None
+        )
 
-        if isinstance(triple[2], str):
-            obj = triple[2]
-        else:
-            try:
-                obj = namespace[namespace._unabbreviate(triple[2])]
-            except NoSuchLabelError:
-                obj = namespace._unabbreviate(triple[2])
-        yield pred, obj
+        obj = []
+        for triple in triples:
+            if isinstance(triple[2], str):
+                obj.append(triple[2])
+            else:
+                try:
+                    obj.append(namespace[namespace._unabbreviate(triple[2])])
+                except NoSuchLabelError:
+                    obj.append(namespace._unabbreviate(triple[2]))
+        yield key, obj
 
 
 def has(self, name) -> bool:
@@ -355,7 +355,6 @@ def __iter__(self):
 
 
 def __setattr__(self, attr, values):
-    print("in settattr")
     metadata__setattr__save(self, attr, values)
     # Make sure that __setattr__() also updates the triplestore
     lst = self.__dict__[attr]
@@ -381,26 +380,26 @@ def __setattr__(self, attr, values):
 
 
 def __repr__(self):
-    result = ["Metadata("]
-    for annotation, values in self.items():
-        result.append(f"  {annotation}=[{values}],")
-    result.append(")")
-    return "\n".join(result)
+    return f"Metadata({dict(self.items())})"
 
 
-orig_metadata_init = Metadata.__init__
+def _getname(iri):
+    label_startpos = iri.rfind("#") if iri.rfind("#") != -1 else iri.rfind("/")
+    return iri[label_startpos + 1 :] if label_startpos != -1 else iri
 
 
-def __init__(self, namespace, storid):
-    orig_namespace_init(self, namespace, storid)
-
-    # with self.namespace.ontology:
-    for key in self.keys():
-        if not isinstance(key, owlready2.annotation.AnnotationPropertyClass):
-            self.namespace.ontology.new_annotation_property(key)
+def __metadata_getattr__(self, attr):
+    try:
+        return metadata__getattr__save(self, attr)
+    except AttributeError:
+        if attr in self.keys():
+            return dict(self.items())[attr]
+        d = {_getname(key): val for key, val in self.items()}
+        return d[attr]
 
 
 metadata__setattr__save = Metadata.__setattr__
+metadata__getattr__save = Metadata.__getattr__
 setattr(Metadata, "keys", keys)
 setattr(Metadata, "items", items)
 setattr(Metadata, "has", has)
@@ -408,6 +407,6 @@ setattr(Metadata, "__contains__", __contains__)
 setattr(Metadata, "__iter__", __iter__)
 setattr(Metadata, "__setattr__", __setattr__)
 setattr(Metadata, "__repr__", __repr__)
-# setattr(Metadata, "__init__", __init__)
+setattr(Metadata, "__getattr__", __metadata_getattr__)
 Metadata.__getitem__ = Metadata.__getattr__
 Metadata.__setitem__ = Metadata.__setattr__
