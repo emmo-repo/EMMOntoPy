@@ -5,12 +5,58 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
 @base <http://emmo.info/testonto> .
 
 <http://emmo.info/testonto> rdf:type owl:Ontology ;
-                             owl:versionIRI <http://emmo.info/testonto/0.1.0> ;
-                             owl:imports <http://emmo.info/testonto/0.1.0/models> ;
-			     owl:versionInfo "0.1.0" .
+    owl:versionIRI <http://emmo.info/testonto/0.2.0> ;
+    owl:imports <http://emmo.info/testonto/0.1.0/models> ;
+	owl:versionInfo "0.2.0" ;
+    dcterms:abstract "This is the abstract of the testonto."@en ;
+	dcterms:alternative "Testonto_alternative"@en ;
+    dcterms:contributor :SimonClark ;
+    dcterms:created "2024-03" ;
+    dcterms:creator <https://orcid.org/0000-0001-8869-3718> ,
+                    :JesperFriis ;
+    dcterms:hasFormat <https://www.w3.org/TR/turtle/> ;
+    dcterms:license "https://creativecommons.org/licenses/by/4.0/legalcode" ;
+    dcterms:title "The test ontology (TESTONTO)"@en ;
+    bibo:status "test ontology ." ;
+    vann:preferredNamespacePrefix "testonto" ;
+    vann:preferredNamespaceUri "http://emmo.info/testonto" ;
+    rdfs:comment "This ontology contains metadata that matches the metadat of EMMOv1.0.0."@en ;
+    foaf:homepage <https://github.com/emmo-repo/EMMOntoPy> ;
+    :EMMO_1246b120_abbe_4840_b0f8_3e4348b24a17 "emmo@emmc.eu" .
+
+###  http://purl.org/dc/terms/alternative
+dcterms:alternative rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/created
+dcterms:created rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/hasFormat
+dcterms:hasFormat rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/ontology/bibo/status
+bibo:status rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespacePrefix
+vann:preferredNamespacePrefix rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespaceUri
+vann:preferredNamespaceUri rdf:type owl:AnnotationProperty .
+
+
+###  http://xmlns.com/foaf/0.1/homepage
+foaf:homepage rdf:type owl:AnnotationProperty .
 
 
 :testclass rdf:type owl:Class ;

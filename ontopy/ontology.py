@@ -2190,6 +2190,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             parent: parent(s) of the data property
             iri: IRI of the new data property.  If None, a new IRI will be
                 based on the ontology base IRI and the entity name.
+
         Returns:
             the new data property.
         """

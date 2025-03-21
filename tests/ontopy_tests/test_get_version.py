@@ -11,9 +11,9 @@ def test_get_version(repo_dir: "Path", testonto: "Ontology") -> None:
 
     ontopath = repo_dir / "tests" / "testonto"
     assert (
-        testonto.get_version(as_iri=True) == "http://emmo.info/testonto/0.1.0"
+        testonto.get_version(as_iri=True) == "http://emmo.info/testonto/0.2.0"
     )
-    assert testonto.get_version() == "0.1.0"
+    assert testonto.get_version() == "0.2.0"
 
     testonto_noVersionIRI = get_ontology(
         str(ontopath) + "/testonto_noVersionIRI.ttl"
