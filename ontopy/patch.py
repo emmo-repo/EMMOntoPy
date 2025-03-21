@@ -2,7 +2,7 @@
 
 # pylint: disable=protected-access
 import types
-from typing import Any, Generator, Tuple
+from typing import TYPE_CHECKING
 
 import owlready2
 from owlready2 import AnnotationPropertyClass, ThingClass, PropertyClass
@@ -16,6 +16,9 @@ from ontopy.utils import (  # pylint: disable=cyclic-import
 from ontopy.ontology import (  # pylint: disable=cyclic-import
     Ontology as OntopyOntology,
 )
+
+if TYPE_CHECKING:
+    from typing import Any, Generator, Tuple
 
 
 def render_func(entity):
@@ -304,7 +307,7 @@ setattr(Namespace, "__init__", namespace_init)
 #
 # Extending Metadata
 # ==================
-def keys(self) -> Generator[str, None, None]:
+def keys(self) -> "Generator[str, None, None]":
     """Return a generator over annotation property names associated
     with this ontology, i.e. metadata keys."""
 
@@ -319,7 +322,7 @@ def keys(self) -> Generator[str, None, None]:
         yield pred
 
 
-def items(self) -> Generator[Tuple[str, Any], None, None]:
+def items(self) -> "Generator[Tuple[str, Any], None, None]":
     """Return a dict of annotation properties as (name, value_list)
     pairs associated with this ontology, i.e. the metadata."""
     namespace = self.namespace
