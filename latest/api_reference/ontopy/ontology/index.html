@@ -4598,7 +4598,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="n">generations2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_generations</span><span class="p">(</span><span class="n">cls2</span><span class="p">,</span> <span class="n">cca</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ccadepth</span> <span class="o">/</span> <span class="p">(</span><span class="n">generations1</span> <span class="o">+</span> <span class="n">generations2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ccadepth</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">new_entity</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">new_entity</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments,too-many-branches,too-many-positional-arguments</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
@@ -4618,6 +4618,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
             <span class="p">]</span>
         <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span>
         <span class="n">preflabel</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">iri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
         <span class="n">ThingClass</span><span class="p">,</span>
         <span class="n">ObjectPropertyClass</span><span class="p">,</span>
@@ -4641,6 +4642,8 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 <span class="sd">                be added as prefLabel if skos:prefLabel is in the ontology</span>
 <span class="sd">                and listed in `self.label_annotations`.  Set `preflabel` to</span>
 <span class="sd">                False, to avoid assigning a prefLabel.</span>
+<span class="sd">            iri: IRI of the entity.  If None, a new IRI will be generated</span>
+<span class="sd">                based on the ontology base IRI and the entity name.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            the new entity.</span>
@@ -4686,7 +4689,8 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 
         <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">entity</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">new_class</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
-
+            <span class="k">if</span> <span class="n">iri</span><span class="p">:</span>
+                <span class="n">entity</span><span class="o">.</span><span class="n">iri</span> <span class="o">=</span> <span class="n">iri</span>
             <span class="n">preflabel_iri</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2004/02/skos/core#prefLabel&quot;</span>
             <span class="k">if</span> <span class="n">preflabel</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">preflabel_iri</span><span class="p">]:</span>
@@ -4707,63 +4711,81 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 
     <span class="c1"># Method that creates new ThingClass using new_entity</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">new_class</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ThingClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ThingClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">],</span>
+        <span class="n">iri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThingClass</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return new class.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name: name of the class</span>
 <span class="sd">            parent: parent(s) of the class</span>
+<span class="sd">            iri: IRI of the new class.  If None, a new IRI will be generated</span>
+<span class="sd">                based on the ontology base IRI and the entity name.</span>
+
 
 <span class="sd">        Returns:</span>
 <span class="sd">            the new class.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="n">iri</span><span class="o">=</span><span class="n">iri</span><span class="p">)</span>
 
     <span class="c1"># Method that creates new ObjectPropertyClass using new_entity</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">new_object_property</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ObjectPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ObjectPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">],</span>
+        <span class="n">iri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObjectPropertyClass</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return new object property.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name: name of the object property</span>
 <span class="sd">            parent: parent(s) of the object property</span>
-
+<span class="sd">            iri: IRI of the new object property.  If None, a new IRI will be</span>
+<span class="sd">                based on the ontology base IRI and the entity name.</span>
 <span class="sd">        Returns:</span>
 <span class="sd">            the new object property.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;object_property&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;object_property&quot;</span><span class="p">,</span> <span class="n">iri</span><span class="o">=</span><span class="n">iri</span><span class="p">)</span>
 
     <span class="c1"># Method that creates new DataPropertyClass using new_entity</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">new_data_property</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">],</span>
+        <span class="n">iri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataPropertyClass</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return new data property.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name: name of the data property</span>
 <span class="sd">            parent: parent(s) of the data property</span>
-
+<span class="sd">            iri: IRI of the new data property.  If None, a new IRI will be</span>
+<span class="sd">                based on the ontology base IRI and the entity name.</span>
 <span class="sd">        Returns:</span>
 <span class="sd">            the new data property.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;data_property&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;data_property&quot;</span><span class="p">,</span> <span class="n">iri</span><span class="o">=</span><span class="n">iri</span><span class="p">)</span>
 
     <span class="c1"># Method that creates new AnnotationPropertyClass using new_entity</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">new_annotation_property</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnnotationPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnnotationPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">],</span>
+        <span class="n">iri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnotationPropertyClass</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return new annotation property.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name: name of the annotation property</span>
 <span class="sd">            parent: parent(s) of the annotation property</span>
-
+<span class="sd">            iri: IRI of the new annotation property.  If None, a new IRI will</span>
+<span class="sd">                be based on the ontology base IRI and the entity name.</span>
 <span class="sd">        Returns:</span>
 <span class="sd">            the new annotation property.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;annotation_property&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;annotation_property&quot;</span><span class="p">,</span> <span class="n">iri</span><span class="o">=</span><span class="n">iri</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">difference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Ontology</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a set of triples that are in this, but not in the</span>
@@ -7112,7 +7134,7 @@ owlready2.Ontology.load().</p>
 
 
 <h3 id="ontopy.ontology.Ontology.new_annotation_property" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">new_annotation_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">new_annotation_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">iri</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.ontology.Ontology.new_annotation_property" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -7144,6 +7166,13 @@ owlready2.Ontology.load().</p>
         <td><p>parent(s) of the annotation property</p></td>
         <td><em>required</em></td>
       </tr>
+      <tr>
+        <td><code>iri</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>IRI of the new annotation property.  If None, a new IRI will
+be based on the ontology base IRI and the entity name.</p></td>
+        <td><code>None</code></td>
+      </tr>
   </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -7164,18 +7193,22 @@ owlready2.Ontology.load().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">new_annotation_property</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnnotationPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnnotationPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">],</span>
+    <span class="n">iri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnotationPropertyClass</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and return new annotation property.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        name: name of the annotation property</span>
 <span class="sd">        parent: parent(s) of the annotation property</span>
-
+<span class="sd">        iri: IRI of the new annotation property.  If None, a new IRI will</span>
+<span class="sd">            be based on the ontology base IRI and the entity name.</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        the new annotation property.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;annotation_property&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;annotation_property&quot;</span><span class="p">,</span> <span class="n">iri</span><span class="o">=</span><span class="n">iri</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -7189,7 +7222,7 @@ owlready2.Ontology.load().</p>
 
 
 <h3 id="ontopy.ontology.Ontology.new_class" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">new_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">new_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">iri</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.ontology.Ontology.new_class" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -7221,6 +7254,13 @@ owlready2.Ontology.load().</p>
         <td><p>parent(s) of the class</p></td>
         <td><em>required</em></td>
       </tr>
+      <tr>
+        <td><code>iri</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>IRI of the new class.  If None, a new IRI will be generated
+based on the ontology base IRI and the entity name.</p></td>
+        <td><code>None</code></td>
+      </tr>
   </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -7241,18 +7281,24 @@ owlready2.Ontology.load().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">new_class</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ThingClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ThingClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">],</span>
+    <span class="n">iri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThingClass</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and return new class.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        name: name of the class</span>
 <span class="sd">        parent: parent(s) of the class</span>
+<span class="sd">        iri: IRI of the new class.  If None, a new IRI will be generated</span>
+<span class="sd">            based on the ontology base IRI and the entity name.</span>
+
 
 <span class="sd">    Returns:</span>
 <span class="sd">        the new class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="n">iri</span><span class="o">=</span><span class="n">iri</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -7266,7 +7312,7 @@ owlready2.Ontology.load().</p>
 
 
 <h3 id="ontopy.ontology.Ontology.new_data_property" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">new_data_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">new_data_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">iri</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.ontology.Ontology.new_data_property" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -7298,6 +7344,13 @@ owlready2.Ontology.load().</p>
         <td><p>parent(s) of the data property</p></td>
         <td><em>required</em></td>
       </tr>
+      <tr>
+        <td><code>iri</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>IRI of the new data property.  If None, a new IRI will be
+based on the ontology base IRI and the entity name.</p></td>
+        <td><code>None</code></td>
+      </tr>
   </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -7318,18 +7371,22 @@ owlready2.Ontology.load().</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">new_data_property</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">],</span>
+    <span class="n">iri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataPropertyClass</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and return new data property.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        name: name of the data property</span>
 <span class="sd">        parent: parent(s) of the data property</span>
-
+<span class="sd">        iri: IRI of the new data property.  If None, a new IRI will be</span>
+<span class="sd">            based on the ontology base IRI and the entity name.</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        the new data property.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;data_property&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;data_property&quot;</span><span class="p">,</span> <span class="n">iri</span><span class="o">=</span><span class="n">iri</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -7343,7 +7400,7 @@ owlready2.Ontology.load().</p>
 
 
 <h3 id="ontopy.ontology.Ontology.new_entity" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">new_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">entitytype</span><span class="o">=</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="n">preflabel</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">new_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">entitytype</span><span class="o">=</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="n">preflabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iri</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.ontology.Ontology.new_entity" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -7397,6 +7454,13 @@ and listed in <code>self.label_annotations</code>.  Set <code>preflabel</code> t
 False, to avoid assigning a prefLabel.</p></td>
         <td><code>None</code></td>
       </tr>
+      <tr>
+        <td><code>iri</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>IRI of the entity.  If None, a new IRI will be generated
+based on the ontology base IRI and the entity name.</p></td>
+        <td><code>None</code></td>
+      </tr>
   </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -7419,7 +7483,7 @@ By default, the parent is Thing.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">new_entity</span><span class="p">(</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">new_entity</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments,too-many-branches,too-many-positional-arguments</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
@@ -7439,6 +7503,7 @@ By default, the parent is Thing.</p>
         <span class="p">]</span>
     <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span>
     <span class="n">preflabel</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">iri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
     <span class="n">ThingClass</span><span class="p">,</span>
     <span class="n">ObjectPropertyClass</span><span class="p">,</span>
@@ -7462,6 +7527,8 @@ By default, the parent is Thing.</p>
 <span class="sd">            be added as prefLabel if skos:prefLabel is in the ontology</span>
 <span class="sd">            and listed in `self.label_annotations`.  Set `preflabel` to</span>
 <span class="sd">            False, to avoid assigning a prefLabel.</span>
+<span class="sd">        iri: IRI of the entity.  If None, a new IRI will be generated</span>
+<span class="sd">            based on the ontology base IRI and the entity name.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        the new entity.</span>
@@ -7507,7 +7574,8 @@ By default, the parent is Thing.</p>
 
     <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">new_class</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
-
+        <span class="k">if</span> <span class="n">iri</span><span class="p">:</span>
+            <span class="n">entity</span><span class="o">.</span><span class="n">iri</span> <span class="o">=</span> <span class="n">iri</span>
         <span class="n">preflabel_iri</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2004/02/skos/core#prefLabel&quot;</span>
         <span class="k">if</span> <span class="n">preflabel</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">preflabel_iri</span><span class="p">]:</span>
@@ -7538,7 +7606,7 @@ By default, the parent is Thing.</p>
 
 
 <h3 id="ontopy.ontology.Ontology.new_object_property" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">new_object_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">new_object_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">iri</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.ontology.Ontology.new_object_property" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -7570,6 +7638,13 @@ By default, the parent is Thing.</p>
         <td><p>parent(s) of the object property</p></td>
         <td><em>required</em></td>
       </tr>
+      <tr>
+        <td><code>iri</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>IRI of the new object property.  If None, a new IRI will be
+based on the ontology base IRI and the entity name.</p></td>
+        <td><code>None</code></td>
+      </tr>
   </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -7590,18 +7665,22 @@ By default, the parent is Thing.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontology.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">new_object_property</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ObjectPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ObjectPropertyClass</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">],</span>
+    <span class="n">iri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObjectPropertyClass</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and return new object property.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        name: name of the object property</span>
 <span class="sd">        parent: parent(s) of the object property</span>
-
+<span class="sd">        iri: IRI of the new object property.  If None, a new IRI will be</span>
+<span class="sd">            based on the ontology base IRI and the entity name.</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        the new object property.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;object_property&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_entity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;object_property&quot;</span><span class="p">,</span> <span class="n">iri</span><span class="o">=</span><span class="n">iri</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
