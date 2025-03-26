@@ -10,7 +10,7 @@ on:
 jobs:
   tests:
     name: External
-    uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.8.3
+    uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.9.2
     with:
       # General
       install_extras: "[dev,docs]"
@@ -70,7 +70,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
     - name: Checkout repository

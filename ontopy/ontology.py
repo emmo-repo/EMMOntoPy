@@ -110,18 +110,13 @@ class World(owlready2.World):
         base_iri = base_iri.as_uri() if isinstance(base_iri, Path) else base_iri
 
         if base_iri == "emmo":
-            base_iri = (
-                "http://emmo-repo.github.io/versions/1.0.0-beta4/emmo.ttl"
-            )
+            base_iri = "https://w3id.org/emmo/"
         elif base_iri == "emmo-inferred":
-            base_iri = (
-                "https://emmo-repo.github.io/versions/1.0.0-beta4/"
-                "emmo-inferred.ttl"
-            )
+            base_iri = "https://w3id.org/emmo/inferred"
         elif base_iri == "emmo-development":
             base_iri = (
-                "https://emmo-repo.github.io/versions/1.0.0-beta5/"
-                "emmo-inferred.ttl"
+                "https://raw.githubusercontent.com/emmo-repo/EMMO/"
+                "refs/heads/dev/emmo.ttl"
             )
 
         if base_iri in self.ontologies:
@@ -564,22 +559,39 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
     def set_common_prefix(
         self,
-        iri_base: str = "http://emmo.info/emmo",
+        iri_base: str = "https://w3id.org/emmo/inferred",
         prefix: str = "emmo",
         visited: "Optional[Set]" = None,
     ) -> None:
         """Set a common prefix for all imported ontologies
         with the same first part of the base_iri.
 
+        Note that this function might give unintended results.
+        I.e. if `https://w3id.org/emmo` is given as iri_base
+        all imported domain ontologies adhering to the
+        emmo standard for base_iri will be given the same
+        prefix as well as emmo itself.
+
+        The default is to set the prefix to emmo only for emmo-inferred.
+
         Args:
             iri_base: The start of the base_iri to look for. Defaults to
-                the emmo base_iri http://emmo.info/emmo
+                the emmo base_iri https://w3id.org/emmo/inferred
             prefix: the desired prefix. Defaults to emmo.
             visited: Ontologies to skip. Only intended for internal use.
         """
         if visited is None:
             visited = set()
         if self.base_iri.startswith(iri_base):
+            self.prefix = prefix
+
+        # If importing emmo-inferred set prefix to emmo
+        if (
+            iri_base == "https://w3id.org/emmo/inferred"
+            and self.prefix == "inferred"
+            and prefix == "emmo"
+            and self.base_iri == "https://w3id.org/emmo#"
+        ):
             self.prefix = prefix
         for onto in self.imported_ontologies:
             if not onto in visited:
@@ -1331,7 +1343,6 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         )
         for s in self._get_obj_triples_po_s(rdf_type, rdf_property):
             if not s < 0:
-                # print(s, self._unabbreviate(s))
                 generator.append(self._unabbreviate(s))
                 # generator.append(self[self._unabbreviate(s)])
                 # generator.append(self.world._get_by_storid(s))
@@ -2014,7 +2025,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         generations2 = self.number_of_generations(cls2, cca)
         return 2 * ccadepth / (generations1 + generations2 + 2 * ccadepth)
 
-    def new_entity(
+    def new_entity(  # pylint: disable=too-many-arguments,too-many-branches,too-many-positional-arguments
         self,
         name: str,
         parent: Union[
@@ -2034,6 +2045,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             ]
         ] = "class",
         preflabel: Optional[str] = None,
+        iri: Optional[str] = None,
     ) -> Union[
         ThingClass,
         ObjectPropertyClass,
@@ -2057,6 +2069,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 be added as prefLabel if skos:prefLabel is in the ontology
                 and listed in `self.label_annotations`.  Set `preflabel` to
                 False, to avoid assigning a prefLabel.
+            iri: IRI of the entity.  If None, a new IRI will be generated
+                based on the ontology base IRI and the entity name.
 
         Returns:
             the new entity.
@@ -2102,7 +2116,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         with self:
             entity = types.new_class(name, parents)
-
+            if iri:
+                entity.iri = iri
             preflabel_iri = "http://www.w3.org/2004/02/skos/core#prefLabel"
             if preflabel:
                 if not self.world[preflabel_iri]:
@@ -2123,63 +2138,82 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
     # Method that creates new ThingClass using new_entity
     def new_class(
-        self, name: str, parent: Union[ThingClass, Iterable]
+        self,
+        name: str,
+        parent: Union[ThingClass, Iterable],
+        iri: Optional[str] = None,
     ) -> ThingClass:
         """Create and return new class.
 
         Args:
             name: name of the class
             parent: parent(s) of the class
+            iri: IRI of the new class.  If None, a new IRI will be generated
+                based on the ontology base IRI and the entity name.
+
 
         Returns:
             the new class.
         """
-        return self.new_entity(name, parent, "class")
+        return self.new_entity(name, parent, "class", iri=iri)
 
     # Method that creates new ObjectPropertyClass using new_entity
     def new_object_property(
-        self, name: str, parent: Union[ObjectPropertyClass, Iterable]
+        self,
+        name: str,
+        parent: Union[ObjectPropertyClass, Iterable],
+        iri: Optional[str] = None,
     ) -> ObjectPropertyClass:
         """Create and return new object property.
 
         Args:
             name: name of the object property
             parent: parent(s) of the object property
-
+            iri: IRI of the new object property.  If None, a new IRI will be
+                based on the ontology base IRI and the entity name.
         Returns:
             the new object property.
         """
-        return self.new_entity(name, parent, "object_property")
+        return self.new_entity(name, parent, "object_property", iri=iri)
 
     # Method that creates new DataPropertyClass using new_entity
     def new_data_property(
-        self, name: str, parent: Union[DataPropertyClass, Iterable]
+        self,
+        name: str,
+        parent: Union[DataPropertyClass, Iterable],
+        iri: Optional[str] = None,
     ) -> DataPropertyClass:
         """Create and return new data property.
 
         Args:
             name: name of the data property
             parent: parent(s) of the data property
+            iri: IRI of the new data property.  If None, a new IRI will be
+                based on the ontology base IRI and the entity name.
 
         Returns:
             the new data property.
         """
-        return self.new_entity(name, parent, "data_property")
+        return self.new_entity(name, parent, "data_property", iri=iri)
 
     # Method that creates new AnnotationPropertyClass using new_entity
     def new_annotation_property(
-        self, name: str, parent: Union[AnnotationPropertyClass, Iterable]
+        self,
+        name: str,
+        parent: Union[AnnotationPropertyClass, Iterable],
+        iri: Optional[str] = None,
     ) -> AnnotationPropertyClass:
         """Create and return new annotation property.
 
         Args:
             name: name of the annotation property
             parent: parent(s) of the annotation property
-
+            iri: IRI of the new annotation property.  If None, a new IRI will
+                be based on the ontology base IRI and the entity name.
         Returns:
             the new annotation property.
         """
-        return self.new_entity(name, parent, "annotation_property")
+        return self.new_entity(name, parent, "annotation_property", iri=iri)
 
     def difference(self, other: owlready2.Ontology) -> set:
         """Return a set of triples that are in this, but not in the
