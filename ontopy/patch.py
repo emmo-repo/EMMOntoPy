@@ -383,11 +383,8 @@ def __setattr__(self, attr, values):
 
 
 def __repr__(self):
-    s = "\n  ".join(
-        f"{k!r}: {v!r}"
-        for k, v in self.items()
-        if k != "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-    )
+    rdftype = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+    s = "\n  ".join(f"{k!r}: {v!r}" for k, v in self.items() if k != rdftype)
     return f"Metadata(\n  {s}\n)"
 
 
