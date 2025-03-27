@@ -383,7 +383,9 @@ def __setattr__(self, attr, values):
 
 
 def __repr__(self):
-    return f"Metadata({dict(self.items())})"
+    rdftype = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+    s = "\n  ".join(f"{k!r}: {v!r}" for k, v in self.items() if k != rdftype)
+    return f"Metadata(\n  {s}\n)"
 
 
 def _getname(iri):
