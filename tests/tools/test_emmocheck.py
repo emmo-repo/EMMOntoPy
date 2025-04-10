@@ -18,6 +18,11 @@ def test_run() -> None:
     # The main() method will raise an exception on error, so it is
     # sufficient to just call it here
 
-    emmocheck.main(["--skip=test_description", str(test_file)])
+    status = emmocheck.main(["--skip=test_description", str(test_file)])
+    assert status == 0
 
-    emmocheck.main([str(test_file)])
+    # This will fail because the ontology does not contain
+    # the emmo.properties elucidation, description
+    # or conceptualisation.
+    status = emmocheck.main([str(test_file)])
+    assert status == 1
