@@ -89,34 +89,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         The only allowed exception is entities who's representation
         starts with "owl.".
         """
-        exceptions = set(
-            (
-                "0.1.homepage",  # foaf:homepage
-                "0.1.logo",
-                "0.1.page",
-                "0.1.name",
-                "bibo:doi",
-                "core.altLabel",
-                "core.hiddenLabel",
-                "core.prefLabel",
-                "terms.abstract",
-                "terms.alternative",
-                "terms:bibliographicCitation",
-                "terms.contributor",
-                "terms.created",
-                "terms.creator",
-                "terms.hasFormat",
-                "terms.identifier",
-                "terms.issued",
-                "terms.license",
-                "terms.modified",
-                "terms.publisher",
-                "terms.source",
-                "terms.title",
-                "vann:preferredNamespacePrefix",
-                "vann:preferredNamespaceUri",
-            )
-        )
+        exceptions = set()
         exceptions.update(
             self.get_config("test_number_of_labels.exceptions", ())
         )
@@ -125,15 +98,29 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
             in self.onto.world._props  # pylint: disable=protected-access
         ):
             for entity in self.onto.classes(self.check_imported):
-                if repr(entity) not in exceptions:
-                    with self.subTest(
-                        entity=entity,
-                        label=get_label(entity),
-                        prefLabels=entity.prefLabel,
-                    ):
-                        if not repr(entity).startswith("owl."):
-                            self.assertTrue(hasattr(entity, "prefLabel"))
-                            self.assertEqual(1, len(entity.prefLabel))
+                # Skip concepts from exceptions and common w3c vocabularies
+                vocabs = (
+                    "owl.",
+                    "0.1.",
+                    "bibo.",
+                    "core.",
+                    "terms.",
+                    "vann.",
+                    "schema.org",
+                )
+                r = repr(entity)
+                if r in exceptions or any(r.startswith(v) for v in vocabs):
+                    continue
+
+                #    if repr(entity) not in exceptions:
+                with self.subTest(
+                    entity=entity,
+                    label=get_label(entity),
+                    prefLabels=entity.prefLabel,
+                ):
+                    if not repr(entity).startswith("owl."):
+                        self.assertTrue(hasattr(entity, "prefLabel"))
+                        self.assertEqual(1, len(entity.prefLabel))
         else:
             self.fail("ontology has no prefLabel")
 
@@ -233,7 +220,15 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         for entity in self.onto.classes(self.check_imported):
 
             # Skip concepts from exceptions and common w3c vocabularies
-            vocabs = "owl.", "0.1.", "bibo.", "core.", "terms.", "vann."
+            vocabs = (
+                "owl.",
+                "0.1.",
+                "bibo.",
+                "core.",
+                "terms.",
+                "vann.",
+                "shchema.org",
+            )
             r = repr(entity)
             if r in exceptions or any(r.startswith(v) for v in vocabs):
                 continue
