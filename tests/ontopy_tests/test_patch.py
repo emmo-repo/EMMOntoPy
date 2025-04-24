@@ -43,7 +43,7 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
             "workplaceHomepage",
             "name",
             "hasFormat",
-            "OWL2DLRestrictedAxiom",
+            "OWLDLRestrictedAxiom",
             "preferredNamespaceUri",
             "uneceCommonCode",
             "creator",
@@ -75,6 +75,8 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
             "status",
             "prefLabel",
             "ISO80000Reference",
+            "ISO9000Reference",
+            "ISO14040Reference",
             "unitSymbol",
             "qudtReference",
             "abstract",
@@ -84,6 +86,7 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
             "wikipediaReference",
             "title",
             "VIMTerm",
+            "figure",
         },
     )
 
