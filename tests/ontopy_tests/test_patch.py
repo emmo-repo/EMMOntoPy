@@ -43,6 +43,7 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
             "workplaceHomepage",
             "name",
             "hasFormat",
+            "OWL2DLRestrictedAxiom",
             "OWLDLRestrictedAxiom",
             "preferredNamespaceUri",
             "uneceCommonCode",
