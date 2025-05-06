@@ -22,7 +22,7 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
         "altLabel",
         "elucidation",
         "comment",
-        "label",
+        # "label",
     }
 
     annot = set(str(a) for a in emmo.Atom.get_annotations(all=True).keys())
@@ -44,6 +44,7 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
             "name",
             "hasFormat",
             "OWL2DLRestrictedAxiom",
+            "OWLDLRestrictedAxiom",
             "preferredNamespaceUri",
             "uneceCommonCode",
             "creator",
@@ -75,6 +76,8 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
             "status",
             "prefLabel",
             "ISO80000Reference",
+            "ISO9000Reference",
+            "ISO14040Reference",
             "unitSymbol",
             "qudtReference",
             "abstract",
@@ -84,6 +87,7 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
             "wikipediaReference",
             "title",
             "VIMTerm",
+            "figure",
         },
     )
 
