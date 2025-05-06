@@ -22,7 +22,7 @@ def test_get_by_label_onto(emmo: "Ontology") -> None:
         "altLabel",
         "elucidation",
         "comment",
-        # "label",
+        "label",
     }
 
     annot = set(str(a) for a in emmo.Atom.get_annotations(all=True).keys())
