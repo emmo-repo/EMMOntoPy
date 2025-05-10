@@ -11,7 +11,7 @@ def test_prefix(testonto: "Ontology", emmo: "Ontology") -> None:
     """Test prefix in ontology"""
 
     print(testonto.get_by_label_all("*"))
-    assert len(testonto.get_by_label_all("*")) == 14
+    assert len(testonto.get_by_label_all("*")) == 15
     assert set(testonto.get_by_label_all("*", prefix="testonto")) == set(
         [
             testonto.alternative,
