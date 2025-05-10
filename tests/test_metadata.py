@@ -58,4 +58,4 @@ def test_metadata() -> None:
 
     assert testonto.metadata.versionInfo == ["0.2.0"]
 
-    assert str(testonto.metadata).startswith("Metadata({")
+    assert str(testonto.metadata).startswith("Metadata(")
