@@ -5,6 +5,7 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix schema: <https://schema.org/> .
 @base <http://emmo.info/models> .
 
 <http://emmo.info/models> rdf:type owl:Ontology ;
@@ -14,6 +15,13 @@
 # Annotations
 skos:prefLabel rdf:type owl:AnnotationProperty .
 skos:altLabel rdf:type owl:AnnotationProperty .
+
+
+# Classes
+
+###  https://schema.org/Organization
+schema:Organization rdf:type owl:Class .
+
 
 
 :testclass rdf:type owl:Class ;
