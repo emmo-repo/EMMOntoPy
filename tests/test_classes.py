@@ -24,10 +24,12 @@ def test_classes(repo_dir) -> None:
         testonto.TestClass,
         testonto.get_by_label("models:TestClass"),
         testonto.Class,
+        testonto.Organization,
     }
     assert set(imported_onto.classes(imported=True)) == {
         imported_onto.TestClass,
         imported_onto.get_by_label("models:TestClass"),
+        testonto.Organization,
     }
     assert set(imported_onto.classes(imported=False)) == {
         imported_onto.TestClass
@@ -44,6 +46,13 @@ def test_classes(repo_dir) -> None:
     assert set(testonto.object_properties(imported=False)) == set()
 
     assert set(testonto.annotation_properties(imported=True)) == {
+        testonto.preferredNamespaceUri,
+        testonto.alternative,
+        testonto.homepage,
+        testonto.preferredNamespacePrefix,
+        testonto.hasFormat,
+        testonto.created,
+        testonto.status,
         testonto.prefLabel,
         testonto.altLabel,
         testonto.hasAnnotationProperty,

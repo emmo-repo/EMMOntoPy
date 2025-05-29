@@ -2,14 +2,23 @@
 
 # pylint: disable=protected-access
 import types
+from typing import TYPE_CHECKING
 
 import owlready2
 from owlready2 import AnnotationPropertyClass, ThingClass, PropertyClass
 from owlready2 import Metadata, Thing, Restriction, Namespace
-from ontopy.utils import EMMOntoPyException  # pylint: disable=cyclic-import
+
+# pylint: disable=wrong-import-order
+from ontopy.utils import (  # pylint: disable=cyclic-import
+    EMMOntoPyException,
+    NoSuchLabelError,
+)
 from ontopy.ontology import (  # pylint: disable=cyclic-import
     Ontology as OntopyOntology,
 )
+
+if TYPE_CHECKING:
+    from typing import Any, Generator, Tuple
 
 
 def render_func(entity):
@@ -298,30 +307,45 @@ setattr(Namespace, "__init__", namespace_init)
 #
 # Extending Metadata
 # ==================
-def keys(self):
+def keys(self) -> "Generator[str, None, None]":
     """Return a generator over annotation property names associated
-    with this ontology."""
+    with this ontology, i.e. metadata keys."""
+
     namespace = self.namespace
-    for annotation in namespace.annotation_properties():
-        if namespace._has_data_triple_spod(
-            s=namespace.storid, p=annotation.storid
-        ):
-            yield annotation
+    predicates = set(x[1] for x in namespace.get_triples(s=self.storid))
+    for pred in predicates:
+        try:
+            pred = namespace[namespace._unabbreviate(pred)].iri
+        except NoSuchLabelError:
+            pred = namespace._unabbreviate(pred)
+
+        yield pred
 
 
-def items(self):
-    """Return a generator over annotation property (name, value_list)
-    pairs associates with this ontology."""
+def items(self) -> "Generator[Tuple[str, Any], None, None]":
+    """Return a dict of annotation properties as (name, value_list)
+    pairs associated with this ontology, i.e. the metadata."""
     namespace = self.namespace
-    for annotation in namespace.annotation_properties():
-        if namespace._has_data_triple_spod(
-            s=namespace.storid, p=annotation.storid
-        ):
-            yield annotation, getattr(self, annotation.name)
+
+    for key in self.keys():
+        triples = namespace._get_triples_spod_spod(
+            s=self.storid, p=namespace._abbreviate(key), o=None
+        )
+
+        obj = []
+        for triple in triples:
+            if isinstance(triple[2], str):
+                obj.append(triple[2])
+            else:
+                try:
+                    obj.append(namespace[namespace._unabbreviate(triple[2])])
+                except NoSuchLabelError:
+                    obj.append(namespace._unabbreviate(triple[2]))
+        yield key, obj
 
 
-def has(self, name):
-    """Returns true if `name`"""
+def has(self, name) -> bool:
+    """Returns true if name"""
     return name in set(self.keys())
 
 
@@ -359,17 +383,28 @@ def __setattr__(self, attr, values):
 
 
 def __repr__(self):
-    result = ["Metadata("]
-    for annotation, values in self.items():
-        sep = f"\n{' ' * (len(annotation.name) + 4)}"
-        result.append(
-            f"  {annotation.name}=[{sep.join(repr(_) for _ in values)}],"
-        )
-    result.append(")")
-    return "\n".join(result)
+    rdftype = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+    s = "\n  ".join(f"{k!r}: {v!r}" for k, v in self.items() if k != rdftype)
+    return f"Metadata(\n  {s}\n)"
+
+
+def _getname(iri):
+    label_startpos = iri.rfind("#") if iri.rfind("#") != -1 else iri.rfind("/")
+    return iri[label_startpos + 1 :] if label_startpos != -1 else iri
+
+
+def __metadata_getattr__(self, attr):
+    try:
+        return metadata__getattr__save(self, attr)
+    except AttributeError:
+        if attr in self.keys():
+            return dict(self.items())[attr]
+        d = {_getname(key): val for key, val in self.items()}
+        return d[attr]
 
 
 metadata__setattr__save = Metadata.__setattr__
+metadata__getattr__save = Metadata.__getattr__
 setattr(Metadata, "keys", keys)
 setattr(Metadata, "items", items)
 setattr(Metadata, "has", has)
@@ -377,5 +412,6 @@ setattr(Metadata, "__contains__", __contains__)
 setattr(Metadata, "__iter__", __iter__)
 setattr(Metadata, "__setattr__", __setattr__)
 setattr(Metadata, "__repr__", __repr__)
+setattr(Metadata, "__getattr__", __metadata_getattr__)
 Metadata.__getitem__ = Metadata.__getattr__
 Metadata.__setitem__ = Metadata.__setattr__

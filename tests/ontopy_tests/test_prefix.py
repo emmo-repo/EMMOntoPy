@@ -17,9 +17,17 @@ def test_prefix() -> None:
 
     testonto = get_ontology(onto_dir / "testonto.ttl").load()
 
-    assert len(testonto.get_by_label_all("*")) == 7
+    print(testonto.get_by_label_all("*"))
+    assert len(testonto.get_by_label_all("*")) == 15
     assert set(testonto.get_by_label_all("*", prefix="testonto")) == set(
         [
+            testonto.alternative,
+            testonto.homepage,
+            testonto.status,
+            testonto.preferredNamespacePrefix,
+            testonto.preferredNamespaceUri,
+            testonto.created,
+            testonto.hasFormat,
             testonto.hasObjectProperty,
             testonto.TestClass,
             testonto.hasAnnotationProperty,
