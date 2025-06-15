@@ -52,11 +52,18 @@ def test_redirection(url, redirected_url, conf=None):
     Returns:
         ok: Whether the redirection was successful.
     """
-    verbose = conf.get("verbose")
-    r = requests.get(url, timeout=5)
-    ok, reason, got = r.ok, r.reason, None
+    if conf is None:
+        conf = {}
+    verbose = int(conf["verbose"]) if "verbose" in conf else 1
+    timeout = float(conf["timeout"]) if "timeout" in conf else None
+    try:
+        r = requests.get(url, timeout=timeout)
+    except requests.Timeout:
+        ok, reason, got = False, "timeout", None
+    else:
+        ok, reason, got = r.ok, r.reason, None
 
-    if r.ok and r.url != redirected_url:
+    if ok and r.ok and r.url != redirected_url:
         ok, reason, got = False, "Invalid redirection", r.url
 
     if verbose:
@@ -92,10 +99,16 @@ def main(argv: list = None):
         action="store_const",
         const=0,
         dest="verbose",
-        help="Whether to be silent..",
+        help="Whether to be silent.",
+    )
+    parser.add_argument(
+        "--timeout",
+        "-t",
+        default="3",
+        help="Number of seconds before timing out. Defaults to 3.",
     )
     args = parser.parse_args(args=argv)
-    conf = {"verbose": args.verbose}
+    conf = {"verbose": args.verbose, "timeout": args.timeout}
 
     return test_all(args.yamlfile, conf=conf)
 
