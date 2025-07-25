@@ -940,6 +940,18 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         # pylint: disable=too-many-statements,too-many-branches
         # pylint: disable=too-many-locals,arguments-renamed,invalid-name
 
+        if namespaces is None:
+            namespaces = {}
+        default_namespaces = {
+            "": self.base_iri,
+            "locn": "http://www.w3.org/ns/locn#",
+            "swrl": "http://www.w3.org/2003/11/swrl#",
+            "bibo": "http://purl.org/ontology/bibo/",
+        }
+        for prefix, ns in default_namespaces.items():
+            if ns not in namespaces.values():
+                namespaces[prefix] = ns
+
         if not _validate_installed_version(
             package="rdflib", min_version="6.0.0"
         ) and format == FMAP.get("ttl", ""):
@@ -956,6 +968,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     "'Known issues' section of the README."
                 )
             )
+
         revmap = {value: key for key, value in FMAP.items()}
         if filename is None:
             if format:
@@ -1036,15 +1049,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 graph.add(triple)
 
             # Add common namespaces unknown to rdflib
-            if namespaces is None:
-                namespaces = {}
-            namespaces.setdefault("", self.base_iri)
-            namespaces.setdefault("locn", "http://www.w3.org/ns/locn#")
-            namespaces.setdefault("swrl", "http://www.w3.org/2003/11/swrl#")
-            namespaces.setdefault("bibo", "http://purl.org/ontology/bibo/")
-            for prefix, iri in namespaces.items():
+            for prefix, ns in namespaces.items():
                 graph.namespace_manager.bind(
-                    prefix, rdflib.Namespace(iri), override=False
+                    prefix, rdflib.Namespace(ns), override=True
                 )
 
             # Remove all ontology-declarations in the graph that are
@@ -1088,9 +1095,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 super().save(tmpfile, format="ntriples", **kwargs)
                 graph = rdflib.Graph()
                 graph.parse(tmpfile, format="ntriples")
-                graph.namespace_manager.bind(
-                    "", rdflib.Namespace(self.base_iri)
-                )
+
+                # Add common namespaces unknown to rdflib
+                for prefix, ns in namespaces.items():
+                    graph.namespace_manager.bind(
+                        prefix, rdflib.Namespace(ns), override=True
+                    )
+
                 if self.iri:
                     base_iri = rdflib.URIRef(self.base_iri)
                     for (
