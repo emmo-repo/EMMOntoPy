@@ -887,6 +887,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         overwrite=False,
         recursive=False,
         squash=False,
+        namespaces=None,
         write_catalog_file=False,
         append_catalog=False,
         catalog_file="catalog-v001.xml",
@@ -920,6 +921,9 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             If true, rdflib will be used to save the current ontology
             together with all its sub-ontologies into `filename`.
             It makes no sense to combine this with `recursive`.
+        namespaces: dict
+            Dict mapping prefixes to additional namespaces. Only used when
+            saving to turtle.
         write_catalog_file: bool
             Whether to also write a catalog file to disk.
         append_catalog: bool
@@ -1032,12 +1036,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 graph.add(triple)
 
             # Add common namespaces unknown to rdflib
-            extra_namespaces = [
-                ("", self.base_iri),
-                ("swrl", "http://www.w3.org/2003/11/swrl#"),
-                ("bibo", "http://purl.org/ontology/bibo/"),
-            ]
-            for prefix, iri in extra_namespaces:
+            if namespaces is None:
+                namespaces = {}
+            namespaces.setdefault("", self.base_iri)
+            namespaces.setdefault("locn", "http://www.w3.org/ns/locn#")
+            namespaces.setdefault("swrl", "http://www.w3.org/2003/11/swrl#")
+            namespaces.setdefault("bibo", "http://purl.org/ontology/bibo/")
+            for prefix, iri in namespaces.items():
                 graph.namespace_manager.bind(
                     prefix, rdflib.Namespace(iri), override=False
                 )
