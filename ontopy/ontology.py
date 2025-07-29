@@ -1049,7 +1049,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             for triple in self.world.as_rdflib_graph():
                 graph.add(triple)
 
-            # Add common namespaces unknown to rdflib
+            # Add additional namespaces to the graph
             for prefix, ns in namespaces.items():
                 graph.namespace_manager.bind(
                     prefix, rdflib.Namespace(ns), override=True
