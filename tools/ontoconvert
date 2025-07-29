@@ -94,8 +94,20 @@ def main(argv: list = None):
         ),
     )
     parser.add_argument(
-        "--no-catalog",
+        "--namespace",
         "-n",
+        action="append",
+        default=[],
+        metavar="PREFIX:NAMESPACE",
+        help=(
+            "Additional prefix:namespace pair that will be added to the header "
+            "of turtle output. The argument can be used multiple times, once for "
+            "each added prefix:namespace pair."
+        ),
+    )
+    parser.add_argument(
+        "--no-catalog",
+        "-N",
         action="store_false",
         dest="url_from_catalog",
         default=None,
@@ -291,6 +303,7 @@ def main(argv: list = None):
             overwrite=args.overwrite,
             recursive=args.recursive,
             squash=args.squash,
+            namespaces=dict(arg.split(":", 1) for arg in args.namespace),
             write_catalog_file=bool(args.catalog_file),
             append_catalog=args.append_catalog,
             catalog_file=args.catalog_file,
