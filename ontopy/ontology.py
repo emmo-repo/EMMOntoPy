@@ -940,6 +940,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         # pylint: disable=too-many-statements,too-many-branches
         # pylint: disable=too-many-locals,arguments-renamed,invalid-name
 
+        # Extend rdflib defaults with namespaces suggested by FOOPS
         if namespaces is None:
             namespaces = {}
         default_namespaces = {
