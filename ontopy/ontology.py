@@ -1097,7 +1097,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 graph = rdflib.Graph()
                 graph.parse(tmpfile, format="ntriples")
 
-                # Add common namespaces unknown to rdflib
+                # Add additional namespaces to the output graph
                 for prefix, ns in namespaces.items():
                     graph.namespace_manager.bind(
                         prefix, rdflib.Namespace(ns), override=True
