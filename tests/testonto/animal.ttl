@@ -89,18 +89,11 @@ skos:prefLabel rdf:type owl:AnnotationProperty .
         :latinName "Insectum" .
 
 
-###  https://w3id.org/emmo/domain/animal#Vertebrate
-# :Vertebrate rdf:type owl:Class ;
-#             rdfs:subClassOf :Animal ;
-#             skos:prefLabel "Vertebrate"@en ,
-#                            "Virveldyr"@no ;
-#             :latinName "Vertebrata" .
-
-
 :WarmBloodedAnimal rdf:type owl:Class ;
             rdfs:subClassOf :Animal ;
             skos:prefLabel "WarmBloodedAnimal"@en ;
             rdfs:comment "Animals whose bodies maintain a temperature higher than that of their environment" .
+
 
 :ColdBloodedAnimal rdf:type owl:Class ;
             rdfs:subClassOf :Animal ;

@@ -16,4 +16,4 @@
     owl:imports <https://w3id.org/emmo/domain/mammal/0.1> ,
                 <https://w3id.org/emmo/domain/animal/0.1/birds> ;
     dcterms:abstract "Entrypoint to the animal ontologies (ani.ttl, animal.ttl, mammal.ttl, animal/*)."@en ;
-    dcterms:comment "The structure of this test ontology is for historical reasons fragmented and unlogical.  Should be a quite good test."@en .
+    dcterms:comment "The structure of this test ontology is for historical reasons fragmented and unlogical.  Good for testing, but should not be used as a template."@en .
