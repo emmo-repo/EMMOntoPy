@@ -44,7 +44,7 @@ def test_preferred_language():
     from ontopy.testutils import ontodir
     from ontopy.utils import get_preferred_language
 
-    onto = get_ontology(ontodir / "animal.ttl").load()
+    onto = get_ontology(ontodir / "animal" / "vertebrates.ttl").load()
     pl = onto.Vertebrate.prefLabel
     assert get_preferred_language(pl) == "Vertebrate"
     assert get_preferred_language(pl, "en") == "Vertebrate"

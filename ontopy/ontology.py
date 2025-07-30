@@ -920,7 +920,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         squash: bool
             If true, rdflib will be used to save the current ontology
             together with all its sub-ontologies into `filename`.
-            It makes no sense to combine this with `recursive`.
+            When combining with `recursive`, a folder structure of partly
+            overlapping single-file ontologies will be created.
         namespaces: dict
             Dict mapping prefixes to additional namespaces. Only used when
             saving to turtle.
