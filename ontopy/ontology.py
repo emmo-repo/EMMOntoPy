@@ -998,16 +998,11 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             os.remove(filepath)
 
         if recursive:
-            #if squash:
-            #    raise ValueError(
-            #        "`recursive` and `squash` should not both be true"
-            #    )
             layout = directory_layout(self)
             if filename:
                 layout[self] = file.rstrip(f".{fmt}")
             # Update path to where the ontology is saved
-            # Note that filename should include format
-            # when given
+            # Note that filename should include format when given
             returnpath = Path(dir) / f"{layout[self]}.{fmt}"
             for onto, path in layout.items():
                 fname = Path(dir) / f"{path}.{fmt}"
@@ -1019,6 +1014,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     overwrite=overwrite,
                     recursive=False,
                     squash=squash,
+                    namespaces=namespaces,
                     write_catalog_file=False,
                     **kwargs,
                 )

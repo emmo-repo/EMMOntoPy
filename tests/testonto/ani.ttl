@@ -1,0 +1,19 @@
+@prefix : <https://w3id.org/emmo/domain/animal#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix animal: <https://w3id.org/emmo/domain/animal#> .
+@prefix ani: <https://w3id.org/emmo/domain/ani#> .
+@base <https://w3id.org/emmo/domain/animal#> .
+
+<https://w3id.org/emmo/domain/ani> rdf:type owl:Ontology ;
+    owl:versionIRI <https://w3id.org/emmo/domain/ani/0.1> ;
+    owl:versionInfo "0.1" ;
+    owl:imports <https://w3id.org/emmo/domain/mammal/0.1> ,
+                <https://w3id.org/emmo/domain/animal/0.1/birds> ;
+    dcterms:abstract "Entrypoint to the animal ontologies (ani.ttl, animal.ttl, mammal.ttl, animal/*)."@en ;
+    dcterms:comment "The structure of this test ontology is for historical reasons fragmented and unlogical.  Should be a quite good test."@en .

@@ -6,8 +6,8 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-@prefix animal: <https://w3id.org/emmo/animal#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix animal: <https://w3id.org/emmo/domain/animal#> .
 @base <https://w3id.org/emmo/domain/animal#> .
 
 <https://w3id.org/emmo/domain/animal/birds> rdf:type owl:Ontology ;

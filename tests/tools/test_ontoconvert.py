@@ -97,39 +97,54 @@ def test_run() -> None:
 
 
     # Test 6 - recursive convert
-    infile6 = ontodir / "testonto.ttl"
+    infile6 = ontodir / "ani.ttl"
+    outfile6 = "ani.ttl"
     ontoconvert.main(
         [
             "--recursive",
             "--overwrite",
-            f"--output-dir={outdir}/test_ontoconvert6"
+            "--namespace=animal:https://w3id.org/emmo/domain/animal#",
+            f"--output-dir={outdir}/test_ontoconvert6",
+            "--output-format=turtle",
+            "--catalog-file=catalog-v001.xml",
             str(infile6),
             str(outfile6),
         ]
     )
-    input5 = infile5.read_text()
-    output5 = outfile5.read_text()
-    assert "@prefix dcterms: <http://purl.org/dc/terms/> ." in input5
-    assert "@prefix dct: <http://purl.org/dc/terms/> ." in output5
-    assert "@prefix bibo: <http://purl.org/ontology/bibo/> ." in input5
-    assert "@prefix bib: <http://purl.org/ontology/bibo/> ." in output5
+    assert (outdir / "test_ontoconvert6" / "catalog-v001.xml").exists()
+    assert (outdir / "test_ontoconvert6" / "ani.ttl").exists()
+    assert (outdir / "test_ontoconvert6" / "animal.ttl").exists()
+    assert (outdir / "test_ontoconvert6" / "mammal.ttl").exists()
+    assert (outdir / "test_ontoconvert6" / "animal" / "catalog-v001.xml").exists()
+    assert (outdir / "test_ontoconvert6" / "animal" / "vertebrates.ttl").exists()
+    assert (outdir / "test_ontoconvert6" / "animal" / "birds.ttl").exists()
+    ani = (outdir / "test_ontoconvert6" / "ani.ttl").read_text()
+    assert "owl:imports" in ani
+    birds = (outdir / "test_ontoconvert6" / "animal" / "birds.ttl").read_text()
+    assert "owl:imports" in birds
 
 
     # Test 7 - combine --recursive and --squash
-    infile6 = ontodir / "testonto.ttl"
-    outfile6 = outdir / "test_ontoconvert6.ttl"
+    infile7 = ontodir / "ani.ttl"
+    outfile7 = "ani.ttl"
     ontoconvert.main(
         [
             "--recursive",
-            "--dir"
+            "--overwrite",
+            "--namespace=animal:https://w3id.org/emmo/domain/animal#",
+            f"--output-dir={outdir}/test_ontoconvert7",
+            "--output-format=turtle",
             "--squash",
-            str(infile6),
-            str(outfile6),
+            str(infile7),
+            str(outfile7),
         ]
     )
-    input5 = infile5.read_text()
-    output5 = outfile5.read_text()
-    assert "@prefix dcterms: <http://purl.org/dc/terms/> ." in input5
-    assert "@prefix dct: <http://purl.org/dc/terms/> ." in output5
-    assert "@prefix bibo: <http://purl.org/ontology/bibo/> ." in input5
-    assert "@prefix bib: <http://purl.org/ontology/bibo/> ." in output5
+    assert (outdir / "test_ontoconvert7" / "ani.ttl").exists()
+    assert (outdir / "test_ontoconvert7" / "animal.ttl").exists()
+    assert (outdir / "test_ontoconvert7" / "mammal.ttl").exists()
+    assert (outdir / "test_ontoconvert7" / "animal" / "vertebrates.ttl").exists()
+    assert (outdir / "test_ontoconvert7" / "animal" / "birds.ttl").exists()
+    ani = (outdir / "test_ontoconvert7" / "ani.ttl").read_text()
+    assert "owl:imports" not in ani
+    birds = (outdir / "test_ontoconvert7" / "animal" / "birds.ttl").read_text()
+    assert "owl:imports" not in birds
