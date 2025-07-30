@@ -95,7 +95,6 @@ def test_run() -> None:
     assert "@prefix bibo: <http://purl.org/ontology/bibo/> ." in input5
     assert "@prefix bib: <http://purl.org/ontology/bibo/> ." in output5
 
-
     # Test 6 - recursive convert
     infile6 = ontodir / "ani.ttl"
     outfile6 = "ani.ttl"
@@ -115,14 +114,17 @@ def test_run() -> None:
     assert (outdir / "test_ontoconvert6" / "ani.ttl").exists()
     assert (outdir / "test_ontoconvert6" / "animal.ttl").exists()
     assert (outdir / "test_ontoconvert6" / "mammal.ttl").exists()
-    assert (outdir / "test_ontoconvert6" / "animal" / "catalog-v001.xml").exists()
-    assert (outdir / "test_ontoconvert6" / "animal" / "vertebrates.ttl").exists()
+    assert (
+        outdir / "test_ontoconvert6" / "animal" / "catalog-v001.xml"
+    ).exists()
+    assert (
+        outdir / "test_ontoconvert6" / "animal" / "vertebrates.ttl"
+    ).exists()
     assert (outdir / "test_ontoconvert6" / "animal" / "birds.ttl").exists()
     ani = (outdir / "test_ontoconvert6" / "ani.ttl").read_text()
     assert "owl:imports" in ani
     birds = (outdir / "test_ontoconvert6" / "animal" / "birds.ttl").read_text()
     assert "owl:imports" in birds
-
 
     # Test 7 - combine --recursive and --squash
     infile7 = ontodir / "ani.ttl"
@@ -142,7 +144,9 @@ def test_run() -> None:
     assert (outdir / "test_ontoconvert7" / "ani.ttl").exists()
     assert (outdir / "test_ontoconvert7" / "animal.ttl").exists()
     assert (outdir / "test_ontoconvert7" / "mammal.ttl").exists()
-    assert (outdir / "test_ontoconvert7" / "animal" / "vertebrates.ttl").exists()
+    assert (
+        outdir / "test_ontoconvert7" / "animal" / "vertebrates.ttl"
+    ).exists()
     assert (outdir / "test_ontoconvert7" / "animal" / "birds.ttl").exists()
     ani = (outdir / "test_ontoconvert7" / "ani.ttl").read_text()
     assert "owl:imports" not in ani
