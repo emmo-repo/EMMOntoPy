@@ -519,7 +519,7 @@ def write_catalog(
 ):  # pylint: disable=redefined-builtin
     """Write catalog file do disk.
 
-    Args:
+    Arguments:
         irimap: dict mapping ontology IRIs (name) to actual locations
             (URIs).  It has the same format as the dict returned by
             read_catalog().
@@ -623,7 +623,7 @@ def convert_imported(  # pylint: disable=too-many-arguments,too-many-locals
         `rdflib>=6.0.0`. See [Known issues](../../../#known-issues) for
         more information.
 
-    Args:
+    Arguments:
         input_ontology: input ontology file name
         output_ontology: output ontology file path. The directory part of
             `output` will be the root of the generated directory structure

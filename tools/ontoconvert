@@ -170,8 +170,7 @@ def main(argv: list = None):
             "rdflib. The output is written to a directory structure matching "
             "the input. "
             "This option requires Protege catalog files to be present. "
-            "It cannot be combined with other options like --squash, "
-            "--inferred, --annotate-source, and --rename-iris."
+            "It is typically combined --output-dir. "
         ),
     )
     parser.add_argument(
@@ -180,7 +179,7 @@ def main(argv: list = None):
         action="store_true",
         help=(
             "Whether to also squash imported ontologies into a single output "
-            "file. Cannot be combined with --recursive."
+            "file."
         ),
     )
     parser.add_argument(

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <uri name="https://w3id.org/emmo/domain/animal/0.1" uri="../animal.ttl"/>
+    <group id="Folder Repository, directory=, recursive=true, Auto-Update=false, version=2" prefer="public" xml:base="">
+        <uri name="https://w3id.org/emmo/domain/animal/0.1" uri="../animal.ttl"/>
+        <uri name="https://w3id.org/emmo/domain/animal/0.1/vertebrates" uri="./vertebrates.ttl"/>
+        <uri name="https://w3id.org/emmo/domain/animal/0.1/birds" uri="./birds.ttl"/>
+        <uri name="https://w3id.org/emmo/domain/mammal/0.1" uri="../mammal.ttl"/>
+    </group>
+</catalog>

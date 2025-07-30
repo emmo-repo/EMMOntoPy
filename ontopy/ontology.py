@@ -998,10 +998,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             os.remove(filepath)
 
         if recursive:
-            if squash:
-                raise ValueError(
-                    "`recursive` and `squash` should not both be true"
-                )
+            #if squash:
+            #    raise ValueError(
+            #        "`recursive` and `squash` should not both be true"
+            #    )
             layout = directory_layout(self)
             if filename:
                 layout[self] = file.rstrip(f".{fmt}")
@@ -1018,7 +1018,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     mkdir=mkdir,
                     overwrite=overwrite,
                     recursive=False,
-                    squash=False,
+                    squash=squash,
                     write_catalog_file=False,
                     **kwargs,
                 )

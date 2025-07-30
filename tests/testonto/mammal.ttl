@@ -11,7 +11,8 @@
 
 <https://w3id.org/emmo/domain/mammal> rdf:type owl:Ontology ;
     owl:versionIRI <https://w3id.org/emmo/domain/mammal/0.1> ;
-    owl:imports <https://w3id.org/emmo/domain/animal/0.1> ;
+    owl:imports <https://w3id.org/emmo/domain/animal/0.1> ,
+        <https://w3id.org/emmo/domain/animal/0.1/vertebrates> ;
     owl:versionInfo "0.1" ;
     foaf:logo "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Mammal_collage.png/450px-Mammal_collage.png" .
 

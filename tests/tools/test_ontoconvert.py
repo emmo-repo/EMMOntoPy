@@ -94,3 +94,42 @@ def test_run() -> None:
     assert "@prefix dct: <http://purl.org/dc/terms/> ." in output5
     assert "@prefix bibo: <http://purl.org/ontology/bibo/> ." in input5
     assert "@prefix bib: <http://purl.org/ontology/bibo/> ." in output5
+
+
+    # Test 6 - recursive convert
+    infile6 = ontodir / "testonto.ttl"
+    ontoconvert.main(
+        [
+            "--recursive",
+            "--overwrite",
+            f"--output-dir={outdir}/test_ontoconvert6"
+            str(infile6),
+            str(outfile6),
+        ]
+    )
+    input5 = infile5.read_text()
+    output5 = outfile5.read_text()
+    assert "@prefix dcterms: <http://purl.org/dc/terms/> ." in input5
+    assert "@prefix dct: <http://purl.org/dc/terms/> ." in output5
+    assert "@prefix bibo: <http://purl.org/ontology/bibo/> ." in input5
+    assert "@prefix bib: <http://purl.org/ontology/bibo/> ." in output5
+
+
+    # Test 7 - combine --recursive and --squash
+    infile6 = ontodir / "testonto.ttl"
+    outfile6 = outdir / "test_ontoconvert6.ttl"
+    ontoconvert.main(
+        [
+            "--recursive",
+            "--dir"
+            "--squash",
+            str(infile6),
+            str(outfile6),
+        ]
+    )
+    input5 = infile5.read_text()
+    output5 = outfile5.read_text()
+    assert "@prefix dcterms: <http://purl.org/dc/terms/> ." in input5
+    assert "@prefix dct: <http://purl.org/dc/terms/> ." in output5
+    assert "@prefix bibo: <http://purl.org/ontology/bibo/> ." in input5
+    assert "@prefix bib: <http://purl.org/ontology/bibo/> ." in output5
