@@ -940,6 +940,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         # pylint: disable=too-many-statements,too-many-branches
         # pylint: disable=too-many-locals,arguments-renamed,invalid-name
 
+        # Extend rdflib defaults with namespaces suggested by FOOPS
         if namespaces is None:
             namespaces = {}
         default_namespaces = {
@@ -1044,7 +1045,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             for triple in self.world.as_rdflib_graph():
                 graph.add(triple)
 
-            # Add common namespaces unknown to rdflib
+            # Add additional namespaces to the graph
             for prefix, ns in namespaces.items():
                 graph.namespace_manager.bind(
                     prefix, rdflib.Namespace(ns), override=True
@@ -1092,7 +1093,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 graph = rdflib.Graph()
                 graph.parse(tmpfile, format="ntriples")
 
-                # Add common namespaces unknown to rdflib
+                # Add additional namespaces to the output graph
                 for prefix, ns in namespaces.items():
                     graph.namespace_manager.bind(
                         prefix, rdflib.Namespace(ns), override=True

@@ -100,8 +100,9 @@ def main(argv: list = None):
         default=[],
         metavar="PREFIX:NAMESPACE",
         help=(
-            "Additional prefix, namespace pairs to add to the header of turtle "
-            "output."
+            "Additional prefix:namespace pair that will be added to the header "
+            "of turtle output. The argument can be used multiple times, once for "
+            "each added prefix:namespace pair."
         ),
     )
     parser.add_argument(
