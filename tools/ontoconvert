@@ -171,7 +171,7 @@ def main(argv: list = None):
             "rdflib. The output is written to a directory structure matching "
             "the input. "
             "This option requires Protege catalog files to be present. "
-            "It is typically combined --output-dir. "
+            "It is typically combined with --output-dir. "
         ),
     )
     parser.add_argument(
