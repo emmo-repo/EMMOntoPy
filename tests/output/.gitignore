@@ -1,1 +1,5 @@
 *.ttl
+*.rdfxml
+*.owl
+test_ontoconvert6/
+test_ontoconvert7/

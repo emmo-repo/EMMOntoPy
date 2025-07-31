@@ -7,6 +7,9 @@
     <uri name="http://emmo.info/testonto/0.1.0/models-recursive"           uri="models-recursive.ttl"/>
     <uri name="http://emmo.info/emmo/domain/dummychameo/1.0.0/dummychameo" uri="dummychameo/dummychameo.ttl"/>
     <uri name="https://w3id.org/emmo/domain/animal/0.1"                    uri="animal.ttl"/>
+    <uri name="https://w3id.org/emmo/domain/animal/0.1/vertebrates"        uri="animal/vertebrates.ttl"/>
+    <uri name="https://w3id.org/emmo/domain/animal/0.1/birds"              uri="animal/birds.ttl"/>
     <uri name="https://w3id.org/emmo/domain/mammal/0.1"                    uri="mammal.ttl"/>
+    <uri name="https://w3id.org/emmo/domain/ani/0.1"                       uri="ani.ttl"/>
   </group>
 </catalog>

@@ -6,12 +6,13 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
-@prefix animal: <https://w3id.org/emmo/animal#> .
+@prefix animal: <https://w3id.org/emmo/domain/animal#> .
 @base <https://w3id.org/emmo/domain/mammal#> .
 
 <https://w3id.org/emmo/domain/mammal> rdf:type owl:Ontology ;
     owl:versionIRI <https://w3id.org/emmo/domain/mammal/0.1> ;
-    owl:imports <https://w3id.org/emmo/domain/animal/0.1> ;
+    owl:imports <https://w3id.org/emmo/domain/animal/0.1> ,
+        <https://w3id.org/emmo/domain/animal/0.1/vertebrates> ;
     owl:versionInfo "0.1" ;
     foaf:logo "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Mammal_collage.png/450px-Mammal_collage.png" .
 

@@ -920,7 +920,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         squash: bool
             If true, rdflib will be used to save the current ontology
             together with all its sub-ontologies into `filename`.
-            It makes no sense to combine this with `recursive`.
+            When combining with `recursive`, a folder structure of partly
+            overlapping single-file ontologies will be created.
         namespaces: dict
             Dict mapping prefixes to additional namespaces. Only used when
             saving to turtle.
@@ -999,16 +1000,11 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             os.remove(filepath)
 
         if recursive:
-            if squash:
-                raise ValueError(
-                    "`recursive` and `squash` should not both be true"
-                )
             layout = directory_layout(self)
             if filename:
                 layout[self] = file.rstrip(f".{fmt}")
             # Update path to where the ontology is saved
-            # Note that filename should include format
-            # when given
+            # Note that filename should include format when given
             returnpath = Path(dir) / f"{layout[self]}.{fmt}"
             for onto, path in layout.items():
                 fname = Path(dir) / f"{path}.{fmt}"
@@ -1019,7 +1015,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     mkdir=mkdir,
                     overwrite=overwrite,
                     recursive=False,
-                    squash=False,
+                    squash=squash,
+                    namespaces=namespaces,
                     write_catalog_file=False,
                     **kwargs,
                 )
