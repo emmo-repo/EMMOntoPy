@@ -10,7 +10,7 @@ Pyparsing is used under the hood for parsing.
 # pylint: disable=unused-import,wrong-import-order
 import pyparsing as pp
 import ontopy  # noqa F401 -- ontopy must be imported before owlready2
-from ontopy.utils import EMMOntoPyException
+from ontopy.exceptions import EMMOntoPyException
 import owlready2
 
 

@@ -21,10 +21,9 @@ import defusedxml.ElementTree as ET
 
 import ontopy
 from ontopy import get_ontology
-from ontopy.utils import EMMOntoPyException, NoSuchLabelError
-from ontopy.utils import ReadCatalogError
+from ontopy.exceptions import EMMOntoPyException, NoSuchLabelError
+from ontopy.exceptions import ReadCatalogError, LabelDefinitionError
 from ontopy.utils import read_catalog, english
-from ontopy.ontology import LabelDefinitionError
 from ontopy.manchester import evaluate
 import owlready2  # pylint: disable=C0411
 

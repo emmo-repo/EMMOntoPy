@@ -121,8 +121,8 @@ pip install EMMOntoPy
 
 ### Required Dependencies
 
-- [Python] 3.7 or later.
-- [Owlready2] v0.23 or later.
+- [Python] 3.9 or later.
+- [Owlready2] v0.28 or later.
 
 ### Optional Dependencies
 
@@ -141,7 +141,6 @@ pip install EMMOntoPy
   - [PyYAML]: Required for generating documentation with pandoc.
   - [blessings]: Clean output for `emmocheck`.
   - [Pygments]: Coloured output for `emmocheck`.
-  - [rdflib]: Required for `ontoversion`-tool.
   - [pyparsing](https://github.com/pyparsing/pyparsing): Used for parsing Manchester syntax
 
 See [docker-instructions.md](docker-instructions.md) for how to build a docker image.
