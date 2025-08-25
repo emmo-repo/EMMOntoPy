@@ -19,12 +19,7 @@ from owlready2.entity import ThingClass
 from ontopy.utils import asstring, get_label
 from ontopy.ontology import Ontology
 from ontopy.utils import get_format
-from ontopy.exceptions import EMMOntoPyException, _check_graphviz
-
-# pylint: disable=wrong-import-order, wrong-import-position
-_check_graphviz()
-
-import graphviz
+from ontopy.exceptions import EMMOntoPyException
 
 
 if TYPE_CHECKING:
@@ -268,6 +263,13 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
         imported=False,
         **kwargs,
     ):
+        # pylint: disable=import-outside-toplevel
+        from ontopy.exceptions import _check_graphviz
+
+        _check_graphviz()
+
+        import graphviz
+
         if style is None or style == "default":
             style = _default_style
 
@@ -1014,7 +1016,7 @@ def get_module_dependencies(iri_or_onto, strip_base=None):
     return modules
 
 
-def plot_modules(  # pylint: disable=too-many-arguments
+def plot_modules(  # pylint: disable=too-many-arguments, too-many-locals
     src,
     filename=None,
     *,
@@ -1039,6 +1041,9 @@ def plot_modules(  # pylint: disable=too-many-arguments
 
     If `ignore_redundant` is true, redundant dependencies are not plotted.
     """
+    # pylint: disable=import-outside-toplevel
+    import graphviz
+
     if isinstance(src, dict):
         modules = src
     else:
