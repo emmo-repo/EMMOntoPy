@@ -54,7 +54,7 @@ with open(os.path.join(rootdir, "requirements_excel.txt"), "r") as handle:
     ]
 
 
-with open(os.path.join(rootdir, "requirements_graph.txt"), "r") as handle:
+with open(os.path.join(rootdir, "requirements_ontodoc.txt"), "r") as handle:
     ONTODOC = [
         f"{_.strip()}"
         for _ in handle.readlines()
