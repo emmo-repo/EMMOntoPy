@@ -61,13 +61,6 @@ with open(os.path.join(rootdir, "requirements_graph.txt"), "r") as handle:
         if not _.startswith("#") and "git+" not in _
     ]
 
-with open(os.path.join(rootdir, "requirements_reason.txt"), "r") as handle:
-    REASON = [
-        f"{_.strip()}"
-        for _ in handle.readlines()
-        if not _.startswith("#") and "git+" not in _
-    ]
-
 
 with open(os.path.join(rootdir, "requirements_dev.txt"), "r") as handle:
     DEV = [
@@ -131,7 +124,6 @@ setuptools.setup(
         "docs": DOCS,
         "excel": EXCEL,
         "graph": GRAPH,
-        "reason": REASON,
     },
     packages=setuptools.find_packages(),
     scripts=[
