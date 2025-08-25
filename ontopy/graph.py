@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 A module for visualising ontologies using graphviz.
+
+It requires graphviz installed in addition to
+the graphviz python package, see documentation.
 """
 # pylint: disable=fixme,too-many-lines
+
 import os
 import re
 import tempfile
@@ -11,11 +15,17 @@ from typing import Optional, TYPE_CHECKING
 import defusedxml.ElementTree as ET
 import owlready2
 from owlready2.entity import ThingClass
-import graphviz
 
 from ontopy.utils import asstring, get_label
 from ontopy.ontology import Ontology
-from ontopy.utils import EMMOntoPyException, get_format
+from ontopy.utils import get_format
+from ontopy.exceptions import EMMOntoPyException, _check_graphviz
+
+# pylint: disable=wrong-import-order, wrong-import-position
+_check_graphviz()
+
+import graphviz
+
 
 if TYPE_CHECKING:
     from ipywidgets.widgets.widget_templates import GridspecLayout

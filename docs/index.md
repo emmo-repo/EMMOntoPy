@@ -142,9 +142,6 @@ pip install EMMOntoPy
   - [blessings]: Clean output for `emmocheck`.
   - [Pygments]: Coloured output for `emmocheck`.
   - [rdflib]: Required for `ontoversion`-tool.
-  - [semver]: Required for `ontoversion`-tool.
-  - [pydot]: Used for generating graphs.
-    Will be deprecated.
   - [pyparsing](https://github.com/pyparsing/pyparsing): Used for parsing Manchester syntax
 
 See [docker-instructions.md](docker-instructions.md) for how to build a docker image.
@@ -193,7 +190,6 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/), specifically:
 [Python]: https://www.python.org/
 [IPython]: https://ipython.org/
 [DLite]: https://github.com/SINTEF/dlite/
-[pydot]: https://pypi.org/project/pydot/
 [graphviz_website]: https://www.graphviz.org/
 [pandoc]: http://pandoc.org/
 [XeLaTeX]: https://www.overleaf.com/learn/latex/XeLaTeX/
@@ -202,7 +198,6 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/), specifically:
 [PyYAML]: https://pypi.org/project/PyYAML/
 [blessings]: https://pypi.org/project/blessings/
 [Pygments]: https://pypi.org/project/Pygments/
-[semver]: https://pypi.org/project/semver/
 [rdflib]: https://pypi.org/project/rdflib/
 [FaCT++]: http://owl.cs.manchester.ac.uk/tools/fact/
 [Manchester syntax]: https://www.w3.org/TR/owl2-manchester-syntax/

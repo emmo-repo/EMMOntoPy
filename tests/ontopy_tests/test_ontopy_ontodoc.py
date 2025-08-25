@@ -7,6 +7,9 @@ if TYPE_CHECKING:
 
 
 def test_ontodoc(emmo: "Ontology", repo_dir: "Path", tmpdir: "Path") -> None:
+    import pytest
+
+    pytest.importorskip("graphviz")
     from ontopy.ontodoc import OntoDoc, DocPP
 
     iris = set(_.namespace.base_iri for _ in emmo.classes())

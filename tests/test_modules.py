@@ -5,6 +5,9 @@ if TYPE_CHECKING:
 
 
 def test_modules(tmpdir: "Path") -> None:
+    import pytest
+
+    pytest.importorskip("graphviz")
     from ontopy import get_ontology
     from ontopy.graph import (
         plot_modules,
