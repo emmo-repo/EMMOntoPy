@@ -39,17 +39,21 @@ from ontopy.utils import (  # pylint: disable=cyclic-import
     convert_imported,
     directory_layout,
     FMAP,
-    IncompatibleVersion,
     isinteractive,
-    NoSuchLabelError,
     OWLREADY2_FORMATS,
-    ReadCatalogError,
     _validate_installed_version,
+)
+
+from ontopy.exceptions import (
+    IncompatibleVersion,
+    NoSuchLabelError,
+    ReadCatalogError,
     LabelDefinitionError,
     AmbiguousLabelError,
     EntityClassDefinitionError,
     EMMOntoPyException,
 )
+
 
 if TYPE_CHECKING:
     from typing import Iterator, List, Sequence, Generator
@@ -1448,8 +1452,15 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         Keyword arguments are passed to the underlying owlready2 function.
         """
+
         # pylint: disable=too-many-branches,too-many-locals
         # pylint: disable=unexpected-keyword-arg,invalid-name
+        # pylint: disable=import-outside-toplevel
+
+        from ontopy.exceptions import _require_java
+
+        _require_java()
+
         removed_gspo = []  # obj: (ontology, s, p, o)
         removed_gspod = []  # data: (ontology, s, p, o, d)
 
@@ -1863,6 +1874,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """Returns a new graph object.  See  emmo.graph.OntoGraph.
 
         Note that this method requires the Python graphviz package.
+
         """
         # pylint: disable=import-outside-toplevel,cyclic-import
         from ontopy.graph import OntoGraph

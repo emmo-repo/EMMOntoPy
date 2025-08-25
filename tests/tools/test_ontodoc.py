@@ -6,6 +6,8 @@ import pytest
 
 def test_run() -> None:
     """Check that running `ontodoc` works."""
+
+    pytest.importorskip("graphviz")
     from ontopy.testutils import ontodir, outdir, get_tool_module
 
     ontodoc = get_tool_module("ontodoc")
@@ -21,6 +23,7 @@ def test_run() -> None:
 
 def test_run_w_individual() -> None:
     """Check that running `ontodoc` works when there is an individual."""
+    pytest.importorskip("graphviz")
     from ontopy.testutils import ontodir, outdir, get_tool_module
 
     test_file = ontodir / "testonto_w_individual.ttl"
@@ -39,6 +42,7 @@ def test_run_w_punning() -> None:
     """Check that running `ontodoc` works even if there is a punned individual.
     This will throw and extra warning as the punned individual will be ignored.
     """
+    pytest.importorskip("graphviz")
     from ontopy.testutils import ontodir, outdir, get_tool_module
 
     test_file = ontodir / "testonto_w_punning.ttl"

@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 def test_descendants(emmo: "Ontology", repo_dir: "Path") -> None:
     from ontopy import get_ontology
-    from ontopy.utils import LabelDefinitionError
+    from ontopy.exceptions import LabelDefinitionError
 
     ontopath = repo_dir / "tests" / "testonto" / "testontology.ttl"
 
@@ -84,7 +84,7 @@ def test_descendants(emmo: "Ontology", repo_dir: "Path") -> None:
 
 def test_ancestors(emmo: "Ontology", repo_dir: "Path") -> None:
     from ontopy import get_ontology
-    from ontopy.utils import LabelDefinitionError
+    from ontopy.exceptions import LabelDefinitionError
 
     ontopath = repo_dir / "tests" / "testonto" / "testontology.ttl"
 
