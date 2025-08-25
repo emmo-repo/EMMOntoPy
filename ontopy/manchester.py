@@ -10,7 +10,7 @@ Pyparsing is used under the hood for parsing.
 # pylint: disable=unused-import,wrong-import-order
 import pyparsing as pp
 import ontopy  # noqa F401 -- ontopy must be imported before owlready2
-from ontopy.exceptions import EMMOntoPyException
+from ontopy.exceptions import ManchesterError
 import owlready2
 
 
@@ -75,10 +75,6 @@ def manchester_expression():
 
     GRAMMAR = expr
     return expr
-
-
-class ManchesterError(EMMOntoPyException):
-    """Raised on invalid Manchester notation."""
 
 
 # pylint: disable=too-many-statements

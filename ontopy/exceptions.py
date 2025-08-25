@@ -48,6 +48,14 @@ class ReadCatalogError(IOError):
     """Error reading catalog file."""
 
 
+class ExcelError(EMMOntoPyException):
+    """Raised on errors in Excel file."""
+
+
+class ManchesterError(EMMOntoPyException):
+    """Raised on invalid Manchester notation."""
+
+
 # Utilities for checking dependencies
 
 
