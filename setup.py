@@ -55,7 +55,7 @@ with open(os.path.join(rootdir, "requirements_excel.txt"), "r") as handle:
 
 
 with open(os.path.join(rootdir, "requirements_graph.txt"), "r") as handle:
-    GRAPH = [
+    ONTODOC = [
         f"{_.strip()}"
         for _ in handle.readlines()
         if not _.startswith("#") and "git+" not in _
@@ -68,6 +68,7 @@ with open(os.path.join(rootdir, "requirements_dev.txt"), "r") as handle:
         for _ in handle.readlines()
         if not _.startswith("#") and "git+" not in _
     ] + DOCS
+
 
 # Retrieve emmo-package version
 with open(os.path.join(rootdir, "ontopy/__init__.py")) as handle:
@@ -123,7 +124,7 @@ setuptools.setup(
         "dev": DEV,
         "docs": DOCS,
         "excel": EXCEL,
-        "graph": GRAPH,
+        "ontodoc": ONTODOC,
     },
     packages=setuptools.find_packages(),
     scripts=[

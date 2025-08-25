@@ -13,7 +13,7 @@ jobs:
     uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.9.2
     with:
       # General
-      install_extras: "[dev,docs,excel,graph]"
+      install_extras: "[dev,docs,excel,ontodoc]"
 
       # pre-commit
       run_pre-commit: true
@@ -100,8 +100,8 @@ jobs:
     - name: Install system dependencies for reasoning and test
       run: sudo apt-get update && sudo apt-get install -y openjdk-11-jre-headless && pytest -vvv --cov=ontopy --cov=emmopy --cov-report=xml --cov-report=term --doctest-modules tests/ontopy_tests/test_reasoner.py
 
-    - name: Install system dependencies for graphs with Graphviz and test
-      run: sudo apt-get install -y graphviz &&  pip install -U -e .[graph] && pytest -vvv --cov=ontopy --cov=emmopy --cov-report=xml --cov-report=term --doctest-modules ontopy/graph.py ontopy/ontodoc.py tests/tools/test_ontodoc.py
+    - name: Install system dependencies for graphs/ontodoc with Graphviz and test
+      run: sudo apt-get install -y graphviz &&  pip install -U -e .[ontodoc] && pytest -vvv --cov=ontopy --cov=emmopy --cov-report=xml --cov-report=term --doctest-modules ontopy/graph.py ontopy/ontodoc.py tests/tools/test_ontodoc.py
 
 
 
