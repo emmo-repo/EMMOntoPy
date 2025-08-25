@@ -13,7 +13,7 @@ jobs:
     uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.9.2
     with:
       # General
-      install_extras: "[dev,docs]"
+      install_extras: "[dev,docs,excel,graph]"
 
       # pre-commit
       run_pre-commit: true

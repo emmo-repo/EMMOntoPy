@@ -9,7 +9,7 @@ from owlready2 import AnnotationPropertyClass, ThingClass, PropertyClass
 from owlready2 import Metadata, Thing, Restriction, Namespace
 
 # pylint: disable=wrong-import-order
-from ontopy.utils import (  # pylint: disable=cyclic-import
+from ontopy.exceptions import (  # pylint: disable=cyclic-import
     EMMOntoPyException,
     NoSuchLabelError,
 )
