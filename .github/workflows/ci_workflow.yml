@@ -94,7 +94,7 @@ jobs:
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          --ignore tests/test_graphiz \
+          --ignore tests/test_graphviz \
           --ignore tests/test_excelparser \
           --ignore tests/test_reason | tee result.log
         if grep -q "SKIPPED" result.log; then
