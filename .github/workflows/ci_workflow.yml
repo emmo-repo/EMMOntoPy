@@ -106,7 +106,7 @@ jobs:
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          tests\test_excelparser \
+          tests/test_excelparser \
 
     - name: Round 3 – Java deps (reasoner)
       run: |
@@ -117,7 +117,7 @@ jobs:
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          tests\test_java \
+          tests/test_java \
 
     - name: Round 4 – Graphviz & ontodoc deps
       run: |
@@ -128,7 +128,7 @@ jobs:
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          tests\test_graphviz \
+          tests/test_graphviz \
 
 
     - name: Combine coverage and generate XML once
