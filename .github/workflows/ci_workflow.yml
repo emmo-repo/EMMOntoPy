@@ -94,9 +94,14 @@ jobs:
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          --ignore tests\test_graphiz \
-          --ignore tests\test_excelparser \
-          --ignore tests\test_reason \
+          --ignore tests/test_graphiz \
+          --ignore tests/test_excelparser \
+          --ignore tests/test_reason | tee result.log
+        if grep -q "SKIPPED" result.log; then
+          echo "❌ Skipped tests detected, failing build"
+          exit 1
+        fi
+
 
     - name: Round 2 – excel deps
       run: |
@@ -106,7 +111,12 @@ jobs:
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          tests/test_excelparser \
+          tests/test_excelparser | tee result.log
+        if grep -q "SKIPPED" result.log; then
+          echo "❌ Skipped tests detected, failing build"
+          exit 1
+        fi
+
 
     - name: Round 3 – Java deps (reasoner)
       run: |
@@ -117,18 +127,27 @@ jobs:
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          tests/test_java \
+          tests/test_java | tee result.log
+        if grep -q "SKIPPED" result.log; then
+          echo "❌ Skipped tests detected, failing build"
+          exit 1
+        fi
+
 
     - name: Round 4 – Graphviz & ontodoc deps
       run: |
         set -euo pipefail
         sudo apt-get install -y graphviz
         pip install -U -e .[ontodoc]
-        pytest -vvv \
+        pytest -rA \
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          tests/test_graphviz \
+          tests/test_graphviz | tee result.log
+        if grep -q "SKIPPED" result.log; then
+          echo "❌ Skipped tests detected, failing build"
+          exit 1
+        fi
 
 
     - name: Combine coverage and generate XML once
