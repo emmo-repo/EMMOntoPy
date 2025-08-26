@@ -20,7 +20,7 @@ jobs:
       # We're mentioning only 'ontopy', since the version is set statically only in
       # ontopy/__init__.py
       package_dirs: ontopy
-      install_extras: "[dev]"
+      install_extras: "[dev,excel,ontodoc]"
       build_libs: build
       build_cmd: "python -m build -o dists"
       build_dir: dists
