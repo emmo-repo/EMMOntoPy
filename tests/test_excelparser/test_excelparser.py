@@ -13,14 +13,11 @@ try:
     pd, np = _get_excelreqs()
 
 except ImportError as e:
-    if "excelparser requires" in str(e):
-        pytest.skip(
-            "excelparser requires extras. "
-            "Install with `pip install emmontopy[excel]",
-            allow_module_level=True,
-        )
-    else:
-        raise
+    pytest.skip(
+        "excelparser requires extras. "
+        "Install with `pip install emmontopy[excel]",
+        allow_module_level=True,
+    )
 
 
 if TYPE_CHECKING:

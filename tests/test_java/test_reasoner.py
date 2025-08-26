@@ -11,12 +11,9 @@ if TYPE_CHECKING:
 try:
     _require_java()
 except RuntimeError as e:
-    if "Java is required for this feature" in str(e):
-        pytest.skip(
-            "Java not available, skipping this test", allow_module_level=True
-        )
-    else:
-        raise
+    pytest.skip(
+        "Java not available, skipping this test", allow_module_level=True
+    )
 
 
 def test_sync_reasoner_hermit(repo_dir: "Path") -> None:

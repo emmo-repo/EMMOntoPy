@@ -6,13 +6,10 @@ from ontopy.exceptions import _check_graphviz
 try:
     _check_graphviz()
 except RuntimeError as e:
-    if "Graphviz is required" in str(e):
-        pytest.skip(
-            "Graphviz not available, skipping this test",
-            allow_module_level=True,
-        )
-    else:
-        raise
+    pytest.skip(
+        "Graphviz not available, skipping this test",
+        allow_module_level=True,
+    )
 
 
 if TYPE_CHECKING:

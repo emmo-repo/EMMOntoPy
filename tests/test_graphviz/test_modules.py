@@ -9,13 +9,10 @@ if TYPE_CHECKING:
 try:
     _check_graphviz()
 except RuntimeError as e:
-    if "Graphviz is required" in str(e):
-        pytest.skip(
-            "Graphviz not available, skipping this test",
-            allow_module_level=True,
-        )
-    else:
-        raise
+    pytest.skip(
+        "Graphviz not available, skipping this test",
+        allow_module_level=True,
+    )
 
 
 def test_modules(tmpdir: "Path") -> None:

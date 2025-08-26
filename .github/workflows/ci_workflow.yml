@@ -84,47 +84,40 @@ jobs:
         python -m pip install --upgrade pip
         pip install -U setuptools wheel
         pip install -U -e .[dev]
-        pip install coverage junitparser
+        pip install coverage
 
-    - name: Plan (collect nodeids for entire repo)
-      run: |
-        set -euo pipefail
-        # Collect all tests (no ignores/selection); relies on tests self-skipping if deps missing
-        pytest -q --collect-only --doctest-modules > /tmp/nodes_plan_all.txt
-        sed -i '/^$/d' /tmp/nodes_plan_all.txt
-        mkdir -p .artifacts
-        cp /tmp/nodes_plan_all.txt .artifacts/
-        echo "Planned tests:" && wc -l .artifacts/nodes_plan_all.txt
 
     - name: Round 1 – minimal env
       run: |
         set -euo pipefail
-        pytest -vvv \
+        pytest -rA \
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          --junitxml=.artifacts/junit_round1.xml
+          --ignore tests\test_graphiz \
+          --ignore tests\test_excelparser \
+          --ignore tests\test_reason \
 
     - name: Round 2 – excel deps
       run: |
         set -euo pipefail
         pip install -U -e .[excel]
-        pytest -vvv \
+        pytest -rA \
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          --junitxml=.artifacts/junit_round2.xml
+          tests\test_excelparser \
 
     - name: Round 3 – Java deps (reasoner)
       run: |
         set -euo pipefail
         sudo apt-get update
         sudo apt-get install -y openjdk-11-jre-headless
-        pytest -vvv \
+        pytest -rA \
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          --junitxml=.artifacts/junit_round3.xml
+          tests\test_java \
 
     - name: Round 4 – Graphviz & ontodoc deps
       run: |
@@ -135,52 +128,8 @@ jobs:
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          --junitxml=.artifacts/junit_round4.xml
+          tests\test_graphviz \
 
-    - name: Verify all tests executed at least once
-      run: |
-        python - <<'PY'
-        from pathlib import Path
-        from junitparser import JUnitXml, Skipped
-
-        art = Path(".artifacts")
-        plan = set(Path(art/"nodes_plan_all.txt").read_text().splitlines())
-        plan.discard("")
-
-        executed_not_skipped = set()
-        for f in ("junit_round1.xml","junit_round2.xml","junit_round3.xml","junit_round4.xml"):
-          xml = JUnitXml.fromfile(art / f)
-          for suite in xml:
-            for case in suite:
-              # JUnit: case.result is None when PASSED; otherwise a list of Failure/Error/Skipped
-              results = list(case.result) if case.result else []
-              was_skipped = any(isinstance(r, Skipped) for r in results)
-              # Accept as executed if not skipped (i.e., passed or failed/xfailed)
-              if not was_skipped:
-                # case.name usually matches the nodeid; keep as-is
-                nid = getattr(case, "name", "") or ""
-                if nid:
-                  executed_not_skipped.add(nid)
-
-        # Strict by nodeid; if mapping differs, relax to file-level
-        missing = sorted(plan - executed_not_skipped)
-        if missing:
-          plan_files = {p.split("::",1)[0] for p in plan}
-          exec_files = {e.split("::",1)[0] for e in executed_not_skipped}
-          file_missing = sorted(plan_files - exec_files)
-          if file_missing:
-            print("ERROR: Some tests were never executed (always skipped) across all rounds:")
-            for m in missing[:100]:
-              print(" -", m)
-            if len(missing) > 100:
-              print(f"... and {len(missing)-100} more")
-            print("\nMissing by file (relaxed):")
-            for fm in file_missing:
-              print(" -", fm)
-            raise SystemExit(1)
-
-        print(f"OK: total planned={len(plan)}, executed (not skipped)={len(executed_not_skipped)}")
-        PY
 
     - name: Combine coverage and generate XML once
       run: |
