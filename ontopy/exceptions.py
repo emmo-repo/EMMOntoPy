@@ -4,6 +4,7 @@
 
 import shutil
 import warnings
+import importlib
 
 
 class EMMOntoPyException(Exception):
@@ -111,3 +112,22 @@ def _check_graphviz():
 
     if not _GRAPHVIZ_AVAILABLE:
         raise RuntimeError("Graphviz is required for this feature. ")
+
+
+def _get_excelreqs():
+    try:
+        _pd = importlib.import_module("pandas")
+    except ImportError as err:
+        raise ImportError(
+            "excelparser requires extras, e.g. pandas. "
+            "Install with `pip install emmontopy[excel]`."
+        ) from err
+    try:
+        _np = importlib.import_module("numpy")
+    except ImportError as err:
+        raise ImportError(
+            "excelparser requires extras, e.g. numpy. "
+            "Install with `pip install emmontopy[excel]`."
+        ) from err
+
+    return _pd, _np

@@ -4,6 +4,12 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+
+pytest.importorskip(
+    "pandas",
+    "pandas not available, did you install EMMOntoPy with extra: [excel]?",
+)
+
 from ontopy import get_ontology
 from ontopy.excelparser import create_ontology_from_excel
 from ontopy.utils import NoSuchLabelError

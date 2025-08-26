@@ -1,10 +1,22 @@
 from typing import TYPE_CHECKING
 import pytest
 
+from ontopy.exceptions import _require_java
+
 if TYPE_CHECKING:
     from pathlib import Path
 
     from ontopy.ontology import Ontology
+
+try:
+    _require_java()
+except RuntimeError as e:
+    if "Java is required for this feature" in str(e):
+        pytest.skip(
+            "Java not available, skipping this test", allow_module_level=True
+        )
+    else:
+        raise
 
 
 def test_sync_reasoner_hermit(repo_dir: "Path") -> None:

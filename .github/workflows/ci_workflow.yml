@@ -79,35 +79,123 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install Python dependencies (and EMMOntoPy minimal)
+    - name: Install Python dependencies (and EMMOntoPy) minimal
       run: |
         python -m pip install --upgrade pip
         pip install -U setuptools wheel
         pip install -U -e .[dev]
+        pip install coverage junitparser
 
-
-    - name: Test minimal version
-      run: pytest -vvv --cov=ontopy --cov=emmopy --cov-report=xml --cov-report=term --doctest-modules --ignore ontopy/graph.py --ignore ontopy/ontodoc.py --ignore tests/tools/test_ontodoc.py --ignore tests/ontopy_tests/test_reasoner.py --ignore tests/test_excelparser/test_excelparser.py --ignore ontopy/excelparser.py --ignore tests/tools/test_excel2onto.py
-
-    - name: Install Python dependencies for excel2onto and test
+    - name: Plan (collect nodeids for entire repo)
       run: |
-        pip install -U -e .[excel] && pytest -vvv --cov=ontopy --cov=emmopy --cov-report=xml --cov-report=term --doctest-modules tests/test_excelparser/test_excelparser.py ontopy/excelparser.py tests/tools/test_excel2onto.py
+        set -euo pipefail
+        # Collect all tests (no ignores/selection); relies on tests self-skipping if deps missing
+        pytest -q --collect-only --doctest-modules > /tmp/nodes_plan_all.txt
+        sed -i '/^$/d' /tmp/nodes_plan_all.txt
+        mkdir -p .artifacts
+        cp /tmp/nodes_plan_all.txt .artifacts/
+        echo "Planned tests:" && wc -l .artifacts/nodes_plan_all.txt
 
+    - name: Round 1 – minimal env
+      run: |
+        set -euo pipefail
+        pytest -vvv \
+          --cov=ontopy --cov=emmopy --cov-append \
+          --cov-report=term --cov-report= \
+          --doctest-modules \
+          --junitxml=.artifacts/junit_round1.xml
 
-    - name: Install system dependencies for reasoning and test
-      run: sudo apt-get update && sudo apt-get install -y openjdk-11-jre-headless && pytest -vvv --cov=ontopy --cov=emmopy --cov-report=xml --cov-report=term --doctest-modules tests/ontopy_tests/test_reasoner.py
+    - name: Round 2 – excel deps
+      run: |
+        set -euo pipefail
+        pip install -U -e .[excel]
+        pytest -vvv \
+          --cov=ontopy --cov=emmopy --cov-append \
+          --cov-report=term --cov-report= \
+          --doctest-modules \
+          --junitxml=.artifacts/junit_round2.xml
 
-    - name: Install system dependencies for graphs/ontodoc with Graphviz and test
-      run: sudo apt-get install -y graphviz &&  pip install -U -e .[ontodoc] && pytest -vvv --cov=ontopy --cov=emmopy --cov-report=xml --cov-report=term --doctest-modules ontopy/graph.py ontopy/ontodoc.py tests/tools/test_ontodoc.py
+    - name: Round 3 – Java deps (reasoner)
+      run: |
+        set -euo pipefail
+        sudo apt-get update
+        sudo apt-get install -y openjdk-11-jre-headless
+        pytest -vvv \
+          --cov=ontopy --cov=emmopy --cov-append \
+          --cov-report=term --cov-report= \
+          --doctest-modules \
+          --junitxml=.artifacts/junit_round3.xml
 
+    - name: Round 4 – Graphviz & ontodoc deps
+      run: |
+        set -euo pipefail
+        sudo apt-get install -y graphviz
+        pip install -U -e .[ontodoc]
+        pytest -vvv \
+          --cov=ontopy --cov=emmopy --cov-append \
+          --cov-report=term --cov-report= \
+          --doctest-modules \
+          --junitxml=.artifacts/junit_round4.xml
 
+    - name: Verify all tests executed at least once
+      run: |
+        python - <<'PY'
+        from pathlib import Path
+        from junitparser import JUnitXml, Skipped
 
+        art = Path(".artifacts")
+        plan = set(Path(art/"nodes_plan_all.txt").read_text().splitlines())
+        plan.discard("")
+
+        executed_not_skipped = set()
+        for f in ("junit_round1.xml","junit_round2.xml","junit_round3.xml","junit_round4.xml"):
+          xml = JUnitXml.fromfile(art / f)
+          for suite in xml:
+            for case in suite:
+              # JUnit: case.result is None when PASSED; otherwise a list of Failure/Error/Skipped
+              results = list(case.result) if case.result else []
+              was_skipped = any(isinstance(r, Skipped) for r in results)
+              # Accept as executed if not skipped (i.e., passed or failed/xfailed)
+              if not was_skipped:
+                # case.name usually matches the nodeid; keep as-is
+                nid = getattr(case, "name", "") or ""
+                if nid:
+                  executed_not_skipped.add(nid)
+
+        # Strict by nodeid; if mapping differs, relax to file-level
+        missing = sorted(plan - executed_not_skipped)
+        if missing:
+          plan_files = {p.split("::",1)[0] for p in plan}
+          exec_files = {e.split("::",1)[0] for e in executed_not_skipped}
+          file_missing = sorted(plan_files - exec_files)
+          if file_missing:
+            print("ERROR: Some tests were never executed (always skipped) across all rounds:")
+            for m in missing[:100]:
+              print(" -", m)
+            if len(missing) > 100:
+              print(f"... and {len(missing)-100} more")
+            print("\nMissing by file (relaxed):")
+            for fm in file_missing:
+              print(" -", fm)
+            raise SystemExit(1)
+
+        print(f"OK: total planned={len(plan)}, executed (not skipped)={len(executed_not_skipped)}")
+        PY
+
+    - name: Combine coverage and generate XML once
+      run: |
+        coverage combine
+        coverage xml -o coverage.xml
+        coverage report -m
 
     - name: Upload coverage to Codecov
       if: matrix.python-version == '3.9' && github.repository == 'emmo-repo/EMMOntoPy'
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        files: coverage.xml
+        flags: unittests
+        fail_ci_if_error: true
 
     # - name: Run vertical demo
     #   run: |

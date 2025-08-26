@@ -1,13 +1,24 @@
+import pytest
 from typing import TYPE_CHECKING
+
+from ontopy.exceptions import _check_graphviz
 
 if TYPE_CHECKING:
     from pathlib import Path
 
+try:
+    _check_graphviz()
+except RuntimeError as e:
+    if "Graphviz is required" in str(e):
+        pytest.skip(
+            "Graphviz not available, skipping this test",
+            allow_module_level=True,
+        )
+    else:
+        raise
+
 
 def test_modules(tmpdir: "Path") -> None:
-    import pytest
-
-    pytest.importorskip("graphviz")
     from ontopy import get_ontology
     from ontopy.graph import (
         plot_modules,
