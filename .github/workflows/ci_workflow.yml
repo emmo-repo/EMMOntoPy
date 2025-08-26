@@ -150,9 +150,8 @@ jobs:
         fi
 
 
-    - name: Combine coverage and generate XML once
+    - name: Generate XML once
       run: |
-        coverage combine
         coverage xml -o coverage.xml
         coverage report -m
 
