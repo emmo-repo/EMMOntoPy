@@ -131,11 +131,23 @@ jobs:
         fi
 
 
+    # Phase 3: install Java and run ONLY the Java-marked tests
+    - name: Install Java (Temurin JDK 17)
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '17'
+
+    - name: Sanity check – confirm Java in Phase 3
+      run: |
+        echo "JAVA_HOME=${JAVA_HOME:-<empty>}"
+        command -v java
+        java -version
+
+
     - name: Round 3 – Java deps (reasoner)
       run: |
         set -euo pipefail
-        sudo apt-get update
-        sudo apt-get install -y openjdk-11-jre-headless
         pytest -rA \
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
