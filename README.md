@@ -119,29 +119,57 @@ Install with:
 pip install EMMOntoPy
 ```
 
+If you want to install with extras:
+
+```console
+pip install EMMOntoPy[excel] # This for installing dependencies relevant for using excel-template for ontology creation
+```
+
+
+
 ### Required Dependencies
 
 - [Python] 3.9 or later.
-- [Owlready2] v0.28 or later.
+Python pacakges:
+  - [Owlready2] v0.28 or later. EMMOntoPy is builds on top of owlready2.
+  - [blessings]: Clean output for `emmocheck`.
+  - [rdflib]: Extend parsing functionality.
+  - packaging: Only for serialising in turtle and to make sure that this is not done with rdflib<6.6.
+  - [Pygments]: Coloured output for `emmocheck`.
+  - [pyparsing](https://github.com/pyparsing/pyparsing): Used for parsing Manchester syntax.
+  - [requests]: Used for redirection checks.
+  - [PyYAML]: Redirection checks
+
 
 ### Optional Dependencies
 
+
+For the excel2onto functionality:
+- Python pacakges (see requirements_excel.txt).
+  - numpy
+  - openpypxl: read excelfiles
+  - pandas: handle tables
+
+For the ontodoc and graph generation tools:
 - [Graphviz][graphviz_website]: Needed for graph generation.
   With support for generation pdf, png and svg figures for tests and generation of documentation automatically (`ontodoc`).
 - [pandoc]: Only used for generated documentation from markdown to nicely formatted html or pdf.
   Tested with v2.1.2.
 - [pdfLaTeX] or [XeLaTeX] and the `upgreek` LaTeX package (included in `texlive-was` on RetHat-based distributions and `texlive-latex-extra` on Ubuntu) for generation of pdf documentation.
   If your ontology contains exotic unicode characters, we recommend XeLaTeX.
-
-- Java.
-  Needed for reasoning.
-
-- Optional Python packages:
+- Python packages (see requirements_ontodoc.txt):
   - [graphviz][graphviz_python]: Generation of documentation and graphs.
   - [PyYAML]: Required for generating documentation with pandoc.
   - [blessings]: Clean output for `emmocheck`.
+
+
   - [Pygments]: Coloured output for `emmocheck`.
   - [pyparsing](https://github.com/pyparsing/pyparsing): Used for parsing Manchester syntax
+
+
+
+For the reasoning tool.
+- Java.
 
 See [docs/docker-instructions.md](docs/docker-instructions.md) for how to build a docker image.
 
