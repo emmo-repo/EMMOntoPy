@@ -158,22 +158,38 @@ jobs:
           exit 1
         fi
 
-
     - name: Round 4 – Graphviz & ontodoc deps
       run: |
         set -euo pipefail
-        sudo apt-get install -y graphviz
+
+        # Install system Graphviz (works in container and on ubuntu runners)
+        if command -v sudo >/dev/null 2>&1; then
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+        else
+          apt-get update
+          apt-get install -y --no-install-recommends graphviz
+        fi
+
+        # Sanity check: ensure dot is available
+        command -v dot
+        dot -V
+
+        # Install Python deps that use Graphviz (your extra already contains them)
         pip install -U -e .[ontodoc]
+
+        # Run ONLY the Graphviz tests
         pytest -rA \
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          tests/test_graphviz | tee result.log
-        if grep -q "SKIPPED" result.log; then
-          echo "❌ Skipped tests detected, failing build"
+          tests/test_graphviz | tee result_graphviz.log
+
+        # Fail if any Graphviz tests got skipped
+        if grep -q "SKIPPED" result_graphviz.log; then
+          echo "❌ Skipped tests detected in Graphviz phase, failing build"
           exit 1
         fi
-
 
     - name: Generate XML once
       run: |
