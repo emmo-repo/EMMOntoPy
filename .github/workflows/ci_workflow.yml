@@ -109,7 +109,7 @@ jobs:
           --doctest-modules \
           --ignore tests/test_graphviz \
           --ignore tests/test_excelparser \
-          --ignore tests/test_reason | tee result.log
+          --ignore tests/test_java | tee result.log
         if grep -q "SKIPPED" result.log; then
           echo "❌ Skipped tests detected, failing build"
           exit 1
