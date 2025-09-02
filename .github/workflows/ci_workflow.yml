@@ -70,14 +70,16 @@ jobs:
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
 
+    container: python:${{ matrix.python-version }}-slim
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v5
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
+    #- name: Set up Python ${{ matrix.python-version }}
+    #  uses: actions/setup-python@v5
+    #  with:
+    #    python-version: ${{ matrix.python-version }}
 
     - name: Install Python dependencies (and EMMOntoPy) minimal
       run: |
@@ -85,6 +87,17 @@ jobs:
         pip install -U setuptools wheel
         pip install -U -e .[dev]
         pip install coverage
+
+    - name: Sanity check – ensure no Java in Round 1
+      run: |
+        echo "JAVA_HOME=${JAVA_HOME:-<empty>}"
+        if command -v java; then
+          echo "❌ Java unexpectedly present"
+          java -version
+          exit 1
+        else
+          echo "✅ No java on PATH (as intended for Phase 1)"
+        fi
 
 
     - name: Round 1 – minimal env
