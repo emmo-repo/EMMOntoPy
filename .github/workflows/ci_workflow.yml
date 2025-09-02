@@ -17,12 +17,12 @@ jobs:
 
       # pre-commit
       run_pre-commit: true
-      python_version_pre-commit: "3.9"
+      python_version_pre-commit: "3.13"
       skip_pre-commit_hooks: pylint
 
       # pylint
       run_pylint: true
-      python_version_pylint_safety: "3.9"
+      python_version_pylint_safety: "3.13"
       pylint_options: "--rcfile=pyproject.toml"
       pylint_targets: "*.py tools emmopy ontopy"
 
@@ -32,13 +32,13 @@ jobs:
 
       # Build distribution
       run_build_package: true
-      python_version_package: "3.9"
+      python_version_package: "3.13"
       build_cmd: "python -m build"
 
       # Build documentation
       # Exclude base classes in emmopy.emmocheck
       run_build_docs: true
-      python_version_docs: "3.9"
+      python_version_docs: "3.13"
       update_python_api_ref: true
       update_docs_landing_page: true
       package_dirs: |
@@ -196,8 +196,27 @@ jobs:
         coverage xml -o coverage.xml
         coverage report -m
 
+    # Install tools only when we actually upload
+    - name: Install Codecov prerequisites (git, curl, gpg)
+      if: matrix.python-version == '3.13' && github.repository == 'emmo-repo/EMMOntoPy'
+      run: |
+        set -euo pipefail
+        # In containers we're root (no sudo); on runners sudo exists.
+        if command -v sudo >/dev/null 2>&1; then
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends git curl gnupg ca-certificates
+        else
+          apt-get update
+          apt-get install -y --no-install-recommends git curl gnupg ca-certificates
+        fi
+        # sanity check
+        git --version
+        curl --version
+        gpg --version
+
+
     - name: Upload coverage to Codecov
-      if: matrix.python-version == '3.9' && github.repository == 'emmo-repo/EMMOntoPy'
+      if: matrix.python-version == '3.13' && github.repository == 'emmo-repo/EMMOntoPy'
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
@@ -228,10 +247,10 @@ jobs:
     steps:
     - uses: actions/checkout@v5
 
-    - name: Set up Python 3.9
+    - name: Set up Python 3.13
       uses: actions/setup-python@v5
       with:
-        python-version: "3.9"
+        python-version: "3.13"
 
     - name: Check Ubuntu version we are running under
       run: |
