@@ -13,14 +13,14 @@
         <link rel="canonical" href="https://emmo-repo.github.io/EMMOntoPy/latest/api_reference/ontopy/graph/">
       
       
-        <link rel="prev" href="../excelparser/">
+        <link rel="prev" href="../exceptions/">
       
       
         <link rel="next" href="../manchester/">
       
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.17">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
     
     
       
@@ -950,6 +950,29 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    exceptions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1450,10 +1473,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2_12" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2_13" >
         
           
-          <label class="md-nav__link" for="__nav_8_2_12" id="__nav_8_2_12_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_8_2_13" id="__nav_8_2_13_label" tabindex="0">
             
   
   
@@ -1466,8 +1489,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_8_2_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8_2_12">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_8_2_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2_13">
             <span class="md-nav__icon md-icon"></span>
             factpluspluswrapper
           </label>
@@ -1856,6 +1879,8 @@
     <div class="doc doc-contents first">
 
       <p>A module for visualising ontologies using graphviz.</p>
+<p>It requires graphviz installed in addition to
+the graphviz python package, see documentation.</p>
 
 
 
@@ -2055,6 +2080,13 @@ kwargs :
         <span class="n">imported</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
+        <span class="c1"># pylint: disable=import-outside-toplevel</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">ontopy.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">_check_graphviz</span>
+
+        <span class="n">_check_graphviz</span><span class="p">()</span>
+
+        <span class="kn">import</span><span class="w"> </span><span class="nn">graphviz</span>
+
         <span class="k">if</span> <span class="n">style</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">style</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
             <span class="n">style</span> <span class="o">=</span> <span class="n">_default_style</span>
 
@@ -4327,7 +4359,7 @@ a dict.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/graph.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">plot_modules</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">plot_modules</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments, too-many-locals</span>
     <span class="n">src</span><span class="p">,</span>
     <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
@@ -4352,6 +4384,9 @@ a dict.</p>
 
 <span class="sd">    If `ignore_redundant` is true, redundant dependencies are not plotted.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># pylint: disable=import-outside-toplevel</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">graphviz</span>
+
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="n">modules</span> <span class="o">=</span> <span class="n">src</span>
     <span class="k">else</span><span class="p">:</span>
@@ -4451,7 +4486,8 @@ a dict.</p>
   
 </div>
       
-        <div class="md-social">
+        
+<div class="md-social">
   
     
     

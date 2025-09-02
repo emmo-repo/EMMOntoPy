@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.17">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
     
     
       
@@ -1121,6 +1121,29 @@
   
   
     <li class="md-nav__item">
+      <a href="api_reference/ontopy/exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    exceptions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="api_reference/ontopy/graph/" class="md-nav__link">
         
   
@@ -1336,10 +1359,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2_12" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2_13" >
         
           
-          <label class="md-nav__link" for="__nav_8_2_12" id="__nav_8_2_12_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_8_2_13" id="__nav_8_2_13_label" tabindex="0">
             
   
   
@@ -1352,8 +1375,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_8_2_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8_2_12">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_8_2_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2_13">
             <span class="md-nav__icon md-icon"></span>
             factpluspluswrapper
           </label>
@@ -1729,38 +1752,45 @@ The EMMOntoPy package also has its own <a href="https://emmo-repo.github.io/EMMO
 <p>Install with:</p>
 <div class="highlight"><pre><span></span><code><span class="go">pip install EMMOntoPy</span>
 </code></pre></div>
+<p>If you want to install with extras:</p>
+<div class="highlight"><pre><span></span><code><span class="go">pip install EMMOntoPy[excel] # This for installing dependencies relevant for using excel-template for ontology creation</span>
+</code></pre></div>
 <h3 id="required-dependencies">Required Dependencies<a class="headerlink" href="#required-dependencies" title="Permanent link">&para;</a></h3>
 <ul>
-<li><a href="https://www.python.org/">Python</a> 3.7 or later.</li>
-<li><a href="https://pypi.org/project/Owlready2/">Owlready2</a> v0.23 or later.</li>
+<li><a href="https://www.python.org/">Python</a> 3.9 or later.
+Python pacakges:</li>
+<li><a href="https://pypi.org/project/Owlready2/">Owlready2</a> v0.28 or later. EMMOntoPy is builds on top of owlready2.</li>
+<li><a href="https://pypi.org/project/blessings/">blessings</a>: Clean output for <code>emmocheck</code>.</li>
+<li><a href="https://pypi.org/project/rdflib/">rdflib</a>: Extend parsing functionality.</li>
+<li>packaging: Only for serialising in turtle and to make sure that this is not done with rdflib&lt;6.6.</li>
+<li><a href="https://pypi.org/project/Pygments/">Pygments</a>: Coloured output for <code>emmocheck</code>.</li>
+<li><a href="https://github.com/pyparsing/pyparsing">pyparsing</a>: Used for parsing Manchester syntax.</li>
+<li>[requests]: Used for redirection checks.</li>
+<li><a href="https://pypi.org/project/PyYAML/">PyYAML</a>: Redirection checks</li>
 </ul>
 <h3 id="optional-dependencies">Optional Dependencies<a class="headerlink" href="#optional-dependencies" title="Permanent link">&para;</a></h3>
+<p>For the excel2onto functionality:
+- Python pacakges (see requirements_excel.txt).
+  - numpy
+  - openpypxl: read excelfiles
+  - pandas: handle tables</p>
+<p>For the ontodoc and graph generation tools:
+- <a href="https://www.graphviz.org/">Graphviz</a>: Needed for graph generation.
+  With support for generation pdf, png and svg figures for tests and generation of documentation automatically (<code>ontodoc</code>).
+- <a href="http://pandoc.org/">pandoc</a>: Only used for generated documentation from markdown to nicely formatted html or pdf.
+  Tested with v2.1.2.
+- <a href="https://www.latex-project.org/">pdfLaTeX</a> or <a href="https://www.overleaf.com/learn/latex/XeLaTeX/">XeLaTeX</a> and the <code>upgreek</code> LaTeX package (included in <code>texlive-was</code> on RetHat-based distributions and <code>texlive-latex-extra</code> on Ubuntu) for generation of pdf documentation.
+  If your ontology contains exotic unicode characters, we recommend XeLaTeX.
+- Python packages (see requirements_ontodoc.txt):
+  - <a href="https://pypi.org/project/graphviz">graphviz</a>: Generation of documentation and graphs.
+  - <a href="https://pypi.org/project/PyYAML/">PyYAML</a>: Required for generating documentation with pandoc.
+  - <a href="https://pypi.org/project/blessings/">blessings</a>: Clean output for <code>emmocheck</code>.</p>
 <ul>
-<li><a href="https://www.graphviz.org/">Graphviz</a>: Needed for graph generation.
-  With support for generation pdf, png and svg figures for tests and generation of documentation automatically (<code>ontodoc</code>).</li>
-<li><a href="http://pandoc.org/">pandoc</a>: Only used for generated documentation from markdown to nicely formatted html or pdf.
-  Tested with v2.1.2.</li>
-<li>
-<p><a href="https://www.latex-project.org/">pdfLaTeX</a> or <a href="https://www.overleaf.com/learn/latex/XeLaTeX/">XeLaTeX</a> and the <code>upgreek</code> LaTeX package (included in <code>texlive-was</code> on RetHat-based distributions and <code>texlive-latex-extra</code> on Ubuntu) for generation of pdf documentation.
-  If your ontology contains exotic unicode characters, we recommend XeLaTeX.</p>
-</li>
-<li>
-<p>Java.
-  Needed for reasoning.</p>
-</li>
-<li>
-<p>Optional Python packages:</p>
-</li>
-<li><a href="https://pypi.org/project/graphviz">graphviz</a>: Generation of documentation and graphs.</li>
-<li><a href="https://pypi.org/project/PyYAML/">PyYAML</a>: Required for generating documentation with pandoc.</li>
-<li><a href="https://pypi.org/project/blessings/">blessings</a>: Clean output for <code>emmocheck</code>.</li>
 <li><a href="https://pypi.org/project/Pygments/">Pygments</a>: Coloured output for <code>emmocheck</code>.</li>
-<li><a href="https://pypi.org/project/rdflib/">rdflib</a>: Required for <code>ontoversion</code>-tool.</li>
-<li><a href="https://pypi.org/project/semver/">semver</a>: Required for <code>ontoversion</code>-tool.</li>
-<li><a href="https://pypi.org/project/pydot/">pydot</a>: Used for generating graphs.
-    Will be deprecated.</li>
 <li><a href="https://github.com/pyparsing/pyparsing">pyparsing</a>: Used for parsing Manchester syntax</li>
 </ul>
+<p>For the reasoning tool.
+- Java.</p>
 <p>See <a href="docker-instructions/">docker-instructions.md</a> for how to build a docker image.</p>
 <h3 id="known-issues">Known issues<a class="headerlink" href="#known-issues" title="Permanent link">&para;</a></h3>
 <ul>
@@ -1844,7 +1874,8 @@ It has mainly been developed by <a href="https://www.sintef.no/">SINTEF</a>, spe
   
 </div>
       
-        <div class="md-social">
+        
+<div class="md-social">
   
     
     

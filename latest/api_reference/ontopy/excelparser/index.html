@@ -16,11 +16,11 @@
         <link rel="prev" href="../colortest/">
       
       
-        <link rel="next" href="../graph/">
+        <link rel="next" href="../exceptions/">
       
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.17">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
     
     
       
@@ -989,15 +989,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ontopy.excelparser.ExcelError" class="md-nav__link">
-    <span class="md-ellipsis">
-      ExcelError
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ontopy.excelparser.create_ontology_from_excel" class="md-nav__link">
     <span class="md-ellipsis">
       create_ontology_from_excel()
@@ -1028,6 +1019,29 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    exceptions
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -1255,10 +1269,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2_12" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2_13" >
         
           
-          <label class="md-nav__link" for="__nav_8_2_12" id="__nav_8_2_12_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_8_2_13" id="__nav_8_2_13_label" tabindex="0">
             
   
   
@@ -1271,8 +1285,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_8_2_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8_2_12">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_8_2_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2_13">
             <span class="md-nav__icon md-icon"></span>
             factpluspluswrapper
           </label>
@@ -1406,15 +1420,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ontopy.excelparser.ExcelError" class="md-nav__link">
-    <span class="md-ellipsis">
-      ExcelError
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ontopy.excelparser.create_ontology_from_excel" class="md-nav__link">
     <span class="md-ellipsis">
       create_ontology_from_excel()
@@ -1480,37 +1485,6 @@ subClassOf, Relations.</p>
 
 
 
-
-
-
-  <div class="doc doc-object doc-class">
-
-
-
-<h2 id="ontopy.excelparser.ExcelError" class="doc doc-heading">
-        <code>
-ExcelError            (<a class="autorefs autorefs-internal" title="ontopy.utils.EMMOntoPyException" href="../utils/#ontopy.utils.EMMOntoPyException">EMMOntoPyException</a>)
-        </code>
-
-
-
-<a href="#ontopy.excelparser.ExcelError" class="headerlink" title="Permanent link">&para;</a></h2>
-
-    <div class="doc doc-contents ">
-
-      <p>Raised on errors in Excel file.</p>
-
-        <details class="quote">
-          <summary>Source code in <code>ontopy/excelparser.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ExcelError</span><span class="p">(</span><span class="n">EMMOntoPyException</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised on errors in Excel file.&quot;&quot;&quot;</span>
-</code></pre></div>
-        </details>
-
-
-    </div>
-
-  </div>
 
 
 
@@ -1923,6 +1897,7 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
                 <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">excelpath</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">path</span>
 
+    <span class="n">pd</span><span class="p">,</span> <span class="n">np</span> <span class="o">=</span> <span class="n">_get_excelreqs</span><span class="p">()</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">imports</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
             <span class="n">excelpath</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">imports_sheet_name</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -2042,12 +2017,12 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
         <details class="quote">
           <summary>Source code in <code>ontopy/excelparser.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">create_ontology_from_pandas</span><span class="p">(</span>  <span class="c1"># pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments, too-many-positional-arguments</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">objectproperties</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">annotationproperties</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">dataproperties</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">metadata</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">imports</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
+    <span class="n">objectproperties</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
+    <span class="n">annotationproperties</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
+    <span class="n">dataproperties</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
+    <span class="n">metadata</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
+    <span class="n">imports</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
     <span class="n">base_iri</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://emmo.info/emmo/domain/onto#&quot;</span><span class="p">,</span>
     <span class="n">base_iri_from_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">catalog</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -2257,13 +2232,14 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
         <details class="quote">
           <summary>Source code in <code>ontopy/excelparser.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_metadata_from_dataframe</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-branches,too-many-statements</span>
-    <span class="n">metadata</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">metadata</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
     <span class="n">base_iri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">base_iri_from_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">imports</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">imports</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">catalog</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create ontology with metadata from pd.DataFrame&quot;&quot;&quot;</span>
+    <span class="n">pd</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_get_excelreqs</span><span class="p">()</span>
 
     <span class="c1"># base_iri from metadata if it exists and base_iri_from_metadata</span>
     <span class="k">if</span> <span class="n">base_iri_from_metadata</span><span class="p">:</span>
@@ -2423,7 +2399,8 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
   
 </div>
       
-        <div class="md-social">
+        
+<div class="md-social">
   
     
     
