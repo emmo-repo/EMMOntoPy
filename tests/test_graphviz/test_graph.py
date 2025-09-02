@@ -1,6 +1,17 @@
 from typing import TYPE_CHECKING
 import pytest
 
+from ontopy.exceptions import _check_graphviz
+
+try:
+    _check_graphviz()
+except RuntimeError as e:
+    pytest.skip(
+        "Graphviz not available, skipping this test",
+        allow_module_level=True,
+    )
+
+
 if TYPE_CHECKING:
     from pathlib import Path
 
@@ -24,6 +35,7 @@ def test_graph(testonto: "Ontology", tmpdir: "Path") -> None:
         tmpdir: A built in pytest fixture to get a function-scoped
             temporary directory'
     """
+
     import owlready2
     from ontopy.graph import OntoGraph
 
@@ -104,6 +116,7 @@ def test_emmo_graphs(emmo: "Ontology", tmpdir: "Path") -> None:
         tmpdir: A built in pytest fixture to get a function-scoped
             temporary directory'
     """
+
     import owlready2
     from ontopy.graph import OntoGraph, plot_modules
     from ontopy import get_ontology

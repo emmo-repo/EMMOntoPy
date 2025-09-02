@@ -10,6 +10,9 @@ if TYPE_CHECKING:
 
 def test_run() -> None:
     """Check that running `ontograph` works."""
+    import pytest
+
+    pytest.importorskip("graphviz")
     from ontopy.testutils import ontodir, outdir, get_tool_module
 
     test_file = ontodir / "models.ttl"
