@@ -1,0 +1,3 @@
+graphviz>=0.16,<0.22
+packaging>=21.0,<26
+PyYAML>=5.4.1,<7

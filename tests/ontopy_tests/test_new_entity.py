@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 def test_new_entity(testonto: "Ontology") -> None:
     """Test adding entities to ontology"""
-    from ontopy.utils import (
+    from ontopy.exceptions import (
         NoSuchLabelError,
         LabelDefinitionError,
         EntityClassDefinitionError,

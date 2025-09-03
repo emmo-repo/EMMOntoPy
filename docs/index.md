@@ -119,33 +119,57 @@ Install with:
 pip install EMMOntoPy
 ```
 
+If you want to install with extras:
+
+```console
+pip install EMMOntoPy[excel] # This for installing dependencies relevant for using excel-template for ontology creation
+```
+
+
+
 ### Required Dependencies
 
-- [Python] 3.7 or later.
-- [Owlready2] v0.23 or later.
+- [Python] 3.9 or later.
+Python pacakges:
+  - [Owlready2] v0.28 or later. EMMOntoPy is builds on top of owlready2.
+  - [blessings]: Clean output for `emmocheck`.
+  - [rdflib]: Extend parsing functionality.
+  - packaging: Only for serialising in turtle and to make sure that this is not done with rdflib<6.6.
+  - [Pygments]: Coloured output for `emmocheck`.
+  - [pyparsing](https://github.com/pyparsing/pyparsing): Used for parsing Manchester syntax.
+  - [requests]: Used for redirection checks.
+  - [PyYAML]: Redirection checks
+
 
 ### Optional Dependencies
 
+
+For the excel2onto functionality:
+- Python pacakges (see requirements_excel.txt).
+  - numpy
+  - openpypxl: read excelfiles
+  - pandas: handle tables
+
+For the ontodoc and graph generation tools:
 - [Graphviz][graphviz_website]: Needed for graph generation.
   With support for generation pdf, png and svg figures for tests and generation of documentation automatically (`ontodoc`).
 - [pandoc]: Only used for generated documentation from markdown to nicely formatted html or pdf.
   Tested with v2.1.2.
 - [pdfLaTeX] or [XeLaTeX] and the `upgreek` LaTeX package (included in `texlive-was` on RetHat-based distributions and `texlive-latex-extra` on Ubuntu) for generation of pdf documentation.
   If your ontology contains exotic unicode characters, we recommend XeLaTeX.
-
-- Java.
-  Needed for reasoning.
-
-- Optional Python packages:
+- Python packages (see requirements_ontodoc.txt):
   - [graphviz][graphviz_python]: Generation of documentation and graphs.
   - [PyYAML]: Required for generating documentation with pandoc.
   - [blessings]: Clean output for `emmocheck`.
+
+
   - [Pygments]: Coloured output for `emmocheck`.
-  - [rdflib]: Required for `ontoversion`-tool.
-  - [semver]: Required for `ontoversion`-tool.
-  - [pydot]: Used for generating graphs.
-    Will be deprecated.
   - [pyparsing](https://github.com/pyparsing/pyparsing): Used for parsing Manchester syntax
+
+
+
+For the reasoning tool.
+- Java.
 
 See [docker-instructions.md](docker-instructions.md) for how to build a docker image.
 
@@ -193,7 +217,6 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/), specifically:
 [Python]: https://www.python.org/
 [IPython]: https://ipython.org/
 [DLite]: https://github.com/SINTEF/dlite/
-[pydot]: https://pypi.org/project/pydot/
 [graphviz_website]: https://www.graphviz.org/
 [pandoc]: http://pandoc.org/
 [XeLaTeX]: https://www.overleaf.com/learn/latex/XeLaTeX/
@@ -202,7 +225,6 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/), specifically:
 [PyYAML]: https://pypi.org/project/PyYAML/
 [blessings]: https://pypi.org/project/blessings/
 [Pygments]: https://pypi.org/project/Pygments/
-[semver]: https://pypi.org/project/semver/
 [rdflib]: https://pypi.org/project/rdflib/
 [FaCT++]: http://owl.cs.manchester.ac.uk/tools/fact/
 [Manchester syntax]: https://www.w3.org/TR/owl2-manchester-syntax/

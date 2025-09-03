@@ -23,6 +23,13 @@ from rdflib.plugin import PluginException
 
 import owlready2
 
+from ontopy.exceptions import (
+    NoSuchLabelError,
+    ReadCatalogError,
+    UnknownVersion,
+    IncompatibleVersion,
+)
+
 if TYPE_CHECKING:
     from typing import Optional, Union
 
@@ -42,44 +49,6 @@ FMAP = {
 
 # Format extension supported by owlready2
 OWLREADY2_FORMATS = "rdfxml", "owl", "xml", "ntriples"
-
-
-class EMMOntoPyException(Exception):
-    """A BaseException class for EMMOntoPy"""
-
-
-class EMMOntoPyWarning(Warning):
-    """A BaseWarning class for EMMOntoPy"""
-
-
-class IncompatibleVersion(EMMOntoPyWarning):
-    """An installed dependency version may be incompatible with a functionality
-    of this package - or rather an outcome of a functionality.
-    This is not critical, hence this is only a warning."""
-
-
-class UnknownVersion(EMMOntoPyException):
-    """Cannot retrieve version from a package."""
-
-
-class IndividualWarning(EMMOntoPyWarning):
-    """A warning related to an individual, e.g. punning."""
-
-
-class NoSuchLabelError(LookupError, AttributeError, EMMOntoPyException):
-    """Error raised when a label cannot be found."""
-
-
-class AmbiguousLabelError(LookupError, AttributeError, EMMOntoPyException):
-    """Error raised when a label is ambiguous."""
-
-
-class LabelDefinitionError(EMMOntoPyException):
-    """Error in label definition."""
-
-
-class EntityClassDefinitionError(EMMOntoPyException):
-    """Error in ThingClass definition."""
 
 
 def english(string):
@@ -338,10 +307,6 @@ def camelsplit(string):
         char = next_char
     result.append(char)
     return "".join(result)
-
-
-class ReadCatalogError(IOError):
-    """Error reading catalog file."""
 
 
 def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-many-arguments

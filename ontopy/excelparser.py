@@ -12,25 +12,25 @@ Note that correct case is mandatory.
 
 import os
 from typing import Tuple, Union
+from typing import TYPE_CHECKING
 import warnings
 
-import pandas as pd
-import numpy as np
 import pyparsing
 import defusedxml.ElementTree as ET
 
 import ontopy
 from ontopy import get_ontology
-from ontopy.utils import EMMOntoPyException, NoSuchLabelError
-from ontopy.utils import ReadCatalogError
+from ontopy.exceptions import ExcelError, NoSuchLabelError
+from ontopy.exceptions import ReadCatalogError, LabelDefinitionError
 from ontopy.utils import read_catalog, english
-from ontopy.ontology import LabelDefinitionError
 from ontopy.manchester import evaluate
+from ontopy.exceptions import _get_excelreqs
+
 import owlready2  # pylint: disable=C0411
 
 
-class ExcelError(EMMOntoPyException):
-    """Raised on errors in Excel file."""
+if TYPE_CHECKING:
+    import pandas as pd  # type-only import, not required at runtime
 
 
 def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-locals
@@ -197,6 +197,7 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-
                 path = os.path.dirname(excelpath) + "/" + str(path)
         return path
 
+    pd, np = _get_excelreqs()
     try:
         imports = pd.read_excel(
             excelpath, sheet_name=imports_sheet_name, skiprows=[1]
@@ -293,12 +294,12 @@ def create_ontology_from_excel(  # pylint: disable=too-many-arguments, too-many-
 
 
 def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments, too-many-positional-arguments
-    data: pd.DataFrame,
-    objectproperties: pd.DataFrame,
-    annotationproperties: pd.DataFrame,
-    dataproperties: pd.DataFrame,
-    metadata: pd.DataFrame,
-    imports: pd.DataFrame,
+    data: "pd.DataFrame",
+    objectproperties: "pd.DataFrame",
+    annotationproperties: "pd.DataFrame",
+    dataproperties: "pd.DataFrame",
+    metadata: "pd.DataFrame",
+    imports: "pd.DataFrame",
     base_iri: str = "http://emmo.info/emmo/domain/onto#",
     base_iri_from_metadata: bool = True,
     catalog: dict = None,
@@ -486,13 +487,14 @@ def create_ontology_from_pandas(  # pylint:disable=too-many-locals,too-many-bran
 
 
 def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-branches,too-many-statements
-    metadata: pd.DataFrame,
+    metadata: "pd.DataFrame",
     base_iri: str,
     base_iri_from_metadata: bool = True,
-    imports: pd.DataFrame = None,
+    imports: "pd.DataFrame" = None,
     catalog: dict = None,
 ) -> Tuple[ontopy.ontology.Ontology, dict]:
     """Create ontology with metadata from pd.DataFrame"""
+    pd, _ = _get_excelreqs()
 
     # base_iri from metadata if it exists and base_iri_from_metadata
     if base_iri_from_metadata:
@@ -591,7 +593,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
 
 
 def _parse_literal(
-    data: Union[pd.DataFrame, pd.Series],
+    data: "Union[pd.DataFrame, pd.Series]",
     name: str,
     metadata: bool = False,
     sep: str = ";",
@@ -599,6 +601,8 @@ def _parse_literal(
     """Helper function to make list ouf strings from ';'-delimited
     strings in one string.
     """
+    pd, _ = _get_excelreqs()
+
     if metadata is True:
         values = data.loc[data["Metadata name"] == name]["Value"].item()
     else:
@@ -609,7 +613,7 @@ def _parse_literal(
 
 
 def _add_literal(  # pylint: disable=too-many-arguments
-    data: Union[pd.DataFrame, pd.Series],
+    data: "Union[pd.DataFrame, pd.Series]",
     destination: owlready2.prop.IndividualValueList,  #
     name: str,
     *,
@@ -637,8 +641,8 @@ def _add_literal(  # pylint: disable=too-many-arguments
 
 
 def _clean_dataframe(
-    data: pd.DataFrame,
-) -> pd.DataFrame:
+    data: "pd.DataFrame",
+) -> "pd.DataFrame":
     """Remove lines with empty prefLabel,
     convert all data to strings, remove spaces, and finally remove
     additional rows with 0-length prefLabel.
@@ -654,7 +658,7 @@ def _clean_dataframe(
 def _add_entities(
     # pylint: disable=too-many-statements,too-many-branches, too-many-locals
     onto: ontopy.ontology.Ontology,
-    data: pd.DataFrame,
+    data: "pd.DataFrame",
     entitytype: Union[
         owlready2.ThingClass,
         owlready2.AnnotationPropertyClass,
@@ -666,6 +670,9 @@ def _add_entities(
     """Add entities to ontology.
     Returns ontology, dictionary with lists of entities that raise errors,
     and a list with indices of added rows."""
+
+    pd, _ = _get_excelreqs()
+
     labels = set(data["prefLabel"])
     for altlabel in data["altLabel"].str.strip():
         if not altlabel == "nan":
@@ -865,7 +872,7 @@ def _add_entities(
 # Helper function for adding range and domain to properties
 def _add_range_domain(
     onto: owlready2.Ontology,
-    properties: pd.DataFrame,
+    properties: "pd.DataFrame",
     added_prop_indices: list,
     properties_with_errors: dict,
     force: bool = False,
@@ -933,7 +940,7 @@ def _add_range_domain(
 
 def _make_entity_list(  # pylint: disable=too-many-arguments, too-many-positional-arguments
     onto: owlready2.Ontology,
-    row: pd.Series,
+    row: "pd.Series",
     rowheader: str,
     force: bool,
     entities_with_errors: dict,

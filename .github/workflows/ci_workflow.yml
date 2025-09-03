@@ -13,16 +13,16 @@ jobs:
     uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.9.2
     with:
       # General
-      install_extras: "[dev,docs]"
+      install_extras: "[dev,docs,excel,ontodoc]"
 
       # pre-commit
       run_pre-commit: true
-      python_version_pre-commit: "3.9"
+      python_version_pre-commit: "3.13"
       skip_pre-commit_hooks: pylint
 
       # pylint
       run_pylint: true
-      python_version_pylint_safety: "3.9"
+      python_version_pylint_safety: "3.13"
       pylint_options: "--rcfile=pyproject.toml"
       pylint_targets: "*.py tools emmopy ontopy"
 
@@ -32,13 +32,13 @@ jobs:
 
       # Build distribution
       run_build_package: true
-      python_version_package: "3.9"
+      python_version_package: "3.13"
       build_cmd: "python -m build"
 
       # Build documentation
       # Exclude base classes in emmopy.emmocheck
       run_build_docs: true
-      python_version_docs: "3.9"
+      python_version_docs: "3.13"
       update_python_api_ref: true
       update_docs_landing_page: true
       package_dirs: |
@@ -70,32 +70,159 @@ jobs:
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
 
+    container: python:${{ matrix.python-version }}-slim
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v5
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
+    #- name: Set up Python ${{ matrix.python-version }}
+    #  uses: actions/setup-python@v5
+    #  with:
+    #    python-version: ${{ matrix.python-version }}
 
-    - name: Install system dependencies
-      run: sudo apt-get update && sudo apt-get install -y graphviz openjdk-11-jre-headless
-
-    - name: Install Python dependencies (and EMMOntoPy)
+    - name: Install Python dependencies (and EMMOntoPy) minimal
       run: |
         python -m pip install --upgrade pip
         pip install -U setuptools wheel
         pip install -U -e .[dev]
+        pip install coverage
 
-    - name: Test
-      run: pytest -vvv --cov=ontopy --cov=emmopy --cov-report=xml --cov-report=term --doctest-modules
+    - name: Sanity check – ensure no Java in Round 1
+      run: |
+        echo "JAVA_HOME=${JAVA_HOME:-<empty>}"
+        if command -v java; then
+          echo "❌ Java unexpectedly present"
+          java -version
+          exit 1
+        else
+          echo "✅ No java on PATH (as intended for Phase 1)"
+        fi
+
+
+    - name: Round 1 – minimal env
+      run: |
+        set -euo pipefail
+        pytest -rA \
+          --cov=ontopy --cov=emmopy --cov-append \
+          --cov-report=term --cov-report= \
+          --doctest-modules \
+          --ignore tests/test_graphviz \
+          --ignore tests/test_excelparser \
+          --ignore tests/test_java | tee result.log
+        if grep -q "SKIPPED" result.log; then
+          echo "❌ Skipped tests detected, failing build"
+          exit 1
+        fi
+
+
+    - name: Round 2 – excel deps
+      run: |
+        set -euo pipefail
+        pip install -U -e .[excel]
+        pytest -rA \
+          --cov=ontopy --cov=emmopy --cov-append \
+          --cov-report=term --cov-report= \
+          --doctest-modules \
+          tests/test_excelparser | tee result.log
+        if grep -q "SKIPPED" result.log; then
+          echo "❌ Skipped tests detected, failing build"
+          exit 1
+        fi
+
+
+    # Phase 3: install Java and run ONLY the Java-marked tests
+    - name: Install Java (Temurin JDK 17)
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '17'
+
+    - name: Sanity check – confirm Java in Phase 3
+      run: |
+        echo "JAVA_HOME=${JAVA_HOME:-<empty>}"
+        command -v java
+        java -version
+
+
+    - name: Round 3 – Java deps (reasoner)
+      run: |
+        set -euo pipefail
+        pytest -rA \
+          --cov=ontopy --cov=emmopy --cov-append \
+          --cov-report=term --cov-report= \
+          --doctest-modules \
+          tests/test_java | tee result.log
+        if grep -q "SKIPPED" result.log; then
+          echo "❌ Skipped tests detected, failing build"
+          exit 1
+        fi
+
+    - name: Round 4 – Graphviz & ontodoc deps
+      run: |
+        set -euo pipefail
+
+        # Install system Graphviz (works in container and on ubuntu runners)
+        if command -v sudo >/dev/null 2>&1; then
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+        else
+          apt-get update
+          apt-get install -y --no-install-recommends graphviz
+        fi
+
+        # Sanity check: ensure dot is available
+        command -v dot
+        dot -V
+
+        # Install Python deps that use Graphviz (your extra already contains them)
+        pip install -U -e .[ontodoc]
+
+        # Run ONLY the Graphviz tests
+        pytest -rA \
+          --cov=ontopy --cov=emmopy --cov-append \
+          --cov-report=term --cov-report= \
+          --doctest-modules \
+          tests/test_graphviz | tee result_graphviz.log
+
+        # Fail if any Graphviz tests got skipped
+        if grep -q "SKIPPED" result_graphviz.log; then
+          echo "❌ Skipped tests detected in Graphviz phase, failing build"
+          exit 1
+        fi
+
+    - name: Generate XML once
+      run: |
+        coverage xml -o coverage.xml
+        coverage report -m
+
+    # Install tools only when we actually upload
+    - name: Install Codecov prerequisites (git, curl, gpg)
+      if: matrix.python-version == '3.13' && github.repository == 'emmo-repo/EMMOntoPy'
+      run: |
+        set -euo pipefail
+        # In containers we're root (no sudo); on runners sudo exists.
+        if command -v sudo >/dev/null 2>&1; then
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends git curl gnupg ca-certificates
+        else
+          apt-get update
+          apt-get install -y --no-install-recommends git curl gnupg ca-certificates
+        fi
+        # sanity check
+        git --version
+        curl --version
+        gpg --version
+
 
     - name: Upload coverage to Codecov
-      if: matrix.python-version == '3.9' && github.repository == 'emmo-repo/EMMOntoPy'
+      if: matrix.python-version == '3.13' && github.repository == 'emmo-repo/EMMOntoPy'
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        files: coverage.xml
+        flags: unittests
+        fail_ci_if_error: true
 
     # - name: Run vertical demo
     #   run: |
@@ -120,10 +247,10 @@ jobs:
     steps:
     - uses: actions/checkout@v5
 
-    - name: Set up Python 3.9
+    - name: Set up Python 3.13
       uses: actions/setup-python@v5
       with:
-        python-version: "3.9"
+        python-version: "3.13"
 
     - name: Check Ubuntu version we are running under
       run: |
@@ -149,6 +276,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        pip install -r requirements_ontodoc.txt
         sudo apt-get update
         sudo apt-get install -y graphviz
         sudo apt-get install -y texlive-xetex
@@ -156,7 +284,7 @@ jobs:
 
     - name: Install EMMOntoPy
       run: |
-        python setup.py install
+        pip install .[dev,ontodoc]
 
     - name: Create EMMO documentation
       run: |

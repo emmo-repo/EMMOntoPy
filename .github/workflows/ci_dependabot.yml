@@ -22,7 +22,7 @@ jobs:
       extra_to_dos: "- [ ] Make sure that the PR is **squash** merged, with a sensible commit message."
       update_pre-commit: true
       python_version: "3.9"
-      install_extras: "[dev,docs]"
+      install_extras: "[dev,excel,ontodoc]"
       skip_pre-commit_hooks: pylint
     secrets:
       PAT: ${{ secrets.RELEASE_PAT }}
