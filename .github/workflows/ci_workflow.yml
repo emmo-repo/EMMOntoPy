@@ -133,7 +133,7 @@ jobs:
 
     # Phase 3: install Java and run ONLY the Java-marked tests
     - name: Install Java (Temurin JDK 17)
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         distribution: temurin
         java-version: '17'
