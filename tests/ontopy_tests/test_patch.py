@@ -120,7 +120,7 @@ def test_get_indirect_is_a() -> None:
     import re
     from ontopy import get_ontology
 
-    emmo = get_ontology("emmo-development").load()
+    emmo = get_ontology("emmo").load()
     assert any(
         re.match("^emmo.*\.hasDimensionString.value(.*)$", str(e))
         for e in emmo.MicroPascal.get_indirect_is_a()

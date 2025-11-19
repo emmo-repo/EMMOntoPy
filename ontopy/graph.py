@@ -113,6 +113,7 @@ _default_style = {
         "hasProperty": {"color": "orange", "style": "dotted"},
         "hasOutput": {"color": "darkviolet", "style": "dotted"},
         "hasInput": {"color": "darkviolet"},
+        "isQuantityValueFor": {"color": "green"},
         "hasTemporaryParticipant": {"color": "darkviolet", "style": "dashed"},
         "refersTo": {"color": "cyan", "style": "dotted"},
         "hasReferent": {"color": "cyan"},

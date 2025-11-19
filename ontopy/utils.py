@@ -10,6 +10,7 @@ import inspect
 import tempfile
 import textwrap
 from pathlib import Path
+from sqlite3 import IntegrityError
 from typing import TYPE_CHECKING
 import urllib.request
 import urllib.parse
@@ -752,7 +753,15 @@ def rename_iris(onto, annotation="prefLabel"):
             onto._add_data_triple_spod(
                 entity.storid, exactMatch, entity.iri, ""
             )
-            entity.name = getattr(entity, annotation).first()
+            entityname = str(entity.name)
+            name = getattr(entity, annotation).first()
+            if str(name) != entityname:
+                try:
+                    entity.name = name
+                except IntegrityError as exc:
+                    raise ValueError(
+                        f"cannot set name of {entityname} to '{name}')"
+                    ) from exc
 
 
 def normalise_url(url):
