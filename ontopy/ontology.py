@@ -99,9 +99,6 @@ class World(owlready2.World):
                 - "emmo": load latest version of asserted EMMO
                 - "emmo-inferred": load latest version of inferred EMMO
                   (default)
-                - "emmo-development": load latest inferred development
-                  version of EMMO. Until first stable release
-                  emmo-inferred and emmo-development will be the same.
             OntologyClass: If given and `base_iri` doesn't correspond
                 to an existing ontology, a new ontology is created of
                 this Ontology subclass.  Defaults to `ontopy.Ontology`.
@@ -117,11 +114,6 @@ class World(owlready2.World):
             base_iri = "https://w3id.org/emmo/"
         elif base_iri == "emmo-inferred":
             base_iri = "https://w3id.org/emmo/inferred"
-        elif base_iri == "emmo-development":
-            base_iri = (
-                "https://raw.githubusercontent.com/emmo-repo/EMMO/"
-                "refs/heads/dev/emmo.ttl"
-            )
 
         if base_iri in self.ontologies:
             onto = self.ontologies[base_iri]

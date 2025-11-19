@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+import pytest
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -40,9 +41,8 @@ def test_load_schema() -> None:
     # assert list(onto.properties()) == [onto.abridged]
 
 
-# @pytest.mark.skip("FOAF is currently unavailable.")
-# def test_import_foaf(emmo: "Ontology") -> None:
-if True:
+@pytest.mark.skip("xlmns.com is currently unavailable.")
+def test_import_foaf(emmo: "Ontology") -> None:
     """Test importing foaf
 
     foaf is the Friend-of-a-Friend ontology.
