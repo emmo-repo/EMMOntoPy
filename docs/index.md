@@ -119,7 +119,7 @@ Install with:
 pip install EMMOntoPy
 ```
 
-Minimal python dependencies can be found in [requirements.txt](requirements.txt)
+Minimal python dependencies can be found in requirements.txt.
 
 
 If you want to install with extra functionalities:
@@ -136,7 +136,7 @@ For the functionality that allows for ontology creation from an excel or csv fil
 pip install EMMOntoPy[excel] # adds the extra python packages needed
 ```
 
-Extra python packages needed are found in [requirements_excel.txt](requirements_excel.txt)
+Extra python packages needed are found in requirements_excel.txt.
 
 
 - For the ontodoc and graph generation tools:
@@ -153,7 +153,7 @@ Extra python packages needed are found in [requirements_excel.txt](requirements_
 pip install EMMOntoPy[ontodoc] # extra python packages needed.
 ```
 
-Extra python packages needed are gound in [requirements_ontodoc.txt](requirements_ontodoc.txt)
+Extra python packages needed are gound in requirements_ontodoc.txt.
 
 
 
