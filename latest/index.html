@@ -396,28 +396,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#required-dependencies" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Required Dependencies
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#optional-dependencies" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Optional Dependencies
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#known-issues" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1863,28 +1841,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#required-dependencies" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Required Dependencies
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#optional-dependencies" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Optional Dependencies
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#known-issues" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2043,45 +1999,35 @@ The EMMOntoPy package also has its own <a href="https://emmo-repo.github.io/EMMO
 <p>Install with:</p>
 <div class="highlight"><pre><span></span><code><span class="go">pip install EMMOntoPy</span>
 </code></pre></div>
-<p>If you want to install with extras:</p>
-<div class="highlight"><pre><span></span><code><span class="go">pip install EMMOntoPy[excel] # This for installing dependencies relevant for using excel-template for ontology creation</span>
+<p>Minimal python dependencies can be found in requirements.txt.</p>
+<p>If you want to install with extra functionalities:</p>
+<ul>
+<li>Reasoning:</li>
+</ul>
+<p>For reasoning there are no extra python requirements, but JAVA is needed.</p>
+<ul>
+<li>Excel2onto:</li>
+</ul>
+<p>For the functionality that allows for ontology creation from an excel or csv file:</p>
+<div class="highlight"><pre><span></span><code><span class="go">pip install EMMOntoPy[excel] # adds the extra python packages needed</span>
 </code></pre></div>
-<h3 id="required-dependencies">Required Dependencies<a class="headerlink" href="#required-dependencies" title="Permanent link">&para;</a></h3>
+<p>Extra python packages needed are found in requirements_excel.txt.</p>
 <ul>
-<li><a href="https://www.python.org/">Python</a> 3.9 or later.
-Python pacakges:</li>
-<li><a href="https://pypi.org/project/Owlready2/">Owlready2</a> v0.28 or later. EMMOntoPy is builds on top of owlready2.</li>
-<li><a href="https://pypi.org/project/blessings/">blessings</a>: Clean output for <code>emmocheck</code>.</li>
-<li><a href="https://pypi.org/project/rdflib/">rdflib</a>: Extend parsing functionality.</li>
-<li>packaging: Only for serialising in turtle and to make sure that this is not done with rdflib&lt;6.6.</li>
-<li><a href="https://pypi.org/project/Pygments/">Pygments</a>: Coloured output for <code>emmocheck</code>.</li>
-<li><a href="https://github.com/pyparsing/pyparsing">pyparsing</a>: Used for parsing Manchester syntax.</li>
-<li>[requests]: Used for redirection checks.</li>
-<li><a href="https://pypi.org/project/PyYAML/">PyYAML</a>: Redirection checks</li>
-</ul>
-<h3 id="optional-dependencies">Optional Dependencies<a class="headerlink" href="#optional-dependencies" title="Permanent link">&para;</a></h3>
-<p>For the excel2onto functionality:
-- Python pacakges (see requirements_excel.txt).
-  - numpy
-  - openpypxl: read excelfiles
-  - pandas: handle tables</p>
-<p>For the ontodoc and graph generation tools:
-- <a href="https://www.graphviz.org/">Graphviz</a>: Needed for graph generation.
-  With support for generation pdf, png and svg figures for tests and generation of documentation automatically (<code>ontodoc</code>).
-- <a href="http://pandoc.org/">pandoc</a>: Only used for generated documentation from markdown to nicely formatted html or pdf.
-  Tested with v2.1.2.
-- <a href="https://www.latex-project.org/">pdfLaTeX</a> or <a href="https://www.overleaf.com/learn/latex/XeLaTeX/">XeLaTeX</a> and the <code>upgreek</code> LaTeX package (included in <code>texlive-was</code> on RetHat-based distributions and <code>texlive-latex-extra</code> on Ubuntu) for generation of pdf documentation.
-  If your ontology contains exotic unicode characters, we recommend XeLaTeX.
-- Python packages (see requirements_ontodoc.txt):
-  - <a href="https://pypi.org/project/graphviz">graphviz</a>: Generation of documentation and graphs.
-  - <a href="https://pypi.org/project/PyYAML/">PyYAML</a>: Required for generating documentation with pandoc.
-  - <a href="https://pypi.org/project/blessings/">blessings</a>: Clean output for <code>emmocheck</code>.</p>
+<li>
+<p>For the ontodoc and graph generation tools:</p>
 <ul>
-<li><a href="https://pypi.org/project/Pygments/">Pygments</a>: Coloured output for <code>emmocheck</code>.</li>
-<li><a href="https://github.com/pyparsing/pyparsing">pyparsing</a>: Used for parsing Manchester syntax</li>
+<li><a href="https://www.graphviz.org/">Graphviz</a>: Needed for graph generation.
+  With support for generation pdf, png and svg figures for tests and generation of documentation automatically (<code>ontodoc</code>).</li>
+<li><a href="http://pandoc.org/">pandoc</a>: Only used for generated documentation from markdown to nicely formatted html or pdf.
+  Tested with v2.1.2.</li>
+<li><a href="https://www.latex-project.org/">pdfLaTeX</a> or <a href="https://www.overleaf.com/learn/latex/XeLaTeX/">XeLaTeX</a> and the <code>upgreek</code> LaTeX package (included in <code>texlive-was</code> on RetHat-based distributions and <code>texlive-latex-extra</code> on Ubuntu) for generation of pdf documentation.
+  If your ontology contains exotic unicode characters, we recommend XeLaTeX.</li>
 </ul>
-<p>For the reasoning tool.
-- Java.</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="go">pip install EMMOntoPy[ontodoc] # extra python packages needed.</span>
+</code></pre></div>
+<p>Extra python packages needed are gound in requirements_ontodoc.txt.</p>
 <p>See <a href="docker-instructions/">docker-instructions.md</a> for how to build a docker image.</p>
 <h3 id="known-issues">Known issues<a class="headerlink" href="#known-issues" title="Permanent link">&para;</a></h3>
 <ul>
