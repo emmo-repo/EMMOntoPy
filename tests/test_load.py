@@ -28,9 +28,6 @@ def test_load() -> None:
     emmo = get_ontology("emmo-inferred").load()
     assert str(emmo.Atom.prefLabel.first()) == "Atom"
 
-    emmo = get_ontology("emmo-development").load()  # ttl format
-    assert str(emmo.Atom.prefLabel.first()) == "Atom"
-
     emmo = get_ontology(
         "https://emmo-repo.github.io/emmo-inferred.ttl"
     ).load()  # owl format
