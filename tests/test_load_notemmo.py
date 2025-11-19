@@ -41,7 +41,7 @@ def test_load_schema() -> None:
     # assert list(onto.properties()) == [onto.abridged]
 
 
-#def test_import_foaf(emmo: "Ontology") -> None:
+# def test_import_foaf(emmo: "Ontology") -> None:
 #    """Test importing foaf
 #
 #    foaf is the Friend-of-a-Friend ontology.
