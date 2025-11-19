@@ -46,12 +46,29 @@ with open(os.path.join(rootdir, "requirements_docs.txt"), "r") as handle:
         if not _.startswith("#") and "git+" not in _
     ]
 
+with open(os.path.join(rootdir, "requirements_excel.txt"), "r") as handle:
+    EXCEL = [
+        f"{_.strip()}"
+        for _ in handle.readlines()
+        if not _.startswith("#") and "git+" not in _
+    ]
+
+
+with open(os.path.join(rootdir, "requirements_ontodoc.txt"), "r") as handle:
+    ONTODOC = [
+        f"{_.strip()}"
+        for _ in handle.readlines()
+        if not _.startswith("#") and "git+" not in _
+    ]
+
+
 with open(os.path.join(rootdir, "requirements_dev.txt"), "r") as handle:
     DEV = [
         f"{_.strip()}"
         for _ in handle.readlines()
         if not _.startswith("#") and "git+" not in _
     ] + DOCS
+
 
 # Retrieve emmo-package version
 with open(os.path.join(rootdir, "ontopy/__init__.py")) as handle:
@@ -91,12 +108,11 @@ setuptools.setup(
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Information Analysis",
         "Topic :: Scientific/Engineering :: Visualization",
@@ -104,7 +120,12 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     install_requires=REQUIREMENTS,
-    extras_require={"dev": DEV, "docs": DOCS},
+    extras_require={
+        "dev": DEV,
+        "docs": DOCS,
+        "excel": EXCEL,
+        "ontodoc": ONTODOC,
+    },
     packages=setuptools.find_packages(),
     scripts=[
         "tools/ontodoc",

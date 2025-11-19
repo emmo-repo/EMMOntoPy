@@ -4,6 +4,20 @@ from typing import TYPE_CHECKING
 import pytest
 
 
+from ontopy.exceptions import _get_excelreqs
+
+
+try:
+    _get_excelreqs()
+except ImportError as e:
+    if "excelparser requires extras" in str(e):
+        pytest.skip(
+            "missing extras for running excelparser", allow_module_level=True
+        )
+    else:
+        raise
+
+
 @pytest.mark.filterwarnings("ignore::UserWarning")
 def test_run() -> None:
     """Check that running `excel2onto` works.

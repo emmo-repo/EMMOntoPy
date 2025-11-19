@@ -10,6 +10,7 @@ import inspect
 import tempfile
 import textwrap
 from pathlib import Path
+from sqlite3 import IntegrityError
 from typing import TYPE_CHECKING
 import urllib.request
 import urllib.parse
@@ -22,6 +23,13 @@ from rdflib.util import guess_format
 from rdflib.plugin import PluginException
 
 import owlready2
+
+from ontopy.exceptions import (
+    NoSuchLabelError,
+    ReadCatalogError,
+    UnknownVersion,
+    IncompatibleVersion,
+)
 
 if TYPE_CHECKING:
     from typing import Optional, Union
@@ -42,44 +50,6 @@ FMAP = {
 
 # Format extension supported by owlready2
 OWLREADY2_FORMATS = "rdfxml", "owl", "xml", "ntriples"
-
-
-class EMMOntoPyException(Exception):
-    """A BaseException class for EMMOntoPy"""
-
-
-class EMMOntoPyWarning(Warning):
-    """A BaseWarning class for EMMOntoPy"""
-
-
-class IncompatibleVersion(EMMOntoPyWarning):
-    """An installed dependency version may be incompatible with a functionality
-    of this package - or rather an outcome of a functionality.
-    This is not critical, hence this is only a warning."""
-
-
-class UnknownVersion(EMMOntoPyException):
-    """Cannot retrieve version from a package."""
-
-
-class IndividualWarning(EMMOntoPyWarning):
-    """A warning related to an individual, e.g. punning."""
-
-
-class NoSuchLabelError(LookupError, AttributeError, EMMOntoPyException):
-    """Error raised when a label cannot be found."""
-
-
-class AmbiguousLabelError(LookupError, AttributeError, EMMOntoPyException):
-    """Error raised when a label is ambiguous."""
-
-
-class LabelDefinitionError(EMMOntoPyException):
-    """Error in label definition."""
-
-
-class EntityClassDefinitionError(EMMOntoPyException):
-    """Error in ThingClass definition."""
 
 
 def english(string):
@@ -340,10 +310,6 @@ def camelsplit(string):
     return "".join(result)
 
 
-class ReadCatalogError(IOError):
-    """Error reading catalog file."""
-
-
 def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-many-arguments
     uri,
     *,
@@ -519,7 +485,7 @@ def write_catalog(
 ):  # pylint: disable=redefined-builtin
     """Write catalog file do disk.
 
-    Args:
+    Arguments:
         irimap: dict mapping ontology IRIs (name) to actual locations
             (URIs).  It has the same format as the dict returned by
             read_catalog().
@@ -623,7 +589,7 @@ def convert_imported(  # pylint: disable=too-many-arguments,too-many-locals
         `rdflib>=6.0.0`. See [Known issues](../../../#known-issues) for
         more information.
 
-    Args:
+    Arguments:
         input_ontology: input ontology file name
         output_ontology: output ontology file path. The directory part of
             `output` will be the root of the generated directory structure
@@ -787,7 +753,15 @@ def rename_iris(onto, annotation="prefLabel"):
             onto._add_data_triple_spod(
                 entity.storid, exactMatch, entity.iri, ""
             )
-            entity.name = getattr(entity, annotation).first()
+            entityname = str(entity.name)
+            name = getattr(entity, annotation).first()
+            if str(name) != entityname:
+                try:
+                    entity.name = name
+                except IntegrityError as exc:
+                    raise ValueError(
+                        f"cannot set name of {entityname} to '{name}')"
+                    ) from exc
 
 
 def normalise_url(url):

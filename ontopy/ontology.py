@@ -39,17 +39,21 @@ from ontopy.utils import (  # pylint: disable=cyclic-import
     convert_imported,
     directory_layout,
     FMAP,
-    IncompatibleVersion,
     isinteractive,
-    NoSuchLabelError,
     OWLREADY2_FORMATS,
-    ReadCatalogError,
     _validate_installed_version,
+)
+
+from ontopy.exceptions import (
+    IncompatibleVersion,
+    NoSuchLabelError,
+    ReadCatalogError,
     LabelDefinitionError,
     AmbiguousLabelError,
     EntityClassDefinitionError,
     EMMOntoPyException,
 )
+
 
 if TYPE_CHECKING:
     from typing import Iterator, List, Sequence, Generator
@@ -95,9 +99,6 @@ class World(owlready2.World):
                 - "emmo": load latest version of asserted EMMO
                 - "emmo-inferred": load latest version of inferred EMMO
                   (default)
-                - "emmo-development": load latest inferred development
-                  version of EMMO. Until first stable release
-                  emmo-inferred and emmo-development will be the same.
             OntologyClass: If given and `base_iri` doesn't correspond
                 to an existing ontology, a new ontology is created of
                 this Ontology subclass.  Defaults to `ontopy.Ontology`.
@@ -113,11 +114,6 @@ class World(owlready2.World):
             base_iri = "https://w3id.org/emmo/"
         elif base_iri == "emmo-inferred":
             base_iri = "https://w3id.org/emmo/inferred"
-        elif base_iri == "emmo-development":
-            base_iri = (
-                "https://raw.githubusercontent.com/emmo-repo/EMMO/"
-                "refs/heads/dev/emmo.ttl"
-            )
 
         if base_iri in self.ontologies:
             onto = self.ontologies[base_iri]
@@ -887,6 +883,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         overwrite=False,
         recursive=False,
         squash=False,
+        namespaces=None,
         write_catalog_file=False,
         append_catalog=False,
         catalog_file="catalog-v001.xml",
@@ -919,7 +916,11 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         squash: bool
             If true, rdflib will be used to save the current ontology
             together with all its sub-ontologies into `filename`.
-            It makes no sense to combine this with `recursive`.
+            When combining with `recursive`, a folder structure of partly
+            overlapping single-file ontologies will be created.
+        namespaces: dict
+            Dict mapping prefixes to additional namespaces. Only used when
+            saving to turtle.
         write_catalog_file: bool
             Whether to also write a catalog file to disk.
         append_catalog: bool
@@ -935,6 +936,19 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         # pylint: disable=redefined-builtin,too-many-arguments
         # pylint: disable=too-many-statements,too-many-branches
         # pylint: disable=too-many-locals,arguments-renamed,invalid-name
+
+        # Extend rdflib defaults with namespaces suggested by FOOPS
+        if namespaces is None:
+            namespaces = {}
+        default_namespaces = {
+            "": self.base_iri,
+            "locn": "http://www.w3.org/ns/locn#",
+            "swrl": "http://www.w3.org/2003/11/swrl#",
+            "bibo": "http://purl.org/ontology/bibo/",
+        }
+        for prefix, ns in default_namespaces.items():
+            if ns not in namespaces.values():
+                namespaces[prefix] = ns
 
         if not _validate_installed_version(
             package="rdflib", min_version="6.0.0"
@@ -952,6 +966,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     "'Known issues' section of the README."
                 )
             )
+
         revmap = {value: key for key, value in FMAP.items()}
         if filename is None:
             if format:
@@ -981,16 +996,11 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             os.remove(filepath)
 
         if recursive:
-            if squash:
-                raise ValueError(
-                    "`recursive` and `squash` should not both be true"
-                )
             layout = directory_layout(self)
             if filename:
                 layout[self] = file.rstrip(f".{fmt}")
             # Update path to where the ontology is saved
-            # Note that filename should include format
-            # when given
+            # Note that filename should include format when given
             returnpath = Path(dir) / f"{layout[self]}.{fmt}"
             for onto, path in layout.items():
                 fname = Path(dir) / f"{path}.{fmt}"
@@ -1001,7 +1011,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                     mkdir=mkdir,
                     overwrite=overwrite,
                     recursive=False,
-                    squash=False,
+                    squash=squash,
+                    namespaces=namespaces,
                     write_catalog_file=False,
                     **kwargs,
                 )
@@ -1031,15 +1042,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             for triple in self.world.as_rdflib_graph():
                 graph.add(triple)
 
-            # Add common namespaces unknown to rdflib
-            extra_namespaces = [
-                ("", self.base_iri),
-                ("swrl", "http://www.w3.org/2003/11/swrl#"),
-                ("bibo", "http://purl.org/ontology/bibo/"),
-            ]
-            for prefix, iri in extra_namespaces:
+            # Add additional namespaces to the graph
+            for prefix, ns in namespaces.items():
                 graph.namespace_manager.bind(
-                    prefix, rdflib.Namespace(iri), override=False
+                    prefix, rdflib.Namespace(ns), override=True
                 )
 
             # Remove all ontology-declarations in the graph that are
@@ -1083,9 +1089,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 super().save(tmpfile, format="ntriples", **kwargs)
                 graph = rdflib.Graph()
                 graph.parse(tmpfile, format="ntriples")
-                graph.namespace_manager.bind(
-                    "", rdflib.Namespace(self.base_iri)
-                )
+
+                # Add additional namespaces to the output graph
+                for prefix, ns in namespaces.items():
+                    graph.namespace_manager.bind(
+                        prefix, rdflib.Namespace(ns), override=True
+                    )
+
                 if self.iri:
                     base_iri = rdflib.URIRef(self.base_iri)
                     for (
@@ -1434,8 +1444,15 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
         Keyword arguments are passed to the underlying owlready2 function.
         """
+
         # pylint: disable=too-many-branches,too-many-locals
         # pylint: disable=unexpected-keyword-arg,invalid-name
+        # pylint: disable=import-outside-toplevel
+
+        from ontopy.exceptions import _require_java
+
+        _require_java()
+
         removed_gspo = []  # obj: (ontology, s, p, o)
         removed_gspod = []  # data: (ontology, s, p, o, d)
 
@@ -1849,6 +1866,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         """Returns a new graph object.  See  emmo.graph.OntoGraph.
 
         Note that this method requires the Python graphviz package.
+
         """
         # pylint: disable=import-outside-toplevel,cyclic-import
         from ontopy.graph import OntoGraph

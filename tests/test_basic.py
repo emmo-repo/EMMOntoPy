@@ -15,7 +15,10 @@ if TYPE_CHECKING:
 @pytest.mark.filterwarnings("ignore:adding new IRI to ontology:UserWarning")
 def test_basic(emmo: "Ontology") -> None:
     from ontopy import get_ontology
-    from ontopy.utils import LabelDefinitionError, EntityClassDefinitionError
+    from ontopy.exceptions import (
+        LabelDefinitionError,
+        EntityClassDefinitionError,
+    )
 
     onto = get_ontology("onto.owl")
     onto.imported_ontologies.append(emmo)
