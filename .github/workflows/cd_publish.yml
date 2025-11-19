@@ -16,7 +16,7 @@ jobs:
 
       # Publish package
       python_package: true
-      python_version_build: "3.9"
+      python_version_build: "3.13"
       # We're mentioning only 'ontopy', since the version is set statically only in
       # ontopy/__init__.py
       package_dirs: ontopy
@@ -29,7 +29,7 @@ jobs:
 
       # Update documentation
       update_docs: true
-      python_version_docs: "3.9"
+      python_version_docs: "3.13"
       doc_extras: "[docs]"
       changelog_exclude_labels: dependencies
 

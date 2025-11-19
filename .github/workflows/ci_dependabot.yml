@@ -21,7 +21,7 @@ jobs:
       pr_labels: dependencies,github_actions
       extra_to_dos: "- [ ] Make sure that the PR is **squash** merged, with a sensible commit message."
       update_pre-commit: true
-      python_version: "3.9"
+      python_version: "3.13"
       install_extras: "[dev,excel,ontodoc]"
       skip_pre-commit_hooks: pylint
     secrets:
