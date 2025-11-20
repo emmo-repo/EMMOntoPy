@@ -848,7 +848,6 @@ def _add_entities(
                 ):
                     for annotation in row["Other annotations"].split(";"):
                         key, value = annotation.split("=", 1)
-                        print("key" + key, value + "value")
                         try:
                             entity[key.strip(" ")] = english(value.strip(" "))
                         except NoSuchLabelError as exc:
