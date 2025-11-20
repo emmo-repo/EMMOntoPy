@@ -153,7 +153,9 @@ Extra python packages needed are found in requirements_excel.txt.
 pip install EMMOntoPy[ontodoc] # extra python packages needed.
 ```
 
-Extra python packages needed are gound in requirements_ontodoc.txt.
+Extra python packages needed are found in requirements_ontodoc.txt.
+
+
 
 
 
