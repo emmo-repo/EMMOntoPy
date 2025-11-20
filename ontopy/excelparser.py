@@ -516,8 +516,9 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
     locations = set()
     for _, row in imports.iterrows():
         # for location in imports:
-        location = row["Imported ontologies"].strip()
+        location = row["Imported ontologies"]
         if not pd.isna(location) and location not in locations:
+            location = location.strip()
             imported = onto.world.get_ontology(location).load()
             onto.imported_ontologies.append(imported)
             catalog[imported.base_iri.rstrip("#/")] = location
