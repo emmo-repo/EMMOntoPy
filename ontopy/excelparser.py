@@ -518,6 +518,7 @@ def get_metadata_from_dataframe(  # pylint: disable=too-many-locals,too-many-bra
         # for location in imports:
         location = row["Imported ontologies"]
         if not pd.isna(location) and location not in locations:
+            location = location.strip()
             imported = onto.world.get_ontology(location).load()
             onto.imported_ontologies.append(imported)
             catalog[imported.base_iri.rstrip("#/")] = location
@@ -847,7 +848,24 @@ def _add_entities(
                 ):
                     for annotation in row["Other annotations"].split(";"):
                         key, value = annotation.split("=", 1)
-                        entity[key.strip(" ")] = english(value.strip(" "))
+                        try:
+                            entity[key.strip(" ")] = english(value.strip(" "))
+                        except NoSuchLabelError as exc:
+                            msg = (
+                                f"Error in Other annotation assignment for: "
+                                f"{entity}. "
+                                f"Annotation to be Evaluated: {annotation}. "
+                                f"{exc}. Are you sure that the annotation"
+                                f" {annotation} is added to the "
+                                "AnnotationsProperties tab correctly?"
+                            )
+                            if force is True:
+                                warnings.warn(msg)
+                                entities_with_errors[
+                                    "errors_in_properties"
+                                ].append(entity.name)
+                            else:
+                                raise ExcelError(msg) from exc
 
             remaining_rows.difference_update(added_rows)
             # Detect infinite loop...
