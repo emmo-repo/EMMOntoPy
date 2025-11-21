@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.10.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.10.1) (2025-11-21)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.10.0...v0.10.1)
+
+**Merged pull requests:**
+
+- Remove cython dep [\#891](https://github.com/emmo-repo/EMMOntoPy/pull/891) ([francescalb](https://github.com/francescalb))
+
 ## [v0.10.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.10.0) (2025-11-20)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.8.1...v0.10.0)
