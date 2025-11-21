@@ -1,5 +1,4 @@
 blessings>=1.7,<2  # core functionality ontology check
-Cython>=0.29.21,<3.2  # core functionality speed
 defusedxml>=0.7.1,<1  # core functionality parsing
 Owlready2>=0.28,!=0.32,!=0.34,<0.49  # core functionality ontology
 packaging>=21.0,<26
