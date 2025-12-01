@@ -153,7 +153,17 @@ Extra python packages needed are found in requirements_excel.txt.
 pip install EMMOntoPy[ontodoc] # extra python packages needed.
 ```
 
-Extra python packages needed are gound in requirements_ontodoc.txt.
+Extra python packages needed are found in requirements_ontodoc.txt.
+
+- Extra efficiency
+
+EMMOntPy builds on Owlready2 which has bult in extra efficiency with the optional package Cython.
+This can be installed separately with:
+
+```console
+pip install Cython
+```
+
 
 
 
