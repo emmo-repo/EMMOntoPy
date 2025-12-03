@@ -1,5 +1,5 @@
 mike~=2.1
 mkdocs~=1.6
 mkdocs-awesome-pages-plugin~=2.10
-mkdocs-material~=9.6
+mkdocs-material~=9.7
 mkdocstrings[python-legacy]~=0.26.2
