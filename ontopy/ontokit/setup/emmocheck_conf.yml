@@ -1,0 +1,66 @@
+# Configurations used when running emmocheck from the ci_emmocheck workflow
+
+test_namespace:
+  exceptions:
+    - manufacturing.EngineeredMaterial
+
+test_quantity_dimension:
+  exceptions:
+    - emmo.ModelledQuantitativeProperty
+    - emmo.MeasuredQuantitativeProperty
+    - emmo.ConventionalQuantitativeProperty
+    - emmo.QuantitativeProperty
+    - emmo.Quantity
+    - emmo.OrdinalQuantity
+    - emmo.BaseQuantity
+    - emmo.PhysicalConstant
+    - emmo.PhysicalQuantity
+    - emmo.ExactConstant
+    - emmo.MeasuredConstant
+    - emmo.DerivedQuantity
+    - emmo.ISQBaseQuantity
+    - emmo.InternationalSystemOfQuantity
+    - emmo.ISQDerivedQuantity
+    - emmo.SIExactConstant
+    - microstructure.PhysicalField
+    - microstructure.PhysicalScalarField
+    - microstructure.PhysicalDiscretisedField
+    - microstructure.VoxelField
+    - microstructure.PixelField
+    - microstructure.PhysicalTensorField
+    - microstructure.PhysicalVectorField
+    - microstructure.ConcentrationField
+    - microstructure.AverageQuantity
+    - microstructure.ReferenceFrame
+    - microstructure.GlobalReferenceFrame
+    - microstructure.LocalReferenceFrame
+    - microstructure.GeneralisedDensity
+    - microstructure.LengthDensity  # should not be ignored!!!
+    - microstructure.Orientation  # does this have a unit? LengthFractionUnit?
+    - microstructure.OrientationDistribution
+    - microstructure.StatisticalQuantity
+    - microstructure.MicrostructureQuantity
+
+test_unit_dimension:
+  exceptions:
+    - emmo.MultipleUnit
+    - emmo.SubMultipleUnit
+    - emmo.OffSystemUnit
+    - emmo.PrefixedUnit
+    - emmo.NonPrefixedUnit
+    - emmo.SpecialUnit
+    - emmo.DerivedUnit
+    - emmo.BaseUnit
+    - emmo.UnitSymbol
+    - emmo.SICoherentDerivedUnit
+    - emmo.SINonCoherentDerivedUnit
+    - emmo.SISpecialUnit
+    - emmo.SICoherentUnit
+    - emmo.SIPrefixedUnit
+    - emmo.SIBaseUnit
+    - emmo.SIUnitSymbol
+    - emmo.SIUnit
+
+test_description:
+  exceptions:
+    - electrochemistry.Electrolyte

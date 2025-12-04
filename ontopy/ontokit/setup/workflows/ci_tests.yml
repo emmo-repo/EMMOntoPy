@@ -1,0 +1,28 @@
+name: CI tests
+on: [push]
+
+env:
+  ONTOLOGY_NAME: $ONTOLOGY_NAME
+
+jobs:
+  ci_testing:
+    concurrency: ci-${{ github.ref }}  # Recommended if you intend to make multiple deployments in quick succession.
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.11
+
+    - name: Install EMMOntoPy
+      run: |
+        pip install --upgrade pip
+        pip install EMMOntoPy
+
+    - name: Test
+      run: |
+        emmocheck --configfile=.github/emmocheck_conf.yml ${ONTOLOGY_NAME}.ttl
