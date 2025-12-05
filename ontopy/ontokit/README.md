@@ -1,10 +1,10 @@
 # Implementation notes for the Ontology Toolkit (ontokit)
-This sub-directory include python modules implementing ontokit tool.
+This sub-directory includes python modules implementing the ontokit tool.
 
 The main tool is implemented in `tools/ontokit`. It simply defines the
 general options and imports the arguments from each sub-command.
 
-Each sub-command will be implemented its own module. These sub-command
+Each sub-command will be implemented in its own module. These sub-command
 modules should at least define two functions (with `<subcmd>` replaced
 with the name of the sub-command):
 
