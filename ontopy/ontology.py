@@ -998,7 +998,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         if recursive:
             layout = directory_layout(self)
             if filename:
-                layout[self] = file.rstrip(f".{fmt}")
+                layout[self] = Path(file).name.rstrip(f".{fmt}")
+
             # Update path to where the ontology is saved
             # Note that filename should include format when given
             returnpath = Path(dir) / f"{layout[self]}.{fmt}"
