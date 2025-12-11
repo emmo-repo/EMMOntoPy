@@ -3467,10 +3467,13 @@ annotation referring to the old IRI.</p>
     <span class="n">exactMatch</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>  <span class="c1"># pylint:disable=invalid-name</span>
         <span class="s2">&quot;http://www.w3.org/2004/02/skos/core#exactMatch&quot;</span>
     <span class="p">)</span>
+    <span class="n">anyURI</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>  <span class="c1"># pylint:disable=invalid-name</span>
+        <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#anyURI&quot;</span>
+    <span class="p">)</span>
     <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_entities</span><span class="p">():</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">annotation</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">annotation</span><span class="p">):</span>
             <span class="n">onto</span><span class="o">.</span><span class="n">_add_data_triple_spod</span><span class="p">(</span>
-                <span class="n">entity</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">exactMatch</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">entity</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">exactMatch</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="n">anyURI</span>
             <span class="p">)</span>
             <span class="n">entityname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">annotation</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
