@@ -219,7 +219,7 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/), specifically:
 [pdfLaTeX]: https://www.latex-project.org/
 [graphviz_python]: https://pypi.org/project/graphviz
 [PyYAML]: https://pypi.org/project/PyYAML/
-[blessings]: https://pypi.org/project/blessings/
+[blessed]: https://pypi.org/project/blessed/
 [Pygments]: https://pypi.org/project/Pygments/
 [rdflib]: https://pypi.org/project/rdflib/
 [FaCT++]: http://owl.cs.manchester.ac.uk/tools/fact/
