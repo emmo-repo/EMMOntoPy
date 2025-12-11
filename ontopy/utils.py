@@ -748,10 +748,13 @@ def rename_iris(onto, annotation="prefLabel"):
     exactMatch = onto._abbreviate(  # pylint:disable=invalid-name
         "http://www.w3.org/2004/02/skos/core#exactMatch"
     )
+    anyURI = onto._abbreviate(  # pylint:disable=invalid-name
+        "http://www.w3.org/2001/XMLSchema#anyURI"
+    )
     for entity in onto.get_entities():
         if hasattr(entity, annotation) and getattr(entity, annotation):
             onto._add_data_triple_spod(
-                entity.storid, exactMatch, entity.iri, ""
+                entity.storid, exactMatch, entity.iri, anyURI
             )
             entityname = str(entity.name)
             name = getattr(entity, annotation).first()
