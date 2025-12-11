@@ -1,4 +1,4 @@
-blessings>=1.7,<2  # core functionality ontology check
+blessed>=1.17  # core functionality ontology check
 defusedxml>=0.7.1,<1  # core functionality parsing
 Owlready2>=0.28,!=0.32,!=0.34,<0.50  # core functionality ontology
 packaging>=21.0,<26
