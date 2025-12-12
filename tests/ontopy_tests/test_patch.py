@@ -17,7 +17,9 @@ def test_get_by_label_onto() -> None:
     thisdir = Path(__file__).resolve().parent
 
     emmopath = thisdir / ".." / "testonto" / "emmo" / "emmo-squashed.ttl"
-    emmo = get_ontology().load()
+
+    emmo = get_ontology(emmopath).load()
+
     assert str(emmo.Atom.get_preferred_label()) == "Atom"
 
     assert emmo.Atom.get_parents() == {emmo.MolecularEntity}
