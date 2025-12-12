@@ -12,4 +12,5 @@ path = thisdir / ".." / "testonto" / "testonto.ttl"
 onto = get_ontology(path).load()
 
 emmopath = thisdir / ".." / "testonto" / "emmo" / "emmo-squashed.ttl"
+
 emmo = get_ontology(emmopath).load()
