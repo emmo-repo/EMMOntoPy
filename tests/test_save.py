@@ -152,9 +152,8 @@ def test_save_and_copy_emmo(
 
         os.makedirs(tmpdir, exist_ok=True)
 
-    emmopath = (
-        "https://raw.githubusercontent.com/emmo-repo/EMMO/1.0.0-beta4/emmo.ttl"
-    )
+    repo_dir = Path(__file__).resolve().parent.parent
+    emmopath = repo_dir / "tests" / "testonto" / "emmo" / "emmo.ttl"
 
     emmo = get_ontology(emmopath).load()
 
@@ -169,8 +168,9 @@ def test_save_and_copy_emmo(
         "catalog-v001.xml",
         "disciplines",
         "emmo.ttl",
-        "mereocausality",
-        "multiperspective",
+        "mereocausality.ttl",
+        "contributors.ttl",
+        "reference",
         "perspectives",
     }
 
@@ -179,15 +179,18 @@ def test_save_and_copy_emmo(
         "math.ttl",
         "computerscience.ttl",
         "chemistry.ttl",
-        "unitsextension.ttl",
         "catalog-v001.xml",
         "isq.ttl",
         "periodictable.ttl",
         "metrology.ttl",
-        "siunits.ttl",
         "disciplines.ttl",
         "manufacturing.ttl",
         "models.ttl",
+        "perceptual.ttl",
+        "geometrical.ttl",
+        "units",
+        "sisystem.ttl",
+        "properties.ttl",
     }
 
     # Check that copied ontology is the same as the original
