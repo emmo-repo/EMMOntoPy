@@ -23,6 +23,7 @@ from rdflib.util import guess_format
 from rdflib.plugin import PluginException
 
 import owlready2
+from owlready2.namespace import rdf_type, owl_imports, owl_ontology
 
 from ontopy.exceptions import (
     NoSuchLabelError,
@@ -765,6 +766,22 @@ def rename_iris(onto, annotation="prefLabel"):
                     raise ValueError(
                         f"cannot set name of {entityname} to '{name}')"
                     ) from exc
+
+
+def rename_ontology(onto, regex, repl):
+    """Rename all ontologies matching `regex`."""
+    versionIRI = "http://www.w3.org/2002/07/owl#versionIRI"
+    ontologies = [onto] + onto.get_imported_ontoloties(recursive=True)
+    for ontology in ontologies:
+        if re.match(regex, ontology.base_iri):
+            newname = re.sub(regex, repl, ontology.base_iri)
+            ontology.base_iri = newname
+
+            if versionIRI in ontology.metadata and re.match(
+                regex, ontology.metadata.versionIRI
+            ):
+                newiri = re.sub(regex, repl, ontology.metadata.versionIRI)
+                ontology.metadata.versionIRI = newiri
 
 
 def normalise_url(url):
