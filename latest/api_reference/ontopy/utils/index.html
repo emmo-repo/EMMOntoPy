@@ -2647,28 +2647,33 @@ local file names</p></td>
   <tbody>
       <tr>
         <td><code>onto</code></td>
-        <td></td>
+        <td><code>Ontology</code></td>
         <td><p>Ontology to work on.</p></td>
         <td><em>required</em></td>
       </tr>
       <tr>
         <td><code>src</code></td>
-        <td></td>
+        <td><code>str</code></td>
         <td><p>Name of source annotation.</p></td>
         <td><em>required</em></td>
       </tr>
       <tr>
         <td><code>dst</code></td>
-        <td></td>
+        <td><code>str</code></td>
         <td><p>Name or IRI of destination annotation.  Use IRI if the
 destination annotation is not already in the ontology.</p></td>
         <td><em>required</em></td>
       </tr>
   </tbody>
 </table>
+<p><strong>Examples:</strong></p>
+    <p>copy_annotation(
+    onto, "elucidation", "http://www.w3.org/2000/01/rdf-schema#comment"
+)</p>
+
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">copy_annotation</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">copy_annotation</span><span class="p">(</span><span class="n">onto</span><span class="p">:</span> <span class="s2">&quot;Ontology&quot;</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;In all classes and properties in `onto`, copy annotation `src` to `dst`.</span>
 
 <span class="sd">    Arguments:</span>
@@ -2676,6 +2681,12 @@ destination annotation is not already in the ontology.</p></td>
 <span class="sd">        src: Name of source annotation.</span>
 <span class="sd">        dst: Name or IRI of destination annotation.  Use IRI if the</span>
 <span class="sd">            destination annotation is not already in the ontology.</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">        copy_annotation(</span>
+<span class="sd">            onto, &quot;elucidation&quot;, &quot;http://www.w3.org/2000/01/rdf-schema#comment&quot;</span>
+<span class="sd">        )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">src</span><span class="p">]:</span>
         <span class="n">src</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">src</span><span class="p">]</span>
