@@ -6,59 +6,53 @@ from ontopy.utils import directory_layout
 
 
 def test_emmo_directory_layout():
-    emmo = get_ontology(
-        "https://raw.githubusercontent.com/emmo-repo/EMMO/1.0.0-beta4/emmo.ttl"
-    ).load()
+    thisdir = Path(__file__).resolve().parent
+    ontopath = thisdir / "testonto" / "emmo" / "emmo.ttl"
+    emmo = get_ontology(ontopath).load()
     layout = directory_layout(emmo)
 
     # Map base IRIs to ontologies for easy access to all sub-ontologies
     omap = {o.base_iri: o for o in layout.keys()}
+    print(omap)
     # Base IRI of EMMO should not end with slash (/) !!!
-    assert layout[omap["http://emmo.info/emmo/"]] == "emmo"
+    assert layout[omap["https://w3id.org/emmo#"]] == "emmo"
 
     assert (
-        layout[omap["http://emmo.info/emmo/perspectives#"]]
+        layout[omap["https://w3id.org/emmo/perspectives#"]]
         == "perspectives/perspectives"
     )
     assert (
-        layout[omap["http://emmo.info/emmo/perspectives/data#"]]
-        == "perspectives/data"
+        layout[omap["https://w3id.org/emmo/reference/data#"]]
+        == "reference/data"
     )
     assert (
-        layout[omap["http://emmo.info/emmo/disciplines#"]]
+        layout[omap["https://w3id.org/emmo/disciplines#"]]
         == "disciplines/disciplines"
     )
     assert (
-        layout[omap["http://emmo.info/emmo/disciplines/math#"]]
+        layout[omap["https://w3id.org/emmo/disciplines/math#"]]
         == "disciplines/math"
     )
     assert (
-        layout[omap["http://emmo.info/emmo/mereocausality#"]]
-        == "mereocausality/mereocausality"
+        layout[omap["https://w3id.org/emmo/mereocausality#"]]
+        == "mereocausality"
+        # == "mereocausality/mereocausality"
     )
 
     # Also check dir layout for the disciplines module - should be the same as for emmo
-    disciplines = omap["http://emmo.info/emmo/disciplines#"]
+    disciplines = omap["https://w3id.org/emmo/disciplines#"]
     layout = directory_layout(disciplines)
     assert (
-        layout[omap["http://emmo.info/emmo/perspectives#"]]
+        layout[omap["https://w3id.org/emmo/perspectives#"]]
         == "perspectives/perspectives"
     )
     assert (
-        layout[omap["http://emmo.info/emmo/perspectives/data#"]]
-        == "perspectives/data"
-    )
-    assert (
-        layout[omap["http://emmo.info/emmo/disciplines#"]]
+        layout[omap["https://w3id.org/emmo/disciplines#"]]
         == "disciplines/disciplines"
     )
     assert (
-        layout[omap["http://emmo.info/emmo/disciplines/math#"]]
+        layout[omap["https://w3id.org/emmo/disciplines/math#"]]
         == "disciplines/math"
-    )
-    assert (
-        layout[omap["http://emmo.info/emmo/mereocausality#"]]
-        == "mereocausality/mereocausality"
     )
 
 

@@ -191,7 +191,7 @@ def main(argv: list = None):
         action="store_true",
         help=(
             "Whether to annotate all entities with the base IRI of the source "
-            "ontology using `dcterms:source` relations.  This is contextual "
+            "ontology using `rdfs:isDefinedBy` relations.  This is contextual "
             "information that is otherwise lost when ontologies are inferred "
             "and/or squashed."
         ),
@@ -274,7 +274,7 @@ def main(argv: list = None):
         if args.iri:
             onto.iri = args.iri
 
-        if args.base_iri:
+        if args.base_iri and args.base_iri != onto.base_iri:
             onto.base_iri = args.base_iri
 
         if args.annotate_source:

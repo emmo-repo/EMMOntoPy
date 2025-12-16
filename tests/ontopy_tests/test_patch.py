@@ -9,9 +9,17 @@ from owlready2 import owl, Inverse
 
 from utilities import setassert
 
+from pathlib import Path
 
-def test_get_by_label_onto(emmo: "Ontology") -> None:
+
+def test_get_by_label_onto() -> None:
     # Test some ThingClass extensions implemented in patch.py
+    thisdir = Path(__file__).resolve().parent
+
+    emmopath = thisdir / ".." / "testonto" / "emmo" / "emmo-squashed.ttl"
+
+    emmo = get_ontology(emmopath).load()
+
     assert str(emmo.Atom.get_preferred_label()) == "Atom"
 
     assert emmo.Atom.get_parents() == {emmo.MolecularEntity}
@@ -120,11 +128,18 @@ def test_get_indirect_is_a() -> None:
     import re
     from ontopy import get_ontology
 
-    emmo = get_ontology("emmo").load()
+    thisdir = Path(__file__).resolve().parent
+
+    emmopath = thisdir / ".." / "testonto" / "emmo" / "emmo-squashed.ttl"
+
+    emmo = get_ontology(emmopath).load()
+
+    print(emmo.MicroPascal.get_indirect_is_a())
     assert any(
         re.match("^emmo.*\.hasDimensionString.value(.*)$", str(e))
         for e in emmo.MicroPascal.get_indirect_is_a()
     )
+
     assert all(
         re.match("^emmo.*\.Item$", str(e)) is None
         for e in emmo.MicroPascal.get_indirect_is_a()

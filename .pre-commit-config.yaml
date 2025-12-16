@@ -21,6 +21,7 @@ repos:
   hooks:
   - id: black
     name: Blacken
+    exclude: '.*\.ttl$'
 
 - repo: https://github.com/PyCQA/bandit
   rev: '1.9.2'

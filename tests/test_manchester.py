@@ -2,8 +2,13 @@ from ontopy import get_ontology
 from ontopy.manchester import evaluate
 from owlready2 import And, Or, Not, Inverse, locstr
 
+from pathlib import Path
 
-emmo = get_ontology().load()
+
+thisdir = Path(__file__).resolve().parent
+ontopath = thisdir / "testonto" / "emmo" / "emmo-squashed.ttl"
+
+emmo = get_ontology(ontopath).load()
 
 
 def check(s, expected):
@@ -69,7 +74,11 @@ def test_manchester():
         'hasSymbolValue value "hello"@en',
         emmo.hasSymbolValue.value(locstr("hello", "en")),
     )
-    check("emmo:hasPart some emmo:Atom", emmo.hasPart.some(emmo.Atom))
+    # Note that prefixes are now automatically set to name of file
+    check(
+        "emmo-squashed:hasPart some emmo-squashed:Atom",
+        emmo.hasPart.some(emmo.Atom),
+    )
 
 
 if __name__ == "__main__":
