@@ -34,6 +34,8 @@ from ontopy.exceptions import (
 if TYPE_CHECKING:
     from typing import Optional, Union
 
+    from ontopy import Ontology
+
 
 # Preferred language
 PREFERRED_LANGUAGE = "en"
@@ -884,7 +886,7 @@ def directory_layout(onto):
     return layout
 
 
-def copy_annotation(onto, src, dst):
+def copy_annotation(onto: "Ontology", src: str, dst: str):
     """In all classes and properties in `onto`, copy annotation `src` to `dst`.
 
     Arguments:
@@ -892,6 +894,12 @@ def copy_annotation(onto, src, dst):
         src: Name of source annotation.
         dst: Name or IRI of destination annotation.  Use IRI if the
             destination annotation is not already in the ontology.
+
+    Example:
+
+        copy_annotation(
+            onto, "elucidation", "http://www.w3.org/2000/01/rdf-schema#comment"
+        )
     """
     if onto.world[src]:
         src = onto.world[src]
