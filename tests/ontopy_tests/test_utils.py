@@ -39,6 +39,15 @@ def test_rename_iris(testonto: "Ontology"):
     )
 
 
+def test_rename_ontologies():
+    from ontopy import get_ontology
+    from ontopy.testutils import ontodir
+
+    onto = get_ontology(ontodir / "ani.ttl").load()
+
+
+
+
 def test_preferred_language():
     from ontopy import get_ontology
     from ontopy.testutils import ontodir

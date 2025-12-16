@@ -23,7 +23,6 @@ from rdflib.util import guess_format
 from rdflib.plugin import PluginException
 
 import owlready2
-from owlready2.namespace import rdf_type, owl_imports, owl_ontology
 
 from ontopy.exceptions import (
     NoSuchLabelError,
@@ -768,10 +767,18 @@ def rename_iris(onto, annotation="prefLabel"):
                     ) from exc
 
 
-def rename_ontology(onto, regex, repl):
-    """Rename all ontologies matching `regex`."""
+def rename_ontology(onto, regex, repl, recursive=True):
+    """Rename `onto` and all its imported ontologies matching
+    `regex`. The new names are obtained by substituting `regex` with
+    `repl` using `re.sub()`.
+
+    If `recursive` is True all recursively imported ontologies are also renamed.
+    If `recursive` is None, only `onto` is renamed.
+    """
     versionIRI = "http://www.w3.org/2002/07/owl#versionIRI"
-    ontologies = [onto] + onto.get_imported_ontoloties(recursive=True)
+    ontologies = [onto]
+    if recursive is not None:
+        ontologies.extend(onto.get_imported_ontoloties(recursive=recursive))
     for ontology in ontologies:
         if re.match(regex, ontology.base_iri):
             newname = re.sub(regex, repl, ontology.base_iri)
