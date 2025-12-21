@@ -145,19 +145,29 @@ class World(owlready2.World):
         return onto
 
     def get_unabbreviated_triples(
-        self, subject=None, predicate=None, obj=None, blank=None
+        self, subject=None, predicate=None, obj=None, datatype=None, blank=None,
     ):
         # pylint: disable=invalid-name
         """Returns all triples unabbreviated.
-        Imported ontologies not included.
 
-        If any of the `subject`, `predicate` or `obj` arguments are given,
-        only matching triples will be returned.
+        Arguments:
+            subject: Matching subject or None.
+            predicate: Matching predicate or None.
+            obj: Matching object or None.
+            datatype: Matching datatype or None (only for data triples).
+            blank: If given, blank nodes will be represented with `blank`.
 
-        If `blank` is given, it will be used to represent blank nodes.
+        Yields:
+            Matching triples. The objects of data triples are returned with
+            n3 notation.
+
+        Note:
+            This function does not include imported ontologies. But by passing
+            a `World` object as `onto` (e.g. replacing `onto` by `onto.world`)
+            all matching triples in the world will be included.
         """
         return _get_unabbreviated_triples(
-            self, subject=subject, predicate=predicate, obj=obj, blank=blank
+            self, subject=subject, predicate=predicate, obj=obj, datatype=datatype, blank=blank
         )
 
 
@@ -2395,7 +2405,7 @@ def _unabbreviate(
 
 
 def _get_unabbreviated_triples(
-    onto, subject=None, predicate=None, obj=None, datatype=None
+    onto, subject=None, predicate=None, obj=None, datatype=None, blank=None
 ):
     """Help function returning all matching triples unabbreviated.
 
@@ -2404,6 +2414,7 @@ def _get_unabbreviated_triples(
         predicate: Matching predicate or None.
         obj: Matching object or None.
         datatype: Matching datatype or None (only for data triples).
+        blank: If given, blank nodes will be represented with `blank`.
 
     Yields:
         Matching triples. The objects of data triples are returned with
@@ -2441,15 +2452,15 @@ def _get_unabbreviated_triples(
             o = onto._abbreviate(obj, create_if_missing=False)
         for s, p, o in onto._get_obj_triples_spo_spo(s, p, o):
             yield (
-                _unabbreviate(onto, s),
-                _unabbreviate(onto, p),
-                _unabbreviate(onto, o),
+                _unabbreviate(onto, s, blank=blank),
+                _unabbreviate(onto, p, blank=blank),
+                _unabbreviate(onto, o, blank=blank),
             )
 
     for s, p, o, d in onto._get_data_triples_spod_spod(s, p, obj, d):
         yield (
-            _unabbreviate(onto, s),
-            _unabbreviate(onto, p),
+            _unabbreviate(onto, s, blank=blank),
+            _unabbreviate(onto, p, blank=blank),
             (
                 f'"{o}"{d}'
                 if isinstance(d, str)
