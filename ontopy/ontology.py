@@ -1828,26 +1828,23 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         _, _, version_info = tokens[0]
         return version_info.split("^^")[0].strip('"')
 
-    def set_version(self, version=None, version_iri=None):
+    def set_version(self, version=None, version_iri=None, set_priorVersion=True, set_versionInfo=True):
         """Assign version to ontology by asigning owl:versionIRI.
 
         If `version` but not `version_iri` is provided, the version
         IRI will be the combination of `base_iri` and `version`.
+
+        If `set_priorVersion` is true, `owl:priorVersion` will also be set
+        to the current version.
+
+        If `set_versionInfo` is true, `owl:versionInfo` will also be set to
+        the new version.
         """
-        _version_iri = "http://www.w3.org/2002/07/owl#versionIRI"
-        version_iri_storid = self.world._abbreviate(_version_iri)
-        if self._has_obj_triple_spo(  # pylint: disable=unexpected-keyword-arg
-            # For some reason _has_obj_triples_spo exists in both
-            # owlready2.namespace.Namespace (with arguments subject/predicate)
-            # and in owlready2.triplelite._GraphManager (with arguments s/p)
-            # owlready2.Ontology inherits from Namespace directly
-            # and pylint checks that.
-            # It actually accesses the one in triplelite.
-            # subject=self.storid, predicate=version_iri_storid
-            s=self.storid,
-            p=version_iri_storid,
-        ):
-            self._del_obj_triple_spo(s=self.storid, p=version_iri_storid)
+        _versionIRI = "http://www.w3.org/2002/07/owl#versionIRI"
+        versionIRI = self._abbreviate(_versionIRI)
+        _string = "http://www.w3.org/2001/XMLSchema#string"
+        string = self._abbreviate(_string)
+        oldver = get_version()
 
         if not version_iri:
             if not version:
@@ -1857,11 +1854,25 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             head, tail = self.base_iri.rstrip("#/").rsplit("/", 1)
             version_iri = "/".join([head, version, tail])
 
-        self._add_obj_triple_spo(
+        self._del_obj_triple_spo(s=self.storid, p=versionIRI)
+        self._set_obj_triple_spo(
             s=self.storid,
-            p=self.world._abbreviate(_version_iri),
+            p=versionIRI,
             o=self.world._abbreviate(version_iri),
         )
+
+        if set_priorVersion and oldver:
+            _priorVersion = "http://www.w3.org/2002/07/owl#priorVersion"
+            priorVersion = self._abbreviate(_priorVersion)
+            self._del_data_triple_spod(s=self.storid, p=priorVersion)
+            self._set_data_triple_spod(s=self.storid, p=priorVersion, o=oldver, d=string)
+
+        if set_versionInfo:
+            _versionInfo = "http://www.w3.org/2002/07/owl#versionInfo"
+            versionInfo = self._abbreviate(_versionInfo)
+            newver = get_version()
+            self._del_obj_triple_sto(s=self.storid, p=versionInfo)
+            self._add_obj_triple_sto(s=self.storid, p=versionInfo, o=newver, d=string)
 
     def get_graph(self, **kwargs):
         """Returns a new graph object.  See  emmo.graph.OntoGraph.
@@ -2384,32 +2395,85 @@ def _unabbreviate(
 
 
 def _get_unabbreviated_triples(
-    onto, subject=None, predicate=None, obj=None, blank=None
+    onto, subject=None, predicate=None, obj=None, datatype=None
 ):
     """Help function returning all matching triples unabbreviated.
-    Does not include imported ontologies.
 
-    If `blank` is given, it will be used to represent blank nodes.
+    Arguments:
+        subject: Matching subject or None.
+        predicate: Matching predicate or None.
+        obj: Matching object or None.
+        datatype: Matching datatype or None (only for data triples).
+
+    Yields:
+        Matching triples. The objects of data triples are returned with
+        n3 notation.
+
+    Note:
+        This function does not include imported ontologies. But by passing
+        a `World` object as `onto` (e.g. replacing `onto` by `onto.world`)
+        all matching triples in the world will be included.
+
     """
     # pylint: disable=invalid-name
-    abb = (
-        None if subject is None else onto._abbreviate(subject),
-        None if predicate is None else onto._abbreviate(predicate),
-        None if obj is None else onto._abbreviate(obj),
-    )
-    for s, p, o in onto._get_obj_triples_spo_spo(*abb):
+    s = p = o = d = None
+
+    if subject:
+        s = onto._abbreviate(subject, create_if_missing=False)
+        if not s:
+            return
+
+    if predicate:
+        p = onto._abbreviate(predicate, create_if_missing=False)
+        if not p:
+            return
+
+    if datatype:
+        if datatype.startswith("@"):
+            d = datatype
+        else:
+            d = onto._abbreviate(datatype, create_if_missing=False)
+            if not d:
+                return
+
+    if datatype is None:
+        if obj:
+            o = onto._abbreviate(obj, create_if_missing=False)
+        for s, p, o in onto._get_obj_triples_spo_spo(s, p, o):
+            yield (
+                _unabbreviate(onto, s),
+                _unabbreviate(onto, p),
+                _unabbreviate(onto, o),
+            )
+
+    for s, p, o, d in onto._get_data_triples_spod_spod(s, p, obj, d):
         yield (
-            _unabbreviate(onto, s, blank=blank),
-            _unabbreviate(onto, p, blank=blank),
-            _unabbreviate(onto, o, blank=blank),
-        )
-    for s, p, o, d in onto._get_data_triples_spod_spod(*abb, d=None):
-        yield (
-            _unabbreviate(onto, s, blank=blank),
-            _unabbreviate(onto, p, blank=blank),
+            _unabbreviate(onto, s),
+            _unabbreviate(onto, p),
             (
                 f'"{o}"{d}'
                 if isinstance(d, str)
                 else f'"{o}"^^{_unabbreviate(onto, d)}' if d else o
             ),
         )
+
+
+def _has_unabbreviated_triple(
+    onto: "Ontology",
+    subject: "Optional[str]" = None,
+    predicate: "Optional[str]" = None,
+    obj: "Optional[str]" = None,
+    datatype: "Optional[str]" = None,
+) -> bool:
+    """Returns true if ontology `onto` contains the given (unabbreviated) triple.
+
+    Same arguments as `_get_unabbreviated_triples()`.
+    """
+    try:
+        next(
+            _get_unabbreviated_triples(onto, subject, predicate, obj, datatype)
+        )
+    except StopIteration:
+        return False
+    else:
+        return True

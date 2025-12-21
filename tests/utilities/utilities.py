@@ -44,7 +44,7 @@ def has_triple(onto, s=None, p=None, o=None) -> bool:
     None may be used as a wildcard for of `s`, `p` or `o`.
     """
     try:
-        return bool(get_triples(onto, s, p, o))
+        return any(get_triples(onto, s, p, o))
     except ValueError:
         return False
 
