@@ -59,9 +59,9 @@ def test_prefix():
 
 def test_prefix_emmo() -> None:
     """Test prefix in ontology"""
-    from ontopy.testutils import get_emmo
+    from ontopy.testutils import get_testutils_emmo
 
-    emmo = get_emmo()
+    emmo = get_testutils_emmo()
 
     # Check that the prefix of emmo-inferred becomes emmo
     assert emmo.Atom.namespace.ontology.prefix == "emmo"
@@ -69,7 +69,7 @@ def test_prefix_emmo() -> None:
     assert emmo.get_by_label("emmo:Atom") == emmo.Atom
     assert emmo["emmo:Atom"] == emmo.Atom
 
-    emmo_asserted = get_emmo("emmo")
+    emmo_asserted = get_testutils_emmo("emmo")
     assert emmo_asserted.Atom.namespace.ontology.prefix == "emmo"
     assert (
         emmo_asserted.get_by_label("Atom", prefix="emmo") == emmo_asserted.Atom
@@ -78,9 +78,9 @@ def test_prefix_emmo() -> None:
 
 def test_prefix_emmo_unsquashed() -> None:
     """Test prefix in ontology"""
-    from ontopy.testutils import get_emmo
+    from ontopy.testutils import get_testutils_emmo
 
-    emmo = get_emmo(squashed=False)
+    emmo = get_testutils_emmo(squashed=False)
 
     # Check that the prefix of emmo-inferred becomes emmo
     assert emmo.Atom.namespace.ontology.prefix == "physicalistic"
@@ -88,7 +88,7 @@ def test_prefix_emmo_unsquashed() -> None:
     assert emmo.get_by_label("physicalistic:Atom") == emmo.Atom
     assert emmo["physicalistic:Atom"] == emmo.Atom
 
-    emmo_asserted = get_emmo("emmo")
+    emmo_asserted = get_testutils_emmo("emmo")
     assert emmo_asserted.Atom.namespace.ontology.prefix == "emmo"
     assert (
         emmo_asserted.get_by_label("Atom", prefix="emmo") == emmo_asserted.Atom

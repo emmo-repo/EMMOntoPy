@@ -37,7 +37,7 @@ def get_testonto():
     return get_ontology(ontodir / "testonto.ttl").load()
 
 
-def get_emmo(squashed=True):
+def get_testutils_emmo(squashed=True):
     """Returns emmo ontology from test directory."""
     if squashed:
         return get_ontology(ontodir / "emmo.ttl").load()
