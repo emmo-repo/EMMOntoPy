@@ -28,3 +28,18 @@ def get_tool_module(name):
     module = module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def get_testonto():
+    """Returns test ontology."""
+    from ontopy import get_ontology
+    return get_ontology(ontodir / "testonto.ttl").load()
+
+
+def get_emmo(squashed=True):
+    """Returns emmo ontology from test directory."""
+    from ontopy import get_ontology
+    if squashed:
+        return get_ontology(ontodir / "emmo.ttl").load()
+    else:
+        return get_ontology(ontodir / "emmo" / "emmo.ttl").load()

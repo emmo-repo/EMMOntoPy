@@ -61,6 +61,10 @@ foaf:homepage rdf:type owl:AnnotationProperty .
 
 :testclass rdf:type owl:Class ;
     rdfs:subClassOf owl:Thing ;
+    skos:prefLabel "TestClass"@en .
+
+:testclass2 rdf:type owl:Class ;
+    rdfs:subClassOf owl:Thing ;
     skos:prefLabel "TestClass2"@en .
 
 :testobjectproperty rdf:type owl:ObjectProperty ;
