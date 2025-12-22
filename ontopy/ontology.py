@@ -57,7 +57,7 @@ from ontopy.exceptions import (
 
 
 if TYPE_CHECKING:
-    from typing import Iterator, List, Sequence, Generator
+    from typing import Iterator, List, Sequence, Tuple, Generator
 
 
 # Default annotations to look up
@@ -152,7 +152,7 @@ class World(owlready2.World):
         obj=None,
         datatype=None,
         blank=None,
-    ):
+    ) -> "Iterator[Tuple[str, str, str]]":
         # pylint: disable=too-many-arguments,too-many-positional-arguments
         """Returns all triples unabbreviated.
 
@@ -172,7 +172,7 @@ class World(owlready2.World):
             a `World` object as `onto` (e.g. replacing `onto` by `onto.world`)
             all matching triples in the world will be included.
         """
-        return _get_unabbreviated_triples(
+        _get_unabbreviated_triples(
             self,
             subject=subject,
             predicate=predicate,
