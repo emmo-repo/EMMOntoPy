@@ -4,8 +4,7 @@ from ontopy import get_ontology
 from ontopy.ontology import NoSuchLabelError
 
 
-if 1:
-#def test_classes() -> None:
+def test_classes() -> None:
     """Test that classes are returned from imported ontologies when
     asked for, but not for the whole world
     """
@@ -13,7 +12,6 @@ if 1:
     import owlready2
 
     from ontopy.testutils import ontodir
-
 
     world = ontopy.World()
     testonto = world.get_ontology("http://domain_ontology/new_ontology")
