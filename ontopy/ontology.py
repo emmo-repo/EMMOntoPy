@@ -2450,7 +2450,10 @@ def _get_unabbreviated_triples(
     """
     # pylint: disable=invalid-name
     # pylint: disable=too-many-arguments,too-many-positional-arguments
-    s = p = o = d = None
+    s = None
+    p = None
+    o = None
+    d = None
 
     if subject:
         s = onto._abbreviate(subject, create_if_missing=False)
@@ -2473,11 +2476,11 @@ def _get_unabbreviated_triples(
     if datatype is None:
         if obj:
             o = onto._abbreviate(obj, create_if_missing=False)
-        for s, p, o in onto._get_obj_triples_spo_spo(s, p, o):
+        for s_, p_, o_ in onto._get_obj_triples_spo_spo(s, p, o):
             yield (
-                _unabbreviate(onto, s, blank=blank),
-                _unabbreviate(onto, p, blank=blank),
-                _unabbreviate(onto, o, blank=blank),
+                _unabbreviate(onto, s_, blank=blank),
+                _unabbreviate(onto, p_, blank=blank),
+                _unabbreviate(onto, o_, blank=blank),
             )
 
     for s, p, o, d in onto._get_data_triples_spod_spod(s, p, obj, d):
