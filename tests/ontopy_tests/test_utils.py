@@ -1,4 +1,3 @@
-
 def test_annotate_source():
     from ontopy import get_ontology
     from ontopy.ontology import _has_unabbreviated_triple
@@ -57,7 +56,7 @@ def test_rename_iris():
         "http://emmo.info/models#TestClass",
         "http://www.w3.org/2004/02/skos/core#exactMatch",
         "http://emmo.info/models#testclass",
-        'http://www.w3.org/2001/XMLSchema#anyURI',
+        "http://www.w3.org/2001/XMLSchema#anyURI",
     )
 
 
@@ -81,7 +80,9 @@ def test_rename_ontologies():
         "https://w3id.org/emmo/domain/animal/vertebrates#",
         "https://w3id.org/emmo/domain/mammal#",
     }
-    assert {o.metadata.versionIRI[0] for o in onto.get_imported_ontologies(True)} == {
+    assert {
+        o.metadata.versionIRI[0] for o in onto.get_imported_ontologies(True)
+    } == {
         "https://w3id.org/emmo/domain/animal/0.1",
         "https://w3id.org/emmo/domain/animal/0.1/birds",
         "https://w3id.org/emmo/domain/animal/0.1/vertebrates",
@@ -91,14 +92,18 @@ def test_rename_ontologies():
     rename_ontology(onto, "/emmo/domain/", "/emmo/application/")
     assert onto.base_iri == "https://w3id.org/emmo/application/ani/"
     assert onto.iri == "https://w3id.org/emmo/application/ani"
-    assert onto.metadata.versionIRI == ["https://w3id.org/emmo/application/ani/0.1"]
+    assert onto.metadata.versionIRI == [
+        "https://w3id.org/emmo/application/ani/0.1"
+    ]
     assert {o.base_iri for o in onto.get_imported_ontologies(True)} == {
         "https://w3id.org/emmo/application/animal#",
         "https://w3id.org/emmo/application/animal/birds#",
         "https://w3id.org/emmo/application/animal/vertebrates#",
         "https://w3id.org/emmo/application/mammal#",
     }
-    assert {o.metadata.versionIRI[0] for o in onto.get_imported_ontologies(True)} == {
+    assert {
+        o.metadata.versionIRI[0] for o in onto.get_imported_ontologies(True)
+    } == {
         "https://w3id.org/emmo/application/animal/0.1",
         "https://w3id.org/emmo/application/animal/0.1/birds",
         "https://w3id.org/emmo/application/animal/0.1/vertebrates",
@@ -108,14 +113,18 @@ def test_rename_ontologies():
     rename_ontology(onto, "/0.1", "/0.2")
     assert onto.base_iri == "https://w3id.org/emmo/application/ani/"
     assert onto.iri == "https://w3id.org/emmo/application/ani"
-    assert onto.metadata.versionIRI == ["https://w3id.org/emmo/application/ani/0.2"]
+    assert onto.metadata.versionIRI == [
+        "https://w3id.org/emmo/application/ani/0.2"
+    ]
     assert {o.base_iri for o in onto.get_imported_ontologies(True)} == {
         "https://w3id.org/emmo/application/animal#",
         "https://w3id.org/emmo/application/animal/birds#",
         "https://w3id.org/emmo/application/animal/vertebrates#",
         "https://w3id.org/emmo/application/mammal#",
     }
-    assert {o.metadata.versionIRI[0] for o in onto.get_imported_ontologies(True)} == {
+    assert {
+        o.metadata.versionIRI[0] for o in onto.get_imported_ontologies(True)
+    } == {
         "https://w3id.org/emmo/application/animal/0.2",
         "https://w3id.org/emmo/application/animal/0.2/birds",
         "https://w3id.org/emmo/application/animal/0.2/vertebrates",

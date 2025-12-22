@@ -4,6 +4,7 @@
 If desirable some of these additions may be moved back into owlready2.
 """
 # pylint: disable=too-many-lines,fixme,arguments-differ,protected-access
+# pylint: disable=disable=too-many-arguments,too-many-positional-arguments
 from typing import TYPE_CHECKING, Optional, Union
 import os
 import fnmatch
@@ -145,9 +146,14 @@ class World(owlready2.World):
         return onto
 
     def get_unabbreviated_triples(
-        self, subject=None, predicate=None, obj=None, datatype=None, blank=None,
+        self,
+        subject=None,
+        predicate=None,
+        obj=None,
+        datatype=None,
+        blank=None,
     ):
-        # pylint: disable=invalid-name
+        # pylint: disable=too-many-arguments,too-many-positional-arguments
         """Returns all triples unabbreviated.
 
         Arguments:
@@ -167,7 +173,12 @@ class World(owlready2.World):
             all matching triples in the world will be included.
         """
         return _get_unabbreviated_triples(
-            self, subject=subject, predicate=predicate, obj=obj, datatype=datatype, blank=blank
+            self,
+            subject=subject,
+            predicate=predicate,
+            obj=obj,
+            datatype=datatype,
+            blank=blank,
         )
 
 
@@ -1838,7 +1849,13 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         _, _, version_info = tokens[0]
         return version_info.split("^^")[0].strip('"')
 
-    def set_version(self, version=None, version_iri=None, set_priorVersion=True, set_versionInfo=True):
+    def set_version(
+        self,
+        version=None,
+        version_iri=None,
+        set_priorVersion=True,  # pylint: disable=invalid-name
+        set_versionInfo=True,  # pylint: disable=invalid-name
+    ):
         """Assign version to ontology by asigning owl:versionIRI.
 
         If `version` but not `version_iri` is provided, the version
@@ -1850,11 +1867,12 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         If `set_versionInfo` is true, `owl:versionInfo` will also be set to
         the new version.
         """
+        # pylint: disable=invalid-name,too-many-locals
         _versionIRI = "http://www.w3.org/2002/07/owl#versionIRI"
         versionIRI = self._abbreviate(_versionIRI)
         _string = "http://www.w3.org/2001/XMLSchema#string"
         string = self._abbreviate(_string)
-        oldver = get_version()
+        oldver = self.get_version()
 
         if not version_iri:
             if not version:
@@ -1875,14 +1893,18 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             _priorVersion = "http://www.w3.org/2002/07/owl#priorVersion"
             priorVersion = self._abbreviate(_priorVersion)
             self._del_data_triple_spod(s=self.storid, p=priorVersion)
-            self._set_data_triple_spod(s=self.storid, p=priorVersion, o=oldver, d=string)
+            self._set_data_triple_spod(
+                s=self.storid, p=priorVersion, o=oldver, d=string
+            )
 
         if set_versionInfo:
             _versionInfo = "http://www.w3.org/2002/07/owl#versionInfo"
             versionInfo = self._abbreviate(_versionInfo)
-            newver = get_version()
+            newver = self.get_version()
             self._del_obj_triple_sto(s=self.storid, p=versionInfo)
-            self._add_obj_triple_sto(s=self.storid, p=versionInfo, o=newver, d=string)
+            self._add_obj_triple_sto(
+                s=self.storid, p=versionInfo, o=newver, d=string
+            )
 
     def get_graph(self, **kwargs):
         """Returns a new graph object.  See  emmo.graph.OntoGraph.
@@ -2427,6 +2449,7 @@ def _get_unabbreviated_triples(
 
     """
     # pylint: disable=invalid-name
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     s = p = o = d = None
 
     if subject:
@@ -2476,7 +2499,8 @@ def _has_unabbreviated_triple(
     obj: "Optional[str]" = None,
     datatype: "Optional[str]" = None,
 ) -> bool:
-    """Returns true if ontology `onto` contains the given (unabbreviated) triple.
+    """Returns true if ontology `onto` contains the given (unabbreviated)
+    triple.
 
     Same arguments as `_get_unabbreviated_triples()`.
     """
@@ -2486,5 +2510,4 @@ def _has_unabbreviated_triple(
         )
     except StopIteration:
         return False
-    else:
-        return True
+    return True

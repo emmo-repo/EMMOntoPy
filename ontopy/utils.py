@@ -795,8 +795,9 @@ def rename_ontology(onto, regex, repl, recursive=True):
         if versionIRI in ontology.metadata and pattern.search(
             ontology.metadata.versionIRI[0]
         ):
-            # Since versionIRI may not be defined as an owlready2 object property
-            # it can only be changed via low-level triple manipulations
+            # Since versionIRI may not be defined as an owlready2 object
+            # property it can only be changed via low-level triple
+            # manipulations
             newiri = pattern.sub(repl, ontology.metadata.versionIRI[0])
             pred = onto._abbreviate(versionIRI)
             storid = onto._abbreviate(newiri)
