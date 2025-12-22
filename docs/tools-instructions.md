@@ -443,7 +443,7 @@ ontoconvert --recursive emmo.ttl owl/emmo.owl
 The following will create a squashed and renamed copy of an ontology (with "/myonto/1.2.3" replaced by "/myonto/1.3.0"):
 
 ```console
-ontoconvert --squash --rename-ontology "|/myonto/1.2.3|/myonto/1.3.0" myonto.ttl myonto-squashed.ttl
+ontoconvert --squash --rename-ontology "|/myonto/1.2.3|/myonto/1.3.0|" myonto.ttl myonto-squashed.ttl
 ```
 
 
