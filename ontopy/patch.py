@@ -398,7 +398,7 @@ def _getname(iri):
 
 
 def __metadata_getattr__(self, attr):
-    """Patched __getattr__() mathod."""
+    """Patched __getattr__() method."""
     try:
         return metadata__getattr__save(self, attr)
     except AttributeError:
