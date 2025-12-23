@@ -771,7 +771,7 @@ def rename_iris(onto, annotation="prefLabel"):
 
 
 def rename_ontology(onto, regex, repl, recursive=True):
-    """Rename `onto` and all its imported ontologies matching
+    """Rename `onto` matching
     `regex`. The new names are obtained by substituting `regex` with
     `repl` using `re.sub()`.
 
