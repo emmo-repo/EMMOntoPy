@@ -2670,7 +2670,7 @@ The figure below is generated with the last command in the list above.
 <p>See <a href="../examples/emmodoc/">examples/emmodoc/README.md</a> for how this tool is used to generate the <a href="https://emmo-repo.github.io/latest/emmo.html">html</a> and <a href="https://emmo-repo.github.io/latest/emmo.pdf">pdf</a> documentation of EMMO itself.</p>
 <hr />
 <h2 id="ontoconvert"><code>ontoconvert</code><a class="headerlink" href="#ontoconvert" title="Permanent link">&para;</a></h2>
-<p>Tool for converting between different ontology formats.</p>
+<p>Tool for converting between different ontology formats and annotating ontologies.</p>
 <h3 id="usage_4">Usage<a class="headerlink" href="#usage_4" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="go">ontoconvert [options] inputfile outputfile</span>
 </code></pre></div>
@@ -2680,24 +2680,79 @@ The figure below is generated with the last command in the list above.
 </ul>
 <h3 id="options_4">Options<a class="headerlink" href="#options_4" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="go">positional arguments:</span>
-<span class="go">  INPUTFILE              Name of inputfile.</span>
-<span class="go">  OUTPUTFILE             Name og output file.</span>
+<span class="go">  input                 IRI/file to OWL source.</span>
+<span class="go">  output                Output file name.</span>
 
-<span class="go">    optional arguments:</span>
-<span class="go">      -h, --help            show this help message and exit</span>
-<span class="go">      --input-format, -f INPUT_FORMAT</span>
-<span class="go">                            Inputformat. Default is to infer from input.</span>
-<span class="go">      --output-format, -F OUTPUT_FORMAT</span>
-<span class="go">                            Default is to infer from output.</span>
-<span class="go">      --no-catalog, -n      Do not read catalog even if it exists.</span>
-<span class="go">      --inferred, -i        Add additional relations inferred by the FaCT++ reasoner to the converted ontology. Implies --squash.</span>
-<span class="go">      --base-iri BASE_IRI, -b BASE_IRI</span>
-<span class="go">                            Base iri of inferred ontology. The default is the base</span>
-<span class="go">                            iri of the input ontology with &quot;-inferred&quot; appended to</span>
-<span class="go">                            it. Used together with --inferred.</span>
-
-<span class="go">      --recursive, -r       The output is written to the directories matching the input. This requires Protege catalog files to be present.</span>
-<span class="go">      --squash, -s          Squash imported ontologies into a single output file.</span>
+<span class="go">options:</span>
+<span class="go">  -h, --help            show this help message and exit</span>
+<span class="go">  --input-format INPUT_FORMAT, -f INPUT_FORMAT</span>
+<span class="go">                        Input format (default is to infer from input). Available formats: &quot;xml&quot;</span>
+<span class="go">                        (rdf/xml), &quot;n3&quot;, &quot;nt&quot;, &quot;trix&quot;, &quot;rdfa&quot;</span>
+<span class="go">  --output-format OUTPUT_FORMAT, -F OUTPUT_FORMAT</span>
+<span class="go">                        Output format (default is to infer from output. Available formats: &quot;xml&quot;</span>
+<span class="go">                        (rdf/xml), &quot;n3&quot;, &quot;turtle&quot;, &quot;nt&quot;, &quot;pretty-xml&quot;, &quot;trix&quot;</span>
+<span class="go">  --output-dir OUTPUT_DIR, -d OUTPUT_DIR</span>
+<span class="go">                        Output directory. If `output` is a relative path, it will be relative to</span>
+<span class="go">                        this directory.</span>
+<span class="go">  --overwrite, -w       Whether to remove `output` if it already exists. The default is to append</span>
+<span class="go">                        to it.</span>
+<span class="go">  --copy-annotation FROM--&gt;TO, -c FROM--&gt;TO</span>
+<span class="go">                        Copy annotation FROM to annotation TO in each class and property in the</span>
+<span class="go">                        ontology. FROM and TO may be given as full IRIs or (if they already exists</span>
+<span class="go">                        as annotations in the ontology) as entity names. This option be given</span>
+<span class="go">                        multiple times.</span>
+<span class="go">  --copy-emmo-annotations, -e</span>
+<span class="go">                        Make a copy of EMMO annotations to plain RDFS for increased</span>
+<span class="go">                        interoperability. Alias for: `--copy-annotation=http://www.w3.org/2004/02/s</span>
+<span class="go">                        kos/core#prefLabel--&gt;http://www.w3.org/2000/01/rdf-schema#label --copy-</span>
+<span class="go">                        annotation=elucidation--&gt;http://www.w3.org/2000/01/rdf-schema#comment`</span>
+<span class="go">                        --copy-annotation=definition--&gt;http://www.w3.org/2000/01/rdf-</span>
+<span class="go">                        schema#comment` --copy-annotation=comment--&gt;http://www.w3.org/2000/01/rdf-</span>
+<span class="go">                        schema#comment`</span>
+<span class="go">  --namespace PREFIX:NAMESPACE, -n PREFIX:NAMESPACE</span>
+<span class="go">                        Additional prefix:namespace pair that will be added to the header of turtle</span>
+<span class="go">                        output. The argument can be used multiple times, once for each added</span>
+<span class="go">                        prefix:namespace pair.</span>
+<span class="go">  --no-catalog, -N      Whether to not read catalog file even if it exists.</span>
+<span class="go">  --reasoner [NAME], --infer [NAME], -i [NAME]</span>
+<span class="go">                        Add additional relations inferred by the reasoner. Supported reasoners are</span>
+<span class="go">                        &quot;HermiT&quot; (default), &quot;Pellet&quot; and &quot;FaCT++&quot;.</span>
+<span class="go">  --no-infer-imported, --no-reason-imported</span>
+<span class="go">                        Do not infer imported ontologies.</span>
+<span class="go">  --java-executable JAVA_EXECUTABLE</span>
+<span class="go">                        Path to Java executable to use. Default is `java`.</span>
+<span class="go">  --java-memory JAVA_MEMORY</span>
+<span class="go">                        Maximum memory allocated to Java in MB. Default is 2000.</span>
+<span class="go">  --iri IRI, -I IRI     IRI of converted ontology.</span>
+<span class="go">  --base-iri BASE_IRI, -b BASE_IRI</span>
+<span class="go">                        Base IRI of converted ontology. The default is the base iri of the input</span>
+<span class="go">                        ontology. This argument can be used to workaround the bug in Owlready2 that</span>
+<span class="go">                        changes the base IRI of the ontology to always end with a slash.</span>
+<span class="go">  --quiet, -q           Don&#39;t print a lot of stuff to stdout during reasoning.</span>
+<span class="go">  --recursive, -r       Whether to also convert imported ontologies recursively using rdflib. The</span>
+<span class="go">                        output is written to a directory structure matching the input. This option</span>
+<span class="go">                        requires Protege catalog files to be present. It is typically combined with</span>
+<span class="go">                        --output-dir.</span>
+<span class="go">  --squash, -s          Whether to also squash imported ontologies into a single output file. When</span>
+<span class="go">                        combining --squash with --recursive, a folder structure of overlapping</span>
+<span class="go">                        single-file ontologies will be generated.</span>
+<span class="go">  --annotate-source, -a</span>
+<span class="go">                        Whether to annotate all entities with the base IRI of the source ontology</span>
+<span class="go">                        using `rdfs:isDefinedBy` relations. This is contextual information that is</span>
+<span class="go">                        otherwise lost when ontologies are inferred and/or squashed.</span>
+<span class="go">  --rename-iris [ANNOTATION], -R [ANNOTATION]</span>
+<span class="go">                        For all entities that have the given annotation (&#39;prefLabel&#39; by default),</span>
+<span class="go">                        change the name of the entity to the value of the annotation. For all</span>
+<span class="go">                        changed entities, an `equivalentTo` annotation is added, referring to the</span>
+<span class="go">                        old name. This option is useful to create a copy of an ontology with more</span>
+<span class="go">                        human readable IRIs.</span>
+<span class="go">  --rename-ontology |REGEX|REPL|</span>
+<span class="go">                        Rename all ontologies matching regular expression `REGEX` to `REPL`, using</span>
+<span class="go">                        the function `re.sub()`. The argument should start and end with the</span>
+<span class="go">                        character used to separate the `REGEX` from the `REPL` strings.</span>
+<span class="go">  --catalog-file [FILENAME], -C [FILENAME]</span>
+<span class="go">                        Whether to write catalog file. Defaults to &quot;catalog-v001.xml&quot;.</span>
+<span class="go">  --append-catalog, -A  Whether to append to (possible) existing catalog file.</span>
 </code></pre></div>
 <h3 id="examples_4">Examples<a class="headerlink" href="#examples_4" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="go">ontoconvert --recursive emmo.ttl owl/emmo.owl</span>
@@ -2710,6 +2765,9 @@ The figure below is generated with the last command in the list above.
 </code></pre></div>
 <p>Since the catalog file will be overwritten in the above example writing output to a separate directory is useful.</p>
 <div class="highlight"><pre><span></span><code><span class="go">ontoconvert --recursive emmo.ttl owl/emmo.owl</span>
+</code></pre></div>
+<p>The following will create a squashed and renamed copy of an ontology (with "/myonto/1.2.3" replaced by "/myonto/1.3.0"):</p>
+<div class="highlight"><pre><span></span><code><span class="go">ontoconvert --squash --rename-ontology &quot;|/myonto/1.2.3|/myonto/1.3.0|&quot; myonto.ttl myonto-squashed.ttl</span>
 </code></pre></div>
 <h3 id="bugs">Bugs<a class="headerlink" href="#bugs" title="Permanent link">&para;</a></h3>
 <p>Since parsing the results from the reasoner is currently broken in Owlready2 (v0.37), a workaround has been added to ontoconvert.

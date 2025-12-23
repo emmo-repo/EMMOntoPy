@@ -1618,6 +1618,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.utils.rename_ontology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rename_ontology()
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.utils.write_catalog" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2009,6 +2020,17 @@
     <span class="md-ellipsis">
       
         rename_iris()
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.rename_ontology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rename_ontology()
       
     </span>
   </a>
@@ -3492,9 +3514,71 @@ annotation referring to the old IRI.</p>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">entity</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
                 <span class="k">except</span> <span class="n">IntegrityError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;cannot set name of </span><span class="si">{</span><span class="n">entityname</span><span class="si">}</span><span class="s2"> to &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
-                    <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
+                    <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">name</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;cannot set name of &#39;</span><span class="si">{</span><span class="n">entityname</span><span class="si">}</span><span class="s2">&#39; to &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
+                        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.rename_ontology" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">rename_ontology</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">repl</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.rename_ontology" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Rename <code>onto</code> matching
+<code>regex</code>. The new names are obtained by substituting <code>regex</code> with
+<code>repl</code> using <code>re.sub()</code>.</p>
+<p>If <code>recursive</code> is True all recursively imported ontologies are also renamed.
+If <code>recursive</code> is None, only <code>onto</code> is renamed.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">rename_ontology</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">repl</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rename `onto` matching</span>
+<span class="sd">    `regex`. The new names are obtained by substituting `regex` with</span>
+<span class="sd">    `repl` using `re.sub()`.</span>
+
+<span class="sd">    If `recursive` is True all recursively imported ontologies are also renamed.</span>
+<span class="sd">    If `recursive` is None, only `onto` is renamed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">versionIRI</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2002/07/owl#versionIRI&quot;</span>
+    <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="n">onto</span><span class="p">]</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">recursive</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ontologies</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">onto</span><span class="o">.</span><span class="n">get_imported_ontologies</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">ontology</span> <span class="ow">in</span> <span class="n">ontologies</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">ontology</span><span class="o">.</span><span class="n">base_iri</span><span class="p">):</span>
+            <span class="n">newiri</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">repl</span><span class="p">,</span> <span class="n">ontology</span><span class="o">.</span><span class="n">base_iri</span><span class="p">)</span>
+            <span class="n">ontology</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">=</span> <span class="n">newiri</span>
+
+        <span class="k">if</span> <span class="n">ontology</span><span class="o">.</span><span class="n">iri</span> <span class="ow">and</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">ontology</span><span class="o">.</span><span class="n">iri</span><span class="p">):</span>
+            <span class="n">newiri</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">repl</span><span class="p">,</span> <span class="n">ontology</span><span class="o">.</span><span class="n">iri</span><span class="p">)</span>
+            <span class="n">ontology</span><span class="o">.</span><span class="n">iri</span> <span class="o">=</span> <span class="n">newiri</span>
+
+        <span class="k">if</span> <span class="n">versionIRI</span> <span class="ow">in</span> <span class="n">ontology</span><span class="o">.</span><span class="n">metadata</span> <span class="ow">and</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="n">ontology</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">versionIRI</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="c1"># Since versionIRI may not be defined as an owlready2 object</span>
+            <span class="c1"># property it can only be changed via low-level triple</span>
+            <span class="c1"># manipulations</span>
+            <span class="n">newiri</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">repl</span><span class="p">,</span> <span class="n">ontology</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">versionIRI</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">pred</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">versionIRI</span><span class="p">)</span>
+            <span class="n">storid</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">newiri</span><span class="p">)</span>
+            <span class="n">ontology</span><span class="o">.</span><span class="n">_del_obj_triple_spo</span><span class="p">(</span><span class="n">ontology</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+            <span class="n">ontology</span><span class="o">.</span><span class="n">_set_obj_triple_spo</span><span class="p">(</span><span class="n">ontology</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">storid</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
