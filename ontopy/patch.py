@@ -355,7 +355,7 @@ def __metadata_contains__(self, name):
 
 
 def __metadata_iter__(self):
-    """Patched __iter__() mathod."""
+    """Patched __iter__() method."""
     return self.keys()
 
 
