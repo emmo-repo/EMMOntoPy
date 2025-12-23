@@ -14,9 +14,9 @@
 <http://emmo.info/testonto> rdf:type owl:Ontology ;
     owl:versionIRI <http://emmo.info/testonto/0.2.0> ;
     owl:imports <http://emmo.info/testonto/0.1.0/models> ;
-	owl:versionInfo "0.2.0" ;
+    owl:versionInfo "0.2.0" ;
     dcterms:abstract "This is the abstract of the testonto."@en ;
-	dcterms:alternative "Testonto_alternative"@en ;
+    dcterms:alternative "Testonto_alternative"@en ;
     dcterms:contributor :SimonClark ;
     dcterms:created "2024-03" ;
     dcterms:creator <https://orcid.org/0000-0001-8869-3718> ,
@@ -62,6 +62,10 @@ foaf:homepage rdf:type owl:AnnotationProperty .
 :testclass rdf:type owl:Class ;
     rdfs:subClassOf owl:Thing ;
     skos:prefLabel "TestClass"@en .
+
+:testclass2 rdf:type owl:Class ;
+    rdfs:subClassOf owl:Thing ;
+    skos:prefLabel "TestClass2"@en .
 
 :testobjectproperty rdf:type owl:ObjectProperty ;
     rdfs:domain :testclass ;

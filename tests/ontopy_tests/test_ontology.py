@@ -42,3 +42,71 @@ def test_find():
     assert m2 in animal.imported_ontologies[0].find(
         "mouse", domain="world", regex=True
     )
+
+
+def test__get_unabbreviated_triples():
+    """Test _get_unabbreviated_triples()."""
+    from ontopy.ontology import _get_unabbreviated_triples
+
+    m = "https://w3id.org/emmo/domain/mammal#"
+    a = "https://w3id.org/emmo/domain/animal#"
+    skos = "http://www.w3.org/2004/02/skos/core#"
+
+    assert list(
+        _get_unabbreviated_triples(animal, predicate=a + "chasing")
+    ) == [(m + "Tom", a + "chasing", m + "Jerry")]
+    assert list(_get_unabbreviated_triples(animal, obj=m + "Jerry")) == [
+        (m + "Tom", a + "chasing", m + "Jerry")
+    ]
+
+    triples = list(
+        _get_unabbreviated_triples(animal, predicate=skos + "prefLabel")
+    )
+    assert len(triples) == 10
+
+    triples = list(
+        _get_unabbreviated_triples(
+            animal, predicate=skos + "prefLabel", datatype="@en"
+        )
+    )
+    assert len(triples) == 10
+
+    triples = list(
+        _get_unabbreviated_triples(animal.world, predicate=skos + "prefLabel")
+    )
+    assert len(triples) == 24
+
+    assert list(
+        _get_unabbreviated_triples(
+            animal, predicate=skos + "prefLabel", obj="Cat"
+        )
+    ) == [(m + "Cat", skos + "prefLabel", '"Cat"@en')]
+    assert list(
+        _get_unabbreviated_triples(
+            animal, predicate=skos + "prefLabel", obj="Cat", datatype="@en"
+        )
+    ) == [(m + "Cat", skos + "prefLabel", '"Cat"@en')]
+    assert list(_get_unabbreviated_triples(animal, "no-match")) == []
+
+
+def test__has_unabbreviated_triple():
+    """Test _has_unabbreviated_triple()."""
+    from ontopy.ontology import _has_unabbreviated_triple
+
+    m = "https://w3id.org/emmo/domain/mammal#"
+    a = "https://w3id.org/emmo/domain/animal#"
+    skos = "http://www.w3.org/2004/02/skos/core#"
+
+    assert _has_unabbreviated_triple(
+        animal, m + "Tom", a + "chasing", m + "Jerry"
+    )
+    assert _has_unabbreviated_triple(
+        animal, m + "Cat", skos + "prefLabel", "Cat"
+    )
+    assert _has_unabbreviated_triple(
+        animal, m + "Cat", skos + "prefLabel", "Cat", "@en"
+    )
+    assert not _has_unabbreviated_triple(
+        animal, m + "Cat", skos + "prefLabel", "Cat", "@no"
+    )
+    assert not _has_unabbreviated_triple(animal, "no-match")

@@ -136,16 +136,16 @@ def test_get_indirect_is_a() -> None:
 
     print(emmo.MicroPascal.get_indirect_is_a())
     assert any(
-        re.match("^emmo.*\.hasDimensionString.value(.*)$", str(e))
+        re.match(r"^emmo.*\.hasDimensionString.value(.*)$", str(e))
         for e in emmo.MicroPascal.get_indirect_is_a()
     )
 
     assert all(
-        re.match("^emmo.*\.Item$", str(e)) is None
+        re.match(r"^emmo.*\.Item$", str(e)) is None
         for e in emmo.MicroPascal.get_indirect_is_a()
     )
     assert any(
-        re.match("^emmo.*\.Item$", str(e))
+        re.match(r"^emmo.*\.Item$", str(e))
         for e in emmo.MicroPascal.get_indirect_is_a(skip_classes=False)
     )
 

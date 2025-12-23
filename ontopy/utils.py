@@ -764,9 +764,45 @@ def rename_iris(onto, annotation="prefLabel"):
                 try:
                     entity.name = name
                 except IntegrityError as exc:
-                    raise ValueError(
-                        f"cannot set name of {entityname} to '{name}')"
-                    ) from exc
+                    if entity.name != name:
+                        raise ValueError(
+                            f"cannot set name of '{entityname}' to '{name}')"
+                        ) from exc
+
+
+def rename_ontology(onto, regex, repl, recursive=True):
+    """Rename `onto` matching
+    `regex`. The new names are obtained by substituting `regex` with
+    `repl` using `re.sub()`.
+
+    If `recursive` is True all recursively imported ontologies are also renamed.
+    If `recursive` is None, only `onto` is renamed.
+    """
+    versionIRI = "http://www.w3.org/2002/07/owl#versionIRI"
+    ontologies = [onto]
+    pattern = re.compile(regex)
+    if recursive is not None:
+        ontologies.extend(onto.get_imported_ontologies(recursive=recursive))
+    for ontology in ontologies:
+        if pattern.search(ontology.base_iri):
+            newiri = pattern.sub(repl, ontology.base_iri)
+            ontology.base_iri = newiri
+
+        if ontology.iri and pattern.search(ontology.iri):
+            newiri = pattern.sub(repl, ontology.iri)
+            ontology.iri = newiri
+
+        if versionIRI in ontology.metadata and pattern.search(
+            ontology.metadata.versionIRI[0]
+        ):
+            # Since versionIRI may not be defined as an owlready2 object
+            # property it can only be changed via low-level triple
+            # manipulations
+            newiri = pattern.sub(repl, ontology.metadata.versionIRI[0])
+            pred = onto._abbreviate(versionIRI)
+            storid = onto._abbreviate(newiri)
+            ontology._del_obj_triple_spo(ontology.storid, pred)
+            ontology._set_obj_triple_spo(ontology.storid, pred, storid)
 
 
 def normalise_url(url):
