@@ -360,7 +360,7 @@ def __metadata_iter__(self):
 
 
 def __metadata_setattr__(self, attr, values):
-    """Patched __setattr__() mathod."""
+    """Patched __setattr__() method."""
     metadata__setattr__save(self, attr, values)
     # Make sure that __setattr__() also updates the triplestore
     lst = self.__dict__[attr]
