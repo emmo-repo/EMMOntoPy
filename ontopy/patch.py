@@ -386,7 +386,7 @@ def __metadata_setattr__(self, attr, values):
 
 
 def __metadata_repr__(self):
-    """Patched __repr__() mathod."""
+    """Patched __repr__() method."""
     rdftype = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
     s = "\n  ".join(f"{k!r}: {v!r}" for k, v in self.items() if k != rdftype)
     return f"Metadata(\n  {s}\n)"
