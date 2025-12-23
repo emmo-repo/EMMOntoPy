@@ -350,7 +350,7 @@ def has(self, name) -> bool:
 
 
 def __metadata_contains__(self, name):
-    """Patched __contains__() mathod."""
+    """Patched __contains__() method."""
     return self.has(name)
 
 
