@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+"""General toolkit for managing ontologies."""
+import argparse
+from ontopy.ontokit.setup import setup_arguments
+
+
+def main(argv: "list" = None):
+    """Main function.
+
+    Arguments:
+        argv: List of arguments, similar to `sys.argv[1:]`.
+            Mainly for testing purposes, since it allows one to invoke the tool
+            manually / through Python.
+
+    """
+    # General options
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        # usage="ontokit [GENERAL_OPTIONS] SUBCOMMAND [SUBCOMMAND_OPTIONS]"
+    )
+    parser.add_argument(
+        "--debug", action="store_true", help="Show Python traceback on error."
+    )
+
+    # Add sub-command arguments
+    subparsers = parser.add_subparsers(required=True, help="Subcommands:")
+    setup_arguments(subparsers)
+
+    args = parser.parse_args(argv)
+
+    # Call the subcommand handler
+    try:
+        return args.subcommand(args)
+    except Exception as exc:  # pylint: disable=broad-exception-caught
+        if args.debug:
+            raise
+        print(f"{exc.__class__.__name__}: {exc}")
+        return exc
+
+
+if __name__ == "__main__":
+    main()
