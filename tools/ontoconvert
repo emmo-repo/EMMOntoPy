@@ -219,6 +219,16 @@ def main(argv: list = None):
         ),
     )
     parser.add_argument(
+        "--rename-ontology",
+        metavar="|REGEX|REPL|",
+        help=(
+            "Rename all ontologies matching regular expression `REGEX` to "
+            "`REPL`, using the function `re.sub()`. The argument should start "
+            "and end with the character used to separate the `REGEX` from the "
+            "`REPL` strings."
+        ),
+    )
+    parser.add_argument(
         "--owlready2-properties",
         action="store_true",
         help=(
