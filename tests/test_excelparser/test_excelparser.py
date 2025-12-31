@@ -7,6 +7,18 @@ import pytest
 from ontopy import get_ontology
 from ontopy.excelparser import create_ontology_from_excel
 from ontopy.utils import NoSuchLabelError
+from ontopy.exceptions import _get_excelreqs
+
+try:
+    pd, np = _get_excelreqs()
+
+except ImportError as e:
+    pytest.skip(
+        "excelparser requires extras. "
+        "Install with `pip install emmontopy[excel]",
+        allow_module_level=True,
+    )
+
 
 if TYPE_CHECKING:
     from pathlib import Path

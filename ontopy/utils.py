@@ -10,6 +10,7 @@ import inspect
 import tempfile
 import textwrap
 from pathlib import Path
+from sqlite3 import IntegrityError
 from typing import TYPE_CHECKING
 import urllib.request
 import urllib.parse
@@ -23,8 +24,17 @@ from rdflib.plugin import PluginException
 
 import owlready2
 
+from ontopy.exceptions import (
+    NoSuchLabelError,
+    ReadCatalogError,
+    UnknownVersion,
+    IncompatibleVersion,
+)
+
 if TYPE_CHECKING:
     from typing import Optional, Union
+
+    from ontopy import Ontology
 
 
 # Preferred language
@@ -42,44 +52,6 @@ FMAP = {
 
 # Format extension supported by owlready2
 OWLREADY2_FORMATS = "rdfxml", "owl", "xml", "ntriples"
-
-
-class EMMOntoPyException(Exception):
-    """A BaseException class for EMMOntoPy"""
-
-
-class EMMOntoPyWarning(Warning):
-    """A BaseWarning class for EMMOntoPy"""
-
-
-class IncompatibleVersion(EMMOntoPyWarning):
-    """An installed dependency version may be incompatible with a functionality
-    of this package - or rather an outcome of a functionality.
-    This is not critical, hence this is only a warning."""
-
-
-class UnknownVersion(EMMOntoPyException):
-    """Cannot retrieve version from a package."""
-
-
-class IndividualWarning(EMMOntoPyWarning):
-    """A warning related to an individual, e.g. punning."""
-
-
-class NoSuchLabelError(LookupError, AttributeError, EMMOntoPyException):
-    """Error raised when a label cannot be found."""
-
-
-class AmbiguousLabelError(LookupError, AttributeError, EMMOntoPyException):
-    """Error raised when a label is ambiguous."""
-
-
-class LabelDefinitionError(EMMOntoPyException):
-    """Error in label definition."""
-
-
-class EntityClassDefinitionError(EMMOntoPyException):
-    """Error in ThingClass definition."""
 
 
 def english(string):
@@ -338,10 +310,6 @@ def camelsplit(string):
         char = next_char
     result.append(char)
     return "".join(result)
-
-
-class ReadCatalogError(IOError):
-    """Error reading catalog file."""
 
 
 def read_catalog(  # pylint: disable=too-many-locals,too-many-statements,too-many-arguments
@@ -782,12 +750,59 @@ def rename_iris(onto, annotation="prefLabel"):
     exactMatch = onto._abbreviate(  # pylint:disable=invalid-name
         "http://www.w3.org/2004/02/skos/core#exactMatch"
     )
+    anyURI = onto._abbreviate(  # pylint:disable=invalid-name
+        "http://www.w3.org/2001/XMLSchema#anyURI"
+    )
     for entity in onto.get_entities():
         if hasattr(entity, annotation) and getattr(entity, annotation):
             onto._add_data_triple_spod(
-                entity.storid, exactMatch, entity.iri, ""
+                entity.storid, exactMatch, entity.iri, anyURI
             )
-            entity.name = getattr(entity, annotation).first()
+            entityname = str(entity.name)
+            name = getattr(entity, annotation).first()
+            if str(name) != entityname:
+                try:
+                    entity.name = name
+                except IntegrityError as exc:
+                    if entity.name != name:
+                        raise ValueError(
+                            f"cannot set name of '{entityname}' to '{name}')"
+                        ) from exc
+
+
+def rename_ontology(onto, regex, repl, recursive=True):
+    """Rename `onto` matching
+    `regex`. The new names are obtained by substituting `regex` with
+    `repl` using `re.sub()`.
+
+    If `recursive` is True all recursively imported ontologies are also renamed.
+    If `recursive` is None, only `onto` is renamed.
+    """
+    versionIRI = "http://www.w3.org/2002/07/owl#versionIRI"
+    ontologies = [onto]
+    pattern = re.compile(regex)
+    if recursive is not None:
+        ontologies.extend(onto.get_imported_ontologies(recursive=recursive))
+    for ontology in ontologies:
+        if pattern.search(ontology.base_iri):
+            newiri = pattern.sub(repl, ontology.base_iri)
+            ontology.base_iri = newiri
+
+        if ontology.iri and pattern.search(ontology.iri):
+            newiri = pattern.sub(repl, ontology.iri)
+            ontology.iri = newiri
+
+        if versionIRI in ontology.metadata and pattern.search(
+            ontology.metadata.versionIRI[0]
+        ):
+            # Since versionIRI may not be defined as an owlready2 object
+            # property it can only be changed via low-level triple
+            # manipulations
+            newiri = pattern.sub(repl, ontology.metadata.versionIRI[0])
+            pred = onto._abbreviate(versionIRI)
+            storid = onto._abbreviate(newiri)
+            ontology._del_obj_triple_spo(ontology.storid, pred)
+            ontology._set_obj_triple_spo(ontology.storid, pred, storid)
 
 
 def remove_owlready2_properties(onto):
@@ -905,7 +920,7 @@ def directory_layout(onto):
     return layout
 
 
-def copy_annotation(onto, src, dst):
+def copy_annotation(onto: "Ontology", src: str, dst: str):
     """In all classes and properties in `onto`, copy annotation `src` to `dst`.
 
     Arguments:
@@ -913,6 +928,12 @@ def copy_annotation(onto, src, dst):
         src: Name of source annotation.
         dst: Name or IRI of destination annotation.  Use IRI if the
             destination annotation is not already in the ontology.
+
+    Example:
+
+        copy_annotation(
+            onto, "elucidation", "http://www.w3.org/2000/01/rdf-schema#comment"
+        )
     """
     if onto.world[src]:
         src = onto.world[src]

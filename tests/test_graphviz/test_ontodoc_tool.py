@@ -3,9 +3,21 @@
 from typing import TYPE_CHECKING
 import pytest
 
+from ontopy.exceptions import _check_graphviz, _require_java
+
+
+try:
+    _check_graphviz()
+except RuntimeError as e:
+    pytest.skip(
+        "Graphviz not available, skipping this test",
+        allow_module_level=True,
+    )
+
 
 def test_run() -> None:
     """Check that running `ontodoc` works."""
+
     from ontopy.testutils import ontodir, outdir, get_tool_module
 
     ontodoc = get_tool_module("ontodoc")
@@ -53,6 +65,14 @@ def test_run_w_punning() -> None:
 def test_ontodoc_rst() -> None:
     """Test reStructuredText output with ontodoc."""
     from ontopy.testutils import ontodir, outdir, get_tool_module
+
+    try:
+        _require_java()
+    except RuntimeError as e:
+        pytest.skip(
+            "Java not available, skipping this test",
+            allow_module_level=True,
+        )
 
     ontodoc = get_tool_module("ontodoc")
     ontodoc.main(

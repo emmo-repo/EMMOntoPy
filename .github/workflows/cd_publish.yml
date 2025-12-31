@@ -16,11 +16,11 @@ jobs:
 
       # Publish package
       python_package: true
-      python_version_build: "3.9"
+      python_version_build: "3.13"
       # We're mentioning only 'ontopy', since the version is set statically only in
       # ontopy/__init__.py
       package_dirs: ontopy
-      install_extras: "[dev]"
+      install_extras: "[dev,excel,ontodoc]"
       build_libs: build
       build_cmd: "python -m build -o dists"
       build_dir: dists
@@ -29,7 +29,7 @@ jobs:
 
       # Update documentation
       update_docs: true
-      python_version_docs: "3.9"
+      python_version_docs: "3.13"
       doc_extras: "[docs]"
       changelog_exclude_labels: dependencies
 
@@ -48,7 +48,7 @@ jobs:
 
     steps:
       - name: Download distribution
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: dist  # The artifact will always be called 'dist'
           path: dist

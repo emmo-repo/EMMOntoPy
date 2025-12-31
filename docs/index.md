@@ -119,33 +119,53 @@ Install with:
 pip install EMMOntoPy
 ```
 
-### Required Dependencies
+Minimal python dependencies can be found in requirements.txt.
 
-- [Python] 3.7 or later.
-- [Owlready2] v0.23 or later.
 
-### Optional Dependencies
+If you want to install with extra functionalities:
 
-- [Graphviz][graphviz_website]: Needed for graph generation.
+- Reasoning:
+
+For reasoning there are no extra python requirements, but JAVA is needed.
+
+- Excel2onto:
+
+For the functionality that allows for ontology creation from an excel or csv file:
+
+```console
+pip install EMMOntoPy[excel] # adds the extra python packages needed
+```
+
+Extra python packages needed are found in requirements_excel.txt.
+
+
+- For the ontodoc and graph generation tools:
+
+	- [Graphviz][graphviz_website]: Needed for graph generation.
   With support for generation pdf, png and svg figures for tests and generation of documentation automatically (`ontodoc`).
-- [pandoc]: Only used for generated documentation from markdown to nicely formatted html or pdf.
+	- [pandoc]: Only used for generated documentation from markdown to nicely formatted html or pdf.
   Tested with v2.1.2.
-- [pdfLaTeX] or [XeLaTeX] and the `upgreek` LaTeX package (included in `texlive-was` on RetHat-based distributions and `texlive-latex-extra` on Ubuntu) for generation of pdf documentation.
+	- [pdfLaTeX] or [XeLaTeX] and the `upgreek` LaTeX package (included in `texlive-was` on RetHat-based distributions and `texlive-latex-extra` on Ubuntu) for generation of pdf documentation.
   If your ontology contains exotic unicode characters, we recommend XeLaTeX.
 
-- Java.
-  Needed for reasoning.
 
-- Optional Python packages:
-  - [graphviz][graphviz_python]: Generation of documentation and graphs.
-  - [PyYAML]: Required for generating documentation with pandoc.
-  - [blessings]: Clean output for `emmocheck`.
-  - [Pygments]: Coloured output for `emmocheck`.
-  - [rdflib]: Required for `ontoversion`-tool.
-  - [semver]: Required for `ontoversion`-tool.
-  - [pydot]: Used for generating graphs.
-    Will be deprecated.
-  - [pyparsing](https://github.com/pyparsing/pyparsing): Used for parsing Manchester syntax
+```console
+pip install EMMOntoPy[ontodoc] # extra python packages needed.
+```
+
+Extra python packages needed are found in requirements_ontodoc.txt.
+
+- Extra efficiency
+
+EMMOntPy builds on Owlready2 which has bult in extra efficiency with the optional package Cython.
+This can be installed separately with:
+
+```console
+pip install Cython
+```
+
+
+
 
 See [docker-instructions.md](docker-instructions.md) for how to build a docker image.
 
@@ -193,16 +213,14 @@ It has mainly been developed by [SINTEF](https://www.sintef.no/), specifically:
 [Python]: https://www.python.org/
 [IPython]: https://ipython.org/
 [DLite]: https://github.com/SINTEF/dlite/
-[pydot]: https://pypi.org/project/pydot/
 [graphviz_website]: https://www.graphviz.org/
 [pandoc]: http://pandoc.org/
 [XeLaTeX]: https://www.overleaf.com/learn/latex/XeLaTeX/
 [pdfLaTeX]: https://www.latex-project.org/
 [graphviz_python]: https://pypi.org/project/graphviz
 [PyYAML]: https://pypi.org/project/PyYAML/
-[blessings]: https://pypi.org/project/blessings/
+[blessed]: https://pypi.org/project/blessed/
 [Pygments]: https://pypi.org/project/Pygments/
-[semver]: https://pypi.org/project/semver/
 [rdflib]: https://pypi.org/project/rdflib/
 [FaCT++]: http://owl.cs.manchester.ac.uk/tools/fact/
 [Manchester syntax]: https://www.w3.org/TR/owl2-manchester-syntax/

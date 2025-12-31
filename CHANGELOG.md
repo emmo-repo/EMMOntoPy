@@ -1,5 +1,57 @@
 # Changelog
 
+## [v0.10.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.10.1) (2025-11-21)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.10.0...v0.10.1)
+
+**Merged pull requests:**
+
+- Remove cython dep [\#891](https://github.com/emmo-repo/EMMOntoPy/pull/891) ([francescalb](https://github.com/francescalb))
+
+## [v0.10.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.10.0) (2025-11-20)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.8.1...v0.10.0)
+
+**Closed issues:**
+
+- EMMO has changed branching model [\#885](https://github.com/emmo-repo/EMMOntoPy/issues/885)
+- FOAF fails because xlmns.com is down [\#884](https://github.com/emmo-repo/EMMOntoPy/issues/884)
+- Add support for python3.14 [\#829](https://github.com/emmo-repo/EMMOntoPy/issues/829)
+- Add support for Pyhon3.13 [\#828](https://github.com/emmo-repo/EMMOntoPy/issues/828)
+
+**Merged pull requests:**
+
+- Excel2onto improve errormsg [\#890](https://github.com/emmo-repo/EMMOntoPy/pull/890) ([francescalb](https://github.com/francescalb))
+- Document extras [\#887](https://github.com/emmo-repo/EMMOntoPy/pull/887) ([francescalb](https://github.com/francescalb))
+- Version updates [\#886](https://github.com/emmo-repo/EMMOntoPy/pull/886) ([francescalb](https://github.com/francescalb))
+- Improved error message if an preferred label is duplicated when calling rename\_iris\(\) [\#880](https://github.com/emmo-repo/EMMOntoPy/pull/880) ([jesper-friis](https://github.com/jesper-friis))
+- Flb/minimal installation [\#873](https://github.com/emmo-repo/EMMOntoPy/pull/873) ([francescalb](https://github.com/francescalb))
+
+## [v0.8.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.8.1) (2025-08-20)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.8.0...v0.8.1)
+
+**Fixed bugs:**
+
+- check only emmo terms [\#851](https://github.com/emmo-repo/EMMOntoPy/issues/851)
+
+**Closed issues:**
+
+- Add possibility of specifying IRI in new\_class etc. [\#843](https://github.com/emmo-repo/EMMOntoPy/issues/843)
+- How to access metadata such as abstract and creators? [\#841](https://github.com/emmo-repo/EMMOntoPy/issues/841)
+
+**Merged pull requests:**
+
+- Recursive creation of squashed ontologies [\#869](https://github.com/emmo-repo/EMMOntoPy/pull/869) ([jesper-friis](https://github.com/jesper-friis))
+- Deprecate support for python 3.8 [\#868](https://github.com/emmo-repo/EMMOntoPy/pull/868) ([francescalb](https://github.com/francescalb))
+- Added `--namespace` option to `ontoconvert` [\#867](https://github.com/emmo-repo/EMMOntoPy/pull/867) ([jesper-friis](https://github.com/jesper-friis))
+- Handle timeout errors in redirectioncheck [\#864](https://github.com/emmo-repo/EMMOntoPy/pull/864) ([jesper-friis](https://github.com/jesper-friis))
+- move from sintef/ci-cd safety to safety own setup [\#854](https://github.com/emmo-repo/EMMOntoPy/pull/854) ([francescalb](https://github.com/francescalb))
+- Emmocheck now does not check prefLabel for any of entities specific prefixes [\#852](https://github.com/emmo-repo/EMMOntoPy/pull/852) ([francescalb](https://github.com/francescalb))
+- Made metadata repr easier to read. [\#847](https://github.com/emmo-repo/EMMOntoPy/pull/847) ([jesper-friis](https://github.com/jesper-friis))
+- Update Metadata so that all metadata-items can be accessed [\#845](https://github.com/emmo-repo/EMMOntoPy/pull/845) ([francescalb](https://github.com/francescalb))
+- Added possibility of specifying iri in new\_entity [\#844](https://github.com/emmo-repo/EMMOntoPy/pull/844) ([francescalb](https://github.com/francescalb))
+
 ## [v0.8.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.8.0) (2025-03-18)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.7.3...v0.8.0)

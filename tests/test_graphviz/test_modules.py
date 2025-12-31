@@ -1,7 +1,18 @@
+import pytest
 from typing import TYPE_CHECKING
+
+from ontopy.exceptions import _check_graphviz
 
 if TYPE_CHECKING:
     from pathlib import Path
+
+try:
+    _check_graphviz()
+except RuntimeError as e:
+    pytest.skip(
+        "Graphviz not available, skipping this test",
+        allow_module_level=True,
+    )
 
 
 def test_modules(tmpdir: "Path") -> None:

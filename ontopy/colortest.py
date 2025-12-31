@@ -11,7 +11,7 @@ from unittest.result import TestResult
 from unittest.runner import TextTestRunner
 from unittest.util import strclass
 
-from blessings import Terminal
+from blessed import Terminal
 from pygments import formatters, highlight
 from pygments.lexers import (  # pylint: disable=no-name-in-module
     Python3TracebackLexer as Lexer,

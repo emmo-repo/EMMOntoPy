@@ -8,9 +8,10 @@ from rdflib.util import guess_format
 from ontopy import get_ontology
 from ontopy.utils import (
     annotate_source,
-    rename_iris,
     copy_annotation,
     remove_owlready2_properties,
+    rename_iris,
+    rename_ontology,
 )
 
 import owlready2  # pylint: disable=wrong-import-order
@@ -176,7 +177,7 @@ def main(argv: list = None):
             "rdflib. The output is written to a directory structure matching "
             "the input. "
             "This option requires Protege catalog files to be present. "
-            "It is typically combined --output-dir. "
+            "It is typically combined with --output-dir. "
         ),
     )
     parser.add_argument(
@@ -196,7 +197,7 @@ def main(argv: list = None):
         action="store_true",
         help=(
             "Whether to annotate all entities with the base IRI of the source "
-            "ontology using `dcterms:source` relations.  This is contextual "
+            "ontology using `rdfs:isDefinedBy` relations.  This is contextual "
             "information that is otherwise lost when ontologies are inferred "
             "and/or squashed."
         ),
@@ -224,6 +225,13 @@ def main(argv: list = None):
             "Whether to keep Owlready2 properties (i.e. properties in the "
             "owlready2 namespace) in generated output. "
             "The default is to strip off owlready2 properties."
+        "--rename-ontology",
+        metavar="|REGEX|REPL|",
+        help=(
+            "Rename all ontologies matching regular expression `REGEX` to "
+            "`REPL`, using the function `re.sub()`. The argument should start "
+            "and end with the character used to separate the `REGEX` from the "
+            "`REPL` strings."
         ),
     )
     parser.add_argument(
@@ -288,7 +296,7 @@ def main(argv: list = None):
         if args.iri:
             onto.iri = args.iri
 
-        if args.base_iri:
+        if args.base_iri and args.base_iri != onto.base_iri:
             onto.base_iri = args.base_iri
 
         if args.annotate_source:
@@ -312,6 +320,20 @@ def main(argv: list = None):
         for cpy in args.copy_annotation:
             src, dst = cpy.split("-->", 1)
             copy_annotation(onto, src.strip(), dst.strip())
+
+        if args.rename_ontology:
+            sep = args.rename_ontology[0]
+            if (
+                args.rename_ontology[-1] != sep
+                or args.rename_ontology.count(sep) != 3
+            ):
+                parser.error(
+                    "The argument of --update-imports should be of the form "
+                    '"|REGEX|REPL|" where "|" may be replaced with any '
+                    "character not used within REGEX or REPL."
+                )
+            _, regex, repl, _ = args.rename_ontology.split(sep)
+            rename_ontology(onto, regex, repl)
 
         onto.save(
             args.output,
