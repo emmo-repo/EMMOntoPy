@@ -822,9 +822,9 @@ def remove_owlready2_properties(onto):
         if onto._unabbreviate(p).startswith(ns)
     ]
     for s, p, o in spo:
-        onto._del_obj_triples_spo(s, p, o)
+        onto._del_obj_triple_spo(s, p, o)
     for s, p, o, d in spod:
-        onto._del_data_triples_spod(s, p, o, d)
+        onto._del_data_triple_spod(s, p, o, d)
 
 
 def normalise_url(url):

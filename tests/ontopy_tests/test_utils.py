@@ -132,6 +132,18 @@ def test_rename_ontologies():
     }
 
 
+def test_remove_owlready2_properties():
+    from ontopy.utils import remove_owlready2_properties
+    from ontopy.testutils import get_testonto
+    
+    onto = get_testonto()
+    onto.hasAnnotationProperty.python_name = "ap"
+    assert onto.hasAnnotationProperty.python_name == "ap"
+    
+    remove_owlready2_properties(onto)
+    assert onto.hasAnnotationProperty.python_name == "ap"
+    
+
 def test_preferred_language():
     from ontopy import get_ontology
     from ontopy.testutils import ontodir
