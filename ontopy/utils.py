@@ -790,6 +790,28 @@ def rename_iris(onto, annotation="prefLabel"):
             entity.name = getattr(entity, annotation).first()
 
 
+def remove_owlready2_properties(onto):
+    """Remove Owlready2 properties from ontology."""
+    ns = (
+        "http://www.lesfleursdunormal.fr/static/_downloads/"
+        "owlready_ontology.owl#"
+    )
+    spo = [
+        (s, p, o)
+        for s, p, o in onto._get_obj_triples_spo_spo(None, None, None)
+        if onto._unabbreviate(p).startswith(ns)
+    ]
+    spod = [
+        (s, p, o, d)
+        for s, p, o, d in onto._get_data_triples_spod_spod(None, None, None)
+        if onto._unabbreviate(p).startswith(ns)
+    ]
+    for s, p, o in spo:
+        onto._del_obj_triples_spo(s, p, o)
+    for s, p, o, d in spod:
+        onto._del_data_triples_spod(s, p, o, d)
+
+
 def normalise_url(url):
     """Returns `url` in a normalised form."""
     splitted = urllib.parse.urlsplit(url)

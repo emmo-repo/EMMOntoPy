@@ -6,7 +6,12 @@ import warnings
 from rdflib.util import guess_format
 
 from ontopy import get_ontology
-from ontopy.utils import annotate_source, rename_iris, copy_annotation
+from ontopy.utils import (
+    annotate_source,
+    rename_iris,
+    copy_annotation,
+    remove_owlready2_properties,
+)
 
 import owlready2  # pylint: disable=wrong-import-order
 import owlready2.reasoning  # pylint: disable=wrong-import-order
@@ -213,6 +218,15 @@ def main(argv: list = None):
         ),
     )
     parser.add_argument(
+        "--owlready2-properties",
+        action="store_true",
+        help=(
+            "Whether to keep Owlready2 properties (i.e. properties in the "
+            "owlready2 namespace) in generated output. "
+            "The default is to strip off owlready2 properties."
+        ),
+    )
+    parser.add_argument(
         "--catalog-file",
         "-C",
         nargs="?",
@@ -291,6 +305,9 @@ def main(argv: list = None):
                 include_imported=include_imported,
                 debug=verbose,
             )
+
+        if not args.owlready2_properties:
+            remove_owlready2_properties(onto)
 
         for cpy in args.copy_annotation:
             src, dst = cpy.split("-->", 1)
