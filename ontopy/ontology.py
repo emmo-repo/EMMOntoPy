@@ -908,6 +908,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         write_catalog_file=False,
         append_catalog=False,
         catalog_file="catalog-v001.xml",
+        owlready2_properties=False,
         **kwargs,
     ) -> Path:
         """Writes the ontology to file.
@@ -949,6 +950,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         catalog_file: str | Path
             Name of catalog file.  If not an absolute path, it is prepended
             to `dir`.
+        owlready2_properties: Whether to keep Owlready2 properties.  If false,
+            all triples with predicate in the Owlready2 namespace are removed.
 
         Returns
         --------
@@ -1094,6 +1097,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                 ):
                     graph.remove((s, p, o))
                     graph.add((URIRef(self.iri), p, o))
+
+            # Remove triples from the owlready2 namespace
+            if not owlready2_properties:
+                ns = (
+                    "http://www.lesfleursdunormal.fr/static/_downloads/"
+                    "owlready_ontology.owl#"
+                )
+                for s, p, o in graph.triples((None, None, None)):
+                    if p.startswith(ns):
+                        graph.remove((s, p, o))
 
             graph.serialize(destination=filepath, format=format)
         elif format in OWLREADY2_FORMATS:

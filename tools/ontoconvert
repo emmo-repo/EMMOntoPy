@@ -317,9 +317,6 @@ def main(argv: list = None):
                 debug=verbose,
             )
 
-        if not args.owlready2_properties:
-            remove_owlready2_properties(onto)
-
         for cpy in args.copy_annotation:
             src, dst = cpy.split("-->", 1)
             copy_annotation(onto, src.strip(), dst.strip())
@@ -338,6 +335,9 @@ def main(argv: list = None):
             _, regex, repl, _ = args.rename_ontology.split(sep)
             rename_ontology(onto, regex, repl)
 
+        if not args.owlready2_properties:
+            remove_owlready2_properties(onto)
+
         onto.save(
             args.output,
             format=output_format,
@@ -350,6 +350,7 @@ def main(argv: list = None):
             write_catalog_file=bool(args.catalog_file),
             append_catalog=args.append_catalog,
             catalog_file=args.catalog_file,
+            owlready2_properties=args.owlready2_properties,
         )
 
         for warning in warnings_handle:
