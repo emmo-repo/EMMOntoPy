@@ -1,7 +1,7 @@
 """Some generic utility functions."""
 
 # pylint: disable=protected-access,invalid-name,redefined-outer-name
-# pylint: disable=import-outside-toplevel
+# pylint: disable=import-outside-toplevel,too-many-lines
 import os
 import sys
 import re
