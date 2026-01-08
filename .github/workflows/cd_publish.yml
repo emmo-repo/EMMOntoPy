@@ -48,7 +48,7 @@ jobs:
 
     steps:
       - name: Download distribution
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: dist  # The artifact will always be called 'dist'
           path: dist
