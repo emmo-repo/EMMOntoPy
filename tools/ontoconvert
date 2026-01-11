@@ -302,7 +302,7 @@ def main(argv: list = None):
                 onto.set_version(
                     version, set_priorVersion=False, set_versionInfo=False
                 )
-            except TypeError, ValueError:
+            except (TypeError, ValueError):
                 pass
 
         if args.base_iri and args.base_iri != onto.base_iri:
