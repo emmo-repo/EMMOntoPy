@@ -1075,20 +1075,16 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             # not the current ontology.
             for s, _, _ in graph.triples((None, RDF.type, OWL.Ontology)):
                 if str(s).rstrip("/#") != self.base_iri.rstrip("/#"):
-                    for (
-                        _,
-                        p,
-                        o,
-                    ) in graph.triples((s, None, None)):
+                    for _, p, o in graph.triples((s, None, None)):
                         graph.remove((s, p, o))
                 graph.remove((s, OWL.imports, None))
 
             # Insert correct IRI of the ontology
             if self.iri:
-                iri = URIRef(self.base_iri.strip("#/"))
-                for s, p, o in graph.triples((iri, None, None)):
-                    graph.remove((s, p, o))
-                    graph.add((URIRef(self.iri), p, o))
+                for s, _, _ in graph.triples((None, RDF.type, OWL.Ontology)):
+                    for _, p, o in graph.triples((s, None, None)):
+                        graph.remove((s, p, o))
+                        graph.add((URIRef(self.iri), p, o))
 
             graph.serialize(destination=filepath, format=format)
         elif not self.iri and format in OWLREADY2_FORMATS:
