@@ -296,11 +296,14 @@ def main(argv: list = None):
 
         if args.iri:
             onto.iri = args.iri
-            # Also set versionIRI
-            version = onto.get_version()
-            onto.set_version(
-                version, set_priorVersion=False, set_versionInfo=False
-            )
+            # Also try to set versionIRI
+            try:
+                version = onto.get_version()
+                onto.set_version(
+                    version, set_priorVersion=False, set_versionInfo=False
+                )
+            except TypeError, ValueError:
+                pass
 
         if args.base_iri and args.base_iri != onto.base_iri:
             onto.base_iri = args.base_iri
