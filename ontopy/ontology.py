@@ -960,6 +960,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         # pylint: disable=redefined-builtin,too-many-arguments
         # pylint: disable=too-many-statements,too-many-branches
         # pylint: disable=too-many-locals,arguments-renamed,invalid-name
+        # pylint: disable=not-an-iterable
 
         # Extend rdflib defaults with namespaces suggested by FOOPS
         if namespaces is None:
@@ -1075,28 +1076,18 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
 
             # Remove all ontology-declarations in the graph that are
             # not the current ontology.
-            for s, _, _ in graph.triples(  # pylint: disable=not-an-iterable
-                (None, RDF.type, OWL.Ontology)
-            ):
+            for s, _, _ in graph.triples((None, RDF.type, OWL.Ontology)):
                 if str(s).rstrip("/#") != self.base_iri.rstrip("/#"):
-                    for (
-                        _,
-                        p,
-                        o,
-                    ) in graph.triples(  # pylint: disable=not-an-iterable
-                        (s, None, None)
-                    ):
+                    for _, p, o in graph.triples((s, None, None)):
                         graph.remove((s, p, o))
                 graph.remove((s, OWL.imports, None))
 
             # Insert correct IRI of the ontology
             if self.iri:
-                base_iri = URIRef(self.base_iri)
-                for s, p, o in graph.triples(  # pylint: disable=not-an-iterable
-                    (base_iri, None, None)
-                ):
-                    graph.remove((s, p, o))
-                    graph.add((URIRef(self.iri), p, o))
+                for s, _, _ in graph.triples((None, RDF.type, OWL.Ontology)):
+                    for _, p, o in graph.triples((s, None, None)):
+                        graph.remove((s, p, o))
+                        graph.add((URIRef(self.iri), p, o))
 
             # Remove triples from the owlready2 namespace
             if not owlready2_properties:
@@ -1109,7 +1100,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                         graph.remove((s, p, o))
 
             graph.serialize(destination=filepath, format=format)
-        elif format in OWLREADY2_FORMATS:
+        elif not self.iri and format in OWLREADY2_FORMATS:
             super().save(file=filepath, format=fmt, **kwargs)
         else:
             # The try-finally clause is needed for cleanup and because
@@ -1131,15 +1122,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
                         prefix, rdflib.Namespace(ns), override=True
                     )
 
+                # Insert correct IRI of the ontology
                 if self.iri:
-                    base_iri = rdflib.URIRef(self.base_iri)
-                    for (
-                        s,
-                        p,
-                        o,
-                    ) in graph.triples(  # pylint: disable=not-an-iterable
-                        (base_iri, None, None)
-                    ):
+                    iri = rdflib.URIRef(self.base_iri.strip("#/"))
+                    for s, p, o in graph.triples((iri, None, None)):
                         graph.remove((s, p, o))
                         graph.add((rdflib.URIRef(self.iri), p, o))
                 graph.serialize(destination=filepath, format=format)
@@ -1827,6 +1813,21 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             entity = self.get_by_label(entity)
         return hasattr(entity, "equivalent_to") and bool(entity.equivalent_to)
 
+    def get_iri(self) -> str:
+        """Return ontology IRI.
+
+        This is the IRI of the ontology in the underlying triplestore
+        and may differ from the `iri` attribute.
+
+        Owlready2 does not allow to change the IRI in the triplestore, but
+        setting the `iri` attribute will write the new IRI when saving the
+        ontology.
+        """
+        storid = self.get_triples(
+            p=owlready2.rdf_type, o=owlready2.owl_ontology
+        )[0][0]
+        return self._unabbreviate(storid)
+
     def get_version(self, as_iri=False) -> str:
         """Returns the version number of the ontology as inferred from the
         owl:versionIRI tag or, if owl:versionIRI is not found, from
@@ -1914,8 +1915,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             _versionInfo = "http://www.w3.org/2002/07/owl#versionInfo"
             versionInfo = self._abbreviate(_versionInfo)
             newver = self.get_version()
-            self._del_obj_triple_sto(s=self.storid, p=versionInfo)
-            self._add_obj_triple_sto(
+            self._del_data_triple_spod(s=self.storid, p=versionInfo)
+            self._add_data_triple_spod(
                 s=self.storid, p=versionInfo, o=newver, d=string
             )
 

@@ -192,6 +192,14 @@ def main(argv: list = None):
         ),
     )
     parser.add_argument(
+        "--set-version",
+        "-v",
+        help=(
+            "Set new version number. This will update the owl:versionIRI, "
+            "owl:versionInfo and owl:priorVersion annotations."
+        ),
+    )
+    parser.add_argument(
         "--annotate-source",
         "-a",
         action="store_true",
@@ -298,9 +306,20 @@ def main(argv: list = None):
 
         if args.iri:
             onto.iri = args.iri
+            # Also try to set versionIRI
+            try:
+                version = onto.get_version()
+                onto.set_version(
+                    version, set_priorVersion=False, set_versionInfo=False
+                )
+            except (TypeError, ValueError):
+                pass
 
         if args.base_iri and args.base_iri != onto.base_iri:
             onto.base_iri = args.base_iri
+
+        if args.set_version:
+            onto.set_version(args.set_version)
 
         if args.annotate_source:
             annotate_source(onto)
