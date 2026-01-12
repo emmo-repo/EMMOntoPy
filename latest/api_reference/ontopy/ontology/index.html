@@ -1651,6 +1651,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.get_iri" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_iri()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#ontopy.ontology.Ontology.get_relations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2662,6 +2673,17 @@
     <span class="md-ellipsis">
       
         get_imported_ontologies()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontopy.ontology.Ontology.get_iri" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_iri()
       
     </span>
   </a>
@@ -4081,6 +4103,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="c1"># pylint: disable=redefined-builtin,too-many-arguments</span>
         <span class="c1"># pylint: disable=too-many-statements,too-many-branches</span>
         <span class="c1"># pylint: disable=too-many-locals,arguments-renamed,invalid-name</span>
+        <span class="c1"># pylint: disable=not-an-iterable</span>
 
         <span class="c1"># Extend rdflib defaults with namespaces suggested by FOOPS</span>
         <span class="k">if</span> <span class="n">namespaces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -4196,31 +4219,21 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 
             <span class="c1"># Remove all ontology-declarations in the graph that are</span>
             <span class="c1"># not the current ontology.</span>
-            <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>  <span class="c1"># pylint: disable=not-an-iterable</span>
-                <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Ontology</span><span class="p">)</span>
-            <span class="p">):</span>
+            <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Ontology</span><span class="p">)):</span>
                 <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">):</span>
-                    <span class="k">for</span> <span class="p">(</span>
-                        <span class="n">_</span><span class="p">,</span>
-                        <span class="n">p</span><span class="p">,</span>
-                        <span class="n">o</span><span class="p">,</span>
-                    <span class="p">)</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>  <span class="c1"># pylint: disable=not-an-iterable</span>
-                        <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                    <span class="p">):</span>
+                    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
                         <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
                 <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">imports</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
 
             <span class="c1"># Insert correct IRI of the ontology</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">:</span>
-                <span class="n">base_iri</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>  <span class="c1"># pylint: disable=not-an-iterable</span>
-                    <span class="p">(</span><span class="n">base_iri</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                <span class="p">):</span>
-                    <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
-                    <span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Ontology</span><span class="p">)):</span>
+                    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+                        <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
+                        <span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
 
             <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">format</span> <span class="ow">in</span> <span class="n">OWLREADY2_FORMATS</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span> <span class="ow">and</span> <span class="nb">format</span> <span class="ow">in</span> <span class="n">OWLREADY2_FORMATS</span><span class="p">:</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># The try-finally clause is needed for cleanup and because</span>
@@ -4242,15 +4255,10 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                         <span class="n">prefix</span><span class="p">,</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">Namespace</span><span class="p">(</span><span class="n">ns</span><span class="p">),</span> <span class="n">override</span><span class="o">=</span><span class="kc">True</span>
                     <span class="p">)</span>
 
+                <span class="c1"># Insert correct IRI of the ontology</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">:</span>
-                    <span class="n">base_iri</span> <span class="o">=</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="p">(</span>
-                        <span class="n">s</span><span class="p">,</span>
-                        <span class="n">p</span><span class="p">,</span>
-                        <span class="n">o</span><span class="p">,</span>
-                    <span class="p">)</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>  <span class="c1"># pylint: disable=not-an-iterable</span>
-                        <span class="p">(</span><span class="n">base_iri</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                    <span class="p">):</span>
+                    <span class="n">iri</span> <span class="o">=</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">))</span>
+                    <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="n">iri</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
                         <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
                         <span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rdflib</span><span class="o">.</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
                 <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
@@ -4938,6 +4946,21 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
             <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;equivalent_to&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">)</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return ontology IRI.</span>
+
+<span class="sd">        This is the IRI of the ontology in the underlying triplestore</span>
+<span class="sd">        and may differ from the `iri` attribute.</span>
+
+<span class="sd">        Owlready2 does not allow to change the IRI in the triplestore, but</span>
+<span class="sd">        setting the `iri` attribute will write the new IRI when saving the</span>
+<span class="sd">        ontology.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">storid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_triples</span><span class="p">(</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">owlready2</span><span class="o">.</span><span class="n">rdf_type</span><span class="p">,</span> <span class="n">o</span><span class="o">=</span><span class="n">owlready2</span><span class="o">.</span><span class="n">owl_ontology</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">storid</span><span class="p">)</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_iri</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the version number of the ontology as inferred from the</span>
 <span class="sd">        owl:versionIRI tag or, if owl:versionIRI is not found, from</span>
@@ -5025,8 +5048,8 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
             <span class="n">_versionInfo</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2002/07/owl#versionInfo&quot;</span>
             <span class="n">versionInfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">_versionInfo</span><span class="p">)</span>
             <span class="n">newver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_del_obj_triple_sto</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">versionInfo</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_add_obj_triple_sto</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_del_data_triple_spod</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">versionInfo</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_data_triple_spod</span><span class="p">(</span>
                 <span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">versionInfo</span><span class="p">,</span> <span class="n">o</span><span class="o">=</span><span class="n">newver</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">string</span>
             <span class="p">)</span>
 
@@ -7171,6 +7194,49 @@ are also returned.</p>
 
 
 
+<h3 id="ontopy.ontology.Ontology.get_iri" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.ontology.Ontology.get_iri" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Return ontology IRI.</p>
+<p>This is the IRI of the ontology in the underlying triplestore
+and may differ from the <code>iri</code> attribute.</p>
+<p>Owlready2 does not allow to change the IRI in the triplestore, but
+setting the <code>iri</code> attribute will write the new IRI when saving the
+ontology.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/ontology.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_iri</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ontology IRI.</span>
+
+<span class="sd">    This is the IRI of the ontology in the underlying triplestore</span>
+<span class="sd">    and may differ from the `iri` attribute.</span>
+
+<span class="sd">    Owlready2 does not allow to change the IRI in the triplestore, but</span>
+<span class="sd">    setting the `iri` attribute will write the new IRI when saving the</span>
+<span class="sd">    ontology.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">storid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_triples</span><span class="p">(</span>
+        <span class="n">p</span><span class="o">=</span><span class="n">owlready2</span><span class="o">.</span><span class="n">rdf_type</span><span class="p">,</span> <span class="n">o</span><span class="o">=</span><span class="n">owlready2</span><span class="o">.</span><span class="n">owl_ontology</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">storid</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 id="ontopy.ontology.Ontology.get_relations" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">get_relations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
 
@@ -8688,6 +8754,7 @@ to <code>dir</code>.</p>
     <span class="c1"># pylint: disable=redefined-builtin,too-many-arguments</span>
     <span class="c1"># pylint: disable=too-many-statements,too-many-branches</span>
     <span class="c1"># pylint: disable=too-many-locals,arguments-renamed,invalid-name</span>
+    <span class="c1"># pylint: disable=not-an-iterable</span>
 
     <span class="c1"># Extend rdflib defaults with namespaces suggested by FOOPS</span>
     <span class="k">if</span> <span class="n">namespaces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -8803,31 +8870,21 @@ to <code>dir</code>.</p>
 
         <span class="c1"># Remove all ontology-declarations in the graph that are</span>
         <span class="c1"># not the current ontology.</span>
-        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>  <span class="c1"># pylint: disable=not-an-iterable</span>
-            <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Ontology</span><span class="p">)</span>
-        <span class="p">):</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Ontology</span><span class="p">)):</span>
             <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">):</span>
-                <span class="k">for</span> <span class="p">(</span>
-                    <span class="n">_</span><span class="p">,</span>
-                    <span class="n">p</span><span class="p">,</span>
-                    <span class="n">o</span><span class="p">,</span>
-                <span class="p">)</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>  <span class="c1"># pylint: disable=not-an-iterable</span>
-                    <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                <span class="p">):</span>
+                <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
                     <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
             <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">imports</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
 
         <span class="c1"># Insert correct IRI of the ontology</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">:</span>
-            <span class="n">base_iri</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>  <span class="c1"># pylint: disable=not-an-iterable</span>
-                <span class="p">(</span><span class="n">base_iri</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="p">):</span>
-                <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
-                <span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Ontology</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+                    <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
+                    <span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
 
         <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">format</span> <span class="ow">in</span> <span class="n">OWLREADY2_FORMATS</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span> <span class="ow">and</span> <span class="nb">format</span> <span class="ow">in</span> <span class="n">OWLREADY2_FORMATS</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># The try-finally clause is needed for cleanup and because</span>
@@ -8849,15 +8906,10 @@ to <code>dir</code>.</p>
                     <span class="n">prefix</span><span class="p">,</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">Namespace</span><span class="p">(</span><span class="n">ns</span><span class="p">),</span> <span class="n">override</span><span class="o">=</span><span class="kc">True</span>
                 <span class="p">)</span>
 
+            <span class="c1"># Insert correct IRI of the ontology</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">:</span>
-                <span class="n">base_iri</span> <span class="o">=</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="p">)</span>
-                <span class="k">for</span> <span class="p">(</span>
-                    <span class="n">s</span><span class="p">,</span>
-                    <span class="n">p</span><span class="p">,</span>
-                    <span class="n">o</span><span class="p">,</span>
-                <span class="p">)</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">(</span>  <span class="c1"># pylint: disable=not-an-iterable</span>
-                    <span class="p">(</span><span class="n">base_iri</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                <span class="p">):</span>
+                <span class="n">iri</span> <span class="o">=</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="n">iri</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
                     <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
                     <span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rdflib</span><span class="o">.</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
             <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
@@ -9092,8 +9144,8 @@ the new version.</p>
         <span class="n">_versionInfo</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2002/07/owl#versionInfo&quot;</span>
         <span class="n">versionInfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">_versionInfo</span><span class="p">)</span>
         <span class="n">newver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_del_obj_triple_sto</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">versionInfo</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_obj_triple_sto</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_del_data_triple_spod</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">versionInfo</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_data_triple_spod</span><span class="p">(</span>
             <span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">versionInfo</span><span class="p">,</span> <span class="n">o</span><span class="o">=</span><span class="n">newver</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">string</span>
         <span class="p">)</span>
 </code></pre></div>
