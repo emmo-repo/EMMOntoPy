@@ -19,3 +19,11 @@ with the name of the sub-command):
 * `<subcmd>_subcommand(args)`: This function implements the sub-command.
   The `args` argument is a `argparse.Namespace` object with all the
   options.
+
+In the tools/ontokit script the following must be added:
+
+* The sub-command must be imported as
+  `from ontopy.ontokit.<subcmd> import <subcmd>_arguments` at the top.
+
+* The `<subcmd>_arguments(subparsers)` function must be called (see under
+  '# Add sub-command arguments' in the `main` function).

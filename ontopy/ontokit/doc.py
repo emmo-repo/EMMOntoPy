@@ -1,5 +1,5 @@
 """
-A module for documenting ontologies.
+A module for documenting ontologies as HTML (rst) that is searchable.
 """
 
 # pylint: disable=fixme,too-many-lines,no-member,too-many-instance-attributes
@@ -32,11 +32,12 @@ class ModuleDocumentation:
     """Class for documentating a module in an ontology.
 
     Arguments:
-        ontology: Ontology to include in the generated documentation.
-            All entities in this ontology will be included.
+        ontology: Ontology (module) to include in the generated documentation.
+            All entities in this ontology (module) will be included.
         entities: Explicit listing of entities (classes, properties,
             individuals, datatypes) to document.  Normally not needed.
-        title: Header title.  Be default it is inferred from title of
+        title: Header title.  By default it is inferred from title
+        of the ontology (module).
         iri_regex: A regular expression that the IRI of documented entities
             should match.
     """
