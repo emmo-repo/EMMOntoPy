@@ -6,7 +6,12 @@ import warnings
 from rdflib.util import guess_format
 
 from ontopy import get_ontology
-from ontopy.utils import annotate_source, rename_iris, copy_annotation
+from ontopy.utils import (
+    annotate_source,
+    copy_annotation,
+    rename_iris,
+    rename_ontology,
+)
 
 import owlready2  # pylint: disable=wrong-import-order
 import owlready2.reasoning  # pylint: disable=wrong-import-order
@@ -186,12 +191,20 @@ def main(argv: list = None):
         ),
     )
     parser.add_argument(
+        "--set-version",
+        "-v",
+        help=(
+            "Set new version number. This will update the owl:versionIRI, "
+            "owl:versionInfo and owl:priorVersion annotations."
+        ),
+    )
+    parser.add_argument(
         "--annotate-source",
         "-a",
         action="store_true",
         help=(
             "Whether to annotate all entities with the base IRI of the source "
-            "ontology using `dcterms:source` relations.  This is contextual "
+            "ontology using `rdfs:isDefinedBy` relations.  This is contextual "
             "information that is otherwise lost when ontologies are inferred "
             "and/or squashed."
         ),
@@ -210,6 +223,16 @@ def main(argv: list = None):
             "added, referring to the old name.\n"
             "This option is useful to create a copy of an ontology with "
             "more human readable IRIs."
+        ),
+    )
+    parser.add_argument(
+        "--rename-ontology",
+        metavar="|REGEX|REPL|",
+        help=(
+            "Rename all ontologies matching regular expression `REGEX` to "
+            "`REPL`, using the function `re.sub()`. The argument should start "
+            "and end with the character used to separate the `REGEX` from the "
+            "`REPL` strings."
         ),
     )
     parser.add_argument(
@@ -273,9 +296,20 @@ def main(argv: list = None):
 
         if args.iri:
             onto.iri = args.iri
+            # Also try to set versionIRI
+            try:
+                version = onto.get_version()
+                onto.set_version(
+                    version, set_priorVersion=False, set_versionInfo=False
+                )
+            except (TypeError, ValueError):
+                pass
 
-        if args.base_iri:
+        if args.base_iri and args.base_iri != onto.base_iri:
             onto.base_iri = args.base_iri
+
+        if args.set_version:
+            onto.set_version(args.set_version)
 
         if args.annotate_source:
             annotate_source(onto)
@@ -295,6 +329,20 @@ def main(argv: list = None):
         for cpy in args.copy_annotation:
             src, dst = cpy.split("-->", 1)
             copy_annotation(onto, src.strip(), dst.strip())
+
+        if args.rename_ontology:
+            sep = args.rename_ontology[0]
+            if (
+                args.rename_ontology[-1] != sep
+                or args.rename_ontology.count(sep) != 3
+            ):
+                parser.error(
+                    "The argument of --update-imports should be of the form "
+                    '"|REGEX|REPL|" where "|" may be replaced with any '
+                    "character not used within REGEX or REPL."
+                )
+            _, regex, repl, _ = args.rename_ontology.split(sep)
+            rename_ontology(onto, regex, repl)
 
         onto.save(
             args.output,

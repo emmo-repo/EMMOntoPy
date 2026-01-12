@@ -8,6 +8,7 @@ from ontopy import get_ontology
 from ontopy.excelparser import create_ontology_from_excel
 from ontopy.utils import NoSuchLabelError
 from ontopy.exceptions import _get_excelreqs
+from ontopy.testutils import testdir
 
 try:
     pd, np = _get_excelreqs()
@@ -29,21 +30,15 @@ if TYPE_CHECKING:
 @pytest.mark.filterwarnings(
     "ignore:Not able to add the following concepts :UserWarning"
 )
-def test_excelparser(repo_dir: "Path") -> None:
+def test_excelparser() -> None:
     """Basic test for creating an ontology from an Excel file."""
     ontopath = (
-        repo_dir
-        / "tests"
-        / "test_excelparser"
-        / "result_ontology"
-        / "fromexcelonto.ttl"
+        testdir / "test_excelparser" / "result_ontology" / "fromexcelonto.ttl"
     )
 
     onto = get_ontology(str(ontopath)).load()
-    xlspath = repo_dir / "tests" / "test_excelparser" / "onto.xlsx"
-    update_xlspath = (
-        repo_dir / "tests" / "test_excelparser" / "onto_update.xlsx"
-    )
+    xlspath = testdir / "test_excelparser" / "onto.xlsx"
+    update_xlspath = testdir / "test_excelparser" / "onto_update.xlsx"
     ontology, catalog, errors = create_ontology_from_excel(xlspath, force=True)
     # ontology.save("test.ttl") # used for printing new ontology when debugging
     assert onto == ontology

@@ -30,10 +30,10 @@ def emmo() -> "Ontology":
     When updating the defeault EMMO for ontopy,
     tests might need to be updated.
     """
-    from emmopy import get_emmo
+    from ontopy import get_ontology
+    from ontopy.testutils import ontodir
 
-    emmo = get_emmo()
-
+    emmo = get_ontology(ontodir / "emmo" / "emmo.ttl").load()
     return emmo
 
 

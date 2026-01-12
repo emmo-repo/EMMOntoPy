@@ -327,7 +327,7 @@ See [examples/emmodoc/README.md](examples/emmodoc/README.md) for how this tool i
 
 ## `ontoconvert`
 
-Tool for converting between different ontology formats.
+Tool for converting between different ontology formats and annotating ontologies.
 
 ### Usage
 
@@ -343,24 +343,80 @@ ontoconvert [options] inputfile outputfile
 
 ```console
 positional arguments:
-  INPUTFILE              Name of inputfile.
-  OUTPUTFILE             Name og output file.
+  input                 IRI/file to OWL source.
+  output                Output file name.
 
-    optional arguments:
-      -h, --help            show this help message and exit
-      --input-format, -f INPUT_FORMAT
-                            Inputformat. Default is to infer from input.
-      --output-format, -F OUTPUT_FORMAT
-                            Default is to infer from output.
-      --no-catalog, -n      Do not read catalog even if it exists.
-      --inferred, -i        Add additional relations inferred by the FaCT++ reasoner to the converted ontology. Implies --squash.
-      --base-iri BASE_IRI, -b BASE_IRI
-                            Base iri of inferred ontology. The default is the base
-                            iri of the input ontology with "-inferred" appended to
-                            it. Used together with --inferred.
+options:
+  -h, --help            show this help message and exit
+  --input-format INPUT_FORMAT, -f INPUT_FORMAT
+                        Input format (default is to infer from input). Available formats: "xml"
+                        (rdf/xml), "n3", "nt", "trix", "rdfa"
+  --output-format OUTPUT_FORMAT, -F OUTPUT_FORMAT
+                        Output format (default is to infer from output. Available formats: "xml"
+                        (rdf/xml), "n3", "turtle", "nt", "pretty-xml", "trix"
+  --output-dir OUTPUT_DIR, -d OUTPUT_DIR
+                        Output directory. If `output` is a relative path, it will be relative to
+                        this directory.
+  --overwrite, -w       Whether to remove `output` if it already exists. The default is to append
+                        to it.
+  --copy-annotation FROM-->TO, -c FROM-->TO
+                        Copy annotation FROM to annotation TO in each class and property in the
+                        ontology. FROM and TO may be given as full IRIs or (if they already exists
+                        as annotations in the ontology) as entity names. This option be given
+                        multiple times.
+  --copy-emmo-annotations, -e
+                        Make a copy of EMMO annotations to plain RDFS for increased
+                        interoperability. Alias for: `--copy-annotation=http://www.w3.org/2004/02/s
+                        kos/core#prefLabel-->http://www.w3.org/2000/01/rdf-schema#label --copy-
+                        annotation=elucidation-->http://www.w3.org/2000/01/rdf-schema#comment`
+                        --copy-annotation=definition-->http://www.w3.org/2000/01/rdf-
+                        schema#comment` --copy-annotation=comment-->http://www.w3.org/2000/01/rdf-
+                        schema#comment`
+  --namespace PREFIX:NAMESPACE, -n PREFIX:NAMESPACE
+                        Additional prefix:namespace pair that will be added to the header of turtle
+                        output. The argument can be used multiple times, once for each added
+                        prefix:namespace pair.
+  --no-catalog, -N      Whether to not read catalog file even if it exists.
+  --reasoner [NAME], --infer [NAME], -i [NAME]
+                        Add additional relations inferred by the reasoner. Supported reasoners are
+                        "HermiT" (default), "Pellet" and "FaCT++".
+  --no-infer-imported, --no-reason-imported
+                        Do not infer imported ontologies.
+  --java-executable JAVA_EXECUTABLE
+                        Path to Java executable to use. Default is `java`.
+  --java-memory JAVA_MEMORY
+                        Maximum memory allocated to Java in MB. Default is 2000.
+  --iri IRI, -I IRI     IRI of converted ontology.
+  --base-iri BASE_IRI, -b BASE_IRI
+                        Base IRI of converted ontology. The default is the base iri of the input
+                        ontology. This argument can be used to workaround the bug in Owlready2 that
+                        changes the base IRI of the ontology to always end with a slash.
+  --quiet, -q           Don't print a lot of stuff to stdout during reasoning.
+  --recursive, -r       Whether to also convert imported ontologies recursively using rdflib. The
+                        output is written to a directory structure matching the input. This option
+                        requires Protege catalog files to be present. It is typically combined with
+                        --output-dir.
+  --squash, -s          Whether to also squash imported ontologies into a single output file. When
+                        combining --squash with --recursive, a folder structure of overlapping
+                        single-file ontologies will be generated.
+  --annotate-source, -a
+                        Whether to annotate all entities with the base IRI of the source ontology
+                        using `rdfs:isDefinedBy` relations. This is contextual information that is
+                        otherwise lost when ontologies are inferred and/or squashed.
+  --rename-iris [ANNOTATION], -R [ANNOTATION]
+                        For all entities that have the given annotation ('prefLabel' by default),
+                        change the name of the entity to the value of the annotation. For all
+                        changed entities, an `equivalentTo` annotation is added, referring to the
+                        old name. This option is useful to create a copy of an ontology with more
+                        human readable IRIs.
+  --rename-ontology |REGEX|REPL|
+                        Rename all ontologies matching regular expression `REGEX` to `REPL`, using
+                        the function `re.sub()`. The argument should start and end with the
+                        character used to separate the `REGEX` from the `REPL` strings.
+  --catalog-file [FILENAME], -C [FILENAME]
+                        Whether to write catalog file. Defaults to "catalog-v001.xml".
+  --append-catalog, -A  Whether to append to (possible) existing catalog file.
 
-      --recursive, -r       The output is written to the directories matching the input. This requires Protege catalog files to be present.
-      --squash, -s          Squash imported ontologies into a single output file.
 ```
 
 ### Examples
@@ -382,6 +438,12 @@ Since the catalog file will be overwritten in the above example writing output t
 
 ```console
 ontoconvert --recursive emmo.ttl owl/emmo.owl
+```
+
+The following will create a squashed and renamed copy of an ontology (with "/myonto/1.2.3" replaced by "/myonto/1.3.0"):
+
+```console
+ontoconvert --squash --rename-ontology "|/myonto/1.2.3|/myonto/1.3.0|" myonto.ttl myonto-squashed.ttl
 ```
 
 
