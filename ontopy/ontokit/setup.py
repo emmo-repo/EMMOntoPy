@@ -3,6 +3,7 @@
 # pylint: disable=fixme
 
 import shutil
+import subprocess  # nosec
 from glob import glob
 from pathlib import Path
 from string import Template
@@ -51,6 +52,23 @@ def setup_arguments(subparsers):
             "turtle file `{ONTOLOGY_NAME}.ttl`."
         ),
     )
+    parser.add_argument(
+        "--github-pages-branch",
+        default="gh-pages",
+        metavar="NAME",
+        help="Name of the GitHub Pages branch [gh-pages]",
+    )
+    parser.add_argument(
+        "--remote",
+        default="origin",
+        metavar="NAME",
+        help="Remote git repository [origin]",
+    )
+    parser.add_argument(
+        "--no-init",
+        action="store_true",
+        help="Do not try to initialise GitHub Pages branch.",
+    )
 
 
 def setup_subcommand(args):
@@ -59,8 +77,10 @@ def setup_subcommand(args):
     thisdir = Path(__file__).resolve().parent
     srcdir = thisdir / "setup"
 
-    root = Path(args.root)
-    workflows_dir = root / ".github" / "workflows"
+    root = Path(args.root).resolve()
+    github_dir = root / ".github"
+    workflows_dir = github_dir / "workflows"
+    scripts_dir = github_dir / "scripts"
     workflows_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
 
     # TODO: infer ONTOLOGY_PREFIX and ONTOLOGY_IRI
@@ -68,7 +88,18 @@ def setup_subcommand(args):
     ontology_prefix = args.ontology_prefix
     ontology_iri = args.ontology_iri
 
+    def ignore(src, names):
+        """Return file names to ignore when copying."""
+        # pylint: disable=unused-argument
+        return [name for name in names if name.endswith("~")]
+
     shutil.copy(srcdir / "emmocheck_conf.yml", root / ".github")
+    shutil.copytree(
+        srcdir / "scripts",
+        root / ".github" / "scripts",
+        ignore=ignore,
+        dirs_exist_ok=True,
+    )
 
     for fname in glob(str(srcdir / "workflows" / "*.yml")):
         template = Template(Path(fname).read_text())
@@ -81,3 +112,15 @@ def setup_subcommand(args):
         )
         outfile = workflows_dir / Path(fname).name
         outfile.write_text(substituted)
+
+    # Initialise github pages branch
+    if not args.no_init:
+        args = [
+            scripts_dir / "init_ghpages.sh",
+            f"--ghpages={args.github_pages_branch}",
+            f"--ontology_name={ontology_name}",
+            f"--ontology_prefix={ontology_prefix}",
+            f"--ontology_iri={ontology_iri}",
+            f"--remote={args.remote}",
+        ]
+        subprocess.call(args, shell=True)  # nosec
