@@ -1022,10 +1022,9 @@ def main(
     if args.configfile:
         import yaml  # pylint: disable=import-outside-toplevel
 
-        with open(args.configfile, "rt") as handle:
-            TestEMMOConventions.config.update(
-                yaml.load(handle, Loader=yaml.SafeLoader)
-            )
+        with open(args.configfile, "rt") as f:
+            conf = yaml.safe_load(f)
+        TestEMMOConventions.config.update(conf if conf else {})
 
     # Run all subclasses of TestEMMOConventions as test suites
     status = 0
