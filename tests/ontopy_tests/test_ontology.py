@@ -44,6 +44,11 @@ def test_find():
     )
 
 
+def test_get_iri():
+    """Test get_iri() method."""
+    assert animal.get_iri() == "https://w3id.org/emmo/domain/mammal"
+
+
 def test__get_unabbreviated_triples():
     """Test _get_unabbreviated_triples()."""
     from ontopy.ontology import _get_unabbreviated_triples

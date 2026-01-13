@@ -713,8 +713,7 @@ def infer_version(iri, version_iri):
 
     if "/" in version:
         raise ValueError(
-            f"version IRI {version_iri!r} is not consistent with base IRI "
-            f"{iri!r}"
+            f"version IRI '{version_iri}' is not consistent with IRI '{iri}'"
         )
     return version
 
