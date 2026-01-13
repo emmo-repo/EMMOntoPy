@@ -27,3 +27,19 @@ In the tools/ontokit script the following must be added:
 
 * The `<subcmd>_arguments(subparsers)` function must be called (see under
   '# Add sub-command arguments' in the `main` function).
+
+Notes on setting up the workflows in github actions:
+* In order for github pages to work correctly the repository must have
+  the `gh-pages` branch enabled for github pages in the repository settings.
+
+* The ontology repository must follow the `EMMO` recommendations for
+  repository structure as defined in the EMMO documentation.
+
+
+* When running `ontokit setup` a new set of *.yml file are created in
+  .github/workflows/. These files define the workflows for continuous
+  integration and deployment. If there are other workflow already present
+  in this directory these will not be overwritten. Only the files created
+  by ontokit will be updated. However, care should be taken that these
+  workflows do not conflict with any other workflows present in the
+  repository.
