@@ -1,0 +1,5 @@
+nbsphinx
+pydata-sphinx-theme
+sphinx
+sphinx_design
+sphinxcontrib-globalsubs

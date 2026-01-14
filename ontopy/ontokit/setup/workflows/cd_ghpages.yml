@@ -31,13 +31,16 @@ jobs:
       run: |
         pip install --upgrade pip
         #pip install EMMOntoPy
-        pip install -U git+https://github.com/emmo-repo/EMMOntoPy.git@annotating
+        pip install -U git+https://github.com/emmo-repo/EMMOntoPy.git@ontokit
 
-    - name: Install temgo and tripper
+    - name: Install tripper
       run: |
-        pip install .
         pip install tripper[datadoc]
         pip install -U git+https://github.com/EMMC-ASBL/tripper.git@master
+
+    #- name: Install current ontology for keywords tool
+    #  run: |
+    #    pip install -U git+
 
     - name: Install ROBOT
       run: |
@@ -108,9 +111,9 @@ jobs:
             --input build/${ONTOLOGY_NAME}.ttl \
             --output build/${ONTOLOGY_NAME}-inferred.ttl
 
-#    - name: Generate markdown documentation of all keywords
-#      run: |
-#        keywords -i build/${ONTOLOGY_NAME}-doc.ttl --keywords build/${ONTOLOGY_NAME}.md --namespace-filter=${ONTOLOGY_IRI} --redefine=allow
+    - name: Generate markdown documentation of all keywords
+      run: |
+        keywords -i build/${ONTOLOGY_NAME}-doc.ttl --keywords build/${ONTOLOGY_NAME}.md --namespace-filter=${ONTOLOGY_IRI}# --redefine=allow
 
     - name: Generate Widoco documentation
       run: |
