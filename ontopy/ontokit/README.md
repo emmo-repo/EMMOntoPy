@@ -36,10 +36,10 @@ Notes on setting up the workflows in github actions:
   repository structure as defined in the EMMO documentation.
 
 
-* When running `ontokit setup` a new set of *.yml file are created in
+* When running `ontokit setup` a new set of `*.yml` files is created in
   .github/workflows/. These files define the workflows for continuous
   integration and deployment. If there are other workflow already present
   in this directory these will not be overwritten. Only the files created
   by ontokit will be updated. However, care should be taken that these
-  workflows do not conflict with any other workflows present in the
+  workflows do not conflict with any other workflow present in the
   repository.
