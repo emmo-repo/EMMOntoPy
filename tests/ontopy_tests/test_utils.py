@@ -132,6 +132,28 @@ def test_rename_ontologies():
     }
 
 
+def test_remove_owlready2_properties():
+    from ontopy.utils import rename_iris, remove_owlready2_properties
+    from ontopy.testutils import get_testonto
+
+    onto = get_testonto()
+    storid = onto._abbreviate(
+        "http://www.lesfleursdunormal.fr/static/_downloads/"
+        "owlready_ontology.owl#python_name"
+    )
+
+    # No initial owlready2 properties
+    assert not any(onto._get_triples_spod_spod(None, storid, None))
+
+    # Add owlready2 properties
+    rename_iris(onto)
+    assert any(onto._get_triples_spod_spod(None, storid, None))
+
+    # Remove owlready2 properties
+    remove_owlready2_properties(onto)
+    assert not any(onto._get_triples_spod_spod(None, storid, None))
+
+
 def test_preferred_language():
     from ontopy import get_ontology
     from ontopy.testutils import ontodir
