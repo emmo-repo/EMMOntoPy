@@ -1607,6 +1607,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ontopy.utils.remove_owlready2_properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        remove_owlready2_properties()
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ontopy.utils.rename_iris" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2009,6 +2020,17 @@
     <span class="md-ellipsis">
       
         read_catalog()
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ontopy.utils.remove_owlready2_properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        remove_owlready2_properties()
       
     </span>
   </a>
@@ -3465,6 +3487,50 @@ internal use to avoid infinite recursions.</p>
     <span class="k">if</span> <span class="n">return_paths</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">iris</span><span class="p">,</span> <span class="n">dirs</span>
     <span class="k">return</span> <span class="n">iris</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="ontopy.utils.remove_owlready2_properties" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">remove_owlready2_properties</span><span class="p">(</span><span class="n">onto</span><span class="p">)</span></code>
+
+
+<a href="#ontopy.utils.remove_owlready2_properties" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Remove Owlready2 properties from ontology.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>ontopy/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">remove_owlready2_properties</span><span class="p">(</span><span class="n">onto</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove Owlready2 properties from ontology.&quot;&quot;&quot;</span>
+    <span class="n">ns</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;http://www.lesfleursdunormal.fr/static/_downloads/&quot;</span>
+        <span class="s2">&quot;owlready_ontology.owl#&quot;</span>
+    <span class="p">)</span>
+    <span class="n">spo</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">_get_obj_triples_spo_spo</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">ns</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">spod</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">_get_data_triples_spod_spod</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">ns</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">spo</span><span class="p">:</span>
+        <span class="n">onto</span><span class="o">.</span><span class="n">_del_obj_triple_spo</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">spod</span><span class="p">:</span>
+        <span class="n">onto</span><span class="o">.</span><span class="n">_del_data_triple_spod</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>

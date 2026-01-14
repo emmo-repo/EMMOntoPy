@@ -4054,6 +4054,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="n">write_catalog_file</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">append_catalog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">catalog_file</span><span class="o">=</span><span class="s2">&quot;catalog-v001.xml&quot;</span><span class="p">,</span>
+        <span class="n">owlready2_properties</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes the ontology to file.</span>
@@ -4095,6 +4096,8 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 <span class="sd">        catalog_file: str | Path</span>
 <span class="sd">            Name of catalog file.  If not an absolute path, it is prepended</span>
 <span class="sd">            to `dir`.</span>
+<span class="sd">        owlready2_properties: Whether to keep Owlready2 properties.  If false,</span>
+<span class="sd">            all triples with predicate in the Owlready2 namespace are removed.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        --------</span>
@@ -4231,6 +4234,16 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
                     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
                         <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
                         <span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
+
+            <span class="c1"># Remove triples from the owlready2 namespace</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">owlready2_properties</span><span class="p">:</span>
+                <span class="n">ns</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://www.lesfleursdunormal.fr/static/_downloads/&quot;</span>
+                    <span class="s2">&quot;owlready_ontology.owl#&quot;</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">ns</span><span class="p">):</span>
+                        <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
 
             <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span> <span class="ow">and</span> <span class="nb">format</span> <span class="ow">in</span> <span class="n">OWLREADY2_FORMATS</span><span class="p">:</span>
@@ -8619,7 +8632,7 @@ with it together with a triple store.</p>
 
 
 <h3 id="ontopy.ontology.Ontology.save" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">mkdir</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">squash</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_catalog_file</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">append_catalog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">mkdir</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">squash</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_catalog_file</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">append_catalog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">owlready2_properties</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.ontology.Ontology.save" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -8685,6 +8698,10 @@ saving to turtle.</p>
 <p>Name of catalog file.  If not an absolute path, it is prepended
 to <code>dir</code>.</p>
 </div>
+<div class="admonition owlready2_properties">
+<p class="admonition-title">Whether to keep Owlready2 properties.  If false,</p>
+<p>all triples with predicate in the Owlready2 namespace are removed.</p>
+</div>
 <h5 id="ontopy.ontology.Ontology.save--returns">Returns<a class="headerlink" href="#ontopy.ontology.Ontology.save--returns" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code>The path to the saved ontology.
 </code></pre></div>
@@ -8705,6 +8722,7 @@ to <code>dir</code>.</p>
     <span class="n">write_catalog_file</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">append_catalog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">catalog_file</span><span class="o">=</span><span class="s2">&quot;catalog-v001.xml&quot;</span><span class="p">,</span>
+    <span class="n">owlready2_properties</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Writes the ontology to file.</span>
@@ -8746,6 +8764,8 @@ to <code>dir</code>.</p>
 <span class="sd">    catalog_file: str | Path</span>
 <span class="sd">        Name of catalog file.  If not an absolute path, it is prepended</span>
 <span class="sd">        to `dir`.</span>
+<span class="sd">    owlready2_properties: Whether to keep Owlready2 properties.  If false,</span>
+<span class="sd">        all triples with predicate in the Owlready2 namespace are removed.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    --------</span>
@@ -8882,6 +8902,16 @@ to <code>dir</code>.</p>
                 <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
                     <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
                     <span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">URIRef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
+
+        <span class="c1"># Remove triples from the owlready2 namespace</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">owlready2_properties</span><span class="p">:</span>
+            <span class="n">ns</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;http://www.lesfleursdunormal.fr/static/_downloads/&quot;</span>
+                <span class="s2">&quot;owlready_ontology.owl#&quot;</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">ns</span><span class="p">):</span>
+                    <span class="n">graph</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
 
         <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
     <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span> <span class="ow">and</span> <span class="nb">format</span> <span class="ow">in</span> <span class="n">OWLREADY2_FORMATS</span><span class="p">:</span>
