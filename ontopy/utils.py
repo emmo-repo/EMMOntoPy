@@ -1,7 +1,7 @@
 """Some generic utility functions."""
 
 # pylint: disable=protected-access,invalid-name,redefined-outer-name
-# pylint: disable=import-outside-toplevel
+# pylint: disable=import-outside-toplevel,too-many-lines
 import os
 import sys
 import re
@@ -802,6 +802,28 @@ def rename_ontology(onto, regex, repl, recursive=True):
             storid = onto._abbreviate(newiri)
             ontology._del_obj_triple_spo(ontology.storid, pred)
             ontology._set_obj_triple_spo(ontology.storid, pred, storid)
+
+
+def remove_owlready2_properties(onto):
+    """Remove Owlready2 properties from ontology."""
+    ns = (
+        "http://www.lesfleursdunormal.fr/static/_downloads/"
+        "owlready_ontology.owl#"
+    )
+    spo = [
+        (s, p, o)
+        for s, p, o in onto._get_obj_triples_spo_spo(None, None, None)
+        if onto._unabbreviate(p).startswith(ns)
+    ]
+    spod = [
+        (s, p, o, d)
+        for s, p, o, d in onto._get_data_triples_spod_spod(None, None, None)
+        if onto._unabbreviate(p).startswith(ns)
+    ]
+    for s, p, o in spo:
+        onto._del_obj_triple_spo(s, p, o)
+    for s, p, o, d in spod:
+        onto._del_data_triple_spod(s, p, o, d)
 
 
 def normalise_url(url):
