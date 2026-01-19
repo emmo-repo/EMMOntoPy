@@ -19,3 +19,27 @@ with the name of the sub-command):
 * `<subcmd>_subcommand(args)`: This function implements the sub-command.
   The `args` argument is a `argparse.Namespace` object with all the
   options.
+
+In the tools/ontokit script the following must be added:
+
+* The sub-command must be imported as
+  `from ontopy.ontokit.<subcmd> import <subcmd>_arguments` at the top.
+
+* The `<subcmd>_arguments(subparsers)` function must be called (see under
+  '# Add sub-command arguments' in the `main` function).
+
+Notes on setting up the workflows in github actions:
+* In order for github pages to work correctly the repository must have
+  the `gh-pages` branch enabled for github pages in the repository settings.
+
+* The ontology repository must follow the `EMMO` recommendations for
+  repository structure as defined in the EMMO documentation.
+
+
+* When running `ontokit setup` a new set of `*.yml` files is created in
+  .github/workflows/. These files define the workflows for continuous
+  integration and deployment. If there are other workflow already present
+  in this directory these will not be overwritten. Only the files created
+  by ontokit will be updated. However, care should be taken that these
+  workflows do not conflict with any other workflow present in the
+  repository.
