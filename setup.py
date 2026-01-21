@@ -134,6 +134,7 @@ setuptools.setup(
         "tools/ontoconvert",
         "tools/ontoversion",
         "tools/excel2onto",
+        "tools/ontokit",
         "tools/redirectioncheck",
     ],
     package_data={

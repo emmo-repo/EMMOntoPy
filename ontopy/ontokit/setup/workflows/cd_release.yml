@@ -1,0 +1,40 @@
+name: Release new version
+
+on:
+  release:
+    types: [published]
+
+env:
+  ONTOLOGY_NAME: $ONTOLOGY_NAME
+  TAG: ${{ github.ref_name }}
+
+permissions:
+  contents: write
+
+jobs:
+  release_version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Create and copy generated files to versions/
+        run: |
+          mkdir -p versions/${TAG#v}
+          cp -f \
+              README.md \
+              ${ONTOLOGY_NAME}.ttl \
+              ${ONTOLOGY_NAME}-dependencies.ttl \
+              ${ONTOLOGY_NAME}-inferred.ttl \
+              versions/${TAG#v}/.
+
+      - name: Push to gh-pages
+        run: |
+          git config --global user.email "${ONTOLOGY_NAME}@emmc.eu"
+          git config --global user.name "${ONTOLOGY_NAME}"
+          git add versions/${TAG#v}
+          git commit -m "Release version ${TAG#v}"
+          git push origin gh-pages

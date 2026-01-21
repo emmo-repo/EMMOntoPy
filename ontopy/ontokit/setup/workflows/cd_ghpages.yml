@@ -1,0 +1,135 @@
+name: Deploy on GitHub Pages
+
+# Only run this workflow on push to a release branch or master
+#on: push
+on:
+  push:
+    branches:
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+-*'
+      - master
+      - main
+
+env:
+  ONTOLOGY_NAME: $ONTOLOGY_NAME
+  ONTOLOGY_PREFIX: $ONTOLOGY_PREFIX
+  ONTOLOGY_IRI: $ONTOLOGY_IRI
+
+permissions:
+  contents: write
+
+
+jobs:
+  deploy-on-ghpages:
+    #concurrency: ci-${{ github.ref }}  # Recommended if you intend to make multiple deployments in quick succession.
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.14
+
+    - name: Install EMMOntoPy and tripper
+      run: |
+        pip install --upgrade pip
+        pip install \
+            "EMMOntoPy[ontodoc] @ git+https://github.com/emmo-repo/EMMOntoPy.git@master" \
+            "tripper[datadoc] @ git+https://github.com/EMMC-ASBL/tripper.git@master"
+
+    #- name: Install current ontology for keywords tool
+    #  run: |
+    #    pip install -U git+
+
+    - name: Install ROBOT
+      run: |
+        mkdir bin
+        wget -nv https://github.com/ontodev/robot/releases/download/v1.9.6/robot.jar
+        mv robot.jar bin/.
+        curl https://raw.githubusercontent.com/ontodev/robot/master/bin/robot > bin/robot
+        chmod +x bin/robot
+        ls -l bin/
+
+    - name: Download Widoco
+      run: |
+        wget --quiet https://github.com/dgarijo/Widoco/releases/download/v1.4.25/widoco-1.4.25-jar-with-dependencies_JDK-17.jar
+
+    - name: Copy readme and license files to gh-pages
+      run: |
+        mkdir build
+        cp README.md LICENSE build/.
+
+    - name: Create dependencies on gh-pages
+      run: |
+        ontoconvert \
+            -saw \
+            --namespace="emmo:https://w3id.org/emmo#" \
+            --namespace="${ONTOLOGY_PREFIX}:${ONTOLOGY_IRI}#" \
+            ${ONTOLOGY_NAME}-dependencies.ttl \
+            build/${ONTOLOGY_NAME}-dependencies.ttl
+
+    - name: Create squashed ontology
+      run: |
+        ontoconvert \
+            -sawe \
+            --namespace="emmo:https://w3id.org/emmo#" \
+            --namespace="${ONTOLOGY_PREFIX}:${ONTOLOGY_IRI}#" \
+            --base-iri="${ONTOLOGY_IRI}#" \
+            --iri="${ONTOLOGY_IRI}" \
+            ${ONTOLOGY_NAME}.ttl \
+            build/${ONTOLOGY_NAME}.ttl
+
+    - name: Create ontology for used later for generating documentation
+      run: |
+        ontoconvert \
+            -awe \
+            --namespace="emmo:https://w3id.org/emmo#" \
+            --namespace="${ONTOLOGY_PREFIX}:${ONTOLOGY_IRI}#" \
+            --base-iri="${ONTOLOGY_IRI}#" \
+            --iri="${ONTOLOGY_IRI}" \
+            --copy-annotation="elucidation-->http://purl.org/dc/terms/description" \
+            --copy-annotation="prefLabel-->http://www.w3.org/2000/01/rdf-schema#label" \
+            ${ONTOLOGY_NAME}.ttl \
+            build/${ONTOLOGY_NAME}-doc.ttl
+
+    - name: Create inferred ontology
+      run: |
+        bin/robot reason \
+            --reasoner HermiT \
+            --remove-redundant-subclass-axioms true \
+            --preserve-annotated-axioms true \
+            --exclude-owl-thing true \
+            --exclude-duplicate-axioms true \
+            --input build/${ONTOLOGY_NAME}.ttl \
+            --output ${ONTOLOGY_NAME}-inferred.ttl
+        ontoconvert --iri=${ONTOLOGY_IRI}/inferred ${ONTOLOGY_NAME}-inferred.ttl build/${ONTOLOGY_NAME}-inferred.ttl
+
+    - name: Generate markdown documentation of all keywords
+      run: |
+        keywords -i build/${ONTOLOGY_NAME}-doc.ttl --keywords build/${ONTOLOGY_NAME}.md --namespace-filter=${ONTOLOGY_IRI}# --redefine=allow
+
+    - name: Generate Widoco documentation
+      run: |
+        java -jar widoco-1.4.25-jar-with-dependencies_JDK-17.jar \
+            -ontFile build/${ONTOLOGY_NAME}-doc.ttl \
+            -outFolder build/widoco \
+            -getOntologyMetadata \
+            -oops \
+            -rewriteAll \
+            -saveConfig build/widoco/widoco.conf \
+            - webVowl \
+            -licensius \
+            -includeAnnotationProperties
+
+
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: build
+        branch: gh-pages
+        clean: false
+        single-commit: true
