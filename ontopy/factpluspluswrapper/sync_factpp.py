@@ -17,7 +17,6 @@ from owlready2.reasoning import (
 
 from ontopy.factpluspluswrapper.factppgraph import FaCTPPGraph
 
-
 OWL_2_TYPE = {
     RDFS.subClassOf: "class",
     RDFS.subPropertyOf: "property",

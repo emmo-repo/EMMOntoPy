@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Tool for checking that ontologies conform to EMMO conventions."""
+
 import sys
 import os
 
@@ -13,7 +14,6 @@ if rootdir not in sys.path:
 from emmopy.emmocheck import (  # pylint: disable=wrong-import-position,import-error
     main,
 )
-
 
 if __name__ == "__main__":
     sys.exit(main())

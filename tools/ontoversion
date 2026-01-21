@@ -4,6 +4,7 @@
 This script uses rdflib and the versionIRI tag on an ontology to infer
 the version.
 """
+
 import argparse
 import sys
 

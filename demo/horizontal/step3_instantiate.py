@@ -7,6 +7,7 @@ In this step we uses the Atomistic Simulation Environment (ASE) to load
 a atomistic Al-Fe4Al13 interface structure from a cif file and
 represents it using the metadata defined in step 2.
 """
+
 # pylint: disable=import-error
 import ase
 import ase.io
@@ -14,7 +15,6 @@ import ase.io
 import dlite
 
 from step2_define_metadata import DLiteAtoms
-
 
 # Example for importing structure from the MaterialsProject.
 # See https://materialsproject.org/docs/api for instructions for getting

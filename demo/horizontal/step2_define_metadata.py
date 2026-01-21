@@ -13,12 +13,12 @@ exposes the attributes as dlite properties. The subclass DLiteAtoms
 adds some methods for handling some special attributes.
 
 """
+
 # pylint: disable=import-error
 import ase
 from ase.spacegroup import Spacegroup
 
 import dlite
-
 
 # Create an ASE Atoms subclass that also inherits from dlite atoms.json
 BaseAtoms = dlite.classfactory(ase.Atoms, url="json://atoms.json?mode=r#")

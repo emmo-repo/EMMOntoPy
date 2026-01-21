@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """`ontodoc` CLI tool."""
+
 # pylint: disable=wrong-import-position,wrong-import-order
 import os
 import sys

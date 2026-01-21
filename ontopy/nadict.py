@@ -4,6 +4,7 @@ A nested dict with both attribute and item access.
 
 NA stands for Nested and Attribute.
 """
+
 from collections.abc import Mapping
 import copy
 

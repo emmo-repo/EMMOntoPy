@@ -5,7 +5,6 @@ import pytest
 
 from ontopy.exceptions import _check_graphviz, _require_java
 
-
 try:
     _check_graphviz()
 except RuntimeError as e:

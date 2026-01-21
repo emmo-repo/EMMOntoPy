@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """# `emmopy`"""
+
 import sys
 from ontopy import __version__ as __ontopy_version__
 
@@ -15,6 +16,5 @@ if "owlready2" in sys.modules and "emmopy" not in sys.modules:
 
 # Import functions from emmopy
 from .emmopy import get_emmo  # pylint: disable=wrong-import-position
-
 
 __all__ = ("get_emmo",)

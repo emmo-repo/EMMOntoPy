@@ -3,6 +3,7 @@
 
 If desirable some of these additions may be moved back into owlready2.
 """
+
 # pylint: disable=too-many-lines,fixme,arguments-differ,protected-access
 # pylint: disable=disable=too-many-arguments,too-many-positional-arguments
 from typing import TYPE_CHECKING, Optional, Union
@@ -54,7 +55,6 @@ from ontopy.exceptions import (
     EntityClassDefinitionError,
     EMMOntoPyException,
 )
-
 
 if TYPE_CHECKING:
     from typing import Iterator, List, Sequence, Tuple, Generator

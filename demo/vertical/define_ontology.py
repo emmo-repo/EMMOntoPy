@@ -33,9 +33,9 @@ References
 [1] Khalid et al. Proc. Manufact. 15 (2018) 1407
 
 """
+
 # pylint: disable=fixme,invalid-name,too-few-public-methods
 from ontopy import World
-
 
 # Load EMMO
 world = World(filename="demo.sqlite3")

@@ -36,6 +36,7 @@ Example configuration file:
       - name_of_test_to_enable
 
 """
+
 import sys
 import re
 import unittest
