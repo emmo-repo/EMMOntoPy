@@ -4,7 +4,6 @@ from owlready2 import And, Or, Not, Inverse, locstr
 
 from pathlib import Path
 
-
 thisdir = Path(__file__).resolve().parent
 ontopath = thisdir / "testonto" / "emmo" / "emmo-squashed.ttl"
 

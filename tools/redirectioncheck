@@ -14,6 +14,7 @@ expected redirections:
         https://raw.githubusercontent.com/emmo-repo/EMMO/master/emmo.ttl
 
 """
+
 import sys
 import argparse
 

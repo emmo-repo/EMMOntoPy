@@ -28,7 +28,6 @@ from ontopy.exceptions import _get_excelreqs
 
 import owlready2  # pylint: disable=C0411
 
-
 if TYPE_CHECKING:
     import pandas as pd  # type-only import, not required at runtime
 

@@ -6,7 +6,6 @@ import pytest
 
 from ontopy.exceptions import _get_excelreqs
 
-
 try:
     _get_excelreqs()
 except ImportError as e:

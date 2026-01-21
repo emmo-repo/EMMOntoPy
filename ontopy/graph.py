@@ -5,6 +5,7 @@ A module for visualising ontologies using graphviz.
 It requires graphviz installed in addition to
 the graphviz python package, see documentation.
 """
+
 # pylint: disable=fixme,too-many-lines
 
 import os
@@ -20,7 +21,6 @@ from ontopy.utils import asstring, get_label
 from ontopy.ontology import Ontology
 from ontopy.utils import get_format
 from ontopy.exceptions import EMMOntoPyException
-
 
 if TYPE_CHECKING:
     from ipywidgets.widgets.widget_templates import GridspecLayout

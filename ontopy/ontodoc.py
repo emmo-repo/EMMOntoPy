@@ -2,6 +2,7 @@
 """
 A module for documenting ontologies.
 """
+
 # pylint: disable=fixme,too-many-lines,no-member
 import os
 import re
@@ -180,8 +181,7 @@ class OntoDoc:
             label=self.onto.base_iri,
             lowerlabel=self.onto.base_iri,
         )
-        template = dedent(
-            """\
+        template = dedent("""\
         %HEADER {title}
         Documentation of {irilink}
 
@@ -200,8 +200,7 @@ class OntoDoc:
 
         %HEADER "Class taxonomies"     level=2
         %ALLFIG classes
-        """
-        ).format(ontology=self.onto, title=title, irilink=irilink)
+        """).format(ontology=self.onto, title=title, irilink=irilink)
         return template
 
     def get_header(self, label, header_level=1, anchor=None):
