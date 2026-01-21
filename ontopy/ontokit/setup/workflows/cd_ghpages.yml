@@ -62,7 +62,7 @@ jobs:
         mkdir build
         cp README.md LICENSE build/.
 
-    - name: Create ${ONTOLOGY_NAME}-dependencies
+    - name: Create dependencies on gh-pages
       run: |
         ontoconvert \
             -saw \
