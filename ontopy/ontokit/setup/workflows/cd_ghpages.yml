@@ -1,8 +1,14 @@
 name: Deploy on GitHub Pages
-on: push
-#on:
-#  push:
-#    branches: [master]
+
+# Only run this workflow on push to a release branch or master
+#on: push
+on:
+  push:
+    branches:
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+-*'
+      - master
+      - main
 
 env:
   ONTOLOGY_NAME: $ONTOLOGY_NAME
@@ -25,18 +31,14 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: 3.11
+        python-version: 3.14
 
-    - name: Install EMMOntoPy
+    - name: Install EMMOntoPy and tripper
       run: |
         pip install --upgrade pip
-        #pip install EMMOntoPy
-        pip install -U git+https://github.com/emmo-repo/EMMOntoPy.git@ontokit
-
-    - name: Install tripper
-      run: |
-        pip install tripper[datadoc]
-        pip install -U git+https://github.com/EMMC-ASBL/tripper.git@master
+        pip install \
+            "EMMOntoPy[ontodoc] @ git+https://github.com/emmo-repo/EMMOntoPy.git@master" \
+            "tripper[datadoc] @ git+https://github.com/EMMC-ASBL/tripper.git@master"
 
     #- name: Install current ontology for keywords tool
     #  run: |
@@ -60,7 +62,7 @@ jobs:
         mkdir build
         cp README.md LICENSE build/.
 
-    - name: Copy readme and license files to gh-pages
+    - name: Create dependencies on gh-pages
       run: |
         ontoconvert \
             -saw \
@@ -95,21 +97,15 @@ jobs:
 
     - name: Create inferred ontology
       run: |
-        # Running HermiT via ontoconvert fails with custom datatypes.
-        # Use ROBOT instead.
-        #
-        #ontoconvert \
-        #    -sawe \
-        #    --base-iri="${ONTOLOGY_IRI}#" \
-        #    --iri="${ONTOLOGY_IRI}" \
-        #    --infer=HermiT \
-        #    ${ONTOLOGY_NAME}.ttl \
-        #    build/${ONTOLOGY_NAME}-inferred.ttl
-        #
         bin/robot reason \
             --reasoner HermiT \
+            --remove-redundant-subclass-axioms true \
+            --preserve-annotated-axioms true \
+            --exclude-owl-thing true \
+            --exclude-duplicate-axioms true \
             --input build/${ONTOLOGY_NAME}.ttl \
-            --output build/${ONTOLOGY_NAME}-inferred.ttl
+            --output ${ONTOLOGY_NAME}-inferred.ttl
+        ontoconvert --iri=${ONTOLOGY_IRI}/inferred ${ONTOLOGY_NAME}-inferred.ttl build/${ONTOLOGY_NAME}-inferred.ttl
 
     - name: Generate markdown documentation of all keywords
       run: |
