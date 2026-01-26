@@ -1,7 +1,7 @@
 blessed>=1.17  # core functionality ontology check
 defusedxml>=0.7.1,<1  # core functionality parsing
 Owlready2>=0.28,!=0.32,!=0.34,<0.50  # core functionality ontology
-packaging>=21.0,<26
+packaging>=21.0,<27
 Pygments>=2.7.4,<3
 pyparsing>=2.4.7
 PyYAML>=5.4.1,<7
