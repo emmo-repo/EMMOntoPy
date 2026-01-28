@@ -2,6 +2,7 @@
 """General toolkit for managing ontologies."""
 import argparse
 from ontopy.ontokit.setup import setup_arguments
+from ontopy.ontokit.docs import docs_arguments
 
 
 def main(argv: "list" = None):
@@ -25,6 +26,7 @@ def main(argv: "list" = None):
     # Add sub-command arguments
     subparsers = parser.add_subparsers(required=True, help="Subcommands:")
     setup_arguments(subparsers)
+    docs_arguments(subparsers)
 
     args = parser.parse_args(argv)
 
