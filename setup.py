@@ -61,6 +61,13 @@ with open(os.path.join(rootdir, "requirements_ontodoc.txt"), "r") as handle:
         if not _.startswith("#") and "git+" not in _
     ]
 
+with open(os.path.join(rootdir, "requirements_ontokit.txt"), "r") as handle:
+    ONTOKIT = [
+        f"{_.strip()}"
+        for _ in handle.readlines()
+        if not _.startswith("#") and "git+" not in _
+    ] + ONTODOC
+
 
 with open(os.path.join(rootdir, "requirements_dev.txt"), "r") as handle:
     DEV = [
@@ -125,6 +132,7 @@ setuptools.setup(
         "docs": DOCS,
         "excel": EXCEL,
         "ontodoc": ONTODOC,
+        "ontokit": ONTOKIT,
     },
     packages=setuptools.find_packages(),
     scripts=[
