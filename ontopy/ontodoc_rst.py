@@ -247,8 +247,64 @@ class ModuleDocumentation:
                 ]
             )
 
+        def _get_links(item, key):
+            """Get HTML links for a list of entitities that
+            can be fetched from the ontology as keys."""
+            links = []
+            for ent in item[key]:
+                full_iri = ent.iri
+                try:
+                    val = ent.prefLabel.get_lang("en")[0]
+                except (IndexError, AttributeError):
+                    val = ent
+                links.append(_html_links(full_iri, display_text=val))
+
+            return links
+
+        def _linkify_manchester(text: str, onto) -> str:
+            """
+            Convert manchester notation as string to HTML links.
+            """
+
+            def _replace(match):
+                word = match.group(0)
+                try:
+                    full = onto[word].iri
+                    return _html_links(full, word)
+                except (KeyError, AttributeError):
+                    return word
+
+            return re.sub(r"\w+", _replace, text)
+
+        def _html_links(full_iri, display_text):
+            """Create the HTML code so that links lead to
+            the correct fragment in the same document if possibe,
+            otherwise link to the full IRI"""
+            fragment_iri = full_iri.split("#")[-1]
+            return (
+                f"<a href='#{fragment_iri}' "
+                f'onclick="'
+                f"if(!document.getElementById('{fragment_iri}'))"
+                f"{{window.location.href='{full_iri}'; return false;}}"
+                f'">'
+                f"{display_text}</a>"
+            )
+
+        def _add_table_row(rst, key, value):
+            try:
+                key = get_preferred_label(key)
+            except AttributeError:
+                key = key
+            rst += "  <tr>\n"
+            rst += f'    <td class="element-table-key"><span class="element-table-key">{key}</span></td>\n'
+            rst += '    <td class="element-table-value">'
+            rst += value
+            rst += "</td>\n"
+            rst += "  </tr>\n"
+            return rst
+
         def add_keyvalue(
-            key, value, escape=True, htmllink=True, show_figure=True
+            key, value, iri=None, escape=True, htmllink=True, show_figure=True
         ):
             """Help function for adding a key-value row to table.
 
@@ -259,12 +315,17 @@ class ModuleDocumentation:
                 show_figure: Whether to show figure in value column.
 
             """
-            # print(key, value)
+            print("A")
+            print(key)
+            print("B")
+            print(value)
             if show_figure and re.match(
                 r"^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$",
                 asstring(value, ontology=self.ontology),
             ):
                 value = f'<img src="{value}">'
+            elif iri:
+                value = _html_links(iri, value)
             else:
                 if escape:  # Not documented what this is
                     value = html.escape(str(value))
@@ -273,7 +334,7 @@ class ModuleDocumentation:
                         r"(https?://[^\s]+)", r'<a href="\1">\1</a>', value
                     )
                 value = value.replace("\n", "<br>")
-            # print('value',value)
+            print("value", value)
             # print(key.title())
             lines.extend(
                 [
@@ -367,7 +428,6 @@ class ModuleDocumentation:
                         for key, item in annotations.items()
                     }
                     for key, value in annotations_en.items():
-                        print(key)
                         if key.namespace.base_iri.startswith(
                             "https://w3id.org/emmo"
                         ):
@@ -378,12 +438,26 @@ class ModuleDocumentation:
                             keyname = (
                                 key._name  # pylint: disable=protected-access
                             )
-                        print(keyname)
                         if isinstance(value, list):
                             for val in value:
+                                print(val)
                                 add_keyvalue(keyname, val)
                         else:
                             add_keyvalue(keyname, value)
+                parents = [
+                    ent
+                    for ent in entity.is_a
+                    if (
+                        isinstance(ent, owlready2.ThingClass)
+                        or isinstance(ent, owlready2.PropertyClass)
+                    )
+                ]
+
+                # Fetch direct subclasses
+                # subclasses = list(entity.subclasses())
+
+                # Fetch OWL restrictions (object property + someValuesFrom)
+                # restrictions = [restriction for restriction in entity.is_a if isinstance(restriction, owlready2.Restriction)]
 
                 if entity.is_a or entity.equivalent_to:
                     add_header("Formal description")
@@ -405,16 +479,18 @@ class ModuleDocumentation:
                             escape=False,
                             htmllink=False,
                         )
-                    for r in entity.is_a:
+                    for r in parents:
                         add_keyvalue(
                             "Subclass Of",
-                            asstring(
-                                r,
-                                link='<a href="{iri}">{label}</a>',
-                                ontology=self.ontology,
-                            ),
-                            escape=False,
-                            htmllink=False,
+                            get_label(r),
+                            r.iri,
+                            # asstring(
+                            #    r,
+                            #    link='<a href="{iri}">{label}</a>',
+                            #    ontology=self.ontology,
+                            # ),
+                            # escape=False,
+                            # htmllink=False,
                         )
 
                 lines.extend(["  </table>", ""])
