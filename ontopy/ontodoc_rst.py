@@ -311,38 +311,49 @@ class ModuleDocumentation:
             Arguments:
                 key: Key to show in the table.
                 value: Value to show in the table.
+                iri: IRI to link to, if value does not have attribute .iri.
                 htmllink: Whether to add html link to value.
                 show_figure: Whether to show figure in value column.
 
             """
-            print("A")
-            print(key)
-            print("B")
-            print(value)
-            if show_figure and re.match(
-                r"^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$",
-                asstring(value, ontology=self.ontology),
-            ):
-                value = f'<img src="{value}">'
-            elif iri:
-                value = _html_links(iri, value)
+            if not isinstance(value, list):
+                values = [value]
             else:
-                if escape:  # Not documented what this is
-                    value = html.escape(str(value))
-                if htmllink:
-                    value = re.sub(
-                        r"(https?://[^\s]+)", r'<a href="\1">\1</a>', value
-                    )
-                value = value.replace("\n", "<br>")
-            print("value", value)
-            # print(key.title())
+                values = value
+                #value = _html_links(value.iri, get_label(value))
+            
+            strval = ""
+            count=0
+            for value in values:
+                if count>0:
+                    strval += ", "
+                count+=1
+                if show_figure and re.match(
+                    r"^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$",
+                    asstring(value, ontology=self.ontology),
+                ):
+                    strval+= f'<img src="{value}">'
+                elif hasattr(value, "iri"):
+                    strval+= _html_links(value.iri, get_label(value))
+                elif iri:
+                    strval+= _html_links(iri, value)
+                else: # Check what this else is for
+                    #strval+=value
+                    #if escape:  # Not documented what this is
+                    strval+= html.escape(str(value))
+                    #if htmllink:
+                    #    strval+= re.sub(
+                    #        r"(https?://[^\s]+)", r'<a href="\1">\1</a>', value
+                    #    )
+                    strval = strval.replace("\n", "<br>")
+                # print(key.title())
             lines.extend(
                 [
                     "  <tr>",
                     '    <td class="element-table-key">'
                     f'<span class="element-table-key">'
                     f"{key}</span></td>",
-                    f'    <td class="element-table-value">{value}</td>',
+                    f'    <td class="element-table-value">{strval}</td>',
                     "  </tr>",
                 ]
             )
@@ -413,6 +424,7 @@ class ModuleDocumentation:
                             entity
                         )
                     }
+                    print(annotations)
 
                     long_annotations = [
                         "http://www.w3.org/2004/02/skos/core#example",
@@ -422,28 +434,31 @@ class ModuleDocumentation:
                     annotations_en = {
                         key: (
                             _extract_all_annotations(item)
-                            if key.iri in long_annotations
-                            else "; ".join(_extract_all_annotations(item))
+                            #if key.iri in long_annotations
+                            #else "; ".join(_extract_all_annotations(item))
                         )
                         for key, item in annotations.items()
                     }
-                    for key, value in annotations_en.items():
-                        if key.namespace.base_iri.startswith(
-                            "https://w3id.org/emmo"
-                        ):
-                            # Expect that any annotation from EMMO has prefLabel
-                            # in English, and use that
-                            keyname = key.prefLabel.en[0]
-                        else:
-                            keyname = (
-                                key._name  # pylint: disable=protected-access
-                            )
-                        if isinstance(value, list):
-                            for val in value:
-                                print(val)
-                                add_keyvalue(keyname, val)
-                        else:
-                            add_keyvalue(keyname, value)
+                    print(annotations_en)
+                
+                    #for key, value in annotations_en.items():
+                    for key in annotations_en.keys():
+                        #if key.namespace.base_iri.startswith(
+                        #    "https://w3id.org/emmo"
+                        #):
+                        #    # Expect that any annotation from EMMO has prefLabel
+                        #    # in English, and use that
+                        #    keyname = key.prefLabel.en[0]
+                        #else:
+                        #    keyname = (
+                        #        key._name  # pylint: disable=protected-access
+                        #    )
+                        #if isinstance(value, list):
+                        #    for val in value:
+                        #        add_keyvalue(keyname, val)
+                        #else:
+                        print(annotations_en[key])
+                        add_keyvalue(get_label(key), annotations_en[key])
                 parents = [
                     ent
                     for ent in entity.is_a
@@ -479,19 +494,20 @@ class ModuleDocumentation:
                             escape=False,
                             htmllink=False,
                         )
-                    for r in parents:
-                        add_keyvalue(
-                            "Subclass Of",
-                            get_label(r),
-                            r.iri,
-                            # asstring(
-                            #    r,
-                            #    link='<a href="{iri}">{label}</a>',
-                            #    ontology=self.ontology,
-                            # ),
-                            # escape=False,
-                            # htmllink=False,
-                        )
+                    add_keyvalue("Subclass Of", parents)
+                    #for r in parents:
+                    #    add_keyvalue(
+                    #        "Subclass Of",
+                    #        get_label(r),
+                    #        r.iri,
+                    #        # asstring(
+                    #        #    r,
+                    #        #    link='<a href="{iri}">{label}</a>',
+                    #        #    ontology=self.ontology,
+                    #        # ),
+                    #        # escape=False,
+                    #        # htmllink=False,
+                    #    )
 
                 lines.extend(["  </table>", ""])
 
