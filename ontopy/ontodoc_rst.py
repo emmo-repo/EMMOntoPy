@@ -4,12 +4,16 @@ A module for documenting ontologies.
 
 # pylint: disable=fixme,too-many-lines,no-member,too-many-instance-attributes
 # pylint: disable=invalid-name
+# pylint: disable=line-too-long # SHOULD BE REMOVED LATER, because of templates
 import html
 import re
 import time
 import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING
+import shutil
+from urllib.request import urlopen
+from urllib.parse import urlparse
 
 import rdflib
 from rdflib import DCTERMS, OWL, URIRef
@@ -26,6 +30,56 @@ if TYPE_CHECKING:
     Property = Type[owlready2.Property]
     Individual = owlready2.Thing  # also datatype
     Entity = Union[Cls, Property, Individual]
+
+# Standard IRIs for the built‑in annotation properties
+ANNOTATION_RANK = {
+    "prefLabel": "http://www.w3.org/2004/02/skos/core#prefLabel",
+    "altLabel": "http://www.w3.org/2004/02/skos/core#altLabel",
+    "label": "http://www.w3.org/2000/01/rdf-schema#label",
+    "elucidation": "https://w3id.org/emmo"
+    "#EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9",
+    "comment": "http://www.w3.org/2000/01/rdf-schema#comment",
+    "example": "http://www.w3.org/2004/02/skos/core#example",
+    "seeAlso": "http://www.w3.org/2000/01/rdf-schema#seeAlso",
+    "isDefinedBy": "http://www.w3.org/2000/01/rdf-schema#isDefinedBy",
+}
+
+
+def _get_annotation_rank(onto: Ontology):
+    # Resolve IRIs → AnnotationProperty instances (in defined order)
+    # Not all IRIs may be present in the ontology
+    priorities = [
+        onto[iri] for iri in ANNOTATION_RANK.values() if onto[iri] is not None
+    ]
+
+    def rank(prop):
+        # Exact match for the first three anchors
+        if prop in priorities[:3]:
+
+            return priorities.index(prop)
+
+        # Otherwise find the earliest anchor among its ancestors
+        ancestors = set(prop.ancestors())
+        for idx, anchor in enumerate(priorities[3:], start=3):
+            if anchor in ancestors:
+                return idx
+
+        # Anything else falls to the bottom
+        return len(priorities)
+
+    all_props = list(onto.annotation_properties(imported=True))
+    return sorted(all_props, key=rank)
+
+
+def _extract_all_annotations(value_list, lang="en"):
+    """Extract text values, prioritizing a language (default: en)."""
+    result = []
+    for elem in value_list:
+        if isinstance(elem, str):
+            result.append(elem)
+        elif hasattr(elem, "lang") and elem.lang == lang:
+            result.append(elem)
+    return result
 
 
 class ModuleDocumentation:
@@ -177,11 +231,13 @@ class ModuleDocumentation:
             "datatypes": self.datatypes,
         }
         lines = []
-
         if header:
             lines.append(self.get_header())
 
+        annotations_ranked = _get_annotation_rank(self.ontology)
+
         def add_header(name):
+            """Help function to add header row to table."""
             clsname = f"element-table-{name.lower().replace(' ', '-')}"
             lines.extend(
                 [
@@ -203,29 +259,33 @@ class ModuleDocumentation:
                 show_figure: Whether to show figure in value column.
 
             """
+            # print(key, value)
             if show_figure and re.match(
                 r"^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$",
                 asstring(value, ontology=self.ontology),
             ):
                 value = f'<img src="{value}">'
             else:
-                if escape:
+                if escape:  # Not documented what this is
                     value = html.escape(str(value))
                 if htmllink:
                     value = re.sub(
                         r"(https?://[^\s]+)", r'<a href="\1">\1</a>', value
                     )
                 value = value.replace("\n", "<br>")
+            # print('value',value)
+            # print(key.title())
             lines.extend(
                 [
                     "  <tr>",
                     '    <td class="element-table-key">'
                     f'<span class="element-table-key">'
-                    f"{key.title()}</span></td>",
+                    f"{key}</span></td>",
                     f'    <td class="element-table-value">{value}</td>',
                     "  </tr>",
                 ]
             )
+            # print(lines)
 
         for subsection in subsections.split(","):
             if maps[subsection]:
@@ -276,12 +336,55 @@ class ModuleDocumentation:
                 add_keyvalue("IRI", entity.iri)
                 if hasattr(entity, "get_annotations"):
                     add_header("Annotations")
-                    for key, value in entity.get_annotations().items():
+
+                    # for key, value in annotations.items():
+                    #    if isinstance(value, list):
+                    ##        for val in value:
+                    #            add_keyvalue(key, val)
+                    #    else:
+                    #        add_keyvalue(key, value)
+                    annotations = {  # pylint: disable=protected-access
+                        a: a._get_values_for_class(  # pylint: disable=protected-access
+                            entity
+                        )
+                        for a in annotations_ranked
+                        if a._get_values_for_class(  # pylint: disable=protected-access
+                            entity
+                        )
+                    }
+
+                    long_annotations = [
+                        "http://www.w3.org/2004/02/skos/core#example",
+                        "https://w3id.org/emmo#"
+                        "EMMO_c7b62dd7_063a_4c2a_8504_42f7264ba83f",
+                    ]
+                    annotations_en = {
+                        key: (
+                            _extract_all_annotations(item)
+                            if key.iri in long_annotations
+                            else "; ".join(_extract_all_annotations(item))
+                        )
+                        for key, item in annotations.items()
+                    }
+                    for key, value in annotations_en.items():
+                        print(key)
+                        if key.namespace.base_iri.startswith(
+                            "https://w3id.org/emmo"
+                        ):
+                            # Expect that any annotation from EMMO has prefLabel
+                            # in English, and use that
+                            keyname = key.prefLabel.en[0]
+                        else:
+                            keyname = (
+                                key._name  # pylint: disable=protected-access
+                            )
+                        print(keyname)
                         if isinstance(value, list):
                             for val in value:
-                                add_keyvalue(key, val)
+                                add_keyvalue(keyname, val)
                         else:
-                            add_keyvalue(key, value)
+                            add_keyvalue(keyname, value)
+
                 if entity.is_a or entity.equivalent_to:
                     add_header("Formal description")
                     for r in entity.equivalent_to:
@@ -480,8 +583,8 @@ References
             else "<AUTHOR>"
         )
         copyright = license if license else f"{time.strftime('%Y')}, {author}"
-
-        content = f"""
+        # pylint: disable=line-too-long
+        content = f"""\
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -503,18 +606,113 @@ extensions = []
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# Pygments styles are Sphinx settings (not theme options)
+pygments_style = "friendly"
+pygments_dark_style = "lightbulb"
 
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
-html_static_path = ['_static']
+html_theme = "pydata_sphinx_theme"
+
+html_theme_options = {{
+    # Remove left sidebar content (primary sidebar)
+    "primary_sidebar_items": [],
+
+    # Navigation depth (only matters if you show a nav in the sidebar)
+    "show_nav_level": 2,
+
+    # Disable right "On this page" TOC everywhere
+    "show_toc_level": 0,
+    "secondary_sidebar_items": [],
+
+    # Navbar
+    "navbar_center": ["navbar-nav"],
+    "navbar_end": ["navbar-icon-links", "theme-switcher", "search-button"],
+
+    # Icon links (Font Awesome 6 classes)
+    "icon_links": [
+        {{
+            "name": "GitHub",
+            "url": "https://github.com/emmo-repo/domain-{md.ontology.name.lower()}",
+            "icon": "fa-brands fa-github",
+        }},
+        {{
+            "name": "Ontology Homepage",
+            "url": "{iri}",
+            "icon": "fa-solid fa-globe",
+        }},
+    ],
+
+    "show_prev_next": False,
+    "footer_start": ["copyright"],
+    "footer_center": ["sphinx-version"],
+}}
+
+html_static_path = ["_static"]
+html_title = "Domain {md.ontology.name.capitalize()} Ontology"
+html_css_files = ["custom.css"]
+
+# html_sidebars keys are docname globs. Apply everywhere unless you truly want per-page overrides.
+html_sidebars = {{
+    "{md.ontology.name.lower()}": ["search-field.html", "page-toc.html", "edit-this-page.html"],
+}}
 """
+
         if not conffile:
             conffile = Path(docfile).with_name("conf.py")
-        if overwrite and conffile.exists():
+        if not overwrite and conffile.exists():
             warnings.warn(f"conf.py file already exists: {conffile}")
             return
 
         conffile.write_text(content, encoding="utf8")
+
+    def copy_css_file(
+        self,
+        source: str | Path = (
+            "https://raw.githubusercontent.com/"
+            "emmo-repo/EMMOntoPy/refs/heads/flb/issue916/"
+            "ontopy/ontokit/templates/custom.css"
+        ),
+    ) -> Path:
+        """
+        Copy a custom CSS file into the Sphinx HTML static directory.
+
+        The source may be:
+          - a URL (http/https),
+          - an absolute local path,
+          - a relative local path.
+
+        Parameters
+        ----------
+        source : str or pathlib.Path, optional
+            Location of the CSS file to copy.
+
+        Returns
+        -------
+        pathlib.Path
+            Path to the copied CSS file.
+        """
+        static_dir = Path("build") / "_static"
+        static_dir.mkdir(parents=True, exist_ok=True)
+
+        destination = static_dir / "custom.css"
+        # Remove existing file if it exists
+        # if destination.exists():
+        #    destination.unlink()
+
+        # URL source
+        # if source.startswith(("http://", "https://")):
+        if urlparse(str(source)).scheme in ("http", "https"):
+            with urlopen(source) as response, open(destination, "wb") as f:
+                shutil.copyfileobj(response, f)
+        # Local path source
+        else:
+            source_path = Path(source)
+            if not source_path.exists():
+                raise FileNotFoundError(f"CSS source not found: {source_path}")
+            shutil.copyfile(source_path, destination)
+
+        print(f"Copied CSS file to: {destination}")
+        return destination
