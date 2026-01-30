@@ -40,7 +40,7 @@ ANNOTATION_RANK = {
     "label": "http://www.w3.org/2000/01/rdf-schema#label",
     "elucidation": "https://w3id.org/emmo"
     "#EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9",
-    #"comment": "http://www.w3.org/2000/01/rdf-schema#comment",
+    # "comment": "http://www.w3.org/2000/01/rdf-schema#comment",
     "example": "http://www.w3.org/2004/02/skos/core#example",
     "seeAlso": "http://www.w3.org/2000/01/rdf-schema#seeAlso",
     "isDefinedBy": "http://www.w3.org/2000/01/rdf-schema#isDefinedBy",
@@ -49,19 +49,17 @@ ANNOTATION_RANK = {
 # Annotations that should render as admonitions
 CALLOUTS = {
     # admonition type -> (directive, optional title)
-    "note":        ("note", None),
-    "comment":     ("note", None),       # treat rdfs:comment as a note (optional)
-    "scopenote":   ("note", None),
-    "example":     ("admonition", "Example"),
-    "tip":         ("tip", None),
-    "caution":     ("caution", None),
-    "warning":     ("warning", None),
-    "important":   ("important", None),
-    "danger":      ("danger", None),
-    "error":       ("error", None),
+    "note": ("note", None),
+    "comment": ("note", None),  # treat rdfs:comment as a note (optional)
+    "scopenote": ("note", None),
+    "example": ("admonition", "Example"),
+    "tip": ("tip", None),
+    "caution": ("caution", None),
+    "warning": ("warning", None),
+    "important": ("important", None),
+    "danger": ("danger", None),
+    "error": ("error", None),
 }
-
- 
 
 
 def _get_annotation_rank(onto: Ontology):
@@ -309,19 +307,6 @@ class ModuleDocumentation:
                 f"{display_text}</a>"
             )
 
-        def _add_table_row(rst, key, value):
-            try:
-                key = get_preferred_label(key)
-            except AttributeError:
-                key = key
-            rst += "  <tr>\n"
-            rst += f'    <td class="element-table-key"><span class="element-table-key">{key}</span></td>\n'
-            rst += '    <td class="element-table-value">'
-            rst += value
-            rst += "</td>\n"
-            rst += "  </tr>\n"
-            return rst
-
         def add_keyvalue(
             key, value, iri=None, escape=True, htmllink=True, show_figure=True
         ):
@@ -339,38 +324,44 @@ class ModuleDocumentation:
                 values = [value]
             else:
                 values = value
-                #value = _html_links(value.iri, get_label(value))
-            
+                # value = _html_links(value.iri, get_label(value))
+
             strval = ""
-            count=0
+            count = 0
             for value in values:
-                if count>0 and not key=="Restrictions":
-                        strval += ", "
-                count+=1
-                
+                if count > 0 and not key == "Restrictions":
+                    strval += ", "
+                count += 1
+
                 if show_figure and re.match(
                     r"^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$",
                     asstring(value, ontology=self.ontology),
                 ):
-                    strval+= f'<img src="{value}">'
+                    strval += f'<img src="{value}">'
                 elif hasattr(value, "iri"):
-                    strval+= _html_links(value.iri, get_label(value))
+                    strval += _html_links(value.iri, get_label(value))
                 elif iri:
-                    strval+= _html_links(iri, value)
+                    strval += _html_links(iri, value)
                 elif key == "Restrictions":
-                    strval+= "<li>" + _linkify_manchester(
-                        asstring(value),
-                        self.ontology,
-                    ) + "</li>"
-                else: # Check what this else is for
-                    #if escape:  # Not documented what this is
-                    strval+= html.escape(str(value))
+                    strval += (
+                        "<li>"
+                        + _linkify_manchester(
+                            asstring(value),
+                            self.ontology,
+                        )
+                        + "</li>"
+                    )
+                else:  # Check what this else is for
+                    # if escape:  # Not documented what this is
+                    strval += html.escape(str(value))
                     strval = strval.replace("\n", "<br>")
-            
+
             # Build a self-contained snippet to prevent table misalignment
             if key == "Restrictions":
-                strval =  f"<div class=\"restriction-list\"><ul>{strval}</ul></div>"
- 
+                strval = (
+                    f'<div class="restriction-list"><ul>{strval}</ul></div>'
+                )
+
             lines.extend(
                 [
                     "  <tr>",
@@ -429,7 +420,9 @@ class ModuleDocumentation:
                     ]
                 )
                 add_keyvalue("IRI", entity.iri)
-                if hasattr(entity, "get_annotations") or hasattr(entity, "get_individual_annotations"):
+                if hasattr(entity, "get_annotations") or hasattr(
+                    entity, "get_individual_annotations"
+                ):
                     add_header("Annotations")
                     annotations = {  # pylint: disable=protected-access
                         a: a._get_values_for_class(  # pylint: disable=protected-access
@@ -447,19 +440,21 @@ class ModuleDocumentation:
                         "EMMO_c7b62dd7_063a_4c2a_8504_42f7264ba83f",
                         "https://w3id.org/emmo#EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9",
                         "https://w3id.org/emmo#EMMO_31252f35_c767_4b97_a877_1235076c3e13",
-                        "https://w3id.org/emmo#EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84"
-
-
+                        "https://w3id.org/emmo#EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84",
                     ]
-                    
-                    table_annotations = {key: value for key, value in annotations.items() if get_label(key) not in CALLOUTS.keys()}
+
+                    table_annotations = {
+                        key: value
+                        for key, value in annotations.items()
+                        if get_label(key) not in CALLOUTS.keys()
+                    }
 
                     for key, item in table_annotations.items():
                         if key.iri not in long_annotations:
                             add_keyvalue(get_label(key), table_annotations[key])
                         else:
                             add_keyvalue(get_label(key), item)
-                
+
                     # Fetch parents (all direct superclasses)
                     parents = [
                         ent
@@ -471,10 +466,18 @@ class ModuleDocumentation:
                     ]
 
                     # Fetch direct subclasses
-                    subclasses = (list(entity.subclasses()) if isinstance(entity, owlready2.ThingClass) else [])
+                    subclasses = (
+                        list(entity.subclasses())
+                        if isinstance(entity, owlready2.ThingClass)
+                        else []
+                    )
 
                     # Fetch OWL restrictions (object property + someValuesFrom)
-                    restrictions = [restriction for restriction in entity.is_a if isinstance(restriction, owlready2.Restriction)]
+                    restrictions = [
+                        restriction
+                        for restriction in entity.is_a
+                        if isinstance(restriction, owlready2.Restriction)
+                    ]
 
                     if entity.is_a or entity.equivalent_to:
                         add_header("Formal description")
@@ -501,7 +504,7 @@ class ModuleDocumentation:
                         # Add Subclasses if any
                         if subclasses:
                             add_keyvalue("Subclasses", subclasses)
-                    
+
                         # Add Restrictions if any
                         if restrictions:
                             add_keyvalue("Restrictions", restrictions)
@@ -509,30 +512,44 @@ class ModuleDocumentation:
                     lines.extend(["  </table>", ""])
 
                     # raw html block content (indented)
-                    lines.extend([
-                        "  </table>",
-                        "",   # end of indented raw content
-                        "",   # blank line after raw directive block
-                    ]) 
-                    callout_annotations = {key: value for key, value in annotations.items() if get_label(key) in CALLOUTS.keys()}
+                    lines.extend(
+                        [
+                            "  </table>",
+                            "",  # end of indented raw content
+                            "",  # blank line after raw directive block
+                        ]
+                    )
+                    callout_annotations = {
+                        key: value
+                        for key, value in annotations.items()
+                        if get_label(key) in CALLOUTS.keys()
+                    }
 
                     def _indent(block: str, n: int = 3) -> str:
                         pad = " " * n
-                        return "\n".join((pad + ln) if ln.strip() else "" for ln in block.splitlines())
-
+                        return "\n".join(
+                            (pad + ln) if ln.strip() else ""
+                            for ln in block.splitlines()
+                        )
 
                     for key, item in callout_annotations.items():
                         directive, title = CALLOUTS[get_label(key)]
-                        lines.extend([f".. {directive}::" + (f" {title}" if title else "") + "\n\n"])
+                        lines.extend(
+                            [
+                                f".. {directive}::"
+                                + (f" {title}" if title else "")
+                                + "\n\n"
+                            ]
+                        )
                         content = _extract_all_annotations(item)
                         content = "\n\n".join(content)
                         content = _indent(content, n=3)
                         lines.extend([content, ""])
 
-                    lines.extend(["\n"])      # blank line between callouts
+                    lines.extend(["\n"])  # blank line between callouts
 
         lines = "\n".join(lines)
-        
+
         return lines
 
 
