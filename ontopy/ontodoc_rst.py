@@ -5,6 +5,7 @@ A module for documenting ontologies.
 # pylint: disable=fixme,too-many-lines,no-member,too-many-instance-attributes
 # pylint: disable=invalid-name
 # pylint: disable=line-too-long # SHOULD BE REMOVED LATER, because of templates
+from curses import raw
 import html
 import re
 import time
@@ -23,6 +24,7 @@ from ontopy.utils import asstring, get_label
 
 import owlready2  # pylint: disable=wrong-import-order
 
+
 if TYPE_CHECKING:
     from typing import Iterable, Optional, Type, Union
 
@@ -38,11 +40,28 @@ ANNOTATION_RANK = {
     "label": "http://www.w3.org/2000/01/rdf-schema#label",
     "elucidation": "https://w3id.org/emmo"
     "#EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9",
-    "comment": "http://www.w3.org/2000/01/rdf-schema#comment",
+    #"comment": "http://www.w3.org/2000/01/rdf-schema#comment",
     "example": "http://www.w3.org/2004/02/skos/core#example",
     "seeAlso": "http://www.w3.org/2000/01/rdf-schema#seeAlso",
     "isDefinedBy": "http://www.w3.org/2000/01/rdf-schema#isDefinedBy",
 }
+
+# Annotations that should render as admonitions
+CALLOUTS = {
+    # admonition type -> (directive, optional title)
+    "note":        ("note", None),
+    "comment":     ("note", None),       # treat rdfs:comment as a note (optional)
+    "scopenote":   ("note", None),
+    "example":     ("admonition", "Example"),
+    "tip":         ("tip", None),
+    "caution":     ("caution", None),
+    "warning":     ("warning", None),
+    "important":   ("important", None),
+    "danger":      ("danger", None),
+    "error":       ("error", None),
+}
+
+ 
 
 
 def _get_annotation_rank(onto: Ontology):
@@ -325,9 +344,10 @@ class ModuleDocumentation:
             strval = ""
             count=0
             for value in values:
-                if count>0:
-                    strval += ", "
+                if count>0 and not key=="Restrictions":
+                        strval += ", "
                 count+=1
+                
                 if show_figure and re.match(
                     r"^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$",
                     asstring(value, ontology=self.ontology),
@@ -337,16 +357,20 @@ class ModuleDocumentation:
                     strval+= _html_links(value.iri, get_label(value))
                 elif iri:
                     strval+= _html_links(iri, value)
+                elif key == "Restrictions":
+                    strval+= "<li>" + _linkify_manchester(
+                        asstring(value),
+                        self.ontology,
+                    ) + "</li>"
                 else: # Check what this else is for
-                    #strval+=value
                     #if escape:  # Not documented what this is
                     strval+= html.escape(str(value))
-                    #if htmllink:
-                    #    strval+= re.sub(
-                    #        r"(https?://[^\s]+)", r'<a href="\1">\1</a>', value
-                    #    )
                     strval = strval.replace("\n", "<br>")
-                # print(key.title())
+            
+            # Build a self-contained snippet to prevent table misalignment
+            if key == "Restrictions":
+                strval =  f"<div class=\"restriction-list\"><ul>{strval}</ul></div>"
+ 
             lines.extend(
                 [
                     "  <tr>",
@@ -357,7 +381,6 @@ class ModuleDocumentation:
                     "  </tr>",
                 ]
             )
-            # print(lines)
 
         for subsection in subsections.split(","):
             if maps[subsection]:
@@ -406,15 +429,8 @@ class ModuleDocumentation:
                     ]
                 )
                 add_keyvalue("IRI", entity.iri)
-                if hasattr(entity, "get_annotations"):
+                if hasattr(entity, "get_annotations") or hasattr(entity, "get_individual_annotations"):
                     add_header("Annotations")
-
-                    # for key, value in annotations.items():
-                    #    if isinstance(value, list):
-                    ##        for val in value:
-                    #            add_keyvalue(key, val)
-                    #    else:
-                    #        add_keyvalue(key, value)
                     annotations = {  # pylint: disable=protected-access
                         a: a._get_values_for_class(  # pylint: disable=protected-access
                             entity
@@ -424,94 +440,100 @@ class ModuleDocumentation:
                             entity
                         )
                     }
-                    print(annotations)
 
                     long_annotations = [
                         "http://www.w3.org/2004/02/skos/core#example",
                         "https://w3id.org/emmo#"
                         "EMMO_c7b62dd7_063a_4c2a_8504_42f7264ba83f",
+                        "https://w3id.org/emmo#EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9",
+                        "https://w3id.org/emmo#EMMO_31252f35_c767_4b97_a877_1235076c3e13",
+                        "https://w3id.org/emmo#EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84"
+
+
                     ]
-                    annotations_en = {
-                        key: (
-                            _extract_all_annotations(item)
-                            #if key.iri in long_annotations
-                            #else "; ".join(_extract_all_annotations(item))
-                        )
-                        for key, item in annotations.items()
-                    }
-                    print(annotations_en)
+                    
+                    table_annotations = {key: value for key, value in annotations.items() if get_label(key) not in CALLOUTS.keys()}
+
+                    for key, item in table_annotations.items():
+                        if key.iri not in long_annotations:
+                            add_keyvalue(get_label(key), table_annotations[key])
+                        else:
+                            add_keyvalue(get_label(key), item)
                 
-                    #for key, value in annotations_en.items():
-                    for key in annotations_en.keys():
-                        #if key.namespace.base_iri.startswith(
-                        #    "https://w3id.org/emmo"
-                        #):
-                        #    # Expect that any annotation from EMMO has prefLabel
-                        #    # in English, and use that
-                        #    keyname = key.prefLabel.en[0]
-                        #else:
-                        #    keyname = (
-                        #        key._name  # pylint: disable=protected-access
-                        #    )
-                        #if isinstance(value, list):
-                        #    for val in value:
-                        #        add_keyvalue(keyname, val)
-                        #else:
-                        print(annotations_en[key])
-                        add_keyvalue(get_label(key), annotations_en[key])
-                parents = [
-                    ent
-                    for ent in entity.is_a
-                    if (
-                        isinstance(ent, owlready2.ThingClass)
-                        or isinstance(ent, owlready2.PropertyClass)
-                    )
-                ]
-
-                # Fetch direct subclasses
-                # subclasses = list(entity.subclasses())
-
-                # Fetch OWL restrictions (object property + someValuesFrom)
-                # restrictions = [restriction for restriction in entity.is_a if isinstance(restriction, owlready2.Restriction)]
-
-                if entity.is_a or entity.equivalent_to:
-                    add_header("Formal description")
-                    for r in entity.equivalent_to:
-
-                        # FIXME: Skip restrictions with value None to work
-                        # around bug in Owlready2 that doesn't handle custom
-                        # datatypes in restrictions correctly...
-                        if hasattr(r, "value") and r.value is None:
-                            continue
-
-                        add_keyvalue(
-                            "Equivalent To",
-                            asstring(
-                                r,
-                                link='<a href="{iri}">{label}</a>',
-                                ontology=self.ontology,
-                            ),
-                            escape=False,
-                            htmllink=False,
+                    # Fetch parents (all direct superclasses)
+                    parents = [
+                        ent
+                        for ent in entity.is_a
+                        if (
+                            isinstance(ent, owlready2.ThingClass)
+                            or isinstance(ent, owlready2.PropertyClass)
                         )
-                    add_keyvalue("Subclass Of", parents)
-                    #for r in parents:
-                    #    add_keyvalue(
-                    #        "Subclass Of",
-                    #        get_label(r),
-                    #        r.iri,
-                    #        # asstring(
-                    #        #    r,
-                    #        #    link='<a href="{iri}">{label}</a>',
-                    #        #    ontology=self.ontology,
-                    #        # ),
-                    #        # escape=False,
-                    #        # htmllink=False,
-                    #    )
+                    ]
 
-                lines.extend(["  </table>", ""])
+                    # Fetch direct subclasses
+                    subclasses = (list(entity.subclasses()) if isinstance(entity, owlready2.ThingClass) else [])
 
-        return "\n".join(lines)
+                    # Fetch OWL restrictions (object property + someValuesFrom)
+                    restrictions = [restriction for restriction in entity.is_a if isinstance(restriction, owlready2.Restriction)]
+
+                    if entity.is_a or entity.equivalent_to:
+                        add_header("Formal description")
+                        for r in entity.equivalent_to:
+
+                            # FIXME: Skip restrictions with value None to work
+                            # around bug in Owlready2 that doesn't handle custom
+                            # datatypes in restrictions correctly...
+                            if hasattr(r, "value") and r.value is None:
+                                continue
+
+                            add_keyvalue(
+                                "Equivalent To",
+                                asstring(
+                                    r,
+                                    link='<a href="{iri}">{label}</a>',
+                                    ontology=self.ontology,
+                                ),
+                                escape=False,
+                                htmllink=False,
+                            )
+                        # Add SubclassOf
+                        add_keyvalue("Subclass Of", parents)
+                        # Add Subclasses if any
+                        if subclasses:
+                            add_keyvalue("Subclasses", subclasses)
+                    
+                        # Add Restrictions if any
+                        if restrictions:
+                            add_keyvalue("Restrictions", restrictions)
+
+                    lines.extend(["  </table>", ""])
+
+                    # raw html block content (indented)
+                    lines.extend([
+                        "  </table>",
+                        "",   # end of indented raw content
+                        "",   # blank line after raw directive block
+                    ]) 
+                    callout_annotations = {key: value for key, value in annotations.items() if get_label(key) in CALLOUTS.keys()}
+
+                    def _indent(block: str, n: int = 3) -> str:
+                        pad = " " * n
+                        return "\n".join((pad + ln) if ln.strip() else "" for ln in block.splitlines())
+
+
+                    for key, item in callout_annotations.items():
+                        directive, title = CALLOUTS[get_label(key)]
+                        lines.extend([f".. {directive}::" + (f" {title}" if title else "") + "\n\n"])
+                        content = _extract_all_annotations(item)
+                        content = "\n\n".join(content)
+                        content = _indent(content, n=3)
+                        lines.extend([content, ""])
+
+                    lines.extend(["\n"])      # blank line between callouts
+
+        lines = "\n".join(lines)
+        
+        return lines
 
 
 class OntologyDocumentation:

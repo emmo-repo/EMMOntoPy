@@ -31,7 +31,7 @@ def docs_arguments(subparsers):
     parser.add_argument(
         "--imported",
         "-i",
-        action="store_true",
+        action="store_false",
         help=("Whether to include imported ontologies. Default is False."),
     )
 
@@ -96,8 +96,9 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
     # Path to ontology file
     # assumes the ontology for docc: build/ontology_name-inferred.ttl
     ontofile = root / "build" / f"{ontology_name}-doc.ttl"  # INFERRED?
-
+    print(f"Loading ontology from {ontofile}")
     onto = get_ontology(ontofile).load()
+    print(args.imported, args.recursive)
     od = OntologyDocumentation(
         onto,
         recursive=args.imported,
