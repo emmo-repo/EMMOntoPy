@@ -124,12 +124,18 @@ jobs:
             -licensius \
             -includeAnnotationProperties
 
+    - name: Generate Ontokit documentation to public
+      run: ontokit docs --iri-regex=${ONTOLOGY_IRI} . && touch public/.nojekyll
+
+    # Copy turtle files from build to public
+    - name: Copy ontologies to public
+      run: cp build/*ttl public/
 
 
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        folder: build
+        folder: public
         branch: gh-pages
         clean: false
         single-commit: true
