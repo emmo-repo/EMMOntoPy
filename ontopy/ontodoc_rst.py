@@ -794,13 +794,16 @@ html_theme_options = {{
             "url": "{iri}",
             "icon": "fa-solid fa-globe",
         }},
+        {{
+            "name": "WIDOCO Documentation",
+            "url": f"https://emmo-repo.github.io/domain-{md.ontology.name.lower()}/widoco",
+            "icon": "fa-solid fa-file-lines",
+        }}
     ],
-
     "show_prev_next": False,
     "footer_start": ["copyright"],
     "footer_center": ["sphinx-version"],
 }}
-
 html_static_path = ["_static"]
 html_title = "Domain {md.ontology.name.capitalize()} Ontology"
 html_css_files = ["custom.css"]
