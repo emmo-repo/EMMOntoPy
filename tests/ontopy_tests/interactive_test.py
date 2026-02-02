@@ -5,7 +5,6 @@ from pathlib import Path
 from .conftest import get_triples, has_triple
 from ontopy import get_ontology
 
-
 thisdir = Path(__file__).resolve().parent
 
 path = thisdir / ".." / "testonto" / "testonto.ttl"

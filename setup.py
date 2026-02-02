@@ -3,12 +3,12 @@
 Python reference API for the
 Elementary Multiperspective Material Ontology (EMMO).
 """
+
 from glob import glob
 import os
 import re
 
 import setuptools
-
 
 rootdir = os.path.dirname(__file__)
 

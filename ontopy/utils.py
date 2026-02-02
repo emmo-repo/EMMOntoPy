@@ -985,9 +985,7 @@ def get_datatype_class():
             suffix=".ttl", mode="wt", delete=False
         ) as f:
             filename = f.name
-            f.write(
-                textwrap.dedent(
-                    """
+            f.write(textwrap.dedent("""
                     @prefix : <http://example.com/onto#> .
                     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
                     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -996,9 +994,7 @@ def get_datatype_class():
                     <http://example.com/onto> rdf:type owl:Ontology .
 
                     :new_datatype rdf:type rdfs:Datatype .
-                    """
-                )
-            )
+                    """))
 
         onto = get_ontology(filename).load()
         Datatype = onto.new_datatype.__class__
