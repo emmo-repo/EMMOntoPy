@@ -13,7 +13,7 @@
         "Sylvain Gouttebroze"@en ;
     dcterms:title "A test domain ontology"@en ;
     owl:imports <http://ontology.info/ontology>,
-        <https://w3id.org/emmo/inferred> ;
+        <https://w3id.org/emmo> ;
     owl:versionInfo "0.01"@en .
 
 :EMMO_0264be35-e8ad-5b35-a1a3-84b37bde22d1 a owl:Class ;
@@ -42,11 +42,11 @@
 
 :EMMO_76b2eb15-3ab7-52b3-ade2-755aa390d63e a owl:Class ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:onProperty ns1:EMMO_e1097637_70d2_4895_973f_2396f04fa204 ;
-            owl:someValuesFrom ns1:EMMO_f1a51559_aa3d_43a0_9327_918039f0dfed ],
-        [ a owl:Restriction ;
             owl:onProperty ns1:EMMO_17e27c22_37e1_468c_9dd7_95e137f73e7f ;
             owl:someValuesFrom :EMMO_472ed27e-ce08-53cb-8453-56ab363275c4 ],
+        [ a owl:Restriction ;
+            owl:onProperty ns1:EMMO_e1097637_70d2_4895_973f_2396f04fa204 ;
+            owl:someValuesFrom ns1:EMMO_f1a51559_aa3d_43a0_9327_918039f0dfed ],
         :EMMO_4b32833e-0833-56a7-903c-28a6a8191fe8,
         :EMMO_5f50f77e-f321-53e3-af76-fe5b0a347479 ;
     skos:example "Textured surface after etching"@en ;
