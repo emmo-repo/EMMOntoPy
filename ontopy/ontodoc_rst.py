@@ -796,7 +796,7 @@ html_theme_options = {{
         }},
         {{
             "name": "WIDOCO Documentation",
-            "url": f"https://emmo-repo.github.io/domain-{md.ontology.name.lower()}/widoco",
+            "url": f"https://emmo-repo.github.io/domain-{md.ontology.name.lower()}/widoco/index-en.html",
             "icon": "fa-solid fa-file-lines",
         }}
     ],
