@@ -95,10 +95,8 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
 
     # Path to ontology file
     # assumes the ontology for docc: build/ontology_name-inferred.ttl
-    ontofile = root / "build" / f"{ontology_name}-doc.ttl"  # INFERRED?
-    print(f"Loading ontology from {ontofile}")
+    ontofile = root / "build" / f"{ontology_name}.ttl"  # INFERRED?
     onto = get_ontology(ontofile).load()
-    print(args.imported, args.recursive)
     od = OntologyDocumentation(
         onto,
         recursive=args.imported,
@@ -111,9 +109,9 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
         docfile = root / Path(args.outfile)
     indexfile = docfile.with_name("index.rst")
     conffile = docfile.with_name("conf.py")
-    print("index and conf written")
     od.write_refdoc(docfile=docfile)
     print(indexfile, type(indexfile))
+
     # if not indexfile.exists():
     print(f"Generating index template: {indexfile}")
     od.write_index_template(
