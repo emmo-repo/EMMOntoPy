@@ -1,3 +1,6 @@
 graphviz>=0.16,<0.22
 packaging>=21.0,<26
 PyYAML>=5.4.1,<7
+
+# Require exact version for documentation tools
+sphinx==9.1.0
