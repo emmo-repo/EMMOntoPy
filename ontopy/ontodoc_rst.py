@@ -5,8 +5,6 @@ A module for documenting ontologies.
 # pylint: disable=fixme,too-many-lines,no-member,too-many-instance-attributes
 # pylint: disable=invalid-name
 # pylint: disable=line-too-long # SHOULD BE REMOVED LATER, because of templates
-from curses import raw
-import html
 import re
 import time
 import warnings
@@ -307,8 +305,40 @@ class ModuleDocumentation:
                 f"{display_text}</a>"
             )
 
+        def _linkify_value(val: str) -> str:
+            """
+            If `val` contains one or more IRIs, return them as separate links.
+            - If exactly one IRI and it's an image, embed the image.
+            - Otherwise, link each IRI separately and join with '; '.
+            """
+            if not isinstance(val, str):
+                return val
+
+            # find IRIs (separated by ; , or whitespace)
+            urls = re.findall(r"https?://[^\s;,]+", val)
+            if not urls:
+                return val
+
+            # single image → embed
+            if len(urls) == 1 and urls[0].lower().endswith(
+                (".png", ".jpg", ".jpeg", ".gif", ".svg")
+            ):
+                u = urls[0]
+                return (
+                    f'<a href="{u}"><img src="{u}" alt="{u}" '
+                    f'style="max-width:400px; max-height:300px;"/></a>'
+                )
+
+            # otherwise, link each separately, showing full IRI as label
+            links = []
+            for u in urls:
+                links.append(_html_links(u, u))  # use full IRI as label
+            return "; ".join(links)
+
         def add_keyvalue(
-            key, value, iri=None, escape=True, htmllink=True, show_figure=True
+            key,
+            value,
+            iri=None,
         ):
             """Help function for adding a key-value row to table.
 
@@ -316,44 +346,34 @@ class ModuleDocumentation:
                 key: Key to show in the table.
                 value: Value to show in the table.
                 iri: IRI to link to, if value does not have attribute .iri.
-                htmllink: Whether to add html link to value.
-                show_figure: Whether to show figure in value column.
-
             """
             if not isinstance(value, list):
                 values = [value]
             else:
                 values = value
-                # value = _html_links(value.iri, get_label(value))
 
             strval = ""
             count = 0
-            for value in values:
+            for val in values:
                 if count > 0 and not key == "Restrictions":
                     strval += ", "
                 count += 1
 
-                if show_figure and re.match(
-                    r"^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$",
-                    asstring(value, ontology=self.ontology),
-                ):
-                    strval += f'<img src="{value}">'
-                elif hasattr(value, "iri"):
-                    strval += _html_links(value.iri, get_label(value))
+                if hasattr(val, "iri"):
+                    strval += _html_links(val.iri, get_label(val))
                 elif iri:
-                    strval += _html_links(iri, value)
+                    strval += _html_links(iri, val)
                 elif key == "Restrictions":
                     strval += (
                         "<li>"
                         + _linkify_manchester(
-                            asstring(value),
+                            asstring(val),
                             self.ontology,
                         )
                         + "</li>"
                     )
-                else:  # Check what this else is for
-                    # if escape:  # Not documented what this is
-                    strval += html.escape(str(value))
+                else:
+                    strval += _linkify_value(val)
                     strval = strval.replace("\n", "<br>")
 
             # Build a self-contained snippet to prevent table misalignment
@@ -419,7 +439,7 @@ class ModuleDocumentation:
                         '  <table class="element-table">',
                     ]
                 )
-                add_keyvalue("IRI", entity.iri)
+                add_keyvalue("IRI", entity.iri, entity.iri)
                 if hasattr(entity, "get_annotations") or hasattr(
                     entity, "get_individual_annotations"
                 ):
@@ -446,7 +466,7 @@ class ModuleDocumentation:
                     table_annotations = {
                         key: value
                         for key, value in annotations.items()
-                        if get_label(key) not in CALLOUTS.keys()
+                        if get_label(key) not in CALLOUTS
                     }
 
                     for key, item in table_annotations.items():
@@ -460,8 +480,10 @@ class ModuleDocumentation:
                         ent
                         for ent in entity.is_a
                         if (
-                            isinstance(ent, owlready2.ThingClass)
-                            or isinstance(ent, owlready2.PropertyClass)
+                            isinstance(
+                                ent,
+                                (owlready2.ThingClass, owlready2.PropertyClass),
+                            )
                         )
                     ]
 
@@ -496,8 +518,6 @@ class ModuleDocumentation:
                                     link='<a href="{iri}">{label}</a>',
                                     ontology=self.ontology,
                                 ),
-                                escape=False,
-                                htmllink=False,
                             )
                         # Add SubclassOf
                         add_keyvalue("Subclass Of", parents)
@@ -522,7 +542,7 @@ class ModuleDocumentation:
                     callout_annotations = {
                         key: value
                         for key, value in annotations.items()
-                        if get_label(key) in CALLOUTS.keys()
+                        if get_label(key) in CALLOUTS
                     }
 
                     def _indent(block: str, n: int = 3) -> str:
@@ -829,14 +849,12 @@ html_sidebars = {{
         static_dir.mkdir(parents=True, exist_ok=True)
 
         destination = static_dir / "custom.css"
-        # Remove existing file if it exists
-        # if destination.exists():
-        #    destination.unlink()
 
         # URL source
-        # if source.startswith(("http://", "https://")):
         if urlparse(str(source)).scheme in ("http", "https"):
-            with urlopen(source) as response, open(destination, "wb") as f:
+            with urlopen(source) as response, open(  # nosec
+                destination, "wb"
+            ) as f:  # nosec
                 shutil.copyfileobj(response, f)
         # Local path source
         else:
