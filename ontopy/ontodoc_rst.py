@@ -194,6 +194,7 @@ class ModuleDocumentation:
             title = self.graph.value(URIRef(iri), DCTERMS.title)
         if not title:
             title = iri.rsplit("/", 1)[-1]
+
         return title
 
     def get_header(self) -> str:
