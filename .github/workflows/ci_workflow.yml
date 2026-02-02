@@ -186,9 +186,7 @@ jobs:
           --cov-report=term --cov-report= \
           --doctest-modules \
           tests/test_graphviz \
-          --doctest-modules \
           ontopy/ontokit/docs.py \
-          --doctest-modules \
           tests/test_ontodoc_rst.py | tee result_graphviz.log
 
         # Fail if any Graphviz tests got skipped
