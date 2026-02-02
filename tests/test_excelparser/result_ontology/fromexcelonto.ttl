@@ -13,7 +13,7 @@
         "Sylvain Gouttebroze"@en ;
     dcterms:title "A test domain ontology"@en ;
     owl:imports <http://ontology.info/ontology>,
-        <https://w3id.org/emmo> ;
+        <https://w3id.org/emmo/inferred> ;
     owl:versionInfo "0.01"@en .
 
 :EMMO_0264be35-e8ad-5b35-a1a3-84b37bde22d1 a owl:Class ;

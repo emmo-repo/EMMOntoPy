@@ -749,7 +749,6 @@ class OntoGraph:  # pylint: disable=too-many-instance-attributes
                 else:
                     for alt_label in relation.get_annotations()["altLabel"]:
                         rattrs = relations[str(alt_label)]
-
                 break
         else:
             warnings.warn(

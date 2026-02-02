@@ -9,6 +9,8 @@ from pathlib import Path
 from importlib.util import spec_from_loader, module_from_spec
 from importlib.machinery import SourceFileLoader
 
+from ontopy import get_ontology
+
 
 rootdir = Path(__file__).resolve().parent.parent
 testdir = rootdir / "tests"
@@ -28,3 +30,15 @@ def get_tool_module(name):
     module = module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def get_testonto():
+    """Returns test ontology."""
+    return get_ontology(ontodir / "testonto.ttl").load()
+
+
+def get_testutils_emmo(squashed=True):
+    """Returns emmo ontology from test directory."""
+    if squashed:
+        return get_ontology(ontodir / "emmo.ttl").load()
+    return get_ontology(ontodir / "emmo" / "emmo.ttl").load()

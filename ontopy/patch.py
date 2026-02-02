@@ -349,22 +349,25 @@ def has(self, name) -> bool:
     return name in set(self.keys())
 
 
-def __contains__(self, name):
+def __metadata_contains__(self, name):
+    """Patched __contains__() method."""
     return self.has(name)
 
 
-def __iter__(self):
+def __metadata_iter__(self):
+    """Patched __iter__() method."""
     return self.keys()
 
 
-def __setattr__(self, attr, values):
+def __metadata_setattr__(self, attr, values):
+    """Patched __setattr__() method."""
     metadata__setattr__save(self, attr, values)
     # Make sure that __setattr__() also updates the triplestore
     lst = self.__dict__[attr]
     if lst:
         namespace = self.namespace
         annotation = {
-            _.name: _ for _ in owlready2.AnnotationProperty.__subclasses__()
+            p.name: p for p in owlready2.AnnotationProperty.__subclasses__()
         }
         if attr in annotation:
             prop = annotation[attr]
@@ -382,7 +385,8 @@ def __setattr__(self, attr, values):
             )
 
 
-def __repr__(self):
+def __metadata_repr__(self):
+    """Patched __repr__() method."""
     rdftype = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
     s = "\n  ".join(f"{k!r}: {v!r}" for k, v in self.items() if k != rdftype)
     return f"Metadata(\n  {s}\n)"
@@ -394,6 +398,7 @@ def _getname(iri):
 
 
 def __metadata_getattr__(self, attr):
+    """Patched __getattr__() method."""
     try:
         return metadata__getattr__save(self, attr)
     except AttributeError:
@@ -408,10 +413,10 @@ metadata__getattr__save = Metadata.__getattr__
 setattr(Metadata, "keys", keys)
 setattr(Metadata, "items", items)
 setattr(Metadata, "has", has)
-setattr(Metadata, "__contains__", __contains__)
-setattr(Metadata, "__iter__", __iter__)
-setattr(Metadata, "__setattr__", __setattr__)
-setattr(Metadata, "__repr__", __repr__)
+setattr(Metadata, "__contains__", __metadata_contains__)
+setattr(Metadata, "__iter__", __metadata_iter__)
+setattr(Metadata, "__setattr__", __metadata_setattr__)
+setattr(Metadata, "__repr__", __metadata_repr__)
 setattr(Metadata, "__getattr__", __metadata_getattr__)
 Metadata.__getitem__ = Metadata.__getattr__
 Metadata.__setitem__ = Metadata.__setattr__

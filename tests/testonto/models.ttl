@@ -20,7 +20,7 @@ skos:altLabel rdf:type owl:AnnotationProperty .
 # Classes
 
 ###  https://schema.org/Organization
-schema:Organization rdf:type owl:Class .
+schema:Organization rdfs:type owl:Class .
 
 
 
