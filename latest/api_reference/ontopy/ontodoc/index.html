@@ -4710,28 +4710,26 @@ style : dict | "html" | "markdown" | "markdown_tex"
             <span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
             <span class="n">lowerlabel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">template</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;\</span>
-<span class="sd">        %HEADER {title}</span>
-<span class="sd">        Documentation of {irilink}</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">        %HEADER </span><span class="si">{title}</span>
+<span class="s2">        Documentation of </span><span class="si">{irilink}</span>
 
-<span class="sd">        %HEADER Relations level=2</span>
-<span class="sd">        %ALL object_properties</span>
+<span class="s2">        %HEADER Relations level=2</span>
+<span class="s2">        %ALL object_properties</span>
 
-<span class="sd">        %HEADER Classes level=2</span>
-<span class="sd">        %ALL classes</span>
+<span class="s2">        %HEADER Classes level=2</span>
+<span class="s2">        %ALL classes</span>
 
-<span class="sd">        %HEADER Individuals level=2</span>
-<span class="sd">        %ALL individuals</span>
+<span class="s2">        %HEADER Individuals level=2</span>
+<span class="s2">        %ALL individuals</span>
 
-<span class="sd">        %HEADER Appendix               level=1</span>
-<span class="sd">        %HEADER &quot;Relation taxonomies&quot;  level=2</span>
-<span class="sd">        %ALLFIG object_properties</span>
+<span class="s2">        %HEADER Appendix               level=1</span>
+<span class="s2">        %HEADER &quot;Relation taxonomies&quot;  level=2</span>
+<span class="s2">        %ALLFIG object_properties</span>
 
-<span class="sd">        %HEADER &quot;Class taxonomies&quot;     level=2</span>
-<span class="sd">        %ALLFIG classes</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">irilink</span><span class="o">=</span><span class="n">irilink</span><span class="p">)</span>
+<span class="s2">        %HEADER &quot;Class taxonomies&quot;     level=2</span>
+<span class="s2">        %ALLFIG classes</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">irilink</span><span class="o">=</span><span class="n">irilink</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">template</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">header_level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -5025,28 +5023,26 @@ style : dict | "html" | "markdown" | "markdown_tex"
         <span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
         <span class="n">lowerlabel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">template</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;\</span>
-<span class="sd">    %HEADER {title}</span>
-<span class="sd">    Documentation of {irilink}</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">    %HEADER </span><span class="si">{title}</span>
+<span class="s2">    Documentation of </span><span class="si">{irilink}</span>
 
-<span class="sd">    %HEADER Relations level=2</span>
-<span class="sd">    %ALL object_properties</span>
+<span class="s2">    %HEADER Relations level=2</span>
+<span class="s2">    %ALL object_properties</span>
 
-<span class="sd">    %HEADER Classes level=2</span>
-<span class="sd">    %ALL classes</span>
+<span class="s2">    %HEADER Classes level=2</span>
+<span class="s2">    %ALL classes</span>
 
-<span class="sd">    %HEADER Individuals level=2</span>
-<span class="sd">    %ALL individuals</span>
+<span class="s2">    %HEADER Individuals level=2</span>
+<span class="s2">    %ALL individuals</span>
 
-<span class="sd">    %HEADER Appendix               level=1</span>
-<span class="sd">    %HEADER &quot;Relation taxonomies&quot;  level=2</span>
-<span class="sd">    %ALLFIG object_properties</span>
+<span class="s2">    %HEADER Appendix               level=1</span>
+<span class="s2">    %HEADER &quot;Relation taxonomies&quot;  level=2</span>
+<span class="s2">    %ALLFIG object_properties</span>
 
-<span class="sd">    %HEADER &quot;Class taxonomies&quot;     level=2</span>
-<span class="sd">    %ALLFIG classes</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">irilink</span><span class="o">=</span><span class="n">irilink</span><span class="p">)</span>
+<span class="s2">    %HEADER &quot;Class taxonomies&quot;     level=2</span>
+<span class="s2">    %ALLFIG classes</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">irilink</span><span class="o">=</span><span class="n">irilink</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">template</span>
 </code></pre></div>
         </details>

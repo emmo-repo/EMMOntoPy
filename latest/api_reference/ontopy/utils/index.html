@@ -2980,20 +2980,16 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
             <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.ttl&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wt&quot;</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">filename</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                <span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span>
-<span class="w">                    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">                    @prefix : &lt;http://example.com/onto#&gt; .</span>
-<span class="sd">                    @prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .</span>
-<span class="sd">                    @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .</span>
-<span class="sd">                    @prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                    @prefix : &lt;http://example.com/onto#&gt; .</span>
+<span class="s2">                    @prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .</span>
+<span class="s2">                    @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .</span>
+<span class="s2">                    @prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .</span>
 
-<span class="sd">                    &lt;http://example.com/onto&gt; rdf:type owl:Ontology .</span>
+<span class="s2">                    &lt;http://example.com/onto&gt; rdf:type owl:Ontology .</span>
 
-<span class="sd">                    :new_datatype rdf:type rdfs:Datatype .</span>
-<span class="sd">                    &quot;&quot;&quot;</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
+<span class="s2">                    :new_datatype rdf:type rdfs:Datatype .</span>
+<span class="s2">                    &quot;&quot;&quot;</span><span class="p">))</span>
 
         <span class="n">onto</span> <span class="o">=</span> <span class="n">get_ontology</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
         <span class="n">Datatype</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">new_datatype</span><span class="o">.</span><span class="vm">__class__</span>

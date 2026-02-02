@@ -11,6 +11,7 @@ This script uses the Atomistic Simulation Environment (ASE) to load
 a atomistic Al-Fe4Al13 interface structure from a cif file and
 represents it using the same metadata framework as used in step 1.
 """
+
 # pylint: disable=import-error,invalid-name
 import dlite
 

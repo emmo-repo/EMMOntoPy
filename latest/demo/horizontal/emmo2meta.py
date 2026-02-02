@@ -13,6 +13,7 @@ Entities in the ontology are mapped to DLite as follows:
 TODO:
   - map restriction cardinality to collection diminsions
 """
+
 # pylint: disable=import-error
 import re
 
