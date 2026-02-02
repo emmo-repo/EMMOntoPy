@@ -120,7 +120,7 @@ jobs:
             -oops \
             -rewriteAll \
             -saveConfig build/widoco/widoco.conf \
-            - webVowl \
+            -webVowl \
             -licensius \
             -includeAnnotationProperties
 
@@ -131,6 +131,9 @@ jobs:
     - name: Copy ontologies to public
       run: cp build/*ttl public/
 
+    # Copy widoco documentation to public, what to do with it is not yet decided.
+    - name: Copy widoco documentation to public
+      run: cp -r build/widoco public/widoco
 
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
