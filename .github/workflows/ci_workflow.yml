@@ -110,7 +110,8 @@ jobs:
           --ignore tests/test_graphviz \
           --ignore tests/test_excelparser \
           --ignore tests/test_java \
-          --ignore ontopy/ontokit/docs.py | tee result.log
+          --ignore ontopy/ontokit/docs.py \
+          --ignore tests/test_ontodoc_rst.py | tee result.log
         if grep -q "SKIPPED" result.log; then
           echo "❌ Skipped tests detected, failing build"
           exit 1
@@ -186,7 +187,9 @@ jobs:
           --doctest-modules \
           tests/test_graphviz \
           --doctest-modules \
-          ontopy/ontokit/docs.py | tee result_graphviz.log
+          ontopy/ontokit/docs.py \
+          --doctest-modules \
+          tests/test_ontodoc_rst.py | tee result_graphviz.log
 
         # Fail if any Graphviz tests got skipped
         if grep -q "SKIPPED" result_graphviz.log; then
