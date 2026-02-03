@@ -22,7 +22,6 @@ from ontopy.utils import asstring, get_label
 
 import owlready2  # pylint: disable=wrong-import-order
 
-
 if TYPE_CHECKING:
     from typing import Iterable, Optional, Type, Union
 
