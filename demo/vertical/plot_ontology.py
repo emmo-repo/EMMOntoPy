@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Plots the user case ontology created with the script `define_ontology.py`."""
-from ontopy import World
 
+from ontopy import World
 
 # Load usercase ontology from sqlite3 database
 world = World(filename="demo.sqlite3")

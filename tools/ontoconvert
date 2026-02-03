@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Converts file format of input ontology and write it to output file(s)."""
+
 import argparse
 import warnings
 
