@@ -62,9 +62,7 @@ CALLOUTS = {
 def _get_annotation_rank(onto: Ontology):
     # Resolve IRIs → AnnotationProperty instances (in defined order)
     # Not all IRIs may be present in the ontology
-    priorities = [
-        onto[iri] for iri in ANNOTATION_RANK.values() if onto[iri] is not None
-    ]
+    priorities = [onto[iri] for iri in ANNOTATION_RANK.values() if iri in onto]
 
     def rank(prop):
         # Exact match for the first three anchors
