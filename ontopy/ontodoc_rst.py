@@ -4,12 +4,15 @@ A module for documenting ontologies.
 
 # pylint: disable=fixme,too-many-lines,no-member,too-many-instance-attributes
 # pylint: disable=invalid-name
-import html
+# pylint: disable=line-too-long # SHOULD BE REMOVED LATER, because of templates
 import re
 import time
 import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING
+import shutil
+from urllib.request import urlopen
+from urllib.parse import urlparse
 
 import rdflib
 from rdflib import DCTERMS, OWL, URIRef
@@ -26,6 +29,69 @@ if TYPE_CHECKING:
     Property = Type[owlready2.Property]
     Individual = owlready2.Thing  # also datatype
     Entity = Union[Cls, Property, Individual]
+
+# Standard IRIs for the built‑in annotation properties
+ANNOTATION_RANK = {
+    "prefLabel": "http://www.w3.org/2004/02/skos/core#prefLabel",
+    "altLabel": "http://www.w3.org/2004/02/skos/core#altLabel",
+    "label": "http://www.w3.org/2000/01/rdf-schema#label",
+    "elucidation": "https://w3id.org/emmo"
+    "#EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9",
+    # "comment": "http://www.w3.org/2000/01/rdf-schema#comment",
+    "example": "http://www.w3.org/2004/02/skos/core#example",
+    "seeAlso": "http://www.w3.org/2000/01/rdf-schema#seeAlso",
+    "isDefinedBy": "http://www.w3.org/2000/01/rdf-schema#isDefinedBy",
+}
+
+# Annotations that should render as admonitions
+CALLOUTS = {
+    # admonition type -> (directive, optional title)
+    "note": ("note", None),
+    "comment": ("note", None),  # treat rdfs:comment as a note (optional)
+    "scopenote": ("note", None),
+    "example": ("admonition", "Example"),
+    "tip": ("tip", None),
+    "caution": ("caution", None),
+    "warning": ("warning", None),
+    "important": ("important", None),
+    "danger": ("danger", None),
+    "error": ("error", None),
+}
+
+
+def _get_annotation_rank(onto: Ontology):
+    # Resolve IRIs → AnnotationProperty instances (in defined order)
+    # Not all IRIs may be present in the ontology
+    priorities = [onto[iri] for iri in ANNOTATION_RANK.values() if iri in onto]
+
+    def rank(prop):
+        # Exact match for the first three anchors
+        if prop in priorities[:3]:
+
+            return priorities.index(prop)
+
+        # Otherwise find the earliest anchor among its ancestors
+        ancestors = set(prop.ancestors())
+        for idx, anchor in enumerate(priorities[3:], start=3):
+            if anchor in ancestors:
+                return idx
+
+        # Anything else falls to the bottom
+        return len(priorities)
+
+    all_props = list(onto.annotation_properties(imported=True))
+    return sorted(all_props, key=rank)
+
+
+def _extract_all_annotations(value_list, lang="en"):
+    """Extract text values, prioritizing a language (default: en)."""
+    result = []
+    for elem in value_list:
+        if isinstance(elem, str):
+            result.append(elem)
+        elif hasattr(elem, "lang") and elem.lang == lang:
+            result.append(elem)
+    return result
 
 
 class ModuleDocumentation:
@@ -125,6 +191,7 @@ class ModuleDocumentation:
             title = self.graph.value(URIRef(iri), DCTERMS.title)
         if not title:
             title = iri.rsplit("/", 1)[-1]
+
         return title
 
     def get_header(self) -> str:
@@ -177,11 +244,13 @@ class ModuleDocumentation:
             "datatypes": self.datatypes,
         }
         lines = []
-
         if header:
             lines.append(self.get_header())
 
+        annotations_ranked = _get_annotation_rank(self.ontology)
+
         def add_header(name):
+            """Help function to add header row to table."""
             clsname = f"element-table-{name.lower().replace(' ', '-')}"
             lines.extend(
                 [
@@ -191,38 +260,133 @@ class ModuleDocumentation:
                 ]
             )
 
+        def _get_links(item, key):
+            """Get HTML links for a list of entitities that
+            can be fetched from the ontology as keys."""
+            links = []
+            for ent in item[key]:
+                full_iri = ent.iri
+                try:
+                    val = ent.prefLabel.get_lang("en")[0]
+                except (IndexError, AttributeError):
+                    val = ent
+                links.append(_html_links(full_iri, display_text=val))
+
+            return links
+
+        def _linkify_manchester(text: str, onto) -> str:
+            """
+            Convert manchester notation as string to HTML links.
+            """
+
+            def _replace(match):
+                word = match.group(0)
+                try:
+                    full = onto[word].iri
+                    return _html_links(full, word)
+                except (KeyError, AttributeError):
+                    return word
+
+            return re.sub(r"\w+", _replace, text)
+
+        def _html_links(full_iri, display_text):
+            """Create the HTML code so that links lead to
+            the correct fragment in the same document if possibe,
+            otherwise link to the full IRI"""
+            fragment_iri = full_iri.split("#")[-1]
+            return (
+                f"<a href='#{fragment_iri}' "
+                f'onclick="'
+                f"if(!document.getElementById('{fragment_iri}'))"
+                f"{{window.location.href='{full_iri}'; return false;}}"
+                f'">'
+                f"{display_text}</a>"
+            )
+
+        def _linkify_value(val: str) -> str:
+            """
+            If `val` contains one or more IRIs, return them as separate links.
+            - If exactly one IRI and it's an image, embed the image.
+            - Otherwise, link each IRI separately and join with '; '.
+            """
+            if not isinstance(val, str):
+                return val
+
+            # find IRIs (separated by ; , or whitespace)
+            urls = re.findall(r"https?://[^\s;,]+", val)
+            if not urls:
+                return val
+
+            # single image → embed
+            if len(urls) == 1 and urls[0].lower().endswith(
+                (".png", ".jpg", ".jpeg", ".gif", ".svg")
+            ):
+                u = urls[0]
+                return (
+                    f'<a href="{u}"><img src="{u}" alt="{u}" '
+                    f'style="max-width:400px; max-height:300px;"/></a>'
+                )
+
+            # otherwise, link each separately, showing full IRI as label
+            links = []
+            for u in urls:
+                links.append(_html_links(u, u))  # use full IRI as label
+            return "; ".join(links)
+
         def add_keyvalue(
-            key, value, escape=True, htmllink=True, show_figure=True
+            key,
+            value,
+            iri=None,
         ):
             """Help function for adding a key-value row to table.
 
             Arguments:
                 key: Key to show in the table.
                 value: Value to show in the table.
-                htmllink: Whether to add html link to value.
-                show_figure: Whether to show figure in value column.
-
+                iri: IRI to link to, if value does not have attribute .iri.
             """
-            if show_figure and re.match(
-                r"^https?://[a-zA-Z0-9.+?@/_-]+\.(png|jpg|jpeg|svg|gif)$",
-                asstring(value, ontology=self.ontology),
-            ):
-                value = f'<img src="{value}">'
+            if not isinstance(value, list):
+                values = [value]
             else:
-                if escape:
-                    value = html.escape(str(value))
-                if htmllink:
-                    value = re.sub(
-                        r"(https?://[^\s]+)", r'<a href="\1">\1</a>', value
+                values = value
+
+            strval = ""
+            count = 0
+            for val in values:
+                if count > 0 and not key == "Restrictions":
+                    strval += ", "
+                count += 1
+
+                if hasattr(val, "iri"):
+                    strval += _html_links(val.iri, get_label(val))
+                elif iri:
+                    strval += _html_links(iri, val)
+                elif key == "Restrictions":
+                    strval += (
+                        "<li>"
+                        + _linkify_manchester(
+                            asstring(val),
+                            self.ontology,
+                        )
+                        + "</li>"
                     )
-                value = value.replace("\n", "<br>")
+                else:
+                    strval += _linkify_value(val)
+                    strval = strval.replace("\n", "<br>")
+
+            # Build a self-contained snippet to prevent table misalignment
+            if key == "Restrictions":
+                strval = (
+                    f'<div class="restriction-list"><ul>{strval}</ul></div>'
+                )
+
             lines.extend(
                 [
                     "  <tr>",
                     '    <td class="element-table-key">'
                     f'<span class="element-table-key">'
-                    f"{key.title()}</span></td>",
-                    f'    <td class="element-table-value">{value}</td>',
+                    f"{key}</span></td>",
+                    f'    <td class="element-table-value">{strval}</td>',
                     "  </tr>",
                 ]
             )
@@ -273,50 +437,138 @@ class ModuleDocumentation:
                         '  <table class="element-table">',
                     ]
                 )
-                add_keyvalue("IRI", entity.iri)
-                if hasattr(entity, "get_annotations"):
+                add_keyvalue("IRI", entity.iri, entity.iri)
+                if hasattr(entity, "get_annotations") or hasattr(
+                    entity, "get_individual_annotations"
+                ):
                     add_header("Annotations")
-                    for key, value in entity.get_annotations().items():
-                        if isinstance(value, list):
-                            for val in value:
-                                add_keyvalue(key, val)
+                    annotations = {  # pylint: disable=protected-access
+                        a: a._get_values_for_class(  # pylint: disable=protected-access
+                            entity
+                        )
+                        for a in annotations_ranked
+                        if a._get_values_for_class(  # pylint: disable=protected-access
+                            entity
+                        )
+                    }
+
+                    long_annotations = [
+                        "http://www.w3.org/2004/02/skos/core#example",
+                        "https://w3id.org/emmo#"
+                        "EMMO_c7b62dd7_063a_4c2a_8504_42f7264ba83f",
+                        "https://w3id.org/emmo#EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9",
+                        "https://w3id.org/emmo#EMMO_31252f35_c767_4b97_a877_1235076c3e13",
+                        "https://w3id.org/emmo#EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84",
+                    ]
+
+                    table_annotations = {
+                        key: value
+                        for key, value in annotations.items()
+                        if get_label(key) not in CALLOUTS
+                    }
+
+                    for key, item in table_annotations.items():
+                        if key.iri not in long_annotations:
+                            add_keyvalue(get_label(key), table_annotations[key])
                         else:
-                            add_keyvalue(key, value)
-                if entity.is_a or entity.equivalent_to:
-                    add_header("Formal description")
-                    for r in entity.equivalent_to:
+                            add_keyvalue(get_label(key), item)
 
-                        # FIXME: Skip restrictions with value None to work
-                        # around bug in Owlready2 that doesn't handle custom
-                        # datatypes in restrictions correctly...
-                        if hasattr(r, "value") and r.value is None:
-                            continue
-
-                        add_keyvalue(
-                            "Equivalent To",
-                            asstring(
-                                r,
-                                link='<a href="{iri}">{label}</a>',
-                                ontology=self.ontology,
-                            ),
-                            escape=False,
-                            htmllink=False,
+                    # Fetch parents (all direct superclasses)
+                    parents = [
+                        ent
+                        for ent in entity.is_a
+                        if (
+                            isinstance(
+                                ent,
+                                (owlready2.ThingClass, owlready2.PropertyClass),
+                            )
                         )
-                    for r in entity.is_a:
-                        add_keyvalue(
-                            "Subclass Of",
-                            asstring(
-                                r,
-                                link='<a href="{iri}">{label}</a>',
-                                ontology=self.ontology,
-                            ),
-                            escape=False,
-                            htmllink=False,
+                    ]
+
+                    # Fetch direct subclasses
+                    subclasses = (
+                        list(entity.subclasses())
+                        if isinstance(entity, owlready2.ThingClass)
+                        else []
+                    )
+
+                    # Fetch OWL restrictions (object property + someValuesFrom)
+                    restrictions = [
+                        restriction
+                        for restriction in entity.is_a
+                        if isinstance(restriction, owlready2.Restriction)
+                    ]
+
+                    if entity.is_a or entity.equivalent_to:
+                        add_header("Formal description")
+                        for r in entity.equivalent_to:
+
+                            # FIXME: Skip restrictions with value None to work
+                            # around bug in Owlready2 that doesn't handle custom
+                            # datatypes in restrictions correctly...
+                            if hasattr(r, "value") and r.value is None:
+                                continue
+
+                            add_keyvalue(
+                                "Equivalent To",
+                                asstring(
+                                    r,
+                                    link='<a href="{iri}">{label}</a>',
+                                    ontology=self.ontology,
+                                ),
+                            )
+                        # Add SubclassOf
+                        add_keyvalue("Subclass Of", parents)
+                        # Add Subclasses if any
+                        if subclasses:
+                            add_keyvalue("Subclasses", subclasses)
+
+                        # Add Restrictions if any
+                        if restrictions:
+                            add_keyvalue("Restrictions", restrictions)
+
+                    lines.extend(["  </table>", ""])
+
+                    # raw html block content (indented)
+                    lines.extend(
+                        [
+                            "  </table>",
+                            "",  # end of indented raw content
+                            "",  # blank line after raw directive block
+                        ]
+                    )
+                    callout_annotations = {
+                        key: value
+                        for key, value in annotations.items()
+                        if get_label(key) in CALLOUTS
+                    }
+
+                    def _indent(block: str, n: int = 3) -> str:
+                        pad = " " * n
+                        return "\n".join(
+                            (pad + ln) if ln.strip() else ""
+                            for ln in block.splitlines()
                         )
 
-                lines.extend(["  </table>", ""])
+                    for key, item in callout_annotations.items():
+                        directive, title = CALLOUTS[get_label(key)]
+                        lines.extend(
+                            [
+                                f".. {directive}::"
+                                + (f" {title}" if title else "")
+                                + "\n\n"
+                            ]
+                        )
+                        content = _extract_all_annotations(item)
+                        content = "\n\n".join(content)
+                        content = _indent(content, n=3)
+                        lines.extend([content, ""])
 
-        return "\n".join(lines)
+                    lines.extend(["\n"])  # blank line between callouts
+
+        lines = "\n".join(lines)
+
+        return lines
 
 
 class OntologyDocumentation:
@@ -480,8 +732,8 @@ References
             else "<AUTHOR>"
         )
         copyright = license if license else f"{time.strftime('%Y')}, {author}"
-
-        content = f"""
+        # pylint: disable=line-too-long
+        content = f"""\
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -503,18 +755,114 @@ extensions = []
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# Pygments styles are Sphinx settings (not theme options)
+pygments_style = "friendly"
+pygments_dark_style = "lightbulb"
 
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
-html_static_path = ['_static']
+html_theme = "pydata_sphinx_theme"
+
+html_theme_options = {{
+    # Remove left sidebar content (primary sidebar)
+    "primary_sidebar_items": [],
+
+    # Navigation depth (only matters if you show a nav in the sidebar)
+    "show_nav_level": 2,
+
+    # Disable right "On this page" TOC everywhere
+    "show_toc_level": 0,
+    "secondary_sidebar_items": [],
+
+    # Navbar
+    "navbar_center": ["navbar-nav"],
+    "navbar_end": ["navbar-icon-links", "theme-switcher", "search-button"],
+
+    # Icon links (Font Awesome 6 classes)
+    "icon_links": [
+        {{
+            "name": "GitHub",
+            "url": "https://github.com/emmo-repo/domain-{md.ontology.name.lower()}",
+            "icon": "fa-brands fa-github",
+        }},
+        {{
+            "name": "Ontology Homepage",
+            "url": "{iri}",
+            "icon": "fa-solid fa-globe",
+        }},
+        {{
+            "name": "WIDOCO Documentation",
+            "url": f"https://emmo-repo.github.io/domain-{md.ontology.name.lower()}/widoco/index-en.html",
+            "icon": "fa-solid fa-file-lines",
+        }}
+    ],
+    "show_prev_next": False,
+    "footer_start": ["copyright"],
+    "footer_center": ["sphinx-version"],
+}}
+html_static_path = ["_static"]
+html_title = "Domain {md.ontology.name.capitalize()} Ontology"
+html_css_files = ["custom.css"]
+
+# html_sidebars keys are docname globs. Apply everywhere unless you truly want per-page overrides.
+html_sidebars = {{
+    "{md.ontology.name.lower()}": ["search-field.html", "page-toc.html", "edit-this-page.html"],
+}}
 """
+
         if not conffile:
             conffile = Path(docfile).with_name("conf.py")
-        if overwrite and conffile.exists():
+        if not overwrite and conffile.exists():
             warnings.warn(f"conf.py file already exists: {conffile}")
             return
 
         conffile.write_text(content, encoding="utf8")
+
+    def copy_css_file(
+        self,
+        source: str | Path = (
+            "https://raw.githubusercontent.com/"
+            "emmo-repo/EMMOntoPy/refs/heads/flb/issue916/"
+            "ontopy/ontokit/setuptemplates/css/custom.css"
+        ),
+    ) -> Path:
+        """
+        Copy a custom CSS file into the Sphinx HTML static directory.
+
+        The source may be:
+          - a URL (http/https),
+          - an absolute local path,
+          - a relative local path.
+
+        Parameters
+        ----------
+        source : str or pathlib.Path, optional
+            Location of the CSS file to copy.
+
+        Returns
+        -------
+        pathlib.Path
+            Path to the copied CSS file.
+        """
+        static_dir = Path("build") / "_static"
+        static_dir.mkdir(parents=True, exist_ok=True)
+
+        destination = static_dir / "custom.css"
+
+        # URL source
+        if urlparse(str(source)).scheme in ("http", "https"):
+            with urlopen(source) as response, open(  # nosec
+                destination, "wb"
+            ) as f:  # nosec
+                shutil.copyfileobj(response, f)
+        # Local path source
+        else:
+            source_path = Path(source)
+            if not source_path.exists():
+                raise FileNotFoundError(f"CSS source not found: {source_path}")
+            shutil.copyfile(source_path, destination)
+
+        print(f"Copied CSS file to: {destination}")
+        return destination

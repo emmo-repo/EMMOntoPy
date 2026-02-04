@@ -37,7 +37,7 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install \
-            "EMMOntoPy[ontodoc] @ git+https://github.com/emmo-repo/EMMOntoPy.git@master" \
+            "EMMOntoPy[ontokit] @ git+https://github.com/emmo-repo/EMMOntoPy.git@ontokit" \
             "tripper[datadoc] @ git+https://github.com/EMMC-ASBL/tripper.git@master"
 
     #- name: Install current ontology for keywords tool
@@ -120,16 +120,25 @@ jobs:
             -oops \
             -rewriteAll \
             -saveConfig build/widoco/widoco.conf \
-            - webVowl \
+            -webVowl \
             -licensius \
             -includeAnnotationProperties
 
+    - name: Generate Ontokit documentation to public
+      run: ontokit docs --iri-regex=${ONTOLOGY_IRI} . && touch public/.nojekyll
 
+    # Copy turtle files from build to public
+    - name: Copy ontologies to public
+      run: cp build/*ttl public/
+
+    # Copy widoco documentation to public, what to do with it is not yet decided.
+    - name: Copy widoco documentation to public
+      run: cp -r build/widoco public/widoco
 
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        folder: build
+        folder: public
         branch: gh-pages
         clean: false
         single-commit: true

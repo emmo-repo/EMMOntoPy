@@ -1,0 +1,78 @@
+td.element-table-key, td.element-table-value {
+    vertical-align: top;
+}
+
+td.element-table-key {
+    text-align: right;
+    padding-right: 2mm;
+    width: 20%;
+}
+
+span.element-table-key {
+    font-weight: bold;
+}
+
+table.element-table {
+    width: 100%;
+    text-align: left;
+}
+
+html table.element-table tr:nth-child(odd) td{
+   background-color: Gainsboro;
+}
+
+table.element-table tr:nth-child(even) td{
+   background-color: GhostWhite;
+}
+
+html[data-theme=dark] table.element-table tr:nth-child(odd) td{
+   background-color: black;
+}
+
+html[data-theme=dark] table.element-table tr:nth-child(even) td{
+   background-color: black;
+}
+body img, body svg {
+    background-color: transparent;
+}
+html[data-theme='dark'] .bd-content img.my-svg,
+html[data-theme='dark'] .bd-content svg.my-svg {
+    background: transparent !important;
+    filter: none !important;
+    color: white !important;
+    fill: white !important;
+    stroke: white !important;
+}
+html:not([data-theme='light']) .bd-content img.my-svg,
+html:not([data-theme='light']) .bd-content svg.my-svg {
+    color: black !important;
+    fill: black !important;
+    stroke: black !important;
+}
+.faq-section summary {
+    font-size: 1.2em; /* Adjust the size as needed */
+    color: #3D98B6; /* This is a bluish color */
+    font-weight: bold; /* Makes the font bold */
+    cursor: pointer; /* Changes the cursor to indicate it's clickable */
+}
+
+#jsoncrackEmbed {
+  flex: 1;
+  order: 2;
+  width: 100%;
+  height: 100vh;
+  border: none;
+}
+/* this fixes darkmode within the json-ld playground iframe
+by inverting all colors if darkmode is active */
+html[data-theme="dark"] iframe[src*="json-ld.org/playground"] {
+   filter: invert(0.9);
+}
+
+/* This implements word wrap in code blocks that read from files */
+pre.literal-block {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    max-width: 100%; /* Ensures content doesn't overflow */
+}
