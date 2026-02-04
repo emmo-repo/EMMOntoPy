@@ -160,7 +160,7 @@ jobs:
           exit 1
         fi
 
-    - name: Round 4 – Graphviz & ontodoc deps
+    - name: Round 4 – Graphviz & ontodoc+ontokit deps
       run: |
         set -euo pipefail
 
@@ -178,7 +178,7 @@ jobs:
         dot -V
 
         # Install Python deps that use Graphviz (your extra already contains them)
-        pip install -U -e .[ontodoc]
+        pip install -U -e .[ontodoc, ontokit]
 
         # Run ONLY the Graphviz tests
         pytest -rA \
