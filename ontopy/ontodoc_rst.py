@@ -696,7 +696,7 @@ References
 
    Reference Index <{docname}>
 
-.. include:: README.md
+.. include:: README.rst
 
 """
         outpath = Path(indexfile)
