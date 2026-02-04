@@ -826,7 +826,7 @@ html_sidebars = {{
         self,
         source: str | Path = (
             "https://raw.githubusercontent.com/"
-            "emmo-repo/EMMOntoPy/refs/heads/flb/issue916/"
+            "emmo-repo/EMMOntoPy/refs/heads/ontokit/"
             "ontopy/ontokit/setuptemplates/css/custom.css"
         ),
     ) -> Path:
