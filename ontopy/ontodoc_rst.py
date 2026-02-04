@@ -696,6 +696,8 @@ References
 
    Reference Index <{docname}>
 
+.. include:: README.md
+
 """
         outpath = Path(indexfile)
         if not overwrite and outpath.exists():

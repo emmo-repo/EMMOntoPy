@@ -1,3 +1,4 @@
+myst-parser
 nbsphinx
 pydata-sphinx-theme
 sphinx
