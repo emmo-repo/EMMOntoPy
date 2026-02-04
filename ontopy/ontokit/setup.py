@@ -75,7 +75,7 @@ def setup_subcommand(args):
     """Implements the setup sub-command."""
 
     thisdir = Path(__file__).resolve().parent
-    srcdir = thisdir / "setup"
+    srcdir = thisdir / "setuptemplates"
 
     root = Path(args.root).resolve()
     github_dir = root / ".github"
