@@ -110,15 +110,12 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
     indexfile = docfile.with_name("index.rst")
     conffile = docfile.with_name("conf.py")
     od.write_refdoc(docfile=docfile)
-    print(indexfile, type(indexfile))
 
     # if not indexfile.exists():
-    print(f"Generating index template: {indexfile}")
     od.write_index_template(
         indexfile=indexfile, docfile=docfile, overwrite=True
     )
     # if not conffile.exists():
-    print(f"Generating configuration template: {conffile}")
     od.write_conf_template(conffile=conffile, docfile=docfile, overwrite=True)
     (Path("build") / "_static").mkdir(parents=True, exist_ok=True)
 
@@ -128,14 +125,7 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
 
     def build_docs(src="build", out=public_dir):
         # Equivalent to: sphinx-build -b html build/ public/
-        print("g=")
         args = ["-b", "html", src, out]
-        print("h=")
-        # status = build_main([
-        # "-b", "html",
-        # "docs",
-        # str(build_dir / "html"),
-        # ])
         code = sphinx_main(args)
         print("i=")
         if code != 0:
@@ -147,5 +137,4 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
     path_public_dir = root / public_dir
     if path_public_dir.exists() and path_public_dir.is_dir():
         shutil.rmtree(path_public_dir)
-    print("f)")
     build_docs("build", public_dir)
