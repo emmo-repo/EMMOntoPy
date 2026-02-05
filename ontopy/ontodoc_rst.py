@@ -696,7 +696,8 @@ References
 
    Reference Index <{docname}>
 
-.. include:: README.rst
+.. include:: ../README.md
+   :parser: myst_parser.sphinx_
 
 """
         outpath = Path(indexfile)
@@ -752,7 +753,14 @@ release = '{release}'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+extensions = [
+    "myst_parser",
+]
+
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".md": "markdown",
+}
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
