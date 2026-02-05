@@ -109,7 +109,7 @@ jobs:
 
     - name: Generate markdown documentation of all keywords
       run: |
-        keywords -i build/${ONTOLOGY_NAME}-doc.ttl --write-kw-md build/${ONTOLOGY_NAME}.md --namespace-filter=${ONTOLOGY_IRI}# --redefine=allow
+        keywords -i build/${ONTOLOGY_NAME}-doc.ttl --write-kw-md build/${ONTOLOGY_NAME}_kw.md --namespace-filter=${ONTOLOGY_IRI}# --redefine=allow
 
     - name: Generate Widoco documentation
       run: |
@@ -123,9 +123,6 @@ jobs:
             -webVowl \
             -licensius \
             -includeAnnotationProperties
-
-    - name: Create README.rst from README.md with pandoc
-      run: pandoc README.md -o build/README.rst
 
     - name: Generate Ontokit documentation to public
       run: ontokit docs --iri-regex=${ONTOLOGY_IRI} . && touch public/.nojekyll
