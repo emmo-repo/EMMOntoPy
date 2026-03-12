@@ -1,4 +1,5 @@
-myst-parser==5.0.0
+myst-parser>=5.0.0;python_version>='3.12'
+myst-parser<5.0.0;python_version<'3.12'
 nbsphinx==0.9.8
 pydata-sphinx-theme==0.16.1
 sphinx==9.1.0
