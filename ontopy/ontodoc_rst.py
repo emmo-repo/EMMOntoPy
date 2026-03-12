@@ -694,7 +694,7 @@ References
    :includehidden:
    :hidden:
 
-   Reference Index <{docname}>
+   Reference Index <{docname}.rst>
 
 .. include:: ../README.md
    :parser: myst_parser.sphinx_
