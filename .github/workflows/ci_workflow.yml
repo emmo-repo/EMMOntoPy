@@ -112,6 +112,15 @@ jobs:
           echo "✅ No java on PATH (as intended for Phase 1)"
         fi
 
+    - name: TLS/CA diagnostics
+      run: |
+        set -euxo pipefail
+        python -V
+        python -c "import ssl, certifi, requests; print('certifi:', certifi.where()); print('ssl default:', ssl.get_default_verify_paths()); print('requests:', requests.__version__)"
+        ls -l /etc/ssl/certs/ca-certificates.crt || true
+        echo | openssl s_client -connect example.com:443 -servername example.com -showcerts 2>/dev/null | openssl x509 -noout -issuer -subject || true
+        python -c "import requests; print(requests.get('https://example.com', timeout=10).status_code)"
+
 
     - name: Round 1 – minimal env
       run: |
