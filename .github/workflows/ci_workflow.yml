@@ -94,6 +94,11 @@ jobs:
           update-ca-certificates
         fi
 
+    - name: Force requests to use system CA bundle
+      run: |
+        echo "REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt" >> $GITHUB_ENV
+        echo "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt" >> $GITHUB_ENV
+
     - name: Install Python dependencies (and EMMOntoPy) minimal
       run: |
         python -m pip install --upgrade pip
