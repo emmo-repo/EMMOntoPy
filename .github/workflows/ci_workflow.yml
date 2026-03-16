@@ -80,6 +80,7 @@ jobs:
     #  uses: actions/setup-python@v6
     #  with:
     #    python-version: ${{ matrix.python-version }}
+
     - name: Install CA certificates
       run: |
         sudo apt-get update
