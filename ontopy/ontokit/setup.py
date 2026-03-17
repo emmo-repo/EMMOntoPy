@@ -21,6 +21,11 @@ def setup_arguments(subparsers):
     )
     parser.set_defaults(subcommand=setup_subcommand)
     parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Show Python traceback on error.",
+    )
+    parser.add_argument(
         "root",
         metavar="PATH",
         help="Root folder of repository to setup.",

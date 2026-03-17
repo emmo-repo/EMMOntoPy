@@ -22,6 +22,12 @@ def docs_arguments(subparsers):
     parser.set_defaults(subcommand=docs_subcommand)
 
     parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Show Python traceback on error.",
+    )
+
+    parser.add_argument(
         "root",
         metavar="PATH",
         help="Root folder of repository to create html documentation for."
@@ -65,7 +71,6 @@ def docs_arguments(subparsers):
 
 def docs_subcommand(args):  # pylint: disable=too-many-locals
     """Implements the docs sub-command."""
-
     root = Path(args.root).resolve()
     workflows_dir = root / ".github" / "workflows"
     # check that workflows dir exists, raise error saying that it is missing
@@ -75,7 +80,6 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
             f"The workflows directory {workflows_dir} does not exist. "
             "Please run ontokit setup first."
         )
-
     # Find the file cd_ghpages.yml in the workflows directory
     cd_ghpages_file = workflows_dir / "cd_ghpages.yml"
     if not cd_ghpages_file.exists():
@@ -110,7 +114,6 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
     indexfile = docfile.with_name("index.rst")
     conffile = docfile.with_name("conf.py")
     od.write_refdoc(docfile=docfile)
-
     # if not indexfile.exists():
     od.write_index_template(
         indexfile=indexfile, docfile=docfile, overwrite=True
@@ -127,11 +130,8 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
         # Equivalent to: sphinx-build -b html build/ public/
         args = ["-b", "html", src, out]
         code = sphinx_main(args)
-        print("i=")
         if code != 0:
-            print("j=")
             raise RuntimeError(f"sphinx-build failed with exit code {code}")
-        print("k=")
 
     # Remove build/ if it exists
     path_public_dir = root / public_dir
