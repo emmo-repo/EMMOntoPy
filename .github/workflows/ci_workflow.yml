@@ -81,6 +81,24 @@ jobs:
     #  with:
     #    python-version: ${{ matrix.python-version }}
 
+    - name: Install CA certificates
+      run: |
+        # In containers we're root (no sudo); on runners sudo exists.
+        if command -v sudo >/dev/null 2>&1; then
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates
+          sudo update-ca-certificates
+        else
+          apt-get update
+          apt-get install -y ca-certificates
+          update-ca-certificates
+        fi
+
+    - name: Force requests to use system CA bundle
+      run: |
+        echo "REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt" >> $GITHUB_ENV
+        echo "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt" >> $GITHUB_ENV
+
     - name: Install Python dependencies (and EMMOntoPy) minimal
       run: |
         python -m pip install --upgrade pip
@@ -98,7 +116,6 @@ jobs:
         else
           echo "✅ No java on PATH (as intended for Phase 1)"
         fi
-
 
     - name: Round 1 – minimal env
       run: |
