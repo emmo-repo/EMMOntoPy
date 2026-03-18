@@ -149,6 +149,13 @@ setuptools.setup(
         "ontopy.factpluspluswrapper.java.lib.so": ["*"],
         "ontopy.factpluspluswrapper.java.lib.jars": ["*.jar"],
         "ontopy.factpluspluswrapper.java": ["pom.xml"],
+        "ontopy.ontokit": [
+            "setuptemplates/*.yml",
+            "setuptemplates/workflows/*.yml",
+            "setuptemplates/scripts/*.sh",
+            "setuptemplates/css/*.css",
+            "setuptemplates/js/*.js",
+        ],
     },
     include_package_data=True,
     data_files=[
