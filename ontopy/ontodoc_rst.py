@@ -711,8 +711,12 @@ References
 
         outpath.write_text(content, encoding="utf8")
 
-    def write_conf_template(
-        self, conffile="conf.py", docfile=None, overwrite=False
+    def write_conf_template(  ## pylint: disable=too-many-locals,too-many-statements
+        self,
+        conffile="conf.py",
+        docfile=None,
+        overwrite=False,
+        github_repository=None,
     ):
         """Write basic template sphinx conf.py file to disk.
 
@@ -721,6 +725,8 @@ References
             docfile: Name of generated documentation file.  If not given,
                 the name of the top ontology will be used.
             overwrite: Whether to overwrite an existing file.
+            github_repository: Optional GitHub repository in the form
+                "OWNER/REPO".
         """
         # pylint: disable=redefined-builtin
         md = self.module_documentations[0]
@@ -739,6 +745,21 @@ References
             else "<AUTHOR>"
         )
         copyright = license if license else f"{time.strftime('%Y')}, {author}"
+        if github_repository and "/" in github_repository:
+            owner, repo = github_repository.split("/", 1)
+            github_url = f"https://github.com/{owner}/{repo}"
+            widoco_url = (
+                f"https://{owner}.github.io/{repo}/widoco/widoco/index-en.html"
+            )
+        else:
+            github_url = (
+                "https://github.com/"
+                f"emmo-repo/domain-{md.ontology.name.lower()}"
+            )
+            widoco_url = (
+                "https://emmo-repo.github.io/"
+                f"domain-{md.ontology.name.lower()}/widoco/widoco/index-en.html"
+            )
         # pylint: disable=line-too-long
         content = f"""\
 # Configuration file for the Sphinx documentation builder.
@@ -798,7 +819,7 @@ html_theme_options = {{
     "icon_links": [
         {{
             "name": "GitHub",
-            "url": "https://github.com/emmo-repo/domain-{md.ontology.name.lower()}",
+            "url": "{github_url}",
             "icon": "fa-brands fa-github",
         }},
         {{
@@ -808,7 +829,7 @@ html_theme_options = {{
         }},
         {{
             "name": "WIDOCO Documentation",
-            "url": f"https://emmo-repo.github.io/domain-{md.ontology.name.lower()}/widoco/index-en.html",
+            "url": "{widoco_url}",
             "icon": "fa-solid fa-file-lines",
         }}
     ],
@@ -817,7 +838,7 @@ html_theme_options = {{
     "footer_center": ["sphinx-version"],
 }}
 html_static_path = ["_static"]
-html_title = "Domain {md.ontology.name.capitalize()} Ontology"
+html_title = f"{md.ontology.name.capitalize()} Ontology"
 html_css_files = ["custom.css"]
 html_js_files = ["toc-collapsible.js"]
 

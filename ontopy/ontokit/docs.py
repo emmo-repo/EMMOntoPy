@@ -94,6 +94,7 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
     env = config.get("env", {})
 
     ontology_name = env.get("ONTOLOGY_NAME")
+    github_repository = env.get("GITHUB_REPOSITORY")
     # ontology_prefix = env.get("ONTOLOGY_PREFIX")
     # ontology_iri = env.get("ONTOLOGY_IRI")
 
@@ -119,7 +120,12 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
         indexfile=indexfile, docfile=docfile, overwrite=True
     )
     # if not conffile.exists():
-    od.write_conf_template(conffile=conffile, docfile=docfile, overwrite=True)
+    od.write_conf_template(
+        conffile=conffile,
+        docfile=docfile,
+        overwrite=True,
+        github_repository=github_repository,
+    )
     (Path("build") / "_static").mkdir(parents=True, exist_ok=True)
 
     od.copy_css_file()  # Use default CSS file

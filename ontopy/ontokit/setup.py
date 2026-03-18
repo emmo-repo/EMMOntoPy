@@ -2,11 +2,40 @@
 
 # pylint: disable=fixme
 
+import re
 import shutil
 import subprocess  # nosec
 from glob import glob
 from pathlib import Path
 from string import Template
+
+
+def _infer_github_repository(root, remote):
+    """Infer GitHub repository as 'owner/repo' from git remote URL."""
+    cmd = ["git", "-C", str(root), "remote", "get-url", remote]
+    proc = subprocess.run(  # nosec
+        cmd,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        return None
+
+    remote_url = proc.stdout.strip()
+    patterns = (
+        r"^git@github\.com:(?P<owner>[^/]+)/(?P<repo>[^/]+?)(?:\.git)?$",
+        r"^https://github\.com/(?P<owner>[^/]+)/(?P<repo>[^/]+?)(?:\.git)?/?$",
+        r"^ssh://git@github\.com/(?P<owner>[^/]+)/(?P<repo>[^/]+?)(?:\.git)?/?$",  # pylint: disable=line-too-long
+    )
+    for pattern in patterns:
+        match = re.match(pattern, remote_url)
+        if match:
+            owner = match.group("owner")
+            repo = match.group("repo")
+            return f"{owner}/{repo}"
+
+    return None
 
 
 def setup_arguments(subparsers):
@@ -70,13 +99,24 @@ def setup_arguments(subparsers):
         help="Remote git repository [origin]",
     )
     parser.add_argument(
+        "--github-repository",
+        "-g",
+        metavar="OWNER/REPO",
+        help=(
+            "GitHub repository in the form OWNER/REPO. "
+            "If omitted, inferred from --remote."
+        ),
+    )
+    parser.add_argument(
         "--no-init",
         action="store_true",
         help="Do not try to initialise GitHub Pages branch.",
     )
 
 
-def setup_subcommand(args):
+def setup_subcommand(
+    args,
+):  # pylint: disable=too-many-locals,too-many-statements
     """Implements the setup sub-command."""
 
     thisdir = Path(__file__).resolve().parent
@@ -92,6 +132,9 @@ def setup_subcommand(args):
     ontology_name = args.ontology_name if args.ontology_name else root.name
     ontology_prefix = args.ontology_prefix
     ontology_iri = args.ontology_iri
+    github_repository = args.github_repository or _infer_github_repository(
+        root, args.remote
+    )
 
     def ignore(src, names):
         """Return file names to ignore when copying."""
@@ -113,6 +156,7 @@ def setup_subcommand(args):
                 "ONTOLOGY_NAME": ontology_name,
                 "ONTOLOGY_PREFIX": ontology_prefix,
                 "ONTOLOGY_IRI": ontology_iri,
+                "GITHUB_REPOSITORY": github_repository or "",
             }
         )
         outfile = workflows_dir / Path(fname).name
