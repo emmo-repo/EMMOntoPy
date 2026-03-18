@@ -22,6 +22,10 @@ from ontopy.utils import asstring, get_label
 
 import owlready2  # pylint: disable=wrong-import-order
 
+SETUPTEMPLATES_DIR = (
+    Path(__file__).resolve().parent / "ontokit" / "setuptemplates"
+)
+
 if TYPE_CHECKING:
     from typing import Iterable, Optional, Type, Union
 
@@ -815,6 +819,7 @@ html_theme_options = {{
 html_static_path = ["_static"]
 html_title = "Domain {md.ontology.name.capitalize()} Ontology"
 html_css_files = ["custom.css"]
+html_js_files = ["toc-collapsible.js"]
 
 # html_sidebars keys are docname globs. Apply everywhere unless you truly want per-page overrides.
 html_sidebars = {{
@@ -832,11 +837,7 @@ html_sidebars = {{
 
     def copy_css_file(
         self,
-        source: str | Path = (
-            "https://raw.githubusercontent.com/"
-            "emmo-repo/EMMOntoPy/refs/heads/ontokit/"
-            "ontopy/ontokit/setuptemplates/css/custom.css"
-        ),
+        source: str | Path = SETUPTEMPLATES_DIR / "css" / "custom.css",
     ) -> Path:
         """
         Copy a custom CSS file into the Sphinx HTML static directory.
@@ -875,4 +876,48 @@ html_sidebars = {{
             shutil.copyfile(source_path, destination)
 
         print(f"Copied CSS file to: {destination}")
+        return destination
+
+    def copy_js_file(
+        self,
+        source: str | Path = (SETUPTEMPLATES_DIR / "js" / "toc-collapsible.js"),
+    ) -> Path:
+        """
+        Copy the collapsible-TOC JavaScript file into the Sphinx HTML
+        static directory.
+
+        The source may be:
+          - a URL (http/https),
+          - an absolute local path,
+          - a relative local path.
+
+        Parameters
+        ----------
+        source : str or pathlib.Path, optional
+            Location of the JS file to copy.
+
+        Returns
+        -------
+        pathlib.Path
+            Path to the copied JS file.
+        """
+        static_dir = Path("build") / "_static"
+        static_dir.mkdir(parents=True, exist_ok=True)
+
+        destination = static_dir / "toc-collapsible.js"
+
+        # URL source
+        if urlparse(str(source)).scheme in ("http", "https"):
+            with urlopen(source) as response, open(  # nosec
+                destination, "wb"
+            ) as f:  # nosec
+                shutil.copyfileobj(response, f)
+        # Local path source
+        else:
+            source_path = Path(source)
+            if not source_path.exists():
+                raise FileNotFoundError(f"JS source not found: {source_path}")
+            shutil.copyfile(source_path, destination)
+
+        print(f"Copied JS file to: {destination}")
         return destination

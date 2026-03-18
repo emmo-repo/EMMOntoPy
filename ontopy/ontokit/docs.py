@@ -123,6 +123,7 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
     (Path("build") / "_static").mkdir(parents=True, exist_ok=True)
 
     od.copy_css_file()  # Use default CSS file
+    od.copy_js_file()  # Use default collapsible-TOC JS file
 
     public_dir = "public"
 
