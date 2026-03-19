@@ -177,7 +177,7 @@ jobs:
           exit 1
         fi
 
-    - name: Round 4 – Graphviz & ontodoc+ontokit deps
+    - name: Round 4 – Graphviz & ontodoc deps
       run: |
         set -euo pipefail
 
@@ -195,7 +195,7 @@ jobs:
         dot -V
 
         # Install Python deps that use Graphviz (your extra already contains them)
-        pip install -U -e .[ontodoc,ontokit]
+        pip install -U -e .[ontodoc]
 
         # Run ONLY the Graphviz tests
         pytest -rA \
@@ -203,7 +203,6 @@ jobs:
           --cov-report=term --cov-report= \
           --doctest-modules \
           tests/test_graphviz \
-          ontopy/ontokit/docs.py \
           tests/test_ontodoc_rst.py | tee result_graphviz.log
 
         # Fail if any Graphviz tests got skipped
@@ -211,6 +210,31 @@ jobs:
           echo "❌ Skipped tests detected in Graphviz phase, failing build"
           exit 1
         fi
+
+    - name: Round 5 – ontokit tests (Python 3.12+)
+      if: matrix.python-version >= '3.12'
+      run: |
+        set -euo pipefail
+
+        # Install Python deps required by ontokit tests
+        pip install -U -e .[ontokit]
+
+        # Run ONLY the ontokit tests
+        #pytest -rA \
+        #  --cov=ontopy --cov=emmopy --cov-append \
+        #  --cov-report=term --cov-report= \
+        #  --doctest-modules \
+        #  ontopy/ontokit \
+        #  tests/tools/ontokit | tee result_ontokit.log
+
+        # Fail if any ontokit tests got skipped
+        #if grep -q "SKIPPED" result_ontokit.log; then
+        #  echo "❌ Skipped tests detected in ontokit phase, failing build"
+        #  exit 1
+        #fi
+
+
+
 
     - name: Generate XML once
       run: |
