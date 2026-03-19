@@ -2,7 +2,9 @@ name: CI/CD - New updates to 'master'
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
+      - lazy_import_for_docs
 
 jobs:
   updates-to-master:
