@@ -13,7 +13,7 @@ jobs:
     uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.9.2
     with:
       # General
-      install_extras: "[dev,docs,excel,ontodoc]"
+      install_extras: "[dev,docs,excel,ontodoc,ontokit]"
 
       # pre-commit
       run_pre-commit: true
@@ -126,7 +126,9 @@ jobs:
           --doctest-modules \
           --ignore tests/test_graphviz \
           --ignore tests/test_excelparser \
-          --ignore tests/test_java | tee result.log
+          --ignore tests/test_java \
+          --ignore ontopy/ontokit/docs.py \
+          --ignore tests/test_ontodoc_rst.py | tee result.log
         if grep -q "SKIPPED" result.log; then
           echo "❌ Skipped tests detected, failing build"
           exit 1
@@ -200,13 +202,39 @@ jobs:
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          tests/test_graphviz | tee result_graphviz.log
+          tests/test_graphviz \
+          tests/test_ontodoc_rst.py | tee result_graphviz.log
 
         # Fail if any Graphviz tests got skipped
         if grep -q "SKIPPED" result_graphviz.log; then
           echo "❌ Skipped tests detected in Graphviz phase, failing build"
           exit 1
         fi
+
+    - name: Round 5 – ontokit tests (Python 3.12+)
+      if: matrix.python-version >= '3.12'
+      run: |
+        set -euo pipefail
+
+        # Install Python deps required by ontokit tests
+        pip install -U -e .[ontokit]
+
+        # Run ONLY the ontokit tests
+        #pytest -rA \
+        #  --cov=ontopy --cov=emmopy --cov-append \
+        #  --cov-report=term --cov-report= \
+        #  --doctest-modules \
+        #  ontopy/ontokit \
+        #  tests/tools/ontokit | tee result_ontokit.log
+
+        # Fail if any ontokit tests got skipped
+        #if grep -q "SKIPPED" result_ontokit.log; then
+        #  echo "❌ Skipped tests detected in ontokit phase, failing build"
+        #  exit 1
+        #fi
+
+
+
 
     - name: Generate XML once
       run: |

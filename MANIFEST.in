@@ -11,3 +11,4 @@ recursive-include demo *
 recursive-exclude demo old __pycache__ *~ *.pyc *.off
 
 recursive-include ontopy/factpluspluswrapper/java **
+recursive-include ontopy/ontokit/setuptemplates *.yml *.sh *.css *.js
