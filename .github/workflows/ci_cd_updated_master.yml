@@ -25,7 +25,7 @@ jobs:
         emmopy
         ontopy
       python_version: "3.13"
-      doc_extras: "[docs,excel,ontodoc]"
+      doc_extras: "[docs,excel,ontodoc,ontokit]"
       special_file_api_ref_options: "emmopy/emmocheck.py,show_bases: false"
       landing_page_replacements: |
         (LICENSE.txt),(LICENSE.md)
