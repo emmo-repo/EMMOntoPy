@@ -2,11 +2,48 @@
 
 # pylint: disable=fixme
 
+import re
 import shutil
 import subprocess  # nosec
 from glob import glob
 from pathlib import Path
-from string import Template
+
+from ontopy.ontokit.config import (
+    create_config,
+    get_config_path,
+    load_config,
+    missing_required_variables,
+    print_config,
+    update_config,
+)
+
+
+def _infer_github_repository(root, remote):
+    """Infer GitHub repository as 'owner/repo' from git remote URL."""
+    cmd = ["git", "-C", str(root), "remote", "get-url", remote]
+    proc = subprocess.run(  # nosec
+        cmd,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        return None
+
+    remote_url = proc.stdout.strip()
+    patterns = (
+        r"^git@github\.com:(?P<owner>[^/]+)/(?P<repo>[^/]+?)(?:\.git)?$",
+        r"^https://github\.com/(?P<owner>[^/]+)/(?P<repo>[^/]+?)(?:\.git)?/?$",
+        r"^ssh://git@github\.com/(?P<owner>[^/]+)/(?P<repo>[^/]+?)(?:\.git)?/?$",  # pylint: disable=line-too-long
+    )
+    for pattern in patterns:
+        match = re.match(pattern, remote_url)
+        if match:
+            owner = match.group("owner")
+            repo = match.group("repo")
+            return f"{owner}/{repo}"
+
+    return None
 
 
 def setup_arguments(subparsers):
@@ -20,6 +57,11 @@ def setup_arguments(subparsers):
         ),
     )
     parser.set_defaults(subcommand=setup_subcommand)
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Show Python traceback on error.",
+    )
     parser.add_argument(
         "root",
         metavar="PATH",
@@ -65,13 +107,24 @@ def setup_arguments(subparsers):
         help="Remote git repository [origin]",
     )
     parser.add_argument(
+        "--github-repository",
+        "-g",
+        metavar="OWNER/REPO",
+        help=(
+            "GitHub repository in the form OWNER/REPO. "
+            "If omitted, inferred from --remote."
+        ),
+    )
+    parser.add_argument(
         "--no-init",
         action="store_true",
         help="Do not try to initialise GitHub Pages branch.",
     )
 
 
-def setup_subcommand(args):
+def setup_subcommand(
+    args,
+):  # pylint: disable=too-many-locals,too-many-statements
     """Implements the setup sub-command."""
 
     thisdir = Path(__file__).resolve().parent
@@ -87,6 +140,46 @@ def setup_subcommand(args):
     ontology_name = args.ontology_name if args.ontology_name else root.name
     ontology_prefix = args.ontology_prefix
     ontology_iri = args.ontology_iri
+    github_repository = args.github_repository or _infer_github_repository(
+        root, args.remote
+    )
+
+    config_path = get_config_path(root)
+    defaults = {
+        "ONTOLOGY_NAME": ontology_name,
+        "ONTOLOGY_PREFIX": ontology_prefix,
+        "ONTOLOGY_IRI": ontology_iri,
+        "GITHUB_REPOSITORY": github_repository,
+        "BUILD_DIR": "build",
+    }
+    if config_path.exists():
+        config = load_config(config_path)
+        config, added = update_config(config_path, config, defaults)
+        if added:
+            print(
+                f"Updated ontokit configuration at {config_path} "
+                f"(added: {', '.join(added)}):"
+            )
+        else:
+            print(f"Loaded existing ontokit configuration from {config_path}:")
+    else:
+        config = create_config(config_path, defaults)
+        print(f"Created ontokit configuration at {config_path}:")
+    print_config(config)
+
+    missing = missing_required_variables(config)
+    if missing:
+        required = ", ".join(missing)
+        raise ValueError(
+            "Missing required variables in "
+            f"{config_path}: {required}. "
+            "Please update the file and rerun `ontokit setup`."
+        )
+
+    ontology_name = config["ONTOLOGY_NAME"]
+    ontology_prefix = config["ONTOLOGY_PREFIX"]
+    ontology_iri = config["ONTOLOGY_IRI"]
+    github_repository = config["GITHUB_REPOSITORY"]
 
     def ignore(src, names):
         """Return file names to ignore when copying."""
@@ -102,16 +195,8 @@ def setup_subcommand(args):
     )
 
     for fname in glob(str(srcdir / "workflows" / "*.yml")):
-        template = Template(Path(fname).read_text())
-        substituted = template.safe_substitute(
-            {
-                "ONTOLOGY_NAME": ontology_name,
-                "ONTOLOGY_PREFIX": ontology_prefix,
-                "ONTOLOGY_IRI": ontology_iri,
-            }
-        )
         outfile = workflows_dir / Path(fname).name
-        outfile.write_text(substituted)
+        shutil.copy(fname, outfile)
 
     # Initialise github pages branch
     if not args.no_init:

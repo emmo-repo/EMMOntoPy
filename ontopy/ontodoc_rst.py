@@ -22,6 +22,10 @@ from ontopy.utils import asstring, get_label
 
 import owlready2  # pylint: disable=wrong-import-order
 
+SETUPTEMPLATES_DIR = (
+    Path(__file__).resolve().parent / "ontokit" / "setuptemplates"
+)
+
 if TYPE_CHECKING:
     from typing import Iterable, Optional, Type, Union
 
@@ -707,8 +711,12 @@ References
 
         outpath.write_text(content, encoding="utf8")
 
-    def write_conf_template(
-        self, conffile="conf.py", docfile=None, overwrite=False
+    def write_conf_template(  ## pylint: disable=too-many-locals,too-many-statements
+        self,
+        conffile="conf.py",
+        docfile=None,
+        overwrite=False,
+        github_repository=None,
     ):
         """Write basic template sphinx conf.py file to disk.
 
@@ -717,6 +725,8 @@ References
             docfile: Name of generated documentation file.  If not given,
                 the name of the top ontology will be used.
             overwrite: Whether to overwrite an existing file.
+            github_repository: Optional GitHub repository in the form
+                "OWNER/REPO".
         """
         # pylint: disable=redefined-builtin
         md = self.module_documentations[0]
@@ -735,6 +745,21 @@ References
             else "<AUTHOR>"
         )
         copyright = license if license else f"{time.strftime('%Y')}, {author}"
+        if github_repository and "/" in github_repository:
+            owner, repo = github_repository.split("/", 1)
+            github_url = f"https://github.com/{owner}/{repo}"
+            widoco_url = (
+                f"https://{owner}.github.io/{repo}/widoco/index-en.html"
+            )
+        else:
+            github_url = (
+                "https://github.com/"
+                f"emmo-repo/domain-{md.ontology.name.lower()}"
+            )
+            widoco_url = (
+                "https://emmo-repo.github.io/"
+                f"domain-{md.ontology.name.lower()}/widoco/index-en.html"
+            )
         # pylint: disable=line-too-long
         content = f"""\
 # Configuration file for the Sphinx documentation builder.
@@ -794,7 +819,7 @@ html_theme_options = {{
     "icon_links": [
         {{
             "name": "GitHub",
-            "url": "https://github.com/emmo-repo/domain-{md.ontology.name.lower()}",
+            "url": "{github_url}",
             "icon": "fa-brands fa-github",
         }},
         {{
@@ -804,7 +829,7 @@ html_theme_options = {{
         }},
         {{
             "name": "WIDOCO Documentation",
-            "url": f"https://emmo-repo.github.io/domain-{md.ontology.name.lower()}/widoco/index-en.html",
+            "url": "{widoco_url}",
             "icon": "fa-solid fa-file-lines",
         }}
     ],
@@ -813,8 +838,9 @@ html_theme_options = {{
     "footer_center": ["sphinx-version"],
 }}
 html_static_path = ["_static"]
-html_title = "Domain {md.ontology.name.capitalize()} Ontology"
+html_title = f"{md.ontology.name.capitalize()} Ontology"
 html_css_files = ["custom.css"]
+html_js_files = ["toc-collapsible.js"]
 
 # html_sidebars keys are docname globs. Apply everywhere unless you truly want per-page overrides.
 html_sidebars = {{
@@ -832,11 +858,7 @@ html_sidebars = {{
 
     def copy_css_file(
         self,
-        source: str | Path = (
-            "https://raw.githubusercontent.com/"
-            "emmo-repo/EMMOntoPy/refs/heads/ontokit/"
-            "ontopy/ontokit/setuptemplates/css/custom.css"
-        ),
+        source: str | Path = SETUPTEMPLATES_DIR / "css" / "custom.css",
     ) -> Path:
         """
         Copy a custom CSS file into the Sphinx HTML static directory.
@@ -875,4 +897,48 @@ html_sidebars = {{
             shutil.copyfile(source_path, destination)
 
         print(f"Copied CSS file to: {destination}")
+        return destination
+
+    def copy_js_file(
+        self,
+        source: str | Path = (SETUPTEMPLATES_DIR / "js" / "toc-collapsible.js"),
+    ) -> Path:
+        """
+        Copy the collapsible-TOC JavaScript file into the Sphinx HTML
+        static directory.
+
+        The source may be:
+          - a URL (http/https),
+          - an absolute local path,
+          - a relative local path.
+
+        Parameters
+        ----------
+        source : str or pathlib.Path, optional
+            Location of the JS file to copy.
+
+        Returns
+        -------
+        pathlib.Path
+            Path to the copied JS file.
+        """
+        static_dir = Path("build") / "_static"
+        static_dir.mkdir(parents=True, exist_ok=True)
+
+        destination = static_dir / "toc-collapsible.js"
+
+        # URL source
+        if urlparse(str(source)).scheme in ("http", "https"):
+            with urlopen(source) as response, open(  # nosec
+                destination, "wb"
+            ) as f:  # nosec
+                shutil.copyfileobj(response, f)
+        # Local path source
+        else:
+            source_path = Path(source)
+            if not source_path.exists():
+                raise FileNotFoundError(f"JS source not found: {source_path}")
+            shutil.copyfile(source_path, destination)
+
+        print(f"Copied JS file to: {destination}")
         return destination

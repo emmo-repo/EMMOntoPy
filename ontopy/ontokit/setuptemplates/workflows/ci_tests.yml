@@ -1,9 +1,6 @@
 name: CI tests
 on: [push]
 
-env:
-  ONTOLOGY_NAME: $ONTOLOGY_NAME
-
 jobs:
   ci_testing:
     concurrency: ci-${{ github.ref }}  # Recommended if you intend to make multiple deployments in quick succession.
@@ -13,6 +10,20 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Load ontokit configuration
+      run: |
+        if [ ! -f .ontokit_conf.yml ]; then
+          echo "Missing .ontokit_conf.yml" >&2
+          exit 1
+        fi
+
+        value=$(sed -n -E "s/^ONTOLOGY_NAME:[[:space:]]*(.*)$/\\1/p" .ontokit_conf.yml | head -n 1)
+        if [ -z "$value" ]; then
+          echo "Missing required key 'ONTOLOGY_NAME' in .ontokit_conf.yml" >&2
+          exit 1
+        fi
+        echo "ONTOLOGY_NAME=${value}" >> "$GITHUB_ENV"
+
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
@@ -21,7 +32,8 @@ jobs:
     - name: Install EMMOntoPy
       run: |
         pip install --upgrade pip
-        pip install EMMOntoPy
+        # pip install EMMOntoPy
+        pip install -U git+https://github.com/emmo-repo/EMMOntoPy.git@master
 
     - name: Test
       run: |

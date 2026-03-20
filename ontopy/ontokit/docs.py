@@ -5,12 +5,15 @@
 import shutil
 from pathlib import Path
 
-import yaml
-
 from sphinx.cmd.build import main as sphinx_main
 
 from ontopy.ontodoc_rst import OntologyDocumentation
 from ontopy.ontology import get_ontology
+from ontopy.ontokit.config import (
+    get_config_path,
+    load_config,
+    missing_required_variables,
+)
 
 
 def docs_arguments(subparsers):
@@ -20,6 +23,12 @@ def docs_arguments(subparsers):
         help=("Create the html documentation for the ontology."),
     )
     parser.set_defaults(subcommand=docs_subcommand)
+
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Show Python traceback on error.",
+    )
 
     parser.add_argument(
         "root",
@@ -65,37 +74,31 @@ def docs_arguments(subparsers):
 
 def docs_subcommand(args):  # pylint: disable=too-many-locals
     """Implements the docs sub-command."""
-
     root = Path(args.root).resolve()
-    workflows_dir = root / ".github" / "workflows"
-    # check that workflows dir exists, raise error saying that it is missing
-    # and ask to run setup first
-    if not workflows_dir.exists():
+    config_path = get_config_path(root)
+    if not config_path.exists():
         raise FileNotFoundError(
-            f"The workflows directory {workflows_dir} does not exist. "
+            f"The ontokit configuration file {config_path} does not exist. "
             "Please run ontokit setup first."
         )
 
-    # Find the file cd_ghpages.yml in the workflows directory
-    cd_ghpages_file = workflows_dir / "cd_ghpages.yml"
-    if not cd_ghpages_file.exists():
-        raise FileNotFoundError(
-            f"The file {cd_ghpages_file} does not exist. "
-            "Please run ontokit setup first."
+    config = load_config(config_path)
+    missing = missing_required_variables(config)
+    if missing:
+        required = ", ".join(missing)
+        raise ValueError(
+            "Missing required variables in "
+            f"{config_path}: {required}. "
+            "Please update the file and rerun `ontokit docs`."
         )
-    # Parse the file cd_ghpages.yml to find the ontology name, prefix, and IRI
-    with open(cd_ghpages_file, "r") as f:
-        config = yaml.safe_load(f)
 
-    env = config.get("env", {})
-
-    ontology_name = env.get("ONTOLOGY_NAME")
-    # ontology_prefix = env.get("ONTOLOGY_PREFIX")
-    # ontology_iri = env.get("ONTOLOGY_IRI")
+    ontology_name = config.get("ONTOLOGY_NAME")
+    github_repository = config.get("GITHUB_REPOSITORY")
+    build_dir = config.get("BUILD_DIR", "build")
 
     # Path to ontology file
-    # assumes the ontology for docc: build/ontology_name-inferred.ttl
-    ontofile = root / "build" / f"{ontology_name}.ttl"  # INFERRED?
+    # assumes the ontology for docc: {build_dir}/ontology_name-inferred.ttl
+    ontofile = root / build_dir / f"{ontology_name}.ttl"  # INFERRED?
     onto = get_ontology(ontofile).load()
     od = OntologyDocumentation(
         onto,
@@ -104,37 +107,39 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
     )
 
     if not args.outfile:
-        docfile = root / "build" / f"{ontology_name}.rst"
+        docfile = root / build_dir / f"{ontology_name}.rst"
     else:
         docfile = root / Path(args.outfile)
     indexfile = docfile.with_name("index.rst")
     conffile = docfile.with_name("conf.py")
     od.write_refdoc(docfile=docfile)
-
     # if not indexfile.exists():
     od.write_index_template(
         indexfile=indexfile, docfile=docfile, overwrite=True
     )
     # if not conffile.exists():
-    od.write_conf_template(conffile=conffile, docfile=docfile, overwrite=True)
-    (Path("build") / "_static").mkdir(parents=True, exist_ok=True)
+    od.write_conf_template(
+        conffile=conffile,
+        docfile=docfile,
+        overwrite=True,
+        github_repository=github_repository,
+    )
+    (Path(build_dir) / "_static").mkdir(parents=True, exist_ok=True)
 
     od.copy_css_file()  # Use default CSS file
+    od.copy_js_file()  # Use default collapsible-TOC JS file
 
     public_dir = "public"
 
-    def build_docs(src="build", out=public_dir):
+    def build_docs(src, out):
         # Equivalent to: sphinx-build -b html build/ public/
         args = ["-b", "html", src, out]
         code = sphinx_main(args)
-        print("i=")
         if code != 0:
-            print("j=")
             raise RuntimeError(f"sphinx-build failed with exit code {code}")
-        print("k=")
 
-    # Remove build/ if it exists
+    # Remove public dir if it exists
     path_public_dir = root / public_dir
     if path_public_dir.exists() and path_public_dir.is_dir():
         shutil.rmtree(path_public_dir)
-    build_docs("build", public_dir)
+    build_docs(build_dir, public_dir)

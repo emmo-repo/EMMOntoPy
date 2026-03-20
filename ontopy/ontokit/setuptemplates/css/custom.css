@@ -76,3 +76,46 @@ pre.literal-block {
     overflow-wrap: break-word !important;
     max-width: 100%; /* Ensures content doesn't overflow */
 }
+
+/* ── Collapsible page-TOC sidebar ───────────────────────────────────── */
+
+/* Tree-like spacing for items with children */
+li.toc-has-children {
+    position: relative;
+    padding-left: 1.1em;
+}
+
+/* Keep the text/link block aligned to the same baseline */
+li.toc-has-children > a {
+    display: inline-block;
+}
+
+/* Chevron button inserted by toc-collapsible.js */
+button.toc-toggle-btn {
+    position: absolute;
+    left: 0;
+    top: 0.08em;
+    width: 1.2em;
+    height: 1.2em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    font-size: 1.0em;
+    line-height: 1;
+    color: inherit;
+    opacity: 0.7;
+}
+
+button.toc-toggle-btn:hover {
+    opacity: 1;
+}
+
+/* Collapsed child list */
+ul.toc-items-collapsed {
+    display: none;
+}
