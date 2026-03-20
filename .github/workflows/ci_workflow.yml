@@ -220,18 +220,18 @@ jobs:
         pip install -U -e .[ontokit]
 
         # Run ONLY the ontokit tests
-        #pytest -rA \
-        #  --cov=ontopy --cov=emmopy --cov-append \
-        #  --cov-report=term --cov-report= \
-        #  --doctest-modules \
-        #  ontopy/ontokit \
-        #  tests/tools/ontokit | tee result_ontokit.log
+        pytest -rA \
+          --cov=ontopy --cov=emmopy --cov-append \
+          --cov-report=term --cov-report= \
+          --doctest-modules \
+          ontopy/ontokit \
+          tests/tools/ontokit | tee result_ontokit.log
 
         # Fail if any ontokit tests got skipped
-        #if grep -q "SKIPPED" result_ontokit.log; then
-        #  echo "❌ Skipped tests detected in ontokit phase, failing build"
-        #  exit 1
-        #fi
+        if grep -q "SKIPPED" result_ontokit.log; then
+          echo "❌ Skipped tests detected in ontokit phase, failing build"
+          exit 1
+        fi
 
 
 
