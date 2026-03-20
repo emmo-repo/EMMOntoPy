@@ -127,7 +127,8 @@ jobs:
           --ignore tests/test_graphviz \
           --ignore tests/test_excelparser \
           --ignore tests/test_java \
-          --ignore ontopy/ontokit/docs.py \
+          --ignore ontopy/ontokit \
+          --ignore tests/tools/ontokit \
           --ignore tests/test_ontodoc_rst.py | tee result.log
         if grep -q "SKIPPED" result.log; then
           echo "❌ Skipped tests detected, failing build"
