@@ -749,7 +749,7 @@ References
             owner, repo = github_repository.split("/", 1)
             github_url = f"https://github.com/{owner}/{repo}"
             widoco_url = (
-                f"https://{owner}.github.io/{repo}/widoco/widoco/index-en.html"
+                f"https://{owner}.github.io/{repo}/widoco/index-en.html"
             )
         else:
             github_url = (
@@ -758,7 +758,7 @@ References
             )
             widoco_url = (
                 "https://emmo-repo.github.io/"
-                f"domain-{md.ontology.name.lower()}/widoco/widoco/index-en.html"
+                f"domain-{md.ontology.name.lower()}/widoco/index-en.html"
             )
         # pylint: disable=line-too-long
         content = f"""\
