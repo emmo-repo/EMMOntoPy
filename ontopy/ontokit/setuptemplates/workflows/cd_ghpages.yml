@@ -144,7 +144,7 @@ jobs:
 
     # Copy widoco documentation to public, what to do with it is not yet decided.
     - name: Copy widoco documentation to public
-      run: cp -r "${BUILD_DIR}/widoco" public/widoco
+      run: cp -r "${BUILD_DIR}/widoco" public
 
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
