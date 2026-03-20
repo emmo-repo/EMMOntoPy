@@ -11,7 +11,6 @@ from importlib.machinery import SourceFileLoader
 
 from ontopy import get_ontology
 
-
 rootdir = Path(__file__).resolve().parent.parent
 testdir = rootdir / "tests"
 ontodir = testdir / "testonto"

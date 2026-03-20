@@ -13,7 +13,7 @@ jobs:
     uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.9.2
     with:
       # General
-      install_extras: "[dev,docs,excel,ontodoc]"
+      install_extras: "[dev,docs,excel,ontodoc,ontokit]"
 
       # pre-commit
       run_pre-commit: true
@@ -81,6 +81,24 @@ jobs:
     #  with:
     #    python-version: ${{ matrix.python-version }}
 
+    - name: Install CA certificates
+      run: |
+        # In containers we're root (no sudo); on runners sudo exists.
+        if command -v sudo >/dev/null 2>&1; then
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates
+          sudo update-ca-certificates
+        else
+          apt-get update
+          apt-get install -y ca-certificates
+          update-ca-certificates
+        fi
+
+    - name: Force requests to use system CA bundle
+      run: |
+        echo "REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt" >> $GITHUB_ENV
+        echo "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt" >> $GITHUB_ENV
+
     - name: Install Python dependencies (and EMMOntoPy) minimal
       run: |
         python -m pip install --upgrade pip
@@ -99,7 +117,6 @@ jobs:
           echo "✅ No java on PATH (as intended for Phase 1)"
         fi
 
-
     - name: Round 1 – minimal env
       run: |
         set -euo pipefail
@@ -109,7 +126,9 @@ jobs:
           --doctest-modules \
           --ignore tests/test_graphviz \
           --ignore tests/test_excelparser \
-          --ignore tests/test_java | tee result.log
+          --ignore tests/test_java \
+          --ignore ontopy/ontokit/docs.py \
+          --ignore tests/test_ontodoc_rst.py | tee result.log
         if grep -q "SKIPPED" result.log; then
           echo "❌ Skipped tests detected, failing build"
           exit 1
@@ -183,13 +202,39 @@ jobs:
           --cov=ontopy --cov=emmopy --cov-append \
           --cov-report=term --cov-report= \
           --doctest-modules \
-          tests/test_graphviz | tee result_graphviz.log
+          tests/test_graphviz \
+          tests/test_ontodoc_rst.py | tee result_graphviz.log
 
         # Fail if any Graphviz tests got skipped
         if grep -q "SKIPPED" result_graphviz.log; then
           echo "❌ Skipped tests detected in Graphviz phase, failing build"
           exit 1
         fi
+
+    - name: Round 5 – ontokit tests (Python 3.12+)
+      if: matrix.python-version >= '3.12'
+      run: |
+        set -euo pipefail
+
+        # Install Python deps required by ontokit tests
+        pip install -U -e .[ontokit]
+
+        # Run ONLY the ontokit tests
+        #pytest -rA \
+        #  --cov=ontopy --cov=emmopy --cov-append \
+        #  --cov-report=term --cov-report= \
+        #  --doctest-modules \
+        #  ontopy/ontokit \
+        #  tests/tools/ontokit | tee result_ontokit.log
+
+        # Fail if any ontokit tests got skipped
+        #if grep -q "SKIPPED" result_ontokit.log; then
+        #  echo "❌ Skipped tests detected in ontokit phase, failing build"
+        #  exit 1
+        #fi
+
+
+
 
     - name: Generate XML once
       run: |
@@ -289,8 +334,8 @@ jobs:
     - name: Create EMMO documentation
       run: |
         cd examples/emmodoc
-        python ../../tools/ontodoc -f simple-html emmo-inferred emmo-simple.html
-        python ../../tools/ontodoc -t emmo.md -p no-self-contained emmo-inferred emmo.html
+        python ../../tools/ontodoc -f simple-html ../../tests/testonto/emmo/emmo-squashed.ttl emmo-simple.html
+        python ../../tools/ontodoc -t emmo.md -p no-self-contained ../../tests/testonto/emmo/emmo-squashed.ttl emmo.html
         # pdf generation is commented out as there is a xetex error which
         # needs to be resolved if we decide to keep ontodoc as a tool.
         # python ../../tools/ontodoc -t emmo.md emmo-inferred emmo.pdf

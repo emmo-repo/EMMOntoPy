@@ -4,6 +4,7 @@
 The excel file must be in the formate provided by
 ontology_template.xlsx
 """
+
 import argparse
 import sys
 import os
