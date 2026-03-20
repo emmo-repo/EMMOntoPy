@@ -71,6 +71,18 @@ def docs_arguments(subparsers):
         "Default is 'docs/index.rst'.",
     )
 
+    parser.add_argument(
+        "--ontology-file",
+        "-f",
+        metavar="FILE",
+        help=(
+            "Path to the ontology file to document in the auto-generated "
+            "reference index, relative to the root directory. Default is "
+            "'build/ontology_name.ttl', where 'ontology_name' is "
+            "the value of ONTOLOGY_NAME in the configuration file."
+        ),
+    )
+
 
 def docs_subcommand(args):  # pylint: disable=too-many-locals
     """Implements the docs sub-command."""
@@ -97,8 +109,12 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
     build_dir = config.get("BUILD_DIR", "build")
 
     # Path to ontology file
-    # assumes the ontology for docc: {build_dir}/ontology_name-inferred.ttl
-    ontofile = root / build_dir / f"{ontology_name}.ttl"  # INFERRED?
+    if args.ontology_file:
+        ontofile = root / args.ontology_file
+    else:
+        ontofile = (
+            root / build_dir / f"{ontology_name}.ttl"
+        )  # INFERRED as default?
     onto = get_ontology(ontofile).load()
     od = OntologyDocumentation(
         onto,
