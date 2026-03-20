@@ -18,6 +18,7 @@ def test_run() -> None:
         captured["iri_regex"] = args.iri_regex
         captured["outfile"] = args.outfile
         captured["ontology_file"] = args.ontology_file
+        captured["docs_dir"] = args.docs_dir
         return 0
 
     monkeypatch = pytest.MonkeyPatch()

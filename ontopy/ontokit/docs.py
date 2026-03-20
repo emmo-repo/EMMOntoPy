@@ -83,6 +83,19 @@ def docs_arguments(subparsers):
         ),
     )
 
+    parser.add_argument(
+        "--docs-dir",
+        metavar="DIR",
+        help=(
+            "Documentation directory to include in the generated "
+            "documentation. "
+            "Typically the README.md which is included as the landing page "
+            "of the documentation links to the docs dir and its contents. "
+            "If not provided, the README.md will be included in the "
+            "documentation, but the docs dir will not be included."
+        ),
+    )
+
 
 def docs_subcommand(args):  # pylint: disable=too-many-locals
     """Implements the docs sub-command."""
@@ -144,6 +157,14 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
 
     od.copy_css_file()  # Use default CSS file
     od.copy_js_file()  # Use default collapsible-TOC JS file
+
+    if args.docs_dir:
+        # Copy the provided docs dir to the build dir
+        src_docs_dir = root / args.docs_dir
+        dst_docs_dir = root / build_dir / args.docs_dir
+        if dst_docs_dir.exists():
+            shutil.rmtree(dst_docs_dir)
+        shutil.copytree(src_docs_dir, dst_docs_dir)
 
     public_dir = "public"
 
