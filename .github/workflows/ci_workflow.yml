@@ -227,7 +227,7 @@ jobs:
           ontopy/ontokit \
           tests/tools/ontokit | tee result_ontokit.log
 
-         Fail if any ontokit tests got skipped
+        # Fail if any ontokit tests got skipped
         if grep -q "SKIPPED" result_ontokit.log; then
           echo "❌ Skipped tests detected in ontokit phase, failing build"
           exit 1
