@@ -14,6 +14,7 @@ def test_run(monkeypatch, tmp_path) -> None:
         captured["iri_regex"] = args.iri_regex
         captured["outfile"] = args.outfile
         captured["ontology_file"] = args.ontology_file
+        captured["docs_dir"] = args.docs_dir
         return 0
 
     monkeypatch.setattr(docs_module, "docs_subcommand", fake_docs_subcommand)
@@ -30,6 +31,8 @@ def test_run(monkeypatch, tmp_path) -> None:
             "docs/custom.rst",
             "--ontology-file",
             "build/custom.ttl",
+            "--docs-dir",
+            "docs",
         ]
     )
 
@@ -39,3 +42,4 @@ def test_run(monkeypatch, tmp_path) -> None:
     assert captured["iri_regex"] == "https://example.org/demo/.*"
     assert captured["outfile"] == "docs/custom.rst"
     assert captured["ontology_file"] == "build/custom.ttl"
+    assert captured["docs_dir"] == "docs"
