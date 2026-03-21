@@ -166,9 +166,9 @@ class ModuleDocumentation:
         elif isinstance(entity, owlready2.ObjectPropertyClass):
             self.object_properties.add(entity)
         elif isinstance(entity, owlready2.DataPropertyClass):
-            self.object_properties.add(entity)
+            self.data_properties.add(entity)
         elif isinstance(entity, owlready2.AnnotationPropertyClass):
-            self.object_properties.add(entity)
+            self.annotation_properties.add(entity)
         elif isinstance(entity, owlready2.Thing):
             if (
                 hasattr(entity.__class__, "iri")
