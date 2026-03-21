@@ -375,6 +375,9 @@ class ModuleDocumentation:
                         )
                         + "</li>"
                     )
+                # if value is a class 'type'
+                elif isinstance(val, type):
+                    strval += _html_links(val.iri, get_label(val))
                 else:
                     strval += _linkify_value(val)
                     strval = strval.replace("\n", "<br>")
