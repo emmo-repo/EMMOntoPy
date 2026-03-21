@@ -19,6 +19,7 @@ from rdflib import DCTERMS, OWL, URIRef
 
 from ontopy.ontology import Ontology, get_ontology
 from ontopy.utils import asstring, get_label
+from ontopy.exceptions import NoSuchLabelError
 
 import owlready2  # pylint: disable=wrong-import-order
 
@@ -521,7 +522,7 @@ class ModuleDocumentation:
                                     ontology=self.ontology,
                                 ),
                             )
-                        # Add SubclassOf
+                        # Add SubclassOf/SubPropertyOf/InstanceOf for direct parents
                         if isinstance(entity, owlready2.ThingClass):
                             add_keyvalue("Subclass Of", parents)
                         elif isinstance(entity, (owlready2.PropertyClass)):
@@ -535,6 +536,27 @@ class ModuleDocumentation:
                         # Add Restrictions if any
                         if restrictions:
                             add_keyvalue("Restrictions", restrictions)
+                        if isinstance(entity, owlready2.PropertyClass):
+                            # Add domain and range for properties
+                            try:
+                                # Remove None from domain list if present (Owlready2 quirk)
+                                entity.domain = [
+                                    d for d in entity.domain if d is not None
+                                ]
+                                if entity.domain:
+                                    add_keyvalue("Domain", entity.domain)
+                            except (NoSuchLabelError, AttributeError):
+                                pass
+                            try:
+                                # Remove None from range list if present (Owlready2 quirk)
+                                entity.range = [
+                                    r for r in entity.range if r is not None
+                                ]
+
+                                if entity.range:
+                                    add_keyvalue("Range", entity.range)
+                            except (NoSuchLabelError, AttributeError):
+                                pass
 
                     lines.extend(["  </table>", ""])
 
