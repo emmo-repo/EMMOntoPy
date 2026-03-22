@@ -166,9 +166,9 @@ class ModuleDocumentation:
         elif isinstance(entity, owlready2.ObjectPropertyClass):
             self.object_properties.add(entity)
         elif isinstance(entity, owlready2.DataPropertyClass):
-            self.object_properties.add(entity)
+            self.data_properties.add(entity)
         elif isinstance(entity, owlready2.AnnotationPropertyClass):
-            self.object_properties.add(entity)
+            self.annotation_properties.add(entity)
         elif isinstance(entity, owlready2.Thing):
             if (
                 hasattr(entity.__class__, "iri")
@@ -522,7 +522,12 @@ class ModuleDocumentation:
                                 ),
                             )
                         # Add SubclassOf
-                        add_keyvalue("Subclass Of", parents)
+                        if isinstance(entity, owlready2.ThingClass):
+                            add_keyvalue("Subclass Of", parents)
+                        elif isinstance(entity, (owlready2.PropertyClass)):
+                            add_keyvalue("Subproperty Of", parents)
+                        elif isinstance(entity, owlready2.Thing):
+                            add_keyvalue("Instance of", parents)
                         # Add Subclasses if any
                         if subclasses:
                             add_keyvalue("Subclasses", subclasses)
