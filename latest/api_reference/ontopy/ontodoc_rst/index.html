@@ -2395,9 +2395,9 @@ should match.</p></td>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ObjectPropertyClass</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">DataPropertyClass</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">AnnotationPropertyClass</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Thing</span><span class="p">):</span>
             <span class="k">if</span> <span class="p">(</span>
                 <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">)</span>
@@ -2751,7 +2751,12 @@ should match.</p></td>
                                 <span class="p">),</span>
                             <span class="p">)</span>
                         <span class="c1"># Add SubclassOf</span>
-                        <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Subclass Of&quot;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
+                            <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Subclass Of&quot;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">owlready2</span><span class="o">.</span><span class="n">PropertyClass</span><span class="p">)):</span>
+                            <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Subproperty Of&quot;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Thing</span><span class="p">):</span>
+                            <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Instance of&quot;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
                         <span class="c1"># Add Subclasses if any</span>
                         <span class="k">if</span> <span class="n">subclasses</span><span class="p">:</span>
                             <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Subclasses&quot;</span><span class="p">,</span> <span class="n">subclasses</span><span class="p">)</span>
@@ -2847,9 +2852,9 @@ entities to document.</p>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ObjectPropertyClass</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">DataPropertyClass</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">AnnotationPropertyClass</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">object_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation_properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Thing</span><span class="p">):</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">)</span>
@@ -3309,7 +3314,12 @@ documentation.</p></td>
                             <span class="p">),</span>
                         <span class="p">)</span>
                     <span class="c1"># Add SubclassOf</span>
-                    <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Subclass Of&quot;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
+                        <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Subclass Of&quot;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">owlready2</span><span class="o">.</span><span class="n">PropertyClass</span><span class="p">)):</span>
+                        <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Subproperty Of&quot;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Thing</span><span class="p">):</span>
+                        <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Instance of&quot;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
                     <span class="c1"># Add Subclasses if any</span>
                     <span class="k">if</span> <span class="n">subclasses</span><span class="p">:</span>
                         <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Subclasses&quot;</span><span class="p">,</span> <span class="n">subclasses</span><span class="p">)</span>
