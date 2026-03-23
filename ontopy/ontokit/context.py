@@ -21,7 +21,7 @@ def context_arguments(subparsers):
     parser.add_argument(
         "input",
         metavar="ONTOLOGY",
-        help="Input ontology. Either a file path or an URL.",
+        help="Input ontology. Either a file path or a URL.",
     )
     parser.add_argument(
         "output",
@@ -29,7 +29,7 @@ def context_arguments(subparsers):
         nargs="?",
         help=(
             "Name of output context file. "
-            "If omitted, is the context written to stdout."
+            "If omitted, the context is written to stdout."
         ),
     )
     parser.add_argument(
