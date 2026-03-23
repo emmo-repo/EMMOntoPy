@@ -29,7 +29,7 @@ def context_arguments(subparsers):
         nargs="?",
         help=(
             "Name of output context file. "
-            "If omitted, is the context written to stdout."
+            "If omitted, the context is written to stdout."
         ),
     )
     parser.add_argument(
