@@ -1,3 +1,0 @@
-# bumpversion
-
-::: ontopy.ontokit.bumpversion
