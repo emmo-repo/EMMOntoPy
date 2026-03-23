@@ -2536,6 +2536,12 @@ should match.</p></td>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">display_text</span><span class="si">}</span><span class="s2">&lt;/a&gt;&quot;</span>
             <span class="p">)</span>
 
+        <span class="k">def</span><span class="w"> </span><span class="nf">_display_iri_label</span><span class="p">(</span><span class="n">iri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Return a compact display label for well-known IRIs.&quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">iri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://www.w3.org/2001/XMLSchema#&quot;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;xsd:</span><span class="si">{</span><span class="n">iri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">return</span> <span class="n">iri</span>
+
         <span class="k">def</span><span class="w"> </span><span class="nf">_linkify_value</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            If `val` contains one or more IRIs, return them as separate links.</span>
@@ -2560,10 +2566,10 @@ should match.</p></td>
                     <span class="sa">f</span><span class="s1">&#39;style=&quot;max-width:400px; max-height:300px;&quot;/&gt;&lt;/a&gt;&#39;</span>
                 <span class="p">)</span>
 
-            <span class="c1"># otherwise, link each separately, showing full IRI as label</span>
+            <span class="c1"># otherwise, link each separately with a compact display label</span>
             <span class="n">links</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
-                <span class="n">links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_html_links</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>  <span class="c1"># use full IRI as label</span>
+                <span class="n">links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_html_links</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">_display_iri_label</span><span class="p">(</span><span class="n">u</span><span class="p">)))</span>
             <span class="k">return</span> <span class="s2">&quot;; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">links</span><span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">add_keyvalue</span><span class="p">(</span>
@@ -2603,6 +2609,7 @@ should match.</p></td>
                         <span class="p">)</span>
                         <span class="o">+</span> <span class="s2">&quot;&lt;/li&gt;&quot;</span>
                     <span class="p">)</span>
+                <span class="c1"># if value is a class &#39;type&#39;</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">strval</span> <span class="o">+=</span> <span class="n">_linkify_value</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
                     <span class="n">strval</span> <span class="o">=</span> <span class="n">strval</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">)</span>
@@ -2750,7 +2757,7 @@ should match.</p></td>
                                     <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">,</span>
                                 <span class="p">),</span>
                             <span class="p">)</span>
-                        <span class="c1"># Add SubclassOf</span>
+                        <span class="c1"># Add SubclassOf/SubPropertyOf/InstanceOf for direct parents</span>
                         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
                             <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Subclass Of&quot;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
                         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">owlready2</span><span class="o">.</span><span class="n">PropertyClass</span><span class="p">)):</span>
@@ -2764,6 +2771,44 @@ should match.</p></td>
                         <span class="c1"># Add Restrictions if any</span>
                         <span class="k">if</span> <span class="n">restrictions</span><span class="p">:</span>
                             <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Restrictions&quot;</span><span class="p">,</span> <span class="n">restrictions</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">PropertyClass</span><span class="p">):</span>
+                            <span class="c1"># Add domain and range for properties</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="c1"># Remove None from domain list if present (Owlready2 quirk)</span>
+                                <span class="n">entity</span><span class="o">.</span><span class="n">domain</span> <span class="o">=</span> <span class="p">[</span>
+                                    <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">domain</span> <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                                <span class="p">]</span>
+                                <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">domain</span><span class="p">:</span>
+                                    <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Domain&quot;</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span>
+                            <span class="k">except</span> <span class="p">(</span><span class="n">NoSuchLabelError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+                                <span class="k">pass</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="c1"># Remove None from range lists if present</span>
+                                <span class="c1"># (Owlready2 quirk). Use the range IRI only for</span>
+                                <span class="c1"># Python datatypes, otherwise keep the ontology</span>
+                                <span class="c1"># entity so it is rendered as an internal link.</span>
+                                <span class="n">ranges</span> <span class="o">=</span> <span class="p">[</span>
+                                    <span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">range</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                                <span class="p">]</span>
+                                <span class="n">range_iris</span> <span class="o">=</span> <span class="p">[</span>
+                                    <span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">range_iri</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                                <span class="p">]</span>
+
+                                <span class="n">range_values</span> <span class="o">=</span> <span class="p">[</span>
+                                    <span class="p">(</span>
+                                        <span class="n">range_</span>
+                                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">range_</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">)</span>
+                                        <span class="k">else</span> <span class="n">range_iri</span>
+                                    <span class="p">)</span>
+                                    <span class="k">for</span> <span class="n">range_</span><span class="p">,</span> <span class="n">range_iri</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                                        <span class="n">ranges</span><span class="p">,</span> <span class="n">range_iris</span>
+                                    <span class="p">)</span>
+                                <span class="p">]</span>
+
+                                <span class="k">if</span> <span class="n">range_values</span><span class="p">:</span>
+                                    <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Range&quot;</span><span class="p">,</span> <span class="n">range_values</span><span class="p">)</span>
+                            <span class="k">except</span> <span class="p">(</span><span class="n">NoSuchLabelError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+                                <span class="k">pass</span>
 
                     <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;  &lt;/table&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">])</span>
 
@@ -3099,6 +3144,12 @@ documentation.</p></td>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">display_text</span><span class="si">}</span><span class="s2">&lt;/a&gt;&quot;</span>
         <span class="p">)</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_display_iri_label</span><span class="p">(</span><span class="n">iri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a compact display label for well-known IRIs.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">iri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://www.w3.org/2001/XMLSchema#&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;xsd:</span><span class="si">{</span><span class="n">iri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">iri</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">_linkify_value</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        If `val` contains one or more IRIs, return them as separate links.</span>
@@ -3123,10 +3174,10 @@ documentation.</p></td>
                 <span class="sa">f</span><span class="s1">&#39;style=&quot;max-width:400px; max-height:300px;&quot;/&gt;&lt;/a&gt;&#39;</span>
             <span class="p">)</span>
 
-        <span class="c1"># otherwise, link each separately, showing full IRI as label</span>
+        <span class="c1"># otherwise, link each separately with a compact display label</span>
         <span class="n">links</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
-            <span class="n">links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_html_links</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>  <span class="c1"># use full IRI as label</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_html_links</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">_display_iri_label</span><span class="p">(</span><span class="n">u</span><span class="p">)))</span>
         <span class="k">return</span> <span class="s2">&quot;; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">links</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">add_keyvalue</span><span class="p">(</span>
@@ -3166,6 +3217,7 @@ documentation.</p></td>
                     <span class="p">)</span>
                     <span class="o">+</span> <span class="s2">&quot;&lt;/li&gt;&quot;</span>
                 <span class="p">)</span>
+            <span class="c1"># if value is a class &#39;type&#39;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">strval</span> <span class="o">+=</span> <span class="n">_linkify_value</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
                 <span class="n">strval</span> <span class="o">=</span> <span class="n">strval</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">)</span>
@@ -3313,7 +3365,7 @@ documentation.</p></td>
                                 <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">,</span>
                             <span class="p">),</span>
                         <span class="p">)</span>
-                    <span class="c1"># Add SubclassOf</span>
+                    <span class="c1"># Add SubclassOf/SubPropertyOf/InstanceOf for direct parents</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
                         <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Subclass Of&quot;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
                     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">owlready2</span><span class="o">.</span><span class="n">PropertyClass</span><span class="p">)):</span>
@@ -3327,6 +3379,44 @@ documentation.</p></td>
                     <span class="c1"># Add Restrictions if any</span>
                     <span class="k">if</span> <span class="n">restrictions</span><span class="p">:</span>
                         <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Restrictions&quot;</span><span class="p">,</span> <span class="n">restrictions</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">PropertyClass</span><span class="p">):</span>
+                        <span class="c1"># Add domain and range for properties</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="c1"># Remove None from domain list if present (Owlready2 quirk)</span>
+                            <span class="n">entity</span><span class="o">.</span><span class="n">domain</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">domain</span> <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                            <span class="p">]</span>
+                            <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">domain</span><span class="p">:</span>
+                                <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Domain&quot;</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="p">(</span><span class="n">NoSuchLabelError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+                            <span class="k">pass</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="c1"># Remove None from range lists if present</span>
+                            <span class="c1"># (Owlready2 quirk). Use the range IRI only for</span>
+                            <span class="c1"># Python datatypes, otherwise keep the ontology</span>
+                            <span class="c1"># entity so it is rendered as an internal link.</span>
+                            <span class="n">ranges</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">range</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                            <span class="p">]</span>
+                            <span class="n">range_iris</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">range_iri</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                            <span class="p">]</span>
+
+                            <span class="n">range_values</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="p">(</span>
+                                    <span class="n">range_</span>
+                                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">range_</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">)</span>
+                                    <span class="k">else</span> <span class="n">range_iri</span>
+                                <span class="p">)</span>
+                                <span class="k">for</span> <span class="n">range_</span><span class="p">,</span> <span class="n">range_iri</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                                    <span class="n">ranges</span><span class="p">,</span> <span class="n">range_iris</span>
+                                <span class="p">)</span>
+                            <span class="p">]</span>
+
+                            <span class="k">if</span> <span class="n">range_values</span><span class="p">:</span>
+                                <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;Range&quot;</span><span class="p">,</span> <span class="n">range_values</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="p">(</span><span class="n">NoSuchLabelError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+                            <span class="k">pass</span>
 
                 <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;  &lt;/table&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">])</span>
 
