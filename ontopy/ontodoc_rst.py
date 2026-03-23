@@ -19,6 +19,7 @@ from rdflib import DCTERMS, OWL, URIRef
 
 from ontopy.ontology import Ontology, get_ontology
 from ontopy.utils import asstring, get_label
+from ontopy.exceptions import NoSuchLabelError
 
 import owlready2  # pylint: disable=wrong-import-order
 
@@ -307,6 +308,12 @@ class ModuleDocumentation:
                 f"{display_text}</a>"
             )
 
+        def _display_iri_label(iri: str) -> str:
+            """Return a compact display label for well-known IRIs."""
+            if iri.startswith("http://www.w3.org/2001/XMLSchema#"):
+                return f"xsd:{iri.split('#', maxsplit=1)[-1]}"
+            return iri
+
         def _linkify_value(val: str) -> str:
             """
             If `val` contains one or more IRIs, return them as separate links.
@@ -331,10 +338,10 @@ class ModuleDocumentation:
                     f'style="max-width:400px; max-height:300px;"/></a>'
                 )
 
-            # otherwise, link each separately, showing full IRI as label
+            # otherwise, link each separately with a compact display label
             links = []
             for u in urls:
-                links.append(_html_links(u, u))  # use full IRI as label
+                links.append(_html_links(u, _display_iri_label(u)))
             return "; ".join(links)
 
         def add_keyvalue(
@@ -374,6 +381,7 @@ class ModuleDocumentation:
                         )
                         + "</li>"
                     )
+                # if value is a class 'type'
                 else:
                     strval += _linkify_value(val)
                     strval = strval.replace("\n", "<br>")
@@ -521,7 +529,7 @@ class ModuleDocumentation:
                                     ontology=self.ontology,
                                 ),
                             )
-                        # Add SubclassOf
+                        # Add SubclassOf/SubPropertyOf/InstanceOf for direct parents
                         if isinstance(entity, owlready2.ThingClass):
                             add_keyvalue("Subclass Of", parents)
                         elif isinstance(entity, (owlready2.PropertyClass)):
@@ -535,6 +543,44 @@ class ModuleDocumentation:
                         # Add Restrictions if any
                         if restrictions:
                             add_keyvalue("Restrictions", restrictions)
+                        if isinstance(entity, owlready2.PropertyClass):
+                            # Add domain and range for properties
+                            try:
+                                # Remove None from domain list if present (Owlready2 quirk)
+                                entity.domain = [
+                                    d for d in entity.domain if d is not None
+                                ]
+                                if entity.domain:
+                                    add_keyvalue("Domain", entity.domain)
+                            except (NoSuchLabelError, AttributeError):
+                                pass
+                            try:
+                                # Remove None from range lists if present
+                                # (Owlready2 quirk). Use the range IRI only for
+                                # Python datatypes, otherwise keep the ontology
+                                # entity so it is rendered as an internal link.
+                                ranges = [
+                                    r for r in entity.range if r is not None
+                                ]
+                                range_iris = [
+                                    r for r in entity.range_iri if r is not None
+                                ]
+
+                                range_values = [
+                                    (
+                                        range_
+                                        if hasattr(range_, "iri")
+                                        else range_iri
+                                    )
+                                    for range_, range_iri in zip(
+                                        ranges, range_iris
+                                    )
+                                ]
+
+                                if range_values:
+                                    add_keyvalue("Range", range_values)
+                            except (NoSuchLabelError, AttributeError):
+                                pass
 
                     lines.extend(["  </table>", ""])
 
