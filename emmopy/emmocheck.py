@@ -315,46 +315,9 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         """
         exceptions = set(
             (
-                "emmo.MultipleUnit",
-                "emmo.SubMultipleUnit",
-                "emmo.OffSystemUnit",
-                "emmo.PrefixedUnit",
-                "emmo.NonPrefixedUnit",
-                "emmo.SpecialUnit",
-                "emmo.DerivedUnit",
-                "emmo.BaseUnit",
                 "emmo.UnitSymbol",
-                "emmo.SICoherentDerivedUnit",
-                "emmo.SINonCoherentDerivedUnit",
-                "emmo.SIMetricPrefixedUnit",
-                "emmo.SISpecialUnit",
-                "emmo.SICoherentUnit",
-                "emmo.SIPrefixedUnit",
-                "emmo.SIBaseUnit",
                 "emmo.SIUnitSymbol",
-                "emmo.SIUnit",
-                "emmo.MultipleUnit",
-                "emmo.SubMultipleUnit",
-                "emmo.OffSystemUnit",
-                "emmo.PrefixedUnit",
-                "emmo.NonPrefixedUnit",
-                "emmo.SpecialUnit",
-                "emmo.DerivedUnit",
-                "emmo.BaseUnit",
-                "emmo.UnitSymbol",
                 "emmo.SIAccepted",
-                "emmo.SICoherentDerivedUnit",
-                "emmo.SINonCoherentDerivedUnit",
-                "emmo.SISpecialUnit",
-                "emmo.SICoherentUnit",
-                "emmo.SIPrefixedUnit",
-                "emmo.SIBaseUnit",
-                "emmo.SIUnitSymbol",
-                "emmo.SIUnit",
-                "emmo.SIAcceptedDerivedUnit",
-                "emmo.SIDerivedUnit",
-                "emmo.SIAcceptedPrefixedUnit",
-                "emmo.CGSUnit",
             )
         )
         if not hasattr(self.onto, "MeasurementUnit"):
@@ -362,11 +325,13 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         exceptions.update(self.get_config("test_unit_dimension.exceptions", ()))
         regex = re.compile(r"^(emmo|metrology).hasDimensionString.value\(.*\)$")
         classes = set(self.onto.classes(self.check_imported))
-        for cls in self.onto.MeasurementUnit.descendants():
+        for cls in self.onto.MeasurementUnit.descendants(include_self=False):
+            if get_label(cls).endswith("Unit"):
+                continue
             if not self.check_imported and cls not in classes:
                 continue
             # Assume that actual units are not subclassed
-            if not list(cls.subclasses()) and repr(cls) not in exceptions:
+            if not next(cls.subclasses(), None) and repr(cls) not in exceptions:
                 with self.subTest(cls=cls, label=get_label(cls)):
                     self.assertTrue(
                         any(
@@ -384,46 +349,11 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         """
         exceptions = set(
             (
-                "metrology.MultipleUnit",
-                "metrology.SubMultipleUnit",
-                "metrology.OffSystemUnit",
-                "metrology.PrefixedUnit",
-                "metrology.NonPrefixedUnit",
-                "metrology.SpecialUnit",
-                "metrology.DerivedUnit",
-                "metrology.BaseUnit",
                 "metrology.UnitSymbol",
-                "siunits.SICoherentDerivedUnit",
-                "siunits.SINonCoherentDerivedUnit",
-                "siunits.SISpecialUnit",
-                "siunits.SICoherentUnit",
-                "siunits.SIPrefixedUnit",
-                "siunits.SIBaseUnit",
                 "siunits.SIUnitSymbol",
-                "siunits.SIUnit",
-                "emmo.MultipleUnit",
-                "emmo.SubMultipleUnit",
-                "emmo.OffSystemUnit",
-                "emmo.PrefixedUnit",
-                "emmo.NonPrefixedUnit",
-                "emmo.SpecialUnit",
-                "emmo.DerivedUnit",
-                "emmo.BaseUnit",
                 "emmo.UnitSymbol",
                 "emmo.SIAccepted",
-                "emmo.SICoherentDerivedUnit",
-                "emmo.SINonCoherentDerivedUnit",
-                "emmo.SISpecialUnit",
-                "emmo.SICoherentUnit",
-                "emmo.SIPrefixedUnit",
-                "emmo.SIBaseUnit",
                 "emmo.SIUnitSymbol",
-                "emmo.SIUnit",
-                "emmo.SIDerivedUnit",
-                "emmo.SIAcceptedPrefixedUnit",
-                "emmo.SIAcceptedDerivedUnit",
-                "emmo.SIMetricPrefixedUnit",
-                "emmo.CGSUnit",
             )
         )
         if not hasattr(self.onto, "MeasurementUnit"):
@@ -432,11 +362,14 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         regex = re.compile(r"^(emmo|metrology).hasDimensionString.value\(.*\)$")
         classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.MeasurementUnit.descendants():
+            label = get_label(cls)
+            if label.endswith("Unit"):
+                continue
             if not self.check_imported and cls not in classes:
                 continue
             # Assume that actual units are not subclassed
             if not list(cls.subclasses()) and repr(cls) not in exceptions:
-                with self.subTest(cls=cls, label=get_label(cls)):
+                with self.subTest(cls=cls, label=label):
                     self.assertTrue(
                         any(
                             regex.match(repr(r))
@@ -592,8 +525,9 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                 continue
             if issubclass(cls, self.onto.ISO80000Categorised):
                 continue
+            label = get_label(cls)
             if repr(cls) not in exceptions:
-                with self.subTest(cls=cls, label=get_label(cls)):
+                with self.subTest(cls=cls, label=label):
                     for r in cls.get_indirect_is_a():
                         if isinstance(r, owlready2.Restriction) and repr(
                             r
@@ -605,12 +539,14 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
                                         self.onto.DimensionalUnit,
                                         self.onto.DimensionlessUnit,
                                     ),
-                                )
+                                ),
                             )
                             break
                     else:
+                        qlabel = get_label(self.onto.ISQDimensionlessQuantity)
                         self.assertTrue(
-                            issubclass(cls, self.onto.ISQDimensionlessQuantity)
+                            issubclass(cls, self.onto.ISQDimensionlessQuantity),
+                            f"{label} is not a subclass of {qlabel}",
                         )
 
     def test_dimensional_unit_rc2(self):
