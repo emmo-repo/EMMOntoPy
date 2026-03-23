@@ -21,7 +21,7 @@ def context_arguments(subparsers):
     parser.add_argument(
         "input",
         metavar="ONTOLOGY",
-        help="Input ontology. Either a file path or an URL.",
+        help="Input ontology. Either a file path or a URL.",
     )
     parser.add_argument(
         "output",
