@@ -31,7 +31,7 @@
 
     if (target) {
         // Scroll to the element
-        target.scrollIntoView({ behavior: "smooth" });
+        target.scrollIntoView({ behavior: "instant" });
 
         // OPTIONAL: clean up the URL and convert ?section=... into a hash
         // So the URL becomes page.html#my-heading
