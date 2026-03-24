@@ -1089,7 +1089,7 @@ html_theme_options = {{
 
     # Disable right "On this page" TOC everywhere
     "show_toc_level": 0,
-    "secondary_sidebar_items": ["reference-indices.html", "page-toc.html"],
+    "secondary_sidebar_items": ["reference-indices.html"],
 
     # Navbar
     "navbar_center": ["navbar-nav"],
@@ -1124,7 +1124,7 @@ html_js_files = ["toc-collapsible.js"]
 
 # html_sidebars keys are docname globs. Apply everywhere unless you truly want per-page overrides.
 html_sidebars = {{
-    "**": ["reference-indices.html", "page-toc.html", "edit-this-page.html"],
+    "**": ["search-field.html", "sidebar-nav-bs.html", "edit-this-page.html"],
 }}
 """
 
