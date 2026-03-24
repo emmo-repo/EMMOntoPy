@@ -199,9 +199,13 @@ class ModuleDocumentation:
 
         return title
 
-    def get_header(self) -> str:
-        """Return a the reStructuredText header as a string."""
-        heading = f"Module: {self.get_title()}"
+    def get_header(self, include_module_prefix: bool = True) -> str:
+        """Return the reStructuredText header as a string."""
+        heading = (
+            f"Module: {self.get_title()}"
+            if include_module_prefix
+            else self.get_title()
+        )
         return f"""
 
 {heading.title()}
@@ -213,6 +217,7 @@ class ModuleDocumentation:
         self,
         subsections: str = "all",
         header: bool = True,
+        include_module_prefix: bool = True,
     ) -> str:
         # pylint: disable=too-many-branches,too-many-locals,too-many-statements
         """Return reference documentation of all module entities.
@@ -229,6 +234,8 @@ class ModuleDocumentation:
                 If "all", all subsections will be documented.
             header: Whether to also include the header in the returned
                 documentation.
+            include_module_prefix: Whether to prefix header title with
+                ``"Module:"``.
 
         Returns:
             String with reference documentation.
@@ -250,7 +257,9 @@ class ModuleDocumentation:
         }
         lines = []
         if header:
-            lines.append(self.get_header())
+            lines.append(
+                self.get_header(include_module_prefix=include_module_prefix)
+            )
 
         annotations_ranked = _get_annotation_rank(self.ontology)
 
@@ -705,12 +714,18 @@ class ReferenceDocumentation:
             String with reference documentation.
         """
         moduledocs = []
+        nonempty_modules = [
+            md for md in self.module_documentations if md.nonempty()
+        ]
+        include_module_prefix = len(nonempty_modules) > 1
         if header:
             moduledocs.append(self.get_header())
         moduledocs.extend(
-            md.get_refdoc(subsections=subsections)
-            for md in self.module_documentations
-            if md.nonempty()
+            md.get_refdoc(
+                subsections=subsections,
+                include_module_prefix=include_module_prefix,
+            )
+            for md in nonempty_modules
         )
         return "\n".join(moduledocs)
 
