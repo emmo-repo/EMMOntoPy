@@ -764,6 +764,7 @@ class OntologyDocumentation:
             Implies ``imported=True``.
         iri_regex: Optional regular expression for filtering entity IRIs.
         title: Title for the primary reference index. Default: Reference Index
+
     """
 
     def __init__(  # pylint: disable=too-many-arguments
@@ -774,6 +775,7 @@ class OntologyDocumentation:
         recursive: bool = False,
         iri_regex: "Optional[str]" = None,
         title: str = "Reference Index",
+        subsections: str = "all",
     ) -> None:
         self.reference_documentations = []
         self._reference_docnames = []
@@ -784,6 +786,7 @@ class OntologyDocumentation:
             recursive=recursive,
             iri_regex=iri_regex,
             title=title,
+            subsections=subsections,
         )
 
     def add_reference_documentation(
@@ -932,6 +935,7 @@ class OntologyDocumentation:
         outdir = Path(outdir)
         outdir.mkdir(parents=True, exist_ok=True)
         for idx, _ in enumerate(self.reference_documentations):
+
             outfile = outdir / f"{self._reference_docname(idx)}.rst"
             if outfile.exists() and not overwrite:
                 warnings.warn(f"Reference file already exists: {outfile}")
@@ -959,7 +963,7 @@ class OntologyDocumentation:
                 for index, refdoc in enumerate(self.reference_documentations)
             ]
         )
-        content = f"""<div class=\"sidebar-secondary-item\">\n  <div class=\"sidebar-secondary-item__title\">Reference Indices</div>\n  <ul class=\"nav bd-sidenav\">\n{links}\n  </ul>\n</div>\n"""
+        content = f"""<div class=\"sidebar-secondary-item\">\n  <div class=\"sidebar-secondary-item__title\">Reference Indices</div>\n  <ul class=\"bd-sidenav\">\n{links}\n  </ul>\n</div>\n"""
         outpath = Path(templatefile)
         if not overwrite and outpath.exists():
             warnings.warn(
