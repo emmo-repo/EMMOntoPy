@@ -1124,7 +1124,7 @@ html_js_files = ["toc-collapsible.js"]
 
 # html_sidebars keys are docname globs. Apply everywhere unless you truly want per-page overrides.
 html_sidebars = {{
-    "**": ["search-field.html", "sidebar-nav-bs.html", "edit-this-page.html"],
+    "**": ["search-field.html", "page-toc.html", "edit-this-page.html"],
 }}
 """
 
