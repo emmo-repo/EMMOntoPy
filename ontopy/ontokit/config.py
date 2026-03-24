@@ -13,6 +13,24 @@ REQUIRED_CONFIG_KEYS = (
     "BUILD_DIR",
 )
 
+REFERENCE_INDICES_COMMENT = """\
+# Optional: select subsections for the primary reference index.
+# Default is "all".
+# REFERENCE_SUBSECTIONS: all
+# Example subset:
+# REFERENCE_SUBSECTIONS: classes,annotation_properties,data_properties,object_properties,individuals
+#
+# Optional: additional reference indices for `ontokit docs`.
+# REFERENCE_INDICES:
+#   - ontology_file: build/other-ontology.ttl
+#     title: Other Ontology Reference
+#     docfile: other-reference.rst
+#     iri_regex: https://example.org/other
+#     imported: false
+#     recursive: false
+#     subsections: all
+"""
+
 
 def get_config_path(root):
     """Return the path to the ontokit configuration file for `root`."""
@@ -22,6 +40,17 @@ def get_config_path(root):
 def _as_string(value):
     """Normalise values to strings for serialisation and substitution."""
     return "" if value is None else str(value)
+
+
+def _write_config_with_reference_indices_comment(path, config):
+    """Write config YAML and append a commented REFERENCE_INDICES example."""
+    content = yaml.safe_dump(config, sort_keys=False).rstrip()
+    # Only append when REFERENCE_INDICES is not explicitly configured.
+    if "REFERENCE_INDICES" not in config:
+        content = f"{content}\n\n{REFERENCE_INDICES_COMMENT.rstrip()}\n"
+    else:
+        content = f"{content}\n"
+    Path(path).write_text(content)
 
 
 def load_config(path):
@@ -43,7 +72,7 @@ def create_config(path, defaults):
     config = {
         key: _as_string(defaults.get(key, "")) for key in REQUIRED_CONFIG_KEYS
     }
-    Path(path).write_text(yaml.safe_dump(config, sort_keys=False))
+    _write_config_with_reference_indices_comment(path, config)
     return config
 
 
@@ -61,7 +90,7 @@ def update_config(path, config, defaults):
             config[key] = _as_string(defaults.get(key, ""))
             added.append(key)
     if added:
-        Path(path).write_text(yaml.safe_dump(config, sort_keys=False))
+        _write_config_with_reference_indices_comment(path, config)
     return config, added
 
 

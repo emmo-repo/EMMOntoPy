@@ -97,7 +97,8 @@ def docs_arguments(subparsers):
     )
 
 
-def docs_subcommand(args):  # pylint: disable=too-many-locals
+# pylint: disable=too-many-locals,too-many-statements,too-many-branches
+def docs_subcommand(args):
     """Implements the docs sub-command."""
     root = Path(args.root).resolve()
     config_path = get_config_path(root)
@@ -120,6 +121,8 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
     ontology_name = config.get("ONTOLOGY_NAME")
     github_repository = config.get("GITHUB_REPOSITORY")
     build_dir = config.get("BUILD_DIR", "build")
+    reference_indices = config.get("REFERENCE_INDICES", [])
+    primary_subsections = config.get("REFERENCE_SUBSECTIONS", "all")
 
     # Path to ontology file
     if args.ontology_file:
@@ -135,13 +138,44 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
         iri_regex=args.iri_regex,
     )
 
+    # Optional additional reference indices provided by .ontokit_conf.yml
+    if reference_indices and not isinstance(reference_indices, list):
+        raise ValueError(
+            "REFERENCE_INDICES in .ontokit_conf.yml must be a list."
+        )
+
+    for ref in reference_indices:
+        if not isinstance(ref, dict):
+            raise ValueError("Each REFERENCE_INDICES entry must be a mapping.")
+        ref_ontology_file = ref.get("ontology_file")
+        if not ref_ontology_file:
+            raise ValueError(
+                "Each REFERENCE_INDICES entry must define 'ontology_file'."
+            )
+        ref_onto = get_ontology(root / ref_ontology_file).load()
+        od.add_reference(
+            ref_onto,
+            imported=ref.get("imported", args.imported),
+            recursive=ref.get("recursive", False),
+            iri_regex=ref.get("iri_regex", args.iri_regex),
+            title=ref.get("title", "Reference Index"),
+            docfile=ref.get("docfile"),
+            subsections=ref.get("subsections", "all"),
+        )
+
     if not args.outfile:
         docfile = root / build_dir / f"{ontology_name}.rst"
     else:
         docfile = root / Path(args.outfile)
     indexfile = docfile.with_name("index.rst")
     conffile = docfile.with_name("conf.py")
-    od.write_refdoc(docfile=docfile)
+    # Write all configured reference indices.
+    od.write_reference_docs(outdir=docfile.parent, overwrite=True)
+    od.write_refdoc(
+        docfile=docfile,
+        reference_index=0,
+        subsections=primary_subsections,
+    )
     # if not indexfile.exists():
     od.write_index_template(
         indexfile=indexfile, docfile=docfile, overwrite=True
@@ -153,7 +187,7 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
         overwrite=True,
         github_repository=github_repository,
     )
-    (Path(build_dir) / "_static").mkdir(parents=True, exist_ok=True)
+    (root / build_dir / "_static").mkdir(parents=True, exist_ok=True)
 
     od.copy_css_file()  # Use default CSS file
     od.copy_js_file()  # Use default collapsible-TOC JS file

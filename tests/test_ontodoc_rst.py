@@ -4,10 +4,11 @@
 # if True:
 def test_ontodoc():
     """Test ontodoc."""
-    from pathlib import Path
-
     from ontopy import get_ontology
-    from ontopy.ontodoc_rst import OntologyDocumentation
+    from ontopy.ontodoc_rst import (
+        OntologyDocumentation,
+        ReferenceDocumentation,
+    )
     from ontopy.testutils import ontodir
     import owlready2
 
@@ -17,5 +18,29 @@ def test_ontodoc():
 
     od = OntologyDocumentation(
         onto, recursive=True, iri_regex="https://w3id.org/emmo"
+    )
+    ref = ReferenceDocumentation(
+        onto,
+        recursive=True,
+        iri_regex="https://w3id.org/emmo",
+        title="Mammal Reference",
+    )
+
+    od.add_reference(
+        onto,
+        recursive=True,
+        iri_regex="https://w3id.org/emmo",
+        title="Second Mammal Reference",
+        docfile="mammal-second.rst",
+        subsections="classes",
+    )
+
+    assert "Mammal Reference" in ref.get_refdoc()
+    combined = od.get_combined_refdoc()
+    assert "Reference Index" in combined
+    assert "Second Mammal Reference" in combined
+    assert od.get_refdoc(reference_index=1) == od.get_refdoc(
+        reference_index=1,
+        subsections="classes",
     )
     print(od.get_refdoc())
