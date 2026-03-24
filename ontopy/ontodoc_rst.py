@@ -891,7 +891,7 @@ html_theme_options = {{
 html_static_path = ["_static"]
 html_title = f"{md.ontology.name.capitalize()} Ontology"
 html_css_files = ["custom.css"]
-html_js_files = ["toc-collapsible.js"]
+html_js_files = ["toc-collapsible.js", "section-nav.js"]
 
 # html_sidebars keys are docname globs. Apply everywhere unless you truly want per-page overrides.
 html_sidebars = {{
@@ -952,16 +952,17 @@ html_sidebars = {{
 
     def copy_js_file(
         self,
-        source: str | Path = (SETUPTEMPLATES_DIR / "js" / "toc-collapsible.js"),
+        source: str | Path = (SETUPTEMPLATES_DIR / "js"),
     ) -> Path:
         """
-        Copy the collapsible-TOC JavaScript file into the Sphinx HTML
-        static directory.
+        Copy JavaScript file(s) from `source` into the Sphinx HTML static
+        directory.
 
         The source may be:
           - a URL (http/https),
-          - an absolute local path,
-          - a relative local path.
+          - an absolute or relative local path,
+          - an absolute or relative local directory (all .js files in the
+            directory are copied).
 
         Parameters
         ----------
@@ -989,7 +990,11 @@ html_sidebars = {{
             source_path = Path(source)
             if not source_path.exists():
                 raise FileNotFoundError(f"JS source not found: {source_path}")
-            shutil.copyfile(source_path, destination)
+            if source_path.is_dir():
+                for jsfile in source_path.glob("*.js"):
+                    shutil.copyfile(jsfile, destination)
+            else:
+                shutil.copyfile(source_path, destination)
 
-        print(f"Copied JS file to: {destination}")
+        print(f"Copied JS file(s) to: {destination}")
         return destination
