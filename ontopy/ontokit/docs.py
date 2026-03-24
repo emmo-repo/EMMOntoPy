@@ -122,7 +122,7 @@ def docs_subcommand(args):
     github_repository = config.get("GITHUB_REPOSITORY")
     build_dir = config.get("BUILD_DIR", "build")
     reference_indices = config.get("REFERENCE_INDICES", [])
-    primary_subsections = config.get("REFERENCE_SUBSECTIONS", "all")
+    # primary_subsections = config.get("REFERENCE_SUBSECTIONS", "all")
 
     # Path to ontology file
     if args.ontology_file:
@@ -171,11 +171,11 @@ def docs_subcommand(args):
     conffile = docfile.with_name("conf.py")
     # Write all configured reference indices.
     od.write_reference_docs(outdir=docfile.parent, overwrite=True)
-    od.write_refdoc(
-        docfile=docfile,
-        reference_index=0,
-        subsections=primary_subsections,
-    )
+    # od.write_refdoc(
+    #    docfile=docfile,
+    ##    reference_index=0,
+    #    subsections=primary_subsections,
+    # )
     # if not indexfile.exists():
     od.write_index_template(
         indexfile=indexfile, docfile=docfile, overwrite=True
