@@ -199,9 +199,13 @@ class ModuleDocumentation:
 
         return title
 
-    def get_header(self) -> str:
-        """Return a the reStructuredText header as a string."""
-        heading = f"Module: {self.get_title()}"
+    def get_header(self, include_module_prefix: bool = True) -> str:
+        """Return the reStructuredText header as a string."""
+        heading = (
+            f"Module: {self.get_title()}"
+            if include_module_prefix
+            else self.get_title()
+        )
         return f"""
 
 {heading.title()}
@@ -213,6 +217,7 @@ class ModuleDocumentation:
         self,
         subsections: str = "all",
         header: bool = True,
+        include_module_prefix: bool = True,
     ) -> str:
         # pylint: disable=too-many-branches,too-many-locals,too-many-statements
         """Return reference documentation of all module entities.
@@ -229,6 +234,8 @@ class ModuleDocumentation:
                 If "all", all subsections will be documented.
             header: Whether to also include the header in the returned
                 documentation.
+            include_module_prefix: Whether to prefix header title with
+                ``"Module:"``.
 
         Returns:
             String with reference documentation.
@@ -250,7 +257,9 @@ class ModuleDocumentation:
         }
         lines = []
         if header:
-            lines.append(self.get_header())
+            lines.append(
+                self.get_header(include_module_prefix=include_module_prefix)
+            )
 
         annotations_ranked = _get_annotation_rank(self.ontology)
 
@@ -626,8 +635,8 @@ class ModuleDocumentation:
         return lines
 
 
-class OntologyDocumentation:
-    """Documentation for an ontology with a common namespace.
+class ReferenceDocumentation:
+    """Reference documentation for ontologies.
 
     Arguments:
         ontologies: Ontologies to include in the generated documentation.
@@ -637,14 +646,18 @@ class OntologyDocumentation:
             Implies `recursive=True`.
         iri_regex: A regular expression that the IRI of documented entities
             should match.
+        title: Title of the reference index section. Defaults to
+            ``"Reference Index"``.
     """
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments
         self,
         ontologies: "Iterable[Ontology]",
+        *,
         imported: bool = True,
         recursive: bool = False,
         iri_regex: "Optional[str]" = None,
+        title: str = "Reference Index",
     ) -> None:
         if isinstance(ontologies, (Ontology, str, Path)):
             ontologies = [ontologies]
@@ -652,6 +665,7 @@ class OntologyDocumentation:
         if recursive:
             imported = True
 
+        self.title = title
         self.iri_regex = iri_regex
         self.module_documentations = []
 
@@ -682,12 +696,9 @@ class OntologyDocumentation:
             )
 
     def get_header(self) -> str:
-        """Return a the reStructuredText header as a string."""
-        return """
-==========
-References
-==========
-"""
+        """Return the reStructuredText header as a string."""
+        header = "=" * len(self.title)
+        return f"\n{header}\n{self.title}\n{header}\n"
 
     def get_refdoc(self, header: bool = True, subsections: str = "all") -> str:
         """Return reference documentation of all module entities.
@@ -703,12 +714,18 @@ References
             String with reference documentation.
         """
         moduledocs = []
+        nonempty_modules = [
+            md for md in self.module_documentations if md.nonempty()
+        ]
+        include_module_prefix = len(nonempty_modules) > 1
         if header:
             moduledocs.append(self.get_header())
         moduledocs.extend(
-            md.get_refdoc(subsections=subsections)
-            for md in self.module_documentations
-            if md.nonempty()
+            md.get_refdoc(
+                subsections=subsections,
+                include_module_prefix=include_module_prefix,
+            )
+            for md in nonempty_modules
         )
         return "\n".join(moduledocs)
 
@@ -716,7 +733,7 @@ References
         """Return the top-level ontology."""
         return self.module_documentations[0].ontology
 
-    def write_refdoc(self, docfile=None, subsections="all"):
+    def write_refdoc(self, docfile=None, subsections="all", orphan=False):
         """Write reference documentation to disk.
 
         Arguments:
@@ -725,12 +742,236 @@ References
             subsections: Comma-separated list of subsections to include in
                 the returned documentation. See ModuleDocumentation.get_refdoc()
                 for more info.
+            orphan: Whether to mark the generated page as orphaned in Sphinx.
         """
         if not docfile:
             docfile = self.top_ontology().name + ".rst"
-        Path(docfile).write_text(
-            self.get_refdoc(subsections=subsections), encoding="utf8"
+        content = self.get_refdoc(subsections=subsections)
+        if orphan:
+            content = f":orphan:\n\n{content}"
+        Path(docfile).write_text(content, encoding="utf8")
+
+
+class OntologyDocumentation:
+    """Full ontology documentation helper.
+
+    This class orchestrates full documentation generation.
+
+    Arguments:
+        ontologies: Ontologies for the primary reference index.
+        imported: Whether to include imported ontologies.
+        recursive: Whether to recursively import all imported ontologies.
+            Implies ``imported=True``.
+        iri_regex: Optional regular expression for filtering entity IRIs.
+        title: Title for the primary reference index. Default: Reference Index
+
+    """
+
+    def __init__(  # pylint: disable=too-many-arguments
+        self,
+        ontologies: "Iterable[Ontology]",
+        *,
+        imported: bool = True,
+        recursive: bool = False,
+        iri_regex: "Optional[str]" = None,
+        title: str = "Reference Index",
+        subsections: str = "all",
+    ) -> None:
+        self.reference_documentations = []
+        self._reference_docnames = []
+        self._reference_subsections = []
+        self.add_reference(
+            ontologies=ontologies,
+            imported=imported,
+            recursive=recursive,
+            iri_regex=iri_regex,
+            title=title,
+            subsections=subsections,
         )
+
+    def add_reference_documentation(
+        self,
+        reference_documentation: ReferenceDocumentation,
+        docfile: "Optional[str]" = None,
+        subsections: str = "all",
+    ) -> None:
+        """Add an existing reference documentation object.
+
+        Arguments:
+            reference_documentation: Reference section to include.
+            docfile: Optional output filename for this reference section.
+                If omitted, the top ontology name is used.
+            subsections: Comma-separated subsections to include for this
+                reference section. Defaults to ``"all"``.
+        """
+        self.reference_documentations.append(reference_documentation)
+        if docfile:
+            docname = Path(docfile).stem
+        else:
+            docname = reference_documentation.top_ontology().name
+        self._reference_docnames.append(docname)
+        self._reference_subsections.append(subsections or "all")
+
+    def add_reference(  # pylint: disable=too-many-arguments
+        self,
+        ontologies: "Iterable[Ontology]",
+        *,
+        imported: bool = True,
+        recursive: bool = False,
+        iri_regex: "Optional[str]" = None,
+        title: str = "Reference Index",
+        docfile: "Optional[str]" = None,
+        subsections: str = "all",
+    ) -> ReferenceDocumentation:
+        """Create and add a reference documentation section.
+
+        Arguments:
+            ontologies: Ontologies for the new reference section.
+            imported: Whether to include imported ontologies.
+            recursive: Whether to recursively import imported ontologies.
+            iri_regex: Optional regular expression for filtering entity IRIs.
+            title: Title for this reference section.
+            docfile: Optional output filename for this reference section.
+            subsections: Comma-separated subsections to include for this
+                reference section. Defaults to ``"all"``.
+
+        Returns:
+            The newly created :class:`ReferenceDocumentation` instance.
+        """
+        refdoc = ReferenceDocumentation(
+            ontologies=ontologies,
+            imported=imported,
+            recursive=recursive,
+            iri_regex=iri_regex,
+            title=title,
+        )
+        self.add_reference_documentation(
+            refdoc,
+            docfile=docfile,
+            subsections=subsections,
+        )
+        return refdoc
+
+    def _reference_docname(self, reference_index: int) -> str:
+        """Return output docname (without suffix) for a reference section."""
+        return self._reference_docnames[reference_index]
+
+    def top_ontology(self) -> Ontology:
+        """Return the top-level ontology of the primary reference section."""
+        return self.reference_documentations[0].top_ontology()
+
+    def get_header(self, reference_index: int = 0) -> str:
+        """Return the RST header for one reference section."""
+        return self.reference_documentations[reference_index].get_header()
+
+    def get_refdoc(
+        self,
+        header: bool = True,
+        subsections: "Optional[str]" = None,
+        reference_index: int = 0,
+    ) -> str:
+        """Return one reference section as RST.
+
+        This method keeps backward compatibility with earlier APIs by
+        defaulting to the primary reference section.
+        """
+        if subsections is None:
+            subsections = self._reference_subsections[reference_index]
+        return self.reference_documentations[reference_index].get_refdoc(
+            header=header,
+            subsections=subsections,
+        )
+
+    def get_combined_refdoc(self, subsections: "Optional[str]" = None) -> str:
+        """Return all reference sections combined in one RST string."""
+        if subsections is not None:
+            return "\n".join(
+                refdoc.get_refdoc(header=True, subsections=subsections)
+                for refdoc in self.reference_documentations
+            )
+        return "\n".join(
+            refdoc.get_refdoc(
+                header=True, subsections=self._reference_subsections[idx]
+            )
+            for idx, refdoc in enumerate(self.reference_documentations)
+        )
+
+    def write_refdoc(
+        self,
+        docfile: "Optional[str]" = None,
+        subsections: "Optional[str]" = None,
+        reference_index: int = 0,
+        orphan: bool = False,
+    ) -> None:
+        """Write one reference section to disk.
+
+        Defaults to writing the primary reference section.
+        """
+        if not docfile:
+            docfile = self._reference_docname(reference_index) + ".rst"
+        self.reference_documentations[reference_index].write_refdoc(
+            docfile=docfile,
+            subsections=(
+                subsections
+                if subsections is not None
+                else self._reference_subsections[reference_index]
+            ),
+            orphan=orphan,
+        )
+
+    def write_reference_docs(
+        self,
+        outdir: "str | Path" = ".",
+        subsections: "Optional[str]" = None,
+        overwrite: bool = False,
+    ) -> None:
+        """Write all configured reference sections to separate RST files.
+
+        Arguments:
+            outdir: Output directory for generated reference files.
+            subsections: Subsections to include in each reference section.
+            overwrite: Whether to overwrite existing files.
+        """
+        outdir = Path(outdir)
+        outdir.mkdir(parents=True, exist_ok=True)
+        for idx, _ in enumerate(self.reference_documentations):
+
+            outfile = outdir / f"{self._reference_docname(idx)}.rst"
+            if outfile.exists() and not overwrite:
+                warnings.warn(f"Reference file already exists: {outfile}")
+                continue
+            self.write_refdoc(
+                docfile=outfile,
+                subsections=subsections,
+                reference_index=idx,
+                orphan=(idx > 0),
+            )
+
+    def write_reference_indices_template(
+        self,
+        templatefile="_templates/reference-indices.html",
+        overwrite=False,
+    ):
+        """Write a custom sidebar template linking all reference indices."""
+        links = "\n".join(
+            [
+                "      <li><a href=\"{{ pathto('"
+                + self._reference_docname(index)
+                + "') }}\">"
+                + refdoc.title
+                + "</a></li>"
+                for index, refdoc in enumerate(self.reference_documentations)
+            ]
+        )
+        content = f"""<div class=\"sidebar-secondary-item\">\n  <div class=\"sidebar-secondary-item__title\">Reference Indices</div>\n  <ul class=\"bd-sidenav\">\n{links}\n  </ul>\n</div>\n"""
+        outpath = Path(templatefile)
+        if not overwrite and outpath.exists():
+            warnings.warn(
+                f"reference-indices.html file already exists: {outpath}"
+            )
+            return
+        outpath.parent.mkdir(parents=True, exist_ok=True)
+        outpath.write_text(content, encoding="utf8")
 
     def write_index_template(
         self, indexfile="index.rst", docfile=None, overwrite=False
@@ -743,13 +984,20 @@ References
                 the name of the top ontology will be used.
             overwrite: Whether to overwrite an existing file.
         """
-        docname = Path(docfile).stem if docfile else self.top_ontology().name
+        primary_docname = (
+            Path(docfile).stem if docfile else self._reference_docname(0)
+        )
+        entries = (
+            f"   {self.reference_documentations[0].title} "
+            f"<{primary_docname}.rst>"
+        )
+
         content = f"""
 .. toctree::
    :includehidden:
    :hidden:
 
-   Reference Index <{docname}.rst>
+{entries}
 
 .. include:: ../README.md
    :parser: myst_parser.sphinx_
@@ -780,7 +1028,7 @@ References
                 "OWNER/REPO".
         """
         # pylint: disable=redefined-builtin
-        md = self.module_documentations[0]
+        md = self.reference_documentations[0].module_documentations[0]
 
         iri = md.ontology.base_iri.rstrip("#/")
         authors = sorted(md.graph.objects(URIRef(iri), DCTERMS.creator))
@@ -860,7 +1108,7 @@ html_theme_options = {{
 
     # Disable right "On this page" TOC everywhere
     "show_toc_level": 0,
-    "secondary_sidebar_items": [],
+    "secondary_sidebar_items": ["reference-indices.html"],
 
     # Navbar
     "navbar_center": ["navbar-nav"],
@@ -895,7 +1143,7 @@ html_js_files = ["toc-collapsible.js", "section-nav.js"]
 
 # html_sidebars keys are docname globs. Apply everywhere unless you truly want per-page overrides.
 html_sidebars = {{
-    "{md.ontology.name.lower()}": ["search-field.html", "page-toc.html", "edit-this-page.html"],
+    "**": ["search-field.html", "page-toc.html", "edit-this-page.html"],
 }}
 """
 
@@ -906,6 +1154,11 @@ html_sidebars = {{
             return
 
         conffile.write_text(content, encoding="utf8")
+        self.write_reference_indices_template(
+            templatefile=Path(conffile).with_name("_templates")
+            / "reference-indices.html",
+            overwrite=True,
+        )
 
     def copy_css_file(
         self,
