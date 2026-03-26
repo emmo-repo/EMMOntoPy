@@ -18,7 +18,7 @@ import rdflib
 from rdflib import DCTERMS, OWL, URIRef
 
 from ontopy.ontology import Ontology, get_ontology
-from ontopy.utils import asstring, get_label
+from ontopy.utils import asstring, get_label, getiriname
 from ontopy.exceptions import NoSuchLabelError
 
 import owlready2  # pylint: disable=wrong-import-order
@@ -307,7 +307,7 @@ class ModuleDocumentation:
             """Create the HTML code so that links lead to
             the correct fragment in the same document if possibe,
             otherwise link to the full IRI"""
-            fragment_iri = full_iri.split("#")[-1]
+            fragment_iri = getiriname(full_iri)
             return (
                 f"<a href='#{fragment_iri}' "
                 f'onclick="'
@@ -429,14 +429,15 @@ class ModuleDocumentation:
             for entity in sorted(maps[subsection], key=get_label):
                 label = get_label(entity)
                 navid = navid2 = ""
-                if entity.name in self.navids:
-                    warnings.warn(f"duplicated entity names: {entity.name}")
+                entity_anchor = getiriname(entity.iri)
+                if entity_anchor in self.navids:
+                    warnings.warn(f"duplicated entity names: {entity_anchor}")
                 else:
-                    self.navids.add(entity.name)
-                    navid = f'   <div id="{entity.name}"></div>'
+                    self.navids.add(entity_anchor)
+                    navid = f'   <div id="{entity_anchor}"></div>'
                 if hasattr(entity, "prefLabel"):
                     preflabel = str(entity.prefLabel.first())
-                    if preflabel != entity.name:
+                    if preflabel != entity_anchor:
                         if preflabel in self.navids:
                             warnings.warn(f"duplicated prefLabel: {preflabel}")
                         else:
