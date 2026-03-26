@@ -44,3 +44,26 @@ def test_ontodoc():
         subsections="classes",
     )
     print(od.get_refdoc())
+
+
+def test_ontodoc_slash_namespace_internal_links():
+    """Internal links should resolve for slash-style namespace IRIs."""
+    import owlready2
+
+    from ontopy import get_ontology
+    from ontopy.ontodoc_rst import ModuleDocumentation
+
+    onto = get_ontology("http://example.com/onto/")
+    with onto:
+
+        class Animal(owlready2.Thing):
+            pass
+
+        class Dog(Animal):
+            pass
+
+    doc = ModuleDocumentation(onto).get_refdoc(subsections="classes")
+
+    assert '<div id="Animal"></div>' in doc
+    assert "href='#Animal'" in doc
+    assert "href='#http://example.com/onto/Animal'" not in doc
