@@ -262,7 +262,7 @@ jobs:
 
     - name: Upload coverage to Codecov
       if: matrix.python-version == '3.13' && github.repository == 'emmo-repo/EMMOntoPy'
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: coverage.xml
