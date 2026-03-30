@@ -174,7 +174,10 @@ def docs_subcommand(args):
     od.write_reference_docs(outdir=docfile.parent, overwrite=True)
     if not indexfile.exists():
         od.write_index_template(
-            indexfile=indexfile, docfile=docfile, overwrite=True
+            indexfile=indexfile,
+            docfile=docfile,
+            overwrite=True,
+            docs_dir=root / args.docs_dir if args.docs_dir else None,
         )
     if not conffile.exists():
         od.write_conf_template(

@@ -975,7 +975,11 @@ class OntologyDocumentation:
         outpath.write_text(content, encoding="utf8")
 
     def write_index_template(
-        self, indexfile="index.rst", docfile=None, overwrite=False
+        self,
+        indexfile="index.rst",
+        docfile=None,
+        overwrite=False,
+        docs_dir=None,
     ):
         """Write a basic template index.rst file to disk.
 
@@ -984,6 +988,10 @@ class OntologyDocumentation:
             docfile: Name of generated documentation file.  If not given,
                 the name of the top ontology will be used.
             overwrite: Whether to overwrite an existing file.
+            docs_dir: Path to the source docs directory.  If given and an
+                ``index.md`` exists inside it, that file is included as the
+                landing page (copied to the build directory under the same
+                name).  Otherwise ``../README.md`` is used.
         """
         primary_docname = (
             Path(docfile).stem if docfile else self._reference_docname(0)
@@ -993,6 +1001,14 @@ class OntologyDocumentation:
             f"<{primary_docname}.rst>"
         )
 
+        if docs_dir is not None and (Path(docs_dir) / "index.md").exists():
+            rel_docs = Path(docs_dir).name
+            include_line = f".. include:: {rel_docs}/index.md\n   :parser: myst_parser.sphinx_"
+        else:
+            include_line = (
+                ".. include:: ../README.md\n   :parser: myst_parser.sphinx_"
+            )
+
         content = f"""
 .. toctree::
    :includehidden:
@@ -1000,8 +1016,7 @@ class OntologyDocumentation:
 
 {entries}
 
-.. include:: ../README.md
-   :parser: myst_parser.sphinx_
+{include_line}
 
 """
         outpath = Path(indexfile)
