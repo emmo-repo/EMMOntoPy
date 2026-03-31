@@ -124,6 +124,12 @@ def docs_subcommand(args):
     reference_indices = config.get("REFERENCE_INDICES", [])
     primary_subsections = config.get("REFERENCE_SUBSECTIONS", "all")
 
+    docs_dir = root / args.docs_dir if args.docs_dir else None
+    if docs_dir is None:
+        default_docs_dir = root / "docs"
+        if default_docs_dir.is_dir():
+            docs_dir = default_docs_dir
+
     # Path to ontology file
     if args.ontology_file:
         ontofile = root / args.ontology_file
@@ -172,32 +178,30 @@ def docs_subcommand(args):
     conffile = docfile.with_name("conf.py")
     # Write all configured reference indices.
     od.write_reference_docs(outdir=docfile.parent, overwrite=True)
-    if not indexfile.exists():
-        od.write_index_template(
-            indexfile=indexfile,
-            docfile=docfile,
-            overwrite=True,
-            docs_dir=root / args.docs_dir if args.docs_dir else None,
-        )
-    if not conffile.exists():
-        od.write_conf_template(
-            conffile=conffile,
-            docfile=docfile,
-            overwrite=True,
-            github_repository=github_repository,
-        )
+    od.write_index_template(
+        indexfile=indexfile,
+        docfile=docfile,
+        overwrite=True,
+        docs_dir=docs_dir,
+    )
+    od.write_conf_template(
+        conffile=conffile,
+        docfile=docfile,
+        overwrite=True,
+        github_repository=github_repository,
+    )
     (root / build_dir / "_static").mkdir(parents=True, exist_ok=True)
 
     od.copy_css_file()  # Use default CSS file
     od.copy_js_file()  # Use default collapsible-TOC JS file
 
-    if args.docs_dir:
-        # Copy the provided docs dir to the build dir
-        src_docs_dir = root / args.docs_dir
-        dst_docs_dir = root / build_dir / args.docs_dir
+    if docs_dir:
+        # Copy repository docs into the build dir so Sphinx consumes the
+        # latest landing pages and markdown content on every run.
+        dst_docs_dir = root / build_dir / docs_dir.name
         if dst_docs_dir.exists():
             shutil.rmtree(dst_docs_dir)
-        shutil.copytree(src_docs_dir, dst_docs_dir)
+        shutil.copytree(docs_dir, dst_docs_dir)
 
     public_dir = "public"
 
