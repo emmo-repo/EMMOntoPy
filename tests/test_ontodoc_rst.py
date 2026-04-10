@@ -47,23 +47,45 @@ def test_ontodoc():
 
 
 def test_ontodoc_slash_namespace_internal_links():
-    """Internal links should resolve for slash-style namespace IRIs."""
+    """Internal links should stay distinct for same labels across ontologies."""
     import owlready2
 
     from ontopy import get_ontology
-    from ontopy.ontodoc_rst import ModuleDocumentation
+    from ontopy.ontodoc_rst import ReferenceDocumentation
 
     onto = get_ontology("http://example.com/onto/")
+    onto2 = get_ontology("http://example.com/anotheronto/")
+    onto.imported_ontologies.append(onto2)
+
+    with onto2:
+
+        class Animal(owlready2.Thing):
+            pass
+
     with onto:
 
         class Animal(owlready2.Thing):
             pass
 
-        class Dog(Animal):
+        class Dog(Animal, onto2.Animal):
             pass
 
-    doc = ModuleDocumentation(onto).get_refdoc(subsections="classes")
+    doc = ReferenceDocumentation(onto, imported=False).get_refdoc(
+        subsections="classes"
+    )
+    print(doc)
 
     assert '<div id="Animal"></div>' in doc
-    assert "href='#Animal'" in doc
     assert "href='#http://example.com/onto/Animal'" not in doc
+    assert "href='#http://example.com/anotheronto/Animal'" not in doc
+    assert (
+        "<a href='#Animal' onclick=\"if(!document.getElementById('Animal'))"
+        "{window.location.href='http://example.com/onto/Animal'; "
+        'return false;}">Animal</a>'
+    ) in doc
+    assert ("<a href='http://example.com/anotheronto/Animal'>Animal</a>") in doc
+    assert (
+        "<a href='#Animal' onclick=\"if(!document.getElementById('Animal'))"
+        "{window.location.href='http://example.com/anotheronto/Animal'; "
+        'return false;}">Animal</a>'
+    ) not in doc

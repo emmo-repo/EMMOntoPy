@@ -255,6 +255,13 @@ class ModuleDocumentation:
             "individuals": self.individuals,
             "datatypes": self.datatypes,
         }
+        # Get all IRIs that will be documented on this page
+        page_entity_iris = {
+            entity.iri
+            for subsection in subsections.split(",")
+            for entity in maps[subsection]
+            if hasattr(entity, "iri")
+        }
         lines = []
         if header:
             lines.append(
@@ -307,6 +314,10 @@ class ModuleDocumentation:
             """Create the HTML code so that links lead to
             the correct fragment in the same document if possibe,
             otherwise link to the full IRI"""
+            if full_iri not in page_entity_iris:
+                # Link to the full IRI if it's not documented on this page
+                return f"<a href='{full_iri}'>{display_text}</a>"
+
             fragment_iri = getiriname(full_iri)
             return (
                 f"<a href='#{fragment_iri}' "
