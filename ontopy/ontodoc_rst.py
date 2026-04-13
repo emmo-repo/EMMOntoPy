@@ -474,7 +474,6 @@ class ModuleDocumentation:
                 if hasattr(entity, "get_annotations") or hasattr(
                     entity, "get_individual_annotations"
                 ):
-                    add_header("Annotations")
                     annotations = {  # pylint: disable=protected-access
                         a: a._get_values_for_class(  # pylint: disable=protected-access
                             entity
@@ -484,6 +483,8 @@ class ModuleDocumentation:
                             entity
                         )
                     }
+                    if len(annotations) > 0:
+                        add_header("Annotations")
 
                     long_annotations = [
                         "http://www.w3.org/2004/02/skos/core#example",
@@ -552,9 +553,9 @@ class ModuleDocumentation:
                             )
                         # Add SubclassOf/SubPropertyOf/InstanceOf for direct parents
                         if isinstance(entity, owlready2.ThingClass):
-                            add_keyvalue("Subclass Of", parents)
+                            add_keyvalue("subClassOf", parents)
                         elif isinstance(entity, (owlready2.PropertyClass)):
-                            add_keyvalue("Subproperty Of", parents)
+                            add_keyvalue("subPropertyOf", parents)
                         elif isinstance(entity, owlready2.Thing):
                             add_keyvalue("Instance of", parents)
                         # Add Subclasses if any
