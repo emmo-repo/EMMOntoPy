@@ -318,11 +318,11 @@ class ModuleDocumentation:
                 # Link to the full IRI if it's not documented on this page
                 return f"<a href='{full_iri}'>{display_text}</a>"
 
-            fragment_iri = getiriname(full_iri)
+            name = getiriname(full_iri)
             return (
-                f"<a href='#{fragment_iri}' "
+                f"<a href='#{name}' "
                 f'onclick="'
-                f"if(!document.getElementById('{fragment_iri}'))"
+                f"if(!document.getElementById('{name}'))"
                 f"{{window.location.href='{full_iri}'; return false;}}"
                 f'">'
                 f"{display_text}</a>"
