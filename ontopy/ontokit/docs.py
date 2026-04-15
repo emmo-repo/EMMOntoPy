@@ -140,7 +140,8 @@ def docs_subcommand(args):
     onto = get_ontology(ontofile).load()
     od = OntologyDocumentation(
         onto,
-        recursive=args.imported,
+        imported=args.imported,
+        recursive=args.recursive,
         iri_regex=args.iri_regex,
         subsections=primary_subsections,
     )
