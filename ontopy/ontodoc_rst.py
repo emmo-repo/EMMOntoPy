@@ -255,6 +255,13 @@ class ModuleDocumentation:
             "individuals": self.individuals,
             "datatypes": self.datatypes,
         }
+        # Get all IRIs that will be documented on this page
+        page_entity_iris = {
+            entity.iri
+            for subsection in subsections.split(",")
+            for entity in maps[subsection]
+            if hasattr(entity, "iri")
+        }
         lines = []
         if header:
             lines.append(
@@ -307,11 +314,15 @@ class ModuleDocumentation:
             """Create the HTML code so that links lead to
             the correct fragment in the same document if possibe,
             otherwise link to the full IRI"""
-            fragment_iri = getiriname(full_iri)
+            if full_iri not in page_entity_iris:
+                # Link to the full IRI if it's not documented on this page
+                return f"<a href='{full_iri}'>{display_text}</a>"
+
+            name = getiriname(full_iri)
             return (
-                f"<a href='#{fragment_iri}' "
+                f"<a href='#{name}' "
                 f'onclick="'
-                f"if(!document.getElementById('{fragment_iri}'))"
+                f"if(!document.getElementById('{name}'))"
                 f"{{window.location.href='{full_iri}'; return false;}}"
                 f'">'
                 f"{display_text}</a>"
@@ -463,7 +474,6 @@ class ModuleDocumentation:
                 if hasattr(entity, "get_annotations") or hasattr(
                     entity, "get_individual_annotations"
                 ):
-                    add_header("Annotations")
                     annotations = {  # pylint: disable=protected-access
                         a: a._get_values_for_class(  # pylint: disable=protected-access
                             entity
@@ -473,6 +483,8 @@ class ModuleDocumentation:
                             entity
                         )
                     }
+                    if len(annotations) > 0:
+                        add_header("Annotations")
 
                     long_annotations = [
                         "http://www.w3.org/2004/02/skos/core#example",
@@ -541,9 +553,9 @@ class ModuleDocumentation:
                             )
                         # Add SubclassOf/SubPropertyOf/InstanceOf for direct parents
                         if isinstance(entity, owlready2.ThingClass):
-                            add_keyvalue("Subclass Of", parents)
+                            add_keyvalue("subClassOf", parents)
                         elif isinstance(entity, (owlready2.PropertyClass)):
-                            add_keyvalue("Subproperty Of", parents)
+                            add_keyvalue("subPropertyOf", parents)
                         elif isinstance(entity, owlready2.Thing):
                             add_keyvalue("Instance of", parents)
                         # Add Subclasses if any
