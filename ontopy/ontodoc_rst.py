@@ -418,10 +418,12 @@ class ModuleDocumentation:
                     ]
                 )
             for entity in sorted(maps[subsection], key=get_label):
+                if hasattr(entity, "deprecated") and entity.deprecated.first():
+                    continue
                 label = get_label(entity)
                 navid = navid2 = ""
                 if entity.name in self.navids:
-                    warnings.warn(f"duplicated entity names: {entity.name}")
+                    warnings.warn(f"duplicated entity name: {entity.name}")
                 else:
                     self.navids.add(entity.name)
                     navid = f'   <div id="{entity.name}"></div>'
