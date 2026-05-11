@@ -1,5 +1,39 @@
 # Changelog
 
+## [v0.11.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.11.0) (2026-05-06)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.10.1...v0.11.0)
+
+**Closed issues:**
+
+- Remove EMMOntoPy version 1.0.1 from documentation [\#928](https://github.com/emmo-repo/EMMOntoPy/issues/928)
+- Standardised toolset for setting up and maintaining github workflows for EMMO and domain ontologies [\#899](https://github.com/emmo-repo/EMMOntoPy/issues/899)
+- Discussion: is pinning upper versions required [\#894](https://github.com/emmo-repo/EMMOntoPy/issues/894)
+- Release on conda-forge [\#857](https://github.com/emmo-repo/EMMOntoPy/issues/857)
+
+**Merged pull requests:**
+
+- Skip documenting deprecated entities [\#968](https://github.com/emmo-repo/EMMOntoPy/pull/968) ([jesper-friis](https://github.com/jesper-friis))
+- Added range and domain to properties in reference documentation [\#942](https://github.com/emmo-repo/EMMOntoPy/pull/942) ([francescalb](https://github.com/francescalb))
+- Correct separating various types of properties in reference index [\#941](https://github.com/emmo-repo/EMMOntoPy/pull/941) ([francescalb](https://github.com/francescalb))
+- widoco simpler link [\#937](https://github.com/emmo-repo/EMMOntoPy/pull/937) ([francescalb](https://github.com/francescalb))
+- Lazy import for docs [\#936](https://github.com/emmo-repo/EMMOntoPy/pull/936) ([francescalb](https://github.com/francescalb))
+- Corrected emmocheck after units have been converted to individuals. [\#934](https://github.com/emmo-repo/EMMOntoPy/pull/934) ([jesper-friis](https://github.com/jesper-friis))
+- Updated emmo-redirections in test [\#930](https://github.com/emmo-repo/EMMOntoPy/pull/930) ([francescalb](https://github.com/francescalb))
+- Try faster emmodoc [\#924](https://github.com/emmo-repo/EMMOntoPy/pull/924) ([francescalb](https://github.com/francescalb))
+- Exceltool fails emmoupdate [\#923](https://github.com/emmo-repo/EMMOntoPy/pull/923) ([francescalb](https://github.com/francescalb))
+- Allow emmocheck\_conf.yml to be empty [\#919](https://github.com/emmo-repo/EMMOntoPy/pull/919) ([jesper-friis](https://github.com/jesper-friis))
+- Added `--set-version` argument to ontoconvert [\#918](https://github.com/emmo-repo/EMMOntoPy/pull/918) ([jesper-friis](https://github.com/jesper-friis))
+- Remove owlready2 properties [\#913](https://github.com/emmo-repo/EMMOntoPy/pull/913) ([jesper-friis](https://github.com/jesper-friis))
+- Added utility function rename\_ontology\(\) [\#912](https://github.com/emmo-repo/EMMOntoPy/pull/912) ([jesper-friis](https://github.com/jesper-friis))
+- Internal emmo [\#909](https://github.com/emmo-repo/EMMOntoPy/pull/909) ([francescalb](https://github.com/francescalb))
+- Loosen upper limit excel dep [\#908](https://github.com/emmo-repo/EMMOntoPy/pull/908) ([francescalb](https://github.com/francescalb))
+- Handle filenames with paths correctly when saving recursively [\#907](https://github.com/emmo-repo/EMMOntoPy/pull/907) ([jesper-friis](https://github.com/jesper-friis))
+- New ontokit tool [\#906](https://github.com/emmo-repo/EMMOntoPy/pull/906) ([jesper-friis](https://github.com/jesper-friis))
+- isOutputOf default color [\#904](https://github.com/emmo-repo/EMMOntoPy/pull/904) ([francescalb](https://github.com/francescalb))
+- Prevent ontoconvert from crashing when the --iri option is given [\#902](https://github.com/emmo-repo/EMMOntoPy/pull/902) ([jesper-friis](https://github.com/jesper-friis))
+- Replace blessings with blessed [\#901](https://github.com/emmo-repo/EMMOntoPy/pull/901) ([lang-m](https://github.com/lang-m))
+
 ## [v0.10.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.10.1) (2025-11-21)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.10.0...v0.10.1)
@@ -216,19 +250,19 @@
 
 ## [v0.5.3.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.2) (2023-06-15)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3.1...v0.5.3.2)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3...v0.5.3.2)
 
 **Merged pull requests:**
 
 - remove warnings\_as\_errors in cd workflow introduced in 0.5.3 [\#625](https://github.com/emmo-repo/EMMOntoPy/pull/625) ([francescalb](https://github.com/francescalb))
 
-## [v0.5.3.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.1) (2023-06-12)
-
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3...v0.5.3.1)
-
 ## [v0.5.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3) (2023-06-12)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.2...v0.5.3)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3.1...v0.5.3)
+
+## [v0.5.3.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.1) (2023-06-12)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.2...v0.5.3.1)
 
 **Closed issues:**
 
