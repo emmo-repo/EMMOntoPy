@@ -438,6 +438,8 @@ class ModuleDocumentation:
                     ]
                 )
             for entity in sorted(maps[subsection], key=get_label):
+                if hasattr(entity, "deprecated") and entity.deprecated.first():
+                    continue
                 label = get_label(entity)
                 navid = navid2 = ""
                 entity_anchor = getiriname(entity.iri)
