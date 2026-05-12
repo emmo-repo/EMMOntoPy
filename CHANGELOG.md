@@ -1,6 +1,23 @@
 # Changelog
 
-## [v0.11.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.11.0) (2026-05-06)
+## [v0.11.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.11.3) (2026-05-12)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.11.2...v0.11.3)
+
+## [v0.11.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.11.2) (2026-05-12)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.11.1...v0.11.2)
+
+## [v0.11.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.11.1) (2026-05-12)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.11.0...v0.11.1)
+
+**Merged pull requests:**
+
+- Ontokit dev for push [\#971](https://github.com/emmo-repo/EMMOntoPy/pull/971) ([francescalb](https://github.com/francescalb))
+- Cd release update docs [\#970](https://github.com/emmo-repo/EMMOntoPy/pull/970) ([francescalb](https://github.com/francescalb))
+
+## [v0.11.0](https://github.com/emmo-repo/EMMOntoPy/tree/v0.11.0) (2026-05-11)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.10.1...v0.11.0)
 
