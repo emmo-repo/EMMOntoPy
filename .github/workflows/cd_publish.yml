@@ -31,8 +31,6 @@ jobs:
 
       # Update documentation
       update_docs: true
-      update_python_api_ref: true
-      update_docs_landing_page: true
       python_version_docs: "3.13"
       doc_extras: "[docs,excel,ontodoc,ontokit]"
       special_file_api_ref_options: "emmopy/emmocheck.py,show_bases: false"
