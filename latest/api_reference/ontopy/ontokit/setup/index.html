@@ -1574,6 +1574,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../docs/" class="md-nav__link">
         
   
@@ -1959,6 +1987,43 @@
         <span class="n">root</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">remote</span>
     <span class="p">)</span>
 
+    <span class="n">config_path</span> <span class="o">=</span> <span class="n">get_config_path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;ONTOLOGY_NAME&quot;</span><span class="p">:</span> <span class="n">ontology_name</span><span class="p">,</span>
+        <span class="s2">&quot;ONTOLOGY_PREFIX&quot;</span><span class="p">:</span> <span class="n">ontology_prefix</span><span class="p">,</span>
+        <span class="s2">&quot;ONTOLOGY_IRI&quot;</span><span class="p">:</span> <span class="n">ontology_iri</span><span class="p">,</span>
+        <span class="s2">&quot;GITHUB_REPOSITORY&quot;</span><span class="p">:</span> <span class="n">github_repository</span><span class="p">,</span>
+        <span class="s2">&quot;BUILD_DIR&quot;</span><span class="p">:</span> <span class="s2">&quot;build&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">config_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span>
+        <span class="n">config</span><span class="p">,</span> <span class="n">added</span> <span class="o">=</span> <span class="n">update_config</span><span class="p">(</span><span class="n">config_path</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">defaults</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">added</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Updated ontokit configuration at </span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;(added: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">added</span><span class="p">)</span><span class="si">}</span><span class="s2">):&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded existing ontokit configuration from </span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">create_config</span><span class="p">(</span><span class="n">config_path</span><span class="p">,</span> <span class="n">defaults</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created ontokit configuration at </span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+    <span class="n">print_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="n">missing</span> <span class="o">=</span> <span class="n">missing_required_variables</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="n">required</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Missing required variables in &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">required</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="s2">&quot;Please update the file and rerun `ontokit setup`.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">ontology_name</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;ONTOLOGY_NAME&quot;</span><span class="p">]</span>
+    <span class="n">ontology_prefix</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;ONTOLOGY_PREFIX&quot;</span><span class="p">]</span>
+    <span class="n">ontology_iri</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;ONTOLOGY_IRI&quot;</span><span class="p">]</span>
+    <span class="n">github_repository</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;GITHUB_REPOSITORY&quot;</span><span class="p">]</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">ignore</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return file names to ignore when copying.&quot;&quot;&quot;</span>
         <span class="c1"># pylint: disable=unused-argument</span>
@@ -1973,17 +2038,8 @@
     <span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">srcdir</span> <span class="o">/</span> <span class="s2">&quot;workflows&quot;</span> <span class="o">/</span> <span class="s2">&quot;*.yml&quot;</span><span class="p">)):</span>
-        <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
-        <span class="n">substituted</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">safe_substitute</span><span class="p">(</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;ONTOLOGY_NAME&quot;</span><span class="p">:</span> <span class="n">ontology_name</span><span class="p">,</span>
-                <span class="s2">&quot;ONTOLOGY_PREFIX&quot;</span><span class="p">:</span> <span class="n">ontology_prefix</span><span class="p">,</span>
-                <span class="s2">&quot;ONTOLOGY_IRI&quot;</span><span class="p">:</span> <span class="n">ontology_iri</span><span class="p">,</span>
-                <span class="s2">&quot;GITHUB_REPOSITORY&quot;</span><span class="p">:</span> <span class="n">github_repository</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">)</span>
         <span class="n">outfile</span> <span class="o">=</span> <span class="n">workflows_dir</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
-        <span class="n">outfile</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">substituted</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">outfile</span><span class="p">)</span>
 
     <span class="c1"># Initialise github pages branch</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">no_init</span><span class="p">:</span>
