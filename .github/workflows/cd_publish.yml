@@ -19,8 +19,10 @@ jobs:
       python_version_build: "3.13"
       # We're mentioning only 'ontopy', since the version is set statically only in
       # ontopy/__init__.py
-      package_dirs: ontopy
-      install_extras: "[dev,excel,ontodoc]"
+      package_dirs: |
+        ontopy
+        emmopy
+      install_extras: "[dev,excel,ontodoc,ontokit]"
       build_libs: build
       build_cmd: "python -m build -o dists"
       build_dir: dists
@@ -29,8 +31,14 @@ jobs:
 
       # Update documentation
       update_docs: true
+      update_python_api_ref: true
+      update_docs_landing_page: true
       python_version_docs: "3.13"
-      doc_extras: "[docs]"
+      doc_extras: "[docs,excel,ontodoc,ontokit]"
+      special_file_api_ref_options: "emmopy/emmocheck.py,show_bases: false"
+      landing_page_replacements: |
+        (LICENSE.txt),(LICENSE.md)
+        (tools),(../tools)
       changelog_exclude_labels: dependencies
 
     secrets:

@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - lazy_import_for_docs
 
 jobs:
   updates-to-master:
