@@ -10,7 +10,7 @@ on:
 jobs:
   tests:
     name: External
-    uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.9.2
+    uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.10.0
     with:
       # General
       install_extras: "[dev,docs,excel,ontodoc,ontokit]"
@@ -127,7 +127,8 @@ jobs:
           --ignore tests/test_graphviz \
           --ignore tests/test_excelparser \
           --ignore tests/test_java \
-          --ignore ontopy/ontokit/docs.py \
+          --ignore ontopy/ontokit \
+          --ignore tests/tools/ontokit \
           --ignore tests/test_ontodoc_rst.py | tee result.log
         if grep -q "SKIPPED" result.log; then
           echo "❌ Skipped tests detected, failing build"
@@ -220,18 +221,18 @@ jobs:
         pip install -U -e .[ontokit]
 
         # Run ONLY the ontokit tests
-        #pytest -rA \
-        #  --cov=ontopy --cov=emmopy --cov-append \
-        #  --cov-report=term --cov-report= \
-        #  --doctest-modules \
-        #  ontopy/ontokit \
-        #  tests/tools/ontokit | tee result_ontokit.log
+        pytest -rA \
+          --cov=ontopy --cov=emmopy --cov-append \
+          --cov-report=term --cov-report= \
+          --doctest-modules \
+          ontopy/ontokit \
+          tests/tools/ontokit | tee result_ontokit.log
 
         # Fail if any ontokit tests got skipped
-        #if grep -q "SKIPPED" result_ontokit.log; then
-        #  echo "❌ Skipped tests detected in ontokit phase, failing build"
-        #  exit 1
-        #fi
+        if grep -q "SKIPPED" result_ontokit.log; then
+          echo "❌ Skipped tests detected in ontokit phase, failing build"
+          exit 1
+        fi
 
 
 
@@ -262,7 +263,7 @@ jobs:
 
     - name: Upload coverage to Codecov
       if: matrix.python-version == '3.13' && github.repository == 'emmo-repo/EMMOntoPy'
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: coverage.xml

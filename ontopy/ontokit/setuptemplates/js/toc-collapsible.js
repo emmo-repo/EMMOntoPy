@@ -1,8 +1,8 @@
 /**
  * toc-collapsible.js
  *
- * Adds collapse/expand toggle buttons to every level of the page-TOC
- * sidebar rendered by pydata-sphinx-theme's page-toc.html.
+ * Adds collapse/expand toggle buttons to every level of the left
+ * navigation sidebar rendered by pydata-sphinx-theme.
  *
  * Each <li> that contains a nested <ul> gets a small chevron button
  * inserted as the first child (left gutter), similar to tree controls
@@ -10,14 +10,10 @@
  * child list.
  */
 document.addEventListener("DOMContentLoaded", function () {
-  // pydata-sphinx-theme wraps the page-toc in a <nav> inside the
-  // primary sidebar.  We cast a wide net across possible class names
-  // used by different versions of the theme.
+  // Target navigation in the primary (left) sidebar.
   const tocNavs = document.querySelectorAll(
     ".bd-sidebar-primary nav, " +
-    ".sidebar-primary-item nav, " +
-    ".bd-toc-nav, " +
-    "[aria-label='Page'] ul"
+    ".sidebar-primary-item nav"
   );
 
   if (!tocNavs.length) return;
@@ -32,13 +28,17 @@ document.addEventListener("DOMContentLoaded", function () {
       const btn = document.createElement("button");
       btn.className = "toc-toggle-btn";
       btn.setAttribute("aria-label", "Toggle subsection");
-      btn.setAttribute("aria-expanded", "true");
-      btn.textContent = "\u25BE"; // ▾ (expanded)
+      btn.setAttribute("aria-expanded", "false");
+      btn.textContent = "\u25B8"; // ▸ (collapsed)
       btn.title = "Collapse/expand";
 
       // Mark items with children and place chevron in left gutter.
       li.classList.add("toc-has-children");
       li.prepend(btn);
+
+      // Start collapsed by default.
+      childUl.classList.add("toc-items-collapsed");
+      li.classList.add("toc-collapsed");
 
       btn.addEventListener("click", function (e) {
         e.preventDefault();

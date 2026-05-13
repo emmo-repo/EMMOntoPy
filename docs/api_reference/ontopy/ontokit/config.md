@@ -1,0 +1,3 @@
+# config
+
+::: ontopy.ontokit.config
