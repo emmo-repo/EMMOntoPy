@@ -1,0 +1,155 @@
+name: Deploy on GitHub Pages
+
+# Only run this workflow on push to a release branch or master
+#on: push
+on:
+  push:
+    branches:
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+-*'
+      - master
+      - main
+
+permissions:
+  contents: write
+
+
+jobs:
+  deploy-on-ghpages:
+    #concurrency: ci-${{ github.ref }}  # Recommended if you intend to make multiple deployments in quick succession.
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Load ontokit configuration
+      run: |
+        if [ ! -f .ontokit_conf.yml ]; then
+          echo "Missing .ontokit_conf.yml" >&2
+          exit 1
+        fi
+
+        for key in ONTOLOGY_NAME ONTOLOGY_PREFIX ONTOLOGY_IRI GITHUB_REPOSITORY BUILD_DIR; do
+          value=$(sed -n -E "s/^${key}:[[:space:]]*(.*)$/\\1/p" .ontokit_conf.yml | head -n 1)
+          if [ -z "$value" ]; then
+            echo "Missing required key '${key}' in .ontokit_conf.yml" >&2
+            exit 1
+          fi
+          echo "${key}=${value}" >> "$GITHUB_ENV"
+        done
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.14
+
+    - name: Install EMMOntoPy and tripper
+      run: |
+        pip install --upgrade pip
+        pip install \
+            "EMMOntoPy[ontokit] @ git+https://github.com/emmo-repo/EMMOntoPy.git@ontokit" \
+            "tripper[datadoc] @ git+https://github.com/EMMC-ASBL/tripper.git@master"
+
+    #- name: Install current ontology for keywords tool
+    #  run: |
+    #    pip install -U git+
+
+    - name: Install ROBOT
+      run: |
+        mkdir bin
+        wget -nv https://github.com/ontodev/robot/releases/download/v1.9.6/robot.jar
+        mv robot.jar bin/.
+        curl https://raw.githubusercontent.com/ontodev/robot/master/bin/robot > bin/robot
+        chmod +x bin/robot
+        ls -l bin/
+
+    - name: Download Widoco
+      run: |
+        wget --quiet https://github.com/dgarijo/Widoco/releases/download/v1.4.25/widoco-1.4.25-jar-with-dependencies_JDK-17.jar
+
+    - name: Copy readme and license files to gh-pages
+      run: |
+        mkdir -p "${BUILD_DIR}"
+        cp README.md LICENSE "${BUILD_DIR}/."
+
+    - name: Create dependencies on gh-pages
+      run: |
+        ontoconvert \
+            -saw \
+            --namespace="emmo:https://w3id.org/emmo#" \
+            --namespace="${ONTOLOGY_PREFIX}:${ONTOLOGY_IRI}#" \
+            ${ONTOLOGY_NAME}-dependencies.ttl \
+            "${BUILD_DIR}/${ONTOLOGY_NAME}-dependencies.ttl"
+
+    - name: Create squashed ontology
+      run: |
+        ontoconvert \
+            -sawe \
+            --namespace="emmo:https://w3id.org/emmo#" \
+            --namespace="${ONTOLOGY_PREFIX}:${ONTOLOGY_IRI}#" \
+            --base-iri="${ONTOLOGY_IRI}#" \
+            --iri="${ONTOLOGY_IRI}" \
+            ${ONTOLOGY_NAME}.ttl \
+            "${BUILD_DIR}/${ONTOLOGY_NAME}.ttl"
+
+    - name: Create ontology for used later for generating documentation
+      run: |
+        ontoconvert \
+            -awe \
+            --namespace="emmo:https://w3id.org/emmo#" \
+            --namespace="${ONTOLOGY_PREFIX}:${ONTOLOGY_IRI}#" \
+            --base-iri="${ONTOLOGY_IRI}#" \
+            --iri="${ONTOLOGY_IRI}" \
+            --copy-annotation="elucidation-->http://purl.org/dc/terms/description" \
+            --copy-annotation="prefLabel-->http://www.w3.org/2000/01/rdf-schema#label" \
+            ${ONTOLOGY_NAME}.ttl \
+            "${BUILD_DIR}/${ONTOLOGY_NAME}-doc.ttl"
+
+    - name: Create inferred ontology
+      run: |
+        bin/robot reason \
+            --reasoner HermiT \
+            --remove-redundant-subclass-axioms true \
+            --preserve-annotated-axioms true \
+            --exclude-owl-thing true \
+            --exclude-duplicate-axioms true \
+            --input "${BUILD_DIR}/${ONTOLOGY_NAME}.ttl" \
+            --output ${ONTOLOGY_NAME}-inferred.ttl
+        ontoconvert --iri=${ONTOLOGY_IRI}/inferred ${ONTOLOGY_NAME}-inferred.ttl "${BUILD_DIR}/${ONTOLOGY_NAME}-inferred.ttl"
+
+    - name: Generate markdown documentation of all keywords
+      run: |
+        keywords -i "${BUILD_DIR}/${ONTOLOGY_NAME}-doc.ttl" --write-kw-md "${BUILD_DIR}/${ONTOLOGY_NAME}_kw.md" --namespace-filter=${ONTOLOGY_IRI}# --redefine=allow
+
+    - name: Generate Widoco documentation
+      run: |
+        java -jar widoco-1.4.25-jar-with-dependencies_JDK-17.jar \
+            -ontFile "${BUILD_DIR}/${ONTOLOGY_NAME}-doc.ttl" \
+            -outFolder "${BUILD_DIR}/widoco" \
+            -getOntologyMetadata \
+            -oops \
+            -rewriteAll \
+            -saveConfig "${BUILD_DIR}/widoco/widoco.conf" \
+            -webVowl \
+            -licensius \
+            -includeAnnotationProperties
+
+    - name: Generate Ontokit documentation to public
+      run: ontokit docs --iri-regex=${ONTOLOGY_IRI} . && touch public/.nojekyll
+
+    # Copy turtle files from build to public
+    - name: Copy ontologies to public
+      run: cp "${BUILD_DIR}"/*.ttl public/
+
+    # Copy widoco documentation to public, what to do with it is not yet decided.
+    - name: Copy widoco documentation to public
+      run: cp -r "${BUILD_DIR}/widoco" public
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: public
+        branch: gh-pages
+        clean: false
+        single-commit: true

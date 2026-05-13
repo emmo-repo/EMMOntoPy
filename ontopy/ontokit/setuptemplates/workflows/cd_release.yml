@@ -1,0 +1,53 @@
+name: Release new version
+
+on:
+  release:
+    types: [published]
+
+env:
+  TAG: ${{ github.ref_name }}
+
+permissions:
+  contents: write
+
+jobs:
+  release_version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Load ontokit configuration
+        run: |
+          if [ ! -f .ontokit_conf.yml ]; then
+            echo "Missing .ontokit_conf.yml" >&2
+            exit 1
+          fi
+
+          value=$(sed -n -E "s/^ONTOLOGY_NAME:[[:space:]]*(.*)$/\\1/p" .ontokit_conf.yml | head -n 1)
+          if [ -z "$value" ]; then
+            echo "Missing required key 'ONTOLOGY_NAME' in .ontokit_conf.yml" >&2
+            exit 1
+          fi
+          echo "ONTOLOGY_NAME=${value}" >> "$GITHUB_ENV"
+
+      - name: Create and copy generated files to versions/
+        run: |
+          mkdir -p versions/${TAG#v}
+          cp -f \
+              README.md \
+              ${ONTOLOGY_NAME}.ttl \
+              ${ONTOLOGY_NAME}-dependencies.ttl \
+              ${ONTOLOGY_NAME}-inferred.ttl \
+              versions/${TAG#v}/.
+
+      - name: Push to gh-pages
+        run: |
+          git config --global user.email "${ONTOLOGY_NAME}@emmc.eu"
+          git config --global user.name "${ONTOLOGY_NAME}"
+          git add versions/${TAG#v}
+          git commit -m "Release version ${TAG#v}"
+          git push origin gh-pages

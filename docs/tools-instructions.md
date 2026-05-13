@@ -10,6 +10,7 @@
 - [ontodoc](#ontodoc)
 - [ontoconvert](#ontoconvert)
 - [excel2onto](#excel2onto)
+- [ontokit](#ontokit)
 
 ---
 
@@ -495,3 +496,16 @@ excel2onto -o new_ontology.ttl new_ontology.xlsx
 ### Bugs
 
 `equivalentTo` is currently not supported.
+
+## ontokit
+ontokit is currently under heavy development and might be subject to change on short notice.
+
+It is included in master so that useful functionalities might be used, but please keep in mind that
+changes that are not completely backwards compatible may occur.
+
+Ontokit funcionality can be found with:
+
+```console
+ontokit --help # will give info on avilable subcommands
+ontokit subcommand --help " info on the chosen subcommand
+```

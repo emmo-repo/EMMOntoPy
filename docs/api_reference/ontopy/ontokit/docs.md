@@ -1,0 +1,3 @@
+# docs
+
+::: ontopy.ontokit.docs

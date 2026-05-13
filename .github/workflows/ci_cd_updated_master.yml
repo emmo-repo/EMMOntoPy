@@ -2,12 +2,13 @@ name: CI/CD - New updates to 'master'
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
 
 jobs:
   updates-to-master:
     name: External
-    uses: SINTEF/ci-cd/.github/workflows/ci_cd_updated_default_branch.yml@v2.9.2
+    uses: SINTEF/ci-cd/.github/workflows/ci_cd_updated_default_branch.yml@v2.10.0
     if: github.repository_owner == 'emmo-repo'
     with:
       git_username: EMMOntoPy Developers
@@ -23,7 +24,7 @@ jobs:
         emmopy
         ontopy
       python_version: "3.13"
-      doc_extras: "[docs,excel,ontodoc]"
+      doc_extras: "[docs,excel,ontodoc,ontokit]"
       special_file_api_ref_options: "emmopy/emmocheck.py,show_bases: false"
       landing_page_replacements: |
         (LICENSE.txt),(LICENSE.md)

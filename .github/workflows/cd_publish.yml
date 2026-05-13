@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: External
-    uses: SINTEF/ci-cd/.github/workflows/cd_release.yml@v2.9.2
+    uses: SINTEF/ci-cd/.github/workflows/cd_release.yml@v2.10.0
     if: github.repository == 'emmo-repo/EMMOntoPy' && startsWith(github.ref, 'refs/tags/v')
     with:
       git_username: EMMOntoPy Developers
@@ -19,8 +19,10 @@ jobs:
       python_version_build: "3.13"
       # We're mentioning only 'ontopy', since the version is set statically only in
       # ontopy/__init__.py
-      package_dirs: ontopy
-      install_extras: "[dev,excel,ontodoc]"
+      package_dirs: |
+        ontopy
+        emmopy
+      install_extras: "[dev,excel,ontodoc,ontokit]"
       build_libs: build
       build_cmd: "python -m build -o dists"
       build_dir: dists
@@ -30,7 +32,7 @@ jobs:
       # Update documentation
       update_docs: true
       python_version_docs: "3.13"
-      doc_extras: "[docs]"
+      doc_extras: "[docs,excel,ontodoc,ontokit]"
       changelog_exclude_labels: dependencies
 
     secrets:
