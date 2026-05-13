@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.11.4](https://github.com/emmo-repo/EMMOntoPy/tree/v0.11.4) (2026-05-13)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.11.3...v0.11.4)
+
+**Merged pull requests:**
+
+- Corrected requirements. Lower req had been increased by ci-cd 2.10 [\#972](https://github.com/emmo-repo/EMMOntoPy/pull/972) ([francescalb](https://github.com/francescalb))
+
 ## [v0.11.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.11.3) (2026-05-12)
 
 [Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.11.2...v0.11.3)
@@ -267,19 +275,19 @@
 
 ## [v0.5.3.2](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.2) (2023-06-15)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3...v0.5.3.2)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3.1...v0.5.3.2)
 
 **Merged pull requests:**
 
 - remove warnings\_as\_errors in cd workflow introduced in 0.5.3 [\#625](https://github.com/emmo-repo/EMMOntoPy/pull/625) ([francescalb](https://github.com/francescalb))
 
-## [v0.5.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3) (2023-06-12)
-
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3.1...v0.5.3)
-
 ## [v0.5.3.1](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3.1) (2023-06-12)
 
-[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.2...v0.5.3.1)
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.3...v0.5.3.1)
+
+## [v0.5.3](https://github.com/emmo-repo/EMMOntoPy/tree/v0.5.3) (2023-06-12)
+
+[Full Changelog](https://github.com/emmo-repo/EMMOntoPy/compare/v0.5.2...v0.5.3)
 
 **Closed issues:**
 
