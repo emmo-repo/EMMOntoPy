@@ -14,7 +14,7 @@
     owl:imports <https://w3id.org/emmo/domain/animal/0.1> ,
         <https://w3id.org/emmo/domain/animal/0.1/vertebrates> ;
     owl:versionInfo "0.1" ;
-    foaf:logo "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Mammal_collage.png/450px-Mammal_collage.png" .
+    foaf:logo "https://cdn-icons-png.flaticon.com/512/2817/2817912.png" .
 
 #################################################################
 #    Classes
@@ -24,7 +24,7 @@
 :Cat rdf:type owl:Class ;
      rdfs:subClassOf :Felines ;
      skos:prefLabel "Cat"@en ;
-     foaf:img "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Orange_tabby_cat_sitting_on_fallen_leaves-Hisashi-01A.jpg/168px-Orange_tabby_cat_sitting_on_fallen_leaves-Hisashi-01A.jpg" .
+     foaf:img "https://cdn-icons-png.flaticon.com/512/616/616430.png" .
 
 
 ###  https://w3id.org/emmo/mammal#Felines
