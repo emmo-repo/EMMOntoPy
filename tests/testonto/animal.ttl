@@ -28,6 +28,12 @@ skos:prefLabel rdf:type owl:AnnotationProperty .
            skos:prefLabel "latinName" ;
            rdfs:subPropertyOf rdf:comment .
 
+###  https://w3id.org/emmo/domain/animal#typicalNumberOfLegs
+:typicalNumberOfLegs rdf:type owl:AnnotationProperty ;
+           skos:prefLabel "typicalNumberOfLegs"@en ;
+           rdfs:range xsd:string ;
+           rdf:comment "Added as annotatino property to check that and annotation property written as an int renders validly in the generation of docs."@en .
+
 
 #################################################################
 #    Object Properties
@@ -84,6 +90,7 @@ skos:prefLabel rdf:type owl:AnnotationProperty .
                           owl:onProperty :hasLegs ;
                           owl:hasValue "6"^^xsd:int
                         ] ;
+        :typicalNumberOfLegs 6 ;
         skos:prefLabel "Insect"@en ,
                        "Insekt"@no ;
         :latinName "Insectum" .
