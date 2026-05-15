@@ -405,7 +405,7 @@ class ModuleDocumentation:
                     )
                 # if value is a class 'type'
                 else:
-                    strval += _linkify_value(val)
+                    strval += str(_linkify_value(val))
                     strval = strval.replace("\n", "<br>")
 
             # Build a self-contained snippet to prevent table misalignment
