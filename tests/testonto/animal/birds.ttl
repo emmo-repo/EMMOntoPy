@@ -22,7 +22,7 @@
                          rdf:type owl:Class
                        ] ;
            rdfs:range :Talon ;
-           skos:prefLabel "has talon"@en
+           skos:prefLabel "has talon"@en .
 
 
 #################################################################
