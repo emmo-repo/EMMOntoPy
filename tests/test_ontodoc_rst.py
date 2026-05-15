@@ -1,9 +1,5 @@
 """Test ontodoc"""
 
-import os
-
-import pytest
-
 
 # if True:
 def test_ontodoc():
@@ -95,17 +91,18 @@ def test_ontodoc_slash_namespace_internal_links():
     ) not in doc
 
 
-@pytest.mark.skipif(
-    os.environ.get("CI", "").lower() in {"true", "1", "yes"},
-    reason="Visual HTML generation skipped in CI",
-)
 def test_animal_html_reference_doc():
     """Generate HTML reference documentation for all animal ontologies.
 
-    This is a visual test intended for local runs only.  It writes RST
-    reference documentation to tests/output/ and then builds a Sphinx HTML
-    site under tests/output/_build/html/ so the result can be inspected in
-    a browser.
+    This writes RST reference documentation to tests/output/ and then builds
+    a Sphinx HTML site under tests/output/_build/html/. Local runs can open
+    the generated index in a browser, while CI verifies that the same
+    documentation build completes successfully.
+
+    To see the written output of the test, which describes where the
+    generated files are located, run pytest as
+    pytest -rP tests/test_ontodoc_rst.py::test_animal_html_reference_doc
+
     """
     import shutil
     from pathlib import Path

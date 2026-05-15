@@ -195,8 +195,8 @@ jobs:
         command -v dot
         dot -V
 
-        # Install Python deps that use Graphviz (your extra already contains them)
-        pip install -U -e .[ontodoc]
+        # Install Python deps for Graphviz and the Sphinx-based ontodoc tests
+        pip install -U -e .[ontokit]
 
         # Run ONLY the Graphviz tests
         pytest -rA \
