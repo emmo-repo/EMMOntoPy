@@ -228,7 +228,7 @@ jobs:
           --doctest-modules \
           ontopy/ontokit \
           tests/tools/ontokit \
-          tests/test_ontokit.txt | tee result_ontokit.log
+          tests/test_ontokit.py | tee result_ontokit.log
 
         # Fail if any ontokit tests got skipped
         if grep -q "SKIPPED" result_ontokit.log; then
