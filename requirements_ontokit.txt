@@ -1,8 +1,8 @@
-myst-parser>=2,<5; python_version<'3.12'
-myst-parser>=5,<6; python_version>='3.12'
-nbsphinx>=0.9,<1
-pydata-sphinx-theme>=0.16,<1
-sphinx>=7,<9; python_version<'3.11'
-sphinx>=8,<10; python_version>='3.11'
-sphinx_design>=0.7,<1
-sphinxcontrib-globalsubs>=1,<2
+myst-parser>=4.0,<4.1; python_version<'3.12'
+myst-parser>=5.0,<5.1; python_version>='3.12'
+nbsphinx>=0.9.8,<0.10
+pydata-sphinx-theme>=0.16.1,<0.17
+sphinx>=7.4,<7.5; python_version<'3.11'
+sphinx>=9.1,<9.2; python_version>='3.11'
+sphinx_design>=0.7.0,<0.8
+sphinxcontrib-globalsubs>=1.0.0,<1.1
