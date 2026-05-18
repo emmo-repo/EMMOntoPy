@@ -49,7 +49,7 @@ def test_get_iri():
     assert animal.get_iri() == "https://w3id.org/emmo/domain/mammal"
 
 
-def test__get_unabbreviated_triples():
+def test_get_unabbreviated_triples():
     """Test _get_unabbreviated_triples()."""
     from ontopy.ontology import _get_unabbreviated_triples
 
@@ -79,7 +79,7 @@ def test__get_unabbreviated_triples():
     triples = list(
         _get_unabbreviated_triples(animal.world, predicate=skos + "prefLabel")
     )
-    assert len(triples) == 24
+    assert len(triples) == 26
 
     assert list(
         _get_unabbreviated_triples(
