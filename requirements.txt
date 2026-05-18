@@ -6,4 +6,4 @@ Pygments>=2.7.4,<3
 pyparsing>=3.3.2
 PyYAML>=5.4.1,<7
 rdflib>=4.2.1,<8  # core functionality graph
-requests>=2.31,<3
+requests>=2.32.5,<3
