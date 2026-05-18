@@ -5,5 +5,5 @@ packaging>=21.0,<27
 Pygments>=2.20.0,<3
 pyparsing>=3.3.2
 PyYAML>=6.0.3,<7
-rdflib>=4.2.1,<8  # core functionality graph
+rdflib>=7.6.0,<8  # core functionality graph
 requests>=2.32.5,<3
