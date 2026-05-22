@@ -125,6 +125,35 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         else:
             self.fail("ontology has no prefLabel")
 
+    def test_number_of_rdfslabels(self):
+        """Check that all entities have one and only one rdfs:label.
+
+        The only allowed exception is entities who's representation
+        starts with "owl.".
+        """
+        exceptions = set()
+        exceptions.update(
+            self.get_config("test_number_of_rdfslabels.exceptions", ())
+        )
+        for entity in self.onto.classes(self.check_imported):
+            # Skip concepts from exceptions and common w3c vocabularies
+            vocabs = (
+                "owl.",
+                "0.1.",
+                "bibo.",
+                "core.",
+                "terms.",
+                "vann.",
+                "schema.org",
+            )
+            r = repr(entity)
+            if r in exceptions or any(r.startswith(v) for v in vocabs):
+                continue
+
+            with self.subTest(entity=entity, label=get_label(entity)):
+                if not repr(entity).startswith("owl."):
+                    self.assertEqual(1, len(entity.label))
+
     def test_class_label(self):
         """Check that class labels are CamelCase and valid identifiers.
 
@@ -975,6 +1004,7 @@ def main(
             name = test.id().split(".")[-1]
             skipped = set(  # skipped by default
                 [
+                    "test_number_of_rdfslabels",
                     "test_namespace",
                     "test_physical_quantity_dimension_annotation",
                     "test_quantity_dimension_beta3",
