@@ -1179,6 +1179,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_class_preflabel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_class_preflabel()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_number_of_labels" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1190,10 +1201,32 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_number_of_rdfslabels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_number_of_rdfslabels()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_object_property_label" class="md-nav__link">
     <span class="md-ellipsis">
       
         test_object_property_label()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_property_preflabel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_property_preflabel()
       
     </span>
   </a>
@@ -2153,6 +2186,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_class_preflabel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_class_preflabel()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_number_of_labels" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2164,10 +2208,32 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_number_of_rdfslabels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_number_of_rdfslabels()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_object_property_label" class="md-nav__link">
     <span class="md-ellipsis">
       
         test_object_property_label()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_property_preflabel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_property_preflabel()
       
     </span>
   </a>
@@ -3841,6 +3907,35 @@ TestSyntacticEMMOConventions        </code>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ontology has no prefLabel&quot;</span><span class="p">)</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_number_of_rdfslabels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all entities have one and only one rdfs:label.</span>
+
+<span class="sd">        The only allowed exception is entities who&#39;s representation</span>
+<span class="sd">        starts with &quot;owl.&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_number_of_rdfslabels.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+            <span class="c1"># Skip concepts from exceptions and common w3c vocabularies</span>
+            <span class="n">vocabs</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;owl.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;0.1.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;bibo.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;core.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;terms.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;vann.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;schema.org&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">exceptions</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vocabs</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;owl.&quot;</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">label</span><span class="p">))</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">test_class_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that class labels are CamelCase and valid identifiers.</span>
 
@@ -3902,6 +3997,71 @@ TestSyntacticEMMOConventions        </code>
                                 <span class="n">label</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;Of&quot;</span><span class="p">,</span> <span class="s2">&quot;With&quot;</span><span class="p">)),</span>
                                 <span class="s1">&#39;should end with &quot;Of&quot; or &quot;With&quot;&#39;</span><span class="p">,</span>
                             <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_class_preflabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that class prefLabels are CamelCase and valid identifiers.</span>
+
+<span class="sd">        For CamelCase, we are currently only checking that the labels</span>
+<span class="sd">        start with upper case.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;0-manifold&quot;</span><span class="p">,</span>  <span class="c1"># not needed in 1.0.0-beta</span>
+                <span class="s2">&quot;1-manifold&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;2-manifold&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;3-manifold&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;C++&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;3DPrinting&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_class_preflabel.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">())</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_property_preflabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that object property prefLabels are lowerCamelCase.</span>
+
+<span class="sd">        Allowed exceptions: &quot;EMMORelation&quot;</span>
+
+<span class="sd">        If they start with &quot;has&quot; or &quot;is&quot; they should be followed by a</span>
+<span class="sd">        upper case letter.</span>
+
+<span class="sd">        If they start with &quot;is&quot; they should also end with &quot;Of&quot;, &quot;With&quot;,</span>
+<span class="sd">        &quot;After&quot; or &quot;By&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">((</span><span class="s2">&quot;EMMORelation&quot;</span><span class="p">,))</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_property_preflabel.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">obj_prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">obj_prop</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                            <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">(),</span> <span class="s2">&quot;label start with lowercase&quot;</span>
+                        <span class="p">)</span>
+                        <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;has&quot;</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                                <span class="n">label</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
+                                <span class="s1">&#39;what follows &quot;has&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
+                            <span class="p">)</span>
+                        <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;is&quot;</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                                <span class="n">label</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
+                                <span class="s1">&#39;what follows &quot;is&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                                <span class="n">label</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;Of&quot;</span><span class="p">,</span> <span class="s2">&quot;With&quot;</span><span class="p">,</span> <span class="s2">&quot;By&quot;</span><span class="p">,</span> <span class="s2">&quot;After&quot;</span><span class="p">)),</span>
+                                <span class="s1">&#39;should end with &quot;Of&quot; or &quot;With&quot;&#39;</span><span class="p">,</span>
+                            <span class="p">)</span>
 </code></pre></div>
         </details>
 
@@ -3955,6 +4115,58 @@ start with upper case.</p>
 
     <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">label</span> <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">())</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">())</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="emmopy.emmocheck.TestSyntacticEMMOConventions.test_class_preflabel" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">test_class_preflabel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_class_preflabel" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that class prefLabels are CamelCase and valid identifiers.</p>
+<p>For CamelCase, we are currently only checking that the labels
+start with upper case.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_class_preflabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that class prefLabels are CamelCase and valid identifiers.</span>
+
+<span class="sd">    For CamelCase, we are currently only checking that the labels</span>
+<span class="sd">    start with upper case.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;0-manifold&quot;</span><span class="p">,</span>  <span class="c1"># not needed in 1.0.0-beta</span>
+            <span class="s2">&quot;1-manifold&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;2-manifold&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;3-manifold&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;C++&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;3DPrinting&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_class_preflabel.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
             <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
                 <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">())</span>
@@ -4040,6 +4252,60 @@ starts with "owl.".</p>
 
 
 
+<h3 id="emmopy.emmocheck.TestSyntacticEMMOConventions.test_number_of_rdfslabels" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">test_number_of_rdfslabels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_number_of_rdfslabels" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that all entities have one and only one rdfs:label.</p>
+<p>The only allowed exception is entities who's representation
+starts with "owl.".</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_number_of_rdfslabels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all entities have one and only one rdfs:label.</span>
+
+<span class="sd">    The only allowed exception is entities who&#39;s representation</span>
+<span class="sd">    starts with &quot;owl.&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_number_of_rdfslabels.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+        <span class="c1"># Skip concepts from exceptions and common w3c vocabularies</span>
+        <span class="n">vocabs</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;owl.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;0.1.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;bibo.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;core.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;terms.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vann.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;schema.org&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">exceptions</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vocabs</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;owl.&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">label</span><span class="p">))</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 id="emmopy.emmocheck.TestSyntacticEMMOConventions.test_object_property_label" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">test_object_property_label</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
 
@@ -4090,6 +4356,72 @@ upper case letter.</p>
                         <span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
                             <span class="n">label</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;Of&quot;</span><span class="p">,</span> <span class="s2">&quot;With&quot;</span><span class="p">)),</span>
+                            <span class="s1">&#39;should end with &quot;Of&quot; or &quot;With&quot;&#39;</span><span class="p">,</span>
+                        <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="emmopy.emmocheck.TestSyntacticEMMOConventions.test_property_preflabel" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">test_property_preflabel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_property_preflabel" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that object property prefLabels are lowerCamelCase.</p>
+<p>Allowed exceptions: "EMMORelation"</p>
+<p>If they start with "has" or "is" they should be followed by a
+upper case letter.</p>
+<p>If they start with "is" they should also end with "Of", "With",
+"After" or "By".</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_property_preflabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that object property prefLabels are lowerCamelCase.</span>
+
+<span class="sd">    Allowed exceptions: &quot;EMMORelation&quot;</span>
+
+<span class="sd">    If they start with &quot;has&quot; or &quot;is&quot; they should be followed by a</span>
+<span class="sd">    upper case letter.</span>
+
+<span class="sd">    If they start with &quot;is&quot; they should also end with &quot;Of&quot;, &quot;With&quot;,</span>
+<span class="sd">    &quot;After&quot; or &quot;By&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">((</span><span class="s2">&quot;EMMORelation&quot;</span><span class="p">,))</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_property_preflabel.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">obj_prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">obj_prop</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                        <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">(),</span> <span class="s2">&quot;label start with lowercase&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;has&quot;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                            <span class="n">label</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
+                            <span class="s1">&#39;what follows &quot;has&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;is&quot;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                            <span class="n">label</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
+                            <span class="s1">&#39;what follows &quot;is&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                            <span class="n">label</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;Of&quot;</span><span class="p">,</span> <span class="s2">&quot;With&quot;</span><span class="p">,</span> <span class="s2">&quot;By&quot;</span><span class="p">,</span> <span class="s2">&quot;After&quot;</span><span class="p">)),</span>
                             <span class="s1">&#39;should end with &quot;Of&quot; or &quot;With&quot;&#39;</span><span class="p">,</span>
                         <span class="p">)</span>
 </code></pre></div>
@@ -4348,6 +4680,9 @@ manually / through Python.</p></td>
             <span class="n">name</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">id</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">skipped</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>  <span class="c1"># skipped by default</span>
                 <span class="p">[</span>
+                    <span class="s2">&quot;test_class_label&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;test_object_property_label&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;test_number_of_rdfslabels&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;test_namespace&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;test_physical_quantity_dimension_annotation&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;test_quantity_dimension_beta3&quot;</span><span class="p">,</span>
