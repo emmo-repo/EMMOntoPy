@@ -26,3 +26,164 @@ def test_run() -> None:
     # or conceptualisation.
     status = emmocheck.main([str(test_file)])
     assert status == 1
+
+
+def test_number_of_rdfslabels(tmp_path) -> None:
+    """Check that `test_number_of_rdfslabels` only runs when enabled."""
+    from ontopy.testutils import get_tool_module
+
+    emmocheck = get_tool_module("emmocheck")
+
+    ontofile = tmp_path / "rdfslabels.ttl"
+    ontofile.write_text(
+        """@prefix : <http://example.org/test#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://example.org/test> a owl:Ontology .
+
+:BadClass a owl:Class ;
+  rdfs:label "Bad class"@en ;
+  rdfs:label "Another label"@en .
+""",
+        encoding="utf-8",
+    )
+
+    configfile = tmp_path / "emmocheck.yml"
+    configfile.write_text("skip:\n  - test_*\n", encoding="utf-8")
+
+    status = emmocheck.main(
+        [
+            "--configfile",
+            str(configfile),
+            str(ontofile),
+        ]
+    )
+    assert status == 0
+
+    status = emmocheck.main(
+        [
+            "--configfile",
+            str(configfile),
+            "--enable=test_number_of_rdfslabels",
+            str(ontofile),
+        ]
+    )
+    assert status == 1
+
+
+def test_preflabel_checks(tmp_path) -> None:
+    """Check prefLabel checks run by default and label checks are opt-in."""
+    from ontopy.testutils import get_tool_module
+
+    emmocheck = get_tool_module("emmocheck")
+
+    ok_ontofile = tmp_path / "preflabel_ok.ttl"
+    ok_ontofile.write_text(
+        """@prefix : <http://example.org/test#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://example.org/test> a owl:Ontology .
+
+:prefLabel a owl:AnnotationProperty .
+
+:MyClass a owl:Class ;
+  rdfs:label "not CamelCase"@en ;
+    :prefLabel "MyClass"@en .
+
+:hasPart a owl:ObjectProperty ;
+  rdfs:label "NotLowerCamel"@en ;
+    :prefLabel "hasPart"@en .
+""",
+        encoding="utf-8",
+    )
+
+    bad_ontofile = tmp_path / "preflabel_bad.ttl"
+    bad_ontofile.write_text(
+        """@prefix : <http://example.org/test#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://example.org/test> a owl:Ontology .
+
+:prefLabel a owl:AnnotationProperty .
+
+:MyClass a owl:Class ;
+  rdfs:label "MyClass"@en ;
+    :prefLabel "notCamelCase"@en .
+
+:hasPart a owl:ObjectProperty ;
+  rdfs:label "hasPart"@en ;
+    :prefLabel "NotLowerCamel"@en .
+""",
+        encoding="utf-8",
+    )
+
+    label_ok_ontofile = tmp_path / "label_ok.ttl"
+    label_ok_ontofile.write_text(
+        """@prefix : <http://example.org/test#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://example.org/test> a owl:Ontology .
+
+:prefLabel a owl:AnnotationProperty .
+
+:MyClass a owl:Class ;
+    rdfs:label "not CamelCase"@en ;
+        :prefLabel "MyClass"@en .
+
+:hasPart a owl:ObjectProperty ;
+  rdfs:label "hasPart"@en ;
+    :prefLabel "hasPart"@en .
+""",
+        encoding="utf-8",
+    )
+
+    configfile = tmp_path / "emmocheck.yml"
+    configfile.write_text("skip:\n  - test_*\n", encoding="utf-8")
+
+    status = emmocheck.main(
+        [
+            "--configfile",
+            str(configfile),
+            str(ok_ontofile),
+        ]
+    )
+    assert status == 0
+
+    status = emmocheck.main(
+        [
+            "--configfile",
+            str(configfile),
+            str(label_ok_ontofile),
+        ]
+    )
+    assert status == 0
+
+    status = emmocheck.main(
+        [
+            "--configfile",
+            str(configfile),
+            "--enable=test_class_label",
+            "--enable=test_object_property_label",
+            str(bad_ontofile),
+        ]
+    )
+    assert status == 1
+
+    status = emmocheck.main(
+        [
+            "--configfile",
+            str(configfile),
+            "--enable=test_class_label",
+            "--enable=test_object_property_label",
+            str(label_ok_ontofile),
+        ]
+    )
+    assert status == 1
