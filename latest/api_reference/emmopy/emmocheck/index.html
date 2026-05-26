@@ -4026,7 +4026,7 @@ TestSyntacticEMMOConventions        </code>
                         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">())</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">test_property_preflabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that object property prefLabels are lowerCamelCase.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that property prefLabels are lowerCamelCase.</span>
 
 <span class="sd">        Allowed exceptions: &quot;EMMORelation&quot;</span>
 
@@ -4041,10 +4041,15 @@ TestSyntacticEMMOConventions        </code>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_property_preflabel.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
         <span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">obj_prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">():</span>
-            <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
-                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">obj_prop</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">(),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">data_properties</span><span class="p">(),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">prop</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
                             <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">(),</span> <span class="s2">&quot;label start with lowercase&quot;</span>
                         <span class="p">)</span>
@@ -4378,7 +4383,7 @@ upper case letter.</p>
 
     <div class="doc doc-contents ">
 
-      <p>Check that object property prefLabels are lowerCamelCase.</p>
+      <p>Check that property prefLabels are lowerCamelCase.</p>
 <p>Allowed exceptions: "EMMORelation"</p>
 <p>If they start with "has" or "is" they should be followed by a
 upper case letter.</p>
@@ -4388,7 +4393,7 @@ upper case letter.</p>
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_property_preflabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that object property prefLabels are lowerCamelCase.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that property prefLabels are lowerCamelCase.</span>
 
 <span class="sd">    Allowed exceptions: &quot;EMMORelation&quot;</span>
 
@@ -4403,10 +4408,15 @@ upper case letter.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_property_preflabel.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
     <span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">obj_prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">():</span>
-        <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
-                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">obj_prop</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
+    <span class="n">properties</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">(),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">data_properties</span><span class="p">(),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">prop</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
                         <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">(),</span> <span class="s2">&quot;label start with lowercase&quot;</span>
                     <span class="p">)</span>
@@ -4680,8 +4690,8 @@ manually / through Python.</p></td>
             <span class="n">name</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">id</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">skipped</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>  <span class="c1"># skipped by default</span>
                 <span class="p">[</span>
-                    <span class="s2">&quot;test_class_label&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;test_object_property_label&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;test_class_preflabel&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;test_property_preflabel&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;test_number_of_rdfslabels&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;test_namespace&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;test_physical_quantity_dimension_annotation&quot;</span><span class="p">,</span>
