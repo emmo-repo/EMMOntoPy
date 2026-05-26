@@ -125,6 +125,35 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         else:
             self.fail("ontology has no prefLabel")
 
+    def test_number_of_rdfslabels(self):
+        """Check that all entities have one and only one rdfs:label.
+
+        The only allowed exception is entities who's representation
+        starts with "owl.".
+        """
+        exceptions = set()
+        exceptions.update(
+            self.get_config("test_number_of_rdfslabels.exceptions", ())
+        )
+        for entity in self.onto.classes(self.check_imported):
+            # Skip concepts from exceptions and common w3c vocabularies
+            vocabs = (
+                "owl.",
+                "0.1.",
+                "bibo.",
+                "core.",
+                "terms.",
+                "vann.",
+                "schema.org",
+            )
+            r = repr(entity)
+            if r in exceptions or any(r.startswith(v) for v in vocabs):
+                continue
+
+            with self.subTest(entity=entity, label=get_label(entity)):
+                if not repr(entity).startswith("owl."):
+                    self.assertEqual(1, len(entity.label))
+
     def test_class_label(self):
         """Check that class labels are CamelCase and valid identifiers.
 
@@ -184,6 +213,71 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                             )
                             self.assertTrue(
                                 label.endswith(("Of", "With")),
+                                'should end with "Of" or "With"',
+                            )
+
+    def test_class_preflabel(self):
+        """Check that class prefLabels are CamelCase and valid identifiers.
+
+        For CamelCase, we are currently only checking that the labels
+        start with upper case.
+        """
+        exceptions = set(
+            (
+                "0-manifold",  # not needed in 1.0.0-beta
+                "1-manifold",
+                "2-manifold",
+                "3-manifold",
+                "C++",
+                "3DPrinting",
+            )
+        )
+        exceptions.update(
+            self.get_config("test_class_preflabel.exceptions", ())
+        )
+
+        for cls in self.onto.classes(self.check_imported):
+            for label in getattr(cls, "prefLabel", []):
+                if str(label) not in exceptions:
+                    with self.subTest(entity=cls, label=label):
+                        self.assertTrue(label.isidentifier())
+                        self.assertTrue(label[0].isupper())
+
+    def test_property_preflabel(self):
+        """Check that object property prefLabels are lowerCamelCase.
+
+        Allowed exceptions: "EMMORelation"
+
+        If they start with "has" or "is" they should be followed by a
+        upper case letter.
+
+        If they start with "is" they should also end with "Of", "With",
+        "After" or "By".
+        """
+        exceptions = set(("EMMORelation",))
+        exceptions.update(
+            self.get_config("test_property_preflabel.exceptions", ())
+        )
+
+        for obj_prop in self.onto.object_properties():
+            if repr(obj_prop) not in exceptions:
+                for label in getattr(obj_prop, "prefLabel", []):
+                    with self.subTest(entity=obj_prop, label=label):
+                        self.assertTrue(
+                            label[0].islower(), "label start with lowercase"
+                        )
+                        if label.startswith("has"):
+                            self.assertTrue(
+                                label[3].isupper(),
+                                'what follows "has" must be "uppercase"',
+                            )
+                        if label.startswith("is"):
+                            self.assertTrue(
+                                label[2].isupper(),
+                                'what follows "is" must be "uppercase"',
+                            )
+                            self.assertTrue(
+                                label.endswith(("Of", "With", "By", "After")),
                                 'should end with "Of" or "With"',
                             )
 
@@ -975,6 +1069,9 @@ def main(
             name = test.id().split(".")[-1]
             skipped = set(  # skipped by default
                 [
+                    "test_class_label",
+                    "test_object_property_label",
+                    "test_number_of_rdfslabels",
                     "test_namespace",
                     "test_physical_quantity_dimension_annotation",
                     "test_quantity_dimension_beta3",
