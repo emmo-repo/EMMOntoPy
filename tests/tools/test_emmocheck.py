@@ -141,6 +141,32 @@ def test_preflabel_checks(tmp_path) -> None:
 :hasPart a owl:ObjectProperty ;
   rdfs:label "hasPart"@en ;
     :prefLabel "hasPart"@en .
+
+:goodAnnotation a owl:AnnotationProperty ;
+    rdfs:label "goodAnnotation"@en ;
+        :prefLabel "goodAnnotation"@en .
+
+
+""",
+        encoding="utf-8",
+    )
+
+    non_object_bad_ontofile = tmp_path / "property_preflabel_non_object.ttl"
+    non_object_bad_ontofile.write_text(
+        """@prefix : <http://example.org/test#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://example.org/test> a owl:Ontology .
+
+:prefLabel a owl:AnnotationProperty .
+
+:hasBadDatatype a owl:DatatypeProperty ;
+    :prefLabel "NotLowerCamel"@en .
+
+:hasGoodObject a owl:ObjectProperty ;
+    :prefLabel "hasGoodObject"@en .
 """,
         encoding="utf-8",
     )
@@ -184,6 +210,16 @@ def test_preflabel_checks(tmp_path) -> None:
             "--enable=test_class_label",
             "--enable=test_object_property_label",
             str(label_ok_ontofile),
+        ]
+    )
+    assert status == 1
+
+    status = emmocheck.main(
+        [
+            "--configfile",
+            str(configfile),
+            "--enable=test_property_preflabel",
+            str(non_object_bad_ontofile),
         ]
     )
     assert status == 1
