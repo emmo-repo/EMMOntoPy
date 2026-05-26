@@ -1,9 +1,5 @@
 """Test ontodoc"""
 
-import os
-
-import pytest
-
 
 # if True:
 def test_ontodoc():
