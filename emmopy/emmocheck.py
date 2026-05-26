@@ -1069,8 +1069,8 @@ def main(
             name = test.id().split(".")[-1]
             skipped = set(  # skipped by default
                 [
-                    "test_class_label",
-                    "test_object_property_label",
+                    "test_class_preflabel",
+                    "test_property_preflabel",
                     "test_number_of_rdfslabels",
                     "test_namespace",
                     "test_physical_quantity_dimension_annotation",
