@@ -252,7 +252,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         upper case letter.
 
         If they start with "is" they should also end with "Of", "With",
-        " After or "By".
+        "After" or "By".
         """
         exceptions = set(("EMMORelation",))
         exceptions.update(
