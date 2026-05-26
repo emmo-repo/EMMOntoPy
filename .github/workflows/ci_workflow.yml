@@ -129,7 +129,8 @@ jobs:
           --ignore tests/test_java \
           --ignore ontopy/ontokit \
           --ignore tests/tools/ontokit \
-          --ignore tests/test_ontodoc_rst.py | tee result.log
+          --ignore tests/test_ontodoc_rst.py \
+          --ignore tests/test_ontokit.py | tee result.log
         if grep -q "SKIPPED" result.log; then
           echo "❌ Skipped tests detected, failing build"
           exit 1
@@ -195,7 +196,7 @@ jobs:
         command -v dot
         dot -V
 
-        # Install Python deps that use Graphviz (your extra already contains them)
+        # Install Python deps that use Graphviz
         pip install -U -e .[ontodoc]
 
         # Run ONLY the Graphviz tests
@@ -226,7 +227,8 @@ jobs:
           --cov-report=term --cov-report= \
           --doctest-modules \
           ontopy/ontokit \
-          tests/tools/ontokit | tee result_ontokit.log
+          tests/tools/ontokit \
+          tests/test_ontokit.py | tee result_ontokit.log
 
         # Fail if any ontokit tests got skipped
         if grep -q "SKIPPED" result_ontokit.log; then
