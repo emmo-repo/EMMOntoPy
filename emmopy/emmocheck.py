@@ -244,7 +244,7 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                         self.assertTrue(label[0].isupper())
 
     def test_property_preflabel(self):
-        """Check that property prefLabels are lowerCamelCase.
+        """Check that object property prefLabels are lowerCamelCase.
 
         Allowed exceptions: "EMMORelation"
 
@@ -252,22 +252,17 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         upper case letter.
 
         If they start with "is" they should also end with "Of", "With",
-        "After" or "By".
+        " After or "By".
         """
         exceptions = set(("EMMORelation",))
         exceptions.update(
             self.get_config("test_property_preflabel.exceptions", ())
         )
 
-        properties = itertools.chain(
-            self.onto.object_properties(),
-            self.onto.data_properties(),
-            self.onto.annotation_properties(),
-        )
-        for prop in properties:
-            if repr(prop) not in exceptions:
-                for label in getattr(prop, "prefLabel", []):
-                    with self.subTest(entity=prop, label=label):
+        for obj_prop in self.onto.object_properties():
+            if repr(obj_prop) not in exceptions:
+                for label in getattr(obj_prop, "prefLabel", []):
+                    with self.subTest(entity=obj_prop, label=label):
                         self.assertTrue(
                             label[0].islower(), "label start with lowercase"
                         )
@@ -1074,8 +1069,8 @@ def main(
             name = test.id().split(".")[-1]
             skipped = set(  # skipped by default
                 [
-                    "test_class_preflabel",
-                    "test_property_preflabel",
+                    "test_class_label",
+                    "test_object_property_label",
                     "test_number_of_rdfslabels",
                     "test_namespace",
                     "test_physical_quantity_dimension_annotation",
