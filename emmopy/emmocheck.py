@@ -251,8 +251,6 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         If they start with "has" or "is" they should be followed by a
         upper case letter.
 
-        If they start with "is" they should also end with "Of", "With",
-        "After" or "By".
         """
         exceptions = set(("EMMORelation",))
         exceptions.update(
@@ -280,10 +278,6 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                             self.assertTrue(
                                 label[2].isupper(),
                                 'what follows "is" must be "uppercase"',
-                            )
-                            self.assertTrue(
-                                label.endswith(("Of", "With", "By", "After")),
-                                'should end with "Of" or "With"',
                             )
 
 

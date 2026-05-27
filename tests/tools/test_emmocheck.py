@@ -146,7 +146,6 @@ def test_preflabel_checks(tmp_path) -> None:
     rdfs:label "isGoodAnnotation"@en ;
         :prefLabel "isGoodAnnotation"@en .
 
-
 """,
         encoding="utf-8",
     )
