@@ -4033,8 +4033,6 @@ TestSyntacticEMMOConventions        </code>
 <span class="sd">        If they start with &quot;has&quot; or &quot;is&quot; they should be followed by a</span>
 <span class="sd">        upper case letter.</span>
 
-<span class="sd">        If they start with &quot;is&quot; they should also end with &quot;Of&quot;, &quot;With&quot;,</span>
-<span class="sd">        &quot;After&quot; or &quot;By&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">((</span><span class="s2">&quot;EMMORelation&quot;</span><span class="p">,))</span>
         <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
@@ -4062,10 +4060,6 @@ TestSyntacticEMMOConventions        </code>
                             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
                                 <span class="n">label</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
                                 <span class="s1">&#39;what follows &quot;is&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
-                            <span class="p">)</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
-                                <span class="n">label</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;Of&quot;</span><span class="p">,</span> <span class="s2">&quot;With&quot;</span><span class="p">,</span> <span class="s2">&quot;By&quot;</span><span class="p">,</span> <span class="s2">&quot;After&quot;</span><span class="p">)),</span>
-                                <span class="s1">&#39;should end with &quot;Of&quot; or &quot;With&quot;&#39;</span><span class="p">,</span>
                             <span class="p">)</span>
 </code></pre></div>
         </details>
@@ -4387,8 +4381,6 @@ upper case letter.</p>
 <p>Allowed exceptions: "EMMORelation"</p>
 <p>If they start with "has" or "is" they should be followed by a
 upper case letter.</p>
-<p>If they start with "is" they should also end with "Of", "With",
-"After" or "By".</p>
 
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
@@ -4400,8 +4392,6 @@ upper case letter.</p>
 <span class="sd">    If they start with &quot;has&quot; or &quot;is&quot; they should be followed by a</span>
 <span class="sd">    upper case letter.</span>
 
-<span class="sd">    If they start with &quot;is&quot; they should also end with &quot;Of&quot;, &quot;With&quot;,</span>
-<span class="sd">    &quot;After&quot; or &quot;By&quot;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">((</span><span class="s2">&quot;EMMORelation&quot;</span><span class="p">,))</span>
     <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
@@ -4429,10 +4419,6 @@ upper case letter.</p>
                         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
                             <span class="n">label</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
                             <span class="s1">&#39;what follows &quot;is&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
-                        <span class="p">)</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
-                            <span class="n">label</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;Of&quot;</span><span class="p">,</span> <span class="s2">&quot;With&quot;</span><span class="p">,</span> <span class="s2">&quot;By&quot;</span><span class="p">,</span> <span class="s2">&quot;After&quot;</span><span class="p">)),</span>
-                            <span class="s1">&#39;should end with &quot;Of&quot; or &quot;With&quot;&#39;</span><span class="p">,</span>
                         <span class="p">)</span>
 </code></pre></div>
         </details>
