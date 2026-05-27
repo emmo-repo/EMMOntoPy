@@ -142,10 +142,9 @@ def test_preflabel_checks(tmp_path) -> None:
   rdfs:label "hasPart"@en ;
     :prefLabel "hasPart"@en .
 
-:goodAnnotation a owl:AnnotationProperty ;
-    rdfs:label "goodAnnotation"@en ;
-        :prefLabel "goodAnnotation"@en .
-
+:isGoodAnnotation a owl:AnnotationProperty ;
+    rdfs:label "isGoodAnnotation"@en ;
+        :prefLabel "isGoodAnnotation"@en .
 
 """,
         encoding="utf-8",
