@@ -132,7 +132,7 @@ def docs_subcommand(args):
         )
 
     ontology_name = config.get("ONTOLOGY_NAME")
-    # git_base_url = config.get("GIT_BASE_URL", "github.com")
+    git_base_url = config.get("GIT_BASE_URL", "github.com")
     build_dir = config.get("BUILD_DIR", "build")
     reference_indices = config.get("REFERENCE_INDICES", [])
     primary_subsections = config.get("REFERENCE_SUBSECTIONS", "all")
@@ -203,7 +203,7 @@ def docs_subcommand(args):
         docfile=docfile,
         overwrite=True,
         github_repository=git_repository,
-        # git_base_url=git_base_url,
+        git_base_url=git_base_url,
     )
     (root / build_dir / "_static").mkdir(parents=True, exist_ok=True)
 
