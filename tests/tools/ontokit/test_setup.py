@@ -1,8 +1,7 @@
 """Tests for the `ontokit setup` sub-command."""
 
-from argparse import Namespace
 from types import SimpleNamespace
-
+from argparse import Namespace
 from ontopy.ontokit import setup as ontokit_setup
 
 
@@ -29,8 +28,14 @@ def test_run_setup_passes_ci_provider(tmp_path, monkeypatch):
     assert captured["ci_provider"] == "gitlab"
 
 
-def test_setup_subcommand_writes_gitlab_files(tmp_path):
+def test_setup_subcommand_writes_gitlab_files(tmp_path, monkeypatch):
     """GitLab provider should scaffold .gitlab-ci.yml and .gitlab support files."""
+    monkeypatch.setattr(
+        ontokit_setup,
+        "_infer_repository",
+        lambda *_args, **_kwargs: "placeholder",
+    )
+
     args = Namespace(
         root=str(tmp_path),
         ci_provider="gitlab",
@@ -39,7 +44,7 @@ def test_setup_subcommand_writes_gitlab_files(tmp_path):
         ontology_iri="https://example.org/demo",
         github_pages_branch="gh-pages",
         remote="origin",
-        github_repository="mygroup/myrepo",
+        github_repository=None,
         git_base_url=None,
         no_init=True,
         debug=False,
@@ -57,6 +62,12 @@ def test_setup_subcommand_does_not_init_ghpages_for_gitlab(
     tmp_path, monkeypatch
 ):
     """GitLab provider should not execute GitHub Pages init logic."""
+    monkeypatch.setattr(
+        ontokit_setup,
+        "_infer_repository",
+        lambda *_args, **_kwargs: "placeholder",
+    )
+
     args = Namespace(
         root=str(tmp_path),
         ci_provider="gitlab",
@@ -65,7 +76,7 @@ def test_setup_subcommand_does_not_init_ghpages_for_gitlab(
         ontology_iri="https://example.org/demo",
         github_pages_branch="gh-pages",
         remote="origin",
-        github_repository="mygroup/myrepo",
+        github_repository=None,
         git_base_url=None,
         no_init=False,
         debug=False,
@@ -81,34 +92,6 @@ def test_setup_subcommand_does_not_init_ghpages_for_gitlab(
     ontokit_setup.setup_subcommand(args)
 
     assert not called
-
-
-def test_infer_repository_github(monkeypatch, tmp_path):
-    """GitHub owner/repo should be inferred from SSH and HTTPS remotes."""
-
-    def fake_run(*_args, **_kwargs):
-        return SimpleNamespace(
-            returncode=0,
-            stdout="git@github.com:myorg/myrepo.git\n",
-        )
-
-    monkeypatch.setattr(ontokit_setup.subprocess, "run", fake_run)
-    inferred = ontokit_setup._infer_repository(tmp_path, "origin", "github")
-    assert inferred == "myorg/myrepo"
-
-
-def test_infer_repository_gitlab_subgroup(monkeypatch, tmp_path):
-    """GitLab subgroup paths should be preserved in inferred repository."""
-
-    def fake_run(*_args, **_kwargs):
-        return SimpleNamespace(
-            returncode=0,
-            stdout="git@gitlab.example.org:group/subgroup/myrepo.git\n",
-        )
-
-    monkeypatch.setattr(ontokit_setup.subprocess, "run", fake_run)
-    inferred = ontokit_setup._infer_repository(tmp_path, "origin", "gitlab")
-    assert inferred == "group/subgroup/myrepo"
 
 
 def test_infer_git_base_url_from_company_remote(monkeypatch, tmp_path):

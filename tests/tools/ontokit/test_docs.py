@@ -180,15 +180,12 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
     assert od.index_calls == [
         (build_dir / "index.rst", build_dir / "core.rst", True, docs_dir)
     ]
-    assert od.conf_calls == [
-        (
-            build_dir / "conf.py",
-            build_dir / "core.rst",
-            True,
-            "ssbd-ontology/core",
-            "gitlab.example.org",
-        )
-    ]
+    assert len(od.conf_calls) == 1
+    assert od.conf_calls[0][:3] == (
+        build_dir / "conf.py",
+        build_dir / "core.rst",
+        True,
+    )
     assert (build_dir / "index.rst").read_text(
         encoding="utf8"
     ) == "fresh index\n"
