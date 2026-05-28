@@ -143,7 +143,11 @@ def setup_arguments(subparsers):
         "--ci-provider",
         choices=("github", "gitlab"),
         default="github",
-        help="CI provider to scaffold workflows for [github]",
+        help="CI provider to scaffold workflows for [github]. "
+        "Note: ontokit setup is primarily designed for GitHub "
+        "and some features may not work as expected with GitLab. "
+        "Users are free to further develop the generated CI "
+        "configuration to suit their needs.",
     )
     parser.add_argument(
         "--github-pages-branch",

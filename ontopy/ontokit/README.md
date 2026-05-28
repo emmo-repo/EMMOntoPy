@@ -29,11 +29,15 @@ In the tools/ontokit script the following must be added:
   '# Add sub-command arguments' in the `main` function).
 
 Notes on setting up workflows with `ontokit setup`:
-* By default, `ontokit setup` scaffolds GitHub workflows in
+* `ontokit setup` is primarily developed for documenting EMMO based ontologies
+  on GitHub. By default, `ontokit setup` scaffolds GitHub workflows in
   `.github/workflows/`.
 
 * You can scaffold GitLab CI instead with
   `ontokit setup --ci-provider gitlab ...`, which creates `.gitlab-ci.yml`.
+  Note that the generated GitLab CI configuration is more basic and may require
+  further development to suit your needs, as the primary focus of ontokit setup
+  is on GitHub workflows.
 
 * In order for github pages to work correctly the repository must have
   the `gh-pages` branch enabled for github pages in the repository settings.

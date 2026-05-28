@@ -45,7 +45,7 @@ def test_setup_subcommand_writes_gitlab_files(tmp_path, monkeypatch):
         github_pages_branch="gh-pages",
         remote="origin",
         github_repository=None,
-        git_base_url=None,
+        git_base_url="example.org",
         no_init=True,
         debug=False,
     )
@@ -77,7 +77,7 @@ def test_setup_subcommand_does_not_init_ghpages_for_gitlab(
         github_pages_branch="gh-pages",
         remote="origin",
         github_repository=None,
-        git_base_url=None,
+        git_base_url="example.org",
         no_init=False,
         debug=False,
     )
