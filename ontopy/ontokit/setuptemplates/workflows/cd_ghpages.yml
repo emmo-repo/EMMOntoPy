@@ -30,7 +30,7 @@ jobs:
           exit 1
         fi
 
-        for key in ONTOLOGY_NAME ONTOLOGY_PREFIX ONTOLOGY_IRI GITHUB_REPOSITORY BUILD_DIR; do
+        for key in ONTOLOGY_NAME ONTOLOGY_PREFIX ONTOLOGY_IRI BUILD_DIR; do
           value=$(sed -n -E "s/^${key}:[[:space:]]*(.*)$/\\1/p" .ontokit_conf.yml | head -n 1)
           if [ -z "$value" ]; then
             echo "Missing required key '${key}' in .ontokit_conf.yml" >&2
@@ -38,6 +38,16 @@ jobs:
           fi
           echo "${key}=${value}" >> "$GITHUB_ENV"
         done
+
+        repo_value=$(sed -n -E "s/^GIT_REPOSITORY:[[:space:]]*(.*)$/\\1/p" .ontokit_conf.yml | head -n 1)
+        if [ -z "$repo_value" ]; then
+          repo_value=$(sed -n -E "s/^GITHUB_REPOSITORY:[[:space:]]*(.*)$/\\1/p" .ontokit_conf.yml | head -n 1)
+        fi
+        if [ -z "$repo_value" ]; then
+          echo "Missing required key 'GIT_REPOSITORY' (or legacy 'GITHUB_REPOSITORY') in .ontokit_conf.yml" >&2
+          exit 1
+        fi
+        echo "GIT_REPOSITORY=${repo_value}" >> "$GITHUB_ENV"
 
     - name: Setup Python
       uses: actions/setup-python@v5
@@ -48,7 +58,7 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install \
-            "EMMOntoPy[ontokit] @ git+https://github.com/emmo-repo/EMMOntoPy.git@ontokit" \
+          "EMMOntoPy[ontokit] @ git+https://github.com/emmo-repo/EMMOntoPy.git@master" \
             "tripper[datadoc] @ git+https://github.com/EMMC-ASBL/tripper.git@master"
 
     #- name: Install current ontology for keywords tool
