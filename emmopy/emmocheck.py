@@ -118,30 +118,14 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                 self.fail(f"ontology has no {label}")
 
         def checker(onto, label):
-            def is_local_entity(entity):
-                entity_iri = getattr(entity, "iri", None)
-                return bool(entity_iri and entity_iri.startswith(onto.base_iri))
-
-            def is_ignored_namespace(entity):
-                namespace = getattr(entity, "namespace", None)
-                namespace_iri = getattr(namespace, "base_iri", "")
-                return bool(
-                    namespace_iri
-                    and list(
-                        filter(
-                            namespace_iri.strip("#").endswith,
-                            self.ignore_namespace,
-                        )
-                    )
-                )
 
             seen = {}
             entities = itertools.chain(
-                filter(is_local_entity, onto.classes()),
-                filter(is_local_entity, onto.object_properties()),
-                filter(is_local_entity, onto.data_properties()),
-                filter(is_local_entity, onto.individuals()),
-                filter(is_local_entity, onto.annotation_properties()),
+                onto.classes(),
+                onto.object_properties(),
+                onto.data_properties(),
+                onto.individuals(),
+                onto.annotation_properties(),
             )
             for entity in entities:
                 if entity in visited:
@@ -149,7 +133,9 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                 visited.add(entity)
 
                 r = repr(entity)
-                if r in exceptions or is_ignored_namespace(entity):
+                if r in exceptions or entity.iri.startswith(
+                    tuple(self.ignore_namespace)
+                ):
                     continue
 
                 for lab in getattr(entity, label, []):
