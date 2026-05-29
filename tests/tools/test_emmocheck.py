@@ -222,3 +222,237 @@ def test_preflabel_checks(tmp_path) -> None:
         ]
     )
     assert status == 1
+
+
+def test_preflabel_uniqueness_within_namespace(tmp_path) -> None:
+    """Check that prefLabel uniqueness can be validated per namespace."""
+    from ontopy.testutils import get_tool_module
+
+    emmocheck = get_tool_module("emmocheck")
+
+    ok_ontofile = tmp_path / "preflabel_unique_ok.ttl"
+    ok_ontofile.write_text(
+        """@prefix : <http://example.org/test#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+<http://example.org/test> a owl:Ontology .
+
+:prefLabel a owl:AnnotationProperty .
+
+:ClassOne a owl:Class ;
+  :prefLabel "ClassOne"@en .
+
+:ClassTwo a owl:Class ;
+  :prefLabel "ClassTwo"@en .
+""",
+        encoding="utf-8",
+    )
+
+    bad_ontofile = tmp_path / "preflabel_unique_bad.ttl"
+    bad_ontofile.write_text(
+        """@prefix : <http://example.org/test#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+<http://example.org/test> a owl:Ontology .
+
+:prefLabel a owl:AnnotationProperty .
+
+:ClassOne a owl:Class ;
+  :prefLabel "Duplicated"@en .
+
+:ClassTwo a owl:Class ;
+  :prefLabel "Duplicated"@en .
+""",
+        encoding="utf-8",
+    )
+
+    configfile = tmp_path / "emmocheck.yml"
+    configfile.write_text("skip:\n  - test_*\n", encoding="utf-8")
+
+    status = emmocheck.main(
+        [
+            "--configfile",
+            str(configfile),
+            "--enable=test_unique_labels",
+            str(ok_ontofile),
+        ]
+    )
+    assert status == 0
+
+    status = emmocheck.main(
+        [
+            "--configfile",
+            str(configfile),
+            "--enable=test_unique_labels",
+            str(bad_ontofile),
+        ]
+    )
+    assert status == 1
+
+
+def test_unique_labels_can_be_configured(tmp_path) -> None:
+    """Check that label properties to validate can be configured."""
+    from ontopy.testutils import get_tool_module
+
+    emmocheck = get_tool_module("emmocheck")
+
+    ontofile = tmp_path / "label_unique_bad.ttl"
+    ontofile.write_text(
+        """@prefix : <http://example.org/test#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://example.org/test> a owl:Ontology .
+
+:prefLabel a owl:AnnotationProperty .
+
+:ClassOne a owl:Class ;
+  rdfs:label "Duplicated"@en ;
+  :prefLabel "ClassOne"@en .
+
+:ClassTwo a owl:Class ;
+  rdfs:label "Duplicated"@en ;
+  :prefLabel "ClassTwo"@en .
+""",
+        encoding="utf-8",
+    )
+
+    configfile = tmp_path / "emmocheck.yml"
+    configfile.write_text(
+        "skip:\n"
+        "  - test_*\n"
+        "test_unique_labels:\n"
+        "  labels:\n"
+        "    - label\n",
+        encoding="utf-8",
+    )
+
+    status = emmocheck.main(
+        [
+            "--configfile",
+            str(configfile),
+            "--enable=test_unique_labels",
+            str(ontofile),
+        ]
+    )
+    assert status == 1
+
+
+def test_unique_labels_checks_imported_by_default(tmp_path) -> None:
+    """Imported ontologies should be checked by default."""
+    from ontopy.testutils import get_tool_module
+
+    emmocheck = get_tool_module("emmocheck")
+
+    imported_ontofile = tmp_path / "imported.ttl"
+    imported_uri = imported_ontofile.resolve().as_uri()
+    imported_ontofile.write_text(
+        f"""@prefix : <{imported_uri}#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<{imported_uri}> a owl:Ontology .
+
+:ImportedOne a owl:Class ;
+    rdfs:label "Duplicated"@en .
+
+:ImportedTwo a owl:Class ;
+    rdfs:label "Duplicated"@en .
+""",
+        encoding="utf-8",
+    )
+
+    main_ontofile = tmp_path / "main.ttl"
+    main_uri = main_ontofile.resolve().as_uri()
+    main_ontofile.write_text(
+        f"""@prefix : <{main_uri}#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<{main_uri}> a owl:Ontology ;
+    owl:imports <{imported_uri}> .
+
+:MainClass a owl:Class ;
+    rdfs:label "MainClass"@en .
+""",
+        encoding="utf-8",
+    )
+
+    configfile = tmp_path / "emmocheck.yml"
+    configfile.write_text(
+        "skip:\n"
+        "  - test_*\n"
+        "test_unique_labels:\n"
+        "  labels:\n"
+        "    - label\n",
+        encoding="utf-8",
+    )
+
+    status = emmocheck.main(
+        [
+            "--configfile",
+            str(configfile),
+            "--enable=test_unique_labels",
+            str(main_ontofile),
+        ]
+    )
+    assert status == 1
+
+
+def test_unique_labels_allows_same_iri_in_imported_files(tmp_path) -> None:
+    """The same entity IRI declared in multiple files should not count as duplicate."""
+    from ontopy.testutils import get_tool_module
+
+    emmocheck = get_tool_module("emmocheck")
+
+    imported_ontofile = tmp_path / "imported_same_iri.ttl"
+    imported_uri = imported_ontofile.resolve().as_uri()
+    imported_ontofile.write_text(
+        f"""@prefix : <{imported_uri}#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<{imported_uri}> a owl:Ontology .
+
+:Shared a owl:Class ;
+    rdfs:label "Shared"@en .
+""",
+        encoding="utf-8",
+    )
+
+    main_ontofile = tmp_path / "main_same_iri.ttl"
+    main_uri = main_ontofile.resolve().as_uri()
+    main_ontofile.write_text(
+        f"""@prefix : <{main_uri}#> .
+@prefix imp: <{imported_uri}#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<{main_uri}> a owl:Ontology ;
+    owl:imports <{imported_uri}> .
+
+imp:Shared a owl:Class ;
+    rdfs:label "Shared"@en .
+""",
+        encoding="utf-8",
+    )
+
+    configfile = tmp_path / "emmocheck.yml"
+    configfile.write_text(
+        "skip:\n"
+        "  - test_*\n"
+        "test_unique_labels:\n"
+        "  labels:\n"
+        "    - label\n",
+        encoding="utf-8",
+    )
+
+    status = emmocheck.main(
+        [
+            "--configfile",
+            str(configfile),
+            "--enable=test_unique_labels",
+            str(main_ontofile),
+        ]
+    )
+    assert status == 0

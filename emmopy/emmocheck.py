@@ -82,6 +82,104 @@ class TestEMMOConventions(unittest.TestCase):
 class TestSyntacticEMMOConventions(TestEMMOConventions):
     """Test syntactic EMMO conventions."""
 
+    def test_unique_labels(self):
+        """Check that configured labels are unique within each namespace.
+
+        Configurations:
+            labels - annotation properties to validate [prefLabel].
+            exceptions - full names of entities to ignore.
+            skipmodules - modules to skip for this test.
+        """
+        testname = "test_unique_labels"
+        exceptions = set()
+        exceptions.update(self.get_config(f"{testname}.exceptions", ()))
+        labels = self.get_config(f"{testname}.labels", ("prefLabel",))
+        if isinstance(labels, str):
+            labels = (labels,)
+
+        for label in labels:
+            if (
+                label
+                not in self.onto.world._props  # pylint: disable=protected-access
+            ):
+                self.fail(f"ontology has no {label}")
+
+        def checker(onto, label):
+            if list(
+                filter(onto.base_iri.strip("#").endswith, self.ignore_namespace)
+            ):
+                print(f"Skipping namespace: {onto.base_iri}")
+                return
+
+            seen = {}
+            entities = itertools.chain(
+                onto.classes(),
+                onto.object_properties(),
+                onto.data_properties(),
+                onto.individuals(True),
+                onto.annotation_properties(True),
+            )
+            for entity in entities:
+                if entity in visited:
+                    continue
+                visited.add(entity)
+
+                r = repr(entity)
+                vocabs = (
+                    "owl.",
+                    "0.1.",
+                    "bibo.",
+                    "core.",
+                    "terms.",
+                    "vann.",
+                    "schema.org",
+                )
+                if (
+                    r in exceptions
+                    or any(r.startswith(v) for v in vocabs)
+                    or skipmodule(self, testname, entity)
+                ):
+                    continue
+
+                for lab in getattr(entity, label, []):
+                    key = (str(lab), getattr(lab, "lang", None))
+                    duplicate_entity = seen.get(key)
+                    duplicate_repr = (
+                        repr(duplicate_entity) if duplicate_entity else None
+                    )
+                    with self.subTest(
+                        label_property=label,
+                        namespace=onto.base_iri,
+                        label_value=key[0],
+                        lang=key[1],
+                        entity=r,
+                        duplicate_with=duplicate_repr,
+                    ):
+                        same_iri = (
+                            duplicate_entity
+                            and getattr(duplicate_entity, "iri", None)
+                            and getattr(duplicate_entity, "iri", None)
+                            == getattr(entity, "iri", None)
+                        )
+                        if duplicate_entity and not same_iri:
+                            self.fail(
+                                f"Duplicate {label} within namespace "
+                                f"{onto.base_iri!r}: {key[0]!r} "
+                                f"(lang={key[1]!r}) for {r}, already used by "
+                                f"{duplicate_repr}"
+                            )
+                    seen[key] = entity
+
+            for imp_onto in onto.imported_ontologies:
+                if imp_onto not in visited_onto[label]:
+                    visited_onto[label].add(imp_onto)
+                    checker(imp_onto, label)
+
+        for label in labels:
+            visited = set()
+            visited_onto = {label: {self.onto}}
+            checker(self.onto, label)
+
     def test_number_of_labels(self):
         """Check that all entities have one and only one prefLabel.
 
