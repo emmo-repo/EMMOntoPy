@@ -84,11 +84,15 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
     def test_unique_labels(self):
         """Check that configured labels are unique within each namespace.
+        This checks imported ontologies as well, but namespaces in the
+        `ignore_namespace` configuration are ignored. Thus, if you import
+        an ontology that you do not have control over, you can add its
+        namespace to `ignore_namespace` to avoid false positives.
 
         Configurations:
             labels - annotation properties to validate [prefLabel].
             exceptions - full names of entities to ignore.
-            skipmodules - modules to skip for this test.
+            ignore_namespace - namespaces to ignore..
         """
         testname = "test_unique_labels"
         exceptions = set()
@@ -96,6 +100,15 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         labels = self.get_config(f"{testname}.labels", ("prefLabel",))
         if isinstance(labels, str):
             labels = (labels,)
+        configured_ignore_namespace = self.get_config(
+            f"{testname}.ignore_namespace", ()
+        )
+        if isinstance(configured_ignore_namespace, str):
+            configured_ignore_namespace = (configured_ignore_namespace,)
+        cli_ignore_namespace = getattr(self, "ignore_namespace", ())
+        self.ignore_namespace = set(cli_ignore_namespace or ()) | set(
+            configured_ignore_namespace
+        )
 
         for label in labels:
             if (
@@ -105,19 +118,30 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                 self.fail(f"ontology has no {label}")
 
         def checker(onto, label):
-            if list(
-                filter(onto.base_iri.strip("#").endswith, self.ignore_namespace)
-            ):
-                print(f"Skipping namespace: {onto.base_iri}")
-                return
+            def is_local_entity(entity):
+                entity_iri = getattr(entity, "iri", None)
+                return bool(entity_iri and entity_iri.startswith(onto.base_iri))
+
+            def is_ignored_namespace(entity):
+                namespace = getattr(entity, "namespace", None)
+                namespace_iri = getattr(namespace, "base_iri", "")
+                return bool(
+                    namespace_iri
+                    and list(
+                        filter(
+                            namespace_iri.strip("#").endswith,
+                            self.ignore_namespace,
+                        )
+                    )
+                )
 
             seen = {}
             entities = itertools.chain(
-                onto.classes(),
-                onto.object_properties(),
-                onto.data_properties(),
-                onto.individuals(True),
-                onto.annotation_properties(True),
+                filter(is_local_entity, onto.classes()),
+                filter(is_local_entity, onto.object_properties()),
+                filter(is_local_entity, onto.data_properties()),
+                filter(is_local_entity, onto.individuals()),
+                filter(is_local_entity, onto.annotation_properties()),
             )
             for entity in entities:
                 if entity in visited:
@@ -125,48 +149,31 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                 visited.add(entity)
 
                 r = repr(entity)
-                vocabs = (
-                    "owl.",
-                    "0.1.",
-                    "bibo.",
-                    "core.",
-                    "terms.",
-                    "vann.",
-                    "schema.org",
-                )
-                if (
-                    r in exceptions
-                    or any(r.startswith(v) for v in vocabs)
-                    or skipmodule(self, testname, entity)
-                ):
+                if r in exceptions or is_ignored_namespace(entity):
                     continue
 
                 for lab in getattr(entity, label, []):
                     key = (str(lab), getattr(lab, "lang", None))
                     duplicate_entity = seen.get(key)
-                    duplicate_repr = (
-                        repr(duplicate_entity) if duplicate_entity else None
-                    )
+                    duplicate_iri = getattr(duplicate_entity, "iri", None)
+                    entity_iri = getattr(entity, "iri", None)
                     with self.subTest(
                         label_property=label,
-                        namespace=onto.base_iri,
                         label_value=key[0],
                         lang=key[1],
-                        entity=r,
-                        duplicate_with=duplicate_repr,
+                        entity=entity_iri,
+                        duplicate_with=duplicate_iri,
                     ):
                         same_iri = (
-                            duplicate_entity
-                            and getattr(duplicate_entity, "iri", None)
-                            and getattr(duplicate_entity, "iri", None)
-                            == getattr(entity, "iri", None)
+                            duplicate_iri is not None
+                            and duplicate_iri == entity_iri
                         )
                         if duplicate_entity and not same_iri:
                             self.fail(
                                 f"Duplicate {label} within namespace "
                                 f"{onto.base_iri!r}: {key[0]!r} "
-                                f"(lang={key[1]!r}) for {r}, already used by "
-                                f"{duplicate_repr}"
+                                f"(lang={key[1]!r}) for {entity_iri}, "
+                                f"already used by {duplicate_iri}."
                             )
                     seen[key] = entity
 
