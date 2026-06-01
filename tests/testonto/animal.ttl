@@ -28,6 +28,12 @@ skos:prefLabel rdf:type owl:AnnotationProperty .
            skos:prefLabel "latinName" ;
            rdfs:subPropertyOf rdf:comment .
 
+###  https://w3id.org/emmo/domain/animal#scientificName
+:scientificName rdf:type owl:AnnotationProperty ;
+           skos:prefLabel "latinName" ;
+           owl:deprecated "true"^^xsd:boolean ;
+           rdfs:subPropertyOf rdf:comment .
+
 
 #################################################################
 #    Object Properties
