@@ -90,9 +90,9 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         namespace to `ignore_namespace` to avoid false positives.
 
         Configurations:
-            labels - annotation properties to validate [prefLabel].
-            exceptions - full names of entities to ignore.
-            ignore_namespace - namespaces to ignore..
+  - labels: annotation properties to validate. Default: `["prefLabel"]`.
+  - exceptions: full names of entities to ignore.
+  - ignore_namespace: namespaces to ignore..
         """
         testname = "test_unique_labels"
         exceptions = set()
