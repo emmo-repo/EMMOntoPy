@@ -84,15 +84,15 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
     def test_unique_labels(self):
         """Check that configured labels are unique within each namespace.
-        This checks imported ontologies as well, but namespaces in the
-        `ignore_namespace` configuration are ignored. Thus, if you import
-        an ontology that you do not have control over, you can add its
-        namespace to `ignore_namespace` to avoid false positives.
+              This checks imported ontologies as well, but namespaces in the
+              `ignore_namespace` configuration are ignored. Thus, if you import
+              an ontology that you do not have control over, you can add its
+              namespace to `ignore_namespace` to avoid false positives.
 
-        Configurations:
-  - labels: annotation properties to validate. Default: `["prefLabel"]`.
-  - exceptions: full names of entities to ignore.
-  - ignore_namespace: namespaces to ignore..
+              Configurations:
+        - labels: annotation properties to validate. Default: `["prefLabel"]`.
+        - exceptions: full names of entities to ignore.
+        - ignore_namespace: namespaces to ignore..
         """
         testname = "test_unique_labels"
         exceptions = set()
