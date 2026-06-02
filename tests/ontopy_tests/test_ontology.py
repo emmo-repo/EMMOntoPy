@@ -79,7 +79,7 @@ def test__get_unabbreviated_triples():
     triples = list(
         _get_unabbreviated_triples(animal.world, predicate=skos + "prefLabel")
     )
-    assert len(triples) == 24
+    assert len(triples) == 25
 
     assert list(
         _get_unabbreviated_triples(
