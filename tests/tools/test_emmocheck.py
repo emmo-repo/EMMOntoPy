@@ -241,28 +241,33 @@ def test_unique_labels(tmp_path) -> None:
         ontofile,
         expected_status,
         labels=None,
-        ignore_namespace=None,
+        skipmodules=None,
     ):
         configfile = tmp_path / f"{Path(ontofile).stem}_emmocheck.yml"
         lines = ["skip:", "  - test_*"]
+        test_unique_labels_config = {}
         if labels:
-            lines.extend(["test_unique_labels:", "  labels:"])
-            for label in labels:
-                lines.append(f"    - {label}")
+            test_unique_labels_config["labels"] = list(labels)
+        if skipmodules:
+            test_unique_labels_config["skipmodules"] = list(skipmodules)
+        if test_unique_labels_config:
+            lines.append("test_unique_labels:")
+            for key, values in test_unique_labels_config.items():
+                lines.append(f"  {key}:")
+                for v in values:
+                    lines.append(f"    - {v}")
         configfile.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
         args = [
             "--configfile",
             str(configfile),
             "--enable=test_unique_labels",
+            str(ontodir / ontofile),
         ]
-        if ignore_namespace:
-            args.extend(["--ignore-namespace", ignore_namespace])
-        args.append(str(ontodir / ontofile))
         status = run_emmocheck(args)
         assert status == expected_status
 
-    run_case("animal.ttl", 0)
+    run_case("animal.ttl", 1)
     # minischema does not have prefLabels, but labels
     run_case("minischema.ttl", 1)
     run_case("minischema.ttl", 0, labels=("label",))
@@ -271,5 +276,5 @@ def test_unique_labels(tmp_path) -> None:
         "minischema.ttl",
         0,
         labels=("label",),
-        ignore_namespace="https://schema.org/",
+        skipmodules=("schema.org",),
     )

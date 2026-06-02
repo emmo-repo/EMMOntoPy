@@ -13,9 +13,11 @@ Toplevel keywords in the YAML file:
     - `exceptions`: List of entities in the ontology to skip. Should be written
       as `<ns0>.<name>`, where `<ns0>` is the last component of the base IRI
       and `<name>` is the name of the entity.
-    - `skipmodules`: List of module names to skip the test for. The module
-      names may be written either as the full module IRI or as the last
-      component of the module IRI.
+    - `skipmodules`: List of module names/namespaces to skip the test for.
+      The modul names may be written either as the full module IRI or
+      as the last component of the module IRI.
+    - `labels`: List of annotation properties to check for uniqueness. This
+      is only used for the `test_unique_labels` test. Default: `["prefLabel"]`.
 
 Example configuration file:
 
@@ -84,15 +86,15 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
     def test_unique_labels(self):
         """Check that configured labels are unique within each namespace.
-              This checks imported ontologies as well, but namespaces in the
-              `ignore_namespace` configuration are ignored. Thus, if you import
-              an ontology that you do not have control over, you can add its
-              namespace to `ignore_namespace` to avoid false positives.
 
-              Configurations:
+        This also checks imported ontologies. Modules/namespaces can be
+        skipped via the `test_unique_labels.skipmodules` configuration
+        in the YAML file.
+
+        Configurations:
         - labels: annotation properties to validate. Default: `["prefLabel"]`.
         - exceptions: full names of entities to ignore.
-        - ignore_namespace: namespaces to ignore..
+        - skipmodules: namespaces to ignore.
         """
         testname = "test_unique_labels"
         exceptions = set()
@@ -100,15 +102,6 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         labels = self.get_config(f"{testname}.labels", ("prefLabel",))
         if isinstance(labels, str):
             labels = (labels,)
-        configured_ignore_namespace = self.get_config(
-            f"{testname}.ignore_namespace", ()
-        )
-        if isinstance(configured_ignore_namespace, str):
-            configured_ignore_namespace = (configured_ignore_namespace,)
-        cli_ignore_namespace = getattr(self, "ignore_namespace", ())
-        self.ignore_namespace = set(cli_ignore_namespace or ()) | set(
-            configured_ignore_namespace
-        )
 
         for label in labels:
             if (
@@ -133,8 +126,8 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                 visited.add(entity)
 
                 r = repr(entity)
-                if r in exceptions or entity.iri.startswith(
-                    tuple(self.ignore_namespace)
+                if r in exceptions or skipmodule(
+                    self, "test_unique_labels", entity
                 ):
                     continue
 
