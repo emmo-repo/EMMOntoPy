@@ -13,9 +13,11 @@ Toplevel keywords in the YAML file:
     - `exceptions`: List of entities in the ontology to skip. Should be written
       as `<ns0>.<name>`, where `<ns0>` is the last component of the base IRI
       and `<name>` is the name of the entity.
-    - `skipmodules`: List of module names to skip the test for. The module
-      names may be written either as the full module IRI or as the last
-      component of the module IRI.
+    - `skipmodules`: List of module names/namespaces to skip the test for.
+      The modul names may be written either as the full module IRI or
+      as the last component of the module IRI.
+    - `labels`: List of annotation properties to check for uniqueness. This
+      is only used for the `test_unique_labels` test. Default: `["prefLabel"]`.
 
 Example configuration file:
 
@@ -81,6 +83,88 @@ class TestEMMOConventions(unittest.TestCase):
 
 class TestSyntacticEMMOConventions(TestEMMOConventions):
     """Test syntactic EMMO conventions."""
+
+    def test_unique_labels(self):
+        """Check that configured labels are unique within each namespace.
+
+        This also checks imported ontologies. Modules/namespaces can be
+        skipped via the `test_unique_labels.skipmodules` configuration
+        in the YAML file.
+
+        Configurations:
+        - labels: annotation properties to validate. Default: `["prefLabel"]`.
+        - exceptions: full names of entities to ignore.
+        - skipmodules: namespaces to ignore.
+        """
+        testname = "test_unique_labels"
+        exceptions = set()
+        exceptions.update(self.get_config(f"{testname}.exceptions", ()))
+        labels = self.get_config(f"{testname}.labels", ("prefLabel",))
+        if isinstance(labels, str):
+            labels = (labels,)
+
+        for label in labels:
+            if (
+                label
+                not in self.onto.world._props  # pylint: disable=protected-access
+            ):
+                self.fail(f"ontology has no {label}")
+
+        def checker(onto, label):
+
+            seen = {}
+            entities = itertools.chain(
+                onto.classes(),
+                onto.object_properties(),
+                onto.data_properties(),
+                onto.individuals(),
+                onto.annotation_properties(),
+            )
+            for entity in entities:
+                if entity in visited:
+                    continue
+                visited.add(entity)
+
+                r = repr(entity)
+                if r in exceptions or skipmodule(
+                    self, "test_unique_labels", entity
+                ):
+                    continue
+
+                for lab in getattr(entity, label, []):
+                    key = (str(lab), getattr(lab, "lang", None))
+                    duplicate_entity = seen.get(key)
+                    duplicate_iri = getattr(duplicate_entity, "iri", None)
+                    entity_iri = getattr(entity, "iri", None)
+                    with self.subTest(
+                        label_property=label,
+                        label_value=key[0],
+                        lang=key[1],
+                        entity=entity_iri,
+                        duplicate_with=duplicate_iri,
+                    ):
+                        same_iri = (
+                            duplicate_iri is not None
+                            and duplicate_iri == entity_iri
+                        )
+                        if duplicate_entity and not same_iri:
+                            self.fail(
+                                f"Duplicate {label} within namespace "
+                                f"{onto.base_iri!r}: {key[0]!r} "
+                                f"(lang={key[1]!r}) for {entity_iri}, "
+                                f"already used by {duplicate_iri}."
+                            )
+                    seen[key] = entity
+
+            for imp_onto in onto.imported_ontologies:
+                if imp_onto not in visited_onto[label]:
+                    visited_onto[label].add(imp_onto)
+                    checker(imp_onto, label)
+
+        for label in labels:
+            visited = set()
+            visited_onto = {label: {self.onto}}
+            checker(self.onto, label)
 
     def test_number_of_labels(self):
         """Check that all entities have one and only one prefLabel.
