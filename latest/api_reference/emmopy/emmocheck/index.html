@@ -1233,6 +1233,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_unique_labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_unique_labels()
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2240,6 +2251,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_unique_labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_unique_labels()
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2302,9 +2324,11 @@
 <li><code>exceptions</code>: List of entities in the ontology to skip. Should be written
   as <code>&lt;ns0&gt;.&lt;name&gt;</code>, where <code>&lt;ns0&gt;</code> is the last component of the base IRI
   and <code>&lt;name&gt;</code> is the name of the entity.</li>
-<li><code>skipmodules</code>: List of module names to skip the test for. The module
-  names may be written either as the full module IRI or as the last
-  component of the module IRI.</li>
+<li><code>skipmodules</code>: List of module names/namespaces to skip the test for.
+  The modul names may be written either as the full module IRI or
+  as the last component of the module IRI.</li>
+<li><code>labels</code>: List of annotation properties to check for uniqueness. This
+  is only used for the <code>test_unique_labels</code> test. Default: <code>["prefLabel"]</code>.</li>
 </ul>
 </li>
 </ul>
@@ -3864,6 +3888,88 @@ TestSyntacticEMMOConventions        </code>
           <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TestSyntacticEMMOConventions</span><span class="p">(</span><span class="n">TestEMMOConventions</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test syntactic EMMO conventions.&quot;&quot;&quot;</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_unique_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that configured labels are unique within each namespace.</span>
+
+<span class="sd">        This also checks imported ontologies. Modules/namespaces can be</span>
+<span class="sd">        skipped via the `test_unique_labels.skipmodules` configuration</span>
+<span class="sd">        in the YAML file.</span>
+
+<span class="sd">        Configurations:</span>
+<span class="sd">        - labels: annotation properties to validate. Default: `[&quot;prefLabel&quot;]`.</span>
+<span class="sd">        - exceptions: full names of entities to ignore.</span>
+<span class="sd">        - skipmodules: namespaces to ignore.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">testname</span> <span class="o">=</span> <span class="s2">&quot;test_unique_labels&quot;</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">testname</span><span class="si">}</span><span class="s2">.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">testname</span><span class="si">}</span><span class="s2">.labels&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="p">(</span><span class="n">labels</span><span class="p">,)</span>
+
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">label</span>
+                <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ontology has no </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">checker</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+
+            <span class="n">seen</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">entities</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(),</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">(),</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">data_properties</span><span class="p">(),</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">individuals</span><span class="p">(),</span>
+                <span class="n">onto</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">(),</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+
+                <span class="n">r</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">exceptions</span> <span class="ow">or</span> <span class="n">skipmodule</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;test_unique_labels&quot;</span><span class="p">,</span> <span class="n">entity</span>
+                <span class="p">):</span>
+                    <span class="k">continue</span>
+
+                <span class="k">for</span> <span class="n">lab</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="p">[]):</span>
+                    <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">lab</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lab</span><span class="p">,</span> <span class="s2">&quot;lang&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+                    <span class="n">duplicate_entity</span> <span class="o">=</span> <span class="n">seen</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                    <span class="n">duplicate_iri</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">duplicate_entity</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="n">entity_iri</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span>
+                        <span class="n">label_property</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+                        <span class="n">label_value</span><span class="o">=</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="n">lang</span><span class="o">=</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">entity</span><span class="o">=</span><span class="n">entity_iri</span><span class="p">,</span>
+                        <span class="n">duplicate_with</span><span class="o">=</span><span class="n">duplicate_iri</span><span class="p">,</span>
+                    <span class="p">):</span>
+                        <span class="n">same_iri</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">duplicate_iri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                            <span class="ow">and</span> <span class="n">duplicate_iri</span> <span class="o">==</span> <span class="n">entity_iri</span>
+                        <span class="p">)</span>
+                        <span class="k">if</span> <span class="n">duplicate_entity</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">same_iri</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;Duplicate </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> within namespace &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="si">!r}</span><span class="s2">: </span><span class="si">{</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">!r}</span><span class="s2"> &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;(lang=</span><span class="si">{</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">!r}</span><span class="s2">) for </span><span class="si">{</span><span class="n">entity_iri</span><span class="si">}</span><span class="s2">, &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;already used by </span><span class="si">{</span><span class="n">duplicate_iri</span><span class="si">}</span><span class="s2">.&quot;</span>
+                            <span class="p">)</span>
+                    <span class="n">seen</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity</span>
+
+            <span class="k">for</span> <span class="n">imp_onto</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">imp_onto</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited_onto</span><span class="p">[</span><span class="n">label</span><span class="p">]:</span>
+                    <span class="n">visited_onto</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">imp_onto</span><span class="p">)</span>
+                    <span class="n">checker</span><span class="p">(</span><span class="n">imp_onto</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+            <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="n">visited_onto</span> <span class="o">=</span> <span class="p">{</span><span class="n">label</span><span class="p">:</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">}}</span>
+            <span class="n">checker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">test_number_of_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all entities have one and only one prefLabel.</span>
 
@@ -4420,6 +4526,118 @@ upper case letter.</p>
                             <span class="n">label</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">(),</span>
                             <span class="s1">&#39;what follows &quot;is&quot; must be &quot;uppercase&quot;&#39;</span><span class="p">,</span>
                         <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="emmopy.emmocheck.TestSyntacticEMMOConventions.test_unique_labels" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">test_unique_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#emmopy.emmocheck.TestSyntacticEMMOConventions.test_unique_labels" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Check that configured labels are unique within each namespace.</p>
+<p>This also checks imported ontologies. Modules/namespaces can be
+skipped via the <code>test_unique_labels.skipmodules</code> configuration
+in the YAML file.</p>
+<p>Configurations:
+- labels: annotation properties to validate. Default: <code>["prefLabel"]</code>.
+- exceptions: full names of entities to ignore.
+- skipmodules: namespaces to ignore.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_unique_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that configured labels are unique within each namespace.</span>
+
+<span class="sd">    This also checks imported ontologies. Modules/namespaces can be</span>
+<span class="sd">    skipped via the `test_unique_labels.skipmodules` configuration</span>
+<span class="sd">    in the YAML file.</span>
+
+<span class="sd">    Configurations:</span>
+<span class="sd">    - labels: annotation properties to validate. Default: `[&quot;prefLabel&quot;]`.</span>
+<span class="sd">    - exceptions: full names of entities to ignore.</span>
+<span class="sd">    - skipmodules: namespaces to ignore.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">testname</span> <span class="o">=</span> <span class="s2">&quot;test_unique_labels&quot;</span>
+    <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">testname</span><span class="si">}</span><span class="s2">.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">testname</span><span class="si">}</span><span class="s2">.labels&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">,))</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">(</span><span class="n">labels</span><span class="p">,)</span>
+
+    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">label</span>
+            <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ontology has no </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">checker</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+
+        <span class="n">seen</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(),</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">(),</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">data_properties</span><span class="p">(),</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">individuals</span><span class="p">(),</span>
+            <span class="n">onto</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+
+            <span class="n">r</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">exceptions</span> <span class="ow">or</span> <span class="n">skipmodule</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;test_unique_labels&quot;</span><span class="p">,</span> <span class="n">entity</span>
+            <span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="k">for</span> <span class="n">lab</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">lab</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lab</span><span class="p">,</span> <span class="s2">&quot;lang&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+                <span class="n">duplicate_entity</span> <span class="o">=</span> <span class="n">seen</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">duplicate_iri</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">duplicate_entity</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">entity_iri</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span>
+                    <span class="n">label_property</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+                    <span class="n">label_value</span><span class="o">=</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">lang</span><span class="o">=</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">entity</span><span class="o">=</span><span class="n">entity_iri</span><span class="p">,</span>
+                    <span class="n">duplicate_with</span><span class="o">=</span><span class="n">duplicate_iri</span><span class="p">,</span>
+                <span class="p">):</span>
+                    <span class="n">same_iri</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">duplicate_iri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                        <span class="ow">and</span> <span class="n">duplicate_iri</span> <span class="o">==</span> <span class="n">entity_iri</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">duplicate_entity</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">same_iri</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Duplicate </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> within namespace &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">onto</span><span class="o">.</span><span class="n">base_iri</span><span class="si">!r}</span><span class="s2">: </span><span class="si">{</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">!r}</span><span class="s2"> &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;(lang=</span><span class="si">{</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">!r}</span><span class="s2">) for </span><span class="si">{</span><span class="n">entity_iri</span><span class="si">}</span><span class="s2">, &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;already used by </span><span class="si">{</span><span class="n">duplicate_iri</span><span class="si">}</span><span class="s2">.&quot;</span>
+                        <span class="p">)</span>
+                <span class="n">seen</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity</span>
+
+        <span class="k">for</span> <span class="n">imp_onto</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">imp_onto</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited_onto</span><span class="p">[</span><span class="n">label</span><span class="p">]:</span>
+                <span class="n">visited_onto</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">imp_onto</span><span class="p">)</span>
+                <span class="n">checker</span><span class="p">(</span><span class="n">imp_onto</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+        <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">visited_onto</span> <span class="o">=</span> <span class="p">{</span><span class="n">label</span><span class="p">:</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">}}</span>
+        <span class="n">checker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
