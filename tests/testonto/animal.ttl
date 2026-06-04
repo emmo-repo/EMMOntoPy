@@ -28,6 +28,12 @@ skos:prefLabel rdf:type owl:AnnotationProperty .
            skos:prefLabel "latinName" ;
            rdfs:subPropertyOf rdf:comment .
 
+###  https://w3id.org/emmo/domain/animal#scientificName
+:scientificName rdf:type owl:AnnotationProperty ;
+           skos:prefLabel "latinName" ;
+           owl:deprecated "true"^^xsd:boolean ;
+           rdfs:subPropertyOf rdf:comment .
+
 
 #################################################################
 #    Object Properties
@@ -45,7 +51,8 @@ skos:prefLabel rdf:type owl:AnnotationProperty .
 #################################################################
 
 ###  https://w3id.org/emmo/domain/animal#hasLegs
-:hasLegs rdf:type owl:DatatypeProperty ;
+:hasLegs rdf:type owl:DatatypeProperty ,
+                  owl:FunctionalProperty ;
          rdfs:domain :Animal ;
          rdfs:range xsd:int ;
          rdf:comment "Number of legs."@en ;
