@@ -123,6 +123,10 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
             for entity in entities:
                 if entity in visited:
                     continue
+                if hasattr(entity, "deprecated") and bool(
+                    entity.deprecated.first()
+                ):
+                    continue
                 visited.add(entity)
 
                 r = repr(entity)
@@ -168,8 +172,6 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
 
     def test_number_of_labels(self):
         """Check that all entities have one and only one prefLabel.
-
-        Use "altLabel" for synonyms.
 
         The only allowed exception is entities who's representation
         starts with "owl.".
