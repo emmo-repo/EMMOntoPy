@@ -498,7 +498,11 @@ excel2onto -o new_ontology.ttl new_ontology.xlsx
 `equivalentTo` is currently not supported.
 
 ## ontokit
-ontokit is currently under heavy development and might be subject to change on short notice.
+
+`ontokit` is a tool for setting up workflows for testing and documenting ontologies
+from the command line.
+
+`ontokit` is currently under heavy development and might be subject to change on short notice.
 
 It is included in master so that useful functionalities might be used, but please keep in mind that
 changes that are not completely backwards compatible may occur.
@@ -506,6 +510,10 @@ changes that are not completely backwards compatible may occur.
 Ontokit funcionality can be found with:
 
 ```console
-ontokit --help # will give info on avilable subcommands
-ontokit subcommand --help " info on the chosen subcommand
+ontokit --help # will give info on available subcommands
+ontokit subcommand --help # info on the chosen subcommand
 ```
+
+For local testing of ontology reference-document generation (used by
+`ontodoc_rst` / `ontokit`), see the focused pytest command in
+[developer testing](developers/testing.md#targeted-checks-for-ontology-reference-docs).
