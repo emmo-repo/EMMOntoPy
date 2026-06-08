@@ -1,36 +1,105 @@
 td.element-table-key, td.element-table-value {
     vertical-align: top;
+    padding: 0.16rem 0.55rem;
+    border-top: 1px solid #dde2e8;
+    line-height: 1.25;
 }
 
 td.element-table-key {
     text-align: right;
-    padding-right: 2mm;
+    padding-right: 0.9rem;
     width: 20%;
+    color: #1f2933;
 }
 
 span.element-table-key {
-    font-weight: bold;
+    font-weight: 600;
 }
 
 table.element-table {
     width: 100%;
     text-align: left;
+    border: 1px solid #cfd4db;
+    border-radius: 0.25rem;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.06);
 }
 
 html table.element-table tr:nth-child(odd) td{
-   background-color: Gainsboro;
+    background-color: #fafbfc;
 }
 
 table.element-table tr:nth-child(even) td{
-   background-color: GhostWhite;
+    background-color: #f1f3f5;
+}
+
+th.element-table-annotations,
+th.element-table-formal-description {
+    background-color: #d9dfe6;
+    color: #111827;
+    text-align: left;
+    border-top: 2px solid #c0c8d2;
+    border-bottom: 1px solid #cfd4db;
+    border-left: none;
+    padding: 0.28rem 0.55rem 0.16rem;
+    font-weight: 700;
+    font-size: 0.84rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+table.element-table a {
+    color: #0b5ea8;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+}
+
+table.element-table a:hover {
+    color: #084f8d;
+}
+
+table.element-table a:focus-visible {
+    outline: 2px solid #1f6feb;
+    outline-offset: 2px;
+    border-radius: 2px;
 }
 
 html[data-theme=dark] table.element-table tr:nth-child(odd) td{
-   background-color: black;
+    background-color: #111827;
 }
 
 html[data-theme=dark] table.element-table tr:nth-child(even) td{
-   background-color: black;
+    background-color: #0f172a;
+}
+
+html[data-theme=dark] td.element-table-key,
+html[data-theme=dark] td.element-table-value {
+    border-top: 1px solid #273244;
+}
+
+html[data-theme=dark] table.element-table {
+    border: 1px solid #334155;
+    background-color: #0b1220;
+    box-shadow: none;
+}
+
+html[data-theme=dark] th.element-table-annotations,
+html[data-theme=dark] th.element-table-formal-description {
+    background-color: #445264;
+    color: #eaf0f7;
+    border-top: 2px solid #50627a;
+    border-bottom: 1px solid #334155;
+    border-left: none;
+    padding: 0.28rem 0.55rem 0.16rem;
+}
+
+html[data-theme=dark] table.element-table a {
+    color: #8ec5ff;
+}
+
+html[data-theme=dark] table.element-table a:hover {
+    color: #b7d8ff;
 }
 body img, body svg {
     background-color: transparent;
