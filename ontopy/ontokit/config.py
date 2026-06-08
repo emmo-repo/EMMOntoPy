@@ -9,9 +9,12 @@ REQUIRED_CONFIG_KEYS = (
     "ONTOLOGY_NAME",
     "ONTOLOGY_PREFIX",
     "ONTOLOGY_IRI",
-    "GITHUB_REPOSITORY",
+    "GIT_REPOSITORY",
+    "GIT_BASE_URL",
     "BUILD_DIR",
 )
+
+LEGACY_REPOSITORY_KEY = "GITHUB_REPOSITORY"
 
 REFERENCE_INDICES_COMMENT = """\
 # Optional: select subsections for the primary reference index.
@@ -84,11 +87,19 @@ def update_config(path, config, defaults):
     were added.
     """
     added = []
+    # Normalise legacy key to new neutral key when possible.
+    if (
+        config.get("GIT_REPOSITORY") is None
+        or str(config.get("GIT_REPOSITORY", "")).strip() == ""
+    ) and str(config.get(LEGACY_REPOSITORY_KEY, "")).strip():
+        config["GIT_REPOSITORY"] = _as_string(config.get(LEGACY_REPOSITORY_KEY))
+
     for key in REQUIRED_CONFIG_KEYS:
         value = config.get(key)
         if value is None or str(value).strip() == "":
             config[key] = _as_string(defaults.get(key, ""))
             added.append(key)
+
     if added:
         _write_config_with_reference_indices_comment(path, config)
     return config, added
@@ -96,6 +107,22 @@ def update_config(path, config, defaults):
 
 def missing_required_variables(config):
     """Return required keys that are missing or empty in `config`."""
+    # Accept legacy repository key as fallback for migration compatibility.
+    if (
+        config.get("GIT_REPOSITORY") is None
+        or str(config.get("GIT_REPOSITORY", "")).strip() == ""
+    ) and str(config.get(LEGACY_REPOSITORY_KEY, "")).strip():
+        config = dict(config)
+        config["GIT_REPOSITORY"] = config[LEGACY_REPOSITORY_KEY]
+
+    # Legacy configs may not define this key.
+    if (
+        config.get("GIT_BASE_URL") is None
+        or str(config.get("GIT_BASE_URL", "")).strip() == ""
+    ):
+        config = dict(config)
+        config["GIT_BASE_URL"] = "github.com"
+
     missing = []
     for key in REQUIRED_CONFIG_KEYS:
         value = config.get(key)
@@ -116,3 +143,8 @@ def print_config(config, stream=None):
 
     for key in REQUIRED_CONFIG_KEYS:
         emit(f"  {key}: {config.get(key, '')}")
+    if LEGACY_REPOSITORY_KEY in config:
+        emit(
+            "  "
+            f"{LEGACY_REPOSITORY_KEY}: {config.get(LEGACY_REPOSITORY_KEY, '')}"
+        )
