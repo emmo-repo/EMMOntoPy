@@ -34,6 +34,14 @@ def main(argv: list = None):
     parser.add_argument("input", help="IRI/file to OWL source.")
     parser.add_argument("output", help="Output file name.")
     parser.add_argument(
+        "--debug",
+        action="store_true",
+        help=(
+            "Fail fast on recoverable conversion errors. "
+            "By default, copy-annotation errors emit warnings and continue."
+        ),
+    )
+    parser.add_argument(
         "--input-format",
         "-f",
         help=(
@@ -339,7 +347,14 @@ def main(argv: list = None):
 
         for cpy in args.copy_annotation:
             src, dst = cpy.split("-->", 1)
-            copy_annotation(onto, src.strip(), dst.strip())
+            try:
+                copy_annotation(onto, src.strip(), dst.strip())
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                if args.debug:
+                    raise
+                warnings.warn(
+                    "Skipping failed --copy-annotation " f"'{cpy}': {exc}"
+                )
 
         if args.rename_ontology:
             sep = args.rename_ontology[0]

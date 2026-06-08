@@ -19,6 +19,8 @@ SAMPLE_DEFAULTS = {
     "ONTOLOGY_NAME": "MyOntology",
     "ONTOLOGY_PREFIX": "myonto",
     "ONTOLOGY_IRI": "https://example.com/myonto#",
+    "GIT_REPOSITORY": "myorg/myrepo",
+    "GIT_BASE_URL": "github.com",
     "GITHUB_REPOSITORY": "myorg/myrepo",
     "BUILD_DIR": "build",
 }
@@ -40,6 +42,7 @@ def test_create_config(tmp_path):
     loaded = load_config(config_file)
     for key in REQUIRED_CONFIG_KEYS:
         assert loaded[key] == SAMPLE_DEFAULTS[key]
+    assert "GITHUB_REPOSITORY" not in loaded
 
 
 def test_update_config_fills_missing_key(tmp_path):
@@ -62,3 +65,14 @@ def test_update_config_does_not_overwrite_existing_key(tmp_path):
     )
     assert updated["ONTOLOGY_NAME"] == "OriginalName"
     assert "ONTOLOGY_NAME" not in added
+
+
+def test_missing_required_variables_accepts_legacy_repository_key():
+    config = {
+        "ONTOLOGY_NAME": "MyOntology",
+        "ONTOLOGY_PREFIX": "myonto",
+        "ONTOLOGY_IRI": "https://example.com/myonto#",
+        "GITHUB_REPOSITORY": "myorg/myrepo",
+        "BUILD_DIR": "build",
+    }
+    assert missing_required_variables(config) == []
