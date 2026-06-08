@@ -152,3 +152,38 @@ def test_run() -> None:
     assert "owl:imports" not in ani
     birds = (outdir / "test_ontoconvert7" / "animal" / "birds.ttl").read_text()
     assert "owl:imports" not in birds
+
+
+def test_copy_annotation_error_warns_and_continues() -> None:
+    """Invalid copy-annotation destination should warn and continue by default."""
+    from ontopy.testutils import ontodir, outdir, get_tool_module
+
+    ontoconvert = get_tool_module("ontoconvert")
+    outfile = outdir / "test_ontoconvert_copy_annotation_warn.ttl"
+    ontoconvert.main(
+        [
+            "--copy-annotation=prefLabel-->not_a_full_iri",
+            str(ontodir / "testonto.ttl"),
+            str(outfile),
+        ]
+    )
+    assert outfile.exists()
+
+
+def test_copy_annotation_error_fails_in_debug_mode() -> None:
+    """Invalid copy-annotation destination should fail when --debug is set."""
+    import pytest
+
+    from ontopy.testutils import ontodir, outdir, get_tool_module
+
+    ontoconvert = get_tool_module("ontoconvert")
+    outfile = outdir / "test_ontoconvert_copy_annotation_debug.ttl"
+    with pytest.raises(ValueError):
+        ontoconvert.main(
+            [
+                "--debug",
+                "--copy-annotation=prefLabel-->not_a_full_iri",
+                str(ontodir / "testonto.ttl"),
+                str(outfile),
+            ]
+        )
