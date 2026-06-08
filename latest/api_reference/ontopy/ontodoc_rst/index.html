@@ -4200,12 +4200,15 @@ Implies <code>imported=True</code>.</p></td>
 
         <span class="n">outpath</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">write_conf_template</span><span class="p">(</span>  <span class="c1">## pylint: disable=too-many-locals,too-many-statements</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_conf_template</span><span class="p">(</span>
+        <span class="c1"># pylint: disable=too-many-arguments, too-many-locals</span>
+        <span class="c1"># pylint: disable=too-many-positional-arguments</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">conffile</span><span class="o">=</span><span class="s2">&quot;conf.py&quot;</span><span class="p">,</span>
         <span class="n">docfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">github_repository</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">git_base_url</span><span class="o">=</span><span class="s2">&quot;github.com&quot;</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write basic template sphinx conf.py file to disk.</span>
 
@@ -4216,6 +4219,7 @@ Implies <code>imported=True</code>.</p></td>
 <span class="sd">            overwrite: Whether to overwrite an existing file.</span>
 <span class="sd">            github_repository: Optional GitHub repository in the form</span>
 <span class="sd">                &quot;OWNER/REPO&quot;.</span>
+<span class="sd">            git_base_url: Base host (or URL) for the git server.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="n">md</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_documentations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">module_documentations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -4234,12 +4238,23 @@ Implies <code>imported=True</code>.</p></td>
             <span class="k">else</span> <span class="s2">&quot;&lt;AUTHOR&gt;&quot;</span>
         <span class="p">)</span>
         <span class="n">copyright</span> <span class="o">=</span> <span class="n">license</span> <span class="k">if</span> <span class="n">license</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">git_base_url</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">git_base_url</span> <span class="k">else</span> <span class="s2">&quot;github.com&quot;</span>
+        <span class="k">if</span> <span class="n">base</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">base</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">):</span>
+            <span class="n">base_url</span> <span class="o">=</span> <span class="n">base</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">base_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">base</span><span class="si">}</span><span class="s2">&quot;</span>
+
         <span class="k">if</span> <span class="n">github_repository</span> <span class="ow">and</span> <span class="s2">&quot;/&quot;</span> <span class="ow">in</span> <span class="n">github_repository</span><span class="p">:</span>
-            <span class="n">owner</span><span class="p">,</span> <span class="n">repo</span> <span class="o">=</span> <span class="n">github_repository</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">github_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://github.com/</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repo</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">widoco_url</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s2">.github.io/</span><span class="si">{</span><span class="n">repo</span><span class="si">}</span><span class="s2">/widoco/index-en.html&quot;</span>
-            <span class="p">)</span>
+            <span class="n">github_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">github_repository</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">base</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;github.com&quot;</span><span class="p">):</span>
+                <span class="n">owner</span><span class="p">,</span> <span class="n">repo</span> <span class="o">=</span> <span class="n">github_repository</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">widoco_url</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s2">.github.io/</span><span class="si">{</span><span class="n">repo</span><span class="si">}</span><span class="s2">/widoco/index-en.html&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">widoco_url</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">github_url</span><span class="si">}</span><span class="s2">/-/tree/gh-pages/widoco/index-en.html&quot;</span>
+                <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">github_url</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;https://github.com/&quot;</span>
@@ -4959,7 +4974,7 @@ defaulting to the primary reference section.</p>
 
 
 <h3 id="ontopy.ontodoc_rst.OntologyDocumentation.write_conf_template" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">write_conf_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conffile</span><span class="o">=</span><span class="s1">&#39;conf.py&#39;</span><span class="p">,</span> <span class="n">docfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">github_repository</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">write_conf_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conffile</span><span class="o">=</span><span class="s1">&#39;conf.py&#39;</span><span class="p">,</span> <span class="n">docfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">github_repository</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">git_base_url</span><span class="o">=</span><span class="s1">&#39;github.com&#39;</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.ontodoc_rst.OntologyDocumentation.write_conf_template" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -5005,16 +5020,25 @@ the name of the top ontology will be used.</p></td>
 "OWNER/REPO".</p></td>
         <td><code>None</code></td>
       </tr>
+      <tr>
+        <td><code>git_base_url</code></td>
+        <td></td>
+        <td><p>Base host (or URL) for the git server.</p></td>
+        <td><code>&#39;github.com&#39;</code></td>
+      </tr>
   </tbody>
 </table>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontodoc_rst.py</code></summary>
-          <div class="highlight"><pre><span></span><code>    <span class="k">def</span><span class="w"> </span><span class="nf">write_conf_template</span><span class="p">(</span>  <span class="c1">## pylint: disable=too-many-locals,too-many-statements</span>
+          <div class="highlight"><pre><span></span><code>    <span class="k">def</span><span class="w"> </span><span class="nf">write_conf_template</span><span class="p">(</span>
+        <span class="c1"># pylint: disable=too-many-arguments, too-many-locals</span>
+        <span class="c1"># pylint: disable=too-many-positional-arguments</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">conffile</span><span class="o">=</span><span class="s2">&quot;conf.py&quot;</span><span class="p">,</span>
         <span class="n">docfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">github_repository</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">git_base_url</span><span class="o">=</span><span class="s2">&quot;github.com&quot;</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write basic template sphinx conf.py file to disk.</span>
 
@@ -5025,6 +5049,7 @@ the name of the top ontology will be used.</p></td>
 <span class="sd">            overwrite: Whether to overwrite an existing file.</span>
 <span class="sd">            github_repository: Optional GitHub repository in the form</span>
 <span class="sd">                &quot;OWNER/REPO&quot;.</span>
+<span class="sd">            git_base_url: Base host (or URL) for the git server.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="n">md</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_documentations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">module_documentations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -5043,12 +5068,23 @@ the name of the top ontology will be used.</p></td>
             <span class="k">else</span> <span class="s2">&quot;&lt;AUTHOR&gt;&quot;</span>
         <span class="p">)</span>
         <span class="n">copyright</span> <span class="o">=</span> <span class="n">license</span> <span class="k">if</span> <span class="n">license</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">git_base_url</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">git_base_url</span> <span class="k">else</span> <span class="s2">&quot;github.com&quot;</span>
+        <span class="k">if</span> <span class="n">base</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">base</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">):</span>
+            <span class="n">base_url</span> <span class="o">=</span> <span class="n">base</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">base_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">base</span><span class="si">}</span><span class="s2">&quot;</span>
+
         <span class="k">if</span> <span class="n">github_repository</span> <span class="ow">and</span> <span class="s2">&quot;/&quot;</span> <span class="ow">in</span> <span class="n">github_repository</span><span class="p">:</span>
-            <span class="n">owner</span><span class="p">,</span> <span class="n">repo</span> <span class="o">=</span> <span class="n">github_repository</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">github_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://github.com/</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repo</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">widoco_url</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s2">.github.io/</span><span class="si">{</span><span class="n">repo</span><span class="si">}</span><span class="s2">/widoco/index-en.html&quot;</span>
-            <span class="p">)</span>
+            <span class="n">github_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">github_repository</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">base</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;github.com&quot;</span><span class="p">):</span>
+                <span class="n">owner</span><span class="p">,</span> <span class="n">repo</span> <span class="o">=</span> <span class="n">github_repository</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">widoco_url</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s2">.github.io/</span><span class="si">{</span><span class="n">repo</span><span class="si">}</span><span class="s2">/widoco/index-en.html&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">widoco_url</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">github_url</span><span class="si">}</span><span class="s2">/-/tree/gh-pages/widoco/index-en.html&quot;</span>
+                <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">github_url</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;https://github.com/&quot;</span>

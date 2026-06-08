@@ -1983,7 +1983,20 @@
         <span class="p">)</span>
 
     <span class="n">config</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span>
-    <span class="n">missing</span> <span class="o">=</span> <span class="n">missing_required_variables</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    <span class="n">git_repository</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;GITHUB_REPOSITORY&quot;</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">git_repository</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">):</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">git_repository</span>
+
+    <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">key</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">missing_required_variables</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">&quot;GITHUB_REPOSITORY&quot;</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">git_repository</span> <span class="ow">and</span> <span class="s2">&quot;GIT_REPOSITORY&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="n">missing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
         <span class="n">required</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -1993,7 +2006,7 @@
         <span class="p">)</span>
 
     <span class="n">ontology_name</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ONTOLOGY_NAME&quot;</span><span class="p">)</span>
-    <span class="n">github_repository</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GITHUB_REPOSITORY&quot;</span><span class="p">)</span>
+    <span class="n">git_base_url</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GIT_BASE_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;github.com&quot;</span><span class="p">)</span>
     <span class="n">build_dir</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;BUILD_DIR&quot;</span><span class="p">,</span> <span class="s2">&quot;build&quot;</span><span class="p">)</span>
     <span class="n">reference_indices</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REFERENCE_INDICES&quot;</span><span class="p">,</span> <span class="p">[])</span>
     <span class="n">primary_subsections</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REFERENCE_SUBSECTIONS&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">)</span>
@@ -2063,7 +2076,8 @@
         <span class="n">conffile</span><span class="o">=</span><span class="n">conffile</span><span class="p">,</span>
         <span class="n">docfile</span><span class="o">=</span><span class="n">docfile</span><span class="p">,</span>
         <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">github_repository</span><span class="o">=</span><span class="n">github_repository</span><span class="p">,</span>
+        <span class="n">github_repository</span><span class="o">=</span><span class="n">git_repository</span><span class="p">,</span>
+        <span class="n">git_base_url</span><span class="o">=</span><span class="n">git_base_url</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="n">build_dir</span> <span class="o">/</span> <span class="s2">&quot;_static&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 

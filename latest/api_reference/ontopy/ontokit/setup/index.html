@@ -1872,7 +1872,8 @@
     <span class="n">parser</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
         <span class="s2">&quot;setup&quot;</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Set up a repository with various github workflows, including &quot;</span>
+            <span class="s2">&quot;Set up a repository with CI/CD workflows (GitHub by default), &quot;</span>
+            <span class="s2">&quot;including &quot;</span>
             <span class="s2">&quot;publishing of squashed and inferred ontologies, generation of &quot;</span>
             <span class="s2">&quot;documentation, releases, etc...&quot;</span>
         <span class="p">),</span>
@@ -1916,6 +1917,16 @@
         <span class="p">),</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--ci-provider&quot;</span><span class="p">,</span>
+        <span class="n">choices</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;github&quot;</span><span class="p">,</span> <span class="s2">&quot;gitlab&quot;</span><span class="p">),</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;github&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;CI provider to scaffold workflows for [github]. &quot;</span>
+        <span class="s2">&quot;Note: ontokit setup is primarily designed for GitHub &quot;</span>
+        <span class="s2">&quot;and some features may not work as expected with GitLab. &quot;</span>
+        <span class="s2">&quot;Users are free to further develop the generated CI &quot;</span>
+        <span class="s2">&quot;configuration to suit their needs.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--github-pages-branch&quot;</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="s2">&quot;gh-pages&quot;</span><span class="p">,</span>
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;NAME&quot;</span><span class="p">,</span>
@@ -1932,8 +1943,16 @@
         <span class="s2">&quot;-g&quot;</span><span class="p">,</span>
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;OWNER/REPO&quot;</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;GitHub repository in the form OWNER/REPO. &quot;</span>
+            <span class="s2">&quot;Repository in the form OWNER/REPO or GROUP/SUBGROUP/REPO. &quot;</span>
             <span class="s2">&quot;If omitted, inferred from --remote.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--git-base-url&quot;</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;HOST&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Git server base host (for example github.com, gitlab.com, &quot;</span>
+            <span class="s2">&quot;git.company.com). If omitted, inferred from --remote.&quot;</span>
         <span class="p">),</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
@@ -1972,27 +1991,40 @@
 
     <span class="n">thisdir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span>
     <span class="n">srcdir</span> <span class="o">=</span> <span class="n">thisdir</span> <span class="o">/</span> <span class="s2">&quot;setuptemplates&quot;</span>
+    <span class="n">ci_provider</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">ci_provider</span>
 
     <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
     <span class="n">github_dir</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">&quot;.github&quot;</span>
-    <span class="n">workflows_dir</span> <span class="o">=</span> <span class="n">github_dir</span> <span class="o">/</span> <span class="s2">&quot;workflows&quot;</span>
-    <span class="n">scripts_dir</span> <span class="o">=</span> <span class="n">github_dir</span> <span class="o">/</span> <span class="s2">&quot;scripts&quot;</span>
-    <span class="n">workflows_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mo">0o755</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">gitlab_dir</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">&quot;.gitlab&quot;</span>
+
+    <span class="k">if</span> <span class="n">ci_provider</span> <span class="o">==</span> <span class="s2">&quot;github&quot;</span><span class="p">:</span>
+        <span class="n">workflows_dir</span> <span class="o">=</span> <span class="n">github_dir</span> <span class="o">/</span> <span class="s2">&quot;workflows&quot;</span>
+        <span class="n">scripts_dir</span> <span class="o">=</span> <span class="n">github_dir</span> <span class="o">/</span> <span class="s2">&quot;scripts&quot;</span>
+        <span class="n">workflows_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mo">0o755</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ci_root_dir</span> <span class="o">=</span> <span class="n">github_dir</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">scripts_dir</span> <span class="o">=</span> <span class="n">gitlab_dir</span> <span class="o">/</span> <span class="s2">&quot;scripts&quot;</span>
+        <span class="n">gitlab_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mo">0o755</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ci_root_dir</span> <span class="o">=</span> <span class="n">gitlab_dir</span>
 
     <span class="c1"># TODO: infer ONTOLOGY_PREFIX and ONTOLOGY_IRI</span>
     <span class="n">ontology_name</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">ontology_name</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">ontology_name</span> <span class="k">else</span> <span class="n">root</span><span class="o">.</span><span class="n">name</span>
     <span class="n">ontology_prefix</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">ontology_prefix</span>
     <span class="n">ontology_iri</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">ontology_iri</span>
-    <span class="n">github_repository</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">github_repository</span> <span class="ow">or</span> <span class="n">_infer_github_repository</span><span class="p">(</span>
-        <span class="n">root</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">remote</span>
+    <span class="n">git_repository</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">github_repository</span> <span class="ow">or</span> <span class="n">_infer_repository</span><span class="p">(</span>
+        <span class="n">root</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="n">ci_provider</span>
     <span class="p">)</span>
+    <span class="n">git_base_url</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">git_base_url</span> <span class="ow">or</span> <span class="n">_infer_git_base_url</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">remote</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">git_base_url</span><span class="p">:</span>
+        <span class="n">git_base_url</span> <span class="o">=</span> <span class="s2">&quot;github.com&quot;</span> <span class="k">if</span> <span class="n">ci_provider</span> <span class="o">==</span> <span class="s2">&quot;github&quot;</span> <span class="k">else</span> <span class="s2">&quot;gitlab.com&quot;</span>
 
     <span class="n">config_path</span> <span class="o">=</span> <span class="n">get_config_path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
     <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;ONTOLOGY_NAME&quot;</span><span class="p">:</span> <span class="n">ontology_name</span><span class="p">,</span>
         <span class="s2">&quot;ONTOLOGY_PREFIX&quot;</span><span class="p">:</span> <span class="n">ontology_prefix</span><span class="p">,</span>
         <span class="s2">&quot;ONTOLOGY_IRI&quot;</span><span class="p">:</span> <span class="n">ontology_iri</span><span class="p">,</span>
-        <span class="s2">&quot;GITHUB_REPOSITORY&quot;</span><span class="p">:</span> <span class="n">github_repository</span><span class="p">,</span>
+        <span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">:</span> <span class="n">git_repository</span><span class="p">,</span>
+        <span class="s2">&quot;GIT_BASE_URL&quot;</span><span class="p">:</span> <span class="n">git_base_url</span><span class="p">,</span>
         <span class="s2">&quot;BUILD_DIR&quot;</span><span class="p">:</span> <span class="s2">&quot;build&quot;</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="n">config_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
@@ -2022,27 +2054,33 @@
     <span class="n">ontology_name</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;ONTOLOGY_NAME&quot;</span><span class="p">]</span>
     <span class="n">ontology_prefix</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;ONTOLOGY_PREFIX&quot;</span><span class="p">]</span>
     <span class="n">ontology_iri</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;ONTOLOGY_IRI&quot;</span><span class="p">]</span>
-    <span class="n">github_repository</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;GITHUB_REPOSITORY&quot;</span><span class="p">]</span>
+    <span class="n">git_repository</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">ignore</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return file names to ignore when copying.&quot;&quot;&quot;</span>
         <span class="c1"># pylint: disable=unused-argument</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)]</span>
+        <span class="n">ignored</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">ci_provider</span> <span class="o">==</span> <span class="s2">&quot;gitlab&quot;</span> <span class="ow">and</span> <span class="n">Path</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="o">==</span> <span class="n">srcdir</span> <span class="o">/</span> <span class="s2">&quot;scripts&quot;</span><span class="p">:</span>
+            <span class="n">ignored</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;init_ghpages.sh&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ignored</span>
 
-    <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">srcdir</span> <span class="o">/</span> <span class="s2">&quot;emmocheck_conf.yml&quot;</span><span class="p">,</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">&quot;.github&quot;</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">srcdir</span> <span class="o">/</span> <span class="s2">&quot;emmocheck_conf.yml&quot;</span><span class="p">,</span> <span class="n">ci_root_dir</span><span class="p">)</span>
     <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span>
         <span class="n">srcdir</span> <span class="o">/</span> <span class="s2">&quot;scripts&quot;</span><span class="p">,</span>
-        <span class="n">root</span> <span class="o">/</span> <span class="s2">&quot;.github&quot;</span> <span class="o">/</span> <span class="s2">&quot;scripts&quot;</span><span class="p">,</span>
+        <span class="n">scripts_dir</span><span class="p">,</span>
         <span class="n">ignore</span><span class="o">=</span><span class="n">ignore</span><span class="p">,</span>
         <span class="n">dirs_exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">srcdir</span> <span class="o">/</span> <span class="s2">&quot;workflows&quot;</span> <span class="o">/</span> <span class="s2">&quot;*.yml&quot;</span><span class="p">)):</span>
-        <span class="n">outfile</span> <span class="o">=</span> <span class="n">workflows_dir</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">outfile</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ci_provider</span> <span class="o">==</span> <span class="s2">&quot;github&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">srcdir</span> <span class="o">/</span> <span class="s2">&quot;workflows&quot;</span> <span class="o">/</span> <span class="s2">&quot;*.yml&quot;</span><span class="p">)):</span>
+            <span class="n">outfile</span> <span class="o">=</span> <span class="n">workflows_dir</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">outfile</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">srcdir</span> <span class="o">/</span> <span class="s2">&quot;gitlab-ci.yml&quot;</span><span class="p">,</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">&quot;.gitlab-ci.yml&quot;</span><span class="p">)</span>
 
     <span class="c1"># Initialise github pages branch</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">no_init</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">ci_provider</span> <span class="o">==</span> <span class="s2">&quot;github&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">no_init</span><span class="p">:</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">scripts_dir</span> <span class="o">/</span> <span class="s2">&quot;init_ghpages.sh&quot;</span><span class="p">,</span>
             <span class="sa">f</span><span class="s2">&quot;--ghpages=</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">github_pages_branch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
