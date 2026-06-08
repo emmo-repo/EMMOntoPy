@@ -267,7 +267,7 @@ def test_unique_labels(tmp_path) -> None:
         status = run_emmocheck(args)
         assert status == expected_status
 
-    run_case("animal.ttl", 1)
+    run_case("animal.ttl", 0)
     # minischema does not have prefLabels, but labels
     run_case("minischema.ttl", 1)
     run_case("minischema.ttl", 0, labels=("label",))

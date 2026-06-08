@@ -18,8 +18,13 @@ from ontopy.ontokit.config import (
 )
 
 
-def _infer_github_repository(root, remote):
-    """Infer GitHub repository as 'owner/repo' from git remote URL."""
+def _infer_repository(root, remote, provider):
+    """Infer repository path from git remote URL.
+
+    Returns `owner/repo` for GitHub remotes and `group[/subgroup]/repo`
+    for GitLab remotes.
+    """
+    # pylint: disable=too-many-return-statements
     cmd = ["git", "-C", str(root), "remote", "get-url", remote]
     proc = subprocess.run(  # nosec
         cmd,
@@ -32,17 +37,56 @@ def _infer_github_repository(root, remote):
 
     remote_url = proc.stdout.strip()
     patterns = (
-        r"^git@github\.com:(?P<owner>[^/]+)/(?P<repo>[^/]+?)(?:\.git)?$",
-        r"^https://github\.com/(?P<owner>[^/]+)/(?P<repo>[^/]+?)(?:\.git)?/?$",
-        r"^ssh://git@github\.com/(?P<owner>[^/]+)/(?P<repo>[^/]+?)(?:\.git)?/?$",  # pylint: disable=line-too-long
+        r"^git@[^:]+:(?P<path>.+?)(?:\.git)?$",
+        r"^https://[^/]+/(?P<path>.+?)(?:\.git)?/?$",
+        r"^ssh://git@[^/]+/(?P<path>.+?)(?:\.git)?/?$",
+    )
+    path = None
+    for pattern in patterns:
+        match = re.match(pattern, remote_url)
+        if match:
+            path = match.group("path").strip("/")
+            break
+
+    if not path:
+        return None
+
+    segments = [segment for segment in path.split("/") if segment]
+    if provider == "github":
+        if len(segments) != 2:
+            return None
+        return "/".join(segments)
+
+    if provider == "gitlab":
+        if len(segments) < 2:
+            return None
+        return "/".join(segments)
+
+    return None
+
+
+def _infer_git_base_url(root, remote):
+    """Infer Git server host from git remote URL."""
+    cmd = ["git", "-C", str(root), "remote", "get-url", remote]
+    proc = subprocess.run(  # nosec
+        cmd,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        return None
+
+    remote_url = proc.stdout.strip()
+    patterns = (
+        r"^git@(?P<host>[^:]+):.+$",
+        r"^https?://(?P<host>[^/]+)/.+$",
+        r"^ssh://git@(?P<host>[^/]+)/.+$",
     )
     for pattern in patterns:
         match = re.match(pattern, remote_url)
         if match:
-            owner = match.group("owner")
-            repo = match.group("repo")
-            return f"{owner}/{repo}"
-
+            return match.group("host")
     return None
 
 
@@ -51,7 +95,8 @@ def setup_arguments(subparsers):
     parser = subparsers.add_parser(
         "setup",
         help=(
-            "Set up a repository with various github workflows, including "
+            "Set up a repository with CI/CD workflows (GitHub by default), "
+            "including "
             "publishing of squashed and inferred ontologies, generation of "
             "documentation, releases, etc..."
         ),
@@ -95,6 +140,16 @@ def setup_arguments(subparsers):
         ),
     )
     parser.add_argument(
+        "--ci-provider",
+        choices=("github", "gitlab"),
+        default="github",
+        help="CI provider to scaffold workflows for [github]. "
+        "Note: ontokit setup is primarily designed for GitHub "
+        "and some features may not work as expected with GitLab. "
+        "Users are free to further develop the generated CI "
+        "configuration to suit their needs.",
+    )
+    parser.add_argument(
         "--github-pages-branch",
         default="gh-pages",
         metavar="NAME",
@@ -111,8 +166,16 @@ def setup_arguments(subparsers):
         "-g",
         metavar="OWNER/REPO",
         help=(
-            "GitHub repository in the form OWNER/REPO. "
+            "Repository in the form OWNER/REPO or GROUP/SUBGROUP/REPO. "
             "If omitted, inferred from --remote."
+        ),
+    )
+    parser.add_argument(
+        "--git-base-url",
+        metavar="HOST",
+        help=(
+            "Git server base host (for example github.com, gitlab.com, "
+            "git.company.com). If omitted, inferred from --remote."
         ),
     )
     parser.add_argument(
@@ -129,27 +192,40 @@ def setup_subcommand(
 
     thisdir = Path(__file__).resolve().parent
     srcdir = thisdir / "setuptemplates"
+    ci_provider = args.ci_provider
 
     root = Path(args.root).resolve()
     github_dir = root / ".github"
-    workflows_dir = github_dir / "workflows"
-    scripts_dir = github_dir / "scripts"
-    workflows_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
+    gitlab_dir = root / ".gitlab"
+
+    if ci_provider == "github":
+        workflows_dir = github_dir / "workflows"
+        scripts_dir = github_dir / "scripts"
+        workflows_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
+        ci_root_dir = github_dir
+    else:
+        scripts_dir = gitlab_dir / "scripts"
+        gitlab_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
+        ci_root_dir = gitlab_dir
 
     # TODO: infer ONTOLOGY_PREFIX and ONTOLOGY_IRI
     ontology_name = args.ontology_name if args.ontology_name else root.name
     ontology_prefix = args.ontology_prefix
     ontology_iri = args.ontology_iri
-    github_repository = args.github_repository or _infer_github_repository(
-        root, args.remote
+    git_repository = args.github_repository or _infer_repository(
+        root, args.remote, ci_provider
     )
+    git_base_url = args.git_base_url or _infer_git_base_url(root, args.remote)
+    if not git_base_url:
+        git_base_url = "github.com" if ci_provider == "github" else "gitlab.com"
 
     config_path = get_config_path(root)
     defaults = {
         "ONTOLOGY_NAME": ontology_name,
         "ONTOLOGY_PREFIX": ontology_prefix,
         "ONTOLOGY_IRI": ontology_iri,
-        "GITHUB_REPOSITORY": github_repository,
+        "GIT_REPOSITORY": git_repository,
+        "GIT_BASE_URL": git_base_url,
         "BUILD_DIR": "build",
     }
     if config_path.exists():
@@ -179,27 +255,33 @@ def setup_subcommand(
     ontology_name = config["ONTOLOGY_NAME"]
     ontology_prefix = config["ONTOLOGY_PREFIX"]
     ontology_iri = config["ONTOLOGY_IRI"]
-    github_repository = config["GITHUB_REPOSITORY"]
+    git_repository = config["GIT_REPOSITORY"]
 
     def ignore(src, names):
         """Return file names to ignore when copying."""
         # pylint: disable=unused-argument
-        return [name for name in names if name.endswith("~")]
+        ignored = [name for name in names if name.endswith("~")]
+        if ci_provider == "gitlab" and Path(src) == srcdir / "scripts":
+            ignored.append("init_ghpages.sh")
+        return ignored
 
-    shutil.copy(srcdir / "emmocheck_conf.yml", root / ".github")
+    shutil.copy(srcdir / "emmocheck_conf.yml", ci_root_dir)
     shutil.copytree(
         srcdir / "scripts",
-        root / ".github" / "scripts",
+        scripts_dir,
         ignore=ignore,
         dirs_exist_ok=True,
     )
 
-    for fname in glob(str(srcdir / "workflows" / "*.yml")):
-        outfile = workflows_dir / Path(fname).name
-        shutil.copy(fname, outfile)
+    if ci_provider == "github":
+        for fname in glob(str(srcdir / "workflows" / "*.yml")):
+            outfile = workflows_dir / Path(fname).name
+            shutil.copy(fname, outfile)
+    else:
+        shutil.copy(srcdir / "gitlab-ci.yml", root / ".gitlab-ci.yml")
 
     # Initialise github pages branch
-    if not args.no_init:
+    if ci_provider == "github" and not args.no_init:
         args = [
             scripts_dir / "init_ghpages.sh",
             f"--ghpages={args.github_pages_branch}",
