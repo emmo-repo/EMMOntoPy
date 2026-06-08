@@ -3927,6 +3927,10 @@ TestSyntacticEMMOConventions        </code>
             <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
                     <span class="k">continue</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;deprecated&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span>
+                    <span class="n">entity</span><span class="o">.</span><span class="n">deprecated</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+                <span class="p">):</span>
+                    <span class="k">continue</span>
                 <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
 
                 <span class="n">r</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
@@ -3972,8 +3976,6 @@ TestSyntacticEMMOConventions        </code>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">test_number_of_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that all entities have one and only one prefLabel.</span>
-
-<span class="sd">        Use &quot;altLabel&quot; for synonyms.</span>
 
 <span class="sd">        The only allowed exception is entities who&#39;s representation</span>
 <span class="sd">        starts with &quot;owl.&quot;.</span>
@@ -4297,7 +4299,6 @@ start with upper case.</p>
     <div class="doc doc-contents ">
 
       <p>Check that all entities have one and only one prefLabel.</p>
-<p>Use "altLabel" for synonyms.</p>
 <p>The only allowed exception is entities who's representation
 starts with "owl.".</p>
 
@@ -4305,8 +4306,6 @@ starts with "owl.".</p>
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_number_of_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that all entities have one and only one prefLabel.</span>
-
-<span class="sd">    Use &quot;altLabel&quot; for synonyms.</span>
 
 <span class="sd">    The only allowed exception is entities who&#39;s representation</span>
 <span class="sd">    starts with &quot;owl.&quot;.</span>
@@ -4595,6 +4594,10 @@ in the YAML file.</p>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;deprecated&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span>
+                <span class="n">entity</span><span class="o">.</span><span class="n">deprecated</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+            <span class="p">):</span>
                 <span class="k">continue</span>
             <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
 
