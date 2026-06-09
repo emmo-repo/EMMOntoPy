@@ -8,7 +8,7 @@ animal = get_ontology(ontodir / "mammal.ttl").load()
 
 def test_find():
     """Test find() method."""
-    m1 = (animal.chasing, animal.prefLabel, "chasing")
+    m1 = (animal.chases, animal.prefLabel, "chases")
     m2 = (animal.Mouse, animal.prefLabel, "Mouse")
     # for domain in "ontology", "imported", "world":
     assert m1 not in animal.find("chas", domain="ontology")
@@ -57,11 +57,11 @@ def test__get_unabbreviated_triples():
     a = "https://w3id.org/emmo/domain/animal#"
     skos = "http://www.w3.org/2004/02/skos/core#"
 
-    assert list(
-        _get_unabbreviated_triples(animal, predicate=a + "chasing")
-    ) == [(m + "Tom", a + "chasing", m + "Jerry")]
+    assert list(_get_unabbreviated_triples(animal, predicate=a + "chases")) == [
+        (m + "Tom", a + "chases", m + "Jerry")
+    ]
     assert list(_get_unabbreviated_triples(animal, obj=m + "Jerry")) == [
-        (m + "Tom", a + "chasing", m + "Jerry")
+        (m + "Tom", a + "chases", m + "Jerry")
     ]
 
     triples = list(
@@ -79,7 +79,7 @@ def test__get_unabbreviated_triples():
     triples = list(
         _get_unabbreviated_triples(animal.world, predicate=skos + "prefLabel")
     )
-    assert len(triples) == 25
+    assert len(triples) == 26
 
     assert list(
         _get_unabbreviated_triples(
@@ -103,7 +103,7 @@ def test__has_unabbreviated_triple():
     skos = "http://www.w3.org/2004/02/skos/core#"
 
     assert _has_unabbreviated_triple(
-        animal, m + "Tom", a + "chasing", m + "Jerry"
+        animal, m + "Tom", a + "chases", m + "Jerry"
     )
     assert _has_unabbreviated_triple(
         animal, m + "Cat", skos + "prefLabel", "Cat"

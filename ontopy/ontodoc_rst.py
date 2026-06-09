@@ -546,13 +546,16 @@ class ModuleDocumentation:
                                 continue
 
                             add_keyvalue(
-                                "Equivalent To",
+                                "equivalentTo",
                                 asstring(
                                     r,
                                     link='<a href="{iri}">{label}</a>',
                                     ontology=self.ontology,
                                 ),
                             )
+                        if hasattr(entity, "inverse") and entity.inverse:
+                            print(entity, entity.inverse)
+                            add_keyvalue("inverseOf", entity.inverse)
                         # Add SubclassOf/SubPropertyOf/InstanceOf for direct parents
                         if isinstance(entity, owlready2.ThingClass):
                             add_keyvalue("subClassOf", parents)

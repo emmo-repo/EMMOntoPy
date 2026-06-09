@@ -39,11 +39,20 @@ skos:prefLabel rdf:type owl:AnnotationProperty .
 #    Object Properties
 #################################################################
 
-###  https://w3id.org/emmo/domain/animal#chasing
-:chasing rdf:type owl:ObjectProperty ;
+###  https://w3id.org/emmo/domain/animal#chases
+:chases rdf:type owl:ObjectProperty ;
          rdfs:domain :Animal ;
          rdfs:range :Animal ;
-         skos:prefLabel "chasing"@en .
+         owl:inverseOf :chasedBy ;
+         skos:prefLabel "chases"@en .
+
+###  https://w3id.org/emmo/domain/animal#chasedBy
+:chasedBy rdf:type owl:ObjectProperty ;
+         rdfs:domain :Animal ;
+         rdfs:range :Animal ;
+         owl:inverseOf :chases ;
+         skos:prefLabel "chasedBy"@en .
+
 
 
 #################################################################
