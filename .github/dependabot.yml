@@ -6,6 +6,10 @@ updates:
     interval: weekly
     day: monday
     time: "05:18"
+  # Use "widen" so Dependabot only relaxes the upper bound when a new release is
+  # compatible with the existing lower bound, instead of raising the lower bound
+  # (app-style "increase" behaviour). This is the correct setting for a library.
+  versioning-strategy: widen
   # Should be bigger than or equal to the total number of dependencies (currently 20)
   open-pull-requests-limit: 30
   target-branch: ci/dependabot-updates
