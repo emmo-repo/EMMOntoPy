@@ -854,6 +854,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#targeted-checks-for-ontology-reference-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Targeted checks for ontology reference docs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#tools" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1796,6 +1807,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#targeted-checks-for-ontology-reference-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Targeted checks for ontology reference docs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#tools" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1850,6 +1872,18 @@ It is a unit testing framework with a plugin system, sporting an extensive plugi
 <span class="go">...</span>
 </code></pre></div>
 <p>To understand what options you have, run <code>pytest --help</code>.</p>
+<h2 id="targeted-checks-for-ontology-reference-docs">Targeted checks for ontology reference docs<a class="headerlink" href="#targeted-checks-for-ontology-reference-docs" title="Permanent link">&para;</a></h2>
+<p>For local verification of index/reference generation used by
+<code>ontodoc_rst</code> and <code>ontokit</code>, run this focused test:</p>
+<div class="highlight"><pre><span></span><code><span class="go">pytest -rP tests/test_ontokit.py::test_animal_html_reference_doc</span>
+</code></pre></div>
+<p>Why this command is useful:</p>
+<ul>
+<li><code>-rP</code> shows captured output for passing tests.</li>
+<li>The test prints the generated local HTML path (<code>index.html</code>) so you can
+    open it in a browser and inspect the rendered reference docs.</li>
+<li>It validates both writing RST reference files and building HTML with Sphinx.</li>
+</ul>
 <h2 id="tools">Tools<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h2>
 <p>Several tools are used to maintain the package, keeping it secure, readable, and easing maintenance.</p>
 <h3 id="mypy">Mypy<a class="headerlink" href="#mypy" title="Permanent link">&para;</a></h3>

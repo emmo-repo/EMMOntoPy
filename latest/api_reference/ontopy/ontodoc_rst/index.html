@@ -3034,13 +3034,16 @@ should match.</p></td>
                                 <span class="k">continue</span>
 
                             <span class="n">add_keyvalue</span><span class="p">(</span>
-                                <span class="s2">&quot;Equivalent To&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;equivalentTo&quot;</span><span class="p">,</span>
                                 <span class="n">asstring</span><span class="p">(</span>
                                     <span class="n">r</span><span class="p">,</span>
                                     <span class="n">link</span><span class="o">=</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{iri}</span><span class="s1">&quot;&gt;</span><span class="si">{label}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="p">,</span>
                                     <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">,</span>
                                 <span class="p">),</span>
                             <span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;inverse&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">inverse</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">inverse</span><span class="p">)</span>
+                            <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;inverseOf&quot;</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">inverse</span><span class="p">)</span>
                         <span class="c1"># Add SubclassOf/SubPropertyOf/InstanceOf for direct parents</span>
                         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
                             <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;subClassOf&quot;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
@@ -3673,13 +3676,16 @@ documentation.</p></td>
                             <span class="k">continue</span>
 
                         <span class="n">add_keyvalue</span><span class="p">(</span>
-                            <span class="s2">&quot;Equivalent To&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;equivalentTo&quot;</span><span class="p">,</span>
                             <span class="n">asstring</span><span class="p">(</span>
                                 <span class="n">r</span><span class="p">,</span>
                                 <span class="n">link</span><span class="o">=</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{iri}</span><span class="s1">&quot;&gt;</span><span class="si">{label}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="p">,</span>
                                 <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">,</span>
                             <span class="p">),</span>
                         <span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;inverse&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">inverse</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">inverse</span><span class="p">)</span>
+                        <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;inverseOf&quot;</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">inverse</span><span class="p">)</span>
                     <span class="c1"># Add SubclassOf/SubPropertyOf/InstanceOf for direct parents</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
                         <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;subClassOf&quot;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>

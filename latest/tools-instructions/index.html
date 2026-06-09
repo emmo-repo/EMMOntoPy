@@ -2963,13 +2963,18 @@ This workaround only only supports FaCT++.  Hence, HermiT and Pellet are current
 <h3 id="bugs_1">Bugs<a class="headerlink" href="#bugs_1" title="Permanent link">&para;</a></h3>
 <p><code>equivalentTo</code> is currently not supported.</p>
 <h2 id="ontokit">ontokit<a class="headerlink" href="#ontokit" title="Permanent link">&para;</a></h2>
-<p>ontokit is currently under heavy development and might be subject to change on short notice.</p>
+<p><code>ontokit</code> is a tool for setting up workflows for testing and documenting ontologies
+from the command line.</p>
+<p><code>ontokit</code> is currently under heavy development and might be subject to change on short notice.</p>
 <p>It is included in master so that useful functionalities might be used, but please keep in mind that
 changes that are not completely backwards compatible may occur.</p>
 <p>Ontokit funcionality can be found with:</p>
-<div class="highlight"><pre><span></span><code><span class="go">ontokit --help # will give info on avilable subcommands</span>
-<span class="go">ontokit subcommand --help &quot; info on the chosen subcommand</span>
+<div class="highlight"><pre><span></span><code><span class="go">ontokit --help # will give info on available subcommands</span>
+<span class="go">ontokit subcommand --help  # info on the chosen subcommand</span>
 </code></pre></div>
+<p>For local testing of ontology reference-document generation (used by
+<code>ontodoc_rst</code> / <code>ontokit</code>), see the focused pytest command in
+<a href="../developers/testing/#targeted-checks-for-ontology-reference-docs">developer testing</a>.</p>
 
 
 
