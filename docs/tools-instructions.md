@@ -511,7 +511,7 @@ Ontokit funcionality can be found with:
 
 ```console
 ontokit --help # will give info on available subcommands
-ontokit subcommand --help # info on the chosen subcommand
+ontokit subcommand --help  # info on the chosen subcommand
 ```
 
 For local testing of ontology reference-document generation (used by
