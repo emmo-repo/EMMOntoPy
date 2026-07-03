@@ -28,22 +28,39 @@ skos:prefLabel rdf:type owl:AnnotationProperty .
            skos:prefLabel "latinName" ;
            rdfs:subPropertyOf rdf:comment .
 
+
 ###  https://w3id.org/emmo/domain/animal#typicalNumberOfLegs
 :typicalNumberOfLegs rdf:type owl:AnnotationProperty ;
            skos:prefLabel "typicalNumberOfLegs"@en ;
            rdfs:range xsd:string ;
            rdf:comment "Added as annotatino property to check that and annotation property written as an int renders validly in the generation of docs."@en .
 
+###  https://w3id.org/emmo/domain/animal#scientificName
+:scientificName rdf:type owl:AnnotationProperty ;
+           skos:prefLabel "latinName" ;
+           owl:deprecated "true"^^xsd:boolean ;
+           rdfs:subPropertyOf rdf:comment .
+
+
 
 #################################################################
 #    Object Properties
 #################################################################
 
-###  https://w3id.org/emmo/domain/animal#chasing
-:chasing rdf:type owl:ObjectProperty ;
+###  https://w3id.org/emmo/domain/animal#chases
+:chases rdf:type owl:ObjectProperty ;
          rdfs:domain :Animal ;
          rdfs:range :Animal ;
-         skos:prefLabel "chasing"@en .
+         owl:inverseOf :chasedBy ;
+         skos:prefLabel "chases"@en .
+
+###  https://w3id.org/emmo/domain/animal#chasedBy
+:chasedBy rdf:type owl:ObjectProperty ;
+         rdfs:domain :Animal ;
+         rdfs:range :Animal ;
+         owl:inverseOf :chases ;
+         skos:prefLabel "chasedBy"@en .
+
 
 
 #################################################################
@@ -51,7 +68,8 @@ skos:prefLabel rdf:type owl:AnnotationProperty .
 #################################################################
 
 ###  https://w3id.org/emmo/domain/animal#hasLegs
-:hasLegs rdf:type owl:DatatypeProperty ;
+:hasLegs rdf:type owl:DatatypeProperty ,
+                  owl:FunctionalProperty ;
          rdfs:domain :Animal ;
          rdfs:range xsd:int ;
          rdf:comment "Number of legs."@en ;

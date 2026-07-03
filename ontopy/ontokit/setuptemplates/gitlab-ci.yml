@@ -1,0 +1,172 @@
+stages:
+  - test
+  - deploy
+  - release
+
+ci_tests:
+  stage: test
+  image: python:3.11
+  script:
+    - |
+      if [ ! -f .ontokit_conf.yml ]; then
+        echo "Missing .ontokit_conf.yml" >&2
+        exit 1
+      fi
+
+      value=$(sed -n -E "s/^ONTOLOGY_NAME:[[:space:]]*(.*)$/\\1/p" .ontokit_conf.yml | head -n 1)
+      if [ -z "$value" ]; then
+        echo "Missing required key 'ONTOLOGY_NAME' in .ontokit_conf.yml" >&2
+        exit 1
+      fi
+      export ONTOLOGY_NAME="$value"
+    - pip install --upgrade pip
+    - pip install -U git+https://github.com/emmo-repo/EMMOntoPy.git@master
+    - emmocheck --configfile=.gitlab/emmocheck_conf.yml ${ONTOLOGY_NAME}.ttl
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+
+pages:
+  stage: deploy
+  image: python:3.14
+  script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends wget curl default-jre-headless
+    - rm -rf /var/lib/apt/lists/*
+    - |
+      if [ ! -f .ontokit_conf.yml ]; then
+        echo "Missing .ontokit_conf.yml" >&2
+        exit 1
+      fi
+
+      for key in ONTOLOGY_NAME ONTOLOGY_PREFIX ONTOLOGY_IRI BUILD_DIR; do
+        value=$(sed -n -E "s/^${key}:[[:space:]]*(.*)$/\\1/p" .ontokit_conf.yml | head -n 1)
+        if [ -z "$value" ]; then
+          echo "Missing required key '${key}' in .ontokit_conf.yml" >&2
+          exit 1
+        fi
+        export ${key}="$value"
+      done
+
+      repo_value=$(sed -n -E "s/^GIT_REPOSITORY:[[:space:]]*(.*)$/\\1/p" .ontokit_conf.yml | head -n 1)
+      if [ -z "$repo_value" ]; then
+        repo_value=$(sed -n -E "s/^GITHUB_REPOSITORY:[[:space:]]*(.*)$/\\1/p" .ontokit_conf.yml | head -n 1)
+      fi
+      if [ -z "$repo_value" ]; then
+        echo "Missing required key 'GIT_REPOSITORY' (or legacy 'GITHUB_REPOSITORY') in .ontokit_conf.yml" >&2
+        exit 1
+      fi
+      export GIT_REPOSITORY="$repo_value"
+    - pip install --upgrade pip
+    - pip install "EMMOntoPy[ontokit] @ git+https://github.com/emmo-repo/EMMOntoPy.git@master"
+    - pip install "tripper[datadoc] @ git+https://github.com/EMMC-ASBL/tripper.git@master"
+    - mkdir -p bin
+    - wget -nv https://github.com/ontodev/robot/releases/download/v1.9.6/robot.jar
+    - mv robot.jar bin/.
+    - curl https://raw.githubusercontent.com/ontodev/robot/master/bin/robot > bin/robot
+    - chmod +x bin/robot
+    - wget --quiet https://github.com/dgarijo/Widoco/releases/download/v1.4.25/widoco-1.4.25-jar-with-dependencies_JDK-17.jar
+    - mkdir -p "${BUILD_DIR}"
+    - cp README.md LICENSE "${BUILD_DIR}/."
+    - |
+      ontoconvert \
+          -saw \
+          --namespace="emmo:https://w3id.org/emmo#" \
+          --namespace="${ONTOLOGY_PREFIX}:${ONTOLOGY_IRI}#" \
+          ${ONTOLOGY_NAME}-dependencies.ttl \
+          "${BUILD_DIR}/${ONTOLOGY_NAME}-dependencies.ttl"
+    - |
+      ontoconvert \
+          -sawe \
+          --namespace="emmo:https://w3id.org/emmo#" \
+          --namespace="${ONTOLOGY_PREFIX}:${ONTOLOGY_IRI}#" \
+          --base-iri="${ONTOLOGY_IRI}#" \
+          --iri="${ONTOLOGY_IRI}" \
+          ${ONTOLOGY_NAME}.ttl \
+          "${BUILD_DIR}/${ONTOLOGY_NAME}.ttl"
+    - |
+      ontoconvert \
+          -awe \
+          --namespace="emmo:https://w3id.org/emmo#" \
+          --namespace="${ONTOLOGY_PREFIX}:${ONTOLOGY_IRI}#" \
+          --base-iri="${ONTOLOGY_IRI}#" \
+          --iri="${ONTOLOGY_IRI}" \
+          --copy-annotation="elucidation-->http://purl.org/dc/terms/description" \
+          --copy-annotation="prefLabel-->http://www.w3.org/2000/01/rdf-schema#label" \
+          ${ONTOLOGY_NAME}.ttl \
+          "${BUILD_DIR}/${ONTOLOGY_NAME}-doc.ttl"
+    - |
+      bin/robot reason \
+          --reasoner HermiT \
+          --remove-redundant-subclass-axioms true \
+          --preserve-annotated-axioms true \
+          --exclude-owl-thing true \
+          --exclude-duplicate-axioms true \
+          --input "${BUILD_DIR}/${ONTOLOGY_NAME}.ttl" \
+          --output ${ONTOLOGY_NAME}-inferred.ttl
+      ontoconvert --iri=${ONTOLOGY_IRI}/inferred ${ONTOLOGY_NAME}-inferred.ttl "${BUILD_DIR}/${ONTOLOGY_NAME}-inferred.ttl"
+    - |
+      keywords -i "${BUILD_DIR}/${ONTOLOGY_NAME}-doc.ttl" --write-kw-md "${BUILD_DIR}/${ONTOLOGY_NAME}_kw.md" --namespace-filter=${ONTOLOGY_IRI}# --redefine=allow
+    - |
+      java -jar widoco-1.4.25-jar-with-dependencies_JDK-17.jar \
+          -ontFile "${BUILD_DIR}/${ONTOLOGY_NAME}-doc.ttl" \
+          -outFolder "${BUILD_DIR}/widoco" \
+          -getOntologyMetadata \
+          -oops \
+          -rewriteAll \
+          -saveConfig "${BUILD_DIR}/widoco/widoco.conf" \
+          -webVowl \
+          -licensius \
+          -includeAnnotationProperties
+    - ontokit docs --iri-regex=${ONTOLOGY_IRI} .
+    - touch public/.nojekyll
+    - cp "${BUILD_DIR}"/*.ttl public/
+    - cp -r "${BUILD_DIR}/widoco" public
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^[0-9]+\.[0-9]+\.[0-9]+(-.*)?$/'
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+release_version:
+  stage: release
+  image: python:3.11
+  script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends git
+    - rm -rf /var/lib/apt/lists/*
+    - git fetch origin gh-pages
+    - git checkout -B gh-pages origin/gh-pages
+    - |
+      if [ ! -f .ontokit_conf.yml ]; then
+        echo "Missing .ontokit_conf.yml on gh-pages branch" >&2
+        exit 1
+      fi
+
+      value=$(sed -n -E "s/^ONTOLOGY_NAME:[[:space:]]*(.*)$/\\1/p" .ontokit_conf.yml | head -n 1)
+      if [ -z "$value" ]; then
+        echo "Missing required key 'ONTOLOGY_NAME' in .ontokit_conf.yml" >&2
+        exit 1
+      fi
+      export ONTOLOGY_NAME="$value"
+    - mkdir -p versions/${CI_COMMIT_TAG#v}
+    - |
+      cp -f \
+          README.md \
+          ${ONTOLOGY_NAME}.ttl \
+          ${ONTOLOGY_NAME}-dependencies.ttl \
+          ${ONTOLOGY_NAME}-inferred.ttl \
+          versions/${CI_COMMIT_TAG#v}/.
+    - git config --global user.email "${ONTOLOGY_NAME}@emmc.eu"
+    - git config --global user.name "${ONTOLOGY_NAME}"
+    - git add versions/${CI_COMMIT_TAG#v}
+    - |
+      if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
+        git commit -m "Release version ${CI_COMMIT_TAG#v}"
+        git push "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" gh-pages
+      else
+        echo "No release changes to commit."
+      fi
+  rules:
+    - if: '$CI_COMMIT_TAG'

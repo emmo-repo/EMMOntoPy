@@ -13,9 +13,11 @@ Toplevel keywords in the YAML file:
     - `exceptions`: List of entities in the ontology to skip. Should be written
       as `<ns0>.<name>`, where `<ns0>` is the last component of the base IRI
       and `<name>` is the name of the entity.
-    - `skipmodules`: List of module names to skip the test for. The module
-      names may be written either as the full module IRI or as the last
-      component of the module IRI.
+    - `skipmodules`: List of module names/namespaces to skip the test for.
+      The modul names may be written either as the full module IRI or
+      as the last component of the module IRI.
+    - `labels`: List of annotation properties to check for uniqueness. This
+      is only used for the `test_unique_labels` test. Default: `["prefLabel"]`.
 
 Example configuration file:
 
@@ -82,10 +84,94 @@ class TestEMMOConventions(unittest.TestCase):
 class TestSyntacticEMMOConventions(TestEMMOConventions):
     """Test syntactic EMMO conventions."""
 
+    def test_unique_labels(self):
+        """Check that configured labels are unique within each namespace.
+
+        This also checks imported ontologies. Modules/namespaces can be
+        skipped via the `test_unique_labels.skipmodules` configuration
+        in the YAML file.
+
+        Configurations:
+        - labels: annotation properties to validate. Default: `["prefLabel"]`.
+        - exceptions: full names of entities to ignore.
+        - skipmodules: namespaces to ignore.
+        """
+        testname = "test_unique_labels"
+        exceptions = set()
+        exceptions.update(self.get_config(f"{testname}.exceptions", ()))
+        labels = self.get_config(f"{testname}.labels", ("prefLabel",))
+        if isinstance(labels, str):
+            labels = (labels,)
+
+        for label in labels:
+            if (
+                label
+                not in self.onto.world._props  # pylint: disable=protected-access
+            ):
+                self.fail(f"ontology has no {label}")
+
+        def checker(onto, label):
+
+            seen = {}
+            entities = itertools.chain(
+                onto.classes(),
+                onto.object_properties(),
+                onto.data_properties(),
+                onto.individuals(),
+                onto.annotation_properties(),
+            )
+            for entity in entities:
+                if entity in visited:
+                    continue
+                if hasattr(entity, "deprecated") and bool(
+                    entity.deprecated.first()
+                ):
+                    continue
+                visited.add(entity)
+
+                r = repr(entity)
+                if r in exceptions or skipmodule(
+                    self, "test_unique_labels", entity
+                ):
+                    continue
+
+                for lab in getattr(entity, label, []):
+                    key = (str(lab), getattr(lab, "lang", None))
+                    duplicate_entity = seen.get(key)
+                    duplicate_iri = getattr(duplicate_entity, "iri", None)
+                    entity_iri = getattr(entity, "iri", None)
+                    with self.subTest(
+                        label_property=label,
+                        label_value=key[0],
+                        lang=key[1],
+                        entity=entity_iri,
+                        duplicate_with=duplicate_iri,
+                    ):
+                        same_iri = (
+                            duplicate_iri is not None
+                            and duplicate_iri == entity_iri
+                        )
+                        if duplicate_entity and not same_iri:
+                            self.fail(
+                                f"Duplicate {label} within namespace "
+                                f"{onto.base_iri!r}: {key[0]!r} "
+                                f"(lang={key[1]!r}) for {entity_iri}, "
+                                f"already used by {duplicate_iri}."
+                            )
+                    seen[key] = entity
+
+            for imp_onto in onto.imported_ontologies:
+                if imp_onto not in visited_onto[label]:
+                    visited_onto[label].add(imp_onto)
+                    checker(imp_onto, label)
+
+        for label in labels:
+            visited = set()
+            visited_onto = {label: {self.onto}}
+            checker(self.onto, label)
+
     def test_number_of_labels(self):
         """Check that all entities have one and only one prefLabel.
-
-        Use "altLabel" for synonyms.
 
         The only allowed exception is entities who's representation
         starts with "owl.".
@@ -124,6 +210,35 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                         self.assertEqual(1, len(entity.prefLabel))
         else:
             self.fail("ontology has no prefLabel")
+
+    def test_number_of_rdfslabels(self):
+        """Check that all entities have one and only one rdfs:label.
+
+        The only allowed exception is entities who's representation
+        starts with "owl.".
+        """
+        exceptions = set()
+        exceptions.update(
+            self.get_config("test_number_of_rdfslabels.exceptions", ())
+        )
+        for entity in self.onto.classes(self.check_imported):
+            # Skip concepts from exceptions and common w3c vocabularies
+            vocabs = (
+                "owl.",
+                "0.1.",
+                "bibo.",
+                "core.",
+                "terms.",
+                "vann.",
+                "schema.org",
+            )
+            r = repr(entity)
+            if r in exceptions or any(r.startswith(v) for v in vocabs):
+                continue
+
+            with self.subTest(entity=entity, label=get_label(entity)):
+                if not repr(entity).startswith("owl."):
+                    self.assertEqual(1, len(entity.label))
 
     def test_class_label(self):
         """Check that class labels are CamelCase and valid identifiers.
@@ -185,6 +300,70 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
                             self.assertTrue(
                                 label.endswith(("Of", "With")),
                                 'should end with "Of" or "With"',
+                            )
+
+    def test_class_preflabel(self):
+        """Check that class prefLabels are CamelCase and valid identifiers.
+
+        For CamelCase, we are currently only checking that the labels
+        start with upper case.
+        """
+        exceptions = set(
+            (
+                "0-manifold",  # not needed in 1.0.0-beta
+                "1-manifold",
+                "2-manifold",
+                "3-manifold",
+                "C++",
+                "3DPrinting",
+            )
+        )
+        exceptions.update(
+            self.get_config("test_class_preflabel.exceptions", ())
+        )
+
+        for cls in self.onto.classes(self.check_imported):
+            for label in getattr(cls, "prefLabel", []):
+                if str(label) not in exceptions:
+                    with self.subTest(entity=cls, label=label):
+                        self.assertTrue(label.isidentifier())
+                        self.assertTrue(label[0].isupper())
+
+    def test_property_preflabel(self):
+        """Check that property prefLabels are lowerCamelCase.
+
+        Allowed exceptions: "EMMORelation"
+
+        If they start with "has" or "is" they should be followed by a
+        upper case letter.
+
+        """
+        exceptions = set(("EMMORelation",))
+        exceptions.update(
+            self.get_config("test_property_preflabel.exceptions", ())
+        )
+
+        properties = itertools.chain(
+            self.onto.object_properties(),
+            self.onto.data_properties(),
+            self.onto.annotation_properties(),
+        )
+        for prop in properties:
+            if repr(prop) not in exceptions:
+                for label in getattr(prop, "prefLabel", []):
+                    with self.subTest(entity=prop, label=label):
+                        self.assertTrue(
+                            label[0].islower(), "label start with lowercase"
+                        )
+                        if label.startswith("has"):
+                            self.assertTrue(
+                                label[3].isupper(),
+                                'what follows "has" must be "uppercase"',
+                            )
+                        if label.startswith("is"):
+                            self.assertTrue(
+                                label[2].isupper(),
+                                'what follows "is" must be "uppercase"',
                             )
 
 
@@ -975,6 +1154,9 @@ def main(
             name = test.id().split(".")[-1]
             skipped = set(  # skipped by default
                 [
+                    "test_class_preflabel",
+                    "test_property_preflabel",
+                    "test_number_of_rdfslabels",
                     "test_namespace",
                     "test_physical_quantity_dimension_annotation",
                     "test_quantity_dimension_beta3",
