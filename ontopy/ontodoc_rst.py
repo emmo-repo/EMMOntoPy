@@ -402,13 +402,9 @@ class ModuleDocumentation:
                         + "</li>"
                     )
                 elif isinstance(val, (owlready2.ClassConstruct,)):
-                    strval += (
-                        "<li>"
-                        + _linkify_manchester(
-                            asstring(val),
-                            self.ontology,
-                        )
-                        + "</li>"
+                    strval += _linkify_manchester(
+                        asstring(val),
+                        self.ontology,
                     )
                 else:
                     strval += _linkify_value(val)
