@@ -514,6 +514,14 @@ ontokit --help # will give info on available subcommands
 ontokit subcommand --help  # info on the chosen subcommand
 ```
 
+Currently, there are two submodules that have been developed: `setup` and `docs`.
+`ontokit setup` will setup .github workflows and create an `.ontokit_conf.yaml` file in the
+root of you repository. You should open, inspect and update this file once you have created it.
+
+`ontokit docs` creates the documentation according to the specifications in the configuration file.
+
+
+
 For local testing of ontology reference-document generation (used by
 `ontodoc_rst` / `ontokit`), see the focused pytest command in
 [developer testing](developers/testing.md#targeted-checks-for-ontology-reference-docs).
