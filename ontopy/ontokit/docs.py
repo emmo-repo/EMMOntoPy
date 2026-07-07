@@ -109,6 +109,7 @@ def docs_subcommand(args):
         )
 
     config = load_config(config_path)
+    print(config)
     git_repository = config.get("GIT_REPOSITORY") or config.get(
         "GITHUB_REPOSITORY"
     )
@@ -136,6 +137,9 @@ def docs_subcommand(args):
     build_dir = config.get("BUILD_DIR", "build")
     reference_indices = config.get("REFERENCE_INDICES", [])
     primary_subsections = config.get("REFERENCE_SUBSECTIONS", "all")
+    primary_imported = config.get("REFERENCE_IMPORTED", args.imported)
+    primary_recursive = config.get("REFERENCE_RECURSIVE", args.recursive)
+    primary_iri_regex = config.get("REFERENCE_IRI_REGEX", args.iri_regex)
 
     docs_dir = root / args.docs_dir if args.docs_dir else None
     if docs_dir is None:
@@ -153,9 +157,9 @@ def docs_subcommand(args):
     onto = get_ontology(ontofile).load()
     od = OntologyDocumentation(
         onto,
-        imported=args.imported,
-        recursive=args.recursive,
-        iri_regex=args.iri_regex,
+        imported=primary_imported,
+        recursive=primary_recursive,
+        iri_regex=primary_iri_regex,
         subsections=primary_subsections,
     )
 
