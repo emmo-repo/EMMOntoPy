@@ -387,7 +387,7 @@ class ModuleDocumentation:
                 if count > 0 and not key == "Restrictions":
                     strval += ", "
                 count += 1
-
+                print(val)
                 if hasattr(val, "iri"):
                     strval += _html_links(val.iri, get_label(val))
                 elif iri:
@@ -401,11 +401,7 @@ class ModuleDocumentation:
                         )
                         + "</li>"
                     )
-                # if value is a class 'type'
-                elif isinstance(
-                    val, (owlready2.ClassConstruct,)  # class_construct.Or,
-                ):
-                    print(val, type(val), str(val))
+                elif isinstance(val, (owlready2.ClassConstruct,)):
                     strval += (
                         "<li>"
                         + _linkify_manchester(
@@ -415,7 +411,6 @@ class ModuleDocumentation:
                         + "</li>"
                     )
                 else:
-                    print(val, type(val), str(val))
                     strval += _linkify_value(val)
                     strval = strval.replace("\n", "<br>")
 
@@ -560,14 +555,9 @@ class ModuleDocumentation:
 
                             add_keyvalue(
                                 "equivalentTo",
-                                asstring(
-                                    r,
-                                    link='<a href="{iri}">{label}</a>',
-                                    ontology=self.ontology,
-                                ),
+                                r,
                             )
                         if hasattr(entity, "inverse") and entity.inverse:
-                            print(entity, entity.inverse)
                             add_keyvalue("inverseOf", entity.inverse)
                         # Add SubclassOf/SubPropertyOf/InstanceOf for direct parents
                         if isinstance(entity, owlready2.ThingClass):
