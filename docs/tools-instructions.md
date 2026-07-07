@@ -17,6 +17,10 @@
 ## `emmocheck`
 
 Tool for checking that ontologies conform to EMMO conventions.
+The various checks can be found in the [API reference documentation of the `ontopy.emmocheck`](https://emmo-repo.github.io/EMMOntoPy/stable/api_reference/emmopy/emmocheck/) module.
+
+To see the checks that are run, use the `--verbose` option.
+
 
 ### Usage
 
@@ -68,7 +72,6 @@ optional arguments:
     emmocheck --check-imported --ignore-namespace=physicalistic --verbose --url-from-catalog emmo.owl (in folder with downloaded EMMO)
     emmocheck --check-imported --local --url-from-catalog --skip test_namespace emmo.owl
 ```
-<!-- (Missing example with local and path) -->
 
 
 ### Configuration file
