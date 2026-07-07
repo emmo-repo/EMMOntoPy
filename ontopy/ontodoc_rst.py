@@ -402,7 +402,20 @@ class ModuleDocumentation:
                         + "</li>"
                     )
                 # if value is a class 'type'
+                elif isinstance(
+                    val, (owlready2.ClassConstruct,)  # class_construct.Or,
+                ):
+                    print(val, type(val), str(val))
+                    strval += (
+                        "<li>"
+                        + _linkify_manchester(
+                            asstring(val),
+                            self.ontology,
+                        )
+                        + "</li>"
+                    )
                 else:
+                    print(val, type(val), str(val))
                     strval += _linkify_value(val)
                     strval = strval.replace("\n", "<br>")
 

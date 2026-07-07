@@ -48,7 +48,11 @@ skos:prefLabel rdf:type owl:AnnotationProperty .
 
 ###  https://w3id.org/emmo/domain/animal#chasedBy
 :chasedBy rdf:type owl:ObjectProperty ;
-         rdfs:domain :Animal ;
+         rdfs:domain [
+                       owl:unionOf ( :WarmBloodedAnimal
+                                     :ColdBloodedAnimal
+                                   )
+         ] ;
          rdfs:range :Animal ;
          owl:inverseOf :chases ;
          skos:prefLabel "chasedBy"@en .
