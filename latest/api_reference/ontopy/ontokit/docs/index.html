@@ -1983,6 +1983,7 @@
         <span class="p">)</span>
 
     <span class="n">config</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
     <span class="n">git_repository</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
         <span class="s2">&quot;GITHUB_REPOSITORY&quot;</span>
     <span class="p">)</span>
@@ -2010,6 +2011,9 @@
     <span class="n">build_dir</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;BUILD_DIR&quot;</span><span class="p">,</span> <span class="s2">&quot;build&quot;</span><span class="p">)</span>
     <span class="n">reference_indices</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REFERENCE_INDICES&quot;</span><span class="p">,</span> <span class="p">[])</span>
     <span class="n">primary_subsections</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REFERENCE_SUBSECTIONS&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">)</span>
+    <span class="n">primary_imported</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REFERENCE_IMPORTED&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">imported</span><span class="p">)</span>
+    <span class="n">primary_recursive</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REFERENCE_RECURSIVE&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">recursive</span><span class="p">)</span>
+    <span class="n">primary_iri_regex</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REFERENCE_IRI_REGEX&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">iri_regex</span><span class="p">)</span>
 
     <span class="n">docs_dir</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="n">args</span><span class="o">.</span><span class="n">docs_dir</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">docs_dir</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">docs_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2027,9 +2031,9 @@
     <span class="n">onto</span> <span class="o">=</span> <span class="n">get_ontology</span><span class="p">(</span><span class="n">ontofile</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
     <span class="n">od</span> <span class="o">=</span> <span class="n">OntologyDocumentation</span><span class="p">(</span>
         <span class="n">onto</span><span class="p">,</span>
-        <span class="n">imported</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">imported</span><span class="p">,</span>
-        <span class="n">recursive</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">recursive</span><span class="p">,</span>
-        <span class="n">iri_regex</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">iri_regex</span><span class="p">,</span>
+        <span class="n">imported</span><span class="o">=</span><span class="n">primary_imported</span><span class="p">,</span>
+        <span class="n">recursive</span><span class="o">=</span><span class="n">primary_recursive</span><span class="p">,</span>
+        <span class="n">iri_regex</span><span class="o">=</span><span class="n">primary_iri_regex</span><span class="p">,</span>
         <span class="n">subsections</span><span class="o">=</span><span class="n">primary_subsections</span><span class="p">,</span>
     <span class="p">)</span>
 
