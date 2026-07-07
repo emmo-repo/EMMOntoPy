@@ -227,6 +227,10 @@ def setup_subcommand(
         "GIT_REPOSITORY": git_repository,
         "GIT_BASE_URL": git_base_url,
         "BUILD_DIR": "build",
+        "REFERENCE_SUBSECTIONS": "all",
+        "REFERENCE_IMPORTED": "false",
+        "REFERENCE_RECURSIVE": "true",
+        "REFERENCE_IRI_REGEX": f"{ontology_iri}#",
     }
     if config_path.exists():
         config = load_config(config_path)
