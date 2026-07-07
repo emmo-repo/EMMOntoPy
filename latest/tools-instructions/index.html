@@ -2972,6 +2972,10 @@ changes that are not completely backwards compatible may occur.</p>
 <div class="highlight"><pre><span></span><code><span class="go">ontokit --help # will give info on available subcommands</span>
 <span class="go">ontokit subcommand --help  # info on the chosen subcommand</span>
 </code></pre></div>
+<p>Currently, there are two submodules that have been developed: <code>setup</code> and <code>docs</code>.
+<code>ontokit setup</code> will setup .github workflows and create an <code>.ontokit_conf.yaml</code> file in the
+root of you repository. You should open, inspect and update this file once you have created it.</p>
+<p><code>ontokit docs</code> creates the documentation according to the specifications in the configuration file.</p>
 <p>For local testing of ontology reference-document generation (used by
 <code>ontodoc_rst</code> / <code>ontokit</code>), see the focused pytest command in
 <a href="../developers/testing/#targeted-checks-for-ontology-reference-docs">developer testing</a>.</p>

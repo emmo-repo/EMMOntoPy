@@ -2875,7 +2875,7 @@ should match.</p></td>
                 <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Restrictions&quot;</span><span class="p">:</span>
                     <span class="n">strval</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span>
                 <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-
+                <span class="nb">print</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">):</span>
                     <span class="n">strval</span> <span class="o">+=</span> <span class="n">_html_links</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="n">get_label</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
                 <span class="k">elif</span> <span class="n">iri</span><span class="p">:</span>
@@ -2889,7 +2889,11 @@ should match.</p></td>
                         <span class="p">)</span>
                         <span class="o">+</span> <span class="s2">&quot;&lt;/li&gt;&quot;</span>
                     <span class="p">)</span>
-                <span class="c1"># if value is a class &#39;type&#39;</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="n">owlready2</span><span class="o">.</span><span class="n">ClassConstruct</span><span class="p">,)):</span>
+                    <span class="n">strval</span> <span class="o">+=</span> <span class="n">_linkify_manchester</span><span class="p">(</span>
+                        <span class="n">asstring</span><span class="p">(</span><span class="n">val</span><span class="p">),</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">,</span>
+                    <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">strval</span> <span class="o">+=</span> <span class="n">_linkify_value</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
                     <span class="n">strval</span> <span class="o">=</span> <span class="n">strval</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">)</span>
@@ -3035,14 +3039,9 @@ should match.</p></td>
 
                             <span class="n">add_keyvalue</span><span class="p">(</span>
                                 <span class="s2">&quot;equivalentTo&quot;</span><span class="p">,</span>
-                                <span class="n">asstring</span><span class="p">(</span>
-                                    <span class="n">r</span><span class="p">,</span>
-                                    <span class="n">link</span><span class="o">=</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{iri}</span><span class="s1">&quot;&gt;</span><span class="si">{label}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="p">,</span>
-                                    <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">,</span>
-                                <span class="p">),</span>
+                                <span class="n">r</span><span class="p">,</span>
                             <span class="p">)</span>
                         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;inverse&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">inverse</span><span class="p">:</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">inverse</span><span class="p">)</span>
                             <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;inverseOf&quot;</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">inverse</span><span class="p">)</span>
                         <span class="c1"># Add SubclassOf/SubPropertyOf/InstanceOf for direct parents</span>
                         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
@@ -3517,7 +3516,7 @@ documentation.</p></td>
             <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Restrictions&quot;</span><span class="p">:</span>
                 <span class="n">strval</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span>
             <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-
+            <span class="nb">print</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">):</span>
                 <span class="n">strval</span> <span class="o">+=</span> <span class="n">_html_links</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="n">get_label</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
             <span class="k">elif</span> <span class="n">iri</span><span class="p">:</span>
@@ -3531,7 +3530,11 @@ documentation.</p></td>
                     <span class="p">)</span>
                     <span class="o">+</span> <span class="s2">&quot;&lt;/li&gt;&quot;</span>
                 <span class="p">)</span>
-            <span class="c1"># if value is a class &#39;type&#39;</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="n">owlready2</span><span class="o">.</span><span class="n">ClassConstruct</span><span class="p">,)):</span>
+                <span class="n">strval</span> <span class="o">+=</span> <span class="n">_linkify_manchester</span><span class="p">(</span>
+                    <span class="n">asstring</span><span class="p">(</span><span class="n">val</span><span class="p">),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">,</span>
+                <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">strval</span> <span class="o">+=</span> <span class="n">_linkify_value</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
                 <span class="n">strval</span> <span class="o">=</span> <span class="n">strval</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">)</span>
@@ -3677,14 +3680,9 @@ documentation.</p></td>
 
                         <span class="n">add_keyvalue</span><span class="p">(</span>
                             <span class="s2">&quot;equivalentTo&quot;</span><span class="p">,</span>
-                            <span class="n">asstring</span><span class="p">(</span>
-                                <span class="n">r</span><span class="p">,</span>
-                                <span class="n">link</span><span class="o">=</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{iri}</span><span class="s1">&quot;&gt;</span><span class="si">{label}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="p">,</span>
-                                <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">,</span>
-                            <span class="p">),</span>
+                            <span class="n">r</span><span class="p">,</span>
                         <span class="p">)</span>
                     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;inverse&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">inverse</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">inverse</span><span class="p">)</span>
                         <span class="n">add_keyvalue</span><span class="p">(</span><span class="s2">&quot;inverseOf&quot;</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">inverse</span><span class="p">)</span>
                     <span class="c1"># Add SubclassOf/SubPropertyOf/InstanceOf for direct parents</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
