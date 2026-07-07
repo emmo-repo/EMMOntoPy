@@ -14,14 +14,26 @@ REQUIRED_CONFIG_KEYS = (
     "BUILD_DIR",
 )
 
+OPTIONAL_CONFIG_KEYS = (
+    "REFERENCE_SUBSECTIONS",
+    "REFERENCE_IMPORTED",
+    "REFERENCE_RECURSIVE",
+    "REFERENCE_IRI_REGEX",
+)
+
 LEGACY_REPOSITORY_KEY = "GITHUB_REPOSITORY"
 
 REFERENCE_INDICES_COMMENT = """\
-# Optional: select subsections for the primary reference index.
-# Default is "all".
+# Optional settings for `ontokit docs` reference indices.
+# Select subsections for the primary reference index. Default is "all".
 # REFERENCE_SUBSECTIONS: all
 # Example subset:
 # REFERENCE_SUBSECTIONS: classes,annotation_properties,data_properties,object_properties,individuals
+#
+# REFERENCE_IMPORTED: false
+# REFERENCE_RECURSIVE: true
+# This regex is used to filter which IRIs are included in the primary reference index. Default is the ontology IRI.
+# REFERENCE_IRI_REGEX: https://example.com/myonto#
 #
 # Optional: additional reference indices for `ontokit docs`.
 # REFERENCE_INDICES:
@@ -99,7 +111,11 @@ def update_config(path, config, defaults):
         if value is None or str(value).strip() == "":
             config[key] = _as_string(defaults.get(key, ""))
             added.append(key)
-
+    for key in OPTIONAL_CONFIG_KEYS:
+        value = config.get(key)
+        if value is None or str(value).strip() == "":
+            config[key] = _as_string(defaults.get(key, ""))
+            added.append(key)
     if added:
         _write_config_with_reference_indices_comment(path, config)
     return config, added
