@@ -2975,6 +2975,12 @@ changes that are not completely backwards compatible may occur.</p>
 <p>Currently, there are two submodules that have been developed: <code>setup</code> and <code>docs</code>.
 <code>ontokit setup</code> will setup .github workflows and create an <code>.ontokit_conf.yaml</code> file in the
 root of you repository. You should open, inspect and update this file once you have created it.</p>
+<p>The created workflows follow the rules for creating <a href="developers/ontology-development.md">EMMO-based ontologies</a>.
+It is recommenced to inspect the created workflows and update them if necessary.</p>
+<p>Some important aspects: github pages with documentation will be created/updated on pushes to <code>main</code>, <code>master</code> or
+any branch matching <code>[0-9]+.[0-9]+.[0-9]+</code> or <code>[0-9]+.[0-9]+.[0-9]+-*</code>.</p>
+<p>For persistent storage of versions of the ontology, a push to a branch matching <code>[0-9]+.[0-9]+.[0-9]+</code> or <code>[0-9]+.[0-9]+.[0-9]+-*</code>
+is necessary. Direct pushes to <code>main</code> or <code>master</code> will only update the "latest" documentation and not the versioned documentation.</p>
 <p><code>ontokit docs</code> creates the documentation according to the specifications in the configuration file.</p>
 <p>For local testing of ontology reference-document generation (used by
 <code>ontodoc_rst</code> / <code>ontokit</code>), see the focused pytest command in
