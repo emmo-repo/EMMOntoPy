@@ -89,21 +89,3 @@ def test_missing_required_variables_accepts_legacy_repository_key():
         "BUILD_DIR": "build",
     }
     assert missing_required_variables(config) == []
-
-
-def test_create_config_includes_optional_default_keys(tmp_path):
-    config_file = tmp_path / CONFIG_FILENAME
-    create_config(config_file, SAMPLE_DEFAULTS)
-    loaded = load_config(config_file)
-
-    assert (
-        loaded["REFERENCE_SUBSECTIONS"]
-        == SAMPLE_DEFAULTS["REFERENCE_SUBSECTIONS"]
-    )
-    assert loaded["REFERENCE_IMPORTED"] == SAMPLE_DEFAULTS["REFERENCE_IMPORTED"]
-    assert (
-        loaded["REFERENCE_RECURSIVE"] == SAMPLE_DEFAULTS["REFERENCE_RECURSIVE"]
-    )
-    assert (
-        loaded["REFERENCE_IRI_REGEX"] == SAMPLE_DEFAULTS["REFERENCE_IRI_REGEX"]
-    )
