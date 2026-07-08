@@ -521,7 +521,7 @@ Currently, there are two submodules that have been developed: `setup` and `docs`
 `ontokit setup` will setup .github workflows and create an `.ontokit_conf.yaml` file in the
 root of you repository. You should open, inspect and update this file once you have created it.
 
-The created workflows follow the rules for creating [EMMO-based ontologies](developers/ontology-development.md).
+The created workflows follow the rules for creating [EMMO-based ontologies](https://github.com/emmo-repo/.github/wiki/DomainOntologiesBestPractice).
 It is recommenced to inspect the created workflows and update them if necessary.
 
 Some important aspects: github pages with documentation will be created/updated on pushes to `main`, `master` or
