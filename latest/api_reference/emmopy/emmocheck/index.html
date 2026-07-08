@@ -2498,6 +2498,14 @@ TestFunctionalEMMOConventions        </code>
 
 <span class="sd">        Exceptions include entities from standard w3c vocabularies.</span>
 
+<span class="sd">        Note that after EMMO 1.0.4, the original IRIs of elucidation,</span>
+<span class="sd">        definition and conceptualisation</span>
+<span class="sd">        have been deprecated and replaced by emmo:elucidation, emmo:definition</span>
+<span class="sd">        and emmo:conceptualisation.</span>
+<span class="sd">        If you have updated to EMMO 1.0.4 or later, you should update your</span>
+<span class="sd">        ontology to use the new IRIs (e.g. replace</span>
+<span class="sd">        emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9&quot; with emmo:elucidation).</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># pylint: disable=invalid-name</span>
         <span class="n">MeasurementUnit</span> <span class="o">=</span> <span class="p">(</span>
@@ -2508,10 +2516,16 @@ TestFunctionalEMMOConventions        </code>
         <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_description.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
         <span class="n">props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="s2">&quot;EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
-            <span class="ow">or</span> <span class="s2">&quot;EMMO_31252f35_c767_4b97_a877_1235076c3e13&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
-            <span class="ow">or</span> <span class="s2">&quot;EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
+        <span class="k">if</span> <span class="p">(</span>  <span class="c1"># pylint: disable=too-many-boolean-expressions</span>
+            <span class="s2">&quot;EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9&quot;</span>
+            <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>  <span class="c1"># deprecated after emmo 1.0.4</span>
+            <span class="ow">or</span> <span class="s2">&quot;EMMO_31252f35_c767_4b97_a877_1235076c3e13&quot;</span>
+            <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>  <span class="c1"># deprecated after emmo 1.0.4</span>
+            <span class="ow">or</span> <span class="s2">&quot;EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84&quot;</span>
+            <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>  <span class="c1"># deprecated after emmo 1.0.4</span>
+            <span class="ow">or</span> <span class="s2">&quot;elucidation&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
+            <span class="ow">or</span> <span class="s2">&quot;definition&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
+            <span class="ow">or</span> <span class="s2">&quot;conceptualisation&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
         <span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span>
                 <span class="s2">&quot;ontology has no description (emmo:elucidation, &quot;</span>
@@ -3078,6 +3092,13 @@ TestFunctionalEMMOConventions        </code>
 <p>A description is either an emmo:elucidation, an
 emmo:definition or an emmo:conceptualisation.</p>
 <p>Exceptions include entities from standard w3c vocabularies.</p>
+<p>Note that after EMMO 1.0.4, the original IRIs of elucidation,
+definition and conceptualisation
+have been deprecated and replaced by emmo:elucidation, emmo:definition
+and emmo:conceptualisation.
+If you have updated to EMMO 1.0.4 or later, you should update your
+ontology to use the new IRIs (e.g. replace
+emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" with emmo:elucidation).</p>
 
         <details class="quote">
           <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
@@ -3089,6 +3110,14 @@ emmo:definition or an emmo:conceptualisation.</p>
 
 <span class="sd">    Exceptions include entities from standard w3c vocabularies.</span>
 
+<span class="sd">    Note that after EMMO 1.0.4, the original IRIs of elucidation,</span>
+<span class="sd">    definition and conceptualisation</span>
+<span class="sd">    have been deprecated and replaced by emmo:elucidation, emmo:definition</span>
+<span class="sd">    and emmo:conceptualisation.</span>
+<span class="sd">    If you have updated to EMMO 1.0.4 or later, you should update your</span>
+<span class="sd">    ontology to use the new IRIs (e.g. replace</span>
+<span class="sd">    emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9&quot; with emmo:elucidation).</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># pylint: disable=invalid-name</span>
     <span class="n">MeasurementUnit</span> <span class="o">=</span> <span class="p">(</span>
@@ -3099,10 +3128,16 @@ emmo:definition or an emmo:conceptualisation.</p>
     <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_description.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
     <span class="n">props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
-    <span class="k">if</span> <span class="p">(</span>
-        <span class="s2">&quot;EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
-        <span class="ow">or</span> <span class="s2">&quot;EMMO_31252f35_c767_4b97_a877_1235076c3e13&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
-        <span class="ow">or</span> <span class="s2">&quot;EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
+    <span class="k">if</span> <span class="p">(</span>  <span class="c1"># pylint: disable=too-many-boolean-expressions</span>
+        <span class="s2">&quot;EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9&quot;</span>
+        <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>  <span class="c1"># deprecated after emmo 1.0.4</span>
+        <span class="ow">or</span> <span class="s2">&quot;EMMO_31252f35_c767_4b97_a877_1235076c3e13&quot;</span>
+        <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>  <span class="c1"># deprecated after emmo 1.0.4</span>
+        <span class="ow">or</span> <span class="s2">&quot;EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84&quot;</span>
+        <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>  <span class="c1"># deprecated after emmo 1.0.4</span>
+        <span class="ow">or</span> <span class="s2">&quot;elucidation&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
+        <span class="ow">or</span> <span class="s2">&quot;definition&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
+        <span class="ow">or</span> <span class="s2">&quot;conceptualisation&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span>
             <span class="s2">&quot;ontology has no description (emmo:elucidation, &quot;</span>

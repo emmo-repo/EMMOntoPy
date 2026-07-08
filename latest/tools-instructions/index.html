@@ -2573,7 +2573,9 @@
 </ul>
 <hr />
 <h2 id="emmocheck"><code>emmocheck</code><a class="headerlink" href="#emmocheck" title="Permanent link">&para;</a></h2>
-<p>Tool for checking that ontologies conform to EMMO conventions.</p>
+<p>Tool for checking that ontologies conform to EMMO conventions.
+The various checks can be found in the <a href="https://emmo-repo.github.io/EMMOntoPy/stable/api_reference/emmopy/emmocheck/">API reference documentation of the <code>ontopy.emmocheck</code></a> module.</p>
+<p>To see the checks that are run, use the <code>--verbose</code> option.</p>
 <h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="go">emmocheck [options] iri</span>
 </code></pre></div>
@@ -2616,8 +2618,6 @@
 <span class="go">    emmocheck --check-imported --ignore-namespace=physicalistic --verbose --url-from-catalog emmo.owl (in folder with downloaded EMMO)</span>
 <span class="go">    emmocheck --check-imported --local --url-from-catalog --skip test_namespace emmo.owl</span>
 </code></pre></div>
-<!-- (Missing example with local and path) -->
-
 <h3 id="configuration-file">Configuration file<a class="headerlink" href="#configuration-file" title="Permanent link">&para;</a></h3>
 <p>The <code>--configfile</code> options expects a YAML configuration file that specifies what tests to skip or enable.</p>
 <p>The following keywords are recognised in the YAML file:</p>
