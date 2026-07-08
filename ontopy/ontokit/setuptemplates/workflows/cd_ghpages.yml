@@ -156,6 +156,18 @@ jobs:
     - name: Copy widoco documentation to public
       run: cp -r "${BUILD_DIR}/widoco" public
 
+    - name: Publish versioned docs for version branches
+      run: |
+        if [[ "${GITHUB_REF_NAME}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+          VERSION_DIR="versions/${GITHUB_REF_NAME}"
+          rm -rf "public/${VERSION_DIR}"
+          mkdir -p "public/${VERSION_DIR}"
+          tmpdir=$(mktemp -d)
+          cp -R public/. "${tmpdir}/"
+          cp -R "${tmpdir}/." "public/${VERSION_DIR}/"
+          rm -rf "${tmpdir}"
+        fi
+
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
