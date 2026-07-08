@@ -378,6 +378,14 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
 
         Exceptions include entities from standard w3c vocabularies.
 
+        Note that after EMMO 1.0.4, the original IRIs of elucidation,
+        definition and conceptualisation
+        have been deprecated and replaced by emmo:elucidation, emmo:definition
+        and emmo:conceptualisation.
+        If you have updated to EMMO 1.0.4 or later, you should update your
+        ontology to use the new IRIs (e.g. replace
+        emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" with emmo:elucidation).
+
         """
         # pylint: disable=invalid-name
         MeasurementUnit = (
@@ -388,10 +396,16 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         exceptions = set()
         exceptions.update(self.get_config("test_description.exceptions", ()))
         props = self.onto.world._props  # pylint: disable=protected-access
-        if (
-            "EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" not in props
-            or "EMMO_31252f35_c767_4b97_a877_1235076c3e13" not in props
-            or "EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84" not in props
+        if (  # pylint: disable=too-many-boolean-expressions
+            "EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9"
+            not in props  # deprecated after emmo 1.0.4
+            or "EMMO_31252f35_c767_4b97_a877_1235076c3e13"
+            not in props  # deprecated after emmo 1.0.4
+            or "EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84"
+            not in props  # deprecated after emmo 1.0.4
+            or "elucidation" not in props
+            or "definition" not in props
+            or "conceptualisation" not in props
         ):
             self.fail(
                 "ontology has no description (emmo:elucidation, "
