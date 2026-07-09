@@ -1034,6 +1034,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestEMMOConventions.should_skip_entity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        should_skip_entity()
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2052,6 +2063,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#emmopy.emmocheck.TestEMMOConventions.should_skip_entity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        should_skip_entity()
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2382,6 +2404,7 @@ TestEMMOConventions        </code>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for testing an ontology against EMMO conventions.&quot;&quot;&quot;</span>
 
     <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># configurations</span>
+    <span class="n">ignore_namespace</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the configuration specified by `string`.</span>
@@ -2399,12 +2422,44 @@ TestEMMOConventions        </code>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">default</span>
         <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">should_skip_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return whether an entity should be ignored because of namespace.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_namespace</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">entity_iri</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entity_iri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">entity_namespace</span> <span class="o">=</span> <span class="n">entity_iri</span>
+        <span class="k">if</span> <span class="s2">&quot;#&quot;</span> <span class="ow">in</span> <span class="n">entity_iri</span><span class="p">:</span>
+            <span class="n">entity_namespace</span> <span class="o">=</span> <span class="n">entity_iri</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;#&quot;</span>
+        <span class="k">elif</span> <span class="s2">&quot;/&quot;</span> <span class="ow">in</span> <span class="n">entity_iri</span><span class="p">:</span>
+            <span class="n">entity_namespace</span> <span class="o">=</span> <span class="n">entity_iri</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+
+        <span class="k">for</span> <span class="n">namespace</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_namespace</span><span class="p">:</span>
+            <span class="n">namespace</span> <span class="o">=</span> <span class="n">namespace</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">namespace</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">variants</span> <span class="o">=</span> <span class="p">{</span><span class="n">namespace</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">namespace</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">)):</span>
+                <span class="n">variants</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">namespace</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">variants</span><span class="o">.</span><span class="n">update</span><span class="p">((</span><span class="n">namespace</span> <span class="o">+</span> <span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">namespace</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">entity_iri</span> <span class="ow">in</span> <span class="n">variants</span> <span class="ow">or</span> <span class="n">entity_namespace</span> <span class="ow">in</span> <span class="n">variants</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
 </code></pre></div>
         </details>
 
 
 
   <div class="doc doc-children">
+
 
 
 
@@ -2451,6 +2506,60 @@ dots, like "test_namespace.exceptions".</p>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">default</span>
     <span class="k">return</span> <span class="n">result</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="emmopy.emmocheck.TestEMMOConventions.should_skip_entity" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span></code>
+
+
+<a href="#emmopy.emmocheck.TestEMMOConventions.should_skip_entity" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Return whether an entity should be ignored because of namespace.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>emmopy/emmocheck.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">should_skip_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return whether an entity should be ignored because of namespace.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_namespace</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">entity_iri</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;iri&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">entity_iri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">entity_namespace</span> <span class="o">=</span> <span class="n">entity_iri</span>
+    <span class="k">if</span> <span class="s2">&quot;#&quot;</span> <span class="ow">in</span> <span class="n">entity_iri</span><span class="p">:</span>
+        <span class="n">entity_namespace</span> <span class="o">=</span> <span class="n">entity_iri</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;#&quot;</span>
+    <span class="k">elif</span> <span class="s2">&quot;/&quot;</span> <span class="ow">in</span> <span class="n">entity_iri</span><span class="p">:</span>
+        <span class="n">entity_namespace</span> <span class="o">=</span> <span class="n">entity_iri</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+
+    <span class="k">for</span> <span class="n">namespace</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_namespace</span><span class="p">:</span>
+        <span class="n">namespace</span> <span class="o">=</span> <span class="n">namespace</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">namespace</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">variants</span> <span class="o">=</span> <span class="p">{</span><span class="n">namespace</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">namespace</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">)):</span>
+            <span class="n">variants</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">namespace</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">variants</span><span class="o">.</span><span class="n">update</span><span class="p">((</span><span class="n">namespace</span> <span class="o">+</span> <span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">namespace</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">entity_iri</span> <span class="ow">in</span> <span class="n">variants</span> <span class="ow">or</span> <span class="n">entity_namespace</span> <span class="ow">in</span> <span class="n">variants</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span>
 </code></pre></div>
         </details>
     </div>
@@ -2516,22 +2625,24 @@ TestFunctionalEMMOConventions        </code>
         <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_description.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
         <span class="n">props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
-        <span class="k">if</span> <span class="p">(</span>  <span class="c1"># pylint: disable=too-many-boolean-expressions</span>
-            <span class="s2">&quot;EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9&quot;</span>
-            <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>  <span class="c1"># deprecated after emmo 1.0.4</span>
-            <span class="ow">or</span> <span class="s2">&quot;EMMO_31252f35_c767_4b97_a877_1235076c3e13&quot;</span>
-            <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>  <span class="c1"># deprecated after emmo 1.0.4</span>
-            <span class="ow">or</span> <span class="s2">&quot;EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84&quot;</span>
-            <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>  <span class="c1"># deprecated after emmo 1.0.4</span>
-            <span class="ow">or</span> <span class="s2">&quot;elucidation&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
-            <span class="ow">or</span> <span class="s2">&quot;definition&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
-            <span class="ow">or</span> <span class="s2">&quot;conceptualisation&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
-        <span class="p">):</span>
+        <span class="n">descriptions</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;EMMO_31252f35_c767_4b97_a877_1235076c3e13&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;elucidation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;definition&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;conceptualisation&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">desc</span> <span class="ow">in</span> <span class="n">props</span> <span class="k">for</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">descriptions</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span>
                 <span class="s2">&quot;ontology has no description (emmo:elucidation, &quot;</span>
                 <span class="s2">&quot;emmo:definition or emmo:conceptualisation)&quot;</span>
             <span class="p">)</span>
+
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+                <span class="k">continue</span>
 
             <span class="c1"># Skip concepts from exceptions and common w3c vocabularies</span>
             <span class="n">vocabs</span> <span class="o">=</span> <span class="p">(</span>
@@ -2639,6 +2750,8 @@ TestFunctionalEMMOConventions        </code>
         <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(emmo|metrology).hasDimensionString.value\(.*\)$&quot;</span><span class="p">)</span>
         <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">MeasurementUnit</span><span class="o">.</span><span class="n">descendants</span><span class="p">(</span><span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+                <span class="k">continue</span>
             <span class="k">if</span> <span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;Unit&quot;</span><span class="p">):</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
@@ -2675,6 +2788,8 @@ TestFunctionalEMMOConventions        </code>
         <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(emmo|metrology).hasDimensionString.value\(.*\)$&quot;</span><span class="p">)</span>
         <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">MeasurementUnit</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+                <span class="k">continue</span>
             <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;Unit&quot;</span><span class="p">):</span>
                 <span class="k">continue</span>
@@ -2756,6 +2871,8 @@ TestFunctionalEMMOConventions        </code>
         <span class="p">)</span>
         <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+                <span class="k">continue</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
@@ -2834,6 +2951,8 @@ TestFunctionalEMMOConventions        </code>
         <span class="p">)</span>
         <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+                <span class="k">continue</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">ISO80000Categorised</span><span class="p">):</span>
@@ -2876,6 +2995,8 @@ TestFunctionalEMMOConventions        </code>
             <span class="s2">&quot;J([+-][1-9]|0)$&quot;</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">SIDimensionalUnit</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+                <span class="k">continue</span>
             <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
                 <span class="n">r</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -2896,6 +3017,8 @@ TestFunctionalEMMOConventions        </code>
             <span class="s2">&quot;J([+-][1-9]|0)$&quot;</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">SIDimensionalUnit</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+                <span class="k">continue</span>
             <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
                 <span class="n">dimstr</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">r</span><span class="o">.</span><span class="n">value</span>
@@ -2963,6 +3086,8 @@ TestFunctionalEMMOConventions        </code>
         <span class="p">)</span>
         <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+                <span class="k">continue</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
@@ -3128,22 +3253,24 @@ emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" with emmo:elucidation).</p>
     <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_description.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
     <span class="n">props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
-    <span class="k">if</span> <span class="p">(</span>  <span class="c1"># pylint: disable=too-many-boolean-expressions</span>
-        <span class="s2">&quot;EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9&quot;</span>
-        <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>  <span class="c1"># deprecated after emmo 1.0.4</span>
-        <span class="ow">or</span> <span class="s2">&quot;EMMO_31252f35_c767_4b97_a877_1235076c3e13&quot;</span>
-        <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>  <span class="c1"># deprecated after emmo 1.0.4</span>
-        <span class="ow">or</span> <span class="s2">&quot;EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84&quot;</span>
-        <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>  <span class="c1"># deprecated after emmo 1.0.4</span>
-        <span class="ow">or</span> <span class="s2">&quot;elucidation&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
-        <span class="ow">or</span> <span class="s2">&quot;definition&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
-        <span class="ow">or</span> <span class="s2">&quot;conceptualisation&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span>
-    <span class="p">):</span>
+    <span class="n">descriptions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EMMO_31252f35_c767_4b97_a877_1235076c3e13&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;elucidation&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;definition&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;conceptualisation&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">desc</span> <span class="ow">in</span> <span class="n">props</span> <span class="k">for</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">descriptions</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span>
             <span class="s2">&quot;ontology has no description (emmo:elucidation, &quot;</span>
             <span class="s2">&quot;emmo:definition or emmo:conceptualisation)&quot;</span>
         <span class="p">)</span>
+
     <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+            <span class="k">continue</span>
 
         <span class="c1"># Skip concepts from exceptions and common w3c vocabularies</span>
         <span class="n">vocabs</span> <span class="o">=</span> <span class="p">(</span>
@@ -3269,6 +3396,8 @@ emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" with emmo:elucidation).</p>
         <span class="s2">&quot;J([+-][1-9]|0)$&quot;</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">SIDimensionalUnit</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">():</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="k">continue</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
             <span class="n">dimstr</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">r</span><span class="o">.</span><span class="n">value</span>
@@ -3324,6 +3453,8 @@ emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" with emmo:elucidation).</p>
         <span class="s2">&quot;J([+-][1-9]|0)$&quot;</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">SIDimensionalUnit</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">():</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="k">continue</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">r</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">equivalent_to</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -3506,6 +3637,8 @@ emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" with emmo:elucidation).</p>
     <span class="p">)</span>
     <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
     <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="k">continue</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
@@ -3630,6 +3763,8 @@ emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" with emmo:elucidation).</p>
     <span class="p">)</span>
     <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
     <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="k">continue</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">ISO80000Categorised</span><span class="p">):</span>
@@ -3751,6 +3886,8 @@ emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" with emmo:elucidation).</p>
     <span class="p">)</span>
     <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
     <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="k">continue</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
@@ -3806,6 +3943,8 @@ emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" with emmo:elucidation).</p>
     <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(emmo|metrology).hasDimensionString.value\(.*\)$&quot;</span><span class="p">)</span>
     <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
     <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">MeasurementUnit</span><span class="o">.</span><span class="n">descendants</span><span class="p">(</span><span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="k">continue</span>
         <span class="k">if</span> <span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;Unit&quot;</span><span class="p">):</span>
             <span class="k">continue</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span> <span class="ow">and</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
@@ -3869,6 +4008,8 @@ emmo:EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9" with emmo:elucidation).</p>
     <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(emmo|metrology).hasDimensionString.value\(.*\)$&quot;</span><span class="p">)</span>
     <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">))</span>
     <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">MeasurementUnit</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="k">continue</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;Unit&quot;</span><span class="p">):</span>
             <span class="k">continue</span>
@@ -3962,6 +4103,8 @@ TestSyntacticEMMOConventions        </code>
             <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
                     <span class="k">continue</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+                    <span class="k">continue</span>
                 <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;deprecated&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span>
                     <span class="n">entity</span><span class="o">.</span><span class="n">deprecated</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
                 <span class="p">):</span>
@@ -4024,6 +4167,8 @@ TestSyntacticEMMOConventions        </code>
             <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
         <span class="p">):</span>
             <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+                    <span class="k">continue</span>
                 <span class="c1"># Skip concepts from exceptions and common w3c vocabularies</span>
                 <span class="n">vocabs</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="s2">&quot;owl.&quot;</span><span class="p">,</span>
@@ -4061,6 +4206,8 @@ TestSyntacticEMMOConventions        </code>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_number_of_rdfslabels.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+                <span class="k">continue</span>
             <span class="c1"># Skip concepts from exceptions and common w3c vocabularies</span>
             <span class="n">vocabs</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;owl.&quot;</span><span class="p">,</span>
@@ -4098,6 +4245,8 @@ TestSyntacticEMMOConventions        </code>
         <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_class_label.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
 
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+                <span class="k">continue</span>
             <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">label</span> <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
                 <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
                     <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
@@ -4120,6 +4269,8 @@ TestSyntacticEMMOConventions        </code>
         <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">obj_prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">):</span>
+                <span class="k">continue</span>
             <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">obj_prop</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
                     <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">obj_prop</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
@@ -4162,6 +4313,8 @@ TestSyntacticEMMOConventions        </code>
         <span class="p">)</span>
 
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+                <span class="k">continue</span>
             <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
                 <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
                     <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
@@ -4188,6 +4341,8 @@ TestSyntacticEMMOConventions        </code>
             <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">(),</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="n">prop</span><span class="p">):</span>
+                <span class="k">continue</span>
             <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
                     <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">prop</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
@@ -4256,6 +4411,8 @@ start with upper case.</p>
     <span class="n">exceptions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_class_label.exceptions&quot;</span><span class="p">,</span> <span class="p">()))</span>
 
     <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="k">continue</span>
         <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">label</span> <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
             <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
                 <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
@@ -4308,6 +4465,8 @@ start with upper case.</p>
     <span class="p">)</span>
 
     <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="k">continue</span>
         <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
             <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
                 <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
@@ -4354,6 +4513,8 @@ starts with "owl.".</p>
         <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_props</span>  <span class="c1"># pylint: disable=protected-access</span>
     <span class="p">):</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+                <span class="k">continue</span>
             <span class="c1"># Skip concepts from exceptions and common w3c vocabularies</span>
             <span class="n">vocabs</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;owl.&quot;</span><span class="p">,</span>
@@ -4416,6 +4577,8 @@ starts with "owl.".</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;test_number_of_rdfslabels.exceptions&quot;</span><span class="p">,</span> <span class="p">())</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_imported</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+            <span class="k">continue</span>
         <span class="c1"># Skip concepts from exceptions and common w3c vocabularies</span>
         <span class="n">vocabs</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;owl.&quot;</span><span class="p">,</span>
@@ -4477,6 +4640,8 @@ upper case letter.</p>
     <span class="p">)</span>
 
     <span class="k">for</span> <span class="n">obj_prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">object_properties</span><span class="p">():</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">):</span>
+            <span class="k">continue</span>
         <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj_prop</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">obj_prop</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
                 <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">obj_prop</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
@@ -4544,6 +4709,8 @@ upper case letter.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">(),</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="n">prop</span><span class="p">):</span>
+            <span class="k">continue</span>
         <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="p">[]):</span>
                 <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">prop</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">):</span>
@@ -4629,6 +4796,8 @@ in the YAML file.</p>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_skip_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;deprecated&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span>
                 <span class="n">entity</span><span class="o">.</span><span class="n">deprecated</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
@@ -4906,12 +5075,10 @@ manually / through Python.</p></td>
         <span class="n">catalog_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">catalog_file</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="c1"># Store settings TestEMMOConventions</span>
-    <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">onto</span> <span class="o">=</span> <span class="n">onto</span>
-    <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">check_imported</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">check_imported</span>
-    <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">ignore_namespace</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">ignore_namespace</span>
-
     <span class="c1"># Configure tests</span>
+    <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">ignore_namespace</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">ignore_namespace</span><span class="p">)</span>
+
     <span class="n">verbosity</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="k">else</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">configfile</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
@@ -4919,6 +5086,23 @@ manually / through Python.</p></td>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">configfile</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">conf</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
         <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">conf</span> <span class="k">if</span> <span class="n">conf</span> <span class="k">else</span> <span class="p">{})</span>
+
+    <span class="n">config_ignore_namespace</span> <span class="o">=</span> <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;ignore_namespace&quot;</span><span class="p">,</span> <span class="p">[]</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config_ignore_namespace</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">config_ignore_namespace</span> <span class="o">=</span> <span class="p">[</span><span class="n">config_ignore_namespace</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config_ignore_namespace</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="n">config_ignore_namespace</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Store settings TestEMMOConventions</span>
+    <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">onto</span> <span class="o">=</span> <span class="n">onto</span>
+    <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">check_imported</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">check_imported</span>
+    <span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">ignore_namespace</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+        <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span>
+            <span class="p">[</span><span class="o">*</span><span class="n">TestEMMOConventions</span><span class="o">.</span><span class="n">ignore_namespace</span><span class="p">,</span> <span class="o">*</span><span class="n">config_ignore_namespace</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="c1"># Run all subclasses of TestEMMOConventions as test suites</span>
     <span class="n">status</span> <span class="o">=</span> <span class="mi">0</span>
@@ -4947,7 +5131,7 @@ manually / through Python.</p></td>
             <span class="c1"># enable/skip tests from config file</span>
             <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">test</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;enable&quot;</span><span class="p">,</span> <span class="p">()):</span>
                 <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatchcase</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
-                    <span class="n">skipped</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">skipped</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">test</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span> <span class="p">()):</span>
                 <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatchcase</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
                     <span class="n">skipped</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -4956,14 +5140,20 @@ manually / through Python.</p></td>
             <span class="c1"># enable/skip from command line</span>
             <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">enable</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatchcase</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
-                    <span class="n">skipped</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">skipped</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">skip</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatchcase</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
                     <span class="n">skipped</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
                     <span class="n">msg</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;skipped from command line&quot;</span>
 
             <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">skipped</span><span class="p">:</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="s2">&quot;setUp&quot;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">test</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
+                <span class="nb">setattr</span><span class="p">(</span>
+                    <span class="n">test</span><span class="p">,</span>
+                    <span class="s2">&quot;setUp&quot;</span><span class="p">,</span>
+                    <span class="k">lambda</span> <span class="n">test_case</span><span class="o">=</span><span class="n">test</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="n">msg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                        <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+                    <span class="p">):</span> <span class="n">test_case</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="n">reason</span><span class="p">),</span>
+                <span class="p">)</span>
 
         <span class="n">runner</span> <span class="o">=</span> <span class="n">TextTestRunner</span><span class="p">(</span><span class="n">verbosity</span><span class="o">=</span><span class="n">verbosity</span><span class="p">)</span>
         <span class="n">runner</span><span class="o">.</span><span class="n">resultclass</span><span class="o">.</span><span class="n">checkmode</span> <span class="o">=</span> <span class="kc">True</span>

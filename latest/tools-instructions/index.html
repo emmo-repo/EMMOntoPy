@@ -2609,13 +2609,14 @@ The various checks can be found in the <a href="https://emmo-repo.github.io/EMMO
 <span class="go">  --url-from-catalog, -u</span>
 <span class="go">      Get url from catalog file.</span>
 <span class="go">  --ignore-namespace, -n</span>
-<span class="go">                        Namespace to be ignored. Can be given multiple times</span>
+<span class="go">                        Namespace to be ignored. Can be given multiple times.</span>
+<span class="go">                        This namespace will be ignored in all tests.</span>
 </code></pre></div>
 <h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="go">    emmocheck http://emmo.info/emmo/1.0.0-alpha2</span>
 <span class="go">    emmocheck --database demo.sqlite3 http://www.emmc.info/emmc-csa/demo#</span>
 <span class="go">    emmocheck -l emmo.owl (in folder to which emmo was downloaded locally)</span>
-<span class="go">    emmocheck --check-imported --ignore-namespace=physicalistic --verbose --url-from-catalog emmo.owl (in folder with downloaded EMMO)</span>
+<span class="go">    emmocheck --check-imported --ignore-namespace=https://w3id.org/emmo --verbose --url-from-catalog emmo.owl (in folder with downloaded EMMO)</span>
 <span class="go">    emmocheck --check-imported --local --url-from-catalog --skip test_namespace emmo.owl</span>
 </code></pre></div>
 <h3 id="configuration-file">Configuration file<a class="headerlink" href="#configuration-file" title="Permanent link">&para;</a></h3>
@@ -2624,6 +2625,7 @@ The various checks can be found in the <a href="https://emmo-repo.github.io/EMMO
 <ul>
 <li><code>skip</code>: List of tests to skip</li>
 <li><code>enable</code>: List of tests to enable</li>
+<li><code>ignore_namespace</code>: List of namespaces to ignore for all checks</li>
 <li><code>&lt;test_name&gt;</code>: A name of a test. Recognised nested keywords are:<ul>
 <li><code>exceptions</code>: List of entities in the ontology to skip. Should be written
   as <code>&lt;ns0&gt;.&lt;name&gt;</code>, where <code>&lt;ns0&gt;</code> is the last component of the base IRI
@@ -2644,6 +2646,9 @@ The various checks can be found in the <a href="https://emmo-repo.github.io/EMMO
 <span class="go">  exceptions:</span>
 <span class="go">    - myunits.MyUnitCategory1</span>
 <span class="go">    - myunits.MyUnitCategory2</span>
+
+<span class="go">ignore_namespace:</span>
+<span class="go">  - https://w3id.org/emmo#</span>
 
 <span class="go">skip:</span>
 <span class="go">  - name_of_test_to_skip</span>
