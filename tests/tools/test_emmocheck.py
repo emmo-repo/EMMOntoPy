@@ -224,6 +224,149 @@ def test_preflabel_checks(tmp_path) -> None:
     assert status == 1
 
 
+def test_ignore_namespace_applies_to_all_tests(tmp_path) -> None:
+    """Check that --ignore-namespace skips matching entities for enabled tests."""
+    from emmopy import emmocheck as emmocheck_module
+    from ontopy.testutils import get_tool_module
+
+    emmocheck = get_tool_module("emmocheck")
+
+    def run_emmocheck(args):
+        emmocheck_module.TestEMMOConventions.config = {}
+        return emmocheck.main(args)
+
+    ontofile = tmp_path / "ignore_namespace.ttl"
+    ontofile.write_text(
+        """@prefix : <http://example.org/test#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://example.org/test> a owl:Ontology .
+
+:badclass a owl:Class ;
+    rdfs:label "bad class"@en .
+
+<http://example.org/test/child#badchild> a owl:Class ;
+    rdfs:label "bad child"@en .
+""",
+        encoding="utf-8",
+    )
+
+    status = run_emmocheck(["--enable=test_class_label", str(ontofile)])
+    assert status == 1
+
+    status = run_emmocheck(
+        [
+            "--enable=test_class_label",
+            "--ignore-namespace",
+            "http://example.org/test",
+            str(ontofile),
+        ]
+    )
+    assert status == 1
+
+    status = run_emmocheck(
+        [
+            "--enable=test_class_label",
+            "--ignore-namespace",
+            "http://example.org/test/child",
+            str(ontofile),
+        ]
+    )
+    assert status == 1
+
+
+def test_enable_disable_tests_still_work(tmp_path) -> None:
+    """Check that enable/skip configuration still works across invocations."""
+    from ontopy.testutils import get_tool_module
+
+    emmocheck = get_tool_module("emmocheck")
+    from emmopy import emmocheck as emmocheck_module
+
+    def run_emmocheck(args):
+        emmocheck_module.TestEMMOConventions.config = {}
+        return emmocheck.main(args)
+
+    ontofile = tmp_path / "enable_disable.ttl"
+    ontofile.write_text(
+        """@prefix : <http://example.org/test#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://example.org/test> a owl:Ontology .
+
+:badclass a owl:Class ;
+    rdfs:label "bad class"@en .
+""",
+        encoding="utf-8",
+    )
+
+    configfile = tmp_path / "emmocheck.yml"
+    configfile.write_text("skip:\n  - test_*\n", encoding="utf-8")
+
+    status = run_emmocheck(
+        [
+            "--configfile",
+            str(configfile),
+            str(ontofile),
+        ]
+    )
+    assert status == 0
+
+    status = run_emmocheck(
+        [
+            "--configfile",
+            str(configfile),
+            "--enable=test_class_label",
+            str(ontofile),
+        ]
+    )
+    assert status == 1
+
+
+def test_ignore_namespace_from_config(tmp_path) -> None:
+    """Check that ignore_namespace can be configured from YAML."""
+    from ontopy.testutils import get_tool_module
+
+    emmocheck = get_tool_module("emmocheck")
+    from emmopy import emmocheck as emmocheck_module
+
+    def run_emmocheck(args):
+        emmocheck_module.TestEMMOConventions.config = {}
+        return emmocheck.main(args)
+
+    ontofile = tmp_path / "ignore_namespace_config.ttl"
+    ontofile.write_text(
+        """@prefix : <http://example.org/test#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://example.org/test> a owl:Ontology .
+
+:badclass a owl:Class ;
+    rdfs:label "bad class"@en .
+""",
+        encoding="utf-8",
+    )
+
+    configfile = tmp_path / "emmocheck.yml"
+    configfile.write_text(
+        "ignore_namespace:\n  - http://example.org/test\n",
+        encoding="utf-8",
+    )
+
+    status = run_emmocheck(
+        [
+            "--configfile",
+            str(configfile),
+            "--enable=test_class_label",
+            "--skip=test_*",
+            str(ontofile),
+        ]
+    )
+    assert status == 0
+
+
 def test_unique_labels(tmp_path) -> None:
     """Check unique-label behavior using ontology fixtures from testonto."""
     from pathlib import Path
