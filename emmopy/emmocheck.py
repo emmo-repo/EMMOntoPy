@@ -62,6 +62,7 @@ class TestEMMOConventions(unittest.TestCase):
     """Base class for testing an ontology against EMMO conventions."""
 
     config = {}  # configurations
+    ignore_namespace = []
 
     def get_config(self, string, default=None):
         """Returns the configuration specified by `string`.
@@ -79,6 +80,37 @@ class TestEMMOConventions(unittest.TestCase):
         except KeyError:
             return default
         return result
+
+    def should_skip_entity(self, entity):
+        """Return whether an entity should be ignored because of namespace."""
+        if not self.ignore_namespace:
+            return False
+
+        entity_iri = getattr(entity, "iri", None)
+        if entity_iri is None:
+            return False
+
+        entity_namespace = entity_iri
+        if "#" in entity_iri:
+            entity_namespace = entity_iri.rsplit("#", 1)[0] + "#"
+        elif "/" in entity_iri:
+            entity_namespace = entity_iri.rsplit("/", 1)[0] + "/"
+
+        for namespace in self.ignore_namespace:
+            namespace = namespace.strip()
+            if not namespace:
+                continue
+
+            variants = {namespace}
+            if namespace.endswith(("#", "/")):
+                variants.add(namespace.rstrip("#/"))
+            else:
+                variants.update((namespace + "#", namespace + "/"))
+
+            if entity_iri in variants or entity_namespace in variants:
+                return True
+
+        return False
 
 
 class TestSyntacticEMMOConventions(TestEMMOConventions):
@@ -122,6 +154,8 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
             )
             for entity in entities:
                 if entity in visited:
+                    continue
+                if self.should_skip_entity(entity):
                     continue
                 if hasattr(entity, "deprecated") and bool(
                     entity.deprecated.first()
@@ -185,6 +219,8 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
             in self.onto.world._props  # pylint: disable=protected-access
         ):
             for entity in self.onto.classes(self.check_imported):
+                if self.should_skip_entity(entity):
+                    continue
                 # Skip concepts from exceptions and common w3c vocabularies
                 vocabs = (
                     "owl.",
@@ -222,6 +258,8 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
             self.get_config("test_number_of_rdfslabels.exceptions", ())
         )
         for entity in self.onto.classes(self.check_imported):
+            if self.should_skip_entity(entity):
+                continue
             # Skip concepts from exceptions and common w3c vocabularies
             vocabs = (
                 "owl.",
@@ -259,6 +297,8 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         exceptions.update(self.get_config("test_class_label.exceptions", ()))
 
         for cls in self.onto.classes(self.check_imported):
+            if self.should_skip_entity(cls):
+                continue
             for label in cls.label + getattr(cls, "prefLabel", []):
                 if str(label) not in exceptions:
                     with self.subTest(entity=cls, label=label):
@@ -281,6 +321,8 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         )
 
         for obj_prop in self.onto.object_properties():
+            if self.should_skip_entity(obj_prop):
+                continue
             if repr(obj_prop) not in exceptions:
                 for label in obj_prop.label:
                     with self.subTest(entity=obj_prop, label=label):
@@ -323,6 +365,8 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
         )
 
         for cls in self.onto.classes(self.check_imported):
+            if self.should_skip_entity(cls):
+                continue
             for label in getattr(cls, "prefLabel", []):
                 if str(label) not in exceptions:
                     with self.subTest(entity=cls, label=label):
@@ -349,6 +393,8 @@ class TestSyntacticEMMOConventions(TestEMMOConventions):
             self.onto.annotation_properties(),
         )
         for prop in properties:
+            if self.should_skip_entity(prop):
+                continue
             if repr(prop) not in exceptions:
                 for label in getattr(prop, "prefLabel", []):
                     with self.subTest(entity=prop, label=label):
@@ -396,22 +442,24 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         exceptions = set()
         exceptions.update(self.get_config("test_description.exceptions", ()))
         props = self.onto.world._props  # pylint: disable=protected-access
-        if (  # pylint: disable=too-many-boolean-expressions
-            "EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9"
-            not in props  # deprecated after emmo 1.0.4
-            or "EMMO_31252f35_c767_4b97_a877_1235076c3e13"
-            not in props  # deprecated after emmo 1.0.4
-            or "EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84"
-            not in props  # deprecated after emmo 1.0.4
-            or "elucidation" not in props
-            or "definition" not in props
-            or "conceptualisation" not in props
-        ):
+        descriptions = [
+            "EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9",
+            "EMMO_31252f35_c767_4b97_a877_1235076c3e13",
+            "EMMO_70fe84ff_99b6_4206_a9fc_9a8931836d84",
+            "elucidation",
+            "definition",
+            "conceptualisation",
+        ]
+
+        if not any(desc in props for desc in descriptions):
             self.fail(
                 "ontology has no description (emmo:elucidation, "
                 "emmo:definition or emmo:conceptualisation)"
             )
+
         for entity in self.onto.classes(self.check_imported):
+            if self.should_skip_entity(entity):
+                continue
 
             # Skip concepts from exceptions and common w3c vocabularies
             vocabs = (
@@ -519,6 +567,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         regex = re.compile(r"^(emmo|metrology).hasDimensionString.value\(.*\)$")
         classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.MeasurementUnit.descendants(include_self=False):
+            if self.should_skip_entity(cls):
+                continue
             if get_label(cls).endswith("Unit"):
                 continue
             if not self.check_imported and cls not in classes:
@@ -555,6 +605,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         regex = re.compile(r"^(emmo|metrology).hasDimensionString.value\(.*\)$")
         classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.MeasurementUnit.descendants():
+            if self.should_skip_entity(cls):
+                continue
             label = get_label(cls)
             if label.endswith("Unit"):
                 continue
@@ -636,6 +688,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         )
         classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.PhysicalQuantity.descendants():
+            if self.should_skip_entity(cls):
+                continue
             if not self.check_imported and cls not in classes:
                 continue
             if repr(cls) not in exceptions:
@@ -714,6 +768,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         )
         classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.PhysicalQuantity.descendants():
+            if self.should_skip_entity(cls):
+                continue
             if not self.check_imported and cls not in classes:
                 continue
             if issubclass(cls, self.onto.ISO80000Categorised):
@@ -756,6 +812,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             "J([+-][1-9]|0)$"
         )
         for cls in self.onto.SIDimensionalUnit.__subclasses__():
+            if self.should_skip_entity(cls):
+                continue
             with self.subTest(cls=cls, label=get_label(cls)):
                 self.assertEqual(len(cls.equivalent_to), 1)
                 r = cls.equivalent_to[0]
@@ -776,6 +834,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
             "J([+-][1-9]|0)$"
         )
         for cls in self.onto.SIDimensionalUnit.__subclasses__():
+            if self.should_skip_entity(cls):
+                continue
             with self.subTest(cls=cls, label=get_label(cls)):
                 dimstr = [
                     r.value
@@ -843,6 +903,8 @@ class TestFunctionalEMMOConventions(TestEMMOConventions):
         )
         classes = set(self.onto.classes(self.check_imported))
         for cls in self.onto.PhysicalQuantity.descendants():
+            if self.should_skip_entity(cls):
+                continue
             if not self.check_imported and cls not in classes:
                 continue
             if repr(cls) not in exceptions:
@@ -1142,12 +1204,10 @@ def main(
         catalog_file=args.catalog_file,
     )
 
-    # Store settings TestEMMOConventions
-    TestEMMOConventions.onto = onto
-    TestEMMOConventions.check_imported = args.check_imported
-    TestEMMOConventions.ignore_namespace = args.ignore_namespace
-
     # Configure tests
+    TestEMMOConventions.config = {}
+    TestEMMOConventions.ignore_namespace = list(args.ignore_namespace)
+
     verbosity = 2 if args.verbose else 1
     if args.configfile:
         import yaml  # pylint: disable=import-outside-toplevel
@@ -1155,6 +1215,23 @@ def main(
         with open(args.configfile, "rt") as f:
             conf = yaml.safe_load(f)
         TestEMMOConventions.config.update(conf if conf else {})
+
+    config_ignore_namespace = TestEMMOConventions.config.get(
+        "ignore_namespace", []
+    )
+    if isinstance(config_ignore_namespace, str):
+        config_ignore_namespace = [config_ignore_namespace]
+    elif not isinstance(config_ignore_namespace, (list, tuple)):
+        config_ignore_namespace = []
+
+    # Store settings TestEMMOConventions
+    TestEMMOConventions.onto = onto
+    TestEMMOConventions.check_imported = args.check_imported
+    TestEMMOConventions.ignore_namespace = list(
+        dict.fromkeys(
+            [*TestEMMOConventions.ignore_namespace, *config_ignore_namespace]
+        )
+    )
 
     # Run all subclasses of TestEMMOConventions as test suites
     status = 0
@@ -1183,7 +1260,7 @@ def main(
             # enable/skip tests from config file
             for pattern in test.get_config("enable", ()):
                 if fnmatch.fnmatchcase(name, pattern):
-                    skipped.remove(name)
+                    skipped.discard(name)
             for pattern in test.get_config("skip", ()):
                 if fnmatch.fnmatchcase(name, pattern):
                     skipped.add(name)
@@ -1192,14 +1269,20 @@ def main(
             # enable/skip from command line
             for pattern in args.enable:
                 if fnmatch.fnmatchcase(name, pattern):
-                    skipped.remove(name)
+                    skipped.discard(name)
             for pattern in args.skip:
                 if fnmatch.fnmatchcase(name, pattern):
                     skipped.add(name)
                     msg[name] = "skipped from command line"
 
             if name in skipped:
-                setattr(test, "setUp", lambda: test.skipTest(msg.get(name, "")))
+                setattr(
+                    test,
+                    "setUp",
+                    lambda test_case=test, reason=msg.get(
+                        name, ""
+                    ): test_case.skipTest(reason),
+                )
 
         runner = TextTestRunner(verbosity=verbosity)
         runner.resultclass.checkmode = True
