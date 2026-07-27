@@ -60,7 +60,8 @@ optional arguments:
   --url-from-catalog, -u
       Get url from catalog file.
   --ignore-namespace, -n
-                        Namespace to be ignored. Can be given multiple times
+                        Namespace to be ignored. Can be given multiple times.
+                        This namespace will be ignored in all tests.
 ```
 
 ### Examples
@@ -69,7 +70,7 @@ optional arguments:
     emmocheck http://emmo.info/emmo/1.0.0-alpha2
     emmocheck --database demo.sqlite3 http://www.emmc.info/emmc-csa/demo#
     emmocheck -l emmo.owl (in folder to which emmo was downloaded locally)
-    emmocheck --check-imported --ignore-namespace=physicalistic --verbose --url-from-catalog emmo.owl (in folder with downloaded EMMO)
+    emmocheck --check-imported --ignore-namespace=https://w3id.org/emmo --verbose --url-from-catalog emmo.owl (in folder with downloaded EMMO)
     emmocheck --check-imported --local --url-from-catalog --skip test_namespace emmo.owl
 ```
 
@@ -81,6 +82,7 @@ The following keywords are recognised in the YAML file:
 
   - `skip`: List of tests to skip
   - `enable`: List of tests to enable
+  - `ignore_namespace`: List of namespaces to ignore for all checks
   - `<test_name>`: A name of a test. Recognised nested keywords are:
     - `exceptions`: List of entities in the ontology to skip. Should be written
       as `<ns0>.<name>`, where `<ns0>` is the last component of the base IRI
@@ -101,6 +103,9 @@ test_unit_dimensions:
   exceptions:
     - myunits.MyUnitCategory1
     - myunits.MyUnitCategory2
+
+ignore_namespace:
+  - https://w3id.org/emmo#
 
 skip:
   - name_of_test_to_skip
