@@ -515,14 +515,14 @@ from the command line.
 It is included in master so that useful functionalities might be used, but please keep in mind that
 changes that are not completely backwards compatible may occur.
 
-Ontokit funcionality can be found with:
+Ontokit functionality can be found with:
 
 ```console
 ontokit --help # will give info on available subcommands
 ontokit subcommand --help  # info on the chosen subcommand
 ```
 
-Currently, there are two submodules that have been developed: `setup` and `docs`.
+Currently, there are three subcommands that have been developed: `setup`, `docs` and `context`.
 `ontokit setup` will setup .github workflows and create an `.ontokit_conf.yaml` file in the
 root of you repository. You should open, inspect and update this file once you have created it.
 
@@ -539,6 +539,27 @@ is necessary. Direct pushes to `main` or `master` will only update the "latest" 
 
 
 `ontokit docs` creates the documentation according to the specifications in the configuration file.
+
+`ontokit context` generates a JSON-LD context from an ontology and can include terms from imported ontologies.
+The `--include-namespace` argument may be provided multiple times to only include terms whose namespace starts
+with one of the given values.
+
+### Example
+
+Generate context without imported ontologies:
+(This will show an almost empty context, since ani.ttl only imports other modules.)
+
+```console
+ontokit context tests/testonto/ani.ttl context.json
+```
+
+
+Generate context including imported ontologies, but keep only terms in the animal namespace:
+(Note that the `--include-namespace` argument may be provided multiple times to include multiple namespaces.)
+
+```console
+ontokit context tests/testonto/ani.ttl context.json --include-imported --include-namespace https://w3id.org/emmo/domain/animal#
+```
 
 
 

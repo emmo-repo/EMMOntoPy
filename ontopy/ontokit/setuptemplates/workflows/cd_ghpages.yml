@@ -148,6 +148,15 @@ jobs:
     - name: Generate Ontokit documentation to public
       run: ontokit docs --iri-regex=${ONTOLOGY_IRI} . && touch public/.nojekyll
 
+    - name: Generate JSON-LD context to public/context
+      run: |
+        mkdir -p public/context
+        ontokit context \
+            "${BUILD_DIR}/${ONTOLOGY_NAME}.ttl" \
+            public/context/context.json \
+            --include-imported \
+            --include-namespace "${ONTOLOGY_IRI}#"
+
     # Copy turtle files from build to public
     - name: Copy ontologies to public
       run: cp "${BUILD_DIR}"/*.ttl public/

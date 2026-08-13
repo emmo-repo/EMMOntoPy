@@ -55,6 +55,16 @@ def context_arguments(subparsers):
             "output context.  May be added multiple times."
         ),
     )
+    parser.add_argument(
+        "--include-namespace",
+        metavar="NAMESPACE",
+        action="append",
+        default=[],
+        help=(
+            "Only include terms whose namespace starts with NAMESPACE. "
+            "May be added multiple times."
+        ),
+    )
 
 
 def context_subcommand(args):
@@ -86,9 +96,19 @@ def context_subcommand(args):
         prefix, ns = arg.split(":", 1)
         prefixes[prefix] = ns
 
+    include_namespaces = tuple(args.include_namespace)
+
+    def namespace_allowed(entity):
+        if not include_namespaces:
+            return True
+        base_iri = entity.namespace.base_iri
+        return any(base_iri.startswith(ns) for ns in include_namespaces)
+
     # Object properties
     d = {}
     for prop in onto.object_properties(args.include_imported):
+        if not namespace_allowed(prop):
+            continue
         label = get_label(prop)
         if label:
             d[label] = {"@id": prop.iri, "@type": "@id"}
@@ -101,6 +121,8 @@ def context_subcommand(args):
         onto.annotation_properties(args.include_imported),
         onto.data_properties(args.include_imported),
     ):
+        if not namespace_allowed(prop):
+            continue
         label = get_label(prop)
         tp = (
             RDF + "plainLiteral"
@@ -115,6 +137,8 @@ def context_subcommand(args):
     # Classes
     d = {}
     for cls in onto.classes(args.include_imported):
+        if not namespace_allowed(cls):
+            continue
         label = get_label(cls)
         if label:
             d[label] = {"@id": cls.iri, "@type": OWL + "Class"}
