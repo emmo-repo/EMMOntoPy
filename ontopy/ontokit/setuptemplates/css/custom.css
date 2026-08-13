@@ -119,3 +119,22 @@ button.toc-toggle-btn:hover {
 ul.toc-items-collapsed {
     display: none;
 }
+
+/* Widen the main article area on desktop while keeping sidebars compact. */
+@media (min-width: 1200px) {
+    .bd-page-width {
+        max-width: 96rem;
+    }
+
+    .bd-main .bd-content .bd-article-container {
+        max-width: 72em;
+    }
+
+    .bd-sidebar-primary {
+        width: clamp(14rem, 20vw, 18rem);
+    }
+
+    .bd-sidebar-secondary {
+        width: 14rem;
+    }
+}

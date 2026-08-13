@@ -71,8 +71,34 @@ def docs_arguments(subparsers):
         "Default is 'docs/index.rst'.",
     )
 
+    parser.add_argument(
+        "--ontology-file",
+        "-f",
+        metavar="FILE",
+        help=(
+            "Path to the ontology file to document in the auto-generated "
+            "reference index, relative to the root directory. Default is "
+            "'build/ontology_name.ttl', where 'ontology_name' is "
+            "the value of ONTOLOGY_NAME in the configuration file."
+        ),
+    )
 
-def docs_subcommand(args):  # pylint: disable=too-many-locals
+    parser.add_argument(
+        "--docs-dir",
+        metavar="DIR",
+        help=(
+            "Documentation directory to include in the generated "
+            "documentation. "
+            "Typically the README.md which is included as the landing page "
+            "of the documentation links to the docs dir and its contents. "
+            "If not provided, the README.md will be included in the "
+            "documentation, but the docs dir will not be included."
+        ),
+    )
+
+
+# pylint: disable=too-many-locals,too-many-statements,too-many-branches
+def docs_subcommand(args):
     """Implements the docs sub-command."""
     root = Path(args.root).resolve()
     config_path = get_config_path(root)
@@ -95,16 +121,55 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
     ontology_name = config.get("ONTOLOGY_NAME")
     github_repository = config.get("GITHUB_REPOSITORY")
     build_dir = config.get("BUILD_DIR", "build")
+    reference_indices = config.get("REFERENCE_INDICES", [])
+    primary_subsections = config.get("REFERENCE_SUBSECTIONS", "all")
+
+    docs_dir = root / args.docs_dir if args.docs_dir else None
+    if docs_dir is None:
+        default_docs_dir = root / "docs"
+        if default_docs_dir.is_dir():
+            docs_dir = default_docs_dir
 
     # Path to ontology file
-    # assumes the ontology for docc: {build_dir}/ontology_name-inferred.ttl
-    ontofile = root / build_dir / f"{ontology_name}.ttl"  # INFERRED?
+    if args.ontology_file:
+        ontofile = root / args.ontology_file
+    else:
+        ontofile = (
+            root / build_dir / f"{ontology_name}.ttl"
+        )  # INFERRED as default?
     onto = get_ontology(ontofile).load()
     od = OntologyDocumentation(
         onto,
-        recursive=args.imported,
+        imported=args.imported,
+        recursive=args.recursive,
         iri_regex=args.iri_regex,
+        subsections=primary_subsections,
     )
+
+    # Optional additional reference indices provided by .ontokit_conf.yml
+    if reference_indices and not isinstance(reference_indices, list):
+        raise ValueError(
+            "REFERENCE_INDICES in .ontokit_conf.yml must be a list."
+        )
+
+    for ref in reference_indices:
+        if not isinstance(ref, dict):
+            raise ValueError("Each REFERENCE_INDICES entry must be a mapping.")
+        ref_ontology_file = ref.get("ontology_file")
+        if not ref_ontology_file:
+            raise ValueError(
+                "Each REFERENCE_INDICES entry must define 'ontology_file'."
+            )
+        ref_onto = get_ontology(root / ref_ontology_file).load()
+        od.add_reference(
+            ref_onto,
+            imported=ref.get("imported", args.imported),
+            recursive=ref.get("recursive", False),
+            iri_regex=ref.get("iri_regex", args.iri_regex),
+            title=ref.get("title", "Reference Index"),
+            docfile=ref.get("docfile"),
+            subsections=ref.get("subsections", "all"),
+        )
 
     if not args.outfile:
         docfile = root / build_dir / f"{ontology_name}.rst"
@@ -112,22 +177,32 @@ def docs_subcommand(args):  # pylint: disable=too-many-locals
         docfile = root / Path(args.outfile)
     indexfile = docfile.with_name("index.rst")
     conffile = docfile.with_name("conf.py")
-    od.write_refdoc(docfile=docfile)
-    # if not indexfile.exists():
+    # Write all configured reference indices.
+    od.write_reference_docs(outdir=docfile.parent, overwrite=True)
     od.write_index_template(
-        indexfile=indexfile, docfile=docfile, overwrite=True
+        indexfile=indexfile,
+        docfile=docfile,
+        overwrite=True,
+        docs_dir=docs_dir,
     )
-    # if not conffile.exists():
     od.write_conf_template(
         conffile=conffile,
         docfile=docfile,
         overwrite=True,
         github_repository=github_repository,
     )
-    (Path(build_dir) / "_static").mkdir(parents=True, exist_ok=True)
+    (root / build_dir / "_static").mkdir(parents=True, exist_ok=True)
 
     od.copy_css_file()  # Use default CSS file
     od.copy_js_file()  # Use default collapsible-TOC JS file
+
+    if docs_dir:
+        # Copy repository docs into the build dir so Sphinx consumes the
+        # latest landing pages and markdown content on every run.
+        dst_docs_dir = root / build_dir / docs_dir.name
+        if dst_docs_dir.exists():
+            shutil.rmtree(dst_docs_dir)
+        shutil.copytree(docs_dir, dst_docs_dir)
 
     public_dir = "public"
 

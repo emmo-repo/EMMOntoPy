@@ -71,3 +71,31 @@ Notes on running `ontokit docs`:
   manually if you want to use `ontokit docs` without running `ontokit setup`.
   However, `ontokit setup` creates github workflow files as well,
   which might lead to changes in your already existing workflows.
+
+*  For the main reference index you can control which subsections are included. The default is
+  `all`.
+
+  ```yaml
+  REFERENCE_SUBSECTIONS: all
+  # Or, for a subset:
+  # REFERENCE_SUBSECTIONS: classes,annotation_properties,data_properties,object_properties,individuals
+  ```
+
+* It is also possible to add multiple additional reference indices in
+  `.ontokit_conf.yml` with `REFERENCE_INDICES`:
+
+  ```yaml
+  REFERENCE_INDICES:
+    - ontology_file: build/other-ontology.ttl
+      title: Other Ontology Reference
+      docfile: other-reference.rst
+      iri_regex: https://example.org/other
+      imported: false
+      recursive: false
+      subsections: all
+  ```
+
+  The `ontology_file` key is required for each entry. The generated
+  `index.rst` will include all configured reference indices. Note
+  that the creation of the ontology in the particular place (as here
+  in build) is not done by this tool.
