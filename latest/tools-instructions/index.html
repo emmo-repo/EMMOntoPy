@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -720,6 +720,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="ontokit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2044,6 +2061,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api_reference/ontopy/ontokit/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api_reference/ontopy/ontokit/docs/" class="md-nav__link">
         
   
@@ -2539,6 +2584,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="ontokit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -2973,11 +3035,11 @@ from the command line.</p>
 <p><code>ontokit</code> is currently under heavy development and might be subject to change on short notice.</p>
 <p>It is included in master so that useful functionalities might be used, but please keep in mind that
 changes that are not completely backwards compatible may occur.</p>
-<p>Ontokit funcionality can be found with:</p>
+<p>Ontokit functionality can be found with:</p>
 <div class="highlight"><pre><span></span><code><span class="go">ontokit --help # will give info on available subcommands</span>
 <span class="go">ontokit subcommand --help  # info on the chosen subcommand</span>
 </code></pre></div>
-<p>Currently, there are two submodules that have been developed: <code>setup</code> and <code>docs</code>.
+<p>Currently, there are three subcommands that have been developed: <code>setup</code>, <code>docs</code> and <code>context</code>.
 <code>ontokit setup</code> will setup .github workflows and create an <code>.ontokit_conf.yaml</code> file in the
 root of you repository. You should open, inspect and update this file once you have created it.</p>
 <p>The created workflows follow the rules for creating <a href="https://github.com/emmo-repo/.github/wiki/DomainOntologiesBestPractice">EMMO-based ontologies</a>.
@@ -2987,6 +3049,18 @@ any branch matching <code>[0-9]+.[0-9]+.[0-9]+</code> or <code>[0-9]+.[0-9]+.[0-
 <p>For persistent storage of versions of the ontology, a push to a branch matching <code>[0-9]+.[0-9]+.[0-9]+</code> or <code>[0-9]+.[0-9]+.[0-9]+-*</code>
 is necessary. Direct pushes to <code>main</code> or <code>master</code> will only update the "latest" documentation and not the versioned documentation.</p>
 <p><code>ontokit docs</code> creates the documentation according to the specifications in the configuration file.</p>
+<p><code>ontokit context</code> generates a JSON-LD context from an ontology and can include terms from imported ontologies.
+The <code>--include-namespace</code> argument may be provided multiple times to only include terms whose namespace starts
+with one of the given values.</p>
+<h3 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
+<p>Generate context without imported ontologies:
+(This will show an almost empty context, since ani.ttl only imports other modules.)</p>
+<div class="highlight"><pre><span></span><code><span class="go">ontokit context tests/testonto/ani.ttl context.json</span>
+</code></pre></div>
+<p>Generate context including imported ontologies, but keep only terms in the animal namespace:
+(Note that the <code>--include-namespace</code> argument may be provided multiple times to include multiple namespaces.)</p>
+<div class="highlight"><pre><span></span><code><span class="go">ontokit context tests/testonto/ani.ttl context.json --include-imported --include-namespace https://w3id.org/emmo/domain/animal#</span>
+</code></pre></div>
 <p>For local testing of ontology reference-document generation (used by
 <code>ontodoc_rst</code> / <code>ontokit</code>), see the focused pytest command in
 <a href="../developers/testing/#targeted-checks-for-ontology-reference-docs">developer testing</a>.</p>
@@ -3067,7 +3141,7 @@ is necessary. Direct pushes to <code>main</code> or <code>master</code> will onl
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.top", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
