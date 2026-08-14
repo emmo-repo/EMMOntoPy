@@ -4,6 +4,7 @@
 import argparse
 from ontopy.ontokit.setup import setup_arguments
 from ontopy.ontokit.docs import docs_arguments
+from ontopy.ontokit.context import context_arguments
 
 
 def main(argv: "list" = None):
@@ -28,6 +29,7 @@ def main(argv: "list" = None):
     subparsers = parser.add_subparsers(required=True, help="Subcommands:")
     setup_arguments(subparsers)
     docs_arguments(subparsers)
+    context_arguments(subparsers)
 
     args = parser.parse_args(argv)
 

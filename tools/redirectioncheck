@@ -62,6 +62,8 @@ def test_redirection(url, redirected_url, conf=None):
         r = requests.get(url, timeout=timeout)
     except requests.Timeout:
         ok, reason, got = True, "timeout", None
+    except requests.exceptions.SSLError as exc:
+        ok, reason, got = False, str(exc), None
     else:
         if r.ok and r.url != redirected_url:
             ok, reason, got = False, "Invalid redirection", r.url
