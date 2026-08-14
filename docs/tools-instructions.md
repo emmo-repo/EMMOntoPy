@@ -17,6 +17,10 @@
 ## `emmocheck`
 
 Tool for checking that ontologies conform to EMMO conventions.
+The various checks can be found in the [API reference documentation of the `ontopy.emmocheck`](https://emmo-repo.github.io/EMMOntoPy/stable/api_reference/emmopy/emmocheck/) module.
+
+To see the checks that are run, use the `--verbose` option.
+
 
 ### Usage
 
@@ -56,7 +60,8 @@ optional arguments:
   --url-from-catalog, -u
       Get url from catalog file.
   --ignore-namespace, -n
-                        Namespace to be ignored. Can be given multiple times
+                        Namespace to be ignored. Can be given multiple times.
+                        This namespace will be ignored in all tests.
 ```
 
 ### Examples
@@ -65,10 +70,9 @@ optional arguments:
     emmocheck http://emmo.info/emmo/1.0.0-alpha2
     emmocheck --database demo.sqlite3 http://www.emmc.info/emmc-csa/demo#
     emmocheck -l emmo.owl (in folder to which emmo was downloaded locally)
-    emmocheck --check-imported --ignore-namespace=physicalistic --verbose --url-from-catalog emmo.owl (in folder with downloaded EMMO)
+    emmocheck --check-imported --ignore-namespace=https://w3id.org/emmo --verbose --url-from-catalog emmo.owl (in folder with downloaded EMMO)
     emmocheck --check-imported --local --url-from-catalog --skip test_namespace emmo.owl
 ```
-<!-- (Missing example with local and path) -->
 
 
 ### Configuration file
@@ -78,6 +82,7 @@ The following keywords are recognised in the YAML file:
 
   - `skip`: List of tests to skip
   - `enable`: List of tests to enable
+  - `ignore_namespace`: List of namespaces to ignore for all checks
   - `<test_name>`: A name of a test. Recognised nested keywords are:
     - `exceptions`: List of entities in the ontology to skip. Should be written
       as `<ns0>.<name>`, where `<ns0>` is the last component of the base IRI
@@ -98,6 +103,9 @@ test_unit_dimensions:
   exceptions:
     - myunits.MyUnitCategory1
     - myunits.MyUnitCategory2
+
+ignore_namespace:
+  - https://w3id.org/emmo#
 
 skip:
   - name_of_test_to_skip
@@ -507,12 +515,53 @@ from the command line.
 It is included in master so that useful functionalities might be used, but please keep in mind that
 changes that are not completely backwards compatible may occur.
 
-Ontokit funcionality can be found with:
+Ontokit functionality can be found with:
 
 ```console
 ontokit --help # will give info on available subcommands
 ontokit subcommand --help  # info on the chosen subcommand
 ```
+
+Currently, there are three subcommands that have been developed: `setup`, `docs` and `context`.
+`ontokit setup` will setup .github workflows and create an `.ontokit_conf.yaml` file in the
+root of you repository. You should open, inspect and update this file once you have created it.
+
+The created workflows follow the rules for creating [EMMO-based ontologies](https://github.com/emmo-repo/.github/wiki/DomainOntologiesBestPractice).
+It is recommenced to inspect the created workflows and update them if necessary.
+
+Some important aspects: github pages with documentation will be created/updated on pushes to `main`, `master` or
+any branch matching `[0-9]+.[0-9]+.[0-9]+` or `[0-9]+.[0-9]+.[0-9]+-*`.
+
+For persistent storage of versions of the ontology, a push to a branch matching `[0-9]+.[0-9]+.[0-9]+` or `[0-9]+.[0-9]+.[0-9]+-*`
+is necessary. Direct pushes to `main` or `master` will only update the "latest" documentation and not the versioned documentation.
+
+
+
+
+`ontokit docs` creates the documentation according to the specifications in the configuration file.
+
+`ontokit context` generates a JSON-LD context from an ontology and can include terms from imported ontologies.
+The `--include-namespace` argument may be provided multiple times to only include terms whose namespace starts
+with one of the given values.
+
+### Example
+
+Generate context without imported ontologies:
+(This will show an almost empty context, since ani.ttl only imports other modules.)
+
+```console
+ontokit context tests/testonto/ani.ttl context.json
+```
+
+
+Generate context including imported ontologies, but keep only terms in the animal namespace:
+(Note that the `--include-namespace` argument may be provided multiple times to include multiple namespaces.)
+
+```console
+ontokit context tests/testonto/ani.ttl context.json --include-imported --include-namespace https://w3id.org/emmo/domain/animal#
+```
+
+
 
 For local testing of ontology reference-document generation (used by
 `ontodoc_rst` / `ontokit`), see the focused pytest command in
