@@ -15,6 +15,22 @@ $ pytest
 
 To understand what options you have, run `pytest --help`.
 
+## Targeted checks for ontology reference docs
+
+For local verification of index/reference generation used by
+`ontodoc_rst` and `ontokit`, run this focused test:
+
+```console
+pytest -rP tests/test_ontokit.py::test_animal_html_reference_doc
+```
+
+Why this command is useful:
+
+- `-rP` shows captured output for passing tests.
+- The test prints the generated local HTML path (`index.html`) so you can
+    open it in a browser and inspect the rendered reference docs.
+- It validates both writing RST reference files and building HTML with Sphinx.
+
 ## Tools
 
 Several tools are used to maintain the package, keeping it secure, readable, and easing maintenance.
