@@ -1912,7 +1912,7 @@ subClassOf, Relations.</p>
 
 
 <h2 id="ontopy.excelparser.create_ontology_from_excel" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">create_ontology_from_excel</span><span class="p">(</span><span class="n">excelpath</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">concept_sheet_name</span><span class="o">=</span><span class="s1">&#39;Concepts&#39;</span><span class="p">,</span> <span class="n">metadata_sheet_name</span><span class="o">=</span><span class="s1">&#39;Metadata&#39;</span><span class="p">,</span> <span class="n">imports_sheet_name</span><span class="o">=</span><span class="s1">&#39;ImportedOntologies&#39;</span><span class="p">,</span> <span class="n">dataproperties_sheet_name</span><span class="o">=</span><span class="s1">&#39;DataProperties&#39;</span><span class="p">,</span> <span class="n">objectproperties_sheet_name</span><span class="o">=</span><span class="s1">&#39;ObjectProperties&#39;</span><span class="p">,</span> <span class="n">annotationproperties_sheet_name</span><span class="o">=</span><span class="s1">&#39;AnnotationProperties&#39;</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo/domain/onto#&#39;</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">input_ontology</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">create_ontology_from_excel</span><span class="p">(</span><span class="n">excelpath</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">concept_sheet_name</span><span class="o">=</span><span class="s1">'Concepts'</span><span class="p">,</span> <span class="n">metadata_sheet_name</span><span class="o">=</span><span class="s1">'Metadata'</span><span class="p">,</span> <span class="n">imports_sheet_name</span><span class="o">=</span><span class="s1">'ImportedOntologies'</span><span class="p">,</span> <span class="n">dataproperties_sheet_name</span><span class="o">=</span><span class="s1">'DataProperties'</span><span class="p">,</span> <span class="n">objectproperties_sheet_name</span><span class="o">=</span><span class="s1">'ObjectProperties'</span><span class="p">,</span> <span class="n">annotationproperties_sheet_name</span><span class="o">=</span><span class="s1">'AnnotationProperties'</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">'http://emmo.info/emmo/domain/onto#'</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">input_ontology</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.excelparser.create_ontology_from_excel" class="headerlink" title="Permanent link">&para;</a></h2>
@@ -2154,55 +2154,55 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">create_ontology_from_excel</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments, too-many-locals</span>
     <span class="n">excelpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">concept_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Concepts&quot;</span><span class="p">,</span>
-    <span class="n">metadata_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Metadata&quot;</span><span class="p">,</span>
-    <span class="n">imports_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ImportedOntologies&quot;</span><span class="p">,</span>
-    <span class="n">dataproperties_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;DataProperties&quot;</span><span class="p">,</span>
-    <span class="n">objectproperties_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ObjectProperties&quot;</span><span class="p">,</span>
-    <span class="n">annotationproperties_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;AnnotationProperties&quot;</span><span class="p">,</span>
-    <span class="n">base_iri</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://emmo.info/emmo/domain/onto#&quot;</span><span class="p">,</span>
+    <span class="n">concept_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Concepts"</span><span class="p">,</span>
+    <span class="n">metadata_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Metadata"</span><span class="p">,</span>
+    <span class="n">imports_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"ImportedOntologies"</span><span class="p">,</span>
+    <span class="n">dataproperties_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"DataProperties"</span><span class="p">,</span>
+    <span class="n">objectproperties_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"ObjectProperties"</span><span class="p">,</span>
+    <span class="n">annotationproperties_sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"AnnotationProperties"</span><span class="p">,</span>
+    <span class="n">base_iri</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"http://emmo.info/emmo/domain/onto#"</span><span class="p">,</span>
     <span class="n">base_iri_from_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">imports</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">catalog</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">input_ontology</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Creates an ontology from an Excel-file.</span>
 
 <span class="sd">    Arguments:</span>
 <span class="sd">        excelpath: Path to Excel workbook.</span>
 <span class="sd">        concept_sheet_name: Name of sheet where concepts are defined.</span>
 <span class="sd">            The second row of this sheet should contain column names that are</span>
-<span class="sd">            supported. Currently these are &#39;prefLabel&#39;,&#39;altLabel&#39;,</span>
-<span class="sd">            &#39;Elucidation&#39;, &#39;Comments&#39;, &#39;Examples&#39;, &#39;subClassOf&#39;, &#39;Relations&#39;.</span>
-<span class="sd">            Multiple entries are separated with &#39;;&#39;.</span>
+<span class="sd">            supported. Currently these are 'prefLabel','altLabel',</span>
+<span class="sd">            'Elucidation', 'Comments', 'Examples', 'subClassOf', 'Relations'.</span>
+<span class="sd">            Multiple entries are separated with ';'.</span>
 <span class="sd">        metadata_sheet_name: Name of sheet where metadata are defined.</span>
-<span class="sd">            The first row contains column names &#39;Metadata name&#39; and &#39;Value&#39;</span>
-<span class="sd">            Supported &#39;Metadata names&#39; are: &#39;Ontology IRI&#39;,</span>
-<span class="sd">            &#39;Ontology vesion IRI&#39;, &#39;Ontology version Info&#39;, &#39;Title&#39;,</span>
-<span class="sd">            &#39;Abstract&#39;, &#39;License&#39;, &#39;Comment&#39;, &#39;Author&#39;, &#39;Contributor&#39;.</span>
+<span class="sd">            The first row contains column names 'Metadata name' and 'Value'</span>
+<span class="sd">            Supported 'Metadata names' are: 'Ontology IRI',</span>
+<span class="sd">            'Ontology vesion IRI', 'Ontology version Info', 'Title',</span>
+<span class="sd">            'Abstract', 'License', 'Comment', 'Author', 'Contributor'.</span>
 <span class="sd">            Multiple entries are separated with a semi-colon (`;`).</span>
 <span class="sd">        imports_sheet_name: Name of sheet where imported ontologies are</span>
 <span class="sd">            defined.</span>
-<span class="sd">            Column name is &#39;Imported ontologies&#39;.</span>
+<span class="sd">            Column name is 'Imported ontologies'.</span>
 <span class="sd">            Fully resolvable URL or path to imported ontologies provided one</span>
 <span class="sd">            per row.</span>
 <span class="sd">        dataproperties_sheet_name: Name of sheet where data properties are</span>
 <span class="sd">            defined. The second row of this sheet should contain column names</span>
-<span class="sd">            that are supported. Currently these are &#39;prefLabel&#39;,&#39;altLabel&#39;,</span>
-<span class="sd">            &#39;Elucidation&#39;, &#39;Comments&#39;, &#39;Examples&#39;, &#39;subPropertyOf&#39;,</span>
-<span class="sd">            &#39;Domain&#39;, &#39;Range&#39;, &#39;dijointWith&#39;, &#39;equivalentTo&#39;.</span>
+<span class="sd">            that are supported. Currently these are 'prefLabel','altLabel',</span>
+<span class="sd">            'Elucidation', 'Comments', 'Examples', 'subPropertyOf',</span>
+<span class="sd">            'Domain', 'Range', 'dijointWith', 'equivalentTo'.</span>
 <span class="sd">        annotationproperties_sheet_name: Name of sheet where annotation</span>
 <span class="sd">            properties are defined. The second row of this sheet should contain</span>
-<span class="sd">            column names that are supported. Currently these are &#39;prefLabel&#39;,</span>
-<span class="sd">            &#39;altLabel&#39;, &#39;Elucidation&#39;, &#39;Comments&#39;, &#39;Examples&#39;, &#39;subPropertyOf&#39;,</span>
-<span class="sd">            &#39;Domain&#39;, &#39;Range&#39;.</span>
+<span class="sd">            column names that are supported. Currently these are 'prefLabel',</span>
+<span class="sd">            'altLabel', 'Elucidation', 'Comments', 'Examples', 'subPropertyOf',</span>
+<span class="sd">            'Domain', 'Range'.</span>
 <span class="sd">        objectproperties_sheet_name: Name of sheet where object properties are</span>
 <span class="sd">            defined.The second row of this sheet should contain column names</span>
-<span class="sd">            that are supported. Currently these are &#39;prefLabel&#39;,&#39;altLabel&#39;,</span>
-<span class="sd">            &#39;Elucidation&#39;, &#39;Comments&#39;, &#39;Examples&#39;, &#39;subPropertyOf&#39;,</span>
-<span class="sd">            &#39;Domain&#39;, &#39;Range&#39;, &#39;inverseOf&#39;, &#39;dijointWith&#39;, &#39;equivalentTo&#39;.</span>
+<span class="sd">            that are supported. Currently these are 'prefLabel','altLabel',</span>
+<span class="sd">            'Elucidation', 'Comments', 'Examples', 'subPropertyOf',</span>
+<span class="sd">            'Domain', 'Range', 'inverseOf', 'dijointWith', 'equivalentTo'.</span>
 <span class="sd">        base_iri: Base IRI of the new ontology.</span>
 <span class="sd">        base_iri_from_metadata: Whether to use base IRI defined from metadata.</span>
 <span class="sd">        imports: List of imported ontologies.</span>
@@ -2224,95 +2224,95 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
 <span class="sd">            * a dictionary with lists of concepts that raise errors, with the</span>
 <span class="sd">              following keys:</span>
 
-<span class="sd">                - &quot;already_defined&quot;: These are concepts (classes)</span>
+<span class="sd">                - "already_defined": These are concepts (classes)</span>
 <span class="sd">                    that are already in the</span>
 <span class="sd">                    ontology, because they were already added in a</span>
 <span class="sd">                    previous line of the excelfile/pandas dataframe, or because</span>
 <span class="sd">                    it is already defined in an imported ontology with the same</span>
 <span class="sd">                    base_iri as the newly created ontology.</span>
-<span class="sd">                - &quot;in_imported_ontologies&quot;: Concepts (classes)</span>
+<span class="sd">                - "in_imported_ontologies": Concepts (classes)</span>
 <span class="sd">                    that are defined in the</span>
 <span class="sd">                    excel, but already exist in the imported ontologies.</span>
-<span class="sd">                - &quot;wrongly_defined&quot;: Concepts (classes) that are given an</span>
+<span class="sd">                - "wrongly_defined": Concepts (classes) that are given an</span>
 <span class="sd">                    invalid prefLabel (e.g. with a space in the name).</span>
-<span class="sd">                - &quot;missing_subClassOf&quot;: Concepts (classes) that are missing</span>
+<span class="sd">                - "missing_subClassOf": Concepts (classes) that are missing</span>
 <span class="sd">                    parents. These concepts are added directly under owl:Thing.</span>
-<span class="sd">                - &quot;invalid_subClassOf&quot;: Concepts (classes) with invalidly</span>
+<span class="sd">                - "invalid_subClassOf": Concepts (classes) with invalidly</span>
 <span class="sd">                    defined parents.</span>
 <span class="sd">                    These concepts are added directly under owl:Thing.</span>
-<span class="sd">                - &quot;nonadded_concepts&quot;: List of all concepts (classes) that are</span>
+<span class="sd">                - "nonadded_concepts": List of all concepts (classes) that are</span>
 <span class="sd">                    not added,</span>
 <span class="sd">                    either because the prefLabel is invalid, or because the</span>
 <span class="sd">                    concept has already been added once or already exists in an</span>
 <span class="sd">                    imported ontology.</span>
-<span class="sd">                - &quot;obj_prop_already_defined&quot;: Object properties that are already</span>
+<span class="sd">                - "obj_prop_already_defined": Object properties that are already</span>
 <span class="sd">                    defined in the ontology.</span>
-<span class="sd">                - &quot;obj_prop_in_imported_ontologies&quot;: Object properties that are</span>
+<span class="sd">                - "obj_prop_in_imported_ontologies": Object properties that are</span>
 <span class="sd">                    defined in the excel, but already exist in the imported</span>
 <span class="sd">                    ontologies.</span>
-<span class="sd">                - &quot;obj_prop_wrongly_defined&quot;: Object properties that are given</span>
+<span class="sd">                - "obj_prop_wrongly_defined": Object properties that are given</span>
 <span class="sd">                    an invalid prefLabel (e.g. with a space in the name).</span>
-<span class="sd">                - &quot;obj_prop_missing_subPropertyOf&quot;: Object properties that are</span>
+<span class="sd">                - "obj_prop_missing_subPropertyOf": Object properties that are</span>
 <span class="sd">                    missing parents.</span>
-<span class="sd">                - &quot;obj_prop_invalid_subPropertyOf&quot;: Object properties with</span>
+<span class="sd">                - "obj_prop_invalid_subPropertyOf": Object properties with</span>
 <span class="sd">                    invalidly defined parents.</span>
-<span class="sd">                - &quot;obj_prop_nonadded_entities&quot;: List of all object properties</span>
+<span class="sd">                - "obj_prop_nonadded_entities": List of all object properties</span>
 <span class="sd">                    that are not added, either because the prefLabel is invalid,</span>
 <span class="sd">                    or because the concept has already been added once or</span>
 <span class="sd">                    already exists in an imported ontology.</span>
-<span class="sd">                - &quot;obj_prop_errors_in_properties&quot;: Object properties with</span>
+<span class="sd">                - "obj_prop_errors_in_properties": Object properties with</span>
 <span class="sd">                    invalidly defined properties.</span>
-<span class="sd">                - &quot;obj_prop_errors_in_range&quot;: Object properties with invalidly</span>
+<span class="sd">                - "obj_prop_errors_in_range": Object properties with invalidly</span>
 <span class="sd">                    defined range.</span>
-<span class="sd">                - &quot;obj_prop_errors_in_domain&quot;: Object properties with invalidly</span>
+<span class="sd">                - "obj_prop_errors_in_domain": Object properties with invalidly</span>
 <span class="sd">                    defined domain.</span>
-<span class="sd">                - &quot;annot_prop_already_defined&quot;: Annotation properties that are</span>
+<span class="sd">                - "annot_prop_already_defined": Annotation properties that are</span>
 <span class="sd">                    already defined in the ontology.</span>
-<span class="sd">                - &quot;annot_prop_in_imported_ontologies&quot;:  Annotation properties</span>
+<span class="sd">                - "annot_prop_in_imported_ontologies":  Annotation properties</span>
 <span class="sd">                    that</span>
 <span class="sd">                    are defined in the excel, but already exist in the imported</span>
 <span class="sd">                    ontologies.</span>
-<span class="sd">                - &quot;annot_prop_wrongly_defined&quot;: Annotation properties that are</span>
+<span class="sd">                - "annot_prop_wrongly_defined": Annotation properties that are</span>
 <span class="sd">                    given an invalid prefLabel (e.g. with a space in the name).</span>
-<span class="sd">                - &quot;annot_prop_missing_subPropertyOf&quot;: Annotation properties that</span>
+<span class="sd">                - "annot_prop_missing_subPropertyOf": Annotation properties that</span>
 <span class="sd">                    are missing parents.</span>
-<span class="sd">                - &quot;annot_prop_invalid_subPropertyOf&quot;: Annotation properties with</span>
+<span class="sd">                - "annot_prop_invalid_subPropertyOf": Annotation properties with</span>
 <span class="sd">                    invalidly defined parents.</span>
-<span class="sd">                - &quot;annot_prop_nonadded_entities&quot;: List of all annotation</span>
+<span class="sd">                - "annot_prop_nonadded_entities": List of all annotation</span>
 <span class="sd">                    properties that are not added, either because the prefLabel</span>
 <span class="sd">                    is invalid, or because the concept has already been added</span>
 <span class="sd">                    once or already exists in an imported ontology.</span>
-<span class="sd">                - &quot;annot_prop_errors_in_properties&quot;: Annotation properties with</span>
+<span class="sd">                - "annot_prop_errors_in_properties": Annotation properties with</span>
 <span class="sd">                    invalidly defined properties.</span>
-<span class="sd">                - &quot;data_prop_already_defined&quot;: Data properties that are already</span>
+<span class="sd">                - "data_prop_already_defined": Data properties that are already</span>
 <span class="sd">                    defined in the ontology.</span>
-<span class="sd">                - &quot;data_prop_in_imported_ontologies&quot;: Data properties that are</span>
+<span class="sd">                - "data_prop_in_imported_ontologies": Data properties that are</span>
 <span class="sd">                    defined in the excel, but already exist in the imported</span>
 <span class="sd">                    ontologies.</span>
-<span class="sd">                - &quot;data_prop_wrongly_defined&quot;:  Data properties that are given</span>
+<span class="sd">                - "data_prop_wrongly_defined":  Data properties that are given</span>
 <span class="sd">                    an invalid prefLabel (e.g. with a space in the name).</span>
-<span class="sd">                - &quot;data_prop_missing_subPropertyOf&quot;: Data properties that are</span>
+<span class="sd">                - "data_prop_missing_subPropertyOf": Data properties that are</span>
 <span class="sd">                    missing parents.</span>
-<span class="sd">                - &quot;data_prop_invalid_subPropertyOf&quot;: Data properties with</span>
+<span class="sd">                - "data_prop_invalid_subPropertyOf": Data properties with</span>
 <span class="sd">                    invalidly defined parents.</span>
-<span class="sd">                - &quot;data_prop_nonadded_entities&quot;: List of all data properties</span>
+<span class="sd">                - "data_prop_nonadded_entities": List of all data properties</span>
 <span class="sd">                    that are not added, either because the prefLabel is invalid,</span>
 <span class="sd">                    or because the concept has already been added once or</span>
 <span class="sd">                    already exists in an imported ontology.</span>
-<span class="sd">                - &quot;data_prop_errors_in_properties&quot;: Data properties with</span>
+<span class="sd">                - "data_prop_errors_in_properties": Data properties with</span>
 <span class="sd">                    invalidly defined properties.</span>
-<span class="sd">                - &quot;data_prop_errors_in_range&quot;: Data properties with invalidly</span>
+<span class="sd">                - "data_prop_errors_in_range": Data properties with invalidly</span>
 <span class="sd">                    defined range.</span>
-<span class="sd">                - &quot;data_prop_errors_in_domain&quot;: Data properties with invalidly</span>
+<span class="sd">                - "data_prop_errors_in_domain": Data properties with invalidly</span>
 <span class="sd">                    defined domain.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">web_protocol</span> <span class="o">=</span> <span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="s2">&quot;ftp://&quot;</span>
+<span class="sd">    """</span>
+    <span class="n">web_protocol</span> <span class="o">=</span> <span class="s2">"http://"</span><span class="p">,</span> <span class="s2">"https://"</span><span class="p">,</span> <span class="s2">"ftp://"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_relative_to_absolute_paths</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">web_protocol</span><span class="p">):</span>
-                <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">excelpath</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">excelpath</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"/"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">path</span>
 
     <span class="n">pd</span><span class="p">,</span> <span class="n">np</span> <span class="o">=</span> <span class="n">_get_excelreqs</span><span class="p">()</span>
@@ -2324,14 +2324,14 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
         <span class="n">imports</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Strip leading and trailing white spaces in paths</span>
-        <span class="n">imports</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s+&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-            <span class="sa">r</span><span class="s2">&quot;\s+$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">imports</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s+"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">"\s+$"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
         <span class="c1"># Set empty strings to nan</span>
-        <span class="n">imports</span> <span class="o">=</span> <span class="n">imports</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*$&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;Imported ontologies&quot;</span> <span class="ow">in</span> <span class="n">imports</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-            <span class="n">imports</span><span class="p">[</span><span class="s2">&quot;Imported ontologies&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">imports</span><span class="p">[</span>
-                <span class="s2">&quot;Imported ontologies&quot;</span>
+        <span class="n">imports</span> <span class="o">=</span> <span class="n">imports</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s*$"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"Imported ontologies"</span> <span class="ow">in</span> <span class="n">imports</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">imports</span><span class="p">[</span><span class="s2">"Imported ontologies"</span><span class="p">]</span> <span class="o">=</span> <span class="n">imports</span><span class="p">[</span>
+                <span class="s2">"Imported ontologies"</span>
             <span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">_relative_to_absolute_paths</span><span class="p">)</span>
 
     <span class="c1"># Read datafile TODO: Some magic to identify the header row</span>
@@ -2342,18 +2342,18 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
         <span class="n">objectproperties</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
             <span class="n">excelpath</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">objectproperties_sheet_name</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;prefLabel&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">objectproperties</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"prefLabel"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">objectproperties</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;The &#39;prefLabel&#39; column is missing in &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">objectproperties_sheet_name</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;New object properties will not be added to the ontology.&quot;</span>
+                <span class="s2">"The 'prefLabel' column is missing in "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">objectproperties_sheet_name</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="s2">"New object properties will not be added to the ontology."</span>
             <span class="p">)</span>
             <span class="n">objectproperties</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;No sheet named </span><span class="si">{</span><span class="n">objectproperties_sheet_name</span><span class="si">}</span><span class="s2"> found &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;in </span><span class="si">{</span><span class="n">excelpath</span><span class="si">}</span><span class="s2">. &quot;</span>
-            <span class="s2">&quot;New object properties will not be added to the ontology.&quot;</span>
+            <span class="sa">f</span><span class="s2">"No sheet named </span><span class="si">{</span><span class="n">objectproperties_sheet_name</span><span class="si">}</span><span class="s2"> found "</span>
+            <span class="sa">f</span><span class="s2">"in </span><span class="si">{</span><span class="n">excelpath</span><span class="si">}</span><span class="s2">. "</span>
+            <span class="s2">"New object properties will not be added to the ontology."</span>
         <span class="p">)</span>
         <span class="n">objectproperties</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">try</span><span class="p">:</span>
@@ -2362,18 +2362,18 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
             <span class="n">sheet_name</span><span class="o">=</span><span class="n">annotationproperties_sheet_name</span><span class="p">,</span>
             <span class="n">skiprows</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;prefLabel&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">annotationproperties</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"prefLabel"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">annotationproperties</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;The &#39;prefLabel&#39; column is missing in &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">annotationproperties_sheet_name</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;New annotation properties will not be added to the ontology.&quot;</span>
+                <span class="s2">"The 'prefLabel' column is missing in "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">annotationproperties_sheet_name</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="s2">"New annotation properties will not be added to the ontology."</span>
             <span class="p">)</span>
             <span class="n">annotationproperties</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;No sheet named </span><span class="si">{</span><span class="n">annotationproperties_sheet_name</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;found in </span><span class="si">{</span><span class="n">excelpath</span><span class="si">}</span><span class="s2">. &quot;</span>
-            <span class="s2">&quot;New annotation properties will not be added to the ontology.&quot;</span>
+            <span class="sa">f</span><span class="s2">"No sheet named </span><span class="si">{</span><span class="n">annotationproperties_sheet_name</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"found in </span><span class="si">{</span><span class="n">excelpath</span><span class="si">}</span><span class="s2">. "</span>
+            <span class="s2">"New annotation properties will not be added to the ontology."</span>
         <span class="p">)</span>
         <span class="n">annotationproperties</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -2381,17 +2381,17 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
         <span class="n">dataproperties</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
             <span class="n">excelpath</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">dataproperties_sheet_name</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;prefLabel&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataproperties</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"prefLabel"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataproperties</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;The &#39;prefLabel&#39; column is missing in &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataproperties_sheet_name</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;New data properties will not be added to the ontology.&quot;</span>
+                <span class="s2">"The 'prefLabel' column is missing in "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">dataproperties_sheet_name</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="s2">"New data properties will not be added to the ontology."</span>
             <span class="p">)</span>
             <span class="n">dataproperties</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;No sheet named </span><span class="si">{</span><span class="n">dataproperties_sheet_name</span><span class="si">}</span><span class="s2"> found in </span><span class="si">{</span><span class="n">excelpath</span><span class="si">}</span><span class="s2">. &quot;</span>
-            <span class="s2">&quot;New data properties will not be added to the ontology.&quot;</span>
+            <span class="sa">f</span><span class="s2">"No sheet named </span><span class="si">{</span><span class="n">dataproperties_sheet_name</span><span class="si">}</span><span class="s2"> found in </span><span class="si">{</span><span class="n">excelpath</span><span class="si">}</span><span class="s2">. "</span>
+            <span class="s2">"New data properties will not be added to the ontology."</span>
         <span class="p">)</span>
         <span class="n">dataproperties</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -2422,7 +2422,7 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
 
 
 <h2 id="ontopy.excelparser.create_ontology_from_pandas" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">create_ontology_from_pandas</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">objectproperties</span><span class="p">,</span> <span class="n">annotationproperties</span><span class="p">,</span> <span class="n">dataproperties</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">imports</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">&#39;http://emmo.info/emmo/domain/onto#&#39;</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">input_ontology</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">create_ontology_from_pandas</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">objectproperties</span><span class="p">,</span> <span class="n">annotationproperties</span><span class="p">,</span> <span class="n">dataproperties</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">imports</span><span class="p">,</span> <span class="n">base_iri</span><span class="o">=</span><span class="s1">'http://emmo.info/emmo/domain/onto#'</span><span class="p">,</span> <span class="n">base_iri_from_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">input_ontology</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.excelparser.create_ontology_from_pandas" class="headerlink" title="Permanent link">&para;</a></h2>
@@ -2435,23 +2435,23 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
         <details class="quote">
           <summary>Source code in <code>ontopy/excelparser.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">create_ontology_from_pandas</span><span class="p">(</span>  <span class="c1"># pylint:disable=too-many-locals,too-many-branches,too-many-statements,too-many-arguments, too-many-positional-arguments</span>
-    <span class="n">data</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
-    <span class="n">objectproperties</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
-    <span class="n">annotationproperties</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
-    <span class="n">dataproperties</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
-    <span class="n">metadata</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
-    <span class="n">imports</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
-    <span class="n">base_iri</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://emmo.info/emmo/domain/onto#&quot;</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">:</span> <span class="s2">"pd.DataFrame"</span><span class="p">,</span>
+    <span class="n">objectproperties</span><span class="p">:</span> <span class="s2">"pd.DataFrame"</span><span class="p">,</span>
+    <span class="n">annotationproperties</span><span class="p">:</span> <span class="s2">"pd.DataFrame"</span><span class="p">,</span>
+    <span class="n">dataproperties</span><span class="p">:</span> <span class="s2">"pd.DataFrame"</span><span class="p">,</span>
+    <span class="n">metadata</span><span class="p">:</span> <span class="s2">"pd.DataFrame"</span><span class="p">,</span>
+    <span class="n">imports</span><span class="p">:</span> <span class="s2">"pd.DataFrame"</span><span class="p">,</span>
+    <span class="n">base_iri</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"http://emmo.info/emmo/domain/onto#"</span><span class="p">,</span>
     <span class="n">base_iri_from_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">catalog</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">input_ontology</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Create an ontology from a pandas DataFrame.</span>
 
-<span class="sd">    Check &#39;create_ontology_from_excel&#39; for complete documentation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Check 'create_ontology_from_excel' for complete documentation.</span>
+<span class="sd">    """</span>
     <span class="c1"># Get ontology to which new concepts should be added</span>
     <span class="k">if</span> <span class="n">input_ontology</span><span class="p">:</span>
         <span class="n">onto</span> <span class="o">=</span> <span class="n">input_ontology</span>
@@ -2461,8 +2461,8 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
         <span class="c1"># that come from the input ontology</span>
         <span class="n">pyname_triples_to_keep</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
             <span class="n">onto</span><span class="o">.</span><span class="n">get_unabbreviated_triples</span><span class="p">(</span>
-                <span class="n">predicate</span><span class="o">=</span><span class="s2">&quot;http://www.lesfleursdunormal.fr/static/_downloads/&quot;</span>
-                <span class="s2">&quot;owlready_ontology.owl#python_name&quot;</span>
+                <span class="n">predicate</span><span class="o">=</span><span class="s2">"http://www.lesfleursdunormal.fr/static/_downloads/"</span>
+                <span class="s2">"owlready_ontology.owl#python_name"</span>
             <span class="p">)</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>  <span class="c1"># Create new ontology</span>
@@ -2517,7 +2517,7 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
             <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="n">onto</span><span class="o">.</span><span class="n">sync_attributes</span><span class="p">(</span>
-        <span class="n">name_policy</span><span class="o">=</span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span> <span class="n">name_prefix</span><span class="o">=</span><span class="s2">&quot;EMMO_&quot;</span><span class="p">,</span> <span class="n">class_docstring</span><span class="o">=</span><span class="s2">&quot;elucidation&quot;</span>
+        <span class="n">name_policy</span><span class="o">=</span><span class="s2">"uuid"</span><span class="p">,</span> <span class="n">name_prefix</span><span class="o">=</span><span class="s2">"EMMO_"</span><span class="p">,</span> <span class="n">class_docstring</span><span class="o">=</span><span class="s2">"elucidation"</span>
     <span class="p">)</span>
     <span class="c1"># Clean up data frame with new concepts</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">_clean_dataframe</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -2529,37 +2529,37 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
     <span class="c1"># Add entity properties in a second loop</span>
     <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">added_concept_indices</span><span class="p">:</span>
         <span class="n">row</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-        <span class="n">properties</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Relations&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">properties</span> <span class="o">==</span> <span class="s2">&quot;nan&quot;</span><span class="p">:</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"Relations"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">properties</span> <span class="o">==</span> <span class="s2">"nan"</span><span class="p">:</span>
             <span class="n">properties</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">entity</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">entity</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_by_label</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"prefLabel"</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
             <span class="k">except</span> <span class="n">NoSuchLabelError</span><span class="p">:</span>
                 <span class="k">pass</span>
-            <span class="n">props</span> <span class="o">=</span> <span class="n">properties</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="n">properties</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">";"</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">props</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">entity</span><span class="o">.</span><span class="n">is_a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">evaluate</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
                 <span class="k">except</span> <span class="n">pyparsing</span><span class="o">.</span><span class="n">ParseException</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                         <span class="c1"># This is currently not tested</span>
-                        <span class="sa">f</span><span class="s2">&quot;Error in Property assignment for: &#39;</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;Property to be Evaluated: &#39;</span><span class="si">{</span><span class="n">prop</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="sa">f</span><span class="s2">"Error in Property assignment for: '</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">'. "</span>
+                        <span class="sa">f</span><span class="s2">"Property to be Evaluated: '</span><span class="si">{</span><span class="n">prop</span><span class="si">}</span><span class="s2">'. "</span>
+                        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span>
                     <span class="p">)</span>
-                    <span class="n">entities_with_errors</span><span class="p">[</span><span class="s2">&quot;errors_in_properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">entities_with_errors</span><span class="p">[</span><span class="s2">"errors_in_properties"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                         <span class="n">entity</span><span class="o">.</span><span class="n">name</span>
                     <span class="p">)</span>
                 <span class="k">except</span> <span class="n">NoSuchLabelError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                     <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Error in Property assignment for: </span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;Property to be Evaluated: </span><span class="si">{</span><span class="n">prop</span><span class="si">}</span><span class="s2">. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="sa">f</span><span class="s2">"Error in Property assignment for: </span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">. "</span>
+                        <span class="sa">f</span><span class="s2">"Property to be Evaluated: </span><span class="si">{</span><span class="n">prop</span><span class="si">}</span><span class="s2">. "</span>
+                        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span>
                     <span class="p">)</span>
                     <span class="k">if</span> <span class="n">force</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
                         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-                        <span class="n">entities_with_errors</span><span class="p">[</span><span class="s2">&quot;errors_in_properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">entities_with_errors</span><span class="p">[</span><span class="s2">"errors_in_properties"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                             <span class="n">entity</span><span class="o">.</span><span class="n">name</span>
                         <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
@@ -2575,7 +2575,7 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
             <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">objectproperties_with_errors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">entities_with_errors</span><span class="p">[</span><span class="s2">&quot;obj_prop_&quot;</span> <span class="o">+</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">entities_with_errors</span><span class="p">[</span><span class="s2">"obj_prop_"</span> <span class="o">+</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
     <span class="c1"># Add range and domain for annotation properties</span>
     <span class="k">if</span> <span class="n">annotationproperties</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">onto</span><span class="p">,</span> <span class="n">annotationproperties_with_errors</span> <span class="o">=</span> <span class="n">_add_range_domain</span><span class="p">(</span>
@@ -2586,7 +2586,7 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
             <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">annotationproperties_with_errors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">entities_with_errors</span><span class="p">[</span><span class="s2">&quot;annot_prop_&quot;</span> <span class="o">+</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">entities_with_errors</span><span class="p">[</span><span class="s2">"annot_prop_"</span> <span class="o">+</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="c1"># Add range and domain for data properties</span>
     <span class="k">if</span> <span class="n">dataproperties</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -2598,22 +2598,22 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
             <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dataproperties_with_errors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">entities_with_errors</span><span class="p">[</span><span class="s2">&quot;data_prop_&quot;</span> <span class="o">+</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">entities_with_errors</span><span class="p">[</span><span class="s2">"data_prop_"</span> <span class="o">+</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="c1"># Synchronise Python attributes to ontology</span>
     <span class="n">onto</span><span class="o">.</span><span class="n">sync_attributes</span><span class="p">(</span>
-        <span class="n">name_policy</span><span class="o">=</span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span> <span class="n">name_prefix</span><span class="o">=</span><span class="s2">&quot;EMMO_&quot;</span><span class="p">,</span> <span class="n">class_docstring</span><span class="o">=</span><span class="s2">&quot;elucidation&quot;</span>
+        <span class="n">name_policy</span><span class="o">=</span><span class="s2">"uuid"</span><span class="p">,</span> <span class="n">name_prefix</span><span class="o">=</span><span class="s2">"EMMO_"</span><span class="p">,</span> <span class="n">class_docstring</span><span class="o">=</span><span class="s2">"elucidation"</span>
     <span class="p">)</span>
     <span class="n">onto</span><span class="o">.</span><span class="n">dir_label</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">entities_with_errors</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">key</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">entities_with_errors</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
     <span class="p">}</span>
 
-    <span class="c1"># Remove triples with predicate &#39;python_name&#39; added by owlready2</span>
+    <span class="c1"># Remove triples with predicate 'python_name' added by owlready2</span>
     <span class="n">onto</span><span class="o">.</span><span class="n">_del_data_triple_spod</span><span class="p">(</span>  <span class="c1"># pylint: disable=protected-access</span>
         <span class="n">p</span><span class="o">=</span><span class="n">onto</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>  <span class="c1"># pylint: disable=protected-access</span>
-            <span class="s2">&quot;http://www.lesfleursdunormal.fr/static/_downloads/&quot;</span>
-            <span class="s2">&quot;owlready_ontology.owl#python_name&quot;</span>
+            <span class="s2">"http://www.lesfleursdunormal.fr/static/_downloads/"</span>
+            <span class="s2">"owlready_ontology.owl#python_name"</span>
         <span class="p">)</span>
     <span class="p">)</span>
 
@@ -2650,24 +2650,24 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
         <details class="quote">
           <summary>Source code in <code>ontopy/excelparser.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_metadata_from_dataframe</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-branches,too-many-statements</span>
-    <span class="n">metadata</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
+    <span class="n">metadata</span><span class="p">:</span> <span class="s2">"pd.DataFrame"</span><span class="p">,</span>
     <span class="n">base_iri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">base_iri_from_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">imports</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">imports</span><span class="p">:</span> <span class="s2">"pd.DataFrame"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">catalog</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ontopy</span><span class="o">.</span><span class="n">ontology</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create ontology with metadata from pd.DataFrame&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Create ontology with metadata from pd.DataFrame"""</span>
     <span class="n">pd</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_get_excelreqs</span><span class="p">()</span>
 
     <span class="c1"># base_iri from metadata if it exists and base_iri_from_metadata</span>
     <span class="k">if</span> <span class="n">base_iri_from_metadata</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">base_iris</span> <span class="o">=</span> <span class="n">_parse_literal</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="s2">&quot;Ontology IRI&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">base_iris</span> <span class="o">=</span> <span class="n">_parse_literal</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="s2">"Ontology IRI"</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">base_iris</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="s2">&quot;More than one Ontology IRI given. The first was chosen.&quot;</span>
+                    <span class="s2">"More than one Ontology IRI given. The first was chosen."</span>
                 <span class="p">)</span>
-            <span class="n">base_iri</span> <span class="o">=</span> <span class="n">base_iris</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;#&quot;</span>
+            <span class="n">base_iri</span> <span class="o">=</span> <span class="n">base_iris</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"#"</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
             <span class="k">pass</span>
 
@@ -2679,28 +2679,28 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
     <span class="n">locations</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">imports</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
         <span class="c1"># for location in imports:</span>
-        <span class="n">location</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Imported ontologies&quot;</span><span class="p">]</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"Imported ontologies"</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">location</span><span class="p">)</span> <span class="ow">and</span> <span class="n">location</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">locations</span><span class="p">:</span>
             <span class="n">location</span> <span class="o">=</span> <span class="n">location</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
             <span class="n">imported</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">get_ontology</span><span class="p">(</span><span class="n">location</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
             <span class="n">onto</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">imported</span><span class="p">)</span>
-            <span class="n">catalog</span><span class="p">[</span><span class="n">imported</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;#/&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">location</span>
+            <span class="n">catalog</span><span class="p">[</span><span class="n">imported</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"#/"</span><span class="p">)]</span> <span class="o">=</span> <span class="n">location</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">cat</span> <span class="o">=</span> <span class="n">read_catalog</span><span class="p">(</span><span class="n">location</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">cat</span> <span class="o">=</span> <span class="n">read_catalog</span><span class="p">(</span><span class="n">location</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">"/"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="n">catalog</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cat</span><span class="p">)</span>
             <span class="k">except</span> <span class="p">(</span><span class="n">ReadCatalogError</span><span class="p">,</span> <span class="n">ET</span><span class="o">.</span><span class="n">ParseError</span><span class="p">):</span>  <span class="c1"># Issue 840</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Catalog for </span><span class="si">{</span><span class="n">imported</span><span class="si">}</span><span class="s2"> not found.&quot;</span><span class="p">)</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Catalog for </span><span class="si">{</span><span class="n">imported</span><span class="si">}</span><span class="s2"> not found."</span><span class="p">)</span>
             <span class="n">locations</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
         <span class="c1"># set defined prefix</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;prefix&quot;</span><span class="p">]):</span>
-            <span class="c1"># set prefix for all ontologies with same &#39;base_iri_root&#39;</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;base_iri_root&quot;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"prefix"</span><span class="p">]):</span>
+            <span class="c1"># set prefix for all ontologies with same 'base_iri_root'</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"base_iri_root"</span><span class="p">]):</span>
                 <span class="n">onto</span><span class="o">.</span><span class="n">set_common_prefix</span><span class="p">(</span>
-                    <span class="n">iri_base</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;base_iri_root&quot;</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;prefix&quot;</span><span class="p">]</span>
+                    <span class="n">iri_base</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">"base_iri_root"</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">"prefix"</span><span class="p">]</span>
                 <span class="p">)</span>
             <span class="c1"># If base_root not given, set prefix only to top ontology</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">imported</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;prefix&quot;</span><span class="p">]</span>
+                <span class="n">imported</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"prefix"</span><span class="p">]</span>
 
     <span class="k">with</span> <span class="n">onto</span><span class="p">:</span>
         <span class="c1"># Add title</span>
@@ -2708,7 +2708,7 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
             <span class="n">_add_literal</span><span class="p">(</span>
                 <span class="n">metadata</span><span class="p">,</span>
                 <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
-                <span class="s2">&quot;Title&quot;</span><span class="p">,</span>
+                <span class="s2">"Title"</span><span class="p">,</span>
                 <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">only_one</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
@@ -2718,7 +2718,7 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
         <span class="c1"># Add license</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">_add_literal</span><span class="p">(</span>
-                <span class="n">metadata</span><span class="p">,</span> <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">license</span><span class="p">,</span> <span class="s2">&quot;License&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span>
+                <span class="n">metadata</span><span class="p">,</span> <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">license</span><span class="p">,</span> <span class="s2">"License"</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">pass</span>
@@ -2726,7 +2726,7 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
         <span class="c1"># Add authors/creators</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">_add_literal</span><span class="p">(</span>
-                <span class="n">metadata</span><span class="p">,</span> <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">creator</span><span class="p">,</span> <span class="s2">&quot;Author&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span>
+                <span class="n">metadata</span><span class="p">,</span> <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">creator</span><span class="p">,</span> <span class="s2">"Author"</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">pass</span>
@@ -2736,7 +2736,7 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
             <span class="n">_add_literal</span><span class="p">(</span>
                 <span class="n">metadata</span><span class="p">,</span>
                 <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">contributor</span><span class="p">,</span>
-                <span class="s2">&quot;Contributor&quot;</span><span class="p">,</span>
+                <span class="s2">"Contributor"</span><span class="p">,</span>
                 <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
@@ -2747,7 +2747,7 @@ the metadata sheet in the excel sheet will not be considered.</p></td>
             <span class="n">_add_literal</span><span class="p">(</span>
                 <span class="n">metadata</span><span class="p">,</span>
                 <span class="n">onto</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">versionInfo</span><span class="p">,</span>
-                <span class="s2">&quot;Ontology version Info&quot;</span><span class="p">,</span>
+                <span class="s2">"Ontology version Info"</span><span class="p">,</span>
                 <span class="n">metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">only_one</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>

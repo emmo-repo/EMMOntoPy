@@ -1898,56 +1898,56 @@
         <details class="quote">
           <summary>Source code in <code>ontopy/ontokit/context.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">context_arguments</span><span class="p">(</span><span class="n">subparsers</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Define arguments for the context sub-command.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Define arguments for the context sub-command."""</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
-        <span class="s2">&quot;context&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Generate a context file from ontology.&quot;</span>
+        <span class="s2">"context"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Generate a context file from ontology."</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">context_subcommand</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;input&quot;</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;ONTOLOGY&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input ontology. Either a file path or a URL.&quot;</span><span class="p">,</span>
+        <span class="s2">"input"</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">"ONTOLOGY"</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">"Input ontology. Either a file path or a URL."</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;output&quot;</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;CONTEXT&quot;</span><span class="p">,</span>
-        <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span>
+        <span class="s2">"output"</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">"CONTEXT"</span><span class="p">,</span>
+        <span class="n">nargs</span><span class="o">=</span><span class="s2">"?"</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Name of output context file. &quot;</span>
-            <span class="s2">&quot;If omitted, the context is written to stdout.&quot;</span>
+            <span class="s2">"Name of output context file. "</span>
+            <span class="s2">"If omitted, the context is written to stdout."</span>
         <span class="p">),</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--include-imported&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;-i&quot;</span><span class="p">,</span>
-        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="s2">"--include-imported"</span><span class="p">,</span>
+        <span class="s2">"-i"</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">"store_true"</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Whether to include properties and classes from imported &quot;</span>
-            <span class="s2">&quot;ontologies.&quot;</span>
+            <span class="s2">"Whether to include properties and classes from imported "</span>
+            <span class="s2">"ontologies."</span>
         <span class="p">),</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--indent&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Indentation in JSON-LD output.&quot;</span>
+        <span class="s2">"--indent"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Indentation in JSON-LD output."</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--namespace&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;-n&quot;</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;PREFIX:NAMESPACE&quot;</span><span class="p">,</span>
-        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">,</span>
+        <span class="s2">"--namespace"</span><span class="p">,</span>
+        <span class="s2">"-n"</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">"PREFIX:NAMESPACE"</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">"append"</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="p">[],</span>
         <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Additional prefix:namespace pair that will be added to the &quot;</span>
-            <span class="s2">&quot;output context.  May be added multiple times.&quot;</span>
+            <span class="s2">"Additional prefix:namespace pair that will be added to the "</span>
+            <span class="s2">"output context.  May be added multiple times."</span>
         <span class="p">),</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--include-namespace&quot;</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;NAMESPACE&quot;</span><span class="p">,</span>
-        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">,</span>
+        <span class="s2">"--include-namespace"</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">"NAMESPACE"</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">"append"</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="p">[],</span>
         <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Only include terms whose namespace starts with NAMESPACE. &quot;</span>
-            <span class="s2">&quot;May be added multiple times.&quot;</span>
+            <span class="s2">"Only include terms whose namespace starts with NAMESPACE. "</span>
+            <span class="s2">"May be added multiple times."</span>
         <span class="p">),</span>
     <span class="p">)</span>
 </code></pre></div>
@@ -1975,23 +1975,23 @@
         <details class="quote">
           <summary>Source code in <code>ontopy/ontokit/context.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">context_subcommand</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements the context sub-command.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Implements the context sub-command."""</span>
     <span class="c1"># pylint: disable=invalid-name</span>
-    <span class="n">RDF</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;</span>
-    <span class="n">OWL</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2002/07/owl#&quot;</span>
-    <span class="n">XSD</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#&quot;</span>
+    <span class="n">RDF</span> <span class="o">=</span> <span class="s2">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</span>
+    <span class="n">OWL</span> <span class="o">=</span> <span class="s2">"http://www.w3.org/2002/07/owl#"</span>
+    <span class="n">XSD</span> <span class="o">=</span> <span class="s2">"http://www.w3.org/2001/XMLSchema#"</span>
 
     <span class="c1"># Data properties known by owlready2</span>
     <span class="n">dataprop</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nb">int</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span>
-        <span class="nb">float</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">&quot;double&quot;</span><span class="p">,</span>
-        <span class="nb">bool</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
-        <span class="nb">str</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span>
-        <span class="n">owlready2</span><span class="o">.</span><span class="n">normstr</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">&quot;normalizedString&quot;</span><span class="p">,</span>
-        <span class="n">owlready2</span><span class="o">.</span><span class="n">locstr</span><span class="p">:</span> <span class="n">RDF</span> <span class="o">+</span> <span class="s2">&quot;langString&quot;</span><span class="p">,</span>
-        <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">&quot;date&quot;</span><span class="p">,</span>
-        <span class="n">datetime</span><span class="o">.</span><span class="n">time</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span>
-        <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">&quot;dateTime&quot;</span><span class="p">,</span>
+        <span class="nb">int</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">"int"</span><span class="p">,</span>
+        <span class="nb">float</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">"double"</span><span class="p">,</span>
+        <span class="nb">bool</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">"boolean"</span><span class="p">,</span>
+        <span class="nb">str</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">"int"</span><span class="p">,</span>
+        <span class="n">owlready2</span><span class="o">.</span><span class="n">normstr</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">"normalizedString"</span><span class="p">,</span>
+        <span class="n">owlready2</span><span class="o">.</span><span class="n">locstr</span><span class="p">:</span> <span class="n">RDF</span> <span class="o">+</span> <span class="s2">"langString"</span><span class="p">,</span>
+        <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">"date"</span><span class="p">,</span>
+        <span class="n">datetime</span><span class="o">.</span><span class="n">time</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">"time"</span><span class="p">,</span>
+        <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">:</span> <span class="n">XSD</span> <span class="o">+</span> <span class="s2">"dateTime"</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">onto</span> <span class="o">=</span> <span class="n">get_ontology</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">input</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
@@ -2000,7 +2000,7 @@
 
     <span class="c1"># Get default prefixes from arguments</span>
     <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">namespace</span><span class="p">:</span>
-        <span class="n">prefix</span><span class="p">,</span> <span class="n">ns</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">prefix</span><span class="p">,</span> <span class="n">ns</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">":"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">prefixes</span><span class="p">[</span><span class="n">prefix</span><span class="p">]</span> <span class="o">=</span> <span class="n">ns</span>
 
     <span class="n">include_namespaces</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">include_namespace</span><span class="p">)</span>
@@ -2018,7 +2018,7 @@
             <span class="k">continue</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="n">prop</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="s2">&quot;@type&quot;</span><span class="p">:</span> <span class="s2">&quot;@id&quot;</span><span class="p">}</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"@id"</span><span class="p">:</span> <span class="n">prop</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="s2">"@type"</span><span class="p">:</span> <span class="s2">"@id"</span><span class="p">}</span>
             <span class="n">prefixes</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">base_iri</span><span class="p">)</span>
     <span class="n">items</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">d</span><span class="p">)})</span>
 
@@ -2032,12 +2032,12 @@
             <span class="k">continue</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
         <span class="n">tp</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">RDF</span> <span class="o">+</span> <span class="s2">&quot;plainLiteral&quot;</span>
+            <span class="n">RDF</span> <span class="o">+</span> <span class="s2">"plainLiteral"</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">prop</span><span class="o">.</span><span class="n">range</span> <span class="ow">or</span> <span class="n">prop</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataprop</span>
             <span class="k">else</span> <span class="n">dataprop</span><span class="p">[</span><span class="n">prop</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="n">prop</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="s2">&quot;@type&quot;</span><span class="p">:</span> <span class="n">tp</span><span class="p">}</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"@id"</span><span class="p">:</span> <span class="n">prop</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="s2">"@type"</span><span class="p">:</span> <span class="n">tp</span><span class="p">}</span>
             <span class="n">prefixes</span><span class="p">[</span><span class="n">prop</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">base_iri</span>
     <span class="n">items</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">d</span><span class="p">)})</span>
 
@@ -2048,17 +2048,17 @@
             <span class="k">continue</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="s2">&quot;@type&quot;</span><span class="p">:</span> <span class="n">OWL</span> <span class="o">+</span> <span class="s2">&quot;Class&quot;</span><span class="p">}</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"@id"</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">iri</span><span class="p">,</span> <span class="s2">"@type"</span><span class="p">:</span> <span class="n">OWL</span> <span class="o">+</span> <span class="s2">"Class"</span><span class="p">}</span>
             <span class="n">prefixes</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">base_iri</span>
     <span class="n">items</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">d</span><span class="p">)})</span>
 
-    <span class="n">ctx</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;@version&quot;</span><span class="p">:</span> <span class="mf">1.1</span><span class="p">}</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"@version"</span><span class="p">:</span> <span class="mf">1.1</span><span class="p">}</span>
     <span class="n">ctx</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">prefixes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">prefixes</span><span class="p">)})</span>
     <span class="n">ctx</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
-    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;@context&quot;</span><span class="p">:</span> <span class="n">ctx</span><span class="p">}</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"@context"</span><span class="p">:</span> <span class="n">ctx</span><span class="p">}</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s2">&quot;wt&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s2">"wt"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">indent</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">indent</span><span class="p">))</span>

@@ -1898,82 +1898,82 @@
         <details class="quote">
           <summary>Source code in <code>ontopy/ontokit/docs.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">docs_arguments</span><span class="p">(</span><span class="n">subparsers</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Define arguments for the docs sub-command.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Define arguments for the docs sub-command."""</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
-        <span class="s2">&quot;docs&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Create the html documentation for the ontology.&quot;</span><span class="p">),</span>
+        <span class="s2">"docs"</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">"Create the html documentation for the ontology."</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">docs_subcommand</span><span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--debug&quot;</span><span class="p">,</span>
-        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Show Python traceback on error.&quot;</span><span class="p">,</span>
+        <span class="s2">"--debug"</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">"store_true"</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">"Show Python traceback on error."</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;root&quot;</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;PATH&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Root folder of repository to create html documentation for.&quot;</span>
-        <span class="s2">&quot;Should be the same as used in the setup command.&quot;</span><span class="p">,</span>
+        <span class="s2">"root"</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">"PATH"</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">"Root folder of repository to create html documentation for."</span>
+        <span class="s2">"Should be the same as used in the setup command."</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--imported&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;-i&quot;</span><span class="p">,</span>
-        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_false&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Whether to include imported ontologies. Default is False.&quot;</span><span class="p">),</span>
+        <span class="s2">"--imported"</span><span class="p">,</span>
+        <span class="s2">"-i"</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">"store_false"</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">"Whether to include imported ontologies. Default is False."</span><span class="p">),</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--recursive&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;-r&quot;</span><span class="p">,</span>
-        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="s2">"--recursive"</span><span class="p">,</span>
+        <span class="s2">"-r"</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">"store_true"</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Whether to recursively import all imported ontologies. &quot;</span>
-            <span class="s2">&quot;Implies `imported=True`.&quot;</span>
+            <span class="s2">"Whether to recursively import all imported ontologies. "</span>
+            <span class="s2">"Implies `imported=True`."</span>
         <span class="p">),</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--iri-regex&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;-x&quot;</span><span class="p">,</span>
+        <span class="s2">"--iri-regex"</span><span class="p">,</span>
+        <span class="s2">"-x"</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;A regular expression that the IRI of documented entities &quot;</span>
-            <span class="s2">&quot;should match.&quot;</span>
+            <span class="s2">"A regular expression that the IRI of documented entities "</span>
+            <span class="s2">"should match."</span>
         <span class="p">),</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--outfile&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;-o&quot;</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output file for the generated documentation (reStructuredText).&quot;</span>
-        <span class="s2">&quot;Default is &#39;docs/index.rst&#39;.&quot;</span><span class="p">,</span>
+        <span class="s2">"--outfile"</span><span class="p">,</span>
+        <span class="s2">"-o"</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">"FILE"</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">"Output file for the generated documentation (reStructuredText)."</span>
+        <span class="s2">"Default is 'docs/index.rst'."</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--ontology-file&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
+        <span class="s2">"--ontology-file"</span><span class="p">,</span>
+        <span class="s2">"-f"</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">"FILE"</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Path to the ontology file to document in the auto-generated &quot;</span>
-            <span class="s2">&quot;reference index, relative to the root directory. Default is &quot;</span>
-            <span class="s2">&quot;&#39;build/ontology_name.ttl&#39;, where &#39;ontology_name&#39; is &quot;</span>
-            <span class="s2">&quot;the value of ONTOLOGY_NAME in the configuration file.&quot;</span>
+            <span class="s2">"Path to the ontology file to document in the auto-generated "</span>
+            <span class="s2">"reference index, relative to the root directory. Default is "</span>
+            <span class="s2">"'build/ontology_name.ttl', where 'ontology_name' is "</span>
+            <span class="s2">"the value of ONTOLOGY_NAME in the configuration file."</span>
         <span class="p">),</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--docs-dir&quot;</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;DIR&quot;</span><span class="p">,</span>
+        <span class="s2">"--docs-dir"</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">"DIR"</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Documentation directory to include in the generated &quot;</span>
-            <span class="s2">&quot;documentation. &quot;</span>
-            <span class="s2">&quot;Typically the README.md which is included as the landing page &quot;</span>
-            <span class="s2">&quot;of the documentation links to the docs dir and its contents. &quot;</span>
-            <span class="s2">&quot;If not provided, the README.md will be included in the &quot;</span>
-            <span class="s2">&quot;documentation, but the docs dir will not be included.&quot;</span>
+            <span class="s2">"Documentation directory to include in the generated "</span>
+            <span class="s2">"documentation. "</span>
+            <span class="s2">"Typically the README.md which is included as the landing page "</span>
+            <span class="s2">"of the documentation links to the docs dir and its contents. "</span>
+            <span class="s2">"If not provided, the README.md will be included in the "</span>
+            <span class="s2">"documentation, but the docs dir will not be included."</span>
         <span class="p">),</span>
     <span class="p">)</span>
 </code></pre></div>
@@ -2001,51 +2001,51 @@
         <details class="quote">
           <summary>Source code in <code>ontopy/ontokit/docs.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">docs_subcommand</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements the docs sub-command.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Implements the docs sub-command."""</span>
     <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
     <span class="n">config_path</span> <span class="o">=</span> <span class="n">get_config_path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">config_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;The ontokit configuration file </span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="s2"> does not exist. &quot;</span>
-            <span class="s2">&quot;Please run ontokit setup first.&quot;</span>
+            <span class="sa">f</span><span class="s2">"The ontokit configuration file </span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="s2"> does not exist. "</span>
+            <span class="s2">"Please run ontokit setup first."</span>
         <span class="p">)</span>
 
     <span class="n">config</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-    <span class="n">git_repository</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-        <span class="s2">&quot;GITHUB_REPOSITORY&quot;</span>
+    <span class="n">git_repository</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"GIT_REPOSITORY"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">"GITHUB_REPOSITORY"</span>
     <span class="p">)</span>
-    <span class="k">if</span> <span class="n">git_repository</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">git_repository</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"GIT_REPOSITORY"</span><span class="p">):</span>
         <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">git_repository</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">"GIT_REPOSITORY"</span><span class="p">]</span> <span class="o">=</span> <span class="n">git_repository</span>
 
     <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">key</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">missing_required_variables</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">&quot;GITHUB_REPOSITORY&quot;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">"GITHUB_REPOSITORY"</span>
     <span class="p">]</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">git_repository</span> <span class="ow">and</span> <span class="s2">&quot;GIT_REPOSITORY&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">missing</span><span class="p">:</span>
-        <span class="n">missing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">git_repository</span> <span class="ow">and</span> <span class="s2">"GIT_REPOSITORY"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="n">missing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"GIT_REPOSITORY"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
-        <span class="n">required</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span>
+        <span class="n">required</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;Missing required variables in &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">required</span><span class="si">}</span><span class="s2">. &quot;</span>
-            <span class="s2">&quot;Please update the file and rerun `ontokit docs`.&quot;</span>
+            <span class="s2">"Missing required variables in "</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">required</span><span class="si">}</span><span class="s2">. "</span>
+            <span class="s2">"Please update the file and rerun `ontokit docs`."</span>
         <span class="p">)</span>
 
-    <span class="n">ontology_name</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ONTOLOGY_NAME&quot;</span><span class="p">)</span>
-    <span class="n">git_base_url</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GIT_BASE_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;github.com&quot;</span><span class="p">)</span>
-    <span class="n">build_dir</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;BUILD_DIR&quot;</span><span class="p">,</span> <span class="s2">&quot;build&quot;</span><span class="p">)</span>
-    <span class="n">reference_indices</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REFERENCE_INDICES&quot;</span><span class="p">,</span> <span class="p">[])</span>
-    <span class="n">primary_subsections</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REFERENCE_SUBSECTIONS&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">)</span>
-    <span class="n">primary_imported</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REFERENCE_IMPORTED&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">imported</span><span class="p">)</span>
-    <span class="n">primary_recursive</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REFERENCE_RECURSIVE&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">recursive</span><span class="p">)</span>
-    <span class="n">primary_iri_regex</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REFERENCE_IRI_REGEX&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">iri_regex</span><span class="p">)</span>
+    <span class="n">ontology_name</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"ONTOLOGY_NAME"</span><span class="p">)</span>
+    <span class="n">git_base_url</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"GIT_BASE_URL"</span><span class="p">,</span> <span class="s2">"github.com"</span><span class="p">)</span>
+    <span class="n">build_dir</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"BUILD_DIR"</span><span class="p">,</span> <span class="s2">"build"</span><span class="p">)</span>
+    <span class="n">reference_indices</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"REFERENCE_INDICES"</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">primary_subsections</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"REFERENCE_SUBSECTIONS"</span><span class="p">,</span> <span class="s2">"all"</span><span class="p">)</span>
+    <span class="n">primary_imported</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"REFERENCE_IMPORTED"</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">imported</span><span class="p">)</span>
+    <span class="n">primary_recursive</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"REFERENCE_RECURSIVE"</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">recursive</span><span class="p">)</span>
+    <span class="n">primary_iri_regex</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"REFERENCE_IRI_REGEX"</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">iri_regex</span><span class="p">)</span>
 
     <span class="n">docs_dir</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="n">args</span><span class="o">.</span><span class="n">docs_dir</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">docs_dir</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">docs_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">default_docs_dir</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">&quot;docs&quot;</span>
+        <span class="n">default_docs_dir</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">"docs"</span>
         <span class="k">if</span> <span class="n">default_docs_dir</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
             <span class="n">docs_dir</span> <span class="o">=</span> <span class="n">default_docs_dir</span>
 
@@ -2054,7 +2054,7 @@
         <span class="n">ontofile</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="n">args</span><span class="o">.</span><span class="n">ontology_file</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ontofile</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">root</span> <span class="o">/</span> <span class="n">build_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ontology_name</span><span class="si">}</span><span class="s2">.ttl&quot;</span>
+            <span class="n">root</span> <span class="o">/</span> <span class="n">build_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">ontology_name</span><span class="si">}</span><span class="s2">.ttl"</span>
         <span class="p">)</span>  <span class="c1"># INFERRED as default?</span>
     <span class="n">onto</span> <span class="o">=</span> <span class="n">get_ontology</span><span class="p">(</span><span class="n">ontofile</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
     <span class="n">od</span> <span class="o">=</span> <span class="n">OntologyDocumentation</span><span class="p">(</span>
@@ -2068,34 +2068,34 @@
     <span class="c1"># Optional additional reference indices provided by .ontokit_conf.yml</span>
     <span class="k">if</span> <span class="n">reference_indices</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference_indices</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;REFERENCE_INDICES in .ontokit_conf.yml must be a list.&quot;</span>
+            <span class="s2">"REFERENCE_INDICES in .ontokit_conf.yml must be a list."</span>
         <span class="p">)</span>
 
     <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">reference_indices</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Each REFERENCE_INDICES entry must be a mapping.&quot;</span><span class="p">)</span>
-        <span class="n">ref_ontology_file</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ontology_file&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Each REFERENCE_INDICES entry must be a mapping."</span><span class="p">)</span>
+        <span class="n">ref_ontology_file</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"ontology_file"</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">ref_ontology_file</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Each REFERENCE_INDICES entry must define &#39;ontology_file&#39;.&quot;</span>
+                <span class="s2">"Each REFERENCE_INDICES entry must define 'ontology_file'."</span>
             <span class="p">)</span>
         <span class="n">ref_onto</span> <span class="o">=</span> <span class="n">get_ontology</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="n">ref_ontology_file</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
         <span class="n">od</span><span class="o">.</span><span class="n">add_reference</span><span class="p">(</span>
             <span class="n">ref_onto</span><span class="p">,</span>
-            <span class="n">imported</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;imported&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">imported</span><span class="p">),</span>
-            <span class="n">recursive</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;recursive&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-            <span class="n">iri_regex</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;iri_regex&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">iri_regex</span><span class="p">),</span>
-            <span class="n">title</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;Reference Index&quot;</span><span class="p">),</span>
-            <span class="n">docfile</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;docfile&quot;</span><span class="p">),</span>
-            <span class="n">subsections</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subsections&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">),</span>
+            <span class="n">imported</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"imported"</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">imported</span><span class="p">),</span>
+            <span class="n">recursive</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"recursive"</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">iri_regex</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"iri_regex"</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">iri_regex</span><span class="p">),</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"Reference Index"</span><span class="p">),</span>
+            <span class="n">docfile</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"docfile"</span><span class="p">),</span>
+            <span class="n">subsections</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"subsections"</span><span class="p">,</span> <span class="s2">"all"</span><span class="p">),</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">outfile</span><span class="p">:</span>
-        <span class="n">docfile</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="n">build_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ontology_name</span><span class="si">}</span><span class="s2">.rst&quot;</span>
+        <span class="n">docfile</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="n">build_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">ontology_name</span><span class="si">}</span><span class="s2">.rst"</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">docfile</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
-    <span class="n">indexfile</span> <span class="o">=</span> <span class="n">docfile</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="s2">&quot;index.rst&quot;</span><span class="p">)</span>
-    <span class="n">conffile</span> <span class="o">=</span> <span class="n">docfile</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="s2">&quot;conf.py&quot;</span><span class="p">)</span>
+    <span class="n">indexfile</span> <span class="o">=</span> <span class="n">docfile</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="s2">"index.rst"</span><span class="p">)</span>
+    <span class="n">conffile</span> <span class="o">=</span> <span class="n">docfile</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="s2">"conf.py"</span><span class="p">)</span>
     <span class="c1"># Write all configured reference indices.</span>
     <span class="n">od</span><span class="o">.</span><span class="n">write_reference_docs</span><span class="p">(</span><span class="n">outdir</span><span class="o">=</span><span class="n">docfile</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">od</span><span class="o">.</span><span class="n">write_index_template</span><span class="p">(</span>
@@ -2111,7 +2111,7 @@
         <span class="n">github_repository</span><span class="o">=</span><span class="n">git_repository</span><span class="p">,</span>
         <span class="n">git_base_url</span><span class="o">=</span><span class="n">git_base_url</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="n">build_dir</span> <span class="o">/</span> <span class="s2">&quot;_static&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="n">build_dir</span> <span class="o">/</span> <span class="s2">"_static"</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">od</span><span class="o">.</span><span class="n">copy_css_file</span><span class="p">()</span>  <span class="c1"># Use default CSS file</span>
     <span class="n">od</span><span class="o">.</span><span class="n">copy_js_file</span><span class="p">()</span>  <span class="c1"># Use default collapsible-TOC JS file</span>
@@ -2124,14 +2124,14 @@
             <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">dst_docs_dir</span><span class="p">)</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">docs_dir</span><span class="p">,</span> <span class="n">dst_docs_dir</span><span class="p">)</span>
 
-    <span class="n">public_dir</span> <span class="o">=</span> <span class="s2">&quot;public&quot;</span>
+    <span class="n">public_dir</span> <span class="o">=</span> <span class="s2">"public"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">build_docs</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
         <span class="c1"># Equivalent to: sphinx-build -b html build/ public/</span>
-        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-b&quot;</span><span class="p">,</span> <span class="s2">&quot;html&quot;</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">out</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"-b"</span><span class="p">,</span> <span class="s2">"html"</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">out</span><span class="p">]</span>
         <span class="n">code</span> <span class="o">=</span> <span class="n">sphinx_main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">code</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sphinx-build failed with exit code </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"sphinx-build failed with exit code </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Remove public dir if it exists</span>
     <span class="n">path_public_dir</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="n">public_dir</span>

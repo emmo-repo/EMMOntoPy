@@ -1991,9 +1991,9 @@
         <details class="quote">
           <summary>Source code in <code>ontopy/ontokit/config.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">create_config</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">defaults</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create ontokit config at `path` from default values.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Create ontokit config at `path` from default values."""</span>
     <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">key</span><span class="p">:</span> <span class="n">_as_string</span><span class="p">(</span><span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">REQUIRED_CONFIG_KEYS</span>
+        <span class="n">key</span><span class="p">:</span> <span class="n">_as_string</span><span class="p">(</span><span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">REQUIRED_CONFIG_KEYS</span>
     <span class="p">}</span>
     <span class="n">_write_config_with_reference_indices_comment</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">config</span>
@@ -2022,7 +2022,7 @@
         <details class="quote">
           <summary>Source code in <code>ontopy/ontokit/config.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_config_path</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the path to the ontokit configuration file for `root`.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the path to the ontokit configuration file for `root`."""</span>
     <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">/</span> <span class="n">CONFIG_FILENAME</span>
 </code></pre></div>
         </details>
@@ -2049,16 +2049,16 @@
         <details class="quote">
           <summary>Source code in <code>ontopy/ontokit/config.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load_config</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load ontokit config from `path` and return it as a dictionary.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Load ontokit config from `path` and return it as a dictionary."""</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">content</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
     <span class="k">except</span> <span class="n">yaml</span><span class="o">.</span><span class="n">YAMLError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid YAML in </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invalid YAML in </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
 
     <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected a mapping in </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">content</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Expected a mapping in </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">content</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">content</span>
 </code></pre></div>
         </details>
@@ -2085,27 +2085,27 @@
         <details class="quote">
           <summary>Source code in <code>ontopy/ontokit/config.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">missing_required_variables</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return required keys that are missing or empty in `config`.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return required keys that are missing or empty in `config`."""</span>
     <span class="c1"># Accept legacy repository key as fallback for migration compatibility.</span>
     <span class="k">if</span> <span class="p">(</span>
-        <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
-        <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span>
-    <span class="p">)</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">LEGACY_REPOSITORY_KEY</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"GIT_REPOSITORY"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"GIT_REPOSITORY"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span>
+    <span class="p">)</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">LEGACY_REPOSITORY_KEY</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
         <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">LEGACY_REPOSITORY_KEY</span><span class="p">]</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">"GIT_REPOSITORY"</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">LEGACY_REPOSITORY_KEY</span><span class="p">]</span>
 
     <span class="c1"># Legacy configs may not define this key.</span>
     <span class="k">if</span> <span class="p">(</span>
-        <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GIT_BASE_URL&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
-        <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GIT_BASE_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"GIT_BASE_URL"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"GIT_BASE_URL"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span>
     <span class="p">):</span>
         <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;GIT_BASE_URL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;github.com&quot;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">"GIT_BASE_URL"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"github.com"</span>
 
     <span class="n">missing</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">REQUIRED_CONFIG_KEYS</span><span class="p">:</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
             <span class="n">missing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">missing</span>
 </code></pre></div>
@@ -2133,21 +2133,21 @@
         <details class="quote">
           <summary>Source code in <code>ontopy/ontokit/config.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">print_config</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print required ontokit variables and their values.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Print required ontokit variables and their values."""</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">write</span> <span class="k">if</span> <span class="n">stream</span> <span class="k">else</span> <span class="nb">print</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">emit</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">stream</span><span class="p">:</span>
-            <span class="n">out</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">out</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">REQUIRED_CONFIG_KEYS</span><span class="p">:</span>
-        <span class="n">emit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">emit</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">LEGACY_REPOSITORY_KEY</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
         <span class="n">emit</span><span class="p">(</span>
-            <span class="s2">&quot;  &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">LEGACY_REPOSITORY_KEY</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">LEGACY_REPOSITORY_KEY</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="s2">"  "</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">LEGACY_REPOSITORY_KEY</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">LEGACY_REPOSITORY_KEY</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 </code></pre></div>
         </details>
@@ -2177,29 +2177,29 @@ were added.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/ontokit/config.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_config</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">defaults</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add any missing required keys to `config` from `defaults` and save.</span>
+<span class="w">    </span><span class="sd">"""Add any missing required keys to `config` from `defaults` and save.</span>
 
 <span class="sd">    Keys that are already present in `config` are never overwritten.</span>
 <span class="sd">    Returns the (possibly updated) config dict and a list of keys that</span>
 <span class="sd">    were added.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">added</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># Normalise legacy key to new neutral key when possible.</span>
     <span class="k">if</span> <span class="p">(</span>
-        <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
-        <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span>
-    <span class="p">)</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">LEGACY_REPOSITORY_KEY</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
-        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;GIT_REPOSITORY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_as_string</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">LEGACY_REPOSITORY_KEY</span><span class="p">))</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"GIT_REPOSITORY"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"GIT_REPOSITORY"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span>
+    <span class="p">)</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">LEGACY_REPOSITORY_KEY</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">"GIT_REPOSITORY"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_as_string</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">LEGACY_REPOSITORY_KEY</span><span class="p">))</span>
 
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">REQUIRED_CONFIG_KEYS</span><span class="p">:</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-            <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_as_string</span><span class="p">(</span><span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
+            <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_as_string</span><span class="p">(</span><span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>
             <span class="n">added</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">OPTIONAL_CONFIG_KEYS</span><span class="p">:</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-            <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_as_string</span><span class="p">(</span><span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
+            <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_as_string</span><span class="p">(</span><span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>
             <span class="n">added</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">added</span><span class="p">:</span>
         <span class="n">_write_config_with_reference_indices_comment</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>

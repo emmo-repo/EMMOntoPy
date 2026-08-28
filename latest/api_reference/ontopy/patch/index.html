@@ -2101,11 +2101,11 @@ will be excluded.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/patch.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">disjoint_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reduce</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a generator with all classes that are disjoint with `self`.</span>
+<span class="w">    </span><span class="sd">"""Returns a generator with all classes that are disjoint with `self`.</span>
 
 <span class="sd">    If `reduce` is `True`, all classes that are a descendant of another class</span>
 <span class="sd">    will be excluded.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">reduce</span><span class="p">:</span>
         <span class="n">disjoint_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">disjoint_with</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">disjoint_set</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
@@ -2148,17 +2148,17 @@ ontologies.</p>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_annotations</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a dict with non-empty annotations.</span>
+<span class="w">    </span><span class="sd">"""Returns a dict with non-empty annotations.</span>
 
 <span class="sd">    If `all` is `True`, also annotations with no value are included.</span>
 
 <span class="sd">    If `imported` is `True`, also include annotations defined in imported</span>
 <span class="sd">    ontologies.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">onto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">ontology</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">extend</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extend annotations with a sequence of values.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Extend annotations with a sequence of values."""</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
             <span class="n">annotations</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -2168,8 +2168,8 @@ ontologies.</p>
         <span class="nb">str</span><span class="p">(</span><span class="n">get_preferred_label</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span> <span class="n">a</span><span class="o">.</span><span class="n">_get_values_for_class</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">annotation_properties</span><span class="p">(</span><span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">)</span>
     <span class="p">}</span>
-    <span class="n">extend</span><span class="p">(</span><span class="s2">&quot;comment&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
-    <span class="n">extend</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+    <span class="n">extend</span><span class="p">(</span><span class="s2">"comment"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
+    <span class="n">extend</span><span class="p">(</span><span class="s2">"label"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">all</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">annotations</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">annotations</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">value</span><span class="p">}</span>
@@ -2200,14 +2200,14 @@ returned set.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/patch.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_indirect_is_a</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skip_classes</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the set of all isSubclassOf relations of self and its ancestors.</span>
+<span class="w">    </span><span class="sd">"""Returns the set of all isSubclassOf relations of self and its ancestors.</span>
 
 <span class="sd">    If `skip_classes` is `True`, indirect classes are not included in the</span>
 <span class="sd">    returned set.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">subclass_relations</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mro</span><span class="p">()):</span>
-        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="s2">&quot;is_a&quot;</span><span class="p">,</span> <span class="s2">&quot;equivalent_to&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="s2">"is_a"</span><span class="p">,</span> <span class="s2">"equivalent_to"</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
                 <span class="n">lst</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">skip_classes</span><span class="p">:</span>
@@ -2248,11 +2248,11 @@ excluded.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/patch.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a list of all parents.</span>
+<span class="w">    </span><span class="sd">"""Returns a list of all parents.</span>
 
 <span class="sd">    If `strict` is `True`, parents that are parents of other parents are</span>
 <span class="sd">    excluded.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
         <span class="n">parents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parents</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">parents</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
@@ -2267,7 +2267,7 @@ excluded.</p>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ObjectPropertyClass</span><span class="p">)</span>
         <span class="p">}</span>
     <span class="k">raise</span> <span class="n">EMMOntoPyException</span><span class="p">(</span>
-        <span class="s2">&quot;self has no parents - this should not be possible!&quot;</span>
+        <span class="s2">"self has no parents - this should not be possible!"</span>
     <span class="p">)</span>
 </code></pre></div>
         </details>
@@ -2298,16 +2298,16 @@ excluded.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/patch.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_preferred_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the preferred label as a string (not list).</span>
+<span class="w">    </span><span class="sd">"""Returns the preferred label as a string (not list).</span>
 
 <span class="sd">    The following heuristics is used:</span>
 <span class="sd">      - if prefLabel annotation property exists, returns the first prefLabel</span>
 <span class="sd">      - if label annotation property exists, returns the first label</span>
 <span class="sd">      - otherwise return the name</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"prefLabel"</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"label"</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </code></pre></div>
@@ -2335,7 +2335,7 @@ excluded.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/patch.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_typename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get restriction type label/name.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Get restriction type label/name."""</span>
     <span class="k">return</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">class_construct</span><span class="o">.</span><span class="n">_restriction_type_2_label</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">]</span>
 </code></pre></div>
         </details>
@@ -2362,7 +2362,7 @@ excluded.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/patch.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">has</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns true if name&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Returns true if name"""</span>
     <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </code></pre></div>
         </details>
@@ -2389,9 +2389,9 @@ pairs associated with this ontology, i.e. the metadata.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/patch.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Generator[Tuple[str, Any], None, None]&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a dict of annotation properties as (name, value_list)</span>
-<span class="sd">    pairs associated with this ontology, i.e. the metadata.&quot;&quot;&quot;</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Generator[Tuple[str, Any], None, None]"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return a dict of annotation properties as (name, value_list)</span>
+<span class="sd">    pairs associated with this ontology, i.e. the metadata."""</span>
     <span class="n">namespace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span>
 
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -2434,9 +2434,9 @@ with this ontology, i.e. metadata keys.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/patch.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Generator[str, None, None]&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a generator over annotation property names associated</span>
-<span class="sd">    with this ontology, i.e. metadata keys.&quot;&quot;&quot;</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Generator[str, None, None]"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return a generator over annotation property names associated</span>
+<span class="sd">    with this ontology, i.e. metadata keys."""</span>
 
     <span class="n">namespace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span>
     <span class="n">predicates</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">namespace</span><span class="o">.</span><span class="n">get_triples</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">))</span>
@@ -2472,9 +2472,9 @@ with this ontology, i.e. metadata keys.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/patch.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">namespace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world_or_ontology</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;__init__ function for the `Namespace` class.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""__init__ function for the `Namespace` class."""</span>
     <span class="n">orig_namespace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world_or_ontology</span><span class="p">,</span> <span class="n">base_iri</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.ttl&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".ttl"</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
 </code></pre></div>
         </details>
@@ -2501,16 +2501,16 @@ with this ontology, i.e. metadata keys.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/patch.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">render_func</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Improve default rendering of entities.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Improve default rendering of entities."""</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">"prefLabel"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">"label"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;altLabel&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">altLabel</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">"altLabel"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">altLabel</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">altLabel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
 </code></pre></div>
         </details>
     </div>

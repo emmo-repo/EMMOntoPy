@@ -1921,7 +1921,7 @@ debug : bool
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sync_reasoner_factpp</span><span class="p">(</span>
     <span class="n">ontology_or_world</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">infer_property_values</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run FaCT++ reasoner and load the inferred relations back into</span>
+<span class="w">    </span><span class="sd">"""Run FaCT++ reasoner and load the inferred relations back into</span>
 <span class="sd">    the owlready2 triplestore.</span>
 
 <span class="sd">    Parameters</span>
@@ -1932,7 +1932,7 @@ debug : bool
 <span class="sd">        Whether to also infer property values.</span>
 <span class="sd">    debug : bool</span>
 <span class="sd">        Whether to print debug info to standard output.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># pylint: disable=too-many-locals,too-many-branches,too-many-statements</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ontology_or_world</span><span class="p">,</span> <span class="n">World</span><span class="p">):</span>
         <span class="n">world</span> <span class="o">=</span> <span class="n">ontology_or_world</span>
@@ -1956,7 +1956,7 @@ debug : bool
 
     <span class="k">try</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** Prepare graph&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"*** Prepare graph"</span><span class="p">)</span>
         <span class="c1"># Exclude owl:imports because they are not needed and can</span>
         <span class="c1"># cause trouble when loading the inferred ontology</span>
         <span class="n">graph1</span> <span class="o">=</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
@@ -1967,11 +1967,11 @@ debug : bool
                 <span class="n">graph1</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** Run FaCT++ reasoner (and postprocess)&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"*** Run FaCT++ reasoner (and postprocess)"</span><span class="p">)</span>
         <span class="n">graph2</span> <span class="o">=</span> <span class="n">FaCTPPGraph</span><span class="p">(</span><span class="n">graph1</span><span class="p">)</span><span class="o">.</span><span class="n">inferred_graph</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** Load inferred ontology&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"*** Load inferred ontology"</span><span class="p">)</span>
         <span class="c1"># Check all rdfs:subClassOf relations in the inferred graph and add</span>
         <span class="c1"># them to the world if they are missing</span>
         <span class="n">new_parents</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
@@ -2020,7 +2020,7 @@ debug : bool
             <span class="n">world</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">acquire_write_lock</span><span class="p">()</span>  <span class="c1"># re-lock when applying results</span>
 
     <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** Applying reasoning results&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"*** Applying reasoning results"</span><span class="p">)</span>
 
     <span class="n">_apply_reasoning_results</span><span class="p">(</span>
         <span class="n">world</span><span class="p">,</span> <span class="n">ontology</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">new_parents</span><span class="p">,</span> <span class="n">new_equivs</span><span class="p">,</span> <span class="n">entity_2_type</span>

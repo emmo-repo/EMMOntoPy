@@ -1962,7 +1962,7 @@ only value restrictions supported so far.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/manchester.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="n">ontology</span><span class="p">:</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Ontology</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Construct</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate expression in Manchester syntax.</span>
+<span class="w">    </span><span class="sd">"""Evaluate expression in Manchester syntax.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        ontology: The ontology within which the expression will be evaluated.</span>
@@ -1976,19 +1976,19 @@ only value restrictions supported so far.</p>
 <span class="sd">    &gt;&gt;&gt; from ontopy import get_ontology</span>
 <span class="sd">    &gt;&gt;&gt; emmo = get_ontology().load()</span>
 
-<span class="sd">    &gt;&gt;&gt; restriction = evaluate(emmo, &#39;hasPart some Atom&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; cls = evaluate(emmo, &#39;Atom&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; expr = evaluate(emmo, &#39;Atom or Molecule&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; restriction = evaluate(emmo, 'hasPart some Atom')</span>
+<span class="sd">    &gt;&gt;&gt; cls = evaluate(emmo, 'Atom')</span>
+<span class="sd">    &gt;&gt;&gt; expr = evaluate(emmo, 'Atom or Molecule')</span>
 
 <span class="sd">    Note:</span>
 <span class="sd">        Logical expressions (with `not`, `and` and `or`) are supported as</span>
 <span class="sd">        well as object property restrictions.  For data properterties are</span>
 <span class="sd">        only value restrictions supported so far.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># pylint: disable=invalid-name</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_parse_literal</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compiles literal to Owlready2 type.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Compiles literal to Owlready2 type."""</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">language</span><span class="p">:</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">locstr</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">string</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">language</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">r</span><span class="o">.</span><span class="n">number</span><span class="p">:</span>
@@ -2000,18 +2000,18 @@ only value restrictions supported so far.</p>
     <span class="c1"># pylint: disable=invalid-name,no-else-return,too-many-return-statements</span>
     <span class="c1"># pylint: disable=too-many-branches</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_eval</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Recursively evaluate expression produced by pyparsing into an</span>
-<span class="sd">        Owlready2 construct.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Recursively evaluate expression produced by pyparsing into an</span>
+<span class="sd">        Owlready2 construct."""</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">fneg</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Negates the argument if `neg` is true.&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""Negates the argument if `neg` is true."""</span>
             <span class="k">return</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Not</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">neg</span> <span class="k">else</span> <span class="n">x</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># r is atomic, returns its owlready2 repr</span>
             <span class="k">return</span> <span class="n">ontology</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>
-        <span class="n">neg</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># whether the expression starts with &quot;not&quot;</span>
-        <span class="k">while</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;not&quot;</span><span class="p">:</span>
-            <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># strip off the &quot;not&quot; and proceed</span>
+        <span class="n">neg</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># whether the expression starts with "not"</span>
+        <span class="k">while</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"not"</span><span class="p">:</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># strip off the "not" and proceed</span>
             <span class="n">neg</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">neg</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># r is either a atomic or a parenthesised</span>
@@ -2021,7 +2021,7 @@ only value restrictions supported so far.</p>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">fneg</span><span class="p">(</span><span class="n">_eval</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         <span class="k">elif</span> <span class="n">r</span><span class="o">.</span><span class="n">op</span><span class="p">:</span>  <span class="c1"># r contains a logical operator: and/or</span>
-            <span class="n">ops</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;and&quot;</span><span class="p">:</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">And</span><span class="p">,</span> <span class="s2">&quot;or&quot;</span><span class="p">:</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Or</span><span class="p">}</span>
+            <span class="n">ops</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"and"</span><span class="p">:</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">And</span><span class="p">,</span> <span class="s2">"or"</span><span class="p">:</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Or</span><span class="p">}</span>
             <span class="n">op</span> <span class="o">=</span> <span class="n">ops</span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">op</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">op</span><span class="p">([</span><span class="n">fneg</span><span class="p">(</span><span class="n">_eval</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span> <span class="n">_eval</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">])])</span>
@@ -2031,41 +2031,41 @@ only value restrictions supported so far.</p>
                 <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">op</span><span class="p">([</span><span class="n">arg1</span><span class="p">,</span> <span class="n">_eval</span><span class="p">(</span><span class="n">r</span><span class="p">)])</span>
         <span class="k">elif</span> <span class="n">r</span><span class="o">.</span><span class="n">objProp</span><span class="p">:</span>  <span class="c1"># r is a restriction</span>
-            <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;inverse&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"inverse"</span><span class="p">:</span>
                 <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 <span class="n">prop</span> <span class="o">=</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Inverse</span><span class="p">(</span><span class="n">ontology</span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">prop</span> <span class="o">=</span> <span class="n">ontology</span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
             <span class="n">rtype</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">rtype</span> <span class="o">==</span> <span class="s2">&quot;Self&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rtype</span> <span class="o">==</span> <span class="s2">"Self"</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">fneg</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">has_self</span><span class="p">())</span>
             <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">f</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">rtype</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">rtype</span> <span class="o">==</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rtype</span> <span class="o">==</span> <span class="s2">"value"</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">fneg</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">_eval</span><span class="p">(</span><span class="n">r</span><span class="p">)))</span>
-            <span class="k">elif</span> <span class="n">rtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;some&quot;</span><span class="p">,</span> <span class="s2">&quot;only&quot;</span><span class="p">):</span>
+            <span class="k">elif</span> <span class="n">rtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"some"</span><span class="p">,</span> <span class="s2">"only"</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">fneg</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">_eval</span><span class="p">(</span><span class="n">r</span><span class="p">)))</span>
-            <span class="k">elif</span> <span class="n">rtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;exactly&quot;</span><span class="p">):</span>
+            <span class="k">elif</span> <span class="n">rtype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"min"</span><span class="p">,</span> <span class="s2">"max"</span><span class="p">,</span> <span class="s2">"exactly"</span><span class="p">):</span>
                 <span class="n">cardinality</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">fneg</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">cardinality</span><span class="p">,</span> <span class="n">_eval</span><span class="p">(</span><span class="n">r</span><span class="p">)))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">ManchesterError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;invalid restriction type: </span><span class="si">{</span><span class="n">rtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">ManchesterError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"invalid restriction type: </span><span class="si">{</span><span class="n">rtype</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">r</span><span class="o">.</span><span class="n">dataProp</span><span class="p">:</span>  <span class="c1"># r is a data property restriction</span>
             <span class="n">prop</span> <span class="o">=</span> <span class="n">ontology</span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
             <span class="n">rtype</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">f</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">rtype</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">rtype</span> <span class="o">==</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rtype</span> <span class="o">==</span> <span class="s2">"value"</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">_parse_literal</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">ManchesterError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;unimplemented data property restriction: &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prop</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rtype</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"unimplemented data property restriction: "</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prop</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rtype</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ManchesterError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;invalid expression: </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ManchesterError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"invalid expression: </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="n">grammar</span> <span class="o">=</span> <span class="n">manchester_expression</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">_eval</span><span class="p">(</span><span class="n">grammar</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">parseAll</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
@@ -2096,12 +2096,12 @@ only value restrictions supported so far.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/manchester.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">manchester_expression</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns pyparsing grammar for a Manchester expression.</span>
+<span class="w">    </span><span class="sd">"""Returns pyparsing grammar for a Manchester expression.</span>
 
 <span class="sd">    This function is mostly for internal use.</span>
 
 <span class="sd">    See also: https://www.w3.org/TR/owl2-manchester-syntax/</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># pylint: disable=global-statement,invalid-name,too-many-locals</span>
     <span class="k">global</span> <span class="n">GRAMMAR</span>
     <span class="k">if</span> <span class="n">GRAMMAR</span><span class="p">:</span>
@@ -2110,46 +2110,46 @@ only value restrictions supported so far.</p>
     <span class="c1"># Subset of the Manchester grammar for expressions</span>
     <span class="c1"># It is based on https://www.w3.org/TR/owl2-manchester-syntax/</span>
     <span class="c1"># but allows logical constructs within restrictions (like Protege)</span>
-    <span class="n">ident</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Word</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">alphas</span> <span class="o">+</span> <span class="s2">&quot;_:-&quot;</span><span class="p">,</span> <span class="n">pp</span><span class="o">.</span><span class="n">alphanums</span> <span class="o">+</span> <span class="s2">&quot;_:-&quot;</span><span class="p">,</span> <span class="n">asKeyword</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ident</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Word</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">alphas</span> <span class="o">+</span> <span class="s2">"_:-"</span><span class="p">,</span> <span class="n">pp</span><span class="o">.</span><span class="n">alphanums</span> <span class="o">+</span> <span class="s2">"_:-"</span><span class="p">,</span> <span class="n">asKeyword</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">uint</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Word</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">nums</span><span class="p">)</span>
     <span class="n">alphas</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Word</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">alphas</span><span class="p">)</span>
-    <span class="n">string</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Word</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">alphanums</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
+    <span class="n">string</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Word</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">alphanums</span> <span class="o">+</span> <span class="s2">":"</span><span class="p">)</span>
     <span class="n">quotedString</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">pp</span><span class="o">.</span><span class="n">QuotedString</span><span class="p">(</span><span class="s1">&#39;&quot;&quot;&quot;&#39;</span><span class="p">,</span> <span class="n">multiline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">|</span> <span class="n">pp</span><span class="o">.</span><span class="n">QuotedString</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
-    <span class="p">)(</span><span class="s2">&quot;string&quot;</span><span class="p">)</span>
-    <span class="n">typedLiteral</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Combine</span><span class="p">(</span><span class="n">quotedString</span> <span class="o">+</span> <span class="s2">&quot;^^&quot;</span> <span class="o">+</span> <span class="n">string</span><span class="p">(</span><span class="s2">&quot;datatype&quot;</span><span class="p">))</span>
-    <span class="n">stringLanguageLiteral</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Combine</span><span class="p">(</span><span class="n">quotedString</span> <span class="o">+</span> <span class="s2">&quot;@&quot;</span> <span class="o">+</span> <span class="n">alphas</span><span class="p">(</span><span class="s2">&quot;language&quot;</span><span class="p">))</span>
+        <span class="n">pp</span><span class="o">.</span><span class="n">QuotedString</span><span class="p">(</span><span class="s1">'"""'</span><span class="p">,</span> <span class="n">multiline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">|</span> <span class="n">pp</span><span class="o">.</span><span class="n">QuotedString</span><span class="p">(</span><span class="s1">'"'</span><span class="p">)</span>
+    <span class="p">)(</span><span class="s2">"string"</span><span class="p">)</span>
+    <span class="n">typedLiteral</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Combine</span><span class="p">(</span><span class="n">quotedString</span> <span class="o">+</span> <span class="s2">"^^"</span> <span class="o">+</span> <span class="n">string</span><span class="p">(</span><span class="s2">"datatype"</span><span class="p">))</span>
+    <span class="n">stringLanguageLiteral</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Combine</span><span class="p">(</span><span class="n">quotedString</span> <span class="o">+</span> <span class="s2">"@"</span> <span class="o">+</span> <span class="n">alphas</span><span class="p">(</span><span class="s2">"language"</span><span class="p">))</span>
     <span class="n">stringLiteral</span> <span class="o">=</span> <span class="n">quotedString</span>
-    <span class="n">numberLiteral</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">pyparsing_common</span><span class="o">.</span><span class="n">number</span><span class="p">(</span><span class="s2">&quot;number&quot;</span><span class="p">)</span>
+    <span class="n">numberLiteral</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">pyparsing_common</span><span class="o">.</span><span class="n">number</span><span class="p">(</span><span class="s2">"number"</span><span class="p">)</span>
     <span class="n">literal</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">typedLiteral</span> <span class="o">|</span> <span class="n">stringLanguageLiteral</span> <span class="o">|</span> <span class="n">stringLiteral</span> <span class="o">|</span> <span class="n">numberLiteral</span>
     <span class="p">)</span>
-    <span class="n">logOp</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">one_of</span><span class="p">([</span><span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="s2">&quot;or&quot;</span><span class="p">],</span> <span class="n">asKeyword</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">logOp</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">one_of</span><span class="p">([</span><span class="s2">"and"</span><span class="p">,</span> <span class="s2">"or"</span><span class="p">],</span> <span class="n">asKeyword</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">expr</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Forward</span><span class="p">()</span>
     <span class="n">restriction</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Forward</span><span class="p">()</span>
-    <span class="n">primary</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;not&quot;</span><span class="p">)[</span><span class="o">...</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span>
-        <span class="n">restriction</span> <span class="o">|</span> <span class="n">ident</span><span class="p">(</span><span class="s2">&quot;cls&quot;</span><span class="p">)</span> <span class="o">|</span> <span class="n">pp</span><span class="o">.</span><span class="n">nested_expr</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="n">expr</span><span class="p">)</span>
+    <span class="n">primary</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">"not"</span><span class="p">)[</span><span class="o">...</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span>
+        <span class="n">restriction</span> <span class="o">|</span> <span class="n">ident</span><span class="p">(</span><span class="s2">"cls"</span><span class="p">)</span> <span class="o">|</span> <span class="n">pp</span><span class="o">.</span><span class="n">nested_expr</span><span class="p">(</span><span class="s2">"("</span><span class="p">,</span> <span class="s2">")"</span><span class="p">,</span> <span class="n">expr</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="n">objPropExpr</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">pp</span><span class="o">.</span><span class="n">Literal</span><span class="p">(</span><span class="s2">&quot;inverse&quot;</span><span class="p">)</span>
-        <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)</span>
-        <span class="o">+</span> <span class="n">ident</span><span class="p">(</span><span class="s2">&quot;objProp&quot;</span><span class="p">)</span>
-        <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">)</span>
-        <span class="o">|</span> <span class="n">pp</span><span class="o">.</span><span class="n">Literal</span><span class="p">(</span><span class="s2">&quot;inverse&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">ident</span><span class="p">(</span><span class="s2">&quot;objProp&quot;</span><span class="p">)</span>
-        <span class="o">|</span> <span class="n">ident</span><span class="p">(</span><span class="s2">&quot;objProp&quot;</span><span class="p">)</span>
+        <span class="n">pp</span><span class="o">.</span><span class="n">Literal</span><span class="p">(</span><span class="s2">"inverse"</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">"("</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">ident</span><span class="p">(</span><span class="s2">"objProp"</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">")"</span><span class="p">)</span>
+        <span class="o">|</span> <span class="n">pp</span><span class="o">.</span><span class="n">Literal</span><span class="p">(</span><span class="s2">"inverse"</span><span class="p">)</span> <span class="o">+</span> <span class="n">ident</span><span class="p">(</span><span class="s2">"objProp"</span><span class="p">)</span>
+        <span class="o">|</span> <span class="n">ident</span><span class="p">(</span><span class="s2">"objProp"</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="n">dataPropExpr</span> <span class="o">=</span> <span class="n">ident</span><span class="p">(</span><span class="s2">&quot;dataProp&quot;</span><span class="p">)</span>
+    <span class="n">dataPropExpr</span> <span class="o">=</span> <span class="n">ident</span><span class="p">(</span><span class="s2">"dataProp"</span><span class="p">)</span>
     <span class="n">restriction</span> <span class="o">&lt;&lt;=</span> <span class="p">(</span>
-        <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;some&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">expr</span>
-        <span class="o">|</span> <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;only&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">expr</span>
-        <span class="o">|</span> <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;Self&quot;</span><span class="p">)</span>
-        <span class="o">|</span> <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">ident</span><span class="p">(</span><span class="s2">&quot;individual&quot;</span><span class="p">)</span>
-        <span class="o">|</span> <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">uint</span> <span class="o">+</span> <span class="n">expr</span>
-        <span class="o">|</span> <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">uint</span> <span class="o">+</span> <span class="n">expr</span>
-        <span class="o">|</span> <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;exactly&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">uint</span> <span class="o">+</span> <span class="n">expr</span>
-        <span class="o">|</span> <span class="n">dataPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">literal</span>
+        <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">"some"</span><span class="p">)</span> <span class="o">+</span> <span class="n">expr</span>
+        <span class="o">|</span> <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">"only"</span><span class="p">)</span> <span class="o">+</span> <span class="n">expr</span>
+        <span class="o">|</span> <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">"Self"</span><span class="p">)</span>
+        <span class="o">|</span> <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">"value"</span><span class="p">)</span> <span class="o">+</span> <span class="n">ident</span><span class="p">(</span><span class="s2">"individual"</span><span class="p">)</span>
+        <span class="o">|</span> <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">"min"</span><span class="p">)</span> <span class="o">+</span> <span class="n">uint</span> <span class="o">+</span> <span class="n">expr</span>
+        <span class="o">|</span> <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">"max"</span><span class="p">)</span> <span class="o">+</span> <span class="n">uint</span> <span class="o">+</span> <span class="n">expr</span>
+        <span class="o">|</span> <span class="n">objPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">"exactly"</span><span class="p">)</span> <span class="o">+</span> <span class="n">uint</span> <span class="o">+</span> <span class="n">expr</span>
+        <span class="o">|</span> <span class="n">dataPropExpr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">"value"</span><span class="p">)</span> <span class="o">+</span> <span class="n">literal</span>
     <span class="p">)</span>
-    <span class="n">expr</span> <span class="o">&lt;&lt;=</span> <span class="n">primary</span> <span class="o">+</span> <span class="p">(</span><span class="n">logOp</span><span class="p">(</span><span class="s2">&quot;op&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">expr</span><span class="p">)[</span><span class="o">...</span><span class="p">]</span>
+    <span class="n">expr</span> <span class="o">&lt;&lt;=</span> <span class="n">primary</span> <span class="o">+</span> <span class="p">(</span><span class="n">logOp</span><span class="p">(</span><span class="s2">"op"</span><span class="p">)</span> <span class="o">+</span> <span class="n">expr</span><span class="p">)[</span><span class="o">...</span><span class="p">]</span>
 
     <span class="n">GRAMMAR</span> <span class="o">=</span> <span class="n">expr</span>
     <span class="k">return</span> <span class="n">expr</span>

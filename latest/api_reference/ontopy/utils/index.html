@@ -2300,7 +2300,7 @@ is squashed and/or inferred.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">annotate_source</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">imported</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Annotate all entities with the base IRI of the ontology using</span>
+<span class="w">    </span><span class="sd">"""Annotate all entities with the base IRI of the ontology using</span>
 <span class="sd">    `rdfs:isDefinedBy` annotations.</span>
 
 <span class="sd">    If `imported` is true, all entities in imported sub-ontologies will</span>
@@ -2308,9 +2308,9 @@ is squashed and/or inferred.</p>
 
 <span class="sd">    This is contextual information that is otherwise lost when the ontology</span>
 <span class="sd">    is squashed and/or inferred.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">source</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>
-        <span class="s2">&quot;http://www.w3.org/2000/01/rdf-schema#isDefinedBy&quot;</span>
+        <span class="s2">"http://www.w3.org/2000/01/rdf-schema#isDefinedBy"</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_entities</span><span class="p">(</span><span class="n">imported</span><span class="o">=</span><span class="n">imported</span><span class="p">):</span>
         <span class="n">triple</span> <span class="o">=</span> <span class="p">(</span>
@@ -2333,7 +2333,7 @@ is squashed and/or inferred.</p>
 
 
 <h2 id="ontopy.utils.asstring" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{label}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">recursion_depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_object</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">asstring</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="s1">'</span><span class="si">{label}</span><span class="s1">'</span><span class="p">,</span> <span class="n">recursion_depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_object</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.utils.asstring" class="headerlink" title="Permanent link">&para;</a></h2>
@@ -2411,20 +2411,20 @@ is squashed and/or inferred.</p>
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">asstring</span><span class="p">(</span>
     <span class="n">expr</span><span class="p">,</span>
-    <span class="n">link</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{label}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">link</span><span class="o">=</span><span class="s2">"</span><span class="si">{label}</span><span class="s2">"</span><span class="p">,</span>
     <span class="n">recursion_depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">exclude_object</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">ontology</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a string representation of `expr`.</span>
+<span class="w">    </span><span class="sd">"""Returns a string representation of `expr`.</span>
 
 <span class="sd">    Arguments:</span>
 <span class="sd">        expr: The entity, restriction or logical expression to represent.</span>
 <span class="sd">        link: A template for links.  May contain the following variables:</span>
 <span class="sd">            - {iri}: The full IRI of the concept.</span>
 <span class="sd">            - {name}: Name-part of IRI.</span>
-<span class="sd">            - {ref}: &quot;#{name}&quot; if the base iri of hte ontology has the same</span>
-<span class="sd">              root as {iri}, otherwise &quot;{iri}&quot;.</span>
+<span class="sd">            - {ref}: "#{name}" if the base iri of hte ontology has the same</span>
+<span class="sd">              root as {iri}, otherwise "{iri}".</span>
 <span class="sd">            - {label}: The label of the concept.</span>
 <span class="sd">            - {lowerlabel}: The label of the concept in lower case and with</span>
 <span class="sd">              spaces replaced with hyphens.</span>
@@ -2434,19 +2434,19 @@ is squashed and/or inferred.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        String representation of `expr`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># pylint: disable=too-many-return-statements,too-many-branches,too-many-statements</span>
     <span class="k">if</span> <span class="n">ontology</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">ontology</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">ontology</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">fmt</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the formatted label of an entity.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns the formatted label of an entity."""</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">ontology</span> <span class="ow">and</span> <span class="n">ontology</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">entity</span><span class="p">]:</span>
                 <span class="n">iri</span> <span class="o">=</span> <span class="n">ontology</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span><span class="o">.</span><span class="n">iri</span>
             <span class="k">elif</span> <span class="p">(</span>
                 <span class="n">ontology</span>
-                <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^[a-zA-Z0-9_+-]+$&quot;</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">"^[a-zA-Z0-9_+-]+$"</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span>
                 <span class="ow">and</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">ontology</span>
             <span class="p">):</span>
                 <span class="n">iri</span> <span class="o">=</span> <span class="n">ontology</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span><span class="o">.</span><span class="n">iri</span>
@@ -2458,15 +2458,15 @@ is squashed and/or inferred.</p>
             <span class="n">iri</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">iri</span>
             <span class="n">label</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">getiriname</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="n">iri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;#&quot;</span> <span class="ow">in</span> <span class="n">iri</span> <span class="k">else</span> <span class="n">iri</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">ref</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">ontology</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="k">else</span> <span class="n">iri</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">iri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"#"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="s2">"#"</span> <span class="ow">in</span> <span class="n">iri</span> <span class="k">else</span> <span class="n">iri</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">"/"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"#</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">ontology</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="k">else</span> <span class="n">iri</span>
         <span class="k">return</span> <span class="n">link</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
             <span class="n">ref</span><span class="o">=</span><span class="n">ref</span><span class="p">,</span>
             <span class="n">iri</span><span class="o">=</span><span class="n">iri</span><span class="p">,</span>
             <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
-            <span class="n">lowerlabel</span><span class="o">=</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">),</span>
+            <span class="n">lowerlabel</span><span class="o">=</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">),</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -2487,62 +2487,62 @@ is squashed and/or inferred.</p>
                 <span class="n">recursion_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
                 <span class="n">ontology</span><span class="o">=</span><span class="n">ontology</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Inverse(</span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Inverse(</span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2">)"</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;*** WARNING: unknown restriction property: </span><span class="si">{</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="si">!r}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"*** WARNING: unknown restriction property: </span><span class="si">{</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="si">!r}</span><span class="s2">"</span>
             <span class="p">)</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">rlabel</span><span class="p">:</span>
             <span class="k">pass</span>
         <span class="k">elif</span> <span class="n">expr</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">(</span><span class="n">owlready2</span><span class="o">.</span><span class="n">MIN</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">MAX</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">EXACTLY</span><span class="p">):</span>
-            <span class="n">res</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">rlabel</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">expr</span><span class="o">.</span><span class="n">cardinality</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">" </span><span class="si">{</span><span class="n">rlabel</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">expr</span><span class="o">.</span><span class="n">cardinality</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">elif</span> <span class="n">expr</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">(</span>
             <span class="n">owlready2</span><span class="o">.</span><span class="n">SOME</span><span class="p">,</span>
             <span class="n">owlready2</span><span class="o">.</span><span class="n">ONLY</span><span class="p">,</span>
             <span class="n">owlready2</span><span class="o">.</span><span class="n">VALUE</span><span class="p">,</span>
             <span class="n">owlready2</span><span class="o">.</span><span class="n">HAS_SELF</span><span class="p">,</span>
         <span class="p">):</span>
-            <span class="n">res</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">rlabel</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">" </span><span class="si">{</span><span class="n">rlabel</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** WARNING: unknown relation&quot;</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">rlabel</span><span class="p">)</span>
-            <span class="n">res</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">rlabel</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"*** WARNING: unknown relation"</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">rlabel</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">" </span><span class="si">{</span><span class="n">rlabel</span><span class="si">}</span><span class="s2">"</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">exclude_object</span><span class="p">:</span>
             <span class="n">string</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span>
                 <span class="n">expr</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">recursion_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">ontology</span>
             <span class="p">)</span>
             <span class="n">res</span> <span class="o">+=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">string</span><span class="si">!r}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">" </span><span class="si">{</span><span class="n">string</span><span class="si">!r}</span><span class="s2">"</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">" </span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 
     <span class="n">Datatype</span> <span class="o">=</span> <span class="n">get_datatype_class</span><span class="p">()</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">Datatype</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">"."</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Or</span><span class="p">):</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="s2">&quot; or &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="s2">" or "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="n">asstring</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">recursion_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">ontology</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">Classes</span>
             <span class="p">]</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">res</span> <span class="k">if</span> <span class="n">recursion_depth</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="k">return</span> <span class="n">res</span> <span class="k">if</span> <span class="n">recursion_depth</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">)"</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">And</span><span class="p">):</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="s2">&quot; and &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="s2">" and "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="n">asstring</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">recursion_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">ontology</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">Classes</span>
             <span class="p">]</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">res</span> <span class="k">if</span> <span class="n">recursion_depth</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="k">return</span> <span class="n">res</span> <span class="k">if</span> <span class="n">recursion_depth</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">)"</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Not</span><span class="p">):</span>
         <span class="n">string</span> <span class="o">=</span> <span class="n">asstring</span><span class="p">(</span>
             <span class="n">expr</span><span class="o">.</span><span class="n">Class</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">recursion_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="n">ontology</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;not </span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"not </span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2">"</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">ThingClass</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">PropertyClass</span><span class="p">):</span>
@@ -2550,7 +2550,7 @@ is squashed and/or inferred.</p>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">Thing</span><span class="p">):</span>  <span class="c1"># instance (individual)</span>
         <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">class_construct</span><span class="o">.</span><span class="n">Inverse</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;inverse(</span><span class="si">{</span><span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"inverse(</span><span class="si">{</span><span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">property</span><span class="p">)</span><span class="si">}</span><span class="s2">)"</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">disjoint</span><span class="o">.</span><span class="n">AllDisjoint</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
 
@@ -2561,13 +2561,13 @@ is squashed and/or inferred.</p>
         <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
             <span class="k">return</span> <span class="n">fmt</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s2">&quot;date&quot;</span>
+            <span class="k">return</span> <span class="s2">"date"</span>
         <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">time</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s2">&quot;datetime&quot;</span>
+            <span class="k">return</span> <span class="s2">"datetime"</span>
         <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s2">&quot;datetime&quot;</span>
+            <span class="k">return</span> <span class="s2">"datetime"</span>
 
-    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown expression: </span><span class="si">{</span><span class="n">expr</span><span class="si">!r}</span><span class="s2"> (type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="si">!r}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown expression: </span><span class="si">{</span><span class="n">expr</span><span class="si">!r}</span><span class="s2"> (type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="si">!r}</span><span class="s2">)"</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -2594,8 +2594,8 @@ if there is a sequence of upper case letters).</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">camelsplit</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Splits CamelCase string before upper case letters (except</span>
-<span class="sd">    if there is a sequence of upper case letters).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Splits CamelCase string before upper case letters (except</span>
+<span class="sd">    if there is a sequence of upper case letters)."""</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">string</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
@@ -2606,13 +2606,13 @@ if there is a sequence of upper case letters).</p>
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">prev_isspace</span> <span class="ow">and</span> <span class="n">char</span><span class="o">.</span><span class="n">isupper</span><span class="p">()</span> <span class="ow">and</span> <span class="n">next_char</span><span class="o">.</span><span class="n">islower</span><span class="p">())</span> <span class="ow">or</span> <span class="p">(</span>
             <span class="n">prev_lower</span> <span class="ow">and</span> <span class="n">char</span><span class="o">.</span><span class="n">isupper</span><span class="p">()</span>
         <span class="p">):</span>
-            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">" "</span><span class="p">)</span>
         <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
         <span class="n">prev_lower</span> <span class="o">=</span> <span class="n">char</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
         <span class="n">prev_isspace</span> <span class="o">=</span> <span class="n">char</span><span class="o">.</span><span class="n">isspace</span><span class="p">()</span>
         <span class="n">char</span> <span class="o">=</span> <span class="n">next_char</span>
     <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -2626,7 +2626,7 @@ if there is a sequence of upper case letters).</p>
 
 
 <h2 id="ontopy.utils.convert_imported" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">convert_imported</span><span class="p">(</span><span class="n">input_ontology</span><span class="p">,</span> <span class="n">output_ontology</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">input_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s1">&#39;xml&#39;</span><span class="p">,</span> <span class="n">url_from_catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">convert_imported</span><span class="p">(</span><span class="n">input_ontology</span><span class="p">,</span> <span class="n">output_ontology</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">input_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s1">'xml'</span><span class="p">,</span> <span class="n">url_from_catalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">'catalog-v001.xml'</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.utils.convert_imported" class="headerlink" title="Permanent link">&para;</a></h2>
@@ -2700,15 +2700,15 @@ local file names</p></td>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">convert_imported</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments,too-many-locals</span>
-    <span class="n">input_ontology</span><span class="p">:</span> <span class="s2">&quot;Union[Path, str]&quot;</span><span class="p">,</span>
-    <span class="n">output_ontology</span><span class="p">:</span> <span class="s2">&quot;Union[Path, str]&quot;</span><span class="p">,</span>
+    <span class="n">input_ontology</span><span class="p">:</span> <span class="s2">"Union[Path, str]"</span><span class="p">,</span>
+    <span class="n">output_ontology</span><span class="p">:</span> <span class="s2">"Union[Path, str]"</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">input_format</span><span class="p">:</span> <span class="s2">&quot;Optional[str]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">output_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;xml&quot;</span><span class="p">,</span>
-    <span class="n">url_from_catalog</span><span class="p">:</span> <span class="s2">&quot;Optional[bool]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">catalog_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;catalog-v001.xml&quot;</span><span class="p">,</span>
+    <span class="n">input_format</span><span class="p">:</span> <span class="s2">"Optional[str]"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">output_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"xml"</span><span class="p">,</span>
+    <span class="n">url_from_catalog</span><span class="p">:</span> <span class="s2">"Optional[bool]"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">catalog_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"catalog-v001.xml"</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert imported ontologies.</span>
+<span class="w">    </span><span class="sd">"""Convert imported ontologies.</span>
 
 <span class="sd">    Store the output in a directory structure matching the source</span>
 <span class="sd">    files.  This require catalog file(s) to be present.</span>
@@ -2730,7 +2730,7 @@ local file names</p></td>
 <span class="sd">            If False, the catalog file will be used if it exists.</span>
 <span class="sd">        catalog_file: name of catalog file, that maps ontology IRIs to</span>
 <span class="sd">            local file names</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">inroot</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">input_ontology</span><span class="p">))</span>
     <span class="n">outroot</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">output_ontology</span><span class="p">))</span>
     <span class="n">outext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">output_ontology</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
@@ -2751,7 +2751,7 @@ local file names</p></td>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">outdir</span><span class="p">):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">outdir</span><span class="p">)</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">indir</span><span class="p">,</span> <span class="n">catalog_file</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rt&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">indir</span><span class="p">,</span> <span class="n">catalog_file</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"rt"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf8"</span>
             <span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
                 <span class="n">content</span> <span class="o">=</span> <span class="n">handle</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">iris</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -2760,7 +2760,7 @@ local file names</p></td>
                     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">newpath</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outdir</span><span class="p">,</span> <span class="n">catalog_file</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wt&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outdir</span><span class="p">,</span> <span class="n">catalog_file</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"wt"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf8"</span>
             <span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
                 <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -2770,11 +2770,11 @@ local file names</p></td>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">recur</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">outext</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">imported</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span>
-            <span class="n">predicate</span><span class="o">=</span><span class="n">URIRef</span><span class="p">(</span><span class="s2">&quot;http://www.w3.org/2002/07/owl#imports&quot;</span><span class="p">)</span>
+            <span class="n">predicate</span><span class="o">=</span><span class="n">URIRef</span><span class="p">(</span><span class="s2">"http://www.w3.org/2002/07/owl#imports"</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="n">inpath</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">imported</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">imported</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">inpath</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="s2">&quot;ftp://&quot;</span><span class="p">)):</span>
-                <span class="n">outpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outroot</span><span class="p">,</span> <span class="n">inpath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">inpath</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">"http://"</span><span class="p">,</span> <span class="s2">"https://"</span><span class="p">,</span> <span class="s2">"ftp://"</span><span class="p">)):</span>
+                <span class="n">outpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outroot</span><span class="p">,</span> <span class="n">inpath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">outpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outroot</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">inpath</span><span class="p">,</span> <span class="n">inroot</span><span class="p">))</span>
             <span class="n">outpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">outpath</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">outext</span>
@@ -2798,19 +2798,19 @@ local file names</p></td>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_validate_installed_version</span><span class="p">(</span>
-        <span class="n">package</span><span class="o">=</span><span class="s2">&quot;rdflib&quot;</span><span class="p">,</span> <span class="n">min_version</span><span class="o">=</span><span class="s2">&quot;6.0.0&quot;</span>
-    <span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">output_format</span> <span class="o">==</span> <span class="n">FMAP</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ttl&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">outext</span> <span class="o">==</span> <span class="s2">&quot;ttl&quot;</span><span class="p">):</span>
+        <span class="n">package</span><span class="o">=</span><span class="s2">"rdflib"</span><span class="p">,</span> <span class="n">min_version</span><span class="o">=</span><span class="s2">"6.0.0"</span>
+    <span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">output_format</span> <span class="o">==</span> <span class="n">FMAP</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"ttl"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span> <span class="ow">or</span> <span class="n">outext</span> <span class="o">==</span> <span class="s2">"ttl"</span><span class="p">):</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">rdflib</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
             <span class="n">__version__</span> <span class="k">as</span> <span class="n">__rdflib_version__</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="n">IncompatibleVersion</span><span class="p">(</span>
-                <span class="s2">&quot;To correctly convert to Turtle format, rdflib must be &quot;</span>
-                <span class="s2">&quot;version 6.0.0 or greater, however, the detected rdflib &quot;</span>
-                <span class="s2">&quot;version used by your Python interpreter is &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">__rdflib_version__</span><span class="si">!r}</span><span class="s2">. For more information see the &quot;</span>
-                <span class="s2">&quot;&#39;Known issues&#39; section of the README.&quot;</span>
+                <span class="s2">"To correctly convert to Turtle format, rdflib must be "</span>
+                <span class="s2">"version 6.0.0 or greater, however, the detected rdflib "</span>
+                <span class="s2">"version used by your Python interpreter is "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">__rdflib_version__</span><span class="si">!r}</span><span class="s2">. For more information see the "</span>
+                <span class="s2">"'Known issues' section of the README."</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
@@ -2819,7 +2819,7 @@ local file names</p></td>
         <span class="n">graph</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">input_ontology</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">PluginException</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># Add input_ontology to exception msg</span>
         <span class="k">raise</span> <span class="n">PluginException</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s1">&#39;Cannot load &quot;</span><span class="si">{</span><span class="n">input_ontology</span><span class="si">}</span><span class="s1">&quot;: </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="n">msg</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="sa">f</span><span class="s1">'Cannot load "</span><span class="si">{</span><span class="n">input_ontology</span><span class="si">}</span><span class="s1">": </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="n">msg</span><span class="si">}</span><span class="s1">'</span>
         <span class="p">)</span><span class="o">.</span><span class="n">with_traceback</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">__traceback__</span><span class="p">)</span>
     <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">output_ontology</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">output_format</span><span class="p">)</span>
     <span class="n">recur</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">outext</span><span class="p">)</span>
@@ -2884,8 +2884,8 @@ destination annotation is not already in the ontology.</p></td>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">copy_annotation</span><span class="p">(</span><span class="n">onto</span><span class="p">:</span> <span class="s2">&quot;Ontology&quot;</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;In all classes and properties in `onto`, copy annotation `src` to `dst`.</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">copy_annotation</span><span class="p">(</span><span class="n">onto</span><span class="p">:</span> <span class="s2">"Ontology"</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""In all classes and properties in `onto`, copy annotation `src` to `dst`.</span>
 
 <span class="sd">    Arguments:</span>
 <span class="sd">        onto: Ontology to work on.</span>
@@ -2896,16 +2896,16 @@ destination annotation is not already in the ontology.</p></td>
 <span class="sd">    Example:</span>
 
 <span class="sd">        copy_annotation(</span>
-<span class="sd">            onto, &quot;elucidation&quot;, &quot;http://www.w3.org/2000/01/rdf-schema#comment&quot;</span>
+<span class="sd">            onto, "elucidation", "http://www.w3.org/2000/01/rdf-schema#comment"</span>
 <span class="sd">        )</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">src</span><span class="p">]:</span>
         <span class="n">src</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">src</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">onto</span><span class="p">:</span>
         <span class="n">src</span> <span class="o">=</span> <span class="n">onto</span><span class="p">[</span><span class="n">src</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
 
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;skipping copy for missing source annotation: </span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">"skipping copy for missing source annotation: </span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="n">dst</span><span class="p">]:</span>
@@ -2913,12 +2913,12 @@ destination annotation is not already in the ontology.</p></td>
     <span class="k">elif</span> <span class="n">dst</span> <span class="ow">in</span> <span class="n">onto</span><span class="p">:</span>
         <span class="n">dst</span> <span class="o">=</span> <span class="n">onto</span><span class="p">[</span><span class="n">dst</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;://&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dst</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"://"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dst</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;new destination annotation property must be provided as &quot;</span>
-                <span class="s2">&quot;a full IRI&quot;</span>
+                <span class="s2">"new destination annotation property must be provided as "</span>
+                <span class="s2">"a full IRI"</span>
             <span class="p">)</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dst</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">"#"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dst</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span>
         <span class="n">iri</span> <span class="o">=</span> <span class="n">dst</span>
         <span class="n">dst</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">new_annotation_property</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">AnnotationProperty</span><span class="p">)</span>
         <span class="n">dst</span><span class="o">.</span><span class="n">iri</span> <span class="o">=</span> <span class="n">iri</span>
@@ -2991,10 +2991,10 @@ layout for saving recursively.</p>
 or indirectly imports ontologies with IRIs <code>ex:A/ontoA</code>, <code>ex:B/ontoB</code>
 and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
 <div class="highlight"><pre><span></span><code>{
-    onto: &quot;onto&quot;,
-    ontoA: &quot;A/ontoA&quot;,
-    ontoB: &quot;B/ontoB&quot;,
-    ontoC: &quot;A/C/ontoC&quot;,
+    onto: "onto",
+    ontoA: "A/ontoA",
+    ontoB: "B/ontoB",
+    ontoC: "A/C/ontoC",
 }
 </code></pre></div>
 <p>where <code>ontoA</code>, <code>ontoB</code> and <code>ontoC</code> are imported Ontology objects.</p>
@@ -3002,7 +3002,7 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">directory_layout</span><span class="p">(</span><span class="n">onto</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyse IRIs of imported ontologies and suggested a directory</span>
+<span class="w">    </span><span class="sd">"""Analyse IRIs of imported ontologies and suggested a directory</span>
 <span class="sd">    layout for saving recursively.</span>
 
 <span class="sd">    Arguments:</span>
@@ -3019,14 +3019,14 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
 <span class="sd">        and `ex:A/C/ontoC`, this function will return the following dict:</span>
 
 <span class="sd">            {</span>
-<span class="sd">                onto: &quot;onto&quot;,</span>
-<span class="sd">                ontoA: &quot;A/ontoA&quot;,</span>
-<span class="sd">                ontoB: &quot;B/ontoB&quot;,</span>
-<span class="sd">                ontoC: &quot;A/C/ontoC&quot;,</span>
+<span class="sd">                onto: "onto",</span>
+<span class="sd">                ontoA: "A/ontoA",</span>
+<span class="sd">                ontoB: "B/ontoB",</span>
+<span class="sd">                ontoC: "A/C/ontoC",</span>
 <span class="sd">            }</span>
 
 <span class="sd">        where `ontoA`, `ontoB` and `ontoC` are imported Ontology objects.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">all_imported</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">imported</span><span class="o">.</span><span class="n">base_iri</span> <span class="k">for</span> <span class="n">imported</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">indirectly_imported_ontologies</span><span class="p">()</span>
     <span class="p">]</span>
@@ -3034,10 +3034,10 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
     <span class="n">namespace_roots</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">iri</span> <span class="ow">in</span> <span class="n">all_imported</span><span class="p">:</span>
         <span class="n">protocol</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlsplit</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span>
-        <span class="n">namespace_roots</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;://&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">protocol</span><span class="p">,</span> <span class="n">domain</span><span class="p">]))</span>
+        <span class="n">namespace_roots</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"://"</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">protocol</span><span class="p">,</span> <span class="n">domain</span><span class="p">]))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">recur</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
-        <span class="n">baseiri</span> <span class="o">=</span> <span class="n">o</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">)</span>
+        <span class="n">baseiri</span> <span class="o">=</span> <span class="n">o</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/#"</span><span class="p">)</span>
 
         <span class="c1"># Some heuristics here to reproduce the EMMO layout.</span>
         <span class="c1"># It might not apply to all ontologies, so maybe it should be</span>
@@ -3045,14 +3045,14 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
         <span class="c1"># match the directory layout.</span>
         <span class="n">emmolayout</span> <span class="o">=</span> <span class="p">(</span>
             <span class="nb">any</span><span class="p">(</span>
-                <span class="n">oo</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">baseiri</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                <span class="n">oo</span><span class="o">.</span><span class="n">base_iri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">baseiri</span> <span class="o">+</span> <span class="s2">"/"</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">oo</span> <span class="ow">in</span> <span class="n">o</span><span class="o">.</span><span class="n">imported_ontologies</span>
             <span class="p">)</span>
-            <span class="ow">or</span> <span class="n">o</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">==</span> <span class="s2">&quot;http://emmo.info/emmo/mereocausality#&quot;</span>
+            <span class="ow">or</span> <span class="n">o</span><span class="o">.</span><span class="n">base_iri</span> <span class="o">==</span> <span class="s2">"http://emmo.info/emmo/mereocausality#"</span>
         <span class="p">)</span>
 
         <span class="n">layout</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">baseiri</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">baseiri</span><span class="p">)</span> <span class="k">if</span> <span class="n">emmolayout</span> <span class="k">else</span> <span class="n">baseiri</span>
+            <span class="n">baseiri</span> <span class="o">+</span> <span class="s2">"/"</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">baseiri</span><span class="p">)</span> <span class="k">if</span> <span class="n">emmolayout</span> <span class="k">else</span> <span class="n">baseiri</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">imported</span> <span class="ow">in</span> <span class="n">o</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">imported</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">layout</span><span class="p">:</span>
@@ -3064,7 +3064,7 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">namespace_roots</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">commonprefix</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
         <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">layout</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="p">:]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+            <span class="n">layout</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="p">:]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">namespace_root</span> <span class="ow">in</span> <span class="n">namespace_roots</span><span class="p">:</span>
@@ -3100,8 +3100,8 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">english</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns `string` as an English location string.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">locstr</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Returns `string` as an English location string."""</span>
+    <span class="k">return</span> <span class="n">owlready2</span><span class="o">.</span><span class="n">locstr</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="s2">"en"</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -3127,7 +3127,7 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_datatype_class</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a class representing rdfs:Datatype.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return a class representing rdfs:Datatype."""</span>
     <span class="c1"># This is a hack, but I find no other way to access rdfs:Datatype</span>
     <span class="c1"># with Owlready2...</span>
 
@@ -3136,7 +3136,7 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
     <span class="kn">from</span><span class="w"> </span><span class="nn">ontopy</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>  <span class="c1"># pylint: disable=import-self</span>
 
     <span class="c1"># Check is Datatype is cached in module __dict__</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">utils</span><span class="p">,</span> <span class="s2">&quot;_Datatype&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">utils</span><span class="p">,</span> <span class="s2">"_Datatype"</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">_Datatype</span>
 
     <span class="c1"># Use try-finally clause instead of delete=True to avoid problems</span>
@@ -3144,10 +3144,10 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
     <span class="n">filename</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span>
-            <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.ttl&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wt&quot;</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span>
+            <span class="n">suffix</span><span class="o">=</span><span class="s2">".ttl"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"wt"</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">filename</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span><span class="s2">"""</span>
 <span class="s2">                    @prefix : &lt;http://example.com/onto#&gt; .</span>
 <span class="s2">                    @prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .</span>
 <span class="s2">                    @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .</span>
@@ -3156,7 +3156,7 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
 <span class="s2">                    &lt;http://example.com/onto&gt; rdf:type owl:Ontology .</span>
 
 <span class="s2">                    :new_datatype rdf:type rdfs:Datatype .</span>
-<span class="s2">                    &quot;&quot;&quot;</span><span class="p">))</span>
+<span class="s2">                    """</span><span class="p">))</span>
 
         <span class="n">onto</span> <span class="o">=</span> <span class="n">get_ontology</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
         <span class="n">Datatype</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">new_datatype</span><span class="o">.</span><span class="vm">__class__</span>
@@ -3191,12 +3191,12 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_format</span><span class="p">(</span><span class="n">outfile</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Infer format from outfile and format.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Infer format from outfile and format."""</span>
     <span class="k">if</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fmt</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">outfile</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fmt</span><span class="p">:</span>
         <span class="n">fmt</span> <span class="o">=</span> <span class="n">default</span>
-    <span class="k">return</span> <span class="n">fmt</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fmt</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">"."</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -3222,9 +3222,9 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_label</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the label of an entity.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Returns the label of an entity."""</span>
     <span class="c1"># pylint: disable=too-many-return-statements</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;namespace&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">"namespace"</span><span class="p">):</span>
         <span class="n">onto</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">ontology</span>
         <span class="k">if</span> <span class="n">onto</span><span class="o">.</span><span class="n">label_annotations</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">la</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">label_annotations</span><span class="p">:</span>
@@ -3234,13 +3234,13 @@ and <code>ex:A/C/ontoC</code>, this function will return the following dict:</p>
                         <span class="k">return</span> <span class="n">get_preferred_language</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
                 <span class="k">except</span> <span class="p">(</span><span class="n">NoSuchLabelError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
                     <span class="k">continue</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;prefLabel&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">"prefLabel"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">get_preferred_language</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">prefLabel</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">"label"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">get_preferred_language</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">"__name__"</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">entity</span><span class="o">.</span><span class="vm">__name__</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">entity</span>
@@ -3284,7 +3284,7 @@ ontopy.utils.PREFERRED_LANGUAGE = "en"</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_preferred_language</span><span class="p">(</span><span class="n">langstrings</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a list of localised strings, return the one in language</span>
+<span class="w">    </span><span class="sd">"""Given a list of localised strings, return the one in language</span>
 <span class="sd">    `lang`. If `lang` is not given, use</span>
 <span class="sd">    `ontopy.utils.PREFERRED_LANGUAGE`.  If no one match is found,</span>
 <span class="sd">    return the first one with no language tag or fallback to the first</span>
@@ -3294,16 +3294,16 @@ ontopy.utils.PREFERRED_LANGUAGE = "en"</p>
 <span class="sd">    change it with:</span>
 
 <span class="sd">    &gt;&gt;&gt; import ontopy.utils</span>
-<span class="sd">    &gt;&gt;&gt; ontopy.utils.PREFERRED_LANGUAGE = &quot;en&quot;</span>
+<span class="sd">    &gt;&gt;&gt; ontopy.utils.PREFERRED_LANGUAGE = "en"</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">lang</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">lang</span> <span class="o">=</span> <span class="n">PREFERRED_LANGUAGE</span>
     <span class="k">for</span> <span class="n">langstr</span> <span class="ow">in</span> <span class="n">langstrings</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">langstr</span><span class="p">,</span> <span class="s2">&quot;lang&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">langstr</span><span class="o">.</span><span class="n">lang</span> <span class="o">==</span> <span class="n">lang</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">langstr</span><span class="p">,</span> <span class="s2">"lang"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">langstr</span><span class="o">.</span><span class="n">lang</span> <span class="o">==</span> <span class="n">lang</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">langstr</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">langstr</span> <span class="ow">in</span> <span class="n">langstrings</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">langstr</span><span class="p">,</span> <span class="s2">&quot;lang&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">langstr</span><span class="p">,</span> <span class="s2">"lang"</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">langstr</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">langstrings</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </code></pre></div>
@@ -3332,12 +3332,12 @@ ontopy.utils.PREFERRED_LANGUAGE = "en"</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">getiriname</span><span class="p">(</span><span class="n">iri</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return name part of an IRI.</span>
+<span class="w">    </span><span class="sd">"""Return name part of an IRI.</span>
 
 <span class="sd">    The name part is what follows after the last slash or hash.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">fragment</span> <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">fragment</span> <span class="k">else</span> <span class="n">res</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">fragment</span> <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">fragment</span> <span class="k">else</span> <span class="n">res</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">"/"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </code></pre></div>
         </details>
     </div>
@@ -3363,9 +3363,9 @@ ontopy.utils.PREFERRED_LANGUAGE = "en"</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">infer_version</span><span class="p">(</span><span class="n">iri</span><span class="p">,</span> <span class="n">version_iri</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Infer version from IRI and versionIRI.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Infer version from IRI and versionIRI."""</span>
     <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">version_iri</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">iri</span><span class="p">)])</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">iri</span><span class="p">):</span>
-        <span class="n">version</span> <span class="o">=</span> <span class="n">version_iri</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span> <span class="p">:]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="n">version_iri</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">iri</span><span class="p">)</span> <span class="p">:]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">version_parts</span> <span class="o">=</span> <span class="p">[]</span>
@@ -3373,11 +3373,11 @@ ontopy.utils.PREFERRED_LANGUAGE = "en"</p>
             <span class="k">while</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">version_iri</span><span class="p">)</span> <span class="ow">and</span> <span class="n">char</span> <span class="o">!=</span> <span class="n">version_iri</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]:</span>
                 <span class="n">version_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">version_iri</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">])</span>
                 <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">version_parts</span><span class="p">)</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/#&quot;</span><span class="p">)</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">version_parts</span><span class="p">)</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/#"</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="s2">&quot;/&quot;</span> <span class="ow">in</span> <span class="n">version</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">"/"</span> <span class="ow">in</span> <span class="n">version</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;version IRI &#39;</span><span class="si">{</span><span class="n">version_iri</span><span class="si">}</span><span class="s2">&#39; is not consistent with IRI &#39;</span><span class="si">{</span><span class="n">iri</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="sa">f</span><span class="s2">"version IRI '</span><span class="si">{</span><span class="n">version_iri</span><span class="si">}</span><span class="s2">' is not consistent with IRI '</span><span class="si">{</span><span class="n">iri</span><span class="si">}</span><span class="s2">'"</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">version</span>
 </code></pre></div>
@@ -3406,12 +3406,12 @@ false otherwise.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">isinteractive</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns true if we are running from an interactive interpreater,</span>
-<span class="sd">    false otherwise.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Returns true if we are running from an interactive interpreater,</span>
+<span class="sd">    false otherwise."""</span>
     <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span>
-        <span class="nb">hasattr</span><span class="p">(</span><span class="n">__builtins__</span><span class="p">,</span> <span class="s2">&quot;__IPYTHON__&quot;</span><span class="p">)</span>
+        <span class="nb">hasattr</span><span class="p">(</span><span class="n">__builtins__</span><span class="p">,</span> <span class="s2">"__IPYTHON__"</span><span class="p">)</span>
         <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">interactive</span>
-        <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s2">&quot;ps1&quot;</span><span class="p">)</span>
+        <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s2">"ps1"</span><span class="p">)</span>
     <span class="p">)</span>
 </code></pre></div>
         </details>
@@ -3438,7 +3438,7 @@ false otherwise.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">normalise_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns `url` in a normalised form.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Returns `url` in a normalised form."""</span>
     <span class="n">splitted</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlsplit</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
     <span class="n">components</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">splitted</span><span class="p">)</span>
     <span class="n">components</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">splitted</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
@@ -3456,7 +3456,7 @@ false otherwise.</p>
 
 
 <h2 id="ontopy.utils.read_catalog" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">read_catalog</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">relative_to</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_paths</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visited_iris</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visited_paths</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">read_catalog</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">catalog_file</span><span class="o">=</span><span class="s1">'catalog-v001.xml'</span><span class="p">,</span> <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">relative_to</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_paths</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visited_iris</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visited_paths</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.utils.read_catalog" class="headerlink" title="Permanent link">&para;</a></h2>
@@ -3489,7 +3489,7 @@ internal use to avoid infinite recursions.</p>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">read_catalog</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-locals,too-many-statements,too-many-arguments</span>
     <span class="n">uri</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">catalog_file</span><span class="o">=</span><span class="s2">&quot;catalog-v001.xml&quot;</span><span class="p">,</span>
+    <span class="n">catalog_file</span><span class="o">=</span><span class="s2">"catalog-v001.xml"</span><span class="p">,</span>
     <span class="n">baseuri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">relative_to</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -3497,7 +3497,7 @@ internal use to avoid infinite recursions.</p>
     <span class="n">visited_iris</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">visited_paths</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reads a Protègè catalog file and returns as a dict.</span>
+<span class="w">    </span><span class="sd">"""Reads a Protègè catalog file and returns as a dict.</span>
 
 <span class="sd">    The returned dict maps the ontology IRI (name) to its actual</span>
 <span class="sd">    location (URI).  The location can be either an absolute file path</span>
@@ -3526,11 +3526,11 @@ internal use to avoid infinite recursions.</p>
 <span class="sd">    internal use to avoid infinite recursions.</span>
 
 <span class="sd">    A ReadCatalogError is raised if the catalog file cannot be found.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># pylint: disable=too-many-branches</span>
 
     <span class="c1"># Protocols supported by urllib.request</span>
-    <span class="n">web_protocols</span> <span class="o">=</span> <span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="s2">&quot;ftp://&quot;</span>
+    <span class="n">web_protocols</span> <span class="o">=</span> <span class="s2">"http://"</span><span class="p">,</span> <span class="s2">"https://"</span><span class="p">,</span> <span class="s2">"ftp://"</span>
     <span class="n">uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>  <span class="c1"># in case uri is a pathlib.Path object</span>
     <span class="n">iris</span> <span class="o">=</span> <span class="n">visited_iris</span> <span class="k">if</span> <span class="n">visited_iris</span> <span class="k">else</span> <span class="p">{}</span>
     <span class="n">dirs</span> <span class="o">=</span> <span class="n">visited_paths</span> <span class="k">if</span> <span class="n">visited_paths</span> <span class="k">else</span> <span class="nb">set</span><span class="p">()</span>
@@ -3544,10 +3544,10 @@ internal use to avoid infinite recursions.</p>
             <span class="n">destfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="n">catalog_file</span><span class="p">)</span>
             <span class="n">uris</span> <span class="o">=</span> <span class="p">{</span>  <span class="c1"># maps uri to base</span>
                 <span class="n">uri</span><span class="p">:</span> <span class="p">(</span><span class="n">baseuri</span> <span class="k">if</span> <span class="n">baseuri</span> <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">uri</span><span class="p">)),</span>
-                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">uri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">catalog_file</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="p">(</span>
-                    <span class="n">baseuri</span> <span class="k">if</span> <span class="n">baseuri</span> <span class="k">else</span> <span class="n">uri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">uri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">catalog_file</span><span class="si">}</span><span class="s1">'</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="n">baseuri</span> <span class="k">if</span> <span class="n">baseuri</span> <span class="k">else</span> <span class="n">uri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
                 <span class="p">),</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">catalog_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">catalog_file</span><span class="si">}</span><span class="s2">"</span><span class="p">:</span> <span class="p">(</span>
                     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
                 <span class="p">),</span>
             <span class="p">}</span>
@@ -3558,7 +3558,7 @@ internal use to avoid infinite recursions.</p>
                 <span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">URLError</span><span class="p">:</span>
                     <span class="k">continue</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="s2">&quot;Content-Length&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">"Content-Length"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
                         <span class="k">continue</span>
 
                     <span class="k">return</span> <span class="n">read_catalog</span><span class="p">(</span>
@@ -3571,9 +3571,9 @@ internal use to avoid infinite recursions.</p>
                         <span class="n">visited_paths</span><span class="o">=</span><span class="n">dirs</span><span class="p">,</span>
                     <span class="p">)</span>
             <span class="k">raise</span> <span class="n">ReadCatalogError</span><span class="p">(</span>
-                <span class="s2">&quot;Cannot download catalog from URLs: &quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">uris</span><span class="p">)</span>
+                <span class="s2">"Cannot download catalog from URLs: "</span> <span class="o">+</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">uris</span><span class="p">)</span>
             <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;file://&quot;</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"file://"</span><span class="p">):</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">uri</span><span class="p">[</span><span class="mi">7</span><span class="p">:]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">uri</span>
@@ -3587,41 +3587,41 @@ internal use to avoid infinite recursions.</p>
         <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">gettag</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">entity</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">entity</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">"}"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">load_catalog</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">ReadCatalogError</span><span class="p">(</span><span class="s2">&quot;No such catalog file: &quot;</span> <span class="o">+</span> <span class="n">filepath</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ReadCatalogError</span><span class="p">(</span><span class="s2">"No such catalog file: "</span> <span class="o">+</span> <span class="n">filepath</span><span class="p">)</span>
         <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
         <span class="n">dirs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">baseuri</span> <span class="k">if</span> <span class="n">baseuri</span> <span class="k">else</span> <span class="n">dirname</span><span class="p">)</span>
         <span class="n">xml</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
         <span class="n">root</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">gettag</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;catalog&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">gettag</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"catalog"</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ReadCatalogError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;expected root tag of catalog file </span><span class="si">{</span><span class="n">filepath</span><span class="si">!r}</span><span class="s2"> to be &quot;</span>
-                <span class="s1">&#39;&quot;catalog&quot;&#39;</span>
+                <span class="sa">f</span><span class="s2">"expected root tag of catalog file </span><span class="si">{</span><span class="n">filepath</span><span class="si">!r}</span><span class="s2"> to be "</span>
+                <span class="s1">'"catalog"'</span>
             <span class="p">)</span>
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">gettag</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;uri&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">gettag</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"uri"</span><span class="p">:</span>
                 <span class="n">load_uri</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">dirname</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">gettag</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;group&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">gettag</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"group"</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">uri</span> <span class="ow">in</span> <span class="n">child</span><span class="p">:</span>
                     <span class="n">load_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">dirname</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">load_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">dirname</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">gettag</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;uri&quot;</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">gettag</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span><span class="si">!r}</span><span class="s2"> should be &#39;uri&#39;.&quot;</span><span class="p">)</span>
-        <span class="n">uri_as_str</span> <span class="o">=</span> <span class="n">uri</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">gettag</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"uri"</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">gettag</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span><span class="si">!r}</span><span class="s2"> should be 'uri'."</span><span class="p">)</span>
+        <span class="n">uri_as_str</span> <span class="o">=</span> <span class="n">uri</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">"uri"</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">uri_as_str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">web_protocols</span><span class="p">):</span>
             <span class="n">url</span> <span class="o">=</span> <span class="n">uri_as_str</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">uri_as_str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">uri_as_str</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">baseuri</span> <span class="ow">and</span> <span class="n">baseuri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">web_protocols</span><span class="p">):</span>
-                <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">baseuri</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">uri_as_str</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">baseuri</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">uri_as_str</span><span class="si">}</span><span class="s2">"</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">baseuri</span> <span class="k">if</span> <span class="n">baseuri</span> <span class="k">else</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">uri_as_str</span><span class="p">)</span>
 
-        <span class="n">iris</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">url</span><span class="p">)</span>
+        <span class="n">iris</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">"name"</span><span class="p">],</span> <span class="n">url</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
             <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">directory</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
@@ -3675,10 +3675,10 @@ internal use to avoid infinite recursions.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">remove_owlready2_properties</span><span class="p">(</span><span class="n">onto</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove Owlready2 properties from ontology.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Remove Owlready2 properties from ontology."""</span>
     <span class="n">ns</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;http://www.lesfleursdunormal.fr/static/_downloads/&quot;</span>
-        <span class="s2">&quot;owlready_ontology.owl#&quot;</span>
+        <span class="s2">"http://www.lesfleursdunormal.fr/static/_downloads/"</span>
+        <span class="s2">"owlready_ontology.owl#"</span>
     <span class="p">)</span>
     <span class="n">spo</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
@@ -3707,7 +3707,7 @@ internal use to avoid infinite recursions.</p>
 
 
 <h2 id="ontopy.utils.rename_iris" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">rename_iris</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">annotation</span><span class="o">=</span><span class="s1">&#39;prefLabel&#39;</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">rename_iris</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">annotation</span><span class="o">=</span><span class="s1">'prefLabel'</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.utils.rename_iris" class="headerlink" title="Permanent link">&para;</a></h2>
@@ -3720,16 +3720,16 @@ annotation referring to the old IRI.</p>
 
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">rename_iris</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">annotation</span><span class="o">=</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;For IRIs with the given annotation, change the name of the entity</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">rename_iris</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">annotation</span><span class="o">=</span><span class="s2">"prefLabel"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""For IRIs with the given annotation, change the name of the entity</span>
 <span class="sd">    to the value of the annotation.  Also add an `skos:exactMatch`</span>
 <span class="sd">    annotation referring to the old IRI.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">exactMatch</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>  <span class="c1"># pylint:disable=invalid-name</span>
-        <span class="s2">&quot;http://www.w3.org/2004/02/skos/core#exactMatch&quot;</span>
+        <span class="s2">"http://www.w3.org/2004/02/skos/core#exactMatch"</span>
     <span class="p">)</span>
     <span class="n">anyURI</span> <span class="o">=</span> <span class="n">onto</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>  <span class="c1"># pylint:disable=invalid-name</span>
-        <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#anyURI&quot;</span>
+        <span class="s2">"http://www.w3.org/2001/XMLSchema#anyURI"</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">onto</span><span class="o">.</span><span class="n">get_entities</span><span class="p">():</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">annotation</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">annotation</span><span class="p">):</span>
@@ -3744,7 +3744,7 @@ annotation referring to the old IRI.</p>
                 <span class="k">except</span> <span class="n">IntegrityError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">name</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;cannot set name of &#39;</span><span class="si">{</span><span class="n">entityname</span><span class="si">}</span><span class="s2">&#39; to &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
+                            <span class="sa">f</span><span class="s2">"cannot set name of '</span><span class="si">{</span><span class="n">entityname</span><span class="si">}</span><span class="s2">' to '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">')"</span>
                         <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
 </code></pre></div>
         </details>
@@ -3775,14 +3775,14 @@ If <code>recursive</code> is None, only <code>onto</code> is renamed.</p>
         <details class="quote">
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">rename_ontology</span><span class="p">(</span><span class="n">onto</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">repl</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rename `onto` matching</span>
+<span class="w">    </span><span class="sd">"""Rename `onto` matching</span>
 <span class="sd">    `regex`. The new names are obtained by substituting `regex` with</span>
 <span class="sd">    `repl` using `re.sub()`.</span>
 
 <span class="sd">    If `recursive` is True all recursively imported ontologies are also renamed.</span>
 <span class="sd">    If `recursive` is None, only `onto` is renamed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">versionIRI</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2002/07/owl#versionIRI&quot;</span>
+<span class="sd">    """</span>
+    <span class="n">versionIRI</span> <span class="o">=</span> <span class="s2">"http://www.w3.org/2002/07/owl#versionIRI"</span>
     <span class="n">ontologies</span> <span class="o">=</span> <span class="p">[</span><span class="n">onto</span><span class="p">]</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">recursive</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -3820,7 +3820,7 @@ If <code>recursive</code> is None, only <code>onto</code> is renamed.</p>
 
 
 <h2 id="ontopy.utils.write_catalog" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">write_catalog</span><span class="p">(</span><span class="n">irimap</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;catalog-v001.xml&#39;</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">relative_paths</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">write_catalog</span><span class="p">(</span><span class="n">irimap</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">'catalog-v001.xml'</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s1">'.'</span><span class="p">,</span> <span class="n">relative_paths</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 
 <a href="#ontopy.utils.write_catalog" class="headerlink" title="Permanent link">&para;</a></h2>
@@ -3881,12 +3881,12 @@ If false, an existing file will be overwritten.</p></td>
           <summary>Source code in <code>ontopy/utils.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">write_catalog</span><span class="p">(</span>
     <span class="n">irimap</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-    <span class="n">output</span><span class="p">:</span> <span class="s2">&quot;Union[str, Path]&quot;</span> <span class="o">=</span> <span class="s2">&quot;catalog-v001.xml&quot;</span><span class="p">,</span>
-    <span class="n">directory</span><span class="p">:</span> <span class="s2">&quot;Union[str, Path]&quot;</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+    <span class="n">output</span><span class="p">:</span> <span class="s2">"Union[str, Path]"</span> <span class="o">=</span> <span class="s2">"catalog-v001.xml"</span><span class="p">,</span>
+    <span class="n">directory</span><span class="p">:</span> <span class="s2">"Union[str, Path]"</span> <span class="o">=</span> <span class="s2">"."</span><span class="p">,</span>
     <span class="n">relative_paths</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">append</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write catalog file do disk.</span>
+<span class="w">    </span><span class="sd">"""Write catalog file do disk.</span>
 
 <span class="sd">    Arguments:</span>
 <span class="sd">        irimap: dict mapping ontology IRIs (name) to actual locations</span>
@@ -3899,11 +3899,11 @@ If false, an existing file will be overwritten.</p></td>
 <span class="sd">            relative paths (instead of  absolute paths).</span>
 <span class="sd">        append: whether to append to a possible existing catalog file.</span>
 <span class="sd">            If false, an existing file will be overwritten.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span> <span class="o">/</span> <span class="n">output</span>
 
     <span class="k">if</span> <span class="n">relative_paths</span><span class="p">:</span>
-        <span class="n">irimap</span> <span class="o">=</span> <span class="n">irimap</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># don&#39;t modify provided irimap</span>
+        <span class="n">irimap</span> <span class="o">=</span> <span class="n">irimap</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># don't modify provided irimap</span>
         <span class="k">for</span> <span class="n">iri</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">irimap</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
                 <span class="n">irimap</span><span class="p">[</span><span class="n">iri</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
@@ -3914,18 +3914,18 @@ If false, an existing file will be overwritten.</p></td>
         <span class="n">irimap</span> <span class="o">=</span> <span class="n">iris</span>
 
     <span class="n">res</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s1">&#39;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;&lt;catalog prefer=&quot;public&quot; &#39;</span>
-        <span class="s1">&#39;xmlns=&quot;urn:oasis:names:tc:entity:xmlns:xml:catalog&quot;&gt;&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;    &lt;group id=&quot;Folder Repository, directory=, recursive=true, &#39;</span>
-        <span class="s1">&#39;Auto-Update=false, version=2&quot; prefer=&quot;public&quot; xml:base=&quot;&quot;&gt;&#39;</span><span class="p">,</span>
+        <span class="s1">'&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;'</span><span class="p">,</span>
+        <span class="s1">'&lt;catalog prefer="public" '</span>
+        <span class="s1">'xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"&gt;'</span><span class="p">,</span>
+        <span class="s1">'    &lt;group id="Folder Repository, directory=, recursive=true, '</span>
+        <span class="s1">'Auto-Update=false, version=2" prefer="public" xml:base=""&gt;'</span><span class="p">,</span>
     <span class="p">]</span>
     <span class="k">for</span> <span class="n">iri</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">irimap</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;        &lt;uri name=&quot;</span><span class="si">{</span><span class="n">iri</span><span class="si">}</span><span class="s1">&quot; uri=&quot;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1">&quot;/&gt;&#39;</span><span class="p">)</span>
-    <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;    &lt;/group&gt;&quot;</span><span class="p">)</span>
-    <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&lt;/catalog&gt;&quot;</span><span class="p">)</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
-        <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">'        &lt;uri name="</span><span class="si">{</span><span class="n">iri</span><span class="si">}</span><span class="s1">" uri="</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1">"/&gt;'</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"    &lt;/group&gt;"</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"&lt;/catalog&gt;"</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"wt"</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+        <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
