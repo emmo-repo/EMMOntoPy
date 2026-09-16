@@ -539,6 +539,9 @@ is necessary. Direct pushes to `main` or `master` will only update the "latest" 
 
 
 `ontokit docs` creates the documentation according to the specifications in the configuration file.
+It uses the stylesheet from defined in EMMOntoPy/ontokit by default. To customise the generated site,
+add `docs/custom.css` in the ontology repository. If docs/custom.css exists, it will be used to override the default stylesheet.
+
 
 `ontokit context` generates a JSON-LD context from an ontology and can include terms from imported ontologies.
 The `--include-namespace` argument may be provided multiple times to only include terms whose namespace starts
