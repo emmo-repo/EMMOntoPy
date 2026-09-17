@@ -2113,7 +2113,11 @@
     <span class="p">)</span>
     <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="n">build_dir</span> <span class="o">/</span> <span class="s2">"_static"</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">od</span><span class="o">.</span><span class="n">copy_css_file</span><span class="p">()</span>  <span class="c1"># Use default CSS file</span>
+    <span class="n">css_source</span> <span class="o">=</span> <span class="n">docs_dir</span> <span class="o">/</span> <span class="s2">"custom.css"</span> <span class="k">if</span> <span class="n">docs_dir</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">css_source</span> <span class="ow">and</span> <span class="n">css_source</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">od</span><span class="o">.</span><span class="n">copy_css_file</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">css_source</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">od</span><span class="o">.</span><span class="n">copy_css_file</span><span class="p">()</span>
     <span class="n">od</span><span class="o">.</span><span class="n">copy_js_file</span><span class="p">()</span>  <span class="c1"># Use default collapsible-TOC JS file</span>
 
     <span class="k">if</span> <span class="n">docs_dir</span><span class="p">:</span>

@@ -725,10 +725,77 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#ontokit-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ontokit setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontokit-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ontokit docs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ontokit docs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-templates-css-and-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default templates (CSS and JavaScript)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontokit-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ontokit context
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ontokit context">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#example" class="md-nav__link">
     <span class="md-ellipsis">
       
         Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-testing-of-ontokit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        local testing of ontokit
       
     </span>
   </a>
@@ -2588,10 +2655,77 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#ontokit-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ontokit setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontokit-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ontokit docs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ontokit docs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-templates-css-and-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default templates (CSS and JavaScript)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontokit-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ontokit context
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ontokit context">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#example" class="md-nav__link">
     <span class="md-ellipsis">
       
         Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-testing-of-ontokit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        local testing of ontokit
       
     </span>
   </a>
@@ -3039,8 +3173,9 @@ changes that are not completely backwards compatible may occur.</p>
 <div class="highlight"><pre><span></span><code><span class="go">ontokit --help # will give info on available subcommands</span>
 <span class="go">ontokit subcommand --help  # info on the chosen subcommand</span>
 </code></pre></div>
-<p>Currently, there are three subcommands that have been developed: <code>setup</code>, <code>docs</code> and <code>context</code>.
-<code>ontokit setup</code> will setup .github workflows and create an <code>.ontokit_conf.yaml</code> file in the
+<p>Currently, there are three subcommands that have been developed: <code>setup</code>, <code>docs</code> and <code>context</code>.</p>
+<h3 id="ontokit-setup">ontokit setup<a class="headerlink" href="#ontokit-setup" title="Permanent link">&para;</a></h3>
+<p><code>ontokit setup</code> will setup .github workflows and create an <code>.ontokit_conf.yaml</code> file in the
 root of you repository. You should open, inspect and update this file once you have created it.</p>
 <p>The created workflows follow the rules for creating <a href="https://github.com/emmo-repo/.github/wiki/DomainOntologiesBestPractice">EMMO-based ontologies</a>.
 It is recommenced to inspect the created workflows and update them if necessary.</p>
@@ -3048,11 +3183,40 @@ It is recommenced to inspect the created workflows and update them if necessary.
 any branch matching <code>[0-9]+.[0-9]+.[0-9]+</code> or <code>[0-9]+.[0-9]+.[0-9]+-*</code>.</p>
 <p>For persistent storage of versions of the ontology, a push to a branch matching <code>[0-9]+.[0-9]+.[0-9]+</code> or <code>[0-9]+.[0-9]+.[0-9]+-*</code>
 is necessary. Direct pushes to <code>main</code> or <code>master</code> will only update the "latest" documentation and not the versioned documentation.</p>
-<p><code>ontokit docs</code> creates the documentation according to the specifications in the configuration file.</p>
+<h3 id="ontokit-docs">ontokit docs<a class="headerlink" href="#ontokit-docs" title="Permanent link">&para;</a></h3>
+<p><code>ontokit docs</code> creates the documentation according to the specifications in the configuration file.
+It uses the stylesheet from defined in EMMOntoPy/ontokit by default. To customise the generated site,
+add <code>docs/custom.css</code> in the ontology repository. If docs/custom.css exists, it will be used to override the default stylesheet.</p>
+<h4 id="default-templates-css-and-javascript">Default templates (CSS and JavaScript)<a class="headerlink" href="#default-templates-css-and-javascript" title="Permanent link">&para;</a></h4>
+<p>The default <code>custom.css</code> and <code>toc-collapsible.js</code> files used by <code>ontokit docs</code> are
+bundled with the <code>EMMOntoPy</code> package under
+<code>ontopy/ontokit/setuptemplates/</code>. They are also published as part of the
+EMMOntoPy documentation site, so they can be inspected or fetched directly
+without installing the package:</p>
+<ul>
+<li><a href="https://emmo-repo.github.io/EMMOntoPy/latest/ontokit-templates/custom.css">https://emmo-repo.github.io/EMMOntoPy/latest/ontokit-templates/custom.css</a></li>
+<li><a href="https://emmo-repo.github.io/EMMOntoPy/latest/ontokit-templates/toc-collapsible.js">https://emmo-repo.github.io/EMMOntoPy/latest/ontokit-templates/toc-collapsible.js</a></li>
+</ul>
+<p>To override the default stylesheet for your own ontology repository, add a
+<code>docs/custom.css</code> file as described above; this takes precedence over the
+published default.</p>
+<p>Since <code>docs/custom.css</code> fully replaces the default stylesheet rather than
+being merged with it, it is recommended to <code>@import</code> the published default
+at the top of the file and only add the rules you want to change below it.
+The later rules will override the imported ones with the same selector:</p>
+<div class="highlight"><pre><span></span><code><span class="c">/* docs/custom.css */</span>
+<span class="p">@</span><span class="k">import</span><span class="w"> </span><span class="nt">url</span><span class="o">(</span><span class="s2">"https://emmo-repo.github.io/EMMOntoPy/latest/ontokit-templates/custom.css"</span><span class="o">)</span><span class="p">;</span>
+
+<span class="c">/* Only override the details you need, e.g. the FAQ summary colour: */</span>
+<span class="p">.</span><span class="nc">faq-section</span><span class="w"> </span><span class="nt">summary</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="mh">#A6192E</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="ontokit-context">ontokit context<a class="headerlink" href="#ontokit-context" title="Permanent link">&para;</a></h3>
 <p><code>ontokit context</code> generates a JSON-LD context from an ontology and can include terms from imported ontologies.
 The <code>--include-namespace</code> argument may be provided multiple times to only include terms whose namespace starts
 with one of the given values.</p>
-<h3 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
+<h4 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h4>
 <p>Generate context without imported ontologies:
 (This will show an almost empty context, since ani.ttl only imports other modules.)</p>
 <div class="highlight"><pre><span></span><code><span class="go">ontokit context tests/testonto/ani.ttl context.json</span>
@@ -3061,6 +3225,7 @@ with one of the given values.</p>
 (Note that the <code>--include-namespace</code> argument may be provided multiple times to include multiple namespaces.)</p>
 <div class="highlight"><pre><span></span><code><span class="go">ontokit context tests/testonto/ani.ttl context.json --include-imported --include-namespace https://w3id.org/emmo/domain/animal#</span>
 </code></pre></div>
+<h3 id="local-testing-of-ontokit">local testing of ontokit<a class="headerlink" href="#local-testing-of-ontokit" title="Permanent link">&para;</a></h3>
 <p>For local testing of ontology reference-document generation (used by
 <code>ontodoc_rst</code> / <code>ontokit</code>), see the focused pytest command in
 <a href="../developers/testing/#targeted-checks-for-ontology-reference-docs">developer testing</a>.</p>
