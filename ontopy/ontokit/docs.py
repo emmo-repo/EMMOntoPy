@@ -211,7 +211,11 @@ def docs_subcommand(args):
     )
     (root / build_dir / "_static").mkdir(parents=True, exist_ok=True)
 
-    od.copy_css_file()  # Use default CSS file
+    css_source = docs_dir / "custom.css" if docs_dir else None
+    if css_source and css_source.exists():
+        od.copy_css_file(source=css_source)
+    else:
+        od.copy_css_file()
     od.copy_js_file()  # Use default collapsible-TOC JS file
 
     if docs_dir:
