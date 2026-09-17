@@ -523,6 +523,9 @@ ontokit subcommand --help  # info on the chosen subcommand
 ```
 
 Currently, there are three subcommands that have been developed: `setup`, `docs` and `context`.
+
+### ontokit setup
+
 `ontokit setup` will setup .github workflows and create an `.ontokit_conf.yaml` file in the
 root of you repository. You should open, inspect and update this file once you have created it.
 
@@ -536,18 +539,49 @@ For persistent storage of versions of the ontology, a push to a branch matching 
 is necessary. Direct pushes to `main` or `master` will only update the "latest" documentation and not the versioned documentation.
 
 
-
+### ontokit docs
 
 `ontokit docs` creates the documentation according to the specifications in the configuration file.
 It uses the stylesheet from defined in EMMOntoPy/ontokit by default. To customise the generated site,
 add `docs/custom.css` in the ontology repository. If docs/custom.css exists, it will be used to override the default stylesheet.
 
+#### Default templates (CSS and JavaScript)
+
+The default `custom.css` and `toc-collapsible.js` files used by `ontokit docs` are
+bundled with the `EMMOntoPy` package under
+`ontopy/ontokit/setuptemplates/`. They are also published as part of the
+EMMOntoPy documentation site, so they can be inspected or fetched directly
+without installing the package:
+
+- <https://emmo-repo.github.io/EMMOntoPy/latest/ontokit-templates/custom.css>
+- <https://emmo-repo.github.io/EMMOntoPy/latest/ontokit-templates/toc-collapsible.js>
+
+
+To override the default stylesheet for your own ontology repository, add a
+`docs/custom.css` file as described above; this takes precedence over the
+published default.
+
+Since `docs/custom.css` fully replaces the default stylesheet rather than
+being merged with it, it is recommended to `@import` the published default
+at the top of the file and only add the rules you want to change below it.
+The later rules will override the imported ones with the same selector:
+
+```css
+/* docs/custom.css */
+@import url("https://emmo-repo.github.io/EMMOntoPy/latest/ontokit-templates/custom.css");
+
+/* Only override the details you need, e.g. the FAQ summary colour: */
+.faq-section summary {
+    color: #A6192E;
+}
+```
+### ontokit context
 
 `ontokit context` generates a JSON-LD context from an ontology and can include terms from imported ontologies.
 The `--include-namespace` argument may be provided multiple times to only include terms whose namespace starts
 with one of the given values.
 
-### Example
+#### Example
 
 Generate context without imported ontologies:
 (This will show an almost empty context, since ani.ttl only imports other modules.)
@@ -564,7 +598,7 @@ Generate context including imported ontologies, but keep only terms in the anima
 ontokit context tests/testonto/ani.ttl context.json --include-imported --include-namespace https://w3id.org/emmo/domain/animal#
 ```
 
-
+### local testing of ontokit
 
 For local testing of ontology reference-document generation (used by
 `ontodoc_rst` / `ontokit`), see the focused pytest command in
