@@ -376,6 +376,7 @@ class ModuleDocumentation:
                 value: Value to show in the table.
                 iri: IRI to link to, if value does not have attribute .iri.
             """
+            print(key, value)
             if not isinstance(value, list):
                 values = [value]
             else:
@@ -384,6 +385,7 @@ class ModuleDocumentation:
             strval = ""
             count = 0
             for val in values:
+                print(val)
                 if count > 0 and not key == "Restrictions":
                     strval += ", "
                 count += 1
@@ -407,7 +409,7 @@ class ModuleDocumentation:
                         self.ontology,
                     )
                 else:
-                    strval += _linkify_value(val)
+                    strval += str(_linkify_value(val))
                     strval = strval.replace("\n", "<br>")
 
             # Build a self-contained snippet to prevent table misalignment
@@ -442,6 +444,7 @@ class ModuleDocumentation:
                     ]
                 )
             for entity in sorted(maps[subsection], key=get_label):
+                print(entity)
                 if hasattr(entity, "deprecated") and entity.deprecated.first():
                     continue
                 label = get_label(entity)
