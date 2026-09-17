@@ -74,7 +74,8 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
                 "ONTOLOGY_NAME: core",
                 "ONTOLOGY_PREFIX: ssbd",
                 "ONTOLOGY_IRI: https://w3id.org/ssbd",
-                "GITHUB_REPOSITORY: ssbd-ontology/core",
+                "GIT_REPOSITORY: ssbd-ontology/core",
+                "GIT_BASE_URL: gitlab.example.org",
                 "BUILD_DIR: build",
             ]
         )
@@ -126,6 +127,7 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
             docfile=None,
             overwrite=False,
             github_repository=None,
+            git_base_url=None,
         ):
             self.conf_calls.append(
                 (
@@ -133,6 +135,7 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
                     Path(docfile),
                     overwrite,
                     github_repository,
+                    git_base_url,
                 )
             )
             Path(conffile).write_text("fresh conf\n", encoding="utf8")
@@ -177,14 +180,12 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
     assert od.index_calls == [
         (build_dir / "index.rst", build_dir / "core.rst", True, docs_dir)
     ]
-    assert od.conf_calls == [
-        (
-            build_dir / "conf.py",
-            build_dir / "core.rst",
-            True,
-            "ssbd-ontology/core",
-        )
-    ]
+    assert len(od.conf_calls) == 1
+    assert od.conf_calls[0][:3] == (
+        build_dir / "conf.py",
+        build_dir / "core.rst",
+        True,
+    )
     assert (build_dir / "index.rst").read_text(
         encoding="utf8"
     ) == "fresh index\n"

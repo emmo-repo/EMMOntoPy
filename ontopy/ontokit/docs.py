@@ -109,7 +109,21 @@ def docs_subcommand(args):
         )
 
     config = load_config(config_path)
-    missing = missing_required_variables(config)
+    print(config)
+    git_repository = config.get("GIT_REPOSITORY") or config.get(
+        "GITHUB_REPOSITORY"
+    )
+    if git_repository and not config.get("GIT_REPOSITORY"):
+        config = dict(config)
+        config["GIT_REPOSITORY"] = git_repository
+
+    missing = [
+        key
+        for key in missing_required_variables(config)
+        if key != "GITHUB_REPOSITORY"
+    ]
+    if not git_repository and "GIT_REPOSITORY" not in missing:
+        missing.append("GIT_REPOSITORY")
     if missing:
         required = ", ".join(missing)
         raise ValueError(
@@ -119,10 +133,13 @@ def docs_subcommand(args):
         )
 
     ontology_name = config.get("ONTOLOGY_NAME")
-    github_repository = config.get("GITHUB_REPOSITORY")
+    git_base_url = config.get("GIT_BASE_URL", "github.com")
     build_dir = config.get("BUILD_DIR", "build")
     reference_indices = config.get("REFERENCE_INDICES", [])
     primary_subsections = config.get("REFERENCE_SUBSECTIONS", "all")
+    primary_imported = config.get("REFERENCE_IMPORTED", args.imported)
+    primary_recursive = config.get("REFERENCE_RECURSIVE", args.recursive)
+    primary_iri_regex = config.get("REFERENCE_IRI_REGEX", args.iri_regex)
 
     docs_dir = root / args.docs_dir if args.docs_dir else None
     if docs_dir is None:
@@ -140,9 +157,9 @@ def docs_subcommand(args):
     onto = get_ontology(ontofile).load()
     od = OntologyDocumentation(
         onto,
-        imported=args.imported,
-        recursive=args.recursive,
-        iri_regex=args.iri_regex,
+        imported=primary_imported,
+        recursive=primary_recursive,
+        iri_regex=primary_iri_regex,
         subsections=primary_subsections,
     )
 
@@ -189,7 +206,8 @@ def docs_subcommand(args):
         conffile=conffile,
         docfile=docfile,
         overwrite=True,
-        github_repository=github_repository,
+        github_repository=git_repository,
+        git_base_url=git_base_url,
     )
     (root / build_dir / "_static").mkdir(parents=True, exist_ok=True)
 

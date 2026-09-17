@@ -1,1 +1,5 @@
 # Configurations used when running emmocheck from the ci_emmocheck workflow
+
+ignore_namespace:
+  # Remove this if you want to check the EMMO ontology itself
+  - https://w3id.org/emmo#

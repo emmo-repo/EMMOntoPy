@@ -1,5 +1,9 @@
 """Test ontodoc"""
 
+import os
+
+import pytest
+
 
 # if True:
 def test_ontodoc():
@@ -73,7 +77,6 @@ def test_ontodoc_slash_namespace_internal_links():
     doc = ReferenceDocumentation(onto, imported=False).get_refdoc(
         subsections="classes"
     )
-    print(doc)
 
     assert '<div id="Animal"></div>' in doc
     assert "href='#http://example.com/onto/Animal'" not in doc

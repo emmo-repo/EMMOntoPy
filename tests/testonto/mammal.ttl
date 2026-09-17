@@ -70,7 +70,7 @@
 ###  https://w3id.org/emmo/mammal#Tom
 :Tom rdf:type owl:NamedIndividual ,
               :Cat ;
-     animal:chasing :Jerry ;
+     animal:chases :Jerry ;
      skos:prefLabel "Tom"@en .
 
 

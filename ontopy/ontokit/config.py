@@ -9,16 +9,31 @@ REQUIRED_CONFIG_KEYS = (
     "ONTOLOGY_NAME",
     "ONTOLOGY_PREFIX",
     "ONTOLOGY_IRI",
-    "GITHUB_REPOSITORY",
+    "GIT_REPOSITORY",
+    "GIT_BASE_URL",
     "BUILD_DIR",
 )
 
+OPTIONAL_CONFIG_KEYS = (
+    "REFERENCE_SUBSECTIONS",
+    "REFERENCE_IMPORTED",
+    "REFERENCE_RECURSIVE",
+    "REFERENCE_IRI_REGEX",
+)
+
+LEGACY_REPOSITORY_KEY = "GITHUB_REPOSITORY"
+
 REFERENCE_INDICES_COMMENT = """\
-# Optional: select subsections for the primary reference index.
-# Default is "all".
+# Optional settings for `ontokit docs` reference indices.
+# Select subsections for the primary reference index. Default is "all".
 # REFERENCE_SUBSECTIONS: all
 # Example subset:
 # REFERENCE_SUBSECTIONS: classes,annotation_properties,data_properties,object_properties,individuals
+#
+# REFERENCE_IMPORTED: false
+# REFERENCE_RECURSIVE: true
+# This regex is used to filter which IRIs are included in the primary reference index. Default is the ontology IRI.
+# REFERENCE_IRI_REGEX: https://example.com/myonto#
 #
 # Optional: additional reference indices for `ontokit docs`.
 # REFERENCE_INDICES:
@@ -84,7 +99,19 @@ def update_config(path, config, defaults):
     were added.
     """
     added = []
+    # Normalise legacy key to new neutral key when possible.
+    if (
+        config.get("GIT_REPOSITORY") is None
+        or str(config.get("GIT_REPOSITORY", "")).strip() == ""
+    ) and str(config.get(LEGACY_REPOSITORY_KEY, "")).strip():
+        config["GIT_REPOSITORY"] = _as_string(config.get(LEGACY_REPOSITORY_KEY))
+
     for key in REQUIRED_CONFIG_KEYS:
+        value = config.get(key)
+        if value is None or str(value).strip() == "":
+            config[key] = _as_string(defaults.get(key, ""))
+            added.append(key)
+    for key in OPTIONAL_CONFIG_KEYS:
         value = config.get(key)
         if value is None or str(value).strip() == "":
             config[key] = _as_string(defaults.get(key, ""))
@@ -96,6 +123,22 @@ def update_config(path, config, defaults):
 
 def missing_required_variables(config):
     """Return required keys that are missing or empty in `config`."""
+    # Accept legacy repository key as fallback for migration compatibility.
+    if (
+        config.get("GIT_REPOSITORY") is None
+        or str(config.get("GIT_REPOSITORY", "")).strip() == ""
+    ) and str(config.get(LEGACY_REPOSITORY_KEY, "")).strip():
+        config = dict(config)
+        config["GIT_REPOSITORY"] = config[LEGACY_REPOSITORY_KEY]
+
+    # Legacy configs may not define this key.
+    if (
+        config.get("GIT_BASE_URL") is None
+        or str(config.get("GIT_BASE_URL", "")).strip() == ""
+    ):
+        config = dict(config)
+        config["GIT_BASE_URL"] = "github.com"
+
     missing = []
     for key in REQUIRED_CONFIG_KEYS:
         value = config.get(key)
@@ -116,3 +159,8 @@ def print_config(config, stream=None):
 
     for key in REQUIRED_CONFIG_KEYS:
         emit(f"  {key}: {config.get(key, '')}")
+    if LEGACY_REPOSITORY_KEY in config:
+        emit(
+            "  "
+            f"{LEGACY_REPOSITORY_KEY}: {config.get(LEGACY_REPOSITORY_KEY, '')}"
+        )

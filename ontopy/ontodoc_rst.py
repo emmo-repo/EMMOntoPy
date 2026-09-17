@@ -387,7 +387,7 @@ class ModuleDocumentation:
                 if count > 0 and not key == "Restrictions":
                     strval += ", "
                 count += 1
-
+                print(val)
                 if hasattr(val, "iri"):
                     strval += _html_links(val.iri, get_label(val))
                 elif iri:
@@ -401,7 +401,11 @@ class ModuleDocumentation:
                         )
                         + "</li>"
                     )
-                # if value is a class 'type'
+                elif isinstance(val, (owlready2.ClassConstruct,)):
+                    strval += _linkify_manchester(
+                        asstring(val),
+                        self.ontology,
+                    )
                 else:
                     strval += _linkify_value(val)
                     strval = strval.replace("\n", "<br>")
@@ -546,13 +550,11 @@ class ModuleDocumentation:
                                 continue
 
                             add_keyvalue(
-                                "Equivalent To",
-                                asstring(
-                                    r,
-                                    link='<a href="{iri}">{label}</a>',
-                                    ontology=self.ontology,
-                                ),
+                                "equivalentTo",
+                                r,
                             )
+                        if hasattr(entity, "inverse") and entity.inverse:
+                            add_keyvalue("inverseOf", entity.inverse)
                         # Add SubclassOf/SubPropertyOf/InstanceOf for direct parents
                         if isinstance(entity, owlready2.ThingClass):
                             add_keyvalue("subClassOf", parents)
@@ -1040,12 +1042,15 @@ class OntologyDocumentation:
 
         outpath.write_text(content, encoding="utf8")
 
-    def write_conf_template(  ## pylint: disable=too-many-locals,too-many-statements
+    def write_conf_template(
+        # pylint: disable=too-many-arguments, too-many-locals
+        # pylint: disable=too-many-positional-arguments
         self,
         conffile="conf.py",
         docfile=None,
         overwrite=False,
         github_repository=None,
+        git_base_url="github.com",
     ):
         """Write basic template sphinx conf.py file to disk.
 
@@ -1056,6 +1061,7 @@ class OntologyDocumentation:
             overwrite: Whether to overwrite an existing file.
             github_repository: Optional GitHub repository in the form
                 "OWNER/REPO".
+            git_base_url: Base host (or URL) for the git server.
         """
         # pylint: disable=redefined-builtin
         md = self.reference_documentations[0].module_documentations[0]
@@ -1074,12 +1080,23 @@ class OntologyDocumentation:
             else "<AUTHOR>"
         )
         copyright = license if license else f"{time.strftime('%Y')}, {author}"
+        base = git_base_url.rstrip("/") if git_base_url else "github.com"
+        if base.startswith("http://") or base.startswith("https://"):
+            base_url = base
+        else:
+            base_url = f"https://{base}"
+
         if github_repository and "/" in github_repository:
-            owner, repo = github_repository.split("/", 1)
-            github_url = f"https://github.com/{owner}/{repo}"
-            widoco_url = (
-                f"https://{owner}.github.io/{repo}/widoco/index-en.html"
-            )
+            github_url = f"{base_url}/{github_repository}"
+            if base.endswith("github.com"):
+                owner, repo = github_repository.split("/", 1)
+                widoco_url = (
+                    f"https://{owner}.github.io/{repo}/widoco/index-en.html"
+                )
+            else:
+                widoco_url = (
+                    f"{github_url}/-/tree/gh-pages/widoco/index-en.html"
+                )
         else:
             github_url = (
                 "https://github.com/"
