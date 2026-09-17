@@ -86,6 +86,10 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
         "# Updated landing page\n\nJSON-LD Playground\n",
         encoding="utf8",
     )
+    custom_css = docs_dir / "custom.css"
+    custom_css.write_text(
+        ".bd-page-width { max-width: 120rem; }\n", encoding="utf8"
+    )
     stale_build_docs = build_dir / "docs"
     stale_build_docs.mkdir()
     (stale_build_docs / "index.md").write_text(
@@ -140,7 +144,8 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
             )
             Path(conffile).write_text("fresh conf\n", encoding="utf8")
 
-        def copy_css_file(self):
+        def copy_css_file(self, source=None):
+            self.css_source = source
             return None
 
         def copy_js_file(self):
@@ -193,4 +198,5 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
     assert (build_dir / "docs" / "index.md").read_text(encoding="utf8") == (
         (docs_dir / "index.md").read_text(encoding="utf8")
     )
+    assert od.css_source == custom_css
     assert not public_dir.exists()
