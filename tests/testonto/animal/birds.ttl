@@ -15,6 +15,16 @@
                                              owl:imports <https://w3id.org/emmo/domain/animal/0.1/vertebrates> ;
                                              owl:versionInfo "0.1" .
 
+:hasTalon rdf:type owl:ObjectProperty ;
+           rdfs:domain [ owl:intersectionOf ( :Bird
+                                              :PredatoryAnimal
+                                            ) ;
+                         rdf:type owl:Class
+                       ] ;
+           rdfs:range :Talon ;
+           skos:prefLabel "has talon"@en .
+
+
 #################################################################
 #    Annotation properties
 #################################################################
