@@ -17,7 +17,7 @@ repos:
     args: [--markdown-linebreak-ext=md]
 
 - repo: https://github.com/ambv/black
-  rev: 26.3.1
+  rev: 26.5.1
   hooks:
   - id: black
     name: Blacken
