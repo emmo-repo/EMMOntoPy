@@ -2127,8 +2127,12 @@ only value restrictions supported so far.</p>
     <span class="n">logOp</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">one_of</span><span class="p">([</span><span class="s2">"and"</span><span class="p">,</span> <span class="s2">"or"</span><span class="p">],</span> <span class="n">asKeyword</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">expr</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Forward</span><span class="p">()</span>
     <span class="n">restriction</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Forward</span><span class="p">()</span>
+    <span class="c1"># Group (instead of pp.nested_expr) keeps the results names of the</span>
+    <span class="c1"># parenthesised sub-expression, which `evaluate()` relies on.</span>
     <span class="n">primary</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">"not"</span><span class="p">)[</span><span class="o">...</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span>
-        <span class="n">restriction</span> <span class="o">|</span> <span class="n">ident</span><span class="p">(</span><span class="s2">"cls"</span><span class="p">)</span> <span class="o">|</span> <span class="n">pp</span><span class="o">.</span><span class="n">nested_expr</span><span class="p">(</span><span class="s2">"("</span><span class="p">,</span> <span class="s2">")"</span><span class="p">,</span> <span class="n">expr</span><span class="p">)</span>
+        <span class="n">restriction</span>
+        <span class="o">|</span> <span class="n">ident</span><span class="p">(</span><span class="s2">"cls"</span><span class="p">)</span>
+        <span class="o">|</span> <span class="n">pp</span><span class="o">.</span><span class="n">Group</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">"("</span><span class="p">)</span> <span class="o">+</span> <span class="n">expr</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">")"</span><span class="p">))</span>
     <span class="p">)</span>
     <span class="n">objPropExpr</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">pp</span><span class="o">.</span><span class="n">Literal</span><span class="p">(</span><span class="s2">"inverse"</span><span class="p">)</span>
