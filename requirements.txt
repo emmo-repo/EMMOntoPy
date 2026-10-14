@@ -3,7 +3,7 @@ defusedxml>=0.7.1,<1  # core functionality parsing
 Owlready2>=0.28,!=0.32,!=0.34,<0.50  # core functionality ontology
 packaging>=26.3,<27
 Pygments>=2.21.0,<3
-pyparsing>=3.3.2
+pyparsing>=3.3.3
 PyYAML>=6.0.3,<7
 rdflib>=7.6.0,<8  # core functionality graph
 requests>=2.34.2,<3
