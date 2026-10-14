@@ -1,7 +1,7 @@
 """# `emmopy.emmopy`
 
 Automagically retrieve the EMMO utilizing
-[`ontopy.get_ontology`][ontopy.get_ontology].
+[`ontopy.get_ontology`][ontopy.ontology.get_ontology].
 """
 
 from typing import Optional, TYPE_CHECKING

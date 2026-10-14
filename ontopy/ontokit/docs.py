@@ -3,6 +3,7 @@
 # pylint: disable=fixme
 
 import shutil
+import warnings
 from pathlib import Path
 
 from sphinx.cmd.build import main as sphinx_main
@@ -172,14 +173,50 @@ def docs_subcommand(args):
     for ref in reference_indices:
         if not isinstance(ref, dict):
             raise ValueError("Each REFERENCE_INDICES entry must be a mapping.")
-        ref_ontology_file = ref.get("ontology_file")
-        if not ref_ontology_file:
+        if "ontology_files" in ref and "ontology_file" in ref:
             raise ValueError(
-                "Each REFERENCE_INDICES entry must define 'ontology_file'."
+                "Each REFERENCE_INDICES entry must define only one of "
+                "'ontology_files' or the deprecated 'ontology_file'."
             )
-        ref_onto = get_ontology(root / ref_ontology_file).load()
+        if "ontology_files" in ref:
+            ref_ontology_files = ref["ontology_files"]
+            if (
+                not isinstance(ref_ontology_files, list)
+                or not ref_ontology_files
+                or any(
+                    not isinstance(filename, str) or not filename.strip()
+                    for filename in ref_ontology_files
+                )
+            ):
+                raise ValueError(
+                    "Each REFERENCE_INDICES 'ontology_files' value must be "
+                    "a non-empty list of file paths."
+                )
+        elif "ontology_file" in ref:
+            warnings.warn(
+                "REFERENCE_INDICES 'ontology_file' is deprecated; use "
+                "'ontology_files' with a list of paths instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            ref_ontology_files = [ref["ontology_file"]]
+            if not isinstance(ref_ontology_files[0], str) or not (
+                ref_ontology_files[0].strip()
+            ):
+                raise ValueError(
+                    "Each REFERENCE_INDICES entry must define a non-empty "
+                    "'ontology_file'."
+                )
+        else:
+            raise ValueError(
+                "Each REFERENCE_INDICES entry must define 'ontology_files'."
+            )
+        ref_ontologies = [
+            get_ontology(root / filename).load()
+            for filename in ref_ontology_files
+        ]
         od.add_reference(
-            ref_onto,
+            ref_ontologies,
             imported=ref.get("imported", args.imported),
             recursive=ref.get("recursive", False),
             iri_regex=ref.get("iri_regex", args.iri_regex),

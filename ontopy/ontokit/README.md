@@ -102,16 +102,22 @@ Notes on running `ontokit docs`:
 
   ```yaml
   REFERENCE_INDICES:
-    - ontology_file: build/other-ontology.ttl
-      title: Other Ontology Reference
-      docfile: other-reference.rst
-      iri_regex: https://example.org/other
+    - title: Combined reference
+      ontology_files:
+        - modules/moduleA.ttl
+        - modules/moduleB.ttl
+        - modules/moduleC.ttl
+      docfile: combined-reference.rst
       imported: false
       recursive: false
       subsections: all
   ```
 
-  The `ontology_file` key is required for each entry. The generated
-  `index.rst` will include all configured reference indices. Note
-  that the creation of the ontology in the particular place (as here
-  in build) is not done by this tool.
+  Each entry's `ontology_files` list defines the ontology files included in
+  that reference index. The generated `index.rst` will include all configured
+  reference indices. Ontology files must already exist at the specified paths;
+  ontokit does not create them.
+
+  The previous singular `ontology_file` key is still accepted for
+  compatibility, but is deprecated. Replace it with a one-item
+  `ontology_files` list; using the old key emits a `DeprecationWarning`.

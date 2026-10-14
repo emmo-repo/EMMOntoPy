@@ -48,8 +48,12 @@ def manchester_expression():
     logOp = pp.one_of(["and", "or"], asKeyword=True)
     expr = pp.Forward()
     restriction = pp.Forward()
+    # Group (instead of pp.nested_expr) keeps the results names of the
+    # parenthesised sub-expression, which `evaluate()` relies on.
     primary = pp.Keyword("not")[...] + (
-        restriction | ident("cls") | pp.nested_expr("(", ")", expr)
+        restriction
+        | ident("cls")
+        | pp.Group(pp.Suppress("(") + expr + pp.Suppress(")"))
     )
     objPropExpr = (
         pp.Literal("inverse")
