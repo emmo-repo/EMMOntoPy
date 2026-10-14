@@ -5136,6 +5136,8 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
 <span class="sd">        setting the `iri` attribute will write the new IRI when saving the</span>
 <span class="sd">        ontology.</span>
 <span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span>
         <span class="n">storid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_triples</span><span class="p">(</span>
             <span class="n">p</span><span class="o">=</span><span class="n">owlready2</span><span class="o">.</span><span class="n">rdf_type</span><span class="p">,</span> <span class="n">o</span><span class="o">=</span><span class="n">owlready2</span><span class="o">.</span><span class="n">owl_ontology</span>
         <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -5163,7 +5165,7 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
             <span class="n">version_iri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">as_iri</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">version_iri</span>
-            <span class="k">return</span> <span class="n">infer_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span> <span class="n">version_iri</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">infer_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iri</span><span class="p">(),</span> <span class="n">version_iri</span><span class="p">)</span>
 
         <span class="n">version_info_storid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>
             <span class="s2">"http://www.w3.org/2002/07/owl#versionInfo"</span>
@@ -5171,7 +5173,8 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_triples</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">version_info_storid</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">tokens</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="s2">"No versionIRI or versionInfo "</span> <span class="sa">f</span><span class="s2">"in Ontology </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="si">!r}</span><span class="s2">"</span>
+                <span class="s2">"No versionIRI or versionInfo "</span>
+                <span class="sa">f</span><span class="s2">"in Ontology '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iri</span><span class="p">()</span><span class="si">}</span><span class="s2">'"</span>
             <span class="p">)</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">version_info</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">version_info</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"^^"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">'"'</span><span class="p">)</span>
@@ -5199,7 +5202,10 @@ Ontology            (<span title="owlready2.namespace.Ontology">Ontology</span>)
         <span class="n">versionIRI</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">_versionIRI</span><span class="p">)</span>
         <span class="n">_string</span> <span class="o">=</span> <span class="s2">"http://www.w3.org/2001/XMLSchema#string"</span>
         <span class="n">string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">_string</span><span class="p">)</span>
-        <span class="n">oldver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">oldver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="n">oldver</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">version_iri</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">version</span><span class="p">:</span>
@@ -7401,6 +7407,8 @@ ontology.</p>
 <span class="sd">    setting the `iri` attribute will write the new IRI when saving the</span>
 <span class="sd">    ontology.</span>
 <span class="sd">    """</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">iri</span>
     <span class="n">storid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_triples</span><span class="p">(</span>
         <span class="n">p</span><span class="o">=</span><span class="n">owlready2</span><span class="o">.</span><span class="n">rdf_type</span><span class="p">,</span> <span class="n">o</span><span class="o">=</span><span class="n">owlready2</span><span class="o">.</span><span class="n">owl_ontology</span>
     <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -7640,7 +7648,7 @@ owl:versionINFO.</p>
         <span class="n">version_iri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_unabbreviate</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">as_iri</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">version_iri</span>
-        <span class="k">return</span> <span class="n">infer_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="p">,</span> <span class="n">version_iri</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">infer_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iri</span><span class="p">(),</span> <span class="n">version_iri</span><span class="p">)</span>
 
     <span class="n">version_info_storid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span>
         <span class="s2">"http://www.w3.org/2002/07/owl#versionInfo"</span>
@@ -7648,7 +7656,8 @@ owl:versionINFO.</p>
     <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_triples</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storid</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">version_info_storid</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">tokens</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="s2">"No versionIRI or versionInfo "</span> <span class="sa">f</span><span class="s2">"in Ontology </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_iri</span><span class="si">!r}</span><span class="s2">"</span>
+            <span class="s2">"No versionIRI or versionInfo "</span>
+            <span class="sa">f</span><span class="s2">"in Ontology '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iri</span><span class="p">()</span><span class="si">}</span><span class="s2">'"</span>
         <span class="p">)</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">version_info</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">version_info</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"^^"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">'"'</span><span class="p">)</span>
@@ -9312,7 +9321,10 @@ the new version.</p>
     <span class="n">versionIRI</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">_versionIRI</span><span class="p">)</span>
     <span class="n">_string</span> <span class="o">=</span> <span class="s2">"http://www.w3.org/2001/XMLSchema#string"</span>
     <span class="n">string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abbreviate</span><span class="p">(</span><span class="n">_string</span><span class="p">)</span>
-    <span class="n">oldver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">oldver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="n">oldver</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">version_iri</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">version</span><span class="p">:</span>
