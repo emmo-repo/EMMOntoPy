@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - ontokit_style_customisation
 
 jobs:
   updates-to-master:

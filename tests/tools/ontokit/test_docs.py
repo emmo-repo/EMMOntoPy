@@ -77,6 +77,16 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
                 "GIT_REPOSITORY: ssbd-ontology/core",
                 "GIT_BASE_URL: gitlab.example.org",
                 "BUILD_DIR: build",
+                "REFERENCE_INDICES:",
+                "  - title: Combined reference",
+                "    ontology_files:",
+                "      - modules/moduleA.ttl",
+                "      - modules/moduleB.ttl",
+                "    docfile: combined-reference.rst",
+                "    imported: false",
+                "    recursive: false",
+                "    subsections: all",
+                "  - ontology_file: modules/legacy.ttl",
             ]
         )
         + "\n",
@@ -85,6 +95,10 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
     (docs_dir / "index.md").write_text(
         "# Updated landing page\n\nJSON-LD Playground\n",
         encoding="utf8",
+    )
+    custom_css = docs_dir / "custom.css"
+    custom_css.write_text(
+        ".bd-page-width { max-width: 120rem; }\n", encoding="utf8"
     )
     stale_build_docs = build_dir / "docs"
     stale_build_docs.mkdir()
@@ -106,8 +120,10 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
             self.index_calls = []
             self.conf_calls = []
             self.refdoc_calls = []
+            self.reference_calls = []
 
-        def add_reference(self, *_args, **_kwargs):
+        def add_reference(self, ontologies, **kwargs):
+            self.reference_calls.append((ontologies, kwargs))
             return None
 
         def write_reference_docs(self, outdir, overwrite=False):
@@ -140,7 +156,8 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
             )
             Path(conffile).write_text("fresh conf\n", encoding="utf8")
 
-        def copy_css_file(self):
+        def copy_css_file(self, source=None):
+            self.css_source = source
             return None
 
         def copy_js_file(self):
@@ -148,7 +165,10 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
 
     captured = {}
 
-    def fake_get_ontology(_path):
+    loaded_paths = []
+
+    def fake_get_ontology(path):
+        loaded_paths.append(Path(path))
         return DummyOntology()
 
     def fake_od(*args, **kwargs):
@@ -162,20 +182,40 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
     monkeypatch.setattr(docs_module, "OntologyDocumentation", fake_od)
     monkeypatch.setattr(docs_module, "sphinx_main", fake_sphinx_main)
 
-    docs_module.docs_subcommand(
-        Namespace(
-            root=str(root),
-            imported=True,
-            recursive=False,
-            iri_regex="https://w3id.org/ssbd",
-            outfile=None,
-            ontology_file=None,
-            docs_dir=None,
-            debug=False,
+    with pytest.warns(
+        DeprecationWarning, match="'ontology_file' is deprecated"
+    ):
+        docs_module.docs_subcommand(
+            Namespace(
+                root=str(root),
+                imported=True,
+                recursive=False,
+                iri_regex="https://w3id.org/ssbd",
+                outfile=None,
+                ontology_file=None,
+                docs_dir=None,
+                debug=False,
+            )
         )
-    )
 
     od = captured["od"]
+    assert loaded_paths == [
+        root / "build/core.ttl",
+        root / "modules/moduleA.ttl",
+        root / "modules/moduleB.ttl",
+        root / "modules/legacy.ttl",
+    ]
+    assert len(od.reference_calls) == 2
+    assert len(od.reference_calls[0][0]) == 2
+    assert od.reference_calls[0][1] == {
+        "imported": False,
+        "recursive": False,
+        "iri_regex": "https://w3id.org/ssbd",
+        "title": "Combined reference",
+        "docfile": "combined-reference.rst",
+        "subsections": "all",
+    }
+    assert len(od.reference_calls[1][0]) == 1
     assert od.refdoc_calls == [(build_dir, True)]
     assert od.index_calls == [
         (build_dir / "index.rst", build_dir / "core.rst", True, docs_dir)
@@ -193,4 +233,5 @@ def test_docs_subcommand_refreshes_generated_inputs(tmp_path, monkeypatch):
     assert (build_dir / "docs" / "index.md").read_text(encoding="utf8") == (
         (docs_dir / "index.md").read_text(encoding="utf8")
     )
+    assert od.css_source == custom_css
     assert not public_dir.exists()

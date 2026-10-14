@@ -1,0 +1,1 @@
+../../ontopy/ontokit/setuptemplates/js/toc-collapsible.js

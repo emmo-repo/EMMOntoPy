@@ -37,13 +37,16 @@ REFERENCE_INDICES_COMMENT = """\
 #
 # Optional: additional reference indices for `ontokit docs`.
 # REFERENCE_INDICES:
-#   - ontology_file: build/other-ontology.ttl
-#     title: Other Ontology Reference
-#     docfile: other-reference.rst
-#     iri_regex: https://example.org/other
+#   - title: Combined reference
+#     ontology_files:
+#       - modules/moduleA.ttl
+#       - modules/moduleB.ttl
+#     docfile: combined-reference.rst
 #     imported: false
 #     recursive: false
 #     subsections: all
+#
+# The deprecated `ontology_file` singular key remains accepted temporarily.
 """
 
 
