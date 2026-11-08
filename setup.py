@@ -134,6 +134,12 @@ setuptools.setup(
         "ontodoc": ONTODOC,
         "ontokit": ONTOKIT,
     },
+    # Explicitly setting package_dir makes setuptools use a simple .pth file
+    # for editable installs instead of a meta path finder, which avoids the
+    # "Editable installation" BuildBackendWarning from `pip install -e .`.
+    # Note that this disables include_package_data for files only listed in
+    # MANIFEST.in, so all package data must be listed in package_data below.
+    package_dir={"": "."},
     packages=setuptools.find_namespace_packages(
         include=["ontopy", "ontopy.*", "emmopy", "emmopy.*"],
         exclude=["*.__pycache__"],
@@ -152,6 +158,7 @@ setuptools.setup(
         "ontopy.factpluspluswrapper.java.lib.so": ["*"],
         "ontopy.factpluspluswrapper.java.lib.jars": ["*.jar"],
         "ontopy.factpluspluswrapper.java": ["pom.xml"],
+        "ontopy.factpluspluswrapper.java.resources": ["*.rdf"],
         "ontopy.ontokit": [
             "setuptemplates/*.yml",
             "setuptemplates/workflows/*.yml",
