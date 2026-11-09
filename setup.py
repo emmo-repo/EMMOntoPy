@@ -105,14 +105,14 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/emmo-repo/EMMOntoPy",
-    license="BSD",
+    license="BSD-3-Clause",
+    license_files=["LICENSE.txt"],
     python_requires=">=3.7",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
         "Intended Audience :: Information Technology",
         "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.10",
@@ -134,7 +134,16 @@ setuptools.setup(
         "ontodoc": ONTODOC,
         "ontokit": ONTOKIT,
     },
-    packages=setuptools.find_packages(),
+    # Explicitly setting package_dir makes setuptools use a simple .pth file
+    # for editable installs instead of a meta path finder, which avoids the
+    # "Editable installation" BuildBackendWarning from `pip install -e .`.
+    # Note that this disables include_package_data for files only listed in
+    # MANIFEST.in, so all package data must be listed in package_data below.
+    package_dir={"": "."},
+    packages=setuptools.find_namespace_packages(
+        include=["ontopy", "ontopy.*", "emmopy", "emmopy.*"],
+        exclude=["*.__pycache__"],
+    ),
     scripts=[
         "tools/ontodoc",
         "tools/ontograph",
@@ -149,6 +158,7 @@ setuptools.setup(
         "ontopy.factpluspluswrapper.java.lib.so": ["*"],
         "ontopy.factpluspluswrapper.java.lib.jars": ["*.jar"],
         "ontopy.factpluspluswrapper.java": ["pom.xml"],
+        "ontopy.factpluspluswrapper.java.resources": ["*.rdf"],
         "ontopy.ontokit": [
             "setuptemplates/*.yml",
             "setuptemplates/workflows/*.yml",
