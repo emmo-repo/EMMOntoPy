@@ -1823,6 +1823,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         setting the `iri` attribute will write the new IRI when saving the
         ontology.
         """
+        if self.iri:
+            return self.iri
         storid = self.get_triples(
             p=owlready2.rdf_type, o=owlready2.owl_ontology
         )[0][0]
@@ -1850,7 +1852,7 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
             version_iri = self.world._unabbreviate(obj)
             if as_iri:
                 return version_iri
-            return infer_version(self.base_iri, version_iri)
+            return infer_version(self.get_iri(), version_iri)
 
         version_info_storid = self.world._abbreviate(
             "http://www.w3.org/2002/07/owl#versionInfo"
@@ -1858,7 +1860,8 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         tokens = self.get_triples(s=self.storid, p=version_info_storid)
         if not tokens:
             raise TypeError(
-                "No versionIRI or versionInfo " f"in Ontology {self.base_iri!r}"
+                "No versionIRI or versionInfo "
+                f"in Ontology '{self.get_iri()}'"
             )
         _, _, version_info = tokens[0]
         return version_info.split("^^")[0].strip('"')
@@ -1886,7 +1889,10 @@ class Ontology(owlready2.Ontology):  # pylint: disable=too-many-public-methods
         versionIRI = self._abbreviate(_versionIRI)
         _string = "http://www.w3.org/2001/XMLSchema#string"
         string = self._abbreviate(_string)
-        oldver = self.get_version()
+        try:
+            oldver = self.get_version()
+        except TypeError:
+            oldver = None
 
         if not version_iri:
             if not version:
