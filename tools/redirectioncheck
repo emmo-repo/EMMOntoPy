@@ -4,14 +4,33 @@
 The expected redirections are specified in a YAML file maping URLs to
 expected redirections:
 
-    ---
+    # Optional base URL
+    # This may e.g. be useful for local testing of w3id redirections.
+    # See: https://docs.w3id.org/guides/testing#run-the-rules-locally
+    base: https://w3id.org/emmo
+    #base: http://localhost:8080/emmo
+
+    # Redirections with no headers (backward compatibility)
     redirections:
-      https://example.com: |
-        https://example.com
-      http://emmo.info/emmo: |
-        https://raw.githubusercontent.com/emmo-repo/EMMO/master/emmo.ttl
-      https://w3id.org/emmo/: |
-        https://raw.githubusercontent.com/emmo-repo/EMMO/master/emmo.ttl
+      /:            https://emmo-repo.github.io/emmo.ttl
+      /turtle:      https://emmo-repo.github.io/emmo.ttl
+      /inferred:    https://emmo-repo.github.io/emmo-inferred.ttl
+      "#Atom":      https://emmo-repo.github.io/emmo.ttl#Atom
+      /1.1.0:       https://emmo-repo.github.io/versions/1.1.0/emmo.ttl
+
+    # Redirections with headers
+    requests:
+      - headers:
+          Accept: text/html
+        redirections:
+          /:        https://emmo-repo.github.io/emmo.html
+          /turtle:  https://emmo-repo.github.io/emmo.ttl
+          /1.1.0:   https://emmo-repo.github.io/versions/1.1.0/emmo.html
+      - headers:
+          Accept: text/turtle
+        redirections:
+          /:        https://emmo-repo.github.io/emmo.ttl
+          /1.1.0:   https://emmo-repo.github.io/versions/1.1.0/emmo.ttl
 
 """
 
@@ -35,9 +54,20 @@ def test_all(yamlfile, conf=None):
     with open(yamlfile, "r") as f:
         specifications = yaml.safe_load(f)
 
+    conf = conf.copy() if conf else {}
+    conf.setdefault("base", specifications.get("base", ""))
+    verbose = int(conf.get("verbose", 1))
+
     ok = True
     for url, redirected_url in specifications["redirections"].items():
         ok &= test_redirection(url, redirected_url, conf=conf)
+
+    for request in specifications.get("requests", []):
+        conf["headers"] = request.get("headers")
+        if verbose:
+            print("# headers:", conf["headers"])
+        for url, redirected_url in request["redirections"].items():
+            ok &= test_redirection(url, redirected_url, conf=conf)
 
     return ok
 
@@ -55,23 +85,28 @@ def test_redirection(url, redirected_url, conf=None):
     """
     if conf is None:
         conf = {}
-    verbose = int(conf["verbose"]) if "verbose" in conf else 1
+    verbose = int(conf.get("verbose", 1))
     timeout = float(conf["timeout"]) if "timeout" in conf else None
+    fullurl = conf.get("base", "") + url
 
     try:
-        r = requests.get(url, timeout=timeout)
+        r = requests.get(fullurl, headers=conf.get("headers"), timeout=timeout)
     except requests.Timeout:
         ok, reason, got = True, "timeout", None
     except requests.exceptions.SSLError as exc:
         ok, reason, got = False, str(exc), None
+    except requests.exceptions.ConnectionError:
+        ok, reason, got = False, "connection error", None
     else:
         if r.ok and r.url != redirected_url:
             ok, reason, got = False, "Invalid redirection", r.url
+        elif r.reason == "Not Found" and not conf.get("check_found", True):
+            ok, reason, got = True, f"OK ({r.reason})", None
         else:
             ok, reason, got = r.ok, r.reason, None
 
     if verbose:
-        print(f"{url:64} {reason}")
+        print(f"{fullurl:64} {reason}")
         if (got and verbose > 1) or verbose > 2:
             print(f"  got:      {got}")
             print(f"  expected: {redirected_url}")
@@ -88,6 +123,29 @@ def main(argv: list = None):
         nargs="?",
         default="redirections.yaml",
         help="Name of YAML file specifying redirections to test.",
+    )
+    parser.add_argument(
+        "--base",
+        "-b",
+        help=(
+            "Base URL to prepend to all URLs. "
+            "Overrides `base` in the yamlfile. "
+            "This may e.g. be useful for local testing of w3id redirections. "
+            "See: https://docs.w3id.org/guides/testing#run-the-rules-locally"
+        ),
+    )
+    parser.add_argument(
+        "--check-found",
+        action="store_true",
+        default=True,
+        help="Fail if the redirected URL cannot be found (default).",
+    )
+    parser.add_argument(
+        "--no-check-found",
+        "-n",
+        dest="check_found",
+        action="store_false",
+        help="Do not fail if the redirected URL cannot be found.",
     )
     parser.add_argument(
         "--verbose",
@@ -112,7 +170,14 @@ def main(argv: list = None):
         help="Number of seconds before timing out. Defaults to 3.",
     )
     args = parser.parse_args(args=argv)
-    conf = {"verbose": args.verbose, "timeout": args.timeout}
+    conf = {
+        "verbose": args.verbose,
+        "timeout": args.timeout,
+        "check_found": args.check_found,
+    }
+
+    if args.base:
+        conf["base"] = args.base
 
     return test_all(args.yamlfile, conf=conf)
 

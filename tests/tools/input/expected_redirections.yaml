@@ -1,5 +1,26 @@
----
+# Optional base url
+base: https://w3id.org/emmo
+#base: http://localhost:8080/emmo
+
+# Redirections with no headers (backward compatibility)
 redirections:
-  https://example.com:                 https://example.com/
-  https://w3id.org/emmo/:              https://raw.githubusercontent.com/emmo-repo/EMMO/master/emmo.ttl
-  https://w3id.org/emmo/1.0.0-beta5/:  https://raw.githubusercontent.com/emmo-repo/EMMO/1.0.0-beta5/emmo.ttl
+  /:            https://emmo-repo.github.io/emmo.ttl
+  /turtle:      https://emmo-repo.github.io/emmo.ttl
+  /inferred:    https://emmo-repo.github.io/emmo-inferred.ttl
+  /context:     https://emmo-repo.github.io/context/context.json
+  "#Atom":      https://emmo-repo.github.io/emmo.ttl#Atom
+  /1.1.0:       https://emmo-repo.github.io/versions/1.1.0/emmo.ttl
+
+# Redirections with headers
+requests:
+  - headers:
+      Accept: text/html
+    redirections:
+      /:        https://emmo-repo.github.io/emmo.html
+      /turtle:  https://emmo-repo.github.io/emmo.ttl
+      /1.1.0:   https://emmo-repo.github.io/versions/1.1.0/emmo.html
+  - headers:
+      Accept: text/turtle
+    redirections:
+      /:        https://emmo-repo.github.io/emmo.ttl
+      /1.1.0:   https://emmo-repo.github.io/versions/1.1.0/emmo.ttl
